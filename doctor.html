@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>醫師端 RAG 文獻助手</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0b0f14;
+    --s1:       #111822;
+    --s2:       #182030;
+    --border:   #1e2d3d;
+    --border2:  #2a3f55;
+    --accent:   #4fa3e0;
+    --accent2:  #00c896;
+    --text:     #d4e4f4;
+    --muted:    #4a6478;
+    --danger:   #e05252;
+    --r:        10px;
+    --header-h: 52px;
+    --input-h:  72px;
+  }
+
+  html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); color:var(--text); font-family:'Noto Serif TC',serif; }
+
+  #app { display:flex; flex-direction:column; width:100vw; height:100vh; overflow:hidden; }
+
+  #header {
+    height:var(--header-h); flex-shrink:0; background:var(--s1); border-bottom:1px solid var(--border);
+    display:flex; align-items:center; padding:0 20px; gap:10px; z-index:10;
+  }
+  #header .logo { width:28px; height:28px; background:var(--accent); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+  #header h1 { font-size:15px; font-weight:600; letter-spacing:.04em; }
+  #header .sub { font-size:11px; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-left:4px; }
+  #header .conn-badge { margin-left:auto; display:flex; align-items:center; gap:10px; font-size:11px; font-family:'JetBrains Mono',monospace; color:var(--muted); }
+  #header .conn-badge .dot { width:7px; height:7px; border-radius:50%; background:var(--muted); }
+  #header .conn-badge .dot.on { background:var(--accent2); }
+  #header a.nav-link { color:var(--muted); text-decoration:none; font-size:11px; font-family:'JetBrains Mono',monospace; border:1px solid var(--border); border-radius:6px; padding:5px 10px; transition:border-color .2s,color .2s; }
+  #header a.nav-link:hover { border-color:var(--border2); color:var(--text); }
+  #btnClear { background:transparent; color:var(--muted); border:1px solid var(--border); border-radius:6px; padding:5px 10px; font-size:11px; font-family:'JetBrains Mono',monospace; cursor:pointer; transition:border-color .2s,color .2s; }
+  #btnClear:hover { border-color:var(--danger); color:var(--danger); }
+
+  #patientBar { flex-shrink:0; background:var(--s1); border-bottom:1px solid var(--border); padding:10px 20px; display:flex; align-items:center; gap:10px; }
+  #queueInput { background:var(--s2); border:1px solid var(--border); border-radius:6px; color:var(--text); padding:8px 12px; font-size:13px; font-family:'JetBrains Mono',monospace; outline:none; width:240px; transition:border-color .2s; }
+  #queueInput:focus { border-color:var(--accent); }
+  #queueInput:disabled { opacity:.4; }
+  .patient-btn { background:var(--accent); color:#001420; border:none; border-radius:6px; padding:8px 16px; font-size:12px; font-weight:600; cursor:pointer; transition:opacity .15s; }
+  .patient-btn:hover { opacity:.85; }
+  .patient-btn:disabled { opacity:.4; cursor:not-allowed; }
+  .patient-tag { display:flex; align-items:center; gap:8px; background:rgba(0,200,150,.08); border:1px solid rgba(0,200,150,.35); border-radius:6px; padding:6px 12px; font-size:12px; color:var(--accent2); font-family:'JetBrains Mono',monospace; }
+  .patient-tag-close { background:none; border:none; color:var(--accent2); cursor:pointer; font-size:12px; padding:0; opacity:.7; }
+  .patient-tag-close:hover { opacity:1; }
+
+  #main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+
+  #chatbox { flex:1; overflow-y:auto; padding:24px; display:flex; flex-direction:column; gap:16px; scroll-behavior:smooth; max-width:900px; width:100%; margin:0 auto; }
+  #chatbox::-webkit-scrollbar { width:4px; }
+  #chatbox::-webkit-scrollbar-track { background:transparent; }
+  #chatbox::-webkit-scrollbar-thumb { background:var(--border2); border-radius:4px; }
+
+  .empty-state { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:var(--muted); text-align:center; }
+  .empty-state .big { font-size:40px; opacity:.3; }
+  .empty-state .hint { font-size:12px; font-family:'JetBrains Mono',monospace; line-height:1.9; max-width:420px; }
+  .suggest-chips { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:8px; max-width:520px; }
+  .chip { border:1px solid var(--border); border-radius:16px; padding:6px 14px; font-size:12px; color:var(--muted); cursor:pointer; transition:border-color .2s,color .2s; background:var(--s1); }
+  .chip:hover { border-color:var(--accent); color:var(--text); }
+
+  .msg { display:flex; flex-direction:column; gap:4px; max-width:82%; animation:popIn .2s ease; }
+  @keyframes popIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .msg.user { align-self:flex-end;   align-items:flex-end; }
+  .msg.ai   { align-self:flex-start; align-items:flex-start; }
+  .msg .who { font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--muted); letter-spacing:.06em; padding:0 4px; }
+  .msg.ai   .bubble { background:var(--s2); border:1px solid var(--border); color:var(--text); border-radius:3px 12px 12px 12px; padding:12px 16px; font-size:14px; line-height:1.8; white-space:pre-wrap; }
+  .msg.user .bubble { background:var(--accent); color:#001420; border-radius:12px 3px 12px 12px; padding:10px 16px; font-size:14px; line-height:1.75; }
+
+  /* 結構化病歷分析（六段式）用專屬卡片樣式，跟一般聊天泡泡區隔開 */
+  .structured-report { align-self:stretch; border:1px solid var(--accent2); background:rgba(0,200,150,.05); border-radius:var(--r); padding:18px 20px; animation:popIn .3s ease; }
+  .structured-report .sr-title { font-size:11px; color:var(--accent2); letter-spacing:.08em; margin-bottom:10px; font-family:'JetBrains Mono',monospace; display:flex; align-items:center; gap:8px; }
+  .structured-report pre { font-family:'Noto Serif TC',serif; font-size:13px; white-space:pre-wrap; line-height:1.85; color:var(--text); }
+
+  .sr-generating { align-self:stretch; border:1px dashed var(--border2); background:var(--s1); border-radius:var(--r); padding:16px 20px; display:flex; align-items:center; gap:10px; color:var(--muted); font-size:12px; font-family:'JetBrains Mono',monospace; }
+  .sr-generating .spin { width:14px; height:14px; border-radius:50%; border:2px solid var(--border2); border-top-color:var(--accent2); animation:spin .8s linear infinite; flex-shrink:0; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  .sr-unavailable { align-self:stretch; border:1px dashed var(--border); background:var(--s1); border-radius:var(--r); padding:14px 18px; color:var(--muted); font-size:12px; font-family:'JetBrains Mono',monospace; }
+
+  .sources { display:flex; flex-wrap:wrap; gap:6px; margin-top:2px; padding:0 4px; }
+  .source-tag { font-size:10px; font-family:'JetBrains Mono',monospace; color:var(--accent2); border:1px solid rgba(0,200,150,.3); background:rgba(0,200,150,.06); border-radius:5px; padding:3px 8px; max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+  .typing-indicator { display:flex; gap:5px; padding:14px 16px; background:var(--s2); border:1px solid var(--border); border-radius:3px 12px 12px 12px; width:fit-content; }
+  .typing-indicator span { width:7px; height:7px; border-radius:50%; background:var(--muted); animation:typing .9s infinite; }
+  .typing-indicator span:nth-child(2) { animation-delay:.2s; }
+  .typing-indicator span:nth-child(3) { animation-delay:.4s; }
+  @keyframes typing { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+  #modeBar { flex-shrink:0; padding:8px 24px 0; max-width:900px; width:100%; margin:0 auto; box-sizing:border-box; display:flex; align-items:center; gap:8px; }
+  #btnStructuredMode {
+    display:flex; align-items:center; gap:6px; background:var(--s2); border:1px solid var(--border);
+    border-radius:16px; padding:6px 14px; font-size:12px; color:var(--muted); cursor:pointer;
+    transition:border-color .2s,color .2s,background .2s; font-family:'Noto Serif TC',serif;
+  }
+  #btnStructuredMode:hover { border-color:var(--border2); color:var(--text); }
+  #btnStructuredMode.active { background:rgba(0,200,150,.12); border-color:var(--accent2); color:var(--accent2); }
+  #btnStructuredMode .dot { width:6px; height:6px; border-radius:50%; background:var(--muted); }
+  #btnStructuredMode.active .dot { background:var(--accent2); }
+  #modeHint { font-size:11px; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+
+  #inputBar { flex-shrink:0; padding:10px 24px 14px; display:flex; align-items:flex-end; gap:10px; border-top:1px solid var(--border); background:var(--s1); max-width:900px; width:100%; margin:0 auto; box-sizing:border-box; }
+  #textInput { flex:1; background:var(--s2); border:1px solid var(--border); border-radius:8px; color:var(--text); padding:12px 14px; font-size:14px; font-family:'Noto Serif TC',serif; outline:none; transition:border-color .2s; resize:none; max-height:120px; min-height:44px; line-height:1.5; }
+  #textInput:focus { border-color:var(--accent); }
+  #textInput::placeholder { color:var(--muted); opacity:.6; }
+  #textInput:disabled { opacity:.4; }
+
+  .icon-btn { width:44px; height:44px; background:var(--accent); border:none; border-radius:8px; cursor:pointer; font-size:17px; display:flex; align-items:center; justify-content:center; color:#001420; transition:opacity .15s,transform .1s; flex-shrink:0; }
+  .icon-btn:hover { opacity:.85; }
+  .icon-btn:active { transform:scale(.96); }
+  .icon-btn:disabled { opacity:.3; cursor:not-allowed; }
+
+  #footNote { text-align:center; font-size:10px; color:var(--muted); font-family:'JetBrains Mono',monospace; padding:0 24px 10px; max-width:900px; margin:0 auto; width:100%; }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div id="header">
+    <div class="logo">📚</div>
+    <h1>醫師端 RAG 文獻助手</h1>
+    <span class="sub">Medscape EM / ID / Lab Medicine</span>
+    <div class="conn-badge">
+      <div class="dot" id="connDot"></div>
+      <span id="connText">檢查後端連線中...</span>
+      <a class="nav-link" href="index.html">← 病患問診端</a>
+      <button id="btnClear" onclick="clearChat()">清除對話</button>
+    </div>
+  </div>
+
+  <div id="patientBar">
+    <input id="queueInput" type="text" placeholder="輸入問診編號（5碼）查詢病人..." maxlength="16">
+    <button class="patient-btn" id="btnLoadPatient" onclick="loadPatient()">載入病人</button>
+    <div id="patientTag" class="patient-tag" style="display:none;">
+      <span id="patientTagText"></span>
+      <button class="patient-tag-close" onclick="unloadPatient()">✕</button>
+    </div>
+  </div>
+
+  <div id="main">
+    <div id="chatbox">
+      <div class="empty-state" id="emptyState">
+        <div class="big">🩻</div>
+        <div class="hint">
+          輸入問診編號載入病人後，AI 會自動產生六段式結構化病歷分析
+          （EMR病歷 / 初步鑑別診斷 / 防漏診鑑別 / 理學檢查 / 檢驗建議 / 影像學決策）。<br><br>
+          也可以直接向 AI 提問任何臨床或文獻相關問題，
+          回答將根據 Medscape 急診醫學 / 感染科 / 檢驗醫學文獻庫產生，並附上引用來源。
+        </div>
+        <div class="suggest-chips">
+          <div class="chip" onclick="askSuggested(this)">胸痛合併冒冷汗要優先排除什麼？</div>
+          <div class="chip" onclick="askSuggested(this)">Thunderclap headache 的鑑別診斷？</div>
+          <div class="chip" onclick="askSuggested(this)">D-dimer 在肺栓塞的檢驗意義</div>
+          <div class="chip" onclick="askSuggested(this)">顳動脈炎（GCA）的診斷標準</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="modeBar">
+      <button id="btnStructuredMode" onclick="toggleStructuredMode()">
+        <span class="dot"></span>
+        <span id="modeLabel">🩺 手動再次分析：關閉</span>
+      </button>
+      <span id="modeHint"></span>
+    </div>
+
+    <div id="inputBar">
+      <textarea id="textInput" rows="1" placeholder="輸入臨床問題，Enter 送出、Shift+Enter 換行..." disabled></textarea>
+      <button class="icon-btn" id="btnSend" onclick="sendMessage()" disabled>➤</button>
+    </div>
+    <div id="footNote">AI 回答僅供臨床參考，不能取代醫師的專業判斷。</div>
+  </div>
+</div>
+
+<script>
+const BACKEND    = "http://127.0.0.1:8000";
+const SESSION_ID = "dr_" + Date.now().toString();
+
+const chatbox    = document.getElementById("chatbox");
+const emptyState = document.getElementById("emptyState");
+const textInput  = document.getElementById("textInput");
+const btnSend    = document.getElementById("btnSend");
+const connDot    = document.getElementById("connDot");
+const connText   = document.getElementById("connText");
+const btnLoadPatient = document.getElementById("btnLoadPatient");
+const queueInput = document.getElementById("queueInput");
+const btnStructuredMode = document.getElementById("btnStructuredMode");
+const modeLabel  = document.getElementById("modeLabel");
+const modeHint   = document.getElementById("modeHint");
+
+let isSending = false;
+let isLoadingPatient = false;
+let loadedPatient = null;
+
+// ── 手動再次分析模式開關 ──────────────────────────────
+// 病人載入時已經會「自動」產生一次六段式分析。
+// 這個開關是給醫師之後想針對「新輸入的口語補充資訊」
+// （例如又問到新症狀、家屬補充病史）再手動觸發一次新分析用的。
+let structuredMode = false;
+
+function toggleStructuredMode() {
+  structuredMode = !structuredMode;
+  btnStructuredMode.classList.toggle("active", structuredMode);
+  if (structuredMode) {
+    modeLabel.textContent = "🩺 手動再次分析：開啟";
+    textInput.placeholder = "貼上新的口語補充主訴，例如：剛剛家屬補充說阿伯這兩天有黑便...";
+    modeHint.textContent = "下一則訊息會針對這段補充資訊，再產生一次新的六段式分析";
+  } else {
+    modeLabel.textContent = "🩺 手動再次分析：關閉";
+    textInput.placeholder = "輸入臨床問題，Enter 送出、Shift+Enter 換行...";
+    modeHint.textContent = "";
+  }
+}
+
+async function loadPatient() {
+  const qn = queueInput.value.trim();
+  if (!qn || isLoadingPatient) return;
+
+  isLoadingPatient = true;
+  btnLoadPatient.disabled = true;
+  queueInput.disabled = true;
+
+  try {
+    const r = await fetch(`${BACKEND}/doctor/load_patient`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ session_id: SESSION_ID, queue_number: qn })
+    });
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}));
+      alert("⚠️ " + (err.detail || `HTTP ${r.status}`));
+      return;
+    }
+    const data = await r.json();
+    loadedPatient = data;
+
+    const tag = document.getElementById("patientTag");
+    const tagText = document.getElementById("patientTagText");
+    const typeLabel = { chest: "胸痛", headache: "頭痛", abdomen: "腹痛" }[data.type] || data.type;
+    tagText.textContent = `👤 病人 ${data.queue_number}（${typeLabel}）`;
+    tag.style.display = "flex";
+    queueInput.value = "";
+
+    if (emptyState.parentElement) emptyState.remove();
+    chatbox.innerHTML = "";
+    addPatientCard(data);
+    addOrdersCard(data);
+
+    // 載入病人後，六段式結構化分析已經在後端自動產生完成，
+    // 這裡直接把結果渲染出來，醫師不用再輸入或按任何按鈕。
+    if (data.structured_note) {
+      addStructuredReport(data.structured_note, data.structured_sources);
+    } else if (data.rag_enabled === false) {
+      addStructuredUnavailable("RAG 向量庫尚未啟用，無法自動產生結構化分析。請先執行 ingest.py 建立知識庫。");
+    } else {
+      addStructuredUnavailable("自動產生結構化分析失敗，可切換下方「手動再次分析」模式重新產生。");
+    }
+  } catch (e) {
+    alert("⚠️ 無法連接後端：" + e.message);
+  } finally {
+    isLoadingPatient = false;
+    btnLoadPatient.disabled = false;
+    queueInput.disabled = false;
+  }
+}
+
+async function unloadPatient() {
+  try { await fetch(`${BACKEND}/doctor/patient/${SESSION_ID}`, { method: "DELETE" }); } catch (e) {}
+  loadedPatient = null;
+  document.getElementById("patientTag").style.display = "none";
+  chatbox.innerHTML = "";
+  location.reload();
+}
+
+function addPatientCard(data) {
+  const card = document.createElement("div");
+  card.style.cssText = "background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:16px 18px;max-width:100%;font-size:13px;line-height:1.8;white-space:pre-wrap;";
+  card.innerHTML = `<div style="font-size:12px;color:var(--accent2);font-family:'JetBrains Mono',monospace;margin-bottom:8px;">📋 問診編號 ${data.queue_number} — 問卷摘要</div>${escapeHtml(data.summary)}<div style="font-size:12px;color:var(--accent2);font-family:'JetBrains Mono',monospace;margin:14px 0 8px;">🩺 AI 初步評估</div>${escapeHtml(data.report)}`;
+  chatbox.appendChild(card);
+  chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+// ── AI 建議醫囑卡片（human-in-the-loop：AI 只給建議，醫師確認才算數）──
+function addOrdersCard(data) {
+  const card = document.createElement("div");
+  card.id = "ordersCard";
+  card.style.cssText = "background:var(--s2);border:1px solid var(--accent);border-radius:10px;padding:16px 18px;max-width:100%;font-size:13px;";
+  card.dataset.queueNumber = data.queue_number;
+
+  const title = document.createElement("div");
+  title.style.cssText = "font-size:12px;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:10px;";
+  title.textContent = "💊 AI 建議醫囑（僅供參考，需醫師確認）";
+  card.appendChild(title);
+
+  const orders = data.pending_orders || [];
+
+  if (data.orders_confirmed) {
+    // 已經確認過：唯讀顯示醫師最終確認的內容，不再提供勾選/按鈕
+    const confirmed = data.confirmed_orders || [];
+    const list = document.createElement("div");
+    list.style.cssText = "line-height:2;";
+    list.innerHTML = confirmed.length
+      ? confirmed.map(o => `✅ ${escapeHtml(o)}`).join("<br>")
+      : "（醫師確認為：不需開立額外檢查）";
+    card.appendChild(list);
+    const badge = document.createElement("div");
+    badge.style.cssText = "margin-top:10px;font-size:11px;color:var(--accent2);font-family:'JetBrains Mono',monospace;";
+    badge.textContent = "✔ 醫師已確認";
+    card.appendChild(badge);
+    chatbox.appendChild(card);
+    chatbox.scrollTop = chatbox.scrollHeight;
+    return;
+  }
+
+  if (!orders.length) {
+    const empty = document.createElement("div");
+    empty.style.cssText = "color:var(--muted);font-size:12px;";
+    empty.textContent = "AI 目前無自動建議，請醫師自行判斷是否需要開立檢查。";
+    card.appendChild(empty);
+    chatbox.appendChild(card);
+    chatbox.scrollTop = chatbox.scrollHeight;
+    return;
+  }
+
+  // 未確認：提供勾選清單（預設全勾），醫師可取消勾選後再確認
+  const list = document.createElement("div");
+  list.style.cssText = "display:flex;flex-direction:column;gap:6px;margin-bottom:12px;";
+  orders.forEach((o, i) => {
+    const row = document.createElement("label");
+    row.style.cssText = "display:flex;align-items:center;gap:8px;cursor:pointer;";
+    row.innerHTML = `<input type="checkbox" class="order-checkbox" data-order="${escapeHtml(o)}" checked style="accent-color:var(--accent);width:15px;height:15px;"><span>${escapeHtml(o)}</span>`;
+    list.appendChild(row);
+  });
+  card.appendChild(list);
+
+  const btn = document.createElement("button");
+  btn.className = "patient-btn";
+  btn.textContent = "✔ 確認醫囑";
+  btn.onclick = () => confirmOrders(card);
+  card.appendChild(btn);
+
+  chatbox.appendChild(card);
+  chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+async function confirmOrders(card) {
+  const queueNumber = card.dataset.queueNumber;
+  const checked = Array.from(card.querySelectorAll(".order-checkbox:checked")).map(cb => cb.dataset.order);
+  const btn = card.querySelector("button");
+  btn.disabled = true;
+  btn.textContent = "送出中...";
+
+  try {
+    const r = await fetch(`${BACKEND}/doctor/orders/confirm`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ queue_number: queueNumber, orders: checked })
+    });
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}));
+      alert("⚠️ " + (err.detail || `HTTP ${r.status}`));
+      btn.disabled = false;
+      btn.textContent = "✔ 確認醫囑";
+      return;
+    }
+    const data = await r.json();
+    // 直接把卡片換成「已確認」的唯讀版本，不用重新整頁
+    card.remove();
+    addOrdersCard({ queue_number: queueNumber, orders_confirmed: true, confirmed_orders: data.confirmed_orders });
+  } catch (e) {
+    alert("⚠️ 無法連接後端：" + e.message);
+    btn.disabled = false;
+    btn.textContent = "✔ 確認醫囑";
+  }
+}
+
+function addStructuredUnavailable(text) {
+  const box = document.createElement("div");
+  box.className = "sr-unavailable";
+  box.textContent = "⚠️ " + text;
+  chatbox.appendChild(box);
+  chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+function escapeHtml(s) {
+  const div = document.createElement("div");
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+queueInput.addEventListener("keydown", e => {
+  if (e.key === "Enter") loadPatient();
+});
+
+async function checkHealth() {
+  try {
+    const r = await fetch(`${BACKEND}/health`);
+    const data = await r.json();
+    if (data.rag_enabled) {
+      connDot.className = "dot on";
+      connText.textContent = "已連線 · RAG 已啟用";
+      setInputsDisabled(false);
+    } else {
+      connDot.className = "dot";
+      connText.textContent = "已連線，但 RAG 尚未啟用（請先執行 ingest.py）";
+    }
+  } catch (e) {
+    connDot.className = "dot";
+    connText.textContent = "無法連接後端，請確認 FastAPI 已啟動";
+  }
+}
+checkHealth();
+
+function setInputsDisabled(v) {
+  textInput.disabled = v;
+  btnSend.disabled = v;
+  if (!v) textInput.focus();
+}
+
+function askSuggested(el) {
+  textInput.value = el.textContent.trim();
+  sendMessage();
+}
+
+function autoGrow() {
+  textInput.style.height = "auto";
+  textInput.style.height = Math.min(textInput.scrollHeight, 120) + "px";
+}
+textInput.addEventListener("input", autoGrow);
+textInput.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+async function sendMessage() {
+  if (isSending) return;
+  const msg = textInput.value.trim();
+  if (!msg) return;
+
+  if (emptyState.parentElement) emptyState.remove();
+  addBubble("user", msg);
+  textInput.value = "";
+  autoGrow();
+  isSending = true;
+  setInputsDisabled(true);
+  showTyping();
+
+  const requestedMode = structuredMode ? "structured_note" : "chat";
+
+  try {
+    const r = await fetch(`${BACKEND}/doctor/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: msg, session_id: SESSION_ID, mode: requestedMode })
+    });
+    removeTyping();
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}));
+      addBubble("ai", "⚠️ " + (err.detail || `HTTP ${r.status}`));
+    } else {
+      const data = await r.json();
+      if (data.mode === "structured_note") {
+        addStructuredReport(data.reply, data.sources);
+      } else {
+        addBubble("ai", data.reply, data.sources);
+      }
+    }
+  } catch (e) {
+    removeTyping();
+    addBubble("ai", "⚠️ 無法連接後端（" + e.message + "），請確認 FastAPI 已啟動。");
+  } finally {
+    isSending = false;
+    setInputsDisabled(false);
+  }
+}
+
+function addBubble(role, text, sources) {
+  const wrap = document.createElement("div");
+  wrap.className = "msg " + role;
+  const who = document.createElement("div");
+  who.className = "who";
+  who.textContent = role === "ai" ? "AI 文獻助手" : "醫師";
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.textContent = text;
+  wrap.appendChild(who);
+  wrap.appendChild(bubble);
+
+  if (sources && sources.length) {
+    wrap.appendChild(buildSourceTags(sources));
+  }
+
+  chatbox.appendChild(wrap);
+  chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+// 結構化病歷分析（六段式）用專屬卡片呈現，跟一般問答泡泡區隔開，
+// 方便醫師一眼認出這是「完整分析結果」而不是單純聊天回覆。
+function addStructuredReport(text, sources) {
+  const card = document.createElement("div");
+  card.className = "structured-report";
+  const title = document.createElement("div");
+  title.className = "sr-title";
+  title.textContent = "🩺 結構化病歷分析（EMR + 臨床決策）";
+  const pre = document.createElement("pre");
+  pre.textContent = text;
+  card.appendChild(title);
+  card.appendChild(pre);
+  if (sources && sources.length) {
+    card.appendChild(buildSourceTags(sources));
+  }
+  chatbox.appendChild(card);
+  chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+function buildSourceTags(sources) {
+  const srcWrap = document.createElement("div");
+  srcWrap.className = "sources";
+  const seen = new Set();
+  sources.forEach(s => {
+    if (seen.has(s.title)) return;
+    seen.add(s.title);
+    const tag = document.createElement(s.url ? "a" : "span");
+    tag.className = "source-tag";
+    tag.textContent = `📄 ${s.title || s.source}`;
+    if (s.url) { tag.href = s.url; tag.target = "_blank"; tag.style.textDecoration = "none"; }
+    srcWrap.appendChild(tag);
+  });
+  return srcWrap;
+}
+
+let typingEl = null;
+function showTyping() {
+  const wrap = document.createElement("div");
+  wrap.className = "msg ai";
+  wrap.id = "__typing";
+  const who = document.createElement("div");
+  who.className = "who";
+  who.textContent = "AI 文獻助手";
+  const ind = document.createElement("div");
+  ind.className = "typing-indicator";
+  ind.innerHTML = "<span></span><span></span><span></span>";
+  wrap.appendChild(who);
+  wrap.appendChild(ind);
+  chatbox.appendChild(wrap);
+  chatbox.scrollTop = chatbox.scrollHeight;
+  typingEl = wrap;
+}
+function removeTyping() { if (typingEl) { typingEl.remove(); typingEl = null; } }
+
+async function clearChat() {
+  try { await fetch(`${BACKEND}/doctor/session/${SESSION_ID}`, { method: "DELETE" }); } catch (e) {}
+  chatbox.innerHTML = "";
+  location.reload();
+}
+</script>
+</body>
+</html>

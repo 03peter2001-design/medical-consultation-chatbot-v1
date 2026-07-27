@@ -1,4 +1,4 @@
-# 胸痛問診機器人（Chest Pain AI Doctor）
+# AI 預問診系統（Medical Consultation Chatbot）
 
 AI 輔助預問診系統。使用者（病患端）用文字或語音回答一系列問題，系統會即時判斷主訴類型（胸痛／頭痛／腹痛），走對應的問診流程，最後透過 LLM（Groq 或 Gemini）產生一份結構化的 AI 初步評估報告；醫師端則可以用問診編號查詢病人資料、閱讀 AI 報告，並針對追加的補充資訊自動生成結構化病歷分析。
 
@@ -8,13 +8,14 @@ AI 輔助預問診系統。使用者（病患端）用文字或語音回答一�
 - 使用身分證字號從 FHIR 載入病歷時，姓名、性別、出生日期與血型等既有基本資料不會重問；一般病史同樣只補問 FHIR 尚未提供的欄位。身分證字號本身不會送入 `/chat`、RAG 或外部模型
 - FHIR `$everything` 中的 `Condition`、`Procedure`、`MedicationStatement`、`MedicationRequest`、`AllergyIntolerance` 與 `QuestionnaireResponse` 會映射到一般病史、心肺／神經／腹部疾病史、手術史、用藥與過敏欄位；本次就診的 `encounter-diagnosis` 不會誤當成既往病史
 - **醫師端**（Vue 路由 `/#/doctor`）：輸入問診編號載入病人資料、同步查看病人標記的疼痛位置與 AI 報告、可另外輸入病人口語補充內容，系統會自動生成六段式結構化病歷分析
-- **RAG（檢索增強生成）**：`backend/docs/` 裡有三份醫學文章（急診醫學／感染科／檢驗醫學），會被向量化存進 `chroma_db`，AI 產生報告時會引用裡面的醫學知識佐證
-- 目前支援 3 種問診情境：**胸痛、頭痛、腹痛**。系統以 LLM 判斷使用者的自由主訴，LLM 無法使用或輸出無效時才以規則備援，再載入對應問卷
+- **RAG（檢索增強生成）**：清理 `backend/docs/` 中急診醫學、感染科與檢驗醫學三份爬蟲語料，切成 chunks 後分類到胸痛、頭痛、腹痛、共通與安全五個 versioned Chroma collections。檢索會依主訴動態選庫、固定加入安全庫，必要時追加共通或另一個症狀庫，再以 RRF 合併及去重
+- **雙語檢索（實驗功能）**：可保留中文原查詢，並以 Gemini 產生去識別化的結構化英文查詢，同時檢索相同 collections；翻譯失敗時會退回原本的多語 embedding 查詢
+- 目前支援 3 種問診情境：**胸痛、頭痛、腹痛**。系統優先以明確關鍵字判斷自由主訴；主訴不明確或同時符合多類時才交由 LLM 分流，再載入對應問卷
 
 ## 專案結構
 
 ```
-ai-doctor/
+medical-consultation-chatbot-v1/
 ├── frontend/                # Vue 3 + Vite 前端
 │   ├── src/
 │   │   ├── components/      # 共用 UI 元件
@@ -30,6 +31,9 @@ ai-doctor/
 │   ├── questionnaires.py     # 分類問卷 JSON 的 lazy loader、快取與驗證
 │   ├── questionnaire_data/   # 主訴、基本、病史及三種疾病問卷 JSON
 │   ├── rag.py                 # RAG 檢索邏輯
+│   ├── rag_translation.py     # Gemini 中英查詢正規化與去識別化
+│   ├── clean_documents.py     # 清理三份爬蟲語料
+│   ├── classify_chunks.py     # chunk 多標籤分類與人工審查清單
 │   ├── ingest.py              # 建立向量資料庫用的腳本
 │   ├── requirements.txt       # Python 套件需求
 │   ├── docs/                  # RAG 知識庫來源文件（.txt）
@@ -45,8 +49,8 @@ ai-doctor/
 ### 1. 下載專案
 
 ```bash
-git clone https://github.com/03peter2001-design/chest-pain-ai-doctor.git
-cd chest-pain-ai-doctor
+git clone git@github.com:03peter2001-design/medical-consultation-chatbot-v1.git
+cd medical-consultation-chatbot-v1
 ```
 
 ### 2. 設定後端環境
@@ -101,6 +105,12 @@ python classify_chunks.py
 python ingest.py --version v2 --dry-run
 python ingest.py --version v2
 ```
+
+以目前語料執行後，清洗結果為 1,585 篇文章、40,526 個 chunks；其中符合
+索引條件的內容會進入 `medical_v2_chest`、`medical_v2_headache`、
+`medical_v2_abdomen`、`medical_v2_common` 與 `medical_v2_safety`，
+其餘內容保留為 `archive`，不建立向量。實際數量以每次產生的
+`classification_report.json` 與 dry-run 報告為準。
 
 清洗產物位於 `backend/clean_docs/`，分類語料、統計與人工審查清單位於
 `backend/classified_docs/`；分類階段產生的 embeddings 會由建庫直接重用，
@@ -165,7 +175,32 @@ npm run dev
 正式建置可執行 `npm run build`，輸出位於 `frontend/dist/`。根目錄的
 `index.html` 與 `doctor.html` 是重構前的舊版，暫時保留供比對與相容使用。
 
-### 7.（選用）設定 D-ID 虛擬數位人語音互動
+### 7.（選用）連接測試用 HAPI FHIR Server
+
+Vue 病患端可直接連接開發環境中的 HAPI FHIR Server。先複製前端設定：
+
+```bash
+cd frontend
+cp .env.example .env
+```
+
+再設定：
+
+```dotenv
+VITE_ENABLE_DIRECT_FHIR=true
+VITE_FHIR_BASE_URL=http://localhost:8080/fhir
+```
+
+前端會以台灣身分證 identifier system
+`http://www.moi.gov.tw` 查詢 `Patient.identifier`，找到唯一病人後再讀取
+`Patient/{id}/$everything`。HAPI Server 必須允許前端開發網址的 CORS。
+可匯入的測試 FHIR Bundle 位於
+`backend/fhir_samples/synthetic_chest_pain_case.json`。
+
+身分證直接查詢只供本機或受控測試環境使用。正式環境不應讓瀏覽器直接
+存取臨床 FHIR Server，應改由具備驗證、授權與稽核的院內後端代理處理。
+
+### 8.（選用）設定 D-ID 虛擬數位人語音互動
 
 病患端網頁左側有一個「D-ID 設定」欄位，需要輸入：
 - **Client Key**：去 [studio.d-id.com](https://studio.d-id.com) 註冊後取得
@@ -180,7 +215,8 @@ npm run dev
 ## 常見問題
 
 **Q: 啟動後端時出現 `[RAG] 未找到 chroma_db，請先執行 python ingest.py`？**
-A: 代表你還沒建立向量資料庫，回到步驟 4 執行 `python ingest.py`。
+A: 代表你還沒建立向量資料庫，回到步驟 4 依序執行清洗、分類及
+`python ingest.py --version v2`。
 
 **Q: 前端顯示無法連線到後端？**
 A: 前端會自動使用目前網頁的 hostname，並以 `8000` 作為預設後端 port。請先在瀏覽器開啟 `http://後端主機:8000/health` 確認能看到健康狀態。
@@ -195,4 +231,10 @@ A: 這是正常的，這兩個東西本來就不會被上傳到 GitHub（見 `.g
 
 ## 開發規劃
 
-- [ ] 目前問診題目是寫死在 `backend/main.py` 裡（`CHEST_QUESTIONS` / `HEADACHE_QUESTIONS` / `ABDOMEN_QUESTIONS`），下一版計畫改成獨立的 JSON 檔案管理，方便之後修改題目不用動到程式碼本身
+- [x] 將前端重構為 Vue 3 + Vite
+- [x] 將主訴、基本資料、一般病史與疾病問卷拆成獨立 JSON
+- [x] 建立胸痛、頭痛、腹痛、共通與安全的 RAG v2 collections
+- [x] 加入可選的 Gemini 中英 dual-query 檢索與失敗 fallback
+- [ ] 完成 RAG 安全庫、低信心分類與黃金測試集的醫療專業審查
+- [ ] 正式環境改用具備身分驗證、授權與稽核的 FHIR 後端代理
+- [ ] 導入狀態感知的動態追問、候選疾病變化與可解釋問診停止條件

@@ -1,198 +1,389 @@
 """
-ingest.py — 從三份 Medscape 文字檔建立 RAG 向量索引
-來源：Emergency Medicine / Infectious Diseases / Laboratory Medicine
-執行方式：python ingest.py
-（把三份 .txt 放到 backend/docs/ 資料夾後執行）
+從 classified_chunks.jsonl 建立 versioned Chroma collections。
+
+執行：
+    cd backend
+    python ingest.py --version v2 --dry-run
+    python ingest.py --version v2
+
+此腳本絕不刪除 legacy `medical_kb`。只有明確指定 --rebuild 時，
+才會刪除相同 version 的五個目標 collections。
 """
 
-import chromadb
-from chromadb.utils import embedding_functions
-import re, os
+from __future__ import annotations
 
-# ── 設定 ──────────────────────────────────────────────────
-CHROMA_DIR    = "./chroma_db"
-CHUNK_SIZE    = 600
-CHUNK_OVERLAP = 200
+import argparse
+import json
+import os
+from collections import Counter, defaultdict
+from pathlib import Path
+from typing import Iterable
 
-SOURCE_FILES = [
-    {
-        "path":  "./docs/Emergency_Medicine_Articles.txt",
-        "label": "Emergency Medicine (Medscape)",
-        "tag":   "em",
-    },
-    {
-        "path":  "./docs/Infectious_Diseases_Articles.txt",
-        "label": "Infectious Diseases (Medscape)",
-        "tag":   "id",
-    },
-    {
-        "path":  "./docs/Laboratory_Medicine_Articles.txt",
-        "label": "Laboratory Medicine (Medscape)",
-        "tag":   "lab",
-    },
-]
-
-ARTICLE_SEP = re.compile(r'\*\* Article URL: (https?://\S+) \*\*')
-
-# 章節標題（導覽列），出現後略過整行
-NAV_TITLES = re.compile(
-    r'^(Show All|DDx|Workup|Presentation|Overview|Follow-up|Medication|'
-    r'Treatment|References|Sections|History|Physical|Causes|Guidelines|'
-    r'Media Gallery|Tables|Questions & Answers|Back to List|'
-    r'Contributor Information|Author|Coauthor|Chief Editor|'
-    r'Specialty Editor Board|Additional Contributors|Acknowledgements|'
-    r'Find Us On|About|Membership|App|WebMD Network|Editions|'
-    r'Drug Interaction Checker|Pill Identifier|Calculators|Formulary|'
-    r'Slideshow|Recommended|Related Conditions|News & Perspective)$',
-    re.IGNORECASE
+from rag_common import (
+    CHROMA_DIR,
+    CLASSIFICATION_REPORT,
+    CLASSIFIED_CORPUS,
+    CLASSIFIED_EMBEDDINGS,
+    EMBEDDING_MODEL,
+    INDEX_ROUTES,
+    MAX_VECTOR_ROWS,
+    collection_name,
 )
 
 
-def extract_body(raw_body: str) -> tuple[str, str]:
-    """
-    從單篇文章的原始文字中：
-    1. 取出標題（Medscape 文章標題行）
-    2. 取出正文（第一個超過100字的段落開始）
-    並清除多餘的導覽列殘留。
-    """
-    # 找「標題行」：通常在第一個 \n\n 之後的第一個包含冒號的長行
-    title_match = re.search(r'\n\n([^\n]{10,120}:[^\n]{0,80})\n', raw_body)
-    title = title_match.group(1).strip() if title_match else ""
-
-    # 找第一個「正文段落」：雙換行後，一個超過100字的段落
-    body_match = re.search(r'\n\n([A-Z][^\n]{100,})', raw_body)
-    if not body_match:
-        return title, ""
-
-    text = raw_body[body_match.start():]
-
-    # 刪除 References 章節以後的內容（只要 References 單獨佔一行）
-    text = re.sub(r'\n\nReferences\n.*', '', text, flags=re.DOTALL)
-
-    # 清除 \r
-    text = text.replace('\r', '')
-    # 壓縮多餘空白行
-    text = re.sub(r'\n{3,}', '\n\n', text)
-    text = re.sub(r'[ \t]+', ' ', text)
-
-    return title, text.strip()
+BATCH_SIZE = 64
+LEGACY_COLLECTION = "medical_kb"
 
 
-def split_articles(raw: str) -> list[dict]:
-    parts = ARTICLE_SEP.split(raw)
-    articles = []
-    for i in range(1, len(parts) - 1, 2):
-        url   = parts[i].strip()
-        title, body_text = extract_body(parts[i + 1])
-        if len(body_text) < 200:
-            continue
-        articles.append({"url": url, "title": title or url, "text": body_text})
-    return articles
+def load_classified_chunks(
+    path: Path = CLASSIFIED_CORPUS,
+) -> Iterable[dict]:
+    if not path.exists():
+        raise RuntimeError(
+            f"找不到分類後語料：{path}\n"
+            "請先執行 python classify_chunks.py"
+        )
+
+    with path.open(encoding="utf-8") as stream:
+        for line_number, line in enumerate(stream, start=1):
+            if not line.strip():
+                continue
+            try:
+                record = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise RuntimeError(
+                    f"{path} 第 {line_number} 行不是合法 JSON"
+                ) from exc
+            missing = {
+                "chunk_id",
+                "article_id",
+                "text",
+                "routes",
+                "route_scores",
+            } - record.keys()
+            if missing:
+                raise RuntimeError(
+                    f"{path} 第 {line_number} 行缺少欄位：{sorted(missing)}"
+                )
+            yield record
 
 
-def chunk_text(text: str) -> list[str]:
-    paragraphs = re.split(r'\n\n+', text)
-    chunks, current = [], ""
+def calculate_index_stats(records: Iterable[dict]) -> dict:
+    chunk_counts = Counter()
+    article_ids = defaultdict(set)
+    unique_indexed_chunks = set()
+    total_chunks = 0
+    archive_chunks = 0
 
-    for para in paragraphs:
-        para = para.strip()
-        if not para or len(para) < 20:
-            continue
-        if len(current) + len(para) + 1 <= CHUNK_SIZE:
-            current += (" " if current else "") + para
-        else:
-            if current:
-                chunks.append(current.strip())
-            if len(para) > CHUNK_SIZE:
-                words, sub = para.split(), ""
-                for w in words:
-                    if len(sub) + len(w) + 1 <= CHUNK_SIZE:
-                        sub += (" " if sub else "") + w
-                    else:
-                        if sub:
-                            chunks.append(sub.strip())
-                        # 強制切割時也帶入前段尾巴作為 overlap
-                        if chunks and CHUNK_OVERLAP > 0:
-                            prev_tail = " ".join(chunks[-1].split()[-(CHUNK_OVERLAP // 6):])
-                            sub = prev_tail + " " + w
-                        else:
-                            sub = w
-                current = sub
-            else:
-                if chunks and CHUNK_OVERLAP > 0:
-                    prev_tail = " ".join(chunks[-1].split()[-(CHUNK_OVERLAP // 6):])
-                    current = prev_tail + " " + para
-                else:
-                    current = para
+    for record in records:
+        total_chunks += 1
+        indexed = False
+        for route in record["routes"]:
+            if route not in INDEX_ROUTES:
+                continue
+            indexed = True
+            chunk_counts[route] += 1
+            article_ids[route].add(record["article_id"])
+            unique_indexed_chunks.add(record["chunk_id"])
+        if not indexed:
+            archive_chunks += 1
 
-    if current.strip():
-        chunks.append(current.strip())
-
-    return [c for c in chunks if len(c) > 60]
+    vector_rows = sum(chunk_counts.values())
+    return {
+        "total_chunks": total_chunks,
+        "archive_chunks": archive_chunks,
+        "unique_indexed_chunks": len(unique_indexed_chunks),
+        "vector_rows": vector_rows,
+        "duplicate_vector_rows": vector_rows - len(unique_indexed_chunks),
+        "max_vector_rows": MAX_VECTOR_ROWS,
+        "within_vector_limit": vector_rows <= MAX_VECTOR_ROWS,
+        "collections": {
+            route: {
+                "chunks": chunk_counts[route],
+                "articles": len(article_ids[route]),
+            }
+            for route in INDEX_ROUTES
+        },
+    }
 
 
-def main():
-    print("=" * 60)
-    print("RAG Ingest — Medscape EM / ID / Lab Medicine")
-    print("=" * 60)
+def load_embedding_store(
+    embeddings_path: Path = CLASSIFIED_EMBEDDINGS,
+    report_path: Path = CLASSIFICATION_REPORT,
+):
+    if not report_path.exists() or not embeddings_path.exists():
+        return None
 
-    client = chromadb.PersistentClient(path=CHROMA_DIR)
-    ef = embedding_functions.SentenceTransformerEmbeddingFunction(
-        model_name="paraphrase-multilingual-MiniLM-L12-v2"
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    count = int(report.get("embedding_count", 0))
+    dimension = int(report.get("embedding_dimension", 0))
+    model = report.get("embedding_model")
+    if not count or not dimension:
+        return None
+    if model != EMBEDDING_MODEL:
+        raise RuntimeError(
+            f"分類 embedding 模型為 {model}，查詢模型為 {EMBEDDING_MODEL}"
+        )
+
+    import numpy as np
+
+    expected_bytes = count * dimension * 4
+    actual_bytes = embeddings_path.stat().st_size
+    if actual_bytes != expected_bytes:
+        raise RuntimeError(
+            f"embedding 檔案大小不符：預期 {expected_bytes}，實際 {actual_bytes}"
+        )
+    return np.memmap(
+        embeddings_path,
+        dtype=np.float32,
+        mode="r",
+        shape=(count, dimension),
     )
 
-    try:
-        client.delete_collection("medical_kb")
-        print("舊 collection 已清除")
-    except Exception:
+
+def attach_embeddings(records: Iterable[dict], embedding_store):
+    for record in records:
+        if "embedding_index" in record:
+            if embedding_store is None:
+                raise RuntimeError("分類語料有 embedding_index，但找不到 embedding 檔")
+            index = int(record["embedding_index"])
+            if index < 0 or index >= len(embedding_store):
+                raise RuntimeError(
+                    f"embedding_index 超出範圍：{record['chunk_id']} → {index}"
+                )
+            record["_embedding"] = embedding_store[index]
+        yield record
+
+
+def _collection_names(client) -> set[str]:
+    names = set()
+    for item in client.list_collections():
+        names.add(item.name if hasattr(item, "name") else str(item))
+    return names
+
+
+def build_collections(
+    client,
+    records: Iterable[dict],
+    version: str,
+    embedding_function,
+    rebuild: bool = False,
+    batch_size: int = BATCH_SIZE,
+) -> dict:
+    target_names = {
+        route: collection_name(version, route)
+        for route in INDEX_ROUTES
+    }
+    existing = _collection_names(client)
+
+    if rebuild:
+        for name in target_names.values():
+            if name in existing:
+                client.delete_collection(name)
+    else:
+        collisions = sorted(set(target_names.values()) & existing)
+        if collisions:
+            raise RuntimeError(
+                "目標 collections 已存在；若確定要重建，請加 --rebuild："
+                + ", ".join(collisions)
+            )
+
+    if LEGACY_COLLECTION not in existing and rebuild:
+        # 明確記錄 invariant；不需要 legacy 存在，但絕不可因 rebuild 建立或刪除它。
         pass
 
-    collection = client.create_collection(
-        name="medical_kb",
-        embedding_function=ef,
-        metadata={"hnsw:space": "cosine"},
+    collections = {
+        route: client.create_collection(
+            name=name,
+            embedding_function=embedding_function,
+            metadata={
+                "hnsw:space": "cosine",
+                "index_version": version,
+                "route": route,
+            },
+        )
+        for route, name in target_names.items()
+    }
+    buffers = {
+        route: {
+            "documents": [],
+            "ids": [],
+            "metadatas": [],
+            "embeddings": [],
+        }
+        for route in INDEX_ROUTES
+    }
+    counts = Counter()
+
+    def flush(route: str) -> None:
+        buffer = buffers[route]
+        if not buffer["documents"]:
+            return
+        kwargs = {
+            "documents": buffer["documents"],
+            "ids": buffer["ids"],
+            "metadatas": buffer["metadatas"],
+        }
+        if buffer["embeddings"]:
+            if len(buffer["embeddings"]) != len(buffer["documents"]):
+                raise RuntimeError("同一批資料混用了預先計算與即時計算 embedding")
+            kwargs["embeddings"] = buffer["embeddings"]
+        collections[route].add(**kwargs)
+        for values in buffer.values():
+            values.clear()
+
+    for record in records:
+        for route in record["routes"]:
+            if route not in INDEX_ROUTES:
+                continue
+            buffer = buffers[route]
+            buffer["documents"].append(record["text"])
+            buffer["ids"].append(record["chunk_id"])
+            if record.get("_embedding") is not None:
+                buffer["embeddings"].append(record["_embedding"])
+            buffer["metadatas"].append(
+                {
+                    "chunk_id": record["chunk_id"],
+                    "article_id": record["article_id"],
+                    "title": record.get("title", "")[:200],
+                    "url": record.get("url", ""),
+                    "updated": record.get("updated", ""),
+                    "source": " | ".join(record.get("source_labels", [])),
+                    "source_tags": ",".join(record.get("source_tags", [])),
+                    "route": route,
+                    "primary_route": record.get("primary_route", "archive"),
+                    "route_score": float(
+                        record.get("route_scores", {}).get(route, 0.0)
+                    ),
+                    "clinical_stage": record.get(
+                        "clinical_stage", "general"
+                    ),
+                    "safety_tags": ",".join(
+                        record.get("safety_tags", [])
+                    ),
+                    "classification_method": record.get(
+                        "classification_method", ""
+                    ),
+                }
+            )
+            counts[route] += 1
+            if len(buffer["documents"]) >= batch_size:
+                flush(route)
+
+    for route in INDEX_ROUTES:
+        flush(route)
+
+    return {
+        "version": version,
+        "collections": {
+            route: {
+                "name": target_names[route],
+                "count": collections[route].count(),
+            }
+            for route in INDEX_ROUTES
+        },
+        "vector_rows": sum(counts.values()),
+    }
+
+
+def create_embedding_function():
+    from chromadb.utils import embedding_functions
+
+    return embedding_functions.SentenceTransformerEmbeddingFunction(
+        model_name=EMBEDDING_MODEL,
+        local_files_only=os.getenv("HF_HUB_OFFLINE", "").lower()
+        in {"1", "true", "yes"},
     )
 
-    all_docs, all_ids, all_metas = [], [], []
-    idx = 0
 
-    for src in SOURCE_FILES:
-        if not os.path.exists(src["path"]):
-            print(f"\n⚠️  找不到 {src['path']}，略過")
-            continue
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="建立 versioned RAG 多 collection 索引"
+    )
+    parser.add_argument("--version", default="v2")
+    parser.add_argument("--input", type=Path, default=CLASSIFIED_CORPUS)
+    parser.add_argument(
+        "--embeddings",
+        type=Path,
+        help="預設讀取 --input 相同目錄的 classified_embeddings.f32",
+    )
+    parser.add_argument(
+        "--classification-report",
+        type=Path,
+        help="預設讀取 --input 相同目錄的 classification_report.json",
+    )
+    parser.add_argument("--chroma-dir", type=Path, default=CHROMA_DIR)
+    parser.add_argument(
+        "--rebuild",
+        action="store_true",
+        help="只刪除並重建同 version 的目標 collections",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="只輸出統計，不載入 embedding 模型、不修改 Chroma",
+    )
+    args = parser.parse_args()
 
-        print(f"\n[{src['tag'].upper()}] 處理 {src['label']}...")
-        raw      = open(src["path"], encoding="utf-8", errors="replace").read()
-        articles = split_articles(raw)
-        print(f"  → 解析出 {len(articles)} 篇文章")
+    # 先驗證 version，即使 dry-run 也不允許產生非法名稱。
+    for route in INDEX_ROUTES:
+        collection_name(args.version, route)
 
-        art_chunks = 0
-        for art in articles:
-            for chunk in chunk_text(art["text"]):
-                all_docs.append(chunk)
-                all_ids.append(f"{src['tag']}_{idx}")
-                all_metas.append({
-                    "source": src["label"],
-                    "title":  art["title"][:120],
-                    "url":    art["url"],
-                })
-                idx += 1
-                art_chunks += 1
-
-        print(f"  → {art_chunks} chunks")
-
-    print(f"\n寫入向量庫（共 {len(all_docs)} chunks）...")
-    BATCH = 64
-    for i in range(0, len(all_docs), BATCH):
-        collection.add(
-            documents=all_docs[i : i + BATCH],
-            ids=all_ids[i : i + BATCH],
-            metadatas=all_metas[i : i + BATCH],
+    embeddings_path = (
+        args.embeddings
+        or args.input.with_name(CLASSIFIED_EMBEDDINGS.name)
+    )
+    classification_report = (
+        args.classification_report
+        or args.input.with_name(CLASSIFICATION_REPORT.name)
+    )
+    embedding_store = load_embedding_store(
+        embeddings_path,
+        classification_report,
+    )
+    records = attach_embeddings(
+        load_classified_chunks(args.input),
+        embedding_store,
+    )
+    stats = calculate_index_stats(records)
+    stats["reuses_precomputed_embeddings"] = embedding_store is not None
+    embedding_dimension = (
+        int(embedding_store.shape[1])
+        if embedding_store is not None
+        else 384
+    )
+    estimated_bytes = stats["vector_rows"] * embedding_dimension * 4
+    stats["embedding_dimension"] = embedding_dimension
+    stats["estimated_embedding_bytes"] = estimated_bytes
+    stats["estimated_embedding_mib"] = round(
+        estimated_bytes / 1024 / 1024,
+        2,
+    )
+    print(json.dumps(stats, ensure_ascii=False, indent=2))
+    if not stats["within_vector_limit"]:
+        raise RuntimeError(
+            f"總向量列數 {stats['vector_rows']} 超過上限 "
+            f"{stats['max_vector_rows']}；請提高次要路由門檻後重新分類"
         )
-        print(f"  {min(i + BATCH, len(all_docs))}/{len(all_docs)}", end="\r")
+    if args.dry_run:
+        print("dry-run 完成：未修改 Chroma")
+        return
 
-    print(f"\n✅ 完成！共 {len(all_docs)} 個向量段落存入 {CHROMA_DIR}/")
-    print("請執行：uvicorn main:app --reload")
+    import chromadb
+
+    client = chromadb.PersistentClient(path=str(args.chroma_dir))
+    result = build_collections(
+        client=client,
+        records=attach_embeddings(
+            load_classified_chunks(args.input),
+            embedding_store,
+        ),
+        version=args.version,
+        embedding_function=create_embedding_function(),
+        rebuild=args.rebuild,
+    )
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    print(f"完成：legacy `{LEGACY_COLLECTION}` 未被修改")
 
 
 if __name__ == "__main__":

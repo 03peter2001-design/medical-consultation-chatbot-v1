@@ -2,6 +2,7 @@ fastapi
 uvicorn[standard]
 pydantic
 groq
+google-genai
 python-dotenv
 pymupdf
 chromadb

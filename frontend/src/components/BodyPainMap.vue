@@ -1,0 +1,336 @@
+<script setup>
+import { computed, ref, watch } from 'vue'
+
+import {
+  BODY_PAIN_REGIONS,
+  getPainRegions,
+} from '../data/bodyPainRegions.js'
+
+const props = defineProps({
+  modelValue: { type: Array, default: () => [] },
+  readonly: { type: Boolean, default: false },
+  compact: { type: Boolean, default: false },
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+const initialView =
+  getPainRegions(props.modelValue)[0]?.view === 'back' ? 'back' : 'front'
+const activeView = ref(initialView)
+const selectedSet = computed(() => new Set(props.modelValue))
+const selectedRegions = computed(() => getPainRegions(props.modelValue))
+const visibleRegions = computed(() =>
+  BODY_PAIN_REGIONS.filter((region) => region.view === activeView.value),
+)
+const counts = computed(() => ({
+  front: selectedRegions.value.filter((region) => region.view === 'front').length,
+  back: selectedRegions.value.filter((region) => region.view === 'back').length,
+}))
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    if (!value.length) return
+    const currentHasSelection = getPainRegions(value).some(
+      (region) => region.view === activeView.value,
+    )
+    if (!currentHasSelection && props.readonly) {
+      activeView.value = getPainRegions(value)[0]?.view || 'front'
+    }
+  },
+)
+
+function toggleRegion(region) {
+  if (props.readonly) return
+  const next = selectedSet.value.has(region.id)
+    ? props.modelValue.filter((id) => id !== region.id)
+    : [...props.modelValue, region.id]
+  emit('update:modelValue', next)
+}
+
+function handleRegionKeydown(event, region) {
+  if (props.readonly || !['Enter', ' '].includes(event.key)) return
+  event.preventDefault()
+  toggleRegion(region)
+}
+</script>
+
+<template>
+  <section
+    class="body-map"
+    :class="{ readonly, compact }"
+    aria-label="人體疼痛位置圖"
+  >
+    <div class="map-toolbar">
+      <div class="view-tabs" role="tablist" aria-label="切換人體正背面">
+        <button
+          v-for="view in ['front', 'back']"
+          :key="view"
+          type="button"
+          role="tab"
+          :aria-selected="activeView === view"
+          :class="{ active: activeView === view }"
+          @click="activeView = view"
+        >
+          {{ view === 'front' ? '正面' : '背面' }}
+          <span v-if="counts[view]">{{ counts[view] }}</span>
+        </button>
+      </div>
+      <button
+        v-if="!readonly && modelValue.length"
+        class="clear-map"
+        type="button"
+        @click="emit('update:modelValue', [])"
+      >
+        清除
+      </button>
+    </div>
+
+    <div class="figure-stage">
+      <span class="side-label side-right">病人右側</span>
+      <span class="side-label side-left">病人左側</span>
+      <svg
+        viewBox="0 0 220 450"
+        role="img"
+        :aria-label="activeView === 'front' ? '人體正面疼痛位置' : '人體背面疼痛位置'"
+      >
+        <g class="body-silhouette" aria-hidden="true">
+          <circle cx="110" cy="39" r="29" />
+          <path d="M94 66h32l4 20 29 8 16 66 17 78-20 5-22-78-7-30 8 108-8 82 17 112h-29l-19-111h-4L89 437H60l17-112-8-82 8-108-7 30-22 78-20-5 17-78 16-66 29-8z" />
+        </g>
+
+        <g :class="{ interactive: !readonly }">
+          <path
+            v-for="region in visibleRegions"
+            :key="region.id"
+            class="pain-region"
+            :class="{ selected: selectedSet.has(region.id) }"
+            :d="region.d"
+            :tabindex="readonly ? undefined : 0"
+            :role="readonly ? undefined : 'button'"
+            :aria-label="region.label"
+            :aria-pressed="readonly ? undefined : selectedSet.has(region.id)"
+            @click="toggleRegion(region)"
+            @keydown="handleRegionKeydown($event, region)"
+          >
+            <title>{{ region.label }}</title>
+          </path>
+        </g>
+
+        <g class="orientation" aria-hidden="true">
+          <text x="28" y="438">R</text>
+          <text x="184" y="438">L</text>
+        </g>
+      </svg>
+    </div>
+
+    <div v-if="selectedRegions.length" class="selected-regions">
+      <span
+        v-for="region in selectedRegions"
+        :key="region.id"
+        class="region-chip"
+      >
+        <i aria-hidden="true" />
+        {{ region.label }}
+      </span>
+    </div>
+    <p v-else class="map-empty">
+      {{ readonly ? '未記錄圖像化疼痛位置' : '尚未選擇疼痛位置' }}
+    </p>
+  </section>
+</template>
+
+<style scoped>
+.body-map {
+  width: min(100%, 390px);
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at 50% 38%, rgb(79 163 224 / 7%), transparent 46%),
+    var(--surface-1);
+}
+
+.map-toolbar {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px;
+  border-bottom: 1px solid var(--border);
+}
+
+.view-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.view-tabs button,
+.clear-map {
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+}
+
+.view-tabs button {
+  display: flex;
+  min-width: 68px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 10px;
+}
+
+.view-tabs button.active {
+  border-color: var(--border-strong);
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.view-tabs button span {
+  display: grid;
+  width: 17px;
+  height: 17px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--danger);
+  color: white;
+  font-size: 9px;
+}
+
+.clear-map {
+  padding: 6px 9px;
+}
+
+.clear-map:hover {
+  color: var(--danger);
+}
+
+.figure-stage {
+  position: relative;
+  display: flex;
+  height: 350px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 34px 6px;
+}
+
+.figure-stage svg {
+  width: auto;
+  height: 100%;
+  overflow: visible;
+}
+
+.body-silhouette {
+  fill: #142233;
+  stroke: #2c4359;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.pain-region {
+  fill: rgb(79 163 224 / 9%);
+  stroke: rgb(79 163 224 / 20%);
+  stroke-width: 1.2;
+  transition:
+    fill 0.16s ease,
+    filter 0.16s ease,
+    stroke 0.16s ease;
+}
+
+.interactive .pain-region {
+  cursor: pointer;
+}
+
+.interactive .pain-region:hover,
+.interactive .pain-region:focus-visible {
+  fill: rgb(0 200 150 / 30%);
+  stroke: var(--green);
+  outline: none;
+}
+
+.pain-region.selected {
+  fill: rgb(224 82 82 / 68%);
+  filter: drop-shadow(0 0 7px rgb(224 82 82 / 55%));
+  stroke: #ff8e8e;
+  stroke-width: 2;
+}
+
+.side-label {
+  position: absolute;
+  top: 14px;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  writing-mode: vertical-rl;
+}
+
+.side-right {
+  left: 12px;
+}
+
+.side-left {
+  right: 12px;
+}
+
+.orientation {
+  fill: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+}
+
+.selected-regions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--border);
+}
+
+.region-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border: 1px solid rgb(224 82 82 / 35%);
+  border-radius: 999px;
+  background: rgb(224 82 82 / 9%);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+}
+
+.region-chip i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--danger);
+}
+
+.map-empty {
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-align: center;
+}
+
+.compact {
+  width: 300px;
+}
+
+.compact .figure-stage {
+  height: 270px;
+}
+
+@media (max-width: 480px) {
+  .figure-stage {
+    height: 310px;
+  }
+}
+</style>

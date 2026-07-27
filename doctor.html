@@ -183,7 +183,34 @@
 </div>
 
 <script>
-const BACKEND    = "http://127.0.0.1:8000";
+function resolveBackendUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const override = params.get("backend")?.trim();
+  if (override) {
+    const candidate = /^https?:\/\//i.test(override)
+      ? override
+      : `http://${override}`;
+    try {
+      const url = new URL(candidate);
+      if (url.protocol === "http:" || url.protocol === "https:") {
+        return url.toString().replace(/\/+$/, "");
+      }
+    } catch {
+      console.warn("忽略無效的 backend 網址參數：", override);
+    }
+  }
+
+  const requestedPort = params.get("backendPort")?.trim();
+  const backendPort = /^\d{1,5}$/.test(requestedPort || "")
+    && Number(requestedPort) <= 65535
+    ? requestedPort
+    : "8000";
+  const protocol = window.location.protocol === "https:" ? "https:" : "http:";
+  const hostname = window.location.hostname || "127.0.0.1";
+  return `${protocol}//${hostname}:${backendPort}`;
+}
+
+const BACKEND = resolveBackendUrl();
 const SESSION_ID = "dr_" + Date.now().toString();
 
 const chatbox    = document.getElementById("chatbox");
@@ -265,7 +292,7 @@ async function loadPatient() {
       addStructuredUnavailable("自動產生結構化分析失敗，可切換下方「手動再次分析」模式重新產生。");
     }
   } catch (e) {
-    alert("⚠️ 無法連接後端：" + e.message);
+    alert(`⚠️ 無法連接後端：${e.message}\n嘗試連線：${BACKEND}`);
   } finally {
     isLoadingPatient = false;
     btnLoadPatient.disabled = false;
@@ -321,7 +348,7 @@ async function checkHealth() {
     }
   } catch (e) {
     connDot.className = "dot";
-    connText.textContent = "無法連接後端，請確認 FastAPI 已啟動";
+    connText.textContent = `無法連接後端：${BACKEND}`;
   }
 }
 checkHealth();
@@ -381,7 +408,10 @@ async function sendMessage() {
     }
   } catch (e) {
     removeTyping();
-    addBubble("ai", "⚠️ 無法連接後端（" + e.message + "），請確認 FastAPI 已啟動。");
+    addBubble(
+      "ai",
+      `⚠️ 無法連接後端（${e.message}）。\n嘗試連線：${BACKEND}\n請確認 FastAPI 的 host 與 port 設定。`
+    );
   } finally {
     isSending = false;
     setInputsDisabled(false);

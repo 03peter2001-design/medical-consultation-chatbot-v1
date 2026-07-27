@@ -1,8 +1,19 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, validator
-from groq import Groq
+from pydantic import BaseModel, Field, validator
 from dotenv import load_dotenv
+from llm import LLMClient
+from questionnaires import (
+    CHIEF_QUESTIONNAIRE,
+    ROUTE_LABELS,
+    build_questionnaire,
+    next_question_index,
+    parse_birth_date,
+    parse_onset_answer,
+    progress_meta,
+    question_input as structured_question_input,
+    questionnaire_meta,
+)
 import os
 import re
 import time
@@ -11,7 +22,7 @@ import traceback
 
 load_dotenv()
 
-app = FastAPI(title="AI 預問診系統", version="2.1.0")
+app = FastAPI(title="AI 預問診系統", version="2.2.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -21,11 +32,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-if not GROQ_API_KEY:
-    raise RuntimeError("缺少環境變數 GROQ_API_KEY")
-
-client = Groq(api_key=GROQ_API_KEY)
+llm_client = LLMClient()
+print(f"[LLM] 使用 {llm_client.provider}（{llm_client.model}）")
 
 sessions: dict[str, dict] = {}
 SESSION_TTL = 60 * 30
@@ -57,21 +65,27 @@ def _cleanup_patient_records():
 
 # ── RAG ──────────────────────────────────────────────────
 RAG_ENABLED = False
+RAG_STATUS = {
+    "enabled": False,
+    "index_version": "unavailable",
+    "collections": [],
+    "legacy_available": False,
+}
 try:
-    from rag import build_context, retrieve, _get_collection
-    import os as _os
+    from rag import build_context, get_rag_status, retrieve
 
-    _BASE_DIR = _os.path.dirname(_os.path.abspath(__file__))
-    _CHROMA_DIR = _os.path.join(_BASE_DIR, "chroma_db")
-
-    if _os.path.exists(_CHROMA_DIR):
-        _get_collection()
-        RAG_ENABLED = True
-        print("[RAG] 向量庫已載入，RAG 功能啟用")
+    RAG_STATUS = get_rag_status()
+    RAG_ENABLED = RAG_STATUS["enabled"]
+    if RAG_ENABLED:
+        print(
+            "[RAG] 向量庫已啟用："
+            f"version={RAG_STATUS['index_version']} "
+            f"collections={RAG_STATUS['collections']}"
+        )
     else:
-        print(f"[RAG] 未找到 chroma_db（{_CHROMA_DIR}），請先執行 python ingest.py（RAG 停用）")
-except ImportError:
-    print("[RAG] rag.py 未找到，RAG 停用")
+        print(f"[RAG] 找不到完整的作用中索引：{RAG_STATUS}")
+except Exception as e:
+    print(f"[RAG] 初始化失敗，RAG 停用：{e}")
 
 # ── Whisper prompt ───────────────────────────────────────
 WHISPER_PROMPT = (
@@ -204,9 +218,46 @@ def _cleanup_sessions():
         del sessions[sid]
 
 
+class PatientPrefill(BaseModel):
+    source: str = "fhir"
+    name: str | None = None
+    gender: str | None = None
+    birth_date: str | None = None
+    blood_type: str | None = None
+    smoke: str | None = None
+    chronic: str | None = None
+    past_meds: str | None = None
+    current_meds: str | None = None
+    allergy: str | None = None
+    cardio: str | None = None
+    neuro: str | None = None
+    abdomen_hx: str | None = None
+    surgery: str | None = None
+
+    @validator(
+        "name",
+        "gender",
+        "birth_date",
+        "blood_type",
+        "smoke",
+        "chronic",
+        "past_meds",
+        "current_meds",
+        "allergy",
+        "cardio",
+        "neuro",
+        "abdomen_hx",
+        "surgery",
+    )
+    def trim_prefill_value(cls, value):
+        return value.strip()[:500] if value else None
+
+
 class ChatRequest(BaseModel):
     message: str = ""
     session_id: str
+    pain_location_ids: list[str] = Field(default_factory=list)
+    patient_prefill: PatientPrefill | None = None
 
     @validator("session_id")
     def session_id_not_empty(cls, v):
@@ -218,109 +269,62 @@ class ChatRequest(BaseModel):
     def message_length(cls, v):
         return v.strip()[:500]
 
+    @validator("pain_location_ids")
+    def pain_location_ids_valid(cls, v):
+        if len(v) > 50:
+            raise ValueError("疼痛位置數量超過上限")
+        unique = []
+        for value in v:
+            if value not in BODY_PAIN_REGIONS:
+                raise ValueError(f"未知的疼痛位置：{value}")
+            if value not in unique:
+                unique.append(value)
+        return unique
 
-STEPS_CHEST = {
-    0: "init", 1: "reason", 2: "gender", 3: "age", 4: "onset_num", 5: "onset_unit",
-    6: "start_type", 7: "location", 8: "fixed", 9: "tender", 10: "quality",
-    11: "aggravate", 12: "relieve", 13: "associated", 14: "smoke", 15: "cardio",
-    16: "chronic", 17: "chronic_detail", 18: "past_meds", 19: "surgery",
-    20: "surgery_detail", 21: "current_meds", 22: "allergy", 23: "report",
+
+BODY_PAIN_REGIONS = {
+    "front_head": {"label": "頭部前側", "view": "front"},
+    "front_neck": {"label": "頸部前側", "view": "front"},
+    "front_chest_right": {"label": "右胸", "view": "front"},
+    "front_chest_center": {"label": "胸骨中央", "view": "front"},
+    "front_chest_left": {"label": "左胸", "view": "front"},
+    "front_upper_abdomen_right": {"label": "右上腹", "view": "front"},
+    "front_upper_abdomen_center": {"label": "上腹中央", "view": "front"},
+    "front_upper_abdomen_left": {"label": "左上腹", "view": "front"},
+    "front_lower_abdomen_right": {"label": "右下腹", "view": "front"},
+    "front_lower_abdomen_center": {"label": "下腹中央", "view": "front"},
+    "front_lower_abdomen_left": {"label": "左下腹", "view": "front"},
+    "front_arm_right": {"label": "右上肢", "view": "front"},
+    "front_arm_left": {"label": "左上肢", "view": "front"},
+    "front_leg_right": {"label": "右下肢", "view": "front"},
+    "front_leg_left": {"label": "左下肢", "view": "front"},
+    "back_head": {"label": "後腦", "view": "back"},
+    "back_neck": {"label": "後頸", "view": "back"},
+    "back_upper_right": {"label": "右上背", "view": "back"},
+    "back_spine_upper": {"label": "上背脊椎", "view": "back"},
+    "back_upper_left": {"label": "左上背", "view": "back"},
+    "back_flank_right": {"label": "右後腰", "view": "back"},
+    "back_spine_lower": {"label": "下背脊椎", "view": "back"},
+    "back_flank_left": {"label": "左後腰", "view": "back"},
+    "back_hip_right": {"label": "右臀部", "view": "back"},
+    "back_hip_left": {"label": "左臀部", "view": "back"},
+    "back_arm_right": {"label": "右上肢後側", "view": "back"},
+    "back_arm_left": {"label": "左上肢後側", "view": "back"},
+    "back_leg_right": {"label": "右下肢後側", "view": "back"},
+    "back_leg_left": {"label": "左下肢後側", "view": "back"},
 }
 
-STEPS_HEADACHE = {
-    0: "init", 1: "reason", 2: "gender", 3: "age", 4: "onset_num", 5: "onset_unit",
-    6: "start_type", 7: "location", 8: "worst_ever", 9: "quality", 10: "aggravate",
-    11: "relieve", 12: "associated", 13: "risk_flags", 14: "smoke", 15: "neuro",
-    16: "chronic", 17: "chronic_detail", 18: "past_meds", 19: "surgery",
-    20: "surgery_detail", 21: "current_meds", 22: "allergy", 23: "report",
-}
 
-STEPS_ABDOMEN = {
-    0: "init", 1: "reason", 2: "gender", 3: "age", 4: "onset_num", 5: "onset_unit",
-    6: "quality", 7: "location", 8: "associated", 9: "contact_history",
-    14: "smoke", 15: "abdomen_hx", 16: "chronic", 17: "chronic_detail",
-    18: "past_meds", 19: "surgery", 20: "surgery_detail", 21: "current_meds",
-    22: "allergy", 23: "report",
-}
+def serialize_pain_locations(location_ids: list[str]) -> list[dict]:
+    return [
+        {"id": location_id, **BODY_PAIN_REGIONS[location_id]}
+        for location_id in location_ids
+    ]
+
 
 CHEST_KEYWORDS = ["胸痛", "胸悶", "胸緊", "胸壓", "胸口痛", "心口", "前胸", "胸部不適"]
 HEADACHE_KEYWORDS = ["頭痛", "頭很痛", "頭暈痛", "偏頭痛", "頭脹", "頭部不適", "腦袋痛"]
 ABDOMEN_KEYWORDS = ["肚子痛", "腹痛", "肚子不舒服", "腹部疼痛", "肚臍痛", "腹脹痛", "肚子", "胃痛"]
-
-COMMON_QUESTIONS = {
-    14: "平時是否有抽菸習慣，還是過去曾抽但已戒菸呢？（有，目前仍在抽 / 沒有，從未抽菸 / 過去有抽，但已戒菸）",
-    16: "過去是否有下列慢性疾病史？（可複選，以逗號分隔）\n選項：糖尿病、慢性腎病、高血脂、肝硬化、自體免疫疾病、癌症、其他、以上皆無\n如果得過自體免疫疾病或癌症，請說出具體病名。",
-    17: "您提到了需要進一步說明的疾病，請簡單描述一下（病名）。",
-    18: "之前是否曾接受過以下藥物治療？（可複選，以逗號分隔）\n選項：抗組織胺、腎上腺素、類固醇、以上皆無",
-    20: "您提到了其他手術，請簡單說明手術名稱。",
-    21: "目前是否有正在服用的藥物？若有，請告知藥物名稱。（沒有 / 有，請填寫藥物名稱）",
-    22: "是否有特殊藥物和食物過敏？若有，請描述對哪些特殊藥物或食物過敏。（沒有 / 有，請描述）",
-}
-
-CHEST_QUESTIONS = {
-    4: "胸痛從什麼時候開始的？（例如：30分鐘前、2小時前、3天前）",
-    5: "",
-    6: "胸痛是突然發作，還是逐漸發作的呢？（突然發作 / 逐漸發作）",
-    7: "胸痛的位置在哪裡？左邊、右邊、正中間，還是兩側都有呢？",
-    8: "胸痛的位置是否會移動？（痛點固定 / 痛點會移動）",
-    9: "是否有觸痛點？也就是用手按壓那個部位時，會不會有壓痛感？（有 / 沒有）",
-    10: "你會如何描述這種疼痛？（可複選，以逗號分隔）\n選項：刺痛、鈍痛、感覺有重物壓迫",
-    11: "你有觀察到哪些情況會使疼痛加重嗎？（可複選，以逗號分隔）\n選項：深呼吸、耗費體力的活動、感到有壓力的時候",
-    12: "你有觀察到什麼情況能緩解疼痛嗎？（可複選，以逗號分隔）\n選項：休息、用藥、坐姿、按摩疼痛部位",
-    13: "請幫我觀察是否出現以下症狀，並將有出現的症狀告訴我：（可複選，以逗號分隔）\n選項：感到呼吸急促、冒冷汗、感到噁心或已經嘔吐、有昏厥要暈倒或頭暈的經歷、感到心跳加速或心跳不規則、咳嗽有痰、肚子痛\n（若都沒有請說「以上皆無」）",
-    15: "過去是否有下列心肺疾病，並將過去有的心肺疾病描述給我聽：（可複選，以逗號分隔）\n選項：高血壓、心絞痛、心臟衰竭、心肌梗塞、心律不整、主動脈剝離、肺栓塞、肺高壓、心包膜積水、氣喘、肺癌、慢性阻塞型肺病、支氣管擴張、氣胸、中風\n（若都沒有請說「以上皆無」）",
-    19: "是否接受過下列手術，並將過去有接受過的手術描述給我聽：（可複選，以逗號分隔）\n選項：心臟支架、心臟血管繞道手術、主動脈人工血管置換、主動脈支架、心律調節器、氣胸胸腔鏡手術、腦部手術、水腦引流、頸動脈手術、腦部放射線治療、頸椎手術、其他（請描述手術名稱）\n（若未曾手術請說「未曾手術」）",
-}
-
-HEADACHE_QUESTIONS = {
-    4: "這次的頭痛，大概是從什麼時候開始的？（例如：30分鐘前、2小時前、3天前）",
-    5: "",
-    6: "這次的頭痛，是像被雷擊般在幾秒內就痛到最劇烈（爆炸性頭痛），還是慢慢加重的？（瞬間爆炸性 / 逐漸加重）",
-    7: "頭痛的位置主要在哪裡？（單側 / 兩側都痛 / 前額 / 後腦勺及頸部 / 整個頭）",
-    8: "這是您這輩子最嚴重、最劇烈的一次頭痛嗎？（是，前所未有的劇痛 / 不是，跟以前差不多或較輕）",
-    9: "您會怎麼描述這個頭痛的感覺？（可複選，以逗號分隔）\n選項：像脈搏一樣的跳痛、悶脹痛、像被緊緊束住、針刺般的刺痛",
-    10: "什麼情況下，頭痛會比較嚴重？（可複選，以逗號分隔）\n選項：咳嗽或用力、彎腰低頭、身體活動、光線刺激、聲音刺激",
-    11: "什麼情況下，頭痛會比較緩解？（可複選，以逗號分隔）\n選項：休息、使用止痛藥、待在黑暗安靜的地方、按摩頭頸部",
-    12: "除了頭痛，您還有以下哪些症狀？（可複選，以逗號分隔）\n選項：噁心或嘔吐、畏光、畏聲、視力模糊或複視、頸部僵硬合併發燒、單側肢體無力或麻木、講話不清楚、意識改變或嗜睡、以上皆無",
-    13: "請問是否有以下情形？（可複選，以逗號分隔）\n選項：近期頭部外傷、癌症病史或免疫功能低下、目前服用抗凝血藥物、懷孕或產後六週內、以上皆無",
-    15: "過去是否有以下神經血管相關疾病史？（可複選，以逗號分隔）\n選項：中風、腦動脈瘤、腦出血、腦膜炎或腦炎、腦部腫瘤、癲癇、偏頭痛病史、顳動脈炎、以上皆無",
-    19: "過去是否曾接受過手術？（可複選，以逗號分隔）\n選項：腦部手術、腦動脈瘤夾閉或栓塞手術、水腦引流、頸動脈手術、腦部放射線治療、頸椎手術、其他、未曾手術",
-}
-
-ABDOMEN_QUESTIONS = {
-    4: "肚子痛是從什麼時候開始的？（例如：30分鐘前、2小時前、3天前）",
-    5: "",
-    6: "請問肚子痛的性質為何？可以複選：（可複選，以逗號分隔）\n選項：鈍痛、刺痛、陣痛、持續痛、由前痛到背後、由肚臍周圍痛轉移到右下腹疼痛、飢餓時會加劇疼痛",
-    7: "請問是肚子痛下列哪個位置？（可複選，以逗號分隔）\n選項：右上腹、左上腹、右下腹、左下腹、全腹痛、左側腰痛、右側腰痛、肚臍以下腹痛",
-    8: "請問是否有下列合併症狀，可複選：（可複選，以逗號分隔）\n選項：腹瀉、發燒發冷、噁心、嘔吐、便秘、血便、冒冷汗、胃酸逆流、血尿、月經過期、陰道分泌物增加、呼吸道症狀、以上皆無",
-    9: "是否有家中或是同行的人有相同的症狀？（是 / 否）",
-    15: "請問你有過下列病史嗎？（可複選，以逗號分隔）\n選項：肝膽結石、腎結石、盲腸炎、腸阻塞、胰臟炎、腹主動脈瘤、紫質症、糖尿病酮酸中毒、以上皆無",
-    19: "請問你有接受過下列腹部手術嗎？可以複選：（可複選，以逗號分隔）\n選項：剖腹產、闌尾切除、子宮切除、膽囊切除、大腸切除手術、胃切除手術、其他、未曾手術",
-}
-
-
-def get_steps_map(ctype: str) -> dict:
-    if ctype == "headache":
-        return STEPS_HEADACHE
-    if ctype == "abdomen":
-        return STEPS_ABDOMEN
-    return STEPS_CHEST
-
-
-INTRO_QUESTIONS = {
-    0: "請問您的性別是？",
-    1: "請問您的年齡是？",
-    2: "請問您今天來看診，主要是哪裡不舒服呢？",
-}
-
-
-def get_question(step: int, ctype: str) -> str:
-    if step in INTRO_QUESTIONS:
-        return INTRO_QUESTIONS[step]
-    if step in COMMON_QUESTIONS:
-        return COMMON_QUESTIONS[step]
-    src = HEADACHE_QUESTIONS if ctype == "headache" else (ABDOMEN_QUESTIONS if ctype == "abdomen" else CHEST_QUESTIONS)
-    return src.get(step, "")
 
 
 def is_chest_pain(text: str) -> bool:
@@ -336,6 +340,7 @@ def is_abdomen_pain(text: str) -> bool:
 
 
 def classify_complaint(text: str) -> str:
+    """由 LLM 判斷主訴路由；只有 API 失敗或輸出無效時才用規則備援。"""
     hits = {
         "chest": is_chest_pain(text),
         "headache": is_headache(text),
@@ -343,13 +348,9 @@ def classify_complaint(text: str) -> str:
     }
     matched = [k for k, v in hits.items() if v]
 
-    if len(matched) == 1:
-        return matched[0]
-
     try:
-        response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[
+        result = llm_client.generate_text(
+            [
                 {
                     "role": "system",
                     "content": (
@@ -364,14 +365,10 @@ def classify_complaint(text: str) -> str:
             temperature=0,
             max_tokens=5,
         )
-        result = response.choices[0].message.content.strip().lower()
-        if "chest" in result:
-            return "chest"
-        if "headache" in result:
-            return "headache"
-        if "abdomen" in result:
-            return "abdomen"
-        return "other"
+        route = result.strip().lower().strip("`'\".。 ")
+        if route in ("chest", "headache", "abdomen", "other"):
+            return route
+        raise ValueError(f"無效的分流輸出：{route[:20]}")
     except Exception as e:
         traceback.print_exc()
         print(f"[Classify] LLM 分流失敗，改用關鍵字判斷: {e}")
@@ -380,18 +377,12 @@ def classify_complaint(text: str) -> str:
         return "other"
 
 
-def needs_chronic_detail(answer: str) -> bool:
-    return any(t in answer for t in ["自體免疫疾病", "癌症", "其他"])
-
-
-def needs_surgery_detail(answer: str) -> bool:
-    return "其他" in answer
-
-
 def parse_gender(text: str) -> str | None:
     raw = text.strip()
     corrected = correct_transcription(text)
 
+    if corrected.startswith("其他：") and corrected[3:].strip():
+        return corrected
     if any(w in corrected for w in ["男性", "男生", "先生", "男"]):
         return "男"
     if any(w in corrected for w in ["女性", "女生", "小姐", "女"]):
@@ -405,57 +396,25 @@ def parse_gender(text: str) -> str | None:
     return None
 
 
-def parse_age(text: str) -> str | None:
+def parse_onset(text: str) -> tuple[str, str] | None:
     text = correct_transcription(text)
-    numbers = re.findall(r"\d+", text)
-    if numbers:
-        age = int(numbers[0])
-        if 0 < age < 130:
-            return str(age)
-    return None
+    return parse_onset_answer(text)
 
 
-def parse_onset(text: str) -> tuple[str, str]:
-    text = correct_transcription(text)
-
-    numbers = re.findall(r"\d+", text)
-    num = numbers[0] if numbers else text
-
-    if any(w in text for w in ["分鐘", "分"]):
-        unit = "分鐘前"
-    elif any(w in text for w in ["小時", "鐘頭"]):
-        unit = "小時前"
-    elif any(w in text for w in ["天", "日"]):
-        unit = "天前"
-    elif any(w in text for w in ["週", "周", "星期"]):
-        unit = "週前"
-    else:
-        unit = "小時前"
-
-    return num, unit
-
-
-def next_step(current: int, data: dict, ctype: str = "chest") -> int:
-    nxt = current + 1
-    if nxt == 5:
-        nxt = 6
-    if ctype == "abdomen":
-        if nxt in (10, 11, 12, 13):
-            nxt = 14
-    if nxt == 17 and not needs_chronic_detail(data.get("chronic", "")):
-        nxt = 18
-    if nxt == 20 and not needs_surgery_detail(data.get("surgery", "")):
-        nxt = 21
-    return nxt
-
-
-def build_summary(data: dict) -> str:
+def build_summary(data: dict, *, include_identity: bool = True) -> str:
     ctype = data.get("type", "chest")
     default_reason = {"chest": "胸痛", "headache": "頭痛", "abdomen": "腹痛"}.get(ctype, "胸痛")
 
+    identity_line = (
+        f"- 姓名：{data.get('name', '未提供')}\n"
+        f"- 出生日期：{data.get('birth_date', '未提供')}\n"
+        if include_identity
+        else ""
+    )
     base = f"""患者基本資料：
-- 性別：{data.get('gender', '未提供')}
+{identity_line}- 性別：{data.get('gender', '未提供')}
 - 年齡：{data.get('age', '未提供')}歲
+- 血型：{data.get('blood_type', '未提供')}
 - 就診原因：{data.get('reason', default_reason)}
 """
 
@@ -515,6 +474,30 @@ def build_summary(data: dict) -> str:
     return (base + symptom_block + tail).strip()
 
 
+def clinical_patient_data(data: dict | None) -> dict:
+    """檢索與外部模型不需要直接識別資訊，只保留臨床欄位。"""
+    identity_fields = {
+        "name",
+        "birth_date",
+        "national_id",
+        "id_number",
+        "patient_id",
+    }
+    return {
+        key: value
+        for key, value in (data or {}).items()
+        if key not in identity_fields
+    }
+
+
+def model_patient_summary(record: dict) -> str:
+    """提供給外部模型的摘要，刻意排除姓名與出生日期。"""
+    return build_summary(
+        clinical_patient_data(record.get("data")),
+        include_identity=False,
+    )
+
+
 # ── 測試用假病人（問診編號 00000）──────────────────────────
 # 純粹為了開發/測試方便：每次重啟後端，都會自動在 patient_records
 # 建立這筆假資料，醫師端直接輸入 00000 就能載入，不用每次都重新跑一次
@@ -537,6 +520,13 @@ def _seed_test_patient():
         "onset_unit": "分鐘前",
         "start_type": "突然發作",
         "location": "左邊",
+        "pain_locations": [
+            {
+                "id": "front_chest_left",
+                "label": "左胸",
+                "view": "front",
+            }
+        ],
         "fixed": "痛點固定",
         "tender": "沒有",
         "quality": "感覺有重物壓迫",
@@ -579,22 +569,30 @@ _seed_test_patient()
 
 def build_report_prompt(data: dict) -> str:
     ctype = data.get("type", "chest")
-    summary = build_summary(data)
+    # 姓名不影響臨床摘要，不送給外部 LLM；出生日期只保留計算後年齡。
+    report_data = clinical_patient_data(data)
+    summary = build_summary(report_data, include_identity=False)
     chief_label = {"chest": "胸痛", "headache": "頭痛", "abdomen": "腹痛"}.get(ctype, "胸痛")
 
     rag_context = ""
     danger_context = ""
     if RAG_ENABLED:
         try:
-            rag_context = build_context(data, ctype)
+            rag_context = build_context(report_data, ctype)
             print(f"[RAG] build_context 撈到 {len(rag_context)} 字的內容")
         except Exception as e:
             print(f"[RAG] build_context 查詢失敗: {e}")
 
         try:
             danger_query = f"{data.get('reason', '')} {data.get('associated', '')} 危險徵兆 紅旗症狀 鑑別診斷".strip()
-            danger_context, _ = retrieve_context_block(danger_query, n_results=4)
-            print(f"[RAG] 補充危險徵兆檢索: {danger_query!r}")
+            danger_context, _ = retrieve_context_block(
+                danger_query,
+                n_results=4,
+                primary_route=ctype,
+                patient_data=report_data,
+                purpose="diagnosis",
+            )
+            print("[RAG] 已完成補充危險徵兆檢索")
         except Exception as e:
             print(f"[RAG] 補充危險徵兆檢索失敗: {e}")
             danger_context = ""
@@ -734,9 +732,9 @@ def build_structured_note_prompt(
 ) -> str:
     patient_block = ""
     if patient:
-        patient_block = f"""此病人已完成AI預問診問卷（問診編號 {patient['queue_number']}），既有資料如下，請一併納入分析：
+        patient_block = f"""此病人已完成AI預問診問卷，既有資料如下，請一併納入分析：
 
-{patient['summary']}
+{model_patient_summary(patient)}
 
 【問診端AI初步評估】
 {patient['report']}
@@ -804,11 +802,28 @@ Allergy（過敏史）：
 
 @app.get("/health")
 def health():
+    current_rag_status = (
+        get_rag_status() if "get_rag_status" in globals() else RAG_STATUS
+    )
     return {
         "status": "ok",
+        "llm_provider": llm_client.provider,
+        "llm_model": llm_client.model,
         "sessions": len(sessions),
         "doctor_sessions": len(doctor_sessions),
-        "rag_enabled": RAG_ENABLED,
+        "rag_enabled": current_rag_status["enabled"],
+        "rag_index_version": current_rag_status["index_version"],
+        "rag_collections": current_rag_status["collections"],
+        "rag_legacy_available": current_rag_status["legacy_available"],
+        "rag_query_translation": current_rag_status.get(
+            "query_translation",
+            {
+                "enabled": False,
+                "provider": "off",
+                "query_mode": "dual",
+                "model": "",
+            },
+        ),
     }
 
 
@@ -822,18 +837,16 @@ async def transcribe(audio: UploadFile = File(...)):
         raise HTTPException(status_code=413, detail="音訊檔案過大（上限 10MB）")
 
     try:
-        transcription = client.audio.transcriptions.create(
-            file=(audio.filename or "audio.webm", audio_bytes),
-            model="whisper-large-v3-turbo",
-            language="zh",
-            response_format="text",
+        raw_text = llm_client.transcribe(
+            audio_bytes=audio_bytes,
+            filename=audio.filename or "audio.webm",
+            mime_type=audio.content_type,
             prompt=WHISPER_PROMPT,
         )
-        raw_text = str(transcription).strip()
         corrected_text = correct_transcription(raw_text)
 
-        print(f"[Whisper] 原始: {raw_text}")
-        print(f"[Whisper] 修正: {corrected_text}")
+        print(f"[Transcribe:{llm_client.provider}] 原始: {raw_text}")
+        print(f"[Transcribe:{llm_client.provider}] 修正: {corrected_text}")
 
         return {"text": corrected_text}
 
@@ -842,210 +855,351 @@ async def transcribe(audio: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=f"語音辨識失敗：{str(e)}")
 
 
+def _question_payload(
+    session: dict,
+    *,
+    reply: str,
+    user_display=None,
+    completed: bool = False,
+    queue_number: str | None = None,
+) -> dict:
+    questionnaire = session.get("questionnaire", CHIEF_QUESTIONNAIRE)
+    index = session.get("index", 0)
+    data = session.get("data", {})
+    current = (
+        questionnaire[index]
+        if not completed and 0 <= index < len(questionnaire)
+        else None
+    )
+    return {
+        "reply": reply,
+        "session_id": session["session_id"],
+        "completed": completed,
+        "user_display": user_display,
+        "step": -1 if completed else index,
+        "queue_number": queue_number,
+        "question_input": (
+            structured_question_input(current) if current else None
+        ),
+        "questionnaire": (
+            questionnaire_meta(current, data.get("type"))
+            if current
+            else None
+        ),
+        "progress": (
+            {"current": 1, "total": 1, "percent": 100}
+            if completed
+            else progress_meta(questionnaire, index, data)
+        ),
+    }
+
+
+def _section_transition_reply(
+    previous_section: str,
+    current: dict,
+    route: str,
+    prefilled_fields: set[str] | None = None,
+) -> str:
+    prompt = current["prompt"]
+    prefilled_fields = prefilled_fields or set()
+    basic_fields = {"name", "gender", "birth_date", "blood_type"}
+    history_fields = {
+        "smoke",
+        "chronic",
+        "past_meds",
+        "current_meds",
+        "allergy",
+    }
+    if previous_section == current["section"]:
+        return prompt
+    if current["section"] == "basic":
+        return f"主訴已記錄。接下來填寫基本資料。\n\n{prompt}"
+    if current["section"] == "history":
+        if basic_fields.issubset(prefilled_fields):
+            return (
+                "主訴已記錄，基本資料已從病歷帶入。"
+                f"接下來補充尚未取得的病史。\n\n{prompt}"
+            )
+        return f"基本資料完成。接下來了解一般病史。\n\n{prompt}"
+    if current["section"] == "disease":
+        if basic_fields.issubset(prefilled_fields):
+            imported = (
+                "基本資料與病史"
+                if history_fields.issubset(prefilled_fields)
+                else "基本資料"
+            )
+            return (
+                f"已從病歷帶入{imported}。接下來進入"
+                f"{ROUTE_LABELS.get(route, '症狀')}問卷。\n\n{prompt}"
+            )
+        return (
+            f"病史資料完成。接下來進入"
+            f"{ROUTE_LABELS.get(route, '症狀')}問卷。\n\n{prompt}"
+        )
+    return prompt
+
+
+async def _complete_consultation(session: dict, user_display: str) -> dict:
+    data = session["data"]
+    ctype = data["type"]
+    try:
+        ai_report = llm_client.generate_text(
+            [
+                {
+                    "role": "system",
+                    "content": (
+                        "你是資深急診醫師。請用繁體中文、自然醫師口吻撰寫"
+                        "預問診摘要。初步評估必須引用提供的醫學知識庫內容，"
+                        "帶入具體的危險徵兆或診斷標準。絕對不可做正式診斷。"
+                    ),
+                },
+                {"role": "user", "content": build_report_prompt(data)},
+            ],
+            temperature=0.3,
+            max_tokens=600,
+        )
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"AI 生成失敗：{str(e)}")
+
+    _cleanup_patient_records()
+    queue_number = generate_queue_number(ctype)
+    patient_records[queue_number] = {
+        "queue_number": queue_number,
+        "type": ctype,
+        "reason": data.get("reason", ""),
+        "summary": build_summary(data),
+        "report": ai_report,
+        "data": data,
+        "ts": time.time(),
+    }
+    session["step"] = -1
+    session["index"] = -1
+    reply = (
+        f"謝謝您的回答，問診已完成。\n\n"
+        f"────────────\n"
+        f"📋 您的問診編號為：{queue_number}\n"
+        f"────────────\n\n"
+        "請您耐心等候叫號，輪到您的號碼時醫師會與您看診。"
+        "如果您感到非常不舒服，請立即告知現場護理師。"
+    )
+    return _question_payload(
+        session,
+        reply=reply,
+        user_display=user_display,
+        completed=True,
+        queue_number=queue_number,
+    )
+
+
 @app.post("/chat")
 async def chat(req: ChatRequest):
     _cleanup_sessions()
 
     if req.session_id not in sessions:
-        sessions[req.session_id] = {"step": 0, "data": {}, "ts": time.time()}
-        return {
-            "reply": "您好！我是您的數位醫療助理。在開始之前，先詢問您的基本資料。\n\n請問您的性別是？",
+        prefill = (
+            req.patient_prefill.dict(exclude_none=True)
+            if req.patient_prefill
+            else {}
+        )
+        prefill.pop("source", None)
+        data = {}
+        prefilled_fields = set()
+        for field, value in prefill.items():
+            if not value:
+                continue
+            if field == "birth_date":
+                parsed_birth_date = parse_birth_date(value)
+                if parsed_birth_date is None:
+                    continue
+                data["birth_date"], age = parsed_birth_date
+                data["age"] = str(age)
+            elif field == "gender":
+                data[field] = parse_gender(value) or value
+            else:
+                data[field] = value
+            prefilled_fields.add(field)
+
+        session = {
             "session_id": req.session_id,
-            "completed": False,
-            "user_display": None,
             "step": 0,
+            "index": 0,
+            "questionnaire": list(CHIEF_QUESTIONNAIRE),
+            "data": data,
+            "prefilled_fields": list(prefilled_fields),
+            "ts": time.time(),
         }
+        sessions[req.session_id] = session
+        return _question_payload(
+            session,
+            reply=(
+                "您好！我是您的數位醫療助理。請先說明主訴，"
+                "之後會依序填寫基本資料、病史與症狀問卷。\n\n"
+                f"{CHIEF_QUESTIONNAIRE[0]['prompt']}"
+            ),
+        )
 
     session = sessions[req.session_id]
     session["ts"] = time.time()
-    step = session["step"]
+    if session.get("index") == -1:
+        return _question_payload(
+            session,
+            reply="本次預問診已完成，請重新整理頁面開始新的問診。",
+            user_display=req.message or None,
+            completed=True,
+        )
+
+    questionnaire = session["questionnaire"]
+    index = session["index"]
+    current = questionnaire[index]
     data = session["data"]
-    user_input = req.message
-
-    user_display = user_input if user_input else None
-
-    if step == -1:
-        return {
-            "reply": "本次預問診已完成，請重新整理頁面開始新的問診。",
-            "session_id": req.session_id,
-            "completed": True,
-            "user_display": user_display,
-            "step": session["step"],
-        }
+    user_input = req.message.strip()
 
     if not user_input:
-        return {
-            "reply": "請輸入內容後再送出。",
-            "session_id": req.session_id,
-            "completed": False,
-            "user_display": None,
-            "step": session["step"],
-        }
-
+        return _question_payload(
+            session,
+            reply=f"請輸入內容後再送出。\n\n{current['prompt']}",
+        )
     if is_junk(user_input):
-        print(f"[Chat] Step {step} 收到雜訊，略過: {repr(user_input)}")
-        current_q = get_question(step, data.get("type", "chest"))
-        retry_hint = f"抱歉，我沒有聽清楚，請再說一次。\n\n{current_q}" if current_q else "抱歉，我沒有聽清楚，請再說一次。"
-        return {
-            "reply": retry_hint,
-            "session_id": req.session_id,
-            "completed": False,
-            "user_display": None,
-            "step": session["step"],
-        }
+        return _question_payload(
+            session,
+            reply=f"抱歉，我沒有聽清楚，請再回答一次。\n\n{current['prompt']}",
+        )
 
-    reply = ""
-    completed = False
-    queue_number = None
+    field = current["field"]
+    user_display = user_input
 
-    if step == 0:
-        gender = parse_gender(user_input)
-        if gender is None:
-            print(f"[Chat] Step 0 性別辨識失敗，原始輸入: {repr(user_input)}")
-            return {
-                "reply": "抱歉，我沒有聽清楚，請問您的性別是？",
-                "session_id": req.session_id,
-                "completed": False,
-                "user_display": None,
-                "step": session["step"],
-            }
-        data["gender"] = gender
-        user_display = "男性" if gender == "男" else "女性"
-        session["step"] = 1
-        reply = "請問您的年齡是？"
-
-    elif step == 1:
-        age = parse_age(user_input)
-        if age is None:
-            print(f"[Chat] Step 1 年齡辨識失敗，原始輸入: {repr(user_input)}")
-            return {
-                "reply": "抱歉，我沒有聽清楚，請問您的年齡是？（請說出數字，例如：45）",
-                "session_id": req.session_id,
-                "completed": False,
-                "user_display": None,
-                "step": session["step"],
-            }
-        data["age"] = age
-        session["step"] = 2
-        reply = "請問您今天來看診，主要是哪裡不舒服呢？"
-
-    elif step == 2:
+    if field == "reason":
         data["reason"] = user_input
-        ctype = classify_complaint(user_input)
-        data["type"] = ctype
-        print(f"[Classify] 主訴「{user_input}」→ {ctype}")
-
-        if ctype in ("chest", "headache", "abdomen"):
-            session["step"] = 4
-            label = {"chest": "胸痛", "headache": "頭痛", "abdomen": "腹痛"}[ctype]
-            reply = f"了解，您說的是{label}的問題。\n\n{get_question(4, ctype)}"
-        else:
+        route = classify_complaint(user_input)
+        data["type"] = route
+        print(f"[Classify] 主訴路由 → {route}")
+        if route not in ("chest", "headache", "abdomen"):
             session["step"] = -1
-            completed = True
-            reply = (
-                "了解，您描述的症狀目前不在胸痛／頭痛／腹痛問診範圍內，"
-                "建議您直接前往門診掛號，讓醫師進一步評估。"
-                "感謝您的配合，祝您早日康復！"
+            session["index"] = -1
+            return _question_payload(
+                session,
+                reply=(
+                    "了解，您描述的症狀目前不在胸痛／頭痛／腹痛問診"
+                    "範圍內，建議直接由現場護理師或醫師進一步分流。"
+                ),
+                user_display=user_display,
+                completed=True,
             )
-
-    elif 4 <= step <= 22:
-        ctype = data.get("type", "chest")
-        key = get_steps_map(ctype)[step]
-        if step == 4:
-            data["onset_num"], data["onset_unit"] = parse_onset(user_input)
-        else:
-            data[key] = user_input
-
-        nxt = next_step(step, data, ctype)
-
-        if nxt <= 22:
-            session["step"] = nxt
-            if nxt == 6:
-                q6 = get_question(6, ctype)
-                reply = f"好的，{data.get('onset_num','')} {data.get('onset_unit','')}開始的。\n\n{q6}"
-            elif nxt == 14:
-                q14 = get_question(14, ctype)
-                reply = f"好，接下來我想了解一些您的過去健康狀況。\n\n{q14}"
-            elif nxt == 15 and ctype == "abdomen":
-                q15 = get_question(15, ctype)
-                reply = f"好，接下來我想了解一些您的過去健康狀況。\n\n{q15}"
-            else:
-                reply = get_question(nxt, ctype)
-        else:
-            session["step"] = -1
-            completed = True
-            try:
-                response = client.chat.completions.create(
-                    model="llama-3.3-70b-versatile",
-                    messages=[
-                        {
-                            "role": "system",
-                            "content": "你是資深急診醫師。請用繁體中文、自然醫師口吻撰寫預問診摘要。初步評估必須引用提供的醫學知識庫內容，帶入具體的危險徵兆或診斷標準。絕對不可做正式診斷。",
-                        },
-                        {"role": "user", "content": build_report_prompt(data)},
-                    ],
-                    temperature=0.3,
-                    max_tokens=600,
-                )
-                ai_report = response.choices[0].message.content.strip()
-            except Exception as e:
-                traceback.print_exc()
-                raise HTTPException(status_code=500, detail=f"AI 生成失敗：{str(e)}")
-
-            _cleanup_patient_records()
-            queue_number = generate_queue_number(ctype)
-            patient_records[queue_number] = {
-                "queue_number": queue_number,
-                "type": ctype,
-                "reason": data.get("reason", ""),
-                "summary": build_summary(data),
-                "report": ai_report,
-                "data": data,
-                "ts": time.time(),
-            }
-
-            reply = (
-                f"謝謝您的回答，問診已完成。\n\n"
-                f"────────────\n"
-                f"📋 您的問診編號為：{queue_number}\n"
-                f"────────────\n\n"
-                "請您耐心等候叫號，輪到您的號碼時醫師會與您看診。"
-                "如果您感到非常不舒服，請立即告知現場護理師。"
+        questionnaire = build_questionnaire(route)
+        session["questionnaire"] = questionnaire
+    elif field == "gender":
+        gender = parse_gender(user_input)
+        if gender is None and user_input != "不便透露":
+            return _question_payload(
+                session,
+                reply=f"無法辨識此選項，請重新選擇。\n\n{current['prompt']}",
             )
+        data[field] = gender or user_input
+        user_display = {
+            "男": "男性",
+            "女": "女性",
+        }.get(data[field], data[field])
+    elif field == "birth_date":
+        parsed_birth_date = parse_birth_date(user_input)
+        if parsed_birth_date is None:
+            return _question_payload(
+                session,
+                reply=(
+                    "出生日期格式不正確或超出合理範圍，請重新選擇。"
+                    f"\n\n{current['prompt']}"
+                ),
+            )
+        data["birth_date"], age = parsed_birth_date
+        data["age"] = str(age)
+        user_display = data["birth_date"]
+    elif field == "onset":
+        parsed_onset = parse_onset(user_input)
+        if parsed_onset is None:
+            return _question_payload(
+                session,
+                reply=(
+                    "我無法確定時間長度，請同時輸入數字和單位，"
+                    "例如「30分鐘前」或「1個月前」。"
+                ),
+            )
+        data["onset_num"], data["onset_unit"] = parsed_onset
+        data["onset"] = user_input
+        user_display = (
+            f"{data['onset_num']} {data['onset_unit']}".strip()
+        )
+    else:
+        if field == "location" and req.pain_location_ids:
+            pain_locations = serialize_pain_locations(req.pain_location_ids)
+            data["pain_locations"] = pain_locations
+            user_input = "、".join(
+                location["label"] for location in pain_locations
+            )
+            user_display = user_input
+        data[field] = user_input
 
-    return {
-        "reply": reply,
-        "session_id": req.session_id,
-        "completed": completed,
-        "user_display": user_display,
-        "step": session["step"],
-        "queue_number": queue_number,
-    }
+    prefilled_fields = set(session.get("prefilled_fields", []))
+    next_index = next_question_index(
+        questionnaire,
+        index,
+        data,
+        skip_fields=prefilled_fields,
+    )
+    if next_index is None:
+        return await _complete_consultation(session, user_display)
+
+    previous_section = current["section"]
+    session["index"] = next_index
+    session["step"] = next_index
+    next_question = questionnaire[next_index]
+    return _question_payload(
+        session,
+        reply=_section_transition_reply(
+            previous_section,
+            next_question,
+            data["type"],
+            prefilled_fields,
+        ),
+        user_display=user_display,
+    )
 
 
-def retrieve_context_block(query: str, n_results: int = 6) -> tuple[str, list[dict]]:
+def retrieve_context_block(
+    query: str,
+    n_results: int = 6,
+    primary_route: str | None = None,
+    patient_data: dict | None = None,
+    purpose: str = "general",
+) -> tuple[str, list[dict]]:
     """
     執行一次 RAG 檢索，回傳 (整理好的知識庫文字, 來源清單)。
     """
     try:
-        chunks = retrieve(query, n_results=n_results)
+        chunks = retrieve(
+            query,
+            primary_route=primary_route,
+            patient_data=patient_data,
+            purpose=purpose,
+            final_k=n_results,
+        )
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"向量庫查詢失敗：{str(e)}")
 
-    seen_titles = set()
+    title_counts = {}
     context_parts = []
     sources = []
     for chunk in chunks:
         title = chunk["title"]
-        if title in seen_titles:
+        if title_counts.get(title, 0) >= 2:
             continue
-        seen_titles.add(title)
+        title_counts[title] = title_counts.get(title, 0) + 1
         context_parts.append(f"[{chunk['source']} — {title}]\n{chunk['text'][:900]}")
         sources.append({
             "title": title,
             "source": chunk["source"],
             "url": chunk.get("url", ""),
+            "route": chunk.get("route", ""),
         })
 
     context_block = "\n\n---\n\n".join(context_parts) if context_parts else "（知識庫中查無相關內容）"
@@ -1074,16 +1228,30 @@ def _generate_structured_note_for_patient(record: dict) -> tuple[str | None, lis
         return None, []
 
     base_query = record.get("reason", "")
+    primary_route = record.get("type")
+    patient_data = clinical_patient_data(record.get("data"))
 
     try:
         diag_context, diag_sources = retrieve_context_block(
-            f"{base_query} 鑑別診斷 危險徵兆 紅旗症狀", n_results=5
+            f"{base_query} 鑑別診斷 危險徵兆 紅旗症狀",
+            n_results=5,
+            primary_route=primary_route,
+            patient_data=patient_data,
+            purpose="diagnosis",
         )
         lab_context, lab_sources = retrieve_context_block(
-            f"{base_query} 抽血檢驗 實驗室檢查", n_results=4
+            f"{base_query} 抽血檢驗 實驗室檢查",
+            n_results=4,
+            primary_route=primary_route,
+            patient_data=patient_data,
+            purpose="lab",
         )
         imaging_context, imaging_sources = retrieve_context_block(
-            f"{base_query} 影像學 X光 電腦斷層 CT MRI 超音波", n_results=4
+            f"{base_query} 影像學 X光 電腦斷層 CT MRI 超音波",
+            n_results=4,
+            primary_route=primary_route,
+            patient_data=patient_data,
+            purpose="imaging",
         )
         sources = _dedup_sources(diag_sources, lab_sources, imaging_sources)
 
@@ -1100,16 +1268,14 @@ def _generate_structured_note_for_patient(record: dict) -> tuple[str | None, lis
             imaging_context=imaging_context,
         )
 
-        response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[
+        structured_note = llm_client.generate_text(
+            [
                 {"role": "system", "content": STRUCTURED_NOTE_SYSTEM_PROMPT},
                 {"role": "user", "content": user_prompt},
             ],
             temperature=0.2,
             max_tokens=1400,
         )
-        structured_note = response.choices[0].message.content.strip()
         return structured_note, sources
 
     except Exception as e:
@@ -1161,6 +1327,7 @@ def load_patient(req: LoadPatientRequest):
         "report": record["report"],
         "structured_note": structured_note,
         "structured_sources": structured_sources,
+        "pain_locations": record.get("data", {}).get("pain_locations", []),
         "rag_enabled": RAG_ENABLED,
     }
 
@@ -1203,24 +1370,52 @@ async def doctor_chat(req: DoctorChatRequest):
         base_query = f"{req.message} {patient.get('reason', '')}"
 
     if req.mode == "structured_note":
+        primary_route = patient.get("type") if patient else None
+        patient_data = (
+            clinical_patient_data(patient.get("data"))
+            if patient
+            else None
+        )
         diag_context, diag_sources = retrieve_context_block(
-            f"{base_query} 鑑別診斷 危險徵兆 紅旗症狀", n_results=5
+            f"{base_query} 鑑別診斷 危險徵兆 紅旗症狀",
+            n_results=5,
+            primary_route=primary_route,
+            patient_data=patient_data,
+            purpose="diagnosis",
         )
         lab_context, lab_sources = retrieve_context_block(
-            f"{base_query} 抽血檢驗 實驗室檢查", n_results=4
+            f"{base_query} 抽血檢驗 實驗室檢查",
+            n_results=4,
+            primary_route=primary_route,
+            patient_data=patient_data,
+            purpose="lab",
         )
         imaging_context, imaging_sources = retrieve_context_block(
-            f"{base_query} 影像學 X光 電腦斷層 CT MRI 超音波", n_results=4
+            f"{base_query} 影像學 X光 電腦斷層 CT MRI 超音波",
+            n_results=4,
+            primary_route=primary_route,
+            patient_data=patient_data,
+            purpose="imaging",
         )
         sources = _dedup_sources(diag_sources, lab_sources, imaging_sources)
     else:
-        context_block, sources = retrieve_context_block(base_query, n_results=6)
+        context_block, sources = retrieve_context_block(
+            base_query,
+            n_results=6,
+            primary_route=patient.get("type") if patient else None,
+            patient_data=(
+                clinical_patient_data(patient.get("data"))
+                if patient
+                else None
+            ),
+            purpose="general",
+        )
 
     patient_block = ""
     if patient:
-        patient_block = f"""目前正在討論的病人（問診編號 {patient['queue_number']}）：
+        patient_block = f"""目前正在討論的病人：
 
-{patient['summary']}
+{model_patient_summary(patient)}
 
 【AI初步評估】
 {patient['report']}
@@ -1255,13 +1450,11 @@ async def doctor_chat(req: DoctorChatRequest):
         max_tokens = 800
 
     try:
-        response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=messages,
+        reply = llm_client.generate_text(
+            messages,
             temperature=0.2,
             max_tokens=max_tokens,
         )
-        reply = response.choices[0].message.content.strip()
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"AI 生成失敗：{str(e)}")

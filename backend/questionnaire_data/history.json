@@ -1,0 +1,62 @@
+{
+  "id": "history",
+  "section": "history",
+  "questions": [
+    {
+      "field": "smoke",
+      "prompt": "平時是否有抽菸習慣？",
+      "kind": "choice",
+      "options": ["有，目前仍在抽", "沒有，從未抽菸", "過去有抽，但已戒菸"],
+      "allow_other": true
+    },
+    {
+      "field": "chronic",
+      "prompt": "過去是否有下列慢性疾病史？",
+      "kind": "choice",
+      "options": [
+        "糖尿病",
+        "慢性腎病",
+        "高血脂",
+        "肝硬化",
+        "自體免疫疾病",
+        "癌症",
+        "以上皆無"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": ["以上皆無"]
+    },
+    {
+      "field": "chronic_detail",
+      "prompt": "請補充慢性疾病、自體免疫疾病或癌症的病名。",
+      "kind": "text",
+      "condition": {
+        "field": "chronic",
+        "contains_any": ["自體免疫疾病", "癌症", "其他："]
+      }
+    },
+    {
+      "field": "past_meds",
+      "prompt": "之前是否曾接受過以下藥物治療？",
+      "kind": "choice",
+      "options": ["抗組織胺", "腎上腺素", "類固醇", "以上皆無"],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": ["以上皆無"]
+    },
+    {
+      "field": "current_meds",
+      "prompt": "目前是否有正在服用的藥物？",
+      "kind": "choice",
+      "options": ["沒有"],
+      "allow_other": true
+    },
+    {
+      "field": "allergy",
+      "prompt": "是否有特殊藥物或食物過敏？",
+      "kind": "choice",
+      "options": ["沒有"],
+      "allow_other": true
+    }
+  ]
+}

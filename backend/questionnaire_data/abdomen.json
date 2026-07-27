@@ -1,0 +1,114 @@
+{
+  "id": "abdomen",
+  "section": "disease",
+  "questions": [
+    {
+      "field": "onset",
+      "prompt": "肚子痛從什麼時候開始？",
+      "kind": "duration",
+      "quick_options": ["1小時前", "1天前", "1週前", "1個月前"],
+      "units": ["分鐘前", "小時前", "天前", "週前", "個月前", "年前"],
+      "allow_other": true,
+      "placeholder": "例如：30分鐘前、1個月前"
+    },
+    {
+      "field": "quality",
+      "prompt": "肚子痛的性質為何？",
+      "kind": "choice",
+      "options": [
+        "鈍痛",
+        "刺痛",
+        "陣痛",
+        "持續痛",
+        "由前痛到背後",
+        "由肚臍周圍痛轉移到右下腹",
+        "飢餓時會加劇疼痛"
+      ],
+      "multiple": true,
+      "allow_other": true
+    },
+    {
+      "field": "location",
+      "prompt": "肚子痛的位置在哪裡？",
+      "kind": "choice",
+      "options": [
+        "右上腹",
+        "左上腹",
+        "右下腹",
+        "左下腹",
+        "全腹痛",
+        "左側腰痛",
+        "右側腰痛",
+        "肚臍以下腹痛"
+      ],
+      "multiple": true,
+      "allow_other": true
+    },
+    {
+      "field": "associated",
+      "prompt": "是否有下列合併症狀？",
+      "kind": "choice",
+      "options": [
+        "腹瀉",
+        "發燒發冷",
+        "噁心",
+        "嘔吐",
+        "便秘",
+        "血便",
+        "冒冷汗",
+        "胃酸逆流",
+        "血尿",
+        "月經過期",
+        "陰道分泌物增加",
+        "呼吸道症狀",
+        "以上皆無"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": ["以上皆無"]
+    },
+    {
+      "field": "contact_history",
+      "prompt": "家中或同行的人是否也有相同症狀？",
+      "kind": "choice",
+      "options": ["是", "否"],
+      "allow_other": true
+    },
+    {
+      "field": "abdomen_hx",
+      "prompt": "過去是否有下列腹部相關病史？",
+      "kind": "choice",
+      "options": [
+        "肝膽結石",
+        "腎結石",
+        "盲腸炎",
+        "腸阻塞",
+        "胰臟炎",
+        "腹主動脈瘤",
+        "紫質症",
+        "糖尿病酮酸中毒",
+        "以上皆無"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": ["以上皆無"]
+    },
+    {
+      "field": "surgery",
+      "prompt": "過去是否接受過下列腹部手術？",
+      "kind": "choice",
+      "options": [
+        "剖腹產",
+        "闌尾切除",
+        "子宮切除",
+        "膽囊切除",
+        "大腸切除手術",
+        "胃切除手術",
+        "未曾手術"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": ["未曾手術"]
+    }
+  ]
+}

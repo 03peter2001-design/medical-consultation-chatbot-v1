@@ -4,12 +4,17 @@ import { computed, ref, watch } from 'vue'
 import {
   BODY_PAIN_REGIONS,
   getPainRegions,
+  getPainMapPreset,
 } from '../data/bodyPainRegions.js'
 
 const props = defineProps({
   modelValue: { type: Array, default: () => [] },
   readonly: { type: Boolean, default: false },
   compact: { type: Boolean, default: false },
+  preset: {
+    type: Object,
+    default: () => getPainMapPreset(),
+  },
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -17,15 +22,36 @@ const emit = defineEmits(['update:modelValue'])
 const initialView =
   getPainRegions(props.modelValue)[0]?.view === 'back' ? 'back' : 'front'
 const activeView = ref(initialView)
+const allowedRegionSet = computed(
+  () => new Set(props.preset.allowedRegionIds || []),
+)
 const selectedSet = computed(() => new Set(props.modelValue))
-const selectedRegions = computed(() => getPainRegions(props.modelValue))
+const selectedRegions = computed(() =>
+  getPainRegions(props.modelValue).filter(
+    (region) => props.readonly || allowedRegionSet.value.has(region.id),
+  ),
+)
 const visibleRegions = computed(() =>
-  BODY_PAIN_REGIONS.filter((region) => region.view === activeView.value),
+  BODY_PAIN_REGIONS.filter(
+    (region) =>
+      region.view === activeView.value &&
+      (props.readonly || allowedRegionSet.value.has(region.id)),
+  ),
 )
 const counts = computed(() => ({
   front: selectedRegions.value.filter((region) => region.view === 'front').length,
   back: selectedRegions.value.filter((region) => region.view === 'back').length,
 }))
+
+const availableViews = computed(() =>
+  ['front', 'back'].filter((view) =>
+    BODY_PAIN_REGIONS.some(
+      (region) =>
+        region.view === view &&
+        (props.readonly || allowedRegionSet.value.has(region.id)),
+    ),
+  ),
+)
 
 watch(
   () => props.modelValue,
@@ -36,6 +62,23 @@ watch(
     )
     if (!currentHasSelection && props.readonly) {
       activeView.value = getPainRegions(value)[0]?.view || 'front'
+    }
+  },
+)
+
+watch(
+  () => props.preset.key,
+  () => {
+    const nextView = availableViews.value.includes(activeView.value)
+      ? activeView.value
+      : availableViews.value[0] || 'front'
+    activeView.value = nextView
+    if (props.readonly) return
+    const allowedSelections = props.modelValue.filter((id) =>
+      allowedRegionSet.value.has(id),
+    )
+    if (allowedSelections.length !== props.modelValue.length) {
+      emit('update:modelValue', allowedSelections)
     }
   },
 )
@@ -58,13 +101,16 @@ function handleRegionKeydown(event, region) {
 <template>
   <section
     class="body-map"
-    :class="{ readonly, compact }"
+    :class="[
+      { readonly, compact },
+      `focus-${preset.key || 'all'}`,
+    ]"
     aria-label="人體疼痛位置圖"
   >
     <div class="map-toolbar">
       <div class="view-tabs" role="tablist" aria-label="切換人體正背面">
         <button
-          v-for="view in ['front', 'back']"
+          v-for="view in availableViews"
           :key="view"
           type="button"
           role="tab"
@@ -90,7 +136,7 @@ function handleRegionKeydown(event, region) {
       <span class="side-label side-right">病人右側</span>
       <span class="side-label side-left">病人左側</span>
       <svg
-        viewBox="0 0 220 450"
+        :viewBox="preset.viewBox || '0 0 220 450'"
         role="img"
         :aria-label="activeView === 'front' ? '人體正面疼痛位置' : '人體背面疼痛位置'"
       >
@@ -117,7 +163,11 @@ function handleRegionKeydown(event, region) {
           </path>
         </g>
 
-        <g class="orientation" aria-hidden="true">
+        <g
+          v-if="(preset.key || 'all') === 'all'"
+          class="orientation"
+          aria-hidden="true"
+        >
           <text x="28" y="438">R</text>
           <text x="184" y="438">L</text>
         </g>
@@ -147,7 +197,7 @@ function handleRegionKeydown(event, region) {
   border: 1px solid var(--border-strong);
   border-radius: var(--radius);
   background:
-    radial-gradient(circle at 50% 38%, rgb(79 163 224 / 7%), transparent 46%),
+    radial-gradient(circle at 50% 38%, rgb(37 104 178 / 5%), transparent 46%),
     var(--surface-1);
 }
 
@@ -173,7 +223,7 @@ function handleRegionKeydown(event, region) {
   color: var(--muted);
   cursor: pointer;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .view-tabs button {
@@ -182,12 +232,13 @@ function handleRegionKeydown(event, region) {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 6px 10px;
+  min-height: 38px;
+  padding: 7px 11px;
 }
 
 .view-tabs button.active {
   border-color: var(--border-strong);
-  background: var(--surface-2);
+  background: var(--blue-soft);
   color: var(--text);
 }
 
@@ -203,7 +254,8 @@ function handleRegionKeydown(event, region) {
 }
 
 .clear-map {
-  padding: 6px 9px;
+  min-height: 38px;
+  padding: 7px 10px;
 }
 
 .clear-map:hover {
@@ -219,22 +271,31 @@ function handleRegionKeydown(event, region) {
   padding: 10px 34px 6px;
 }
 
+.focus-headache .figure-stage {
+  height: 300px;
+}
+
+.focus-chest .figure-stage,
+.focus-abdomen .figure-stage {
+  height: 320px;
+}
+
 .figure-stage svg {
   width: auto;
   height: 100%;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .body-silhouette {
-  fill: #142233;
-  stroke: #2c4359;
+  fill: #e7eef5;
+  stroke: #7895ad;
   stroke-linejoin: round;
   stroke-width: 1.5;
 }
 
 .pain-region {
-  fill: rgb(79 163 224 / 9%);
-  stroke: rgb(79 163 224 / 20%);
+  fill: rgb(37 104 178 / 6%);
+  stroke: rgb(37 104 178 / 25%);
   stroke-width: 1.2;
   transition:
     fill 0.16s ease,
@@ -248,15 +309,15 @@ function handleRegionKeydown(event, region) {
 
 .interactive .pain-region:hover,
 .interactive .pain-region:focus-visible {
-  fill: rgb(0 200 150 / 30%);
+  fill: rgb(10 146 126 / 20%);
   stroke: var(--green);
   outline: none;
 }
 
 .pain-region.selected {
-  fill: rgb(224 82 82 / 68%);
-  filter: drop-shadow(0 0 7px rgb(224 82 82 / 55%));
-  stroke: #ff8e8e;
+  fill: rgb(198 64 79 / 62%);
+  filter: drop-shadow(0 0 6px rgb(198 64 79 / 28%));
+  stroke: #ad2f3e;
   stroke-width: 2;
 }
 
@@ -265,7 +326,7 @@ function handleRegionKeydown(event, region) {
   top: 14px;
   color: var(--muted);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
+  font-size: 11px;
   writing-mode: vertical-rl;
 }
 
@@ -280,7 +341,7 @@ function handleRegionKeydown(event, region) {
 .orientation {
   fill: var(--muted);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .selected-regions {
@@ -296,12 +357,12 @@ function handleRegionKeydown(event, region) {
   align-items: center;
   gap: 6px;
   padding: 5px 8px;
-  border: 1px solid rgb(224 82 82 / 35%);
+  border: 1px solid rgb(198 64 79 / 30%);
   border-radius: 999px;
-  background: rgb(224 82 82 / 9%);
+  background: #fdecee;
   color: var(--text);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .region-chip i {
@@ -316,7 +377,7 @@ function handleRegionKeydown(event, region) {
   border-top: 1px solid var(--border);
   color: var(--muted);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 12px;
   text-align: center;
 }
 

@@ -152,7 +152,12 @@ test('builds a backend prefill and marks missing FHIR blood type', () => {
         item: [
           {
             linkId: 'history',
-            answer: [{ valueString: '有高血壓，吸菸約30年' }],
+            answer: [
+              {
+                valueString:
+                  '有高血壓，吸菸約30年；否認已知冠心症病史',
+              },
+            ],
           },
           {
             linkId: 'allergy',
@@ -167,8 +172,10 @@ test('builds a backend prefill and marks missing FHIR blood type', () => {
   assert.equal(prefill.gender, '男性')
   assert.equal(prefill.birth_date, '1968-04-12')
   assert.equal(prefill.blood_type, 'FHIR 未提供')
-  assert.equal(prefill.smoke, '有高血壓，吸菸約30年')
-  assert.equal(prefill.chronic, '有高血壓，吸菸約30年')
+  assert.equal(prefill.smoke, '吸菸約30年')
+  assert.equal(prefill.chronic, '有高血壓')
+  assert.match(prefill.cardio, /有高血壓/)
+  assert.match(prefill.cardio, /否認已知冠心症病史/)
   assert.equal(prefill.allergy, '否認已知藥物過敏')
 })
 
@@ -182,7 +189,15 @@ test('reads ABO blood type from a FHIR observation', () => {
     resources: [
       {
         resourceType: 'Observation',
-        code: { coding: [{ code: '882-1' }] },
+        code: {
+          coding: [
+            {
+              system: 'http://loinc.org',
+              code: '882-1',
+              display: 'ABO and Rh group [Type] in Blood',
+            },
+          ],
+        },
         valueCodeableConcept: {
           coding: [{ code: 'AB', display: 'AB' }],
         },
@@ -190,6 +205,15 @@ test('reads ABO blood type from a FHIR observation', () => {
     ],
   })
   assert.equal(prefill.blood_type, 'AB型')
+  assert.deepEqual(prefill.clinical_codings, [
+    {
+      field: 'blood_type',
+      system: 'http://loinc.org',
+      code: '882-1',
+      display: 'ABO and Rh group [Type] in Blood',
+      source: 'fhir',
+    },
+  ])
 })
 
 test('maps FHIR conditions procedures and medications to questionnaire fields', () => {
@@ -298,4 +322,12 @@ test('keeps past encounter neuro diagnoses and maps neuro surgery', () => {
   assert.match(prefill.neuro, /Stroke/)
   assert.match(prefill.neuro, /37796009/)
   assert.equal(prefill.surgery, 'Clipping of intracranial aneurysm')
+  assert.ok(
+    prefill.clinical_codings.some(
+      (coding) =>
+        coding.field === 'neuro' &&
+        coding.system === 'http://snomed.info/sct' &&
+        coding.code === '230690007',
+    ),
+  )
 })

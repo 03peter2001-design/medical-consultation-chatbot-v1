@@ -10,7 +10,9 @@ defineProps({
 
 <template>
   <header class="app-header">
-    <div class="app-logo" aria-hidden="true">{{ icon }}</div>
+    <div class="app-logo" aria-hidden="true">
+      <slot name="icon">{{ icon }}</slot>
+    </div>
     <h1 class="app-title">{{ title }}</h1>
     <span v-if="subtitle" class="app-subtitle">{{ subtitle }}</span>
     <div class="header-actions">

@@ -33,13 +33,49 @@ export function resolveBackendUrl(locationLike = runtimeLocation) {
 
 export const backendUrl = resolveBackendUrl()
 
+export function consultationListPath({
+  search = '',
+  limit = 30,
+  offset = 0,
+} = {}) {
+  const params = new URLSearchParams({
+    limit: String(limit),
+    offset: String(offset),
+  })
+  const normalizedSearch = search.trim()
+  if (normalizedSearch) params.set('search', normalizedSearch)
+  return `/doctor/consultations?${params.toString()}`
+}
+
+export function consultationDetailPath(queueNumber) {
+  return `/doctor/consultations/${encodeURIComponent(queueNumber)}`
+}
+
 async function request(path, options = {}) {
   const response = await fetch(`${backendUrl}${path}`, options)
   const data = await response.json().catch(() => ({}))
   if (!response.ok) {
-    throw new Error(data.detail || `HTTP ${response.status}`)
+    throw new Error(formatApiErrorDetail(data.detail, response.status))
   }
   return data
+}
+
+export function formatApiErrorDetail(detail, status) {
+  if (typeof detail === 'string' && detail.trim()) return detail
+  if (Array.isArray(detail)) {
+    const messages = detail
+      .map((issue) => {
+        if (!issue || typeof issue !== 'object') return ''
+        const location = Array.isArray(issue.loc)
+          ? issue.loc.filter((part) => part !== 'body').join('.')
+          : ''
+        const message = issue.msg || ''
+        return [location, message].filter(Boolean).join('：')
+      })
+      .filter(Boolean)
+    if (messages.length) return messages.join('；')
+  }
+  return `HTTP ${status}`
 }
 
 function jsonOptions(method, body) {
@@ -52,6 +88,12 @@ function jsonOptions(method, body) {
 
 export const api = {
   health: () => request('/health'),
+  listConsultations: (options) =>
+    request(consultationListPath(options)),
+  deleteConsultation: (queueNumber) =>
+    request(consultationDetailPath(queueNumber), {
+      method: 'DELETE',
+    }),
   patientChat: (
     message,
     sessionId,

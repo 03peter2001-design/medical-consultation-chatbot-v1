@@ -2,6 +2,7 @@
 import {
   computed,
   nextTick,
+  onBeforeUnmount,
   onMounted,
   ref,
   watch,
@@ -10,12 +11,14 @@ import { RouterLink } from 'vue-router'
 
 import AppHeader from '../components/AppHeader.vue'
 import ChatMessage from '../components/ChatMessage.vue'
+import ConsultationBrowser from '../components/ConsultationBrowser.vue'
 import PatientRecordCard from '../components/PatientRecordCard.vue'
 import StructuredReport from '../components/StructuredReport.vue'
 import TypingIndicator from '../components/TypingIndicator.vue'
 import { api, backendUrl, connectionError } from '../services/backend.js'
 
 const sessionId = `dr_${Date.now()}`
+const casePageSize = 30
 const suggestions = [
   '胸痛合併冒冷汗要優先排除什麼？',
   'Thunderclap headache 的鑑別診斷？',
@@ -36,6 +39,15 @@ const typing = ref(false)
 const healthState = ref('checking')
 const connectionText = ref('檢查後端連線中...')
 const preservePatientTop = ref(false)
+const caseSearch = ref('')
+const caseRecords = ref([])
+const caseTotal = ref(0)
+const isLoadingCases = ref(false)
+const caseListError = ref('')
+const deletingQueueNumber = ref('')
+const mobileWorkspaceTab = ref('cases')
+let caseSearchTimer = null
+let caseRequestVersion = 0
 
 const canChat = computed(
   () => healthState.value === 'online' && !isSending.value,
@@ -50,27 +62,31 @@ const modeHint = computed(() =>
     ? '下一則訊息會針對這段補充資訊，再產生一次新的六段式分析'
     : '',
 )
-const patientType = computed(() => {
-  if (!loadedPatient.value) return ''
-  return (
-    {
-      chest: '胸痛',
-      headache: '頭痛',
-      abdomen: '腹痛',
-    }[loadedPatient.value.type] || loadedPatient.value.type
-  )
-})
+const patientType = computed(() => typeLabel(loadedPatient.value?.type))
+const hasMoreCases = computed(
+  () => caseRecords.value.length < caseTotal.value,
+)
 
 watch(
-  [() => items.value.length, typing],
+  typing,
   async () => {
-    const shouldAutoScroll = !preservePatientTop.value
     await nextTick()
-    if (chatbox.value && shouldAutoScroll) {
+    if (preservePatientTop.value) {
+      if (chatbox.value) chatbox.value.scrollTop = 0
+      return
+    }
+    if (chatbox.value) {
       chatbox.value.scrollTop = chatbox.value.scrollHeight
     }
   },
 )
+
+watch(caseSearch, () => {
+  window.clearTimeout(caseSearchTimer)
+  caseSearchTimer = window.setTimeout(() => {
+    void fetchConsultations({ reset: true })
+  }, 250)
+})
 
 function nextId() {
   return `${Date.now()}_${items.value.length}`
@@ -99,6 +115,70 @@ function focusInput() {
   nextTick(() => textInput.value?.focus())
 }
 
+function typeLabel(type) {
+  return (
+    {
+      chest: '胸痛',
+      headache: '頭痛',
+      abdomen: '腹痛',
+      other: '其他',
+    }[type] || type || '未分類'
+  )
+}
+
+function summaryUnavailableMessage(record) {
+  if (record.workflow_status === 'summary_pending') {
+    return '病例編號已建立，AI 摘要正在背景產生，請稍後重新載入。'
+  }
+  if (record.workflow_status === 'summary_failed') {
+    const detail = record.summary_error ? `（${record.summary_error}）` : ''
+    return `AI 摘要產生失敗，可稍後重試。${detail}`
+  }
+  if (record.workflow_status === 'summary_partial') {
+    return '一般 AI 摘要已完成，但六段式 RAG 分析未完整產生，可使用手動再次分析。'
+  }
+  if (record.rag_enabled === false) {
+    return '病例送出時 RAG 向量庫尚未啟用，因此沒有預先產生結構化分析。'
+  }
+  return '這筆病例尚無預先產生的結構化分析，可使用下方「手動再次分析」功能。'
+}
+
+async function fetchConsultations({ reset = true } = {}) {
+  if (!reset && isLoadingCases.value) return
+  const requestVersion = ++caseRequestVersion
+  isLoadingCases.value = true
+  caseListError.value = ''
+  const offset = reset ? 0 : caseRecords.value.length
+
+  try {
+    const result = await api.listConsultations({
+      search: caseSearch.value,
+      limit: casePageSize,
+      offset,
+    })
+    if (requestVersion !== caseRequestVersion) return
+    caseRecords.value = reset
+      ? result.items
+      : [...caseRecords.value, ...result.items]
+    caseTotal.value = result.total
+  } catch (error) {
+    if (requestVersion !== caseRequestVersion) return
+    caseListError.value = error.message
+    if (reset) {
+      caseRecords.value = []
+      caseTotal.value = 0
+    }
+  } finally {
+    if (requestVersion === caseRequestVersion) {
+      isLoadingCases.value = false
+    }
+  }
+}
+
+function refreshConsultations() {
+  void fetchConsultations({ reset: true })
+}
+
 async function checkHealth() {
   healthState.value = 'checking'
   connectionText.value = '檢查後端連線中...'
@@ -118,15 +198,20 @@ async function checkHealth() {
   }
 }
 
-async function loadPatient() {
-  const queueNumber = queueInput.value.trim()
+async function loadPatient(queueNumberOverride = '') {
+  const queueNumber =
+    typeof queueNumberOverride === 'string' && queueNumberOverride
+      ? queueNumberOverride.trim()
+      : queueInput.value.trim()
   if (!queueNumber || isLoadingPatient.value) return
 
+  textInput.value?.blur()
   isLoadingPatient.value = true
   preservePatientTop.value = true
   try {
     const record = await api.loadPatient(queueNumber, sessionId)
     loadedPatient.value = record
+    mobileWorkspaceTab.value = 'record'
     queueInput.value = ''
     items.value = [
       {
@@ -142,20 +227,51 @@ async function loadPatient() {
       items.value.push({
         id: nextId(),
         kind: 'unavailable',
-          text:
-            record.rag_enabled === false
-            ? 'RAG 向量庫尚未啟用，無法自動產生結構化分析。請先執行 ingest.py 建立知識庫。'
-            : '自動產生結構化分析失敗，可切換下方「手動再次分析」模式重新產生。',
+        text: summaryUnavailableMessage(record),
       })
     }
 
+    void fetchConsultations({ reset: true })
     await nextTick()
     if (chatbox.value) chatbox.value.scrollTop = 0
   } catch (error) {
     window.alert(`⚠️ ${error.message}\n後端：${backendUrl}`)
   } finally {
-    preservePatientTop.value = false
     isLoadingPatient.value = false
+    await nextTick()
+    await new Promise((resolve) => {
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(resolve)
+      })
+    })
+    if (chatbox.value) chatbox.value.scrollTop = 0
+    preservePatientTop.value = false
+  }
+}
+
+async function deleteConsultation(record) {
+  if (deletingQueueNumber.value) return
+  const confirmed = window.confirm(
+    `確定要永久刪除 ${record.patient_name}（病例 #${record.queue_number}）嗎？\n\n此操作無法復原。`,
+  )
+  if (!confirmed) return
+
+  deletingQueueNumber.value = record.queue_number
+  try {
+    await api.deleteConsultation(record.queue_number)
+    caseRecords.value = caseRecords.value.filter(
+      (item) => item.queue_number !== record.queue_number,
+    )
+    caseTotal.value = Math.max(0, caseTotal.value - 1)
+    if (loadedPatient.value?.queue_number === record.queue_number) {
+      loadedPatient.value = null
+      items.value = []
+      input.value = ''
+    }
+  } catch (error) {
+    window.alert(`⚠️ 刪除病例失敗：${error.message}`)
+  } finally {
+    deletingQueueNumber.value = ''
   }
 }
 
@@ -167,6 +283,7 @@ async function unloadPatient() {
   }
   loadedPatient.value = null
   items.value = []
+  mobileWorkspaceTab.value = 'cases'
 }
 
 async function clearChat() {
@@ -178,6 +295,7 @@ async function clearChat() {
   loadedPatient.value = null
   items.value = []
   input.value = ''
+  mobileWorkspaceTab.value = 'cases'
 }
 
 function chooseSuggestion(suggestion) {
@@ -228,18 +346,38 @@ async function sendMessage() {
   }
 }
 
-onMounted(checkHealth)
+onMounted(() => {
+  void checkHealth()
+  void fetchConsultations({ reset: true })
+})
+
+onBeforeUnmount(() => {
+  window.clearTimeout(caseSearchTimer)
+})
 </script>
 
 <template>
   <div class="app-shell doctor-app">
     <AppHeader
-      icon="📚"
-      title="醫師端 RAG 文獻助手"
-      subtitle="Medscape EM / ID / Lab Medicine"
+      icon=""
+      title="醫師端病例與文獻助手"
+      subtitle="病例資料庫 / Medscape EM / ID / Lab Medicine"
       :status="connectionText"
       :status-tone="healthState === 'online' ? 'online' : 'idle'"
     >
+      <template #icon>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.8"
+        >
+          <path d="M8 4.5h8a2 2 0 0 1 2 2v13H6v-13a2 2 0 0 1 2-2Z" />
+          <path d="M9 3h6v3H9zM12 9v6M9 12h6" />
+        </svg>
+      </template>
       <RouterLink class="nav-link" to="/">← 病患問診端</RouterLink>
       <button class="utility-button clear-button" @click="clearChat">
         清除對話
@@ -251,14 +389,14 @@ onMounted(checkHealth)
         v-model="queueInput"
         type="text"
         maxlength="16"
-        placeholder="輸入問診編號（5碼）查詢病人..."
+        placeholder="輸入問診編號（urgent 3碼／routine 5碼）..."
         :disabled="isLoadingPatient"
-        @keydown.enter.prevent="loadPatient"
+        @keydown.enter.prevent="loadPatient()"
       />
       <button
         class="load-patient-button"
         :disabled="isLoadingPatient || !queueInput.trim()"
-        @click="loadPatient"
+        @click="loadPatient()"
       >
         {{ isLoadingPatient ? '分析中…' : '載入病人' }}
       </button>
@@ -270,12 +408,50 @@ onMounted(checkHealth)
       </div>
     </section>
 
-    <main class="doctor-main">
+    <nav class="mobile-workspace-tabs" aria-label="醫師端工作區">
+      <button
+        :class="{ active: mobileWorkspaceTab === 'cases' }"
+        :aria-current="mobileWorkspaceTab === 'cases' ? 'page' : undefined"
+        @click="mobileWorkspaceTab = 'cases'"
+      >
+        病例
+      </button>
+      <button
+        :class="{ active: mobileWorkspaceTab === 'record' }"
+        :aria-current="mobileWorkspaceTab === 'record' ? 'page' : undefined"
+        @click="mobileWorkspaceTab = 'record'"
+      >
+        分析
+      </button>
+    </nav>
+
+    <div
+      class="doctor-workspace"
+      :class="`mobile-${mobileWorkspaceTab}`"
+    >
+      <ConsultationBrowser
+        v-model:search="caseSearch"
+        :records="caseRecords"
+        :total="caseTotal"
+        :loading="isLoadingCases"
+        :error="caseListError"
+        :deleting-queue-number="deletingQueueNumber"
+        :loaded-queue-number="loadedPatient?.queue_number"
+        :patient-loading="isLoadingPatient"
+        :has-more="hasMoreCases"
+        @refresh="refreshConsultations"
+        @select="loadPatient"
+        @delete="deleteConsultation"
+        @load-more="fetchConsultations({ reset: false })"
+      />
+
+      <main class="doctor-main">
       <div ref="chatbox" class="messages doctor-messages" aria-live="polite">
         <section v-if="!items.length" class="empty-state">
           <div class="empty-icon">🩻</div>
           <p>
-            輸入問診編號載入病人後，AI 會自動產生六段式結構化病歷分析
+            病人送出問診時，AI 已預先產生六段式結構化病歷分析；
+            輸入問診編號即可直接載入
             （EMR病歷 / 初步鑑別診斷 / 防漏診鑑別 / 理學檢查 /
             檢驗建議 / 影像學決策）。<br /><br />
             也可以直接向 AI 提問任何臨床或文獻相關問題，
@@ -353,7 +529,8 @@ onMounted(checkHealth)
       <div class="footnote">
         AI 回答僅供臨床參考，不能取代醫師的專業判斷。
       </div>
-    </main>
+      </main>
+    </div>
   </div>
 </template>
 
@@ -368,25 +545,31 @@ onMounted(checkHealth)
   color: var(--danger);
 }
 
+.mobile-workspace-tabs {
+  display: none;
+}
+
 .patient-bar {
   display: flex;
   flex: 0 0 auto;
   align-items: center;
   gap: 10px;
-  padding: 10px 20px;
+  min-height: 62px;
+  padding: 10px 24px;
   border-bottom: 1px solid var(--border);
   background: var(--surface-1);
 }
 
 .patient-bar > input {
-  width: 240px;
-  padding: 8px 12px;
+  width: 310px;
+  min-height: 42px;
+  padding: 9px 13px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: var(--surface-2);
+  background: var(--surface-1);
   color: var(--text);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .patient-bar > input:focus {
@@ -394,12 +577,13 @@ onMounted(checkHealth)
 }
 
 .load-patient-button {
-  padding: 8px 16px;
+  min-height: 42px;
+  padding: 9px 17px;
   border-radius: 6px;
   background: var(--blue);
-  color: #001420;
+  color: white;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -413,13 +597,14 @@ onMounted(checkHealth)
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 12px;
-  border: 1px solid rgb(0 200 150 / 35%);
+  min-height: 42px;
+  padding: 8px 13px;
+  border: 1px solid rgb(10 146 126 / 35%);
   border-radius: 6px;
-  background: rgb(0 200 150 / 8%);
+  background: var(--green-soft);
   color: var(--green);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .patient-tag button {
@@ -428,21 +613,31 @@ onMounted(checkHealth)
   cursor: pointer;
 }
 
+.doctor-workspace {
+  display: grid;
+  min-height: 0;
+  flex: 1;
+  grid-template-columns: minmax(300px, 340px) minmax(0, 1fr);
+  overflow: hidden;
+}
+
 .doctor-main {
   display: flex;
   min-height: 0;
   flex: 1;
   flex-direction: column;
   overflow: hidden;
+  background: var(--bg);
 }
 
 .doctor-messages {
   width: 100%;
-  max-width: 900px;
+  max-width: 1180px;
   flex: 1;
   gap: 16px;
   margin: 0 auto;
-  padding: 24px;
+  overflow-anchor: none;
+  padding: 24px 28px;
 }
 
 .empty-state {
@@ -462,15 +657,14 @@ onMounted(checkHealth)
 }
 
 .empty-state p {
-  max-width: 430px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  line-height: 1.9;
+  max-width: 560px;
+  font-size: 15px;
+  line-height: 1.75;
 }
 
 .suggestions {
   display: flex;
-  max-width: 540px;
+  max-width: 680px;
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
@@ -478,13 +672,14 @@ onMounted(checkHealth)
 }
 
 .suggestions button {
-  padding: 6px 14px;
+  min-height: 42px;
+  padding: 9px 15px;
   border: 1px solid var(--border);
   border-radius: 16px;
   background: var(--surface-1);
   color: var(--muted);
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .suggestions button:hover:not(:disabled) {
@@ -504,14 +699,13 @@ onMounted(checkHealth)
   border-radius: var(--radius);
   background: var(--surface-1);
   color: var(--muted);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .mode-bar {
   display: flex;
   width: 100%;
-  max-width: 900px;
+  max-width: 1180px;
   flex: 0 0 auto;
   align-items: center;
   gap: 8px;
@@ -523,18 +717,19 @@ onMounted(checkHealth)
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
+  min-height: 42px;
+  padding: 9px 14px;
   border: 1px solid var(--border);
   border-radius: 16px;
   background: var(--surface-2);
   color: var(--muted);
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .mode-button.active {
   border-color: var(--green);
-  background: rgb(0 200 150 / 12%);
+  background: var(--green-soft);
   color: var(--green);
 }
 
@@ -552,35 +747,35 @@ onMounted(checkHealth)
 .mode-bar > span {
   color: var(--muted);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .doctor-input-bar {
   display: flex;
   width: 100%;
-  max-width: 900px;
+  max-width: 1180px;
   flex: 0 0 auto;
   align-items: flex-end;
   gap: 10px;
   margin: 0 auto;
-  padding: 10px 24px 14px;
+  padding: 12px 24px 16px;
   border-top: 1px solid var(--border);
   background: var(--surface-1);
 }
 
 .doctor-input-bar textarea {
   min-width: 0;
-  min-height: 44px;
+  min-height: 50px;
   max-height: 120px;
   flex: 1;
   resize: none;
-  padding: 11px 14px;
+  padding: 12px 14px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: var(--surface-2);
+  background: var(--surface-1);
   color: var(--text);
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.55;
 }
 
 .doctor-input-bar textarea:focus {
@@ -593,13 +788,13 @@ onMounted(checkHealth)
 
 .doctor-send {
   display: grid;
-  width: 44px;
-  height: 44px;
-  flex: 0 0 44px;
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
   place-items: center;
   border-radius: 8px;
   background: var(--blue);
-  color: #001420;
+  color: white;
   cursor: pointer;
   font-size: 17px;
 }
@@ -611,13 +806,21 @@ onMounted(checkHealth)
 
 .footnote {
   width: 100%;
-  max-width: 900px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 0 24px 10px;
   color: var(--muted);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 12px;
   text-align: center;
+}
+
+@media (max-width: 980px) {
+  .doctor-workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(220px, 34dvh) minmax(0, 1fr);
+  }
+
 }
 
 @media (max-width: 760px) {
@@ -635,6 +838,48 @@ onMounted(checkHealth)
     order: 3;
     width: 100%;
     justify-content: space-between;
+  }
+
+  .mobile-workspace-tabs {
+    display: grid;
+    flex: 0 0 auto;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin: 10px 12px 0;
+    padding: 4px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface-1);
+  }
+
+  .mobile-workspace-tabs button {
+    min-height: 44px;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .mobile-workspace-tabs button.active {
+    background: var(--blue);
+    color: white;
+  }
+
+  .doctor-workspace {
+    display: block;
+    min-height: 0;
+  }
+
+  .doctor-workspace.mobile-record .case-browser,
+  .doctor-workspace.mobile-cases .doctor-main {
+    display: none;
+  }
+
+  .case-browser,
+  .doctor-main {
+    height: 100%;
   }
 
   .doctor-messages {

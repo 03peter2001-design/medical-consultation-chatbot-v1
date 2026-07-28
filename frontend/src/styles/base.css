@@ -1,18 +1,21 @@
 :root {
-  --bg: #0b0f14;
-  --surface-1: #111822;
-  --surface-2: #182030;
-  --border: #1e2d3d;
-  --border-strong: #2a3f55;
-  --green: #00c896;
-  --blue: #4fa3e0;
-  --text: #d4e4f4;
-  --muted: #4a6478;
-  --danger: #e05252;
+  --bg: #f4f7fa;
+  --surface-1: #ffffff;
+  --surface-2: #f7fafc;
+  --border: #d8e1e9;
+  --border-strong: #b9c8d5;
+  --green: #087f6d;
+  --green-soft: #e7f7f3;
+  --blue: #2568b2;
+  --blue-soft: #edf5fd;
+  --text: #203345;
+  --muted: #5d7185;
+  --danger: #c6404f;
+  --warning: #a66012;
   --radius: 10px;
-  --header-height: 52px;
-  color-scheme: dark;
-  font-family: 'Noto Serif TC', serif;
+  --header-height: 64px;
+  color-scheme: light;
+  font-family: 'Noto Sans TC', system-ui, sans-serif;
   font-synthesis: none;
 }
 
@@ -36,6 +39,8 @@ body,
 body {
   background: var(--bg);
   color: var(--text);
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 button,
@@ -52,7 +57,8 @@ a {
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
-textarea:focus-visible {
+textarea:focus-visible,
+select:focus-visible {
   outline: 2px solid var(--blue);
   outline-offset: 2px;
 }
@@ -63,10 +69,6 @@ button {
 
 a {
   color: inherit;
-}
-
-.mono {
-  font-family: 'JetBrains Mono', monospace;
 }
 
 .app-shell {
@@ -83,38 +85,43 @@ a {
   display: flex;
   flex: 0 0 var(--header-height);
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   height: var(--header-height);
-  padding: 0 20px;
+  padding: 0 24px;
   background: var(--surface-1);
   border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 8px rgb(37 67 91 / 6%);
 }
 
 .app-logo {
   display: grid;
-  flex: 0 0 28px;
-  width: 28px;
-  height: 28px;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
   place-items: center;
   border-radius: 8px;
   background: var(--brand-accent, var(--green));
-  color: #001a12;
-  font-size: 14px;
+  color: white;
+  font-size: 18px;
+}
+
+.app-logo svg {
+  width: 22px;
+  height: 22px;
 }
 
 .app-title {
   overflow: hidden;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .app-subtitle {
   color: var(--muted);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .header-actions {
@@ -123,8 +130,7 @@ a {
   gap: 10px;
   margin-left: auto;
   color: var(--muted);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .connection-status {
@@ -153,14 +159,14 @@ a {
 
 .nav-link,
 .utility-button {
-  padding: 5px 10px;
+  min-height: 40px;
+  padding: 8px 13px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: transparent;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  background: var(--surface-1);
+  font-size: 13px;
   text-decoration: none;
   transition:
     border-color 0.2s,
@@ -169,14 +175,14 @@ a {
 
 .nav-link:hover,
 .utility-button:hover {
-  border-color: var(--border-strong);
-  color: var(--text);
+  border-color: var(--blue);
+  color: var(--blue);
 }
 
 .messages {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   overflow-y: auto;
   scroll-behavior: smooth;
 }
@@ -192,7 +198,7 @@ a {
 
 .chat-message {
   display: flex;
-  max-width: 82%;
+  max-width: min(82%, 780px);
   flex-direction: column;
   gap: 4px;
   animation: pop-in 0.2s ease;
@@ -211,29 +217,31 @@ a {
 .message-author {
   padding: 0 4px;
   color: var(--muted);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.06em;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
 .message-bubble {
-  padding: 11px 15px;
-  border-radius: 3px 12px 12px;
+  padding: 14px 17px;
+  border-radius: 4px 12px 12px;
   white-space: pre-wrap;
-  font-size: 14px;
-  line-height: 1.78;
+  font-size: 16px;
+  line-height: 1.72;
 }
 
 .chat-message.ai .message-bubble {
   border: 1px solid var(--border);
-  background: var(--surface-2);
+  background: var(--surface-1);
   color: var(--text);
+  box-shadow: 0 3px 12px rgb(37 67 91 / 5%);
 }
 
 .chat-message.user .message-bubble {
   border-radius: 12px 3px 12px 12px;
-  background: var(--message-accent, var(--green));
-  color: #001420;
+  border: 1px solid color-mix(in srgb, var(--message-accent, var(--green)) 35%, white);
+  background: color-mix(in srgb, var(--message-accent, var(--green)) 9%, white);
+  color: var(--text);
 }
 
 .typing-indicator {
@@ -243,7 +251,7 @@ a {
   padding: 13px 15px;
   border: 1px solid var(--border);
   border-radius: 3px 12px 12px;
-  background: var(--surface-2);
+  background: var(--surface-1);
 }
 
 .typing-indicator span {
@@ -272,13 +280,13 @@ a {
 .source-tag {
   max-width: 280px;
   overflow: hidden;
-  padding: 3px 8px;
-  border: 1px solid rgb(0 200 150 / 30%);
+  padding: 5px 9px;
+  border: 1px solid rgb(8 127 109 / 30%);
   border-radius: 5px;
-  background: rgb(0 200 150 / 6%);
+  background: var(--green-soft);
   color: var(--green);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 12px;
   text-decoration: none;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -335,10 +343,16 @@ a {
 
   .nav-link,
   .utility-button {
-    padding: 5px 8px;
+    min-height: 38px;
+    padding: 7px 9px;
   }
 
   .chat-message {
-    max-width: 92%;
+    max-width: 96%;
+  }
+
+  .message-bubble {
+    padding: 13px 15px;
+    font-size: 16px;
   }
 }

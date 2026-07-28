@@ -21,7 +21,7 @@ defineProps({
   padding: 18px 20px;
   border: 1px solid var(--green);
   border-radius: var(--radius);
-  background: rgb(0 200 150 / 5%);
+  background: var(--green-soft);
   animation: pop-in 0.3s ease;
 }
 
@@ -32,15 +32,16 @@ defineProps({
   margin-bottom: 10px;
   color: var(--green);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 14px;
+  font-weight: 600;
   letter-spacing: 0.08em;
 }
 
 pre {
   color: var(--text);
-  font-family: 'Noto Serif TC', serif;
-  font-size: 13px;
-  line-height: 1.85;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 15px;
+  line-height: 1.75;
   white-space: pre-wrap;
 }
 

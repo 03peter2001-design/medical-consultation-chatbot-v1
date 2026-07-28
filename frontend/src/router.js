@@ -16,7 +16,7 @@ const router = createRouter({
       path: '/doctor',
       name: 'doctor',
       component: DoctorView,
-      meta: { title: '醫師端 RAG 文獻助手' },
+      meta: { title: '醫師端病例與文獻助手' },
     },
   ],
   scrollBehavior: () => ({ top: 0 }),

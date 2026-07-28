@@ -1,3 +1,5 @@
+import { buildFhirClinicalCodings } from './terminology.js'
+
 export const TAIWAN_ID_SYSTEM = 'http://www.moi.gov.tw'
 
 const runtimeLocation =
@@ -119,7 +121,7 @@ export async function findPatientByNationalId(
   return matches[0]
 }
 
-export async function loadPatientEverything(
+async function loadPatientEverything(
   patientId,
   {
     baseUrl = resolveFhirBaseUrl(),
@@ -228,6 +230,21 @@ function joinClinicalValues(values) {
   return uniqueClinicalValues(values).join('、')
 }
 
+function splitHistoryStatements(value) {
+  return String(value || '')
+    .split(/[，,；;。]+/)
+    .map((item) => item.trim())
+    .filter(Boolean)
+}
+
+function isNegatedHistory(value) {
+  return /否認|沒有|無已知|未曾|並無|不曾/.test(String(value || ''))
+}
+
+function isSmokingHistory(value) {
+  return /吸菸|抽菸|戒菸|smok/i.test(String(value || ''))
+}
+
 function conditionIsHistorical(resource) {
   if (resource?.resourceType !== 'Condition') return false
   const verificationCodes = (resource.verificationStatus?.coding || []).map(
@@ -299,6 +316,7 @@ const CONDITION_ROUTE_TERMS = {
     'hypertension', 'angina', 'heart failure', 'myocardial infarction',
     'arrhythm', 'aortic dissection', 'pulmonary embol',
     'pulmonary hypertension', 'pericardial effusion', 'asthma',
+    '冠心症', 'coronary artery disease', 'coronary heart disease',
     'lung cancer', 'copd', 'bronchiectasis', 'pneumothorax', 'stroke',
   ],
   neuro: [
@@ -432,28 +450,43 @@ export function buildPatientPrefill({
     .map((resource) => conceptText(resource.code))
     .filter(Boolean)
   const historyValues = uniqueClinicalValues([
-    historyAnswer,
+    ...splitHistoryStatements(historyAnswer),
     ...historicalConditions,
   ])
+  const chronicHistoryValues = historyValues.filter(
+    (value) => !isSmokingHistory(value) && !isNegatedHistory(value),
+  )
+  const smokingHistoryValues = historyValues.filter(isSmokingHistory)
   const procedures = resources
     .filter(procedureIsSurgical)
     .map((resource) => conceptText(resource.code))
     .filter(Boolean)
+  const clinicalCodings = buildFhirClinicalCodings(resources, {
+    includeCondition: conditionIsHistorical,
+    conditionFields: (resource) => {
+      const value = conceptText(resource.code)
+      const codes = (resource.code?.coding || []).map(
+        (coding) => coding.code,
+      )
+      return [
+        'chronic',
+        ...['cardio', 'neuro', 'abdomen_hx'].filter((route) =>
+          matchesConditionRoute(value, route, codes),
+        ),
+      ]
+    },
+    includeProcedure: procedureIsSurgical,
+  })
 
   const prefill = {
     source: 'fhir',
+    clinical_codings: clinicalCodings,
     name: name === '未命名病人' ? undefined : name,
     gender,
     birth_date: birthDate || undefined,
     blood_type: bloodType || undefined,
-    chronic: joinClinicalValues(historyValues) || undefined,
-    smoke: historyValues.find((value) =>
-      /吸菸|抽菸|戒菸|smok/i.test(value),
-    )
-      ? historyValues.find((value) =>
-          /吸菸|抽菸|戒菸|smok/i.test(value),
-        )
-      : undefined,
+    chronic: joinClinicalValues(chronicHistoryValues) || undefined,
+    smoke: joinClinicalValues(smokingHistoryValues) || undefined,
     past_meds:
       joinClinicalValues([
         ...pastMedications,

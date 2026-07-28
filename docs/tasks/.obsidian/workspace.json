@@ -1,0 +1,200 @@
+{
+  "main": {
+    "id": "391f4d77985eb60b",
+    "type": "split",
+    "children": [
+      {
+        "id": "37bbd79ddd283b0e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d159787712a75263",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "TODOs.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "TODOs"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "697a62d605a9ae05",
+    "type": "split",
+    "children": [
+      {
+        "id": "0b40956883842062",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "037f47c8193c6331",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "檔案瀏覽器"
+            }
+          },
+          {
+            "id": "2f60353ce27db79b",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜尋"
+            }
+          },
+          {
+            "id": "19ceb39c310ecf42",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "書籤"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "43106a6a1882e63c",
+    "type": "split",
+    "children": [
+      {
+        "id": "e22dd0d5c098ba19",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e7b6ad86813954de",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "TODOs.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "TODOs 的反向連結"
+            }
+          },
+          {
+            "id": "6eed1f0858586e8a",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "TODOs.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "TODOs 的對外連結"
+            }
+          },
+          {
+            "id": "6b7fbb7c418f8e84",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "標籤"
+            }
+          },
+          {
+            "id": "a8398fc2aed988f1",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "所有屬性"
+            }
+          },
+          {
+            "id": "25a52ee9d7a08670",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "TODOs.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "TODOs 的大綱"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:開啟快速切換": false,
+      "graph:查看關聯圖": false,
+      "canvas:建立新畫布": false,
+      "daily-notes:開啟今天的每日筆記": false,
+      "templates:插入模板": false,
+      "command-palette:開啟命令面板": false,
+      "bases:建立新的 base": false
+    }
+  },
+  "active": "037f47c8193c6331",
+  "lastOpenFiles": [
+    "TODOs.md",
+    "T02-建立FHIR臨床事件時間軸.md",
+    "T03-建置院內主代理人推論平台.md",
+    "T01-建立研究資料與時間軸標註規格.md",
+    "T04-產品化問診代理人.md",
+    "T06-建立ECG判讀代理人.md",
+    "T09-建立醫師確認與FHIR回寫流程.md",
+    "T05-建立實驗室資料代理人.md",
+    "tasks/T01-建立研究資料與時間軸標註規格.md",
+    "tasks",
+    "00-願景與原則.md"
+  ]
+}

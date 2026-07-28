@@ -114,6 +114,8 @@ export function buildClinicalRecord(record = {}) {
       const coding = resolveConditionCoding(
         hypothesis.condition,
         hypothesis.coding,
+        codings,
+        data,
       )
       return { ...hypothesis, coding }
     },

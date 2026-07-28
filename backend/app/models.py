@@ -10,9 +10,10 @@ class ClinicalCoding(BaseModel):
     system: str
     code: str
     display: str = ""
+    text: str = ""
     source: str = "fhir"
 
-    @validator("field", "system", "code", "display", "source")
+    @validator("field", "system", "code", "display", "text", "source")
     def trim_coding_value(cls, value):
         return value.strip()[:200]
 

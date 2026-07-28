@@ -135,3 +135,67 @@ test('builds a scannable clinical record from structured patient data', () => {
   assert.equal(result.timeline[0].extractedFacts[0].label, '伴隨症狀')
   assert.match(result.timeline[0].reason, /停止追問/)
 })
+
+test('reuses an unambiguous source FHIR coding for the same differential', () => {
+  const result = buildClinicalRecord({
+    clinical_codings: [
+      {
+        field: 'chronic',
+        system: 'http://snomed.info/sct',
+        code: '38341003',
+        display: 'Hypertensive disorder',
+        source: 'fhir',
+      },
+    ],
+    patient_data: {
+      chronic: '高血壓',
+    },
+    amie_state: {
+      differential_hypotheses: [
+        {
+          condition: '高血壓',
+          supporting_evidence: ['既往病史'],
+          opposing_evidence: [],
+        },
+      ],
+    },
+  })
+
+  assert.equal(result.differentials[0].coding.code, '38341003')
+  assert.equal(result.differentials[0].coding.source, 'fhir')
+})
+
+test('does not guess a differential coding when source codings are ambiguous', () => {
+  const result = buildClinicalRecord({
+    clinical_codings: [
+      {
+        field: 'chronic',
+        system: 'http://snomed.info/sct',
+        code: '38341003',
+        display: 'Hypertensive disorder',
+        source: 'fhir',
+      },
+      {
+        field: 'chronic',
+        system: 'http://snomed.info/sct',
+        code: '44054006',
+        display: 'Diabetes mellitus type 2',
+        source: 'fhir',
+      },
+    ],
+    patient_data: {
+      chronic: '高血壓、第二型糖尿病',
+    },
+    amie_state: {
+      differential_hypotheses: [
+        {
+          condition: '高血壓',
+          supporting_evidence: [],
+          opposing_evidence: [],
+        },
+      ],
+    },
+  })
+
+  assert.equal(result.differentials[0].coding, null)
+})

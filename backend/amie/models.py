@@ -24,18 +24,25 @@ class ChiefFinding(BaseModel):
     evidence: str = ""
 
 
+class RouteEvidence(BaseModel):
+    """A symptom route paired with verbatim evidence from the complaint."""
+
+    route: ChiefRoute
+    evidence: str = ""
+
+
 class ChiefComplaintAssessment(BaseModel):
     """Evidence-grounded semantic extraction, not a diagnosis or triage."""
 
     primary_symptom: ChiefRoute = "unknown"
     primary_evidence: str = ""
-    symptom_domains: list[ChiefRoute] = Field(default_factory=list)
+    symptom_domains: list[ChiefRoute | RouteEvidence] = Field(default_factory=list)
     onset: EvidenceValue = Field(default_factory=EvidenceValue)
     severity: EvidenceValue = Field(default_factory=EvidenceValue)
     is_new_or_changed: EvidenceValue = Field(default_factory=EvidenceValue)
     findings: list[ChiefFinding] = Field(default_factory=list)
     negated_findings: list[ChiefFinding] = Field(default_factory=list)
-    route_candidates: list[ChiefRoute] = Field(default_factory=list)
+    route_candidates: list[ChiefRoute | RouteEvidence] = Field(default_factory=list)
     uncertain_fields: list[str] = Field(default_factory=list)
 
     @classmethod
@@ -55,6 +62,27 @@ class ChiefComplaintAssessment(BaseModel):
             if start < 0 or end <= start:
                 raise
             payload = json.loads(cleaned[start : end + 1])
+        if isinstance(payload, dict):
+            for field in ("symptom_domains", "route_candidates"):
+                values = payload.get(field)
+                if not isinstance(values, list):
+                    continue
+                payload[field] = [
+                    {
+                        "route": next(
+                            (
+                                item.get(key)
+                                for key in ("route", "domain", "value", "code", "symptom")
+                                if item.get(key)
+                            ),
+                            "",
+                        ),
+                        "evidence": item.get("evidence", ""),
+                    }
+                    if isinstance(item, dict)
+                    else item
+                    for item in values
+                ]
         if hasattr(cls, "model_validate"):
             return cls.model_validate(payload)
         return cls.parse_obj(payload)

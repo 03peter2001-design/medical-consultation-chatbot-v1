@@ -30,6 +30,7 @@ class TerminologyReferenceTests(unittest.TestCase):
                     "system": "http://snomed.info/sct",
                     "code": "38341003",
                     "display": "Hypertensive disorder",
+                    "text": "高血壓",
                 },
                 {
                     "field": "blood_type",
@@ -47,6 +48,7 @@ class TerminologyReferenceTests(unittest.TestCase):
 
         self.assertEqual(len(result), 2)
         self.assertEqual(result[0]["code"], "38341003")
+        self.assertEqual(result[0]["text"], "高血壓")
         self.assertEqual(result[1]["code"], "882-1")
         self.assertTrue(all(coding["source"] == "fhir" for coding in result))
 

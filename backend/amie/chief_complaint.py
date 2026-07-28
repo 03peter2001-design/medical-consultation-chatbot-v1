@@ -4,12 +4,13 @@ from __future__ import annotations
 
 import json
 import re
-from typing import Any
+from typing import Any, cast
 
 from .models import (
     ChiefComplaintAssessment,
     ChiefFinding,
     EvidenceValue,
+    RouteEvidence,
 )
 from .rule_config import finding_codes, load_safety_rules, supported_routes
 
@@ -120,6 +121,27 @@ def _validated_findings(
     return validated
 
 
+def _validated_routes(
+    text: str,
+    routes: list[str | RouteEvidence],
+    allowed_routes: set[str],
+) -> list[str]:
+    validated: list[str] = []
+    for item in routes[:12]:
+        if isinstance(item, RouteEvidence):
+            route = _trim(item.route, 40).lower()
+            evidence = _trim(item.evidence, 160)
+            if not _has_grounded_evidence(text, evidence):
+                continue
+        else:
+            route = _trim(item, 40).lower()
+        if route not in allowed_routes and route != "other":
+            continue
+        if route not in validated:
+            validated.append(route)
+    return validated
+
+
 def validate_assessment(
     text: str,
     assessment: ChiefComplaintAssessment,
@@ -156,27 +178,35 @@ def validate_assessment(
         force_absent=True,
     )
 
-    supported_domains = [
-        route for route in assessment.symptom_domains if route in allowed_routes or route == "other"
-    ]
-    route_candidates = [
-        route
-        for route in assessment.route_candidates
-        if route in allowed_routes or route == "other"
-    ]
+    supported_domains = _validated_routes(
+        text,
+        assessment.symptom_domains,
+        allowed_routes,
+    )
+    route_candidates = _validated_routes(
+        text,
+        assessment.route_candidates,
+        allowed_routes,
+    )
     if primary_symptom != "unknown" and primary_symptom not in route_candidates:
         route_candidates.insert(0, primary_symptom)
 
     return ChiefComplaintAssessment(
         primary_symptom=primary_symptom,
         primary_evidence=primary_evidence,
-        symptom_domains=list(dict.fromkeys(supported_domains))[:4],
+        symptom_domains=cast(
+            list[str | RouteEvidence],
+            list(dict.fromkeys(supported_domains))[:4],
+        ),
         onset=onset,
         severity=severity,
         is_new_or_changed=is_new_or_changed,
         findings=findings,
         negated_findings=negated,
-        route_candidates=list(dict.fromkeys(route_candidates))[:4],
+        route_candidates=cast(
+            list[str | RouteEvidence],
+            list(dict.fromkeys(route_candidates))[:4],
+        ),
         uncertain_fields=[
             _trim(field, 80) for field in assessment.uncertain_fields[:12] if _trim(field, 80)
         ],
@@ -260,15 +290,19 @@ class ChiefComplaintExtractor:
 {text}
 
 規則：
-1. primary_symptom、symptom_domains及route_candidates只能是：
+1. primary_symptom只能是單一字串：
    {route_values}。
+   symptom_domains及route_candidates必須是物件陣列，每個物件只能包含
+   route與evidence；route只能使用上述值，evidence必須逐字取自病人原文。
 2. onset.value只能是sudden、gradual、unknown。
 3. severity.value只能是mild、moderate、severe、unknown。
 4. is_new_or_changed.value只能是true、false、unknown。
 5. finding.code只能使用下列代碼：
    {finding_values}。
 6. findings只放present；negated_findings只放病人明確否認的項目。
-7. 每個非unknown值及finding都必須附原文逐字evidence。
+7. 每個非unknown值、route及finding都必須附原文逐字evidence。
+8. 即使有多個症狀，symptom_domains及route_candidates仍不可輸出字串以外
+   的route值，也不可使用domain、value等其他欄位名稱。
 
 語意正規化原則：
 {normalization_guidance}
@@ -283,7 +317,9 @@ finding定義：
 {{
   "primary_symptom": "unknown",
   "primary_evidence": "",
-  "symptom_domains": [],
+  "symptom_domains": [
+    {{"route": "unknown", "evidence": ""}}
+  ],
   "onset": {{"value": "unknown", "evidence": ""}},
   "severity": {{"value": "unknown", "evidence": ""}},
   "is_new_or_changed": {{"value": "unknown", "evidence": ""}},
@@ -291,7 +327,9 @@ finding定義：
     {{"code": "{example_finding}", "status": "present", "evidence": "原文片段"}}
   ],
   "negated_findings": [],
-  "route_candidates": [],
+  "route_candidates": [
+    {{"route": "unknown", "evidence": ""}}
+  ],
   "uncertain_fields": []
 }}
 """.strip()
@@ -305,5 +343,9 @@ def preferred_route(
     allowed_routes = supported_routes()
     if assessment.primary_symptom in {*allowed_routes, "other"} and assessment.primary_evidence:
         return assessment.primary_symptom
-    supported = [route for route in assessment.route_candidates if route in allowed_routes]
+    supported = [
+        route
+        for route in assessment.route_candidates
+        if isinstance(route, str) and route in allowed_routes
+    ]
     return supported[0] if len(supported) == 1 else None

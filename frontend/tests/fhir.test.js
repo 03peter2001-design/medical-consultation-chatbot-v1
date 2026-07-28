@@ -277,6 +277,39 @@ test('maps FHIR conditions procedures and medications to questionnaire fields', 
   assert.equal(prefill.past_meds, '抗組織胺')
 })
 
+test('preserves CodeableConcept text with a source FHIR disease coding', () => {
+  const prefill = buildPatientPrefill({
+    patient: {
+      name: [{ text: '病史編碼測試病人' }],
+      gender: 'male',
+      birthDate: '1980-01-01',
+    },
+    resources: [
+      {
+        resourceType: 'Condition',
+        category: [
+          {
+            coding: [{ code: 'problem-list-item' }],
+          },
+        ],
+        code: {
+          text: '高血壓',
+          coding: [
+            {
+              system: 'http://snomed.info/sct',
+              code: '38341003',
+              display: 'Hypertensive disorder',
+            },
+          ],
+        },
+      },
+    ],
+  })
+
+  assert.equal(prefill.clinical_codings[0].code, '38341003')
+  assert.equal(prefill.clinical_codings[0].text, '高血壓')
+})
+
 test('keeps past encounter neuro diagnoses and maps neuro surgery', () => {
   const prefill = buildPatientPrefill({
     patient: {

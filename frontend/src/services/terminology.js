@@ -12,7 +12,7 @@ export function normalizeCoding(coding, fallback = {}) {
   const code = String(coding.code || '').trim()
   if (!SUPPORTED_SYSTEMS.has(system) || !code) return null
 
-  return {
+  const normalized = {
     field: String(coding.field || fallback.field || '').trim(),
     system,
     code,
@@ -23,6 +23,9 @@ export function normalizeCoding(coding, fallback = {}) {
       coding.source || fallback.source || 'fhir',
     ).trim(),
   }
+  const text = String(coding.text || fallback.text || '').trim()
+  if (text) normalized.text = text
+  return normalized
 }
 
 export function codingSystemLabel(system) {
@@ -35,10 +38,77 @@ export function codingKey(coding) {
   return `${coding?.system || ''}|${coding?.code || ''}|${coding?.field || ''}`
 }
 
-export function resolveConditionCoding(condition, explicitCoding = null) {
-  return normalizeCoding(explicitCoding, {
+function comparableText(value) {
+  return String(value || '')
+    .normalize('NFKC')
+    .toLocaleLowerCase()
+    .replace(/[\s()[\]（）{}「」『』【】"'。，,；;：:、/\\_-]+/g, '')
+}
+
+function fieldSegments(value) {
+  return String(value || '')
+    .split(/[、，,；;。\n/]+/)
+    .map(comparableText)
+    .filter(Boolean)
+}
+
+function uniqueCodingMatches(matches) {
+  const byCode = new Map()
+  for (const match of matches) {
+    const key = `${match.coding.system}|${match.coding.code}`
+    const existing = byCode.get(key)
+    if (!existing || match.score > existing.score) {
+      byCode.set(key, match)
+    }
+  }
+  const ranked = [...byCode.values()].sort((a, b) => b.score - a.score)
+  if (!ranked.length || ranked[0].score === ranked[1]?.score) return null
+  return ranked[0].coding
+}
+
+export function resolveConditionCoding(
+  condition,
+  explicitCoding = null,
+  sourceCodings = [],
+  patientData = {},
+) {
+  const explicit = normalizeCoding(explicitCoding, {
     display: condition,
   })
+  if (explicit) return explicit
+
+  const target = comparableText(condition)
+  if (!target) return null
+
+  const matches = (sourceCodings || [])
+    .map((coding) => normalizeCoding(coding))
+    .filter(Boolean)
+    .map((coding) => {
+      const codingText = comparableText(coding.text)
+      const display = comparableText(coding.display)
+      const fieldValue = comparableText(patientData?.[coding.field])
+      const segments = fieldSegments(patientData?.[coding.field])
+      let score = 0
+
+      if (codingText === target) score = 100
+      else if (display === target) score = 90
+      else if (fieldValue === target) score = 60
+      else if (segments.includes(target)) score = 50
+      else if (
+        segments.some(
+          (segment) =>
+            segment.length >= 2 &&
+            (segment.includes(target) || target.includes(segment)),
+        )
+      ) {
+        score = 40
+      }
+
+      return { coding, score }
+    })
+    .filter((match) => match.score > 0)
+
+  return uniqueCodingMatches(matches)
 }
 
 function supportedCodings(concept, fallback = {}) {
@@ -46,6 +116,7 @@ function supportedCodings(concept, fallback = {}) {
     .map((coding) =>
       normalizeCoding(coding, {
         ...fallback,
+        text: concept?.text || fallback.text || '',
         display:
           coding.display ||
           concept?.text ||

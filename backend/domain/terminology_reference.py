@@ -72,13 +72,15 @@ def filter_supported_codings(
         if key in seen:
             continue
         seen.add(key)
-        result.append(
-            {
-                "field": field[:64],
-                "system": system,
-                "code": code[:64],
-                "display": str(coding.get("display", "")).strip()[:200],
-                "source": "fhir",
-            }
-        )
+        normalized = {
+            "field": field[:64],
+            "system": system,
+            "code": code[:64],
+            "display": str(coding.get("display", "")).strip()[:200],
+            "source": "fhir",
+        }
+        text = str(coding.get("text", "")).strip()[:200]
+        if text:
+            normalized["text"] = text
+        result.append(normalized)
     return result

@@ -113,6 +113,89 @@ class AMIEEngineTests(unittest.TestCase):
             "優先確認伴隨症狀。",
         )
 
+    def test_typo_route_object_continues_instead_of_handoff(self):
+        llm = FakeLLM(
+            decision(next_field="associated"),
+            semantic_response={
+                "primary_symptom": "chest",
+                "primary_evidence": "兇悶",
+                "symptom_domains": [
+                    {
+                        "domain": "chest",
+                        "evidence": "兇悶",
+                    }
+                ],
+                "route_candidates": [
+                    {
+                        "route": "chest",
+                        "evidence": "兇悶",
+                    }
+                ],
+            },
+        )
+
+        result = AMIEEngine(llm).run_turn(
+            route="chest",
+            answer="我兇悶",
+            current_field="reason",
+            data={
+                **self.base_data,
+                "reason": "我兇悶",
+            },
+            questionnaire=self.questionnaire,
+            prefilled_fields=self.prefilled,
+        )
+
+        self.assertEqual(result.action, "ask")
+        self.assertNotEqual(result.action, "handoff")
+        self.assertEqual(result.model_error, "")
+
+    def test_multiple_route_objects_continue_instead_of_handoff(self):
+        llm = FakeLLM(
+            decision(next_field="associated"),
+            semantic_response={
+                "primary_symptom": "headache",
+                "primary_evidence": "頭痛",
+                "symptom_domains": [
+                    {
+                        "domain": "headache",
+                        "evidence": "頭痛",
+                    },
+                    {
+                        "domain": "abdomen",
+                        "evidence": "肚子痛",
+                    },
+                ],
+                "route_candidates": [
+                    {
+                        "route": "headache",
+                        "evidence": "頭痛",
+                    },
+                    {
+                        "route": "abdomen",
+                        "evidence": "肚子痛",
+                    },
+                ],
+            },
+        )
+
+        result = AMIEEngine(llm).run_turn(
+            route="headache",
+            answer="我頭痛，肚子痛",
+            current_field="reason",
+            data={
+                **self.base_data,
+                "type": "headache",
+                "reason": "我頭痛，肚子痛",
+            },
+            questionnaire=build_questionnaire("headache"),
+            prefilled_fields=self.prefilled,
+        )
+
+        self.assertEqual(result.action, "ask")
+        self.assertNotEqual(result.action, "handoff")
+        self.assertEqual(result.model_error, "")
+
     def test_basic_identity_answer_never_calls_external_model(self):
         llm = FakeLLM()
         result = AMIEEngine(llm).run_turn(

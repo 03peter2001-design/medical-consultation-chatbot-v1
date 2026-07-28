@@ -112,6 +112,107 @@ class ChiefComplaintExtractorTests(unittest.TestCase):
         self.assertIn("dizziness_unspecified", prompt)
         self.assertIn("常見錯字、同音字、中英混用", prompt)
 
+    def test_accepts_evidenced_object_route_for_typo_complaint(self):
+        complaint = "我兇悶"
+        payload = {
+            "primary_symptom": "chest",
+            "primary_evidence": "兇悶",
+            "symptom_domains": [
+                {
+                    "domain": "chest",
+                    "evidence": "兇悶",
+                }
+            ],
+            "onset": {"value": "unknown", "evidence": ""},
+            "severity": {"value": "unknown", "evidence": ""},
+            "is_new_or_changed": {"value": "unknown", "evidence": ""},
+            "findings": [],
+            "negated_findings": [],
+            "route_candidates": [
+                {
+                    "route": "chest",
+                    "evidence": "兇悶",
+                }
+            ],
+            "uncertain_fields": [],
+        }
+
+        assessment, error = ChiefComplaintExtractor(FakeLLM(payload)).extract(complaint)
+
+        self.assertEqual(error, "")
+        self.assertEqual(assessment.symptom_domains, ["chest"])
+        self.assertEqual(assessment.route_candidates, ["chest"])
+        self.assertEqual(preferred_route(assessment), "chest")
+
+    def test_accepts_multiple_evidenced_symptom_domains(self):
+        complaint = "我頭痛，肚子痛"
+        payload = {
+            "primary_symptom": "headache",
+            "primary_evidence": "頭痛",
+            "symptom_domains": [
+                {
+                    "domain": "headache",
+                    "evidence": "頭痛",
+                },
+                {
+                    "domain": "abdomen",
+                    "evidence": "肚子痛",
+                },
+            ],
+            "onset": {"value": "unknown", "evidence": ""},
+            "severity": {"value": "unknown", "evidence": ""},
+            "is_new_or_changed": {"value": "unknown", "evidence": ""},
+            "findings": [],
+            "negated_findings": [],
+            "route_candidates": [
+                {
+                    "route": "headache",
+                    "evidence": "頭痛",
+                },
+                {
+                    "route": "abdomen",
+                    "evidence": "肚子痛",
+                },
+            ],
+            "uncertain_fields": [],
+        }
+
+        assessment, error = ChiefComplaintExtractor(FakeLLM(payload)).extract(complaint)
+
+        self.assertEqual(error, "")
+        self.assertEqual(
+            assessment.symptom_domains,
+            ["headache", "abdomen"],
+        )
+        self.assertEqual(
+            assessment.route_candidates,
+            ["headache", "abdomen"],
+        )
+        self.assertEqual(preferred_route(assessment), "headache")
+
+    def test_discards_object_route_without_verbatim_evidence(self):
+        complaint = "我頭痛"
+        payload = headache_payload(
+            symptom_domains=[
+                {
+                    "domain": "abdomen",
+                    "evidence": "肚子痛",
+                }
+            ],
+            route_candidates=[
+                {
+                    "route": "abdomen",
+                    "evidence": "肚子痛",
+                }
+            ],
+        )
+
+        assessment, error = ChiefComplaintExtractor(FakeLLM(payload)).extract(complaint)
+
+        self.assertEqual(error, "")
+        self.assertEqual(assessment.symptom_domains, [])
+        self.assertEqual(assessment.route_candidates, ["headache"])
+
     def test_discards_model_finding_without_verbatim_evidence(self):
         complaint = "我頭痛而且視線模糊"
         payload = headache_payload(

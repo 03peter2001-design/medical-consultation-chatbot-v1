@@ -1,0 +1,539 @@
+{
+  "schema_version": 1,
+  "supported_routes": [
+    "chest",
+    "headache",
+    "abdomen"
+  ],
+  "route_keywords": {
+    "chest": [
+      "胸痛",
+      "胸悶",
+      "胸緊",
+      "胸壓",
+      "胸口痛",
+      "心口",
+      "前胸",
+      "胸部不適"
+    ],
+    "headache": [
+      "頭痛",
+      "頭很痛",
+      "頭暈痛",
+      "偏頭痛",
+      "頭脹",
+      "頭部不適",
+      "腦袋痛"
+    ],
+    "abdomen": [
+      "肚子痛",
+      "腹痛",
+      "肚子不舒服",
+      "腹部疼痛",
+      "肚臍痛",
+      "腹脹痛",
+      "肚子",
+      "胃痛"
+    ]
+  },
+  "finding_codes": [
+    "altered_consciousness",
+    "syncope",
+    "severe_breathing",
+    "diaphoresis",
+    "tearing_pain",
+    "vertigo",
+    "dizziness_unspecified",
+    "gait_unsteadiness",
+    "nausea",
+    "vomiting",
+    "blurred_vision",
+    "visual_change_unspecified",
+    "vision_loss",
+    "diplopia",
+    "focal_weakness",
+    "focal_neurologic_symptom",
+    "facial_droop",
+    "speech_difficulty",
+    "fever",
+    "neck_stiffness",
+    "major_bleeding",
+    "recent_head_trauma",
+    "vaginal_bleeding"
+  ],
+  "semantic_extraction": {
+    "normalization_instructions": [
+      "依整句上下文判斷概念，可處理常見錯字、同音字、中英混用與口語表達。",
+      "evidence 必須逐字保留患者原文，不得把修正後的標準詞寫進 evidence。",
+      "只有原文明確支持時才能輸出 present；語意不明時保持 unknown。",
+      "不要將未指明部位的疼痛，直接推定為胸痛、頭痛或腹痛。",
+      "不要把語意不明的 dizzy 或頭暈直接當成 vertigo；未描述旋轉感時使用 dizziness_unspecified。"
+    ],
+    "severity_definitions": {
+      "mild": "患者明確描述症狀輕微，對活動影響很小。",
+      "moderate": "患者明確描述症狀介於輕微與難以忍受之間，已造成一定影響。",
+      "severe": "患者明確表達症狀非常強烈、難以忍受或接近可承受極限；必須結合症狀部位判斷。",
+      "unknown": "原文不足以可靠判斷強度。"
+    },
+    "finding_definitions": {
+      "altered_consciousness": "意識改變、反應異常或無法正常喚醒。",
+      "syncope": "短暫失去意識或昏倒。",
+      "severe_breathing": "嚴重呼吸困難或無法正常呼吸。",
+      "diaphoresis": "明確出現大量冷汗。",
+      "tearing_pain": "明確描述撕裂樣疼痛。",
+      "vertigo": "明確描述自身或環境旋轉、天旋地轉。",
+      "dizziness_unspecified": "只描述 dizzy、頭暈或暈眩，但未說明旋轉、昏厥感或不平衡。",
+      "gait_unsteadiness": "走路明顯不穩或無法維持平衡。",
+      "nausea": "噁心或想吐但不一定已經嘔吐。",
+      "vomiting": "已經發生嘔吐。",
+      "blurred_vision": "視線或視力變得模糊。",
+      "visual_change_unspecified": "結構化選項表示視覺異常，但未區分模糊、複視或視力喪失。",
+      "vision_loss": "部分或全部視力突然喪失。",
+      "diplopia": "看見重影或複視。",
+      "focal_weakness": "單側或局部肢體無力。",
+      "focal_neurologic_symptom": "結構化選項表示單側無力或麻木等局部神經症狀。",
+      "facial_droop": "臉部單側下垂或嘴角歪斜。",
+      "speech_difficulty": "說話含糊、無法表達或理解語言。",
+      "fever": "患者明確表示發燒。",
+      "neck_stiffness": "頸部僵硬或難以前彎。",
+      "major_bleeding": "明確描述大量或持續性出血。",
+      "recent_head_trauma": "近期頭部撞擊或外傷。",
+      "vaginal_bleeding": "非預期的陰道出血。"
+    }
+  },
+  "negation": {
+    "terms": [
+      "沒有",
+      "無",
+      "否認",
+      "未曾",
+      "並無",
+      "不是",
+      "沒"
+    ],
+    "lookback_chars": 8
+  },
+  "raw_rules": {
+    "universal": [
+      {
+        "code": "altered_consciousness",
+        "label": "意識狀態異常",
+        "level": "urgent",
+        "terms": [
+          "失去意識",
+          "昏迷",
+          "叫不醒"
+        ]
+      },
+      {
+        "code": "severe_breathing",
+        "label": "嚴重呼吸困難",
+        "level": "urgent",
+        "terms": [
+          "無法呼吸",
+          "喘不過氣",
+          "嘴唇發紫"
+        ]
+      },
+      {
+        "code": "major_bleeding",
+        "label": "疑似大量出血",
+        "level": "urgent",
+        "terms": [
+          "大量出血",
+          "大量吐血"
+        ]
+      }
+    ],
+    "routes": {
+      "chest": [
+        {
+          "code": "chest_syncope",
+          "label": "胸部不適合併昏厥",
+          "level": "urgent",
+          "terms": [
+            "昏厥",
+            "暈倒"
+          ]
+        },
+        {
+          "code": "chest_diaphoresis",
+          "label": "胸部不適合併冒冷汗",
+          "level": "urgent",
+          "terms": [
+            "冒冷汗"
+          ]
+        },
+        {
+          "code": "tearing_chest_pain",
+          "label": "撕裂樣胸背痛",
+          "level": "urgent",
+          "terms": [
+            "撕裂樣胸痛",
+            "胸痛延伸到背部"
+          ]
+        }
+      ],
+      "headache": [
+        {
+          "code": "thunderclap_headache",
+          "label": "突發爆炸性頭痛",
+          "level": "urgent",
+          "terms": [
+            "雷擊般頭痛",
+            "此生最嚴重的頭痛"
+          ]
+        },
+        {
+          "code": "focal_neurologic_deficit",
+          "label": "疑似局部神經功能異常",
+          "level": "urgent",
+          "terms": [
+            "單側肢體無力",
+            "講話不清楚",
+            "臉歪"
+          ]
+        },
+        {
+          "code": "meningism",
+          "label": "頭痛合併發燒與頸部僵硬",
+          "level": "urgent",
+          "terms": [
+            "頸部僵硬合併發燒"
+          ]
+        }
+      ],
+      "abdomen": [
+        {
+          "code": "abdominal_syncope",
+          "label": "腹痛合併昏厥",
+          "level": "urgent",
+          "terms": [
+            "腹痛昏厥",
+            "肚子痛暈倒"
+          ]
+        },
+        {
+          "code": "peritonism",
+          "label": "疑似腹膜刺激徵象",
+          "level": "urgent",
+          "terms": [
+            "腹部僵硬",
+            "肚子硬得像木板"
+          ]
+        },
+        {
+          "code": "pregnancy_bleeding",
+          "label": "可能懷孕合併腹痛出血",
+          "level": "urgent",
+          "terms": [
+            "月經過期又出血",
+            "懷孕腹痛出血"
+          ]
+        }
+      ]
+    },
+    "combinations": []
+  },
+  "fhir_history_fields": [
+    "current_meds",
+    "past_meds",
+    "chronic",
+    "cardio",
+    "neuro",
+    "abdomen_hx",
+    "risk_flags"
+  ],
+  "fhir_risk_patterns": {
+    "antithrombotic_use": [
+      "warfarin",
+      "華法林",
+      "apixaban",
+      "艾必克凝",
+      "rivaroxaban",
+      "拜瑞妥",
+      "dabigatran",
+      "普栓達",
+      "edoxaban",
+      "里先安",
+      "clopidogrel",
+      "保栓通",
+      "阿斯匹靈",
+      "aspirin",
+      "抗凝血",
+      "抗血小板"
+    ],
+    "malignancy_history": [
+      "癌",
+      "惡性腫瘤",
+      "malignan",
+      "cancer",
+      "chemotherapy",
+      "化療"
+    ],
+    "immunocompromised": [
+      "免疫低下",
+      "免疫功能低下",
+      "免疫抑制",
+      "器官移植",
+      "HIV",
+      "AIDS",
+      "長期類固醇"
+    ],
+    "pregnancy_possible": [
+      "懷孕",
+      "妊娠",
+      "產後",
+      "月經過期"
+    ]
+  },
+  "structured_rules": [
+    {
+      "code": "semantic_altered_consciousness",
+      "label": "意識狀態異常",
+      "level": "urgent",
+      "when": {
+        "any_findings": [
+          "altered_consciousness"
+        ]
+      }
+    },
+    {
+      "code": "semantic_severe_breathing",
+      "label": "嚴重呼吸困難",
+      "level": "urgent",
+      "when": {
+        "any_findings": [
+          "severe_breathing"
+        ]
+      }
+    },
+    {
+      "code": "semantic_major_bleeding",
+      "label": "疑似大量出血",
+      "level": "urgent",
+      "when": {
+        "any_findings": [
+          "major_bleeding"
+        ]
+      }
+    },
+    {
+      "code": "semantic_focal_weakness",
+      "label": "疑似局部神經功能異常",
+      "level": "urgent",
+      "when": {
+        "any_findings": [
+          "focal_weakness"
+        ]
+      }
+    },
+    {
+      "code": "semantic_focal_neurologic_symptom",
+      "label": "疑似局部神經功能異常",
+      "level": "urgent",
+      "when": {
+        "any_findings": [
+          "focal_neurologic_symptom"
+        ]
+      }
+    },
+    {
+      "code": "semantic_facial_droop",
+      "label": "疑似局部神經功能異常",
+      "level": "urgent",
+      "when": {
+        "any_findings": [
+          "facial_droop"
+        ]
+      }
+    },
+    {
+      "code": "semantic_speech_difficulty",
+      "label": "疑似局部神經功能異常",
+      "level": "urgent",
+      "when": {
+        "any_findings": [
+          "speech_difficulty"
+        ]
+      }
+    },
+    {
+      "code": "semantic_vision_loss",
+      "label": "突發視力喪失",
+      "level": "urgent",
+      "when": {
+        "any_findings": [
+          "vision_loss"
+        ]
+      }
+    },
+    {
+      "code": "semantic_chest_syncope",
+      "label": "胸部不適合併昏厥",
+      "level": "urgent",
+      "when": {
+        "primary_in": [
+          "chest"
+        ],
+        "any_findings": [
+          "syncope"
+        ]
+      }
+    },
+    {
+      "code": "semantic_chest_diaphoresis",
+      "label": "胸部不適合併冒冷汗",
+      "level": "urgent",
+      "when": {
+        "primary_in": [
+          "chest"
+        ],
+        "any_findings": [
+          "diaphoresis"
+        ]
+      }
+    },
+    {
+      "code": "semantic_chest_tearing_pain",
+      "label": "撕裂樣胸背痛",
+      "level": "urgent",
+      "when": {
+        "primary_in": [
+          "chest"
+        ],
+        "any_findings": [
+          "tearing_pain"
+        ]
+      }
+    },
+    {
+      "code": "semantic_severe_headache_visual_change",
+      "label": "劇烈頭痛合併視覺異常",
+      "level": "urgent",
+      "when": {
+        "primary_in": [
+          "headache"
+        ],
+        "severity_in": [
+          "severe"
+        ],
+        "any_findings": [
+          "blurred_vision",
+          "visual_change_unspecified",
+          "diplopia",
+          "vision_loss"
+        ]
+      }
+    },
+    {
+      "code": "semantic_sudden_severe_headache",
+      "label": "突發劇烈頭痛",
+      "level": "urgent",
+      "when": {
+        "primary_in": [
+          "headache"
+        ],
+        "onset_in": [
+          "sudden"
+        ],
+        "severity_in": [
+          "severe"
+        ]
+      }
+    },
+    {
+      "code": "semantic_meningism",
+      "label": "頭痛合併發燒與頸部僵硬",
+      "level": "urgent",
+      "when": {
+        "primary_in": [
+          "headache"
+        ],
+        "all_findings": [
+          "fever",
+          "neck_stiffness"
+        ]
+      }
+    },
+    {
+      "code": "semantic_acute_vestibular_syndrome",
+      "label": "疑似突發急性前庭症候群",
+      "level": "urgent",
+      "when": {
+        "onset_in": [
+          "sudden"
+        ],
+        "all_findings": [
+          "vertigo",
+          "gait_unsteadiness"
+        ],
+        "any_findings": [
+          "nausea",
+          "vomiting"
+        ]
+      }
+    },
+    {
+      "code": "semantic_head_trauma_antithrombotic",
+      "label": "頭部外傷合併抗栓藥物史",
+      "level": "urgent",
+      "when": {
+        "all_findings": [
+          "recent_head_trauma"
+        ],
+        "all_risks": [
+          "antithrombotic_use"
+        ]
+      }
+    },
+    {
+      "code": "semantic_malignancy_history",
+      "label": "新發頭痛合併惡性腫瘤病史",
+      "level": "urgent",
+      "when": {
+        "primary_in": [
+          "headache"
+        ],
+        "new_or_changed_in": [
+          "true"
+        ],
+        "all_risks": [
+          "malignancy_history"
+        ]
+      }
+    },
+    {
+      "code": "semantic_immunocompromised",
+      "label": "新發頭痛合併免疫低下",
+      "level": "urgent",
+      "when": {
+        "primary_in": [
+          "headache"
+        ],
+        "new_or_changed_in": [
+          "true"
+        ],
+        "all_risks": [
+          "immunocompromised"
+        ]
+      }
+    },
+    {
+      "code": "semantic_pregnancy_abdominal_bleeding",
+      "label": "可能懷孕合併腹痛出血",
+      "level": "urgent",
+      "when": {
+        "primary_in": [
+          "abdomen"
+        ],
+        "all_findings": [
+          "vaginal_bleeding"
+        ],
+        "all_risks": [
+          "pregnancy_possible"
+        ]
+      }
+    }
+  ]
+}

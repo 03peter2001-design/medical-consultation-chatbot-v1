@@ -1,0 +1,32 @@
+{
+  "name" : "tw.gov.mohw.twcore",
+  "version" : "1.0.0",
+  "tools-version" : 3,
+  "type" : "IG",
+  "date" : "20251210085750",
+  "license" : "CC0-1.0",
+  "canonical" : "https://twcore.mohw.gov.tw/ig/twcore",
+  "url" : "https://twcore.mohw.gov.tw/ig/twcore/1.0.0",
+  "title" : "臺灣核心實作指引(TW Core IG)",
+  "description" : "臺灣核心實作指引(TW Core IG) (built Wed, Dec 10, 2025 08:57+0000+00:00)",
+  "fhirVersions" : ["4.0.1"],
+  "dependencies" : {
+    "hl7.fhir.r4.core" : "4.0.1",
+    "hl7.terminology.r4" : "7.0.0",
+    "hl7.fhir.uv.extensions.r4" : "5.2.0",
+    "hl7.fhir.uv.ips" : "1.1.0",
+    "hl7.fhir.uv.sdc" : "3.0.0"
+  },
+  "author" : "衛生福利部",
+  "maintainers" : [
+    {
+      "name" : "衛生福利部",
+      "email" : "CCYU@mohw.gov.tw",
+      "url" : "https://www.mohw.gov.tw/"
+    }
+  ],
+  "directories" : {
+    "lib" : "package",
+    "example" : "example"
+  }
+}

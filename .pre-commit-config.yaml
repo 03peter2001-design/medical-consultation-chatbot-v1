@@ -1,0 +1,30 @@
+repos:
+  - repo: local
+    hooks:
+      - id: backend-ruff-check
+        name: backend · Ruff lint and import order
+        entry: bash -c 'cd backend && venv/bin/ruff check .'
+        language: system
+        pass_filenames: false
+        types: [python]
+
+      - id: backend-ruff-format
+        name: backend · Ruff format
+        entry: bash -c 'cd backend && venv/bin/ruff format --check .'
+        language: system
+        pass_filenames: false
+        types: [python]
+
+      - id: backend-pyright
+        name: backend · Pyright
+        entry: bash -c 'cd backend && venv/bin/pyright --project pyproject.toml'
+        language: system
+        pass_filenames: false
+        types: [python]
+
+      - id: backend-import-linter
+        name: backend · architecture contracts
+        entry: bash -c 'cd backend && venv/bin/lint-imports --config .importlinter'
+        language: system
+        pass_filenames: false
+        types: [python]

@@ -1,0 +1,145 @@
+{
+  "id": "chest",
+  "section": "disease",
+  "questions": [
+    {
+      "field": "onset",
+      "prompt": "胸痛從什麼時候開始？",
+      "kind": "duration",
+      "quick_options": ["1小時前", "1天前", "1週前", "1個月前"],
+      "units": ["分鐘前", "小時前", "天前", "週前", "個月前", "年前"],
+      "allow_other": true,
+      "placeholder": "例如：30分鐘前、1個月前"
+    },
+    {
+      "field": "start_type",
+      "prompt": "胸痛是突然發作，還是逐漸發作？",
+      "kind": "choice",
+      "options": ["突然發作", "逐漸發作"],
+      "semantic_options": {
+        "突然發作": {"onset": "sudden"},
+        "逐漸發作": {"onset": "gradual"}
+      },
+      "allow_other": true
+    },
+    {
+      "field": "location",
+      "prompt": "胸痛的位置在哪裡？",
+      "kind": "choice",
+      "options": ["左邊", "右邊", "正中間", "兩側都有"],
+      "multiple": true,
+      "allow_other": true
+    },
+    {
+      "field": "fixed",
+      "prompt": "胸痛的位置是否會移動？",
+      "kind": "choice",
+      "options": ["痛點固定", "痛點會移動"],
+      "allow_other": true
+    },
+    {
+      "field": "tender",
+      "prompt": "用手按壓疼痛部位時，是否會有壓痛感？",
+      "kind": "choice",
+      "options": ["有", "沒有"],
+      "allow_other": true
+    },
+    {
+      "field": "quality",
+      "prompt": "您會如何描述這種疼痛？",
+      "kind": "choice",
+      "options": ["刺痛", "鈍痛", "感覺有重物壓迫"],
+      "multiple": true,
+      "allow_other": true
+    },
+    {
+      "field": "aggravate",
+      "prompt": "哪些情況會使疼痛加重？",
+      "kind": "choice",
+      "options": ["深呼吸", "耗費體力的活動", "感到有壓力的時候"],
+      "multiple": true,
+      "allow_other": true
+    },
+    {
+      "field": "relieve",
+      "prompt": "哪些情況能緩解疼痛？",
+      "kind": "choice",
+      "options": ["休息", "用藥", "坐姿", "按摩疼痛部位"],
+      "multiple": true,
+      "allow_other": true
+    },
+    {
+      "field": "associated",
+      "prompt": "是否同時出現以下症狀？",
+      "kind": "choice",
+      "options": [
+        "感到呼吸急促",
+        "冒冷汗",
+        "感到噁心或已經嘔吐",
+        "有昏厥或暈倒",
+        "感到頭暈",
+        "感到心跳加速或心跳不規則",
+        "咳嗽有痰",
+        "肚子痛",
+        "以上皆無"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "semantic_options": {
+        "冒冷汗": {"findings": ["diaphoresis"]},
+        "感到噁心或已經嘔吐": {"findings": ["nausea"]},
+        "有昏厥或暈倒": {"findings": ["syncope"]},
+        "感到頭暈": {"findings": ["dizziness_unspecified"]}
+      },
+      "exclusive_options": ["以上皆無"]
+    },
+    {
+      "field": "cardio",
+      "prompt": "過去是否有下列心肺或腦血管疾病？",
+      "kind": "choice",
+      "options": [
+        "高血壓",
+        "心絞痛",
+        "心臟衰竭",
+        "心肌梗塞",
+        "心律不整",
+        "主動脈剝離",
+        "肺栓塞",
+        "肺高壓",
+        "心包膜積水",
+        "氣喘",
+        "肺癌",
+        "慢性阻塞型肺病",
+        "支氣管擴張",
+        "氣胸",
+        "中風",
+        "以上皆無"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": ["以上皆無"]
+    },
+    {
+      "field": "surgery",
+      "prompt": "過去是否接受過下列手術？",
+      "kind": "choice",
+      "options": [
+        "心臟支架",
+        "心臟血管繞道手術",
+        "主動脈人工血管置換",
+        "主動脈支架",
+        "心律調節器",
+        "氣胸胸腔鏡手術",
+        "腦部手術",
+        "水腦引流",
+        "頸動脈手術",
+        "腦部放射線治療",
+        "頸椎手術",
+        "未曾手術"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": ["未曾手術"]
+    }
+  ]
+}

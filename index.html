@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 預問診系統（Avatar 版）</title>
+<title>AI 預問診系統</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' font-size='48'%3E🩺%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -145,6 +146,41 @@
   .typing-indicator span:nth-child(3) { animation-delay:.4s; }
   @keyframes typing { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
 
+  #choicePanel {
+    flex-shrink:0; max-height:44%; overflow-y:auto; padding:14px 16px;
+    border-top:1px solid var(--border); background:var(--s1);
+  }
+  #choicePanel[hidden] { display:none; }
+  .choice-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
+  .choice-head strong { font-size:13px; font-weight:600; }
+  .choice-mode-label { color:var(--muted); font-size:10px; font-family:'JetBrains Mono',monospace; }
+  #choiceOptions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .choice-item, .choice-other {
+    display:flex; align-items:center; gap:9px; min-height:42px; padding:9px 11px;
+    border:1px solid var(--border); border-radius:8px; background:var(--s2);
+    color:var(--text); cursor:pointer; transition:border-color .15s,background .15s;
+  }
+  .choice-item:hover, .choice-other:hover { border-color:var(--border2); }
+  .choice-item:has(input:checked), .choice-other:has(input:checked) {
+    border-color:var(--accent); background:rgba(0,200,150,.09);
+  }
+  .choice-item input, .choice-other input { width:17px; height:17px; accent-color:var(--accent); flex-shrink:0; }
+  .choice-item span { font-size:13px; line-height:1.5; }
+  .choice-footer {
+    position:sticky; bottom:-14px; z-index:2; margin-top:8px; padding:8px 0 10px;
+    background:var(--s1); box-shadow:0 -8px 16px rgba(11,15,20,.9);
+  }
+  .choice-other { cursor:default; }
+  .choice-other label { font-size:13px; white-space:nowrap; cursor:pointer; }
+  #choiceOtherInput {
+    min-width:0; flex:1; height:34px; padding:7px 10px; color:var(--text);
+    background:var(--bg); border:1px solid var(--border); border-radius:6px;
+    font:13px 'Noto Serif TC',serif; outline:none;
+  }
+  #choiceOtherInput:focus { border-color:var(--blue); }
+  #choiceOtherInput:disabled { opacity:.4; }
+  #choiceError { min-height:18px; margin-top:5px; color:var(--danger); font-size:11px; }
+
   #inputBar { flex-shrink:0; height:var(--input-h); padding:0 16px; display:flex; align-items:center; gap:8px; border-top:1px solid var(--border); background:var(--s1); }
   #inputBar input { flex:1; background:var(--s2); border:1px solid var(--border); border-radius:8px; color:var(--text); padding:10px 14px; font-size:14px; font-family:'Noto Serif TC',serif; outline:none; transition:border-color .2s; height:42px; }
   #inputBar input:focus { border-color:var(--blue); }
@@ -157,6 +193,14 @@
   .icon-btn.send { background:var(--accent); border-color:var(--accent); color:#001a12; }
   .icon-btn.send:hover { opacity:.85; }
   .icon-btn.recording { background:var(--danger); border-color:var(--danger); }
+
+  @media (max-width:760px) {
+    #left { display:none; }
+    #startOverlay { left:0; }
+    .msg { max-width:90%; }
+    #choiceOptions { grid-template-columns:1fr; }
+    #choicePanel { max-height:48%; }
+  }
 </style>
 </head>
 <body>
@@ -164,17 +208,17 @@
 <div id="startOverlay">
   <div class="ov-logo">🩺</div>
   <div class="ov-title">AI 預問診系統</div>
-  <div class="ov-sub" id="overlayStatus">請在左側填入 D-ID 金鑰<br>連接成功後即可開始問診</div>
-  <button id="btnStart" onclick="startSession()">開始問診</button>
+  <div class="ov-sub" id="overlayStatus">Avatar 為選用功能<br>未連接也可以直接開始文字或語音問診</div>
+  <button id="btnStart" class="ready" onclick="startSession()">開始問診</button>
 </div>
 
 <div id="app">
   <div id="header">
     <div class="logo">🩺</div>
-    <h1>AI 預問診系統（Avatar 版）</h1>
+    <h1>AI 預問診系統</h1>
     <div class="conn-badge">
       <div class="dot" id="connDot"></div>
-      <span id="connText">未連線</span>
+      <span id="connText">純對話模式</span>
       <a href="doctor.html" style="margin-left:10px;color:var(--muted);text-decoration:none;font-size:11px;border:1px solid var(--border);border-radius:6px;padding:5px 10px;">醫師端 →</a>
     </div>
   </div>
@@ -184,7 +228,7 @@
       <div id="avatarWrap">
         <div id="avatarPlaceholder">
           <div class="big">👤</div>
-          <div>填入設定後<br>點擊「連接 Avatar」</div>
+          <div>Avatar 為選用功能<br>未連接也可正常問診</div>
         </div>
         <video id="agentVideo" autoplay playsinline></video>
         <div id="waveOverlay">
@@ -192,7 +236,7 @@
         </div>
       </div>
       <div id="configPanel">
-        <div class="cfg-title">D-ID 設定</div>
+        <div class="cfg-title">D-ID Avatar（選用）</div>
         <div class="cfg-field">
           <label>CLIENT KEY</label>
           <input type="password" id="clientKey" placeholder="ck_..." />
@@ -203,7 +247,7 @@
         </div>
         <button class="btn-primary" id="btnConnect" onclick="connectAvatar()">連接 Avatar</button>
         <button class="btn-ghost"   id="btnDisconnect" onclick="disconnectAvatar()">中斷連線</button>
-        <div id="cfgStatus">請輸入 D-ID 金鑰</div>
+        <div id="cfgStatus">未設定時使用純對話模式</div>
         <hr class="divider">
         <div class="cfg-title">取得金鑰方式</div>
         <div class="hint">
@@ -220,6 +264,21 @@
         <span id="stepText">0%</span>
       </div>
       <div id="chatbox"></div>
+      <div id="choicePanel" hidden>
+        <div class="choice-head">
+          <strong>請勾選符合的項目</strong>
+          <span class="choice-mode-label" id="choiceModeLabel"></span>
+        </div>
+        <div id="choiceOptions"></div>
+        <div class="choice-footer">
+          <div class="choice-other">
+            <input type="checkbox" id="choiceOtherToggle" />
+            <label for="choiceOtherToggle" id="choiceOtherLabel">其他／補充說明</label>
+            <input type="text" id="choiceOtherInput" placeholder="請輸入其他情況…" disabled />
+          </div>
+          <div id="choiceError" role="alert" aria-live="polite"></div>
+        </div>
+      </div>
       <div id="inputBar">
         <input type="text" id="textInput" placeholder="請輸入您的回覆..." disabled />
         <button class="icon-btn" id="btnMic" onclick="startVoice()" disabled>🎤</button>
@@ -229,20 +288,46 @@
   </div>
 </div>
 
-<script type="module">
-  import * as did from "https://esm.sh/@d-id/client-sdk@1";
-  window._did = did;
-</script>
-
 <script>
 const SESSION_ID = Date.now().toString();
-const BACKEND    = "http://127.0.0.1:8000";
+
+function resolveBackendUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const override = params.get("backend")?.trim();
+  if (override) {
+    const candidate = /^https?:\/\//i.test(override)
+      ? override
+      : `http://${override}`;
+    try {
+      const url = new URL(candidate);
+      if (url.protocol === "http:" || url.protocol === "https:") {
+        return url.toString().replace(/\/+$/, "");
+      }
+    } catch {
+      console.warn("忽略無效的 backend 網址參數：", override);
+    }
+  }
+
+  const requestedPort = params.get("backendPort")?.trim();
+  const backendPort = /^\d{1,5}$/.test(requestedPort || "")
+    && Number(requestedPort) <= 65535
+    ? requestedPort
+    : "8000";
+  const protocol = window.location.protocol === "https:" ? "https:" : "http:";
+  const hostname = window.location.hostname || "127.0.0.1";
+  return `${protocol}//${hostname}:${backendPort}`;
+}
+
+const BACKEND = resolveBackendUrl();
 // 後端最大 step 是 23（最後一題：過敏史），完成後才會送出報告。
 // 用 23 當分母，使用者看到最後一題時剛好顯示 100%，不會提前跳滿。
 const TOTAL_STEPS = 23;
 
 let isCompleted  = false;
 let agentManager = null;
+let consultationStarted = false;
+let didSdkPromise = null;
+let activeQuestionInput = null;
 
 const chatbox       = document.getElementById("chatbox");
 const textInput     = document.getElementById("textInput");
@@ -259,22 +344,45 @@ const waveOverlay   = document.getElementById("waveOverlay");
 const overlayEl     = document.getElementById("startOverlay");
 const overlayStatus = document.getElementById("overlayStatus");
 const btnStart      = document.getElementById("btnStart");
+const choicePanel       = document.getElementById("choicePanel");
+const choiceOptions     = document.getElementById("choiceOptions");
+const choiceModeLabel   = document.getElementById("choiceModeLabel");
+const choiceOtherToggle = document.getElementById("choiceOtherToggle");
+const choiceOtherLabel  = document.getElementById("choiceOtherLabel");
+const choiceOtherInput  = document.getElementById("choiceOtherInput");
+const choiceError       = document.getElementById("choiceError");
 
 // ── 開始遮罩 ──
 async function startSession() {
-  if (!agentManager) return;
+  if (consultationStarted) return;
+  consultationStarted = true;
+  btnStart.disabled = true;
   overlayEl.classList.add("hide");
   setTimeout(() => overlayEl.remove(), 500);
-  setTimeout(async () => { await startConsultation(); }, 2000);
+  await startConsultation();
 }
 
 // ── D-ID Avatar ──
-async function waitForSDK(timeout = 5000) {
-  const start = Date.now();
-  while (!window._did) {
-    if (Date.now() - start > timeout) throw new Error("D-ID SDK 載入逾時");
-    await new Promise(r => setTimeout(r, 200));
+async function loadDidSDK(timeout = 10000) {
+  if (window._did) return window._did;
+  if (!didSdkPromise) {
+    didSdkPromise = import("https://esm.sh/@d-id/client-sdk@1")
+      .then(sdk => {
+        window._did = sdk;
+        return sdk;
+      })
+      .catch(err => {
+        didSdkPromise = null;
+        throw err;
+      });
   }
+  return Promise.race([
+    didSdkPromise,
+    new Promise((_, reject) => setTimeout(
+      () => reject(new Error("D-ID SDK 載入逾時")),
+      timeout
+    )),
+  ]);
 }
 
 async function connectAvatar() {
@@ -283,8 +391,12 @@ async function connectAvatar() {
   if (!clientKey || !agentId) { setStatus("請填入 Client Key 和 Agent ID","err"); return; }
   setStatus("SDK 載入中...","wait");
   btnConnect.disabled = true;
-  try { await waitForSDK(); }
-  catch (e) { setStatus("SDK 載入失敗，請重新整理頁面","err"); btnConnect.disabled=false; return; }
+  try { await loadDidSDK(); }
+  catch (e) {
+    setStatus("SDK 載入失敗；仍可使用純對話問診","err");
+    btnConnect.disabled=false;
+    return;
+  }
   setStatus("連接中...","wait");
   try {
     agentManager = await window._did.createAgentManager(agentId, {
@@ -298,17 +410,20 @@ async function connectAvatar() {
             connText.textContent = "已連線";
             btnConnect.style.display    = "none";
             btnDisconnect.style.display = "block";
-            overlayStatus.textContent = "Avatar 已就緒，點擊開始問診 👇";
-            btnStart.classList.add("ready");
+            if (!consultationStarted) {
+              overlayStatus.textContent = "Avatar 已就緒，點擊開始問診 👇";
+            }
           } else if (state === "disconnected" || state === "failed") {
-            setStatus("連線中斷","err");
+            agentManager = null;
+            setStatus("Avatar 連線中斷；問診仍可繼續","err");
             connDot.className = "dot";
-            connText.textContent = "未連線";
+            connText.textContent = "純對話模式";
             btnConnect.style.display    = "block";
             btnConnect.disabled         = false;
             btnDisconnect.style.display = "none";
-            btnStart.classList.remove("ready");
-            overlayStatus.textContent = "請在左側填入 D-ID 金鑰\n連接成功後即可開始";
+            if (!consultationStarted) {
+              overlayStatus.textContent = "Avatar 未連線，仍可直接開始問診";
+            }
           }
         },
         onVideoStateChange(state) {
@@ -316,11 +431,21 @@ async function connectAvatar() {
           waveOverlay.className = talking ? "show" : "";
           connDot.className = "dot " + (talking ? "talking" : "on");
         },
-        onError(err) { setStatus("連接失敗："+(err.message||err),"err"); btnConnect.disabled=false; }
+        onError(err) {
+          agentManager = null;
+          connDot.className = "dot";
+          connText.textContent = "純對話模式";
+          setStatus("Avatar 連接失敗；仍可使用純對話問診","err");
+          btnConnect.disabled=false;
+        }
       }
     });
     await agentManager.connect();
-  } catch (err) { setStatus("連接失敗："+err.message,"err"); btnConnect.disabled=false; }
+  } catch (err) {
+    agentManager = null;
+    setStatus("Avatar 連接失敗；仍可使用純對話問診","err");
+    btnConnect.disabled=false;
+  }
 }
 
 async function disconnectAvatar() {
@@ -328,16 +453,119 @@ async function disconnectAvatar() {
   try { await agentManager.disconnect(); } catch {}
   agentManager=null; videoEl.srcObject=null;
   placeholder.classList.remove("hide"); waveOverlay.className="";
-  connDot.className="dot"; connText.textContent="未連線";
-  setStatus("已中斷連線","");
+  connDot.className="dot"; connText.textContent="純對話模式";
+  setStatus("Avatar 已中斷；問診仍可繼續","");
   btnConnect.style.display="block"; btnConnect.disabled=false; btnDisconnect.style.display="none";
-  btnStart.classList.remove("ready");
-  overlayStatus.textContent = "請在左側填入 D-ID 金鑰\n連接成功後即可開始";
+  if (!consultationStarted) {
+    overlayStatus.textContent = "Avatar 未連線，仍可直接開始問診";
+  }
 }
 
 function setStatus(msg,type) {
   cfgStatus.textContent = msg;
   cfgStatus.style.color = type==="ok" ? "var(--accent)" : type==="err" ? "var(--danger)" : type==="wait" ? "var(--blue)" : "var(--muted)";
+}
+
+function displayReply(data) {
+  const spec = data?.question_input;
+  let text = data?.reply ?? "";
+  if (!spec?.question || !spec?.prompt) return text;
+  const at = text.lastIndexOf(spec.question);
+  if (at < 0) return text;
+  return text.slice(0, at) + spec.prompt + text.slice(at + spec.question.length);
+}
+
+function clearQuestionInput() {
+  activeQuestionInput = null;
+  choiceOptions.replaceChildren();
+  choicePanel.hidden = true;
+  choiceOtherToggle.checked = false;
+  choiceOtherInput.value = "";
+  choiceOtherInput.disabled = true;
+  choiceError.textContent = "";
+  textInput.style.display = "";
+  textInput.placeholder = "請輸入您的回覆...";
+}
+
+function uncheckChoiceInputs(predicate = () => true) {
+  choiceOptions.querySelectorAll('input[type="checkbox"]').forEach(input => {
+    if (predicate(input)) input.checked = false;
+  });
+}
+
+function renderQuestionInput(spec) {
+  clearQuestionInput();
+  if (!spec || spec.kind !== "choice" || !Array.isArray(spec.options)) return;
+
+  activeQuestionInput = spec;
+  choicePanel.hidden = false;
+  choiceModeLabel.textContent = spec.multiple ? "可複選" : "請選一項";
+  choiceOtherLabel.textContent = spec.other_label || "其他／補充說明";
+  textInput.style.display = "none";
+
+  const exclusive = new Set(spec.exclusive_options || []);
+  spec.options.forEach((option, index) => {
+    const label = document.createElement("label");
+    label.className = "choice-item";
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.value = option;
+    input.dataset.exclusive = exclusive.has(option) ? "true" : "false";
+    input.id = `choice_${index}`;
+    const text = document.createElement("span");
+    text.textContent = option;
+    input.addEventListener("change", () => {
+      choiceError.textContent = "";
+      if (!input.checked) return;
+      if (!spec.multiple) {
+        uncheckChoiceInputs(other => other !== input);
+        choiceOtherToggle.checked = false;
+        choiceOtherInput.value = "";
+        choiceOtherInput.disabled = true;
+      } else if (input.dataset.exclusive === "true") {
+        uncheckChoiceInputs(other => other !== input);
+        choiceOtherToggle.checked = false;
+        choiceOtherInput.value = "";
+        choiceOtherInput.disabled = true;
+      } else {
+        uncheckChoiceInputs(other => other.dataset.exclusive === "true");
+      }
+    });
+    label.append(input, text);
+    choiceOptions.appendChild(label);
+  });
+}
+
+choiceOtherToggle.addEventListener("change", () => {
+  choiceError.textContent = "";
+  choiceOtherInput.disabled = !choiceOtherToggle.checked;
+  if (choiceOtherToggle.checked) {
+    if (!activeQuestionInput?.multiple) {
+      uncheckChoiceInputs();
+    } else {
+      uncheckChoiceInputs(input => input.dataset.exclusive === "true");
+    }
+    choiceOtherInput.focus();
+  } else {
+    choiceOtherInput.value = "";
+  }
+});
+
+choiceOtherInput.addEventListener("input", () => {
+  if (!choiceOtherToggle.checked && choiceOtherInput.value.trim()) {
+    choiceOtherToggle.checked = true;
+    choiceOtherToggle.dispatchEvent(new Event("change"));
+  }
+  choiceError.textContent = "";
+});
+
+function focusCurrentInput() {
+  if (activeQuestionInput) {
+    const first = choiceOptions.querySelector('input[type="checkbox"]');
+    first?.focus();
+  } else {
+    textInput.focus();
+  }
 }
 
 async function avatarSpeak(text) {
@@ -359,16 +587,19 @@ async function startConsultation() {
   setInputsDisabled(true);
   const data = await callBackend("");
   if (!data) { setInputsDisabled(false); return; }
-  addBubble("ai", data.reply);
-  avatarSpeak(data.reply);
+  const reply = displayReply(data);
+  addBubble("ai", reply);
+  avatarSpeak(reply);
   updateProgress(data.step ?? 0);
+  renderQuestionInput(data.question_input);
   setInputsDisabled(false);
-  textInput.focus();
+  focusCurrentInput();
 }
 
 // ── 處理後端回傳，共用於文字輸入與語音輸入 ──
 function handleResponse(data, rawFallback) {
   if (!data) return;
+  clearQuestionInput();
   addBubble("user", data.user_display ?? rawFallback);
   if (data.completed) {
     if (data.queue_number) {
@@ -382,23 +613,49 @@ function handleResponse(data, rawFallback) {
     connDot.className = "dot on";
     connText.textContent = "問診完成";
   } else {
-    addBubble("ai", data.reply);
-    avatarSpeak(data.reply);
+    const reply = displayReply(data);
+    addBubble("ai", reply);
+    avatarSpeak(reply);
     updateProgress(data.step ?? 0);
+    renderQuestionInput(data.question_input);
     setInputsDisabled(false);
-    textInput.focus();
+    focusCurrentInput();
   }
 }
 
 async function sendMessage() {
   if (isCompleted) return;
-  const msg = textInput.value.trim();
-  if (!msg) return;
+  let msg = "";
+  if (activeQuestionInput) {
+    const selected = [...choiceOptions.querySelectorAll('input[type="checkbox"]:checked')]
+      .map(input => input.value);
+    const other = choiceOtherToggle.checked ? choiceOtherInput.value.trim() : "";
+    if (choiceOtherToggle.checked && !other) {
+      choiceError.textContent = "請輸入其他／補充說明，或取消勾選。";
+      choiceOtherInput.focus();
+      return;
+    }
+    if (other) selected.push(`其他：${other}`);
+    if (!selected.length) {
+      choiceError.textContent = activeQuestionInput.multiple
+        ? "請至少勾選一項，或填寫其他情況。"
+        : "請勾選一項，或填寫其他情況。";
+      return;
+    }
+    msg = selected.join("、");
+  } else {
+    msg = textInput.value.trim();
+    if (!msg) return;
+  }
   textInput.value = "";
   setInputsDisabled(true);
   showTyping();
   const data = await callBackend(msg);
   removeTyping();
+  if (!data) {
+    setInputsDisabled(false);
+    return;
+  }
   handleResponse(data, msg);
 }
 
@@ -411,7 +668,10 @@ async function callBackend(message) {
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     return await r.json();
   } catch (e) {
-    addBubble("ai","⚠️ 無法連接後端（"+e.message+"），請確認 FastAPI 已啟動（python main.py）。");
+    addBubble(
+      "ai",
+      `⚠️ 無法連接後端（${e.message}）。\n嘗試連線：${BACKEND}\n請確認 FastAPI 的 host 與 port 設定。`
+    );
     return null;
   }
 }
@@ -459,7 +719,14 @@ function showReport(text) {
   chatbox.appendChild(card); chatbox.scrollTop=chatbox.scrollHeight;
 }
 
-function setInputsDisabled(v) { textInput.disabled=v; btnSend.disabled=v; btnMic.disabled=v; }
+function setInputsDisabled(v) {
+  textInput.disabled=v;
+  btnSend.disabled=v;
+  btnMic.disabled=v;
+  choiceOptions.querySelectorAll("input").forEach(input => { input.disabled = v; });
+  choiceOtherToggle.disabled = v;
+  choiceOtherInput.disabled = v || !choiceOtherToggle.checked;
+}
 
 function updateProgress(step) {
   const pct = step >= TOTAL_STEPS ? 100 : Math.round((step / TOTAL_STEPS) * 100);
@@ -495,6 +762,15 @@ async function startVoice() {
           btnMic.disabled = false; btnMic.textContent = "🎤";
           return;
         }
+        if (activeQuestionInput) {
+          choiceOtherToggle.checked = true;
+          choiceOtherToggle.dispatchEvent(new Event("change"));
+          choiceOtherInput.value = rawText;
+          choiceError.textContent = "";
+          setInputsDisabled(false);
+          choiceOtherInput.focus();
+          return;
+        }
         // 直接送後端，不提前顯示，等 user_display 回來再渲染
         setInputsDisabled(true);
         showTyping();
@@ -512,6 +788,7 @@ async function startVoice() {
 }
 
 textInput.addEventListener("keydown", e=>{ if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage();} });
+choiceOtherInput.addEventListener("keydown", e=>{ if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage();} });
 
 window.addEventListener("load",()=>{
   navigator.mediaDevices?.getUserMedia?.({audio:true}).then(s=>s.getTracks().forEach(t=>t.stop())).catch(()=>{});

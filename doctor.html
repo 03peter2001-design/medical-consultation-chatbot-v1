@@ -183,7 +183,34 @@
 </div>
 
 <script>
-const BACKEND    = "http://127.0.0.1:8000";
+function resolveBackendUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const override = params.get("backend")?.trim();
+  if (override) {
+    const candidate = /^https?:\/\//i.test(override)
+      ? override
+      : `http://${override}`;
+    try {
+      const url = new URL(candidate);
+      if (url.protocol === "http:" || url.protocol === "https:") {
+        return url.toString().replace(/\/+$/, "");
+      }
+    } catch {
+      console.warn("忽略無效的 backend 網址參數：", override);
+    }
+  }
+
+  const requestedPort = params.get("backendPort")?.trim();
+  const backendPort = /^\d{1,5}$/.test(requestedPort || "")
+    && Number(requestedPort) <= 65535
+    ? requestedPort
+    : "8000";
+  const protocol = window.location.protocol === "https:" ? "https:" : "http:";
+  const hostname = window.location.hostname || "127.0.0.1";
+  return `${protocol}//${hostname}:${backendPort}`;
+}
+
+const BACKEND = resolveBackendUrl();
 const SESSION_ID = "dr_" + Date.now().toString();
 
 const chatbox    = document.getElementById("chatbox");
@@ -254,7 +281,6 @@ async function loadPatient() {
     if (emptyState.parentElement) emptyState.remove();
     chatbox.innerHTML = "";
     addPatientCard(data);
-    addOrdersCard(data);
 
     // 載入病人後，六段式結構化分析已經在後端自動產生完成，
     // 這裡直接把結果渲染出來，醫師不用再輸入或按任何按鈕。
@@ -266,7 +292,7 @@ async function loadPatient() {
       addStructuredUnavailable("自動產生結構化分析失敗，可切換下方「手動再次分析」模式重新產生。");
     }
   } catch (e) {
-    alert("⚠️ 無法連接後端：" + e.message);
+    alert(`⚠️ 無法連接後端：${e.message}\n嘗試連線：${BACKEND}`);
   } finally {
     isLoadingPatient = false;
     btnLoadPatient.disabled = false;
@@ -288,100 +314,6 @@ function addPatientCard(data) {
   card.innerHTML = `<div style="font-size:12px;color:var(--accent2);font-family:'JetBrains Mono',monospace;margin-bottom:8px;">📋 問診編號 ${data.queue_number} — 問卷摘要</div>${escapeHtml(data.summary)}<div style="font-size:12px;color:var(--accent2);font-family:'JetBrains Mono',monospace;margin:14px 0 8px;">🩺 AI 初步評估</div>${escapeHtml(data.report)}`;
   chatbox.appendChild(card);
   chatbox.scrollTop = chatbox.scrollHeight;
-}
-
-// ── AI 建議醫囑卡片（human-in-the-loop：AI 只給建議，醫師確認才算數）──
-function addOrdersCard(data) {
-  const card = document.createElement("div");
-  card.id = "ordersCard";
-  card.style.cssText = "background:var(--s2);border:1px solid var(--accent);border-radius:10px;padding:16px 18px;max-width:100%;font-size:13px;";
-  card.dataset.queueNumber = data.queue_number;
-
-  const title = document.createElement("div");
-  title.style.cssText = "font-size:12px;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:10px;";
-  title.textContent = "💊 AI 建議醫囑（僅供參考，需醫師確認）";
-  card.appendChild(title);
-
-  const orders = data.pending_orders || [];
-
-  if (data.orders_confirmed) {
-    // 已經確認過：唯讀顯示醫師最終確認的內容，不再提供勾選/按鈕
-    const confirmed = data.confirmed_orders || [];
-    const list = document.createElement("div");
-    list.style.cssText = "line-height:2;";
-    list.innerHTML = confirmed.length
-      ? confirmed.map(o => `✅ ${escapeHtml(o)}`).join("<br>")
-      : "（醫師確認為：不需開立額外檢查）";
-    card.appendChild(list);
-    const badge = document.createElement("div");
-    badge.style.cssText = "margin-top:10px;font-size:11px;color:var(--accent2);font-family:'JetBrains Mono',monospace;";
-    badge.textContent = "✔ 醫師已確認";
-    card.appendChild(badge);
-    chatbox.appendChild(card);
-    chatbox.scrollTop = chatbox.scrollHeight;
-    return;
-  }
-
-  if (!orders.length) {
-    const empty = document.createElement("div");
-    empty.style.cssText = "color:var(--muted);font-size:12px;";
-    empty.textContent = "AI 目前無自動建議，請醫師自行判斷是否需要開立檢查。";
-    card.appendChild(empty);
-    chatbox.appendChild(card);
-    chatbox.scrollTop = chatbox.scrollHeight;
-    return;
-  }
-
-  // 未確認：提供勾選清單（預設全勾），醫師可取消勾選後再確認
-  const list = document.createElement("div");
-  list.style.cssText = "display:flex;flex-direction:column;gap:6px;margin-bottom:12px;";
-  orders.forEach((o, i) => {
-    const row = document.createElement("label");
-    row.style.cssText = "display:flex;align-items:center;gap:8px;cursor:pointer;";
-    row.innerHTML = `<input type="checkbox" class="order-checkbox" data-order="${escapeHtml(o)}" checked style="accent-color:var(--accent);width:15px;height:15px;"><span>${escapeHtml(o)}</span>`;
-    list.appendChild(row);
-  });
-  card.appendChild(list);
-
-  const btn = document.createElement("button");
-  btn.className = "patient-btn";
-  btn.textContent = "✔ 確認醫囑";
-  btn.onclick = () => confirmOrders(card);
-  card.appendChild(btn);
-
-  chatbox.appendChild(card);
-  chatbox.scrollTop = chatbox.scrollHeight;
-}
-
-async function confirmOrders(card) {
-  const queueNumber = card.dataset.queueNumber;
-  const checked = Array.from(card.querySelectorAll(".order-checkbox:checked")).map(cb => cb.dataset.order);
-  const btn = card.querySelector("button");
-  btn.disabled = true;
-  btn.textContent = "送出中...";
-
-  try {
-    const r = await fetch(`${BACKEND}/doctor/orders/confirm`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ queue_number: queueNumber, orders: checked })
-    });
-    if (!r.ok) {
-      const err = await r.json().catch(() => ({}));
-      alert("⚠️ " + (err.detail || `HTTP ${r.status}`));
-      btn.disabled = false;
-      btn.textContent = "✔ 確認醫囑";
-      return;
-    }
-    const data = await r.json();
-    // 直接把卡片換成「已確認」的唯讀版本，不用重新整頁
-    card.remove();
-    addOrdersCard({ queue_number: queueNumber, orders_confirmed: true, confirmed_orders: data.confirmed_orders });
-  } catch (e) {
-    alert("⚠️ 無法連接後端：" + e.message);
-    btn.disabled = false;
-    btn.textContent = "✔ 確認醫囑";
-  }
 }
 
 function addStructuredUnavailable(text) {
@@ -416,7 +348,7 @@ async function checkHealth() {
     }
   } catch (e) {
     connDot.className = "dot";
-    connText.textContent = "無法連接後端，請確認 FastAPI 已啟動";
+    connText.textContent = `無法連接後端：${BACKEND}`;
   }
 }
 checkHealth();
@@ -476,7 +408,10 @@ async function sendMessage() {
     }
   } catch (e) {
     removeTyping();
-    addBubble("ai", "⚠️ 無法連接後端（" + e.message + "），請確認 FastAPI 已啟動。");
+    addBubble(
+      "ai",
+      `⚠️ 無法連接後端（${e.message}）。\n嘗試連線：${BACKEND}\n請確認 FastAPI 的 host 與 port 設定。`
+    );
   } finally {
     isSending = false;
     setInputsDisabled(false);

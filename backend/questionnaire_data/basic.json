@@ -1,0 +1,31 @@
+{
+  "id": "basic",
+  "section": "basic",
+  "questions": [
+    {
+      "field": "name",
+      "prompt": "請輸入您的姓名。",
+      "kind": "text",
+      "placeholder": "姓名僅供本次問診辨識"
+    },
+    {
+      "field": "gender",
+      "prompt": "請選擇您的生理性別。",
+      "kind": "choice",
+      "options": ["男性", "女性"],
+      "allow_other": true
+    },
+    {
+      "field": "birth_date",
+      "prompt": "請選擇您的出生日期，系統會自動計算年齡。",
+      "kind": "date"
+    },
+    {
+      "field": "blood_type",
+      "prompt": "請選擇您的血型。",
+      "kind": "choice",
+      "options": ["A型", "B型", "AB型", "O型", "不清楚"],
+      "allow_other": true
+    }
+  ]
+}

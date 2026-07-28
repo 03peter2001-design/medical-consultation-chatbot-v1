@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "semantic_threshold": 0.42,
+  "secondary_threshold": 0.48,
+  "secondary_margin": 0.06,
+  "low_confidence_threshold": 0.55,
+  "routes": {
+    "chest": {
+      "keywords": [
+        "chest pain",
+        "chest discomfort",
+        "angina",
+        "myocardial infarction",
+        "acute coronary",
+        "cardiac ischemia",
+        "aortic dissection",
+        "pulmonary embolism",
+        "pneumothorax",
+        "pericarditis",
+        "myocarditis",
+        "palpitation",
+        "dyspnea",
+        "shortness of breath",
+        "胸痛",
+        "胸悶",
+        "心肌梗塞",
+        "心絞痛",
+        "呼吸困難",
+        "心悸"
+      ],
+      "prototypes": [
+        "chest pain, pressure, dyspnea, palpitations and cardiovascular or pulmonary differential diagnosis",
+        "胸痛、胸悶、呼吸困難、心悸及心肺急症鑑別診斷"
+      ]
+    },
+    "headache": {
+      "keywords": [
+        "headache",
+        "migraine",
+        "subarachnoid hemorrhage",
+        "intracranial hemorrhage",
+        "meningitis",
+        "encephalitis",
+        "temporal arteritis",
+        "giant cell arteritis",
+        "papilledema",
+        "cerebral aneurysm",
+        "stroke",
+        "neurologic deficit",
+        "頭痛",
+        "偏頭痛",
+        "腦出血",
+        "蜘蛛膜下腔出血",
+        "腦膜炎",
+        "中風"
+      ],
+      "prototypes": [
+        "headache, migraine, neurologic deficit, intracranial hemorrhage and central nervous system infection",
+        "頭痛、偏頭痛、神經學症狀、顱內出血與中樞神經感染"
+      ]
+    },
+    "abdomen": {
+      "keywords": [
+        "abdominal pain",
+        "acute abdomen",
+        "appendicitis",
+        "cholecystitis",
+        "biliary colic",
+        "pancreatitis",
+        "bowel obstruction",
+        "gastrointestinal bleeding",
+        "ectopic pregnancy",
+        "pelvic inflammatory",
+        "renal colic",
+        "pyelonephritis",
+        "肚子痛",
+        "腹痛",
+        "闌尾炎",
+        "膽囊炎",
+        "胰臟炎",
+        "腸阻塞",
+        "子宮外孕"
+      ],
+      "prototypes": [
+        "abdominal pain, acute abdomen, gastrointestinal, hepatobiliary, urinary and gynecologic differential diagnosis",
+        "腹痛、急性腹症、腸胃肝膽、泌尿與婦科鑑別診斷"
+      ]
+    },
+    "common": {
+      "keywords": [
+        "allergy",
+        "medication history",
+        "drug interaction",
+        "anticoagulant",
+        "pregnancy",
+        "immunocompromised",
+        "diabetes mellitus",
+        "hypertension",
+        "laboratory test",
+        "reference range",
+        "complete blood count",
+        "metabolic panel",
+        "過敏",
+        "用藥",
+        "懷孕",
+        "免疫低下",
+        "糖尿病",
+        "高血壓",
+        "檢驗"
+      ],
+      "prototypes": [
+        "general medical history, medications, allergy, pregnancy, chronic disease and broadly applicable laboratory testing",
+        "共通病史、用藥、過敏、懷孕、慢性病與一般檢驗"
+      ]
+    }
+  },
+  "safety_rules": {
+    "acute_coronary_syndrome": [
+      "acute coronary syndrome",
+      "myocardial infarction",
+      "st elevation",
+      "cardiogenic shock"
+    ],
+    "aortic_dissection": [
+      "aortic dissection",
+      "tearing chest pain"
+    ],
+    "pulmonary_embolism": [
+      "pulmonary embolism",
+      "massive pulmonary embolism"
+    ],
+    "tension_pneumothorax": [
+      "tension pneumothorax"
+    ],
+    "intracranial_hemorrhage": [
+      "subarachnoid hemorrhage",
+      "intracranial hemorrhage",
+      "thunderclap headache"
+    ],
+    "stroke": [
+      "acute ischemic stroke",
+      "hemorrhagic stroke",
+      "focal neurologic deficit"
+    ],
+    "central_nervous_system_infection": [
+      "bacterial meningitis",
+      "encephalitis",
+      "neck stiffness"
+    ],
+    "abdominal_emergency": [
+      "ruptured abdominal aortic aneurysm",
+      "ectopic pregnancy",
+      "bowel perforation",
+      "mesenteric ischemia"
+    ],
+    "shock_or_sepsis": [
+      "septic shock",
+      "anaphylactic shock",
+      "hemorrhagic shock"
+    ]
+  },
+  "clinical_stage_keywords": {
+    "lab": [
+      "laboratory",
+      "blood test",
+      "serum",
+      "reference range",
+      "troponin",
+      "complete blood count",
+      "檢驗",
+      "抽血"
+    ],
+    "imaging": [
+      "imaging",
+      "radiograph",
+      "x-ray",
+      "computed tomography",
+      "magnetic resonance",
+      "ultrasound",
+      "echocardiography",
+      "影像",
+      "電腦斷層",
+      "超音波"
+    ],
+    "treatment": [
+      "treatment",
+      "management",
+      "therapy",
+      "medication",
+      "surgery",
+      "antibiotic",
+      "治療",
+      "處置"
+    ],
+    "diagnosis": [
+      "differential diagnosis",
+      "diagnosis",
+      "diagnostic criteria",
+      "red flag",
+      "鑑別診斷",
+      "診斷",
+      "危險徵兆"
+    ],
+    "workup": [
+      "workup",
+      "evaluation",
+      "physical examination",
+      "history",
+      "檢查",
+      "病史"
+    ]
+  }
+}

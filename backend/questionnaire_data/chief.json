@@ -1,0 +1,12 @@
+{
+  "id": "chief",
+  "section": "chief",
+  "questions": [
+    {
+      "field": "reason",
+      "prompt": "請自由描述今天最不舒服的症狀、部位，以及發生的情況。",
+      "kind": "text",
+      "placeholder": "例如：今天早上開始胸口悶痛，走路時更明顯"
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "id": "headache",
+  "section": "disease",
+  "questions": [
+    {
+      "field": "onset",
+      "prompt": "這次頭痛大約從什麼時候開始？",
+      "kind": "duration",
+      "quick_options": ["1小時前", "1天前", "1週前", "1個月前"],
+      "units": ["分鐘前", "小時前", "天前", "週前", "個月前", "年前"],
+      "allow_other": true,
+      "placeholder": "例如：30分鐘前、1個月前"
+    },
+    {
+      "field": "start_type",
+      "prompt": "頭痛是幾秒內達到最劇烈，還是慢慢加重？",
+      "kind": "choice",
+      "options": ["瞬間爆炸性", "逐漸加重"],
+      "semantic_options": {
+        "瞬間爆炸性": {"onset": "sudden"},
+        "逐漸加重": {"onset": "gradual"}
+      },
+      "allow_other": true
+    },
+    {
+      "field": "location",
+      "prompt": "頭痛的位置主要在哪裡？",
+      "kind": "choice",
+      "options": ["單側", "兩側都痛", "前額", "後腦勺及頸部", "整個頭"],
+      "multiple": true,
+      "allow_other": true
+    },
+    {
+      "field": "worst_ever",
+      "prompt": "這是您至今最嚴重的一次頭痛嗎？",
+      "kind": "choice",
+      "options": ["是，前所未有的劇痛", "不是，跟以前差不多或較輕"],
+      "semantic_options": {
+        "是，前所未有的劇痛": {"severity": "severe"}
+      },
+      "allow_other": true
+    },
+    {
+      "field": "quality",
+      "prompt": "您會怎麼描述頭痛的感覺？",
+      "kind": "choice",
+      "options": ["像脈搏一樣的跳痛", "悶脹痛", "像被緊緊束住", "針刺般的刺痛"],
+      "multiple": true,
+      "allow_other": true
+    },
+    {
+      "field": "aggravate",
+      "prompt": "什麼情況下頭痛會比較嚴重？",
+      "kind": "choice",
+      "options": ["咳嗽或用力", "彎腰低頭", "身體活動", "光線刺激", "聲音刺激"],
+      "multiple": true,
+      "allow_other": true
+    },
+    {
+      "field": "relieve",
+      "prompt": "什麼情況下頭痛會比較緩解？",
+      "kind": "choice",
+      "options": ["休息", "使用止痛藥", "待在黑暗安靜的地方", "按摩頭頸部"],
+      "multiple": true,
+      "allow_other": true
+    },
+    {
+      "field": "associated",
+      "prompt": "除了頭痛，還有哪些症狀？",
+      "kind": "choice",
+      "options": [
+        "噁心或嘔吐",
+        "畏光",
+        "畏聲",
+        "視力模糊或複視",
+        "頸部僵硬合併發燒",
+        "單側肢體無力或麻木",
+        "講話不清楚",
+        "意識改變或嗜睡",
+        "以上皆無"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "semantic_options": {
+        "噁心或嘔吐": {"findings": ["nausea"]},
+        "視力模糊或複視": {"findings": ["visual_change_unspecified"]},
+        "頸部僵硬合併發燒": {
+          "findings": ["neck_stiffness", "fever"]
+        },
+        "單側肢體無力或麻木": {
+          "findings": ["focal_neurologic_symptom"]
+        },
+        "講話不清楚": {"findings": ["speech_difficulty"]},
+        "意識改變或嗜睡": {"findings": ["altered_consciousness"]}
+      },
+      "exclusive_options": ["以上皆無"]
+    },
+    {
+      "field": "risk_flags",
+      "prompt": "請問是否有以下情形？",
+      "kind": "choice",
+      "options": [
+        "近期頭部外傷",
+        "癌症病史",
+        "免疫功能低下",
+        "目前服用抗凝血藥物",
+        "懷孕或產後六週內",
+        "以上皆無"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "semantic_options": {
+        "近期頭部外傷": {"findings": ["recent_head_trauma"]}
+      },
+      "exclusive_options": ["以上皆無"]
+    },
+    {
+      "field": "neuro",
+      "prompt": "過去是否有以下神經血管相關疾病？",
+      "kind": "choice",
+      "options": [
+        "中風",
+        "腦動脈瘤",
+        "腦出血",
+        "腦膜炎或腦炎",
+        "腦部腫瘤",
+        "癲癇",
+        "偏頭痛病史",
+        "顳動脈炎",
+        "以上皆無"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": ["以上皆無"]
+    },
+    {
+      "field": "surgery",
+      "prompt": "過去是否曾接受過下列手術？",
+      "kind": "choice",
+      "options": [
+        "腦部手術",
+        "腦動脈瘤夾閉或栓塞手術",
+        "水腦引流",
+        "頸動脈手術",
+        "腦部放射線治療",
+        "頸椎手術",
+        "未曾手術"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": ["未曾手術"]
+    }
+  ]
+}

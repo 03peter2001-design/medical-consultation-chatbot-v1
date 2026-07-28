@@ -16,6 +16,10 @@
       "prompt": "胸痛是突然發作，還是逐漸發作？",
       "kind": "choice",
       "options": ["突然發作", "逐漸發作"],
+      "semantic_options": {
+        "突然發作": {"onset": "sudden"},
+        "逐漸發作": {"onset": "gradual"}
+      },
       "allow_other": true
     },
     {
@@ -72,7 +76,8 @@
         "感到呼吸急促",
         "冒冷汗",
         "感到噁心或已經嘔吐",
-        "有昏厥、暈倒或頭暈",
+        "有昏厥或暈倒",
+        "感到頭暈",
         "感到心跳加速或心跳不規則",
         "咳嗽有痰",
         "肚子痛",
@@ -80,6 +85,12 @@
       ],
       "multiple": true,
       "allow_other": true,
+      "semantic_options": {
+        "冒冷汗": {"findings": ["diaphoresis"]},
+        "感到噁心或已經嘔吐": {"findings": ["nausea"]},
+        "有昏厥或暈倒": {"findings": ["syncope"]},
+        "感到頭暈": {"findings": ["dizziness_unspecified"]}
+      },
       "exclusive_options": ["以上皆無"]
     },
     {

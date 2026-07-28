@@ -1,0 +1,51 @@
+[importlinter]
+root_packages =
+    amie
+    app
+    domain
+    infrastructure
+    knowledge
+    scripts
+
+[importlinter:contract:domain-boundary]
+name = Domain must remain independent
+type = forbidden
+source_modules =
+    domain
+forbidden_modules =
+    amie
+    app
+    infrastructure
+    knowledge
+
+[importlinter:contract:infrastructure-boundary]
+name = Infrastructure must not depend on application concerns
+type = forbidden
+source_modules =
+    infrastructure
+forbidden_modules =
+    amie
+    app
+    domain
+    knowledge
+
+[importlinter:contract:knowledge-boundary]
+name = Knowledge retrieval must remain independent
+type = forbidden
+source_modules =
+    knowledge
+forbidden_modules =
+    amie
+    app
+    domain
+    infrastructure
+
+[importlinter:contract:amie-boundary]
+name = AMIE workflow may only depend on the domain layer
+type = forbidden
+source_modules =
+    amie
+forbidden_modules =
+    app
+    infrastructure
+    knowledge

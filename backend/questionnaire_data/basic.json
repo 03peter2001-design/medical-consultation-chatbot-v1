@@ -12,7 +12,7 @@
       "field": "gender",
       "prompt": "請選擇您的生理性別。",
       "kind": "choice",
-      "options": ["男性", "女性", "不便透露"],
+      "options": ["男性", "女性"],
       "allow_other": true
     },
     {

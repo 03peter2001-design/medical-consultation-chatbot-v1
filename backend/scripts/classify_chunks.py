@@ -3,7 +3,7 @@
 
 執行：
     cd backend
-    python classify_chunks.py
+    python -m scripts.classify_chunks
 """
 
 from __future__ import annotations
@@ -17,9 +17,9 @@ import os
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable
 
-from rag_common import (
+from knowledge.common import (
     CLASSIFICATION_REPORT,
     CLASSIFIED_CORPUS,
     CLASSIFIED_EMBEDDINGS,
@@ -63,9 +63,7 @@ def iter_clean_articles(path: Path = CLEAN_CORPUS) -> Iterable[dict]:
             try:
                 yield json.loads(line)
             except json.JSONDecodeError as exc:
-                raise ValueError(
-                    f"{path} 第 {line_number} 行不是合法 JSON"
-                ) from exc
+                raise ValueError(f"{path} 第 {line_number} 行不是合法 JSON") from exc
 
 
 def iter_chunks(path: Path = CLEAN_CORPUS) -> Iterable[dict]:
@@ -113,8 +111,7 @@ def detect_clinical_stage(title: str, text: str, taxonomy: dict) -> str:
     # 越專門的內容優先；general 是沒有明確階段時的保守預設。
     for stage in ("lab", "imaging", "treatment", "diagnosis", "workup"):
         if any(
-            keyword.casefold() in combined
-            for keyword in taxonomy["clinical_stage_keywords"][stage]
+            keyword.casefold() in combined for keyword in taxonomy["clinical_stage_keywords"][stage]
         ):
             return stage
     return "general"
@@ -149,8 +146,7 @@ def classify_chunk(
         second_route, second_score = symptom_ranked[1]
         if (
             second_score >= taxonomy["secondary_threshold"]
-            and symptom_ranked[0][1] - second_score
-            <= taxonomy["secondary_margin"]
+            and symptom_ranked[0][1] - second_score <= taxonomy["secondary_margin"]
         ):
             routes.append(second_route)
     elif scores.get("common", 0.0) >= semantic_threshold:
@@ -228,17 +224,12 @@ class SemanticScorer:
                 show_progress_bar=False,
             )
 
-    def score_batch(
-        self, chunks: list[dict]
-    ) -> tuple[list[dict[str, float]], list]:
+    def score_batch(self, chunks: list[dict]) -> tuple[list[dict[str, float]], Any]:
         import numpy as np
 
         # 同一向量後續會直接寫入 Chroma，因此必須涵蓋完整 chunk；
         # 標題一併加入，讓段落在跨文章檢索時保有主題語境。
-        texts = [
-            f"{chunk['title']} {chunk['text']}"
-            for chunk in chunks
-        ]
+        texts = [f"{chunk['title']} {chunk['text']}" for chunk in chunks]
         embeddings = self.model.encode(
             texts,
             batch_size=128,
@@ -285,9 +276,7 @@ def _write_outputs(
     vector_rows = 0
 
     output_tmp = output_path.with_suffix(output_path.suffix + ".tmp")
-    embeddings_tmp = embeddings_path.with_suffix(
-        embeddings_path.suffix + ".tmp"
-    )
+    embeddings_tmp = embeddings_path.with_suffix(embeddings_path.suffix + ".tmp")
     review_tmp = review_path.with_suffix(review_path.suffix + ".tmp")
     report_tmp = report_path.with_suffix(report_path.suffix + ".tmp")
 
@@ -317,9 +306,7 @@ def _write_outputs(
         for record in records:
             record = dict(record)
             embedding = record.pop("_embedding", None)
-            is_indexed = any(
-                route in INDEX_ROUTES for route in record["routes"]
-            )
+            is_indexed = any(route in INDEX_ROUTES for route in record["routes"])
             if embedding is not None and is_indexed:
                 import numpy as np
 
@@ -346,9 +333,7 @@ def _write_outputs(
             sample_route = record["primary_route"]
             if sample_route in sample_heaps:
                 sample_key = int(
-                    hashlib.sha256(
-                        record["chunk_id"].encode("utf-8")
-                    ).hexdigest(),
+                    hashlib.sha256(record["chunk_id"].encode("utf-8")).hexdigest(),
                     16,
                 )
                 heap = sample_heaps[sample_route]
@@ -384,9 +369,7 @@ def _write_outputs(
                 print(f"已分類 {total} chunks", flush=True)
 
         for route, heap in sample_heaps.items():
-            for _, _, record in sorted(
-                heap, key=lambda item: (-item[0], item[1])
-            ):
+            for _, _, record in sorted(heap, key=lambda item: (-item[0], item[1])):
                 if record["chunk_id"] in review_ids:
                     continue
                 review_counts["route_sample"] += 1
@@ -417,13 +400,9 @@ def _write_outputs(
         "embedding_dimension": embedding_dimension,
         "total_chunks": total,
         "vector_rows": vector_rows,
-        "duplicate_vector_rows": max(
-            0, vector_rows - len(unique_indexed_chunks)
-        ),
+        "duplicate_vector_rows": max(0, vector_rows - len(unique_indexed_chunks)),
         "route_chunk_counts": dict(sorted(route_counts.items())),
-        "route_article_counts": {
-            route: len(ids) for route, ids in sorted(article_ids.items())
-        },
+        "route_article_counts": {route: len(ids) for route, ids in sorted(article_ids.items())},
         "primary_route_counts": dict(sorted(primary_counts.items())),
         "clinical_stage_counts": dict(sorted(stage_counts.items())),
         "classification_method_counts": dict(sorted(method_counts.items())),
@@ -470,9 +449,7 @@ def classify_corpus(
         else:
             semantic_batch = [{} for _ in batch]
             embeddings = [None for _ in batch]
-        for chunk, semantic_scores, embedding in zip(
-            batch, semantic_batch, embeddings
-        ):
+        for chunk, semantic_scores, embedding in zip(batch, semantic_batch, embeddings):
             result = classify_chunk(chunk, taxonomy, semantic_scores)
             yield {
                 **chunk,
@@ -519,10 +496,7 @@ def main() -> None:
     report = classify_corpus(
         input_path=args.input,
         output_path=args.output,
-        embeddings_path=(
-            args.embeddings
-            or args.output.with_name(CLASSIFIED_EMBEDDINGS.name)
-        ),
+        embeddings_path=(args.embeddings or args.output.with_name(CLASSIFIED_EMBEDDINGS.name)),
         report_path=args.report,
         review_path=args.review_queue,
         taxonomy_path=args.taxonomy,

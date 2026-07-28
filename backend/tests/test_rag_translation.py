@@ -2,7 +2,7 @@ import json
 import unittest
 from types import SimpleNamespace
 
-from rag_translation import (
+from knowledge.translation import (
     GeminiQueryNormalizer,
     QueryNormalization,
     parse_normalization,
@@ -12,9 +12,7 @@ from rag_translation import (
 
 def valid_payload():
     return {
-        "literal_translation": (
-            "No chest pain, but sudden tearing back pain started today."
-        ),
+        "literal_translation": ("No chest pain, but sudden tearing back pain started today."),
         "positive_findings": [
             "sudden tearing back pain",
         ],
@@ -22,9 +20,7 @@ def valid_payload():
         "uncertain_findings": [],
         "temporality": ["started today"],
         "standardized_terms": ["tearing back pain"],
-        "retrieval_query": (
-            "sudden tearing back pain without chest pain"
-        ),
+        "retrieval_query": ("sudden tearing back pain without chest pain"),
     }
 
 

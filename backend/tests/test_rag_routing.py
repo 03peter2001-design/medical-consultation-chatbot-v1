@@ -2,9 +2,13 @@ import unittest
 from types import SimpleNamespace
 from unittest.mock import patch
 
-import rag
-from rag import _expand_query_terms, _rrf_merge, select_routes
-from rag_translation import QueryNormalization
+from knowledge import retrieval as rag
+from knowledge.retrieval import (
+    _expand_query_terms,
+    _rrf_merge,
+    select_routes,
+)
+from knowledge.translation import QueryNormalization
 
 
 class RagRoutingTests(unittest.TestCase):
@@ -87,9 +91,7 @@ class RagRoutingTests(unittest.TestCase):
             "title": "Legacy",
             "url": "https://example.test/legacy",
         }
-        registry = SimpleNamespace(
-            embedding_function=lambda input: [[0.0, 0.0, 0.0]]
-        )
+        registry = SimpleNamespace(embedding_function=lambda input: [[0.0, 0.0, 0.0]])
         with (
             patch.object(rag, "RAG_INDEX_VERSION", "v2"),
             patch.object(rag, "_registry", registry),
@@ -125,9 +127,7 @@ class RagRoutingTests(unittest.TestCase):
 
     def test_dual_query_batches_original_and_english_embeddings(self):
         normalized = QueryNormalization(
-            literal_translation=(
-                "Unilateral pulsating headache with photophobia and nausea."
-            ),
+            literal_translation=("Unilateral pulsating headache with photophobia and nausea."),
             positive_findings=(
                 "unilateral pulsating headache",
                 "photophobia",
@@ -137,9 +137,7 @@ class RagRoutingTests(unittest.TestCase):
             uncertain_findings=(),
             temporality=(),
             standardized_terms=("unilateral pulsating headache",),
-            retrieval_query=(
-                "unilateral pulsating headache photophobia nausea"
-            ),
+            retrieval_query=("unilateral pulsating headache photophobia nausea"),
         )
         normalizer = SimpleNamespace(
             query_mode="dual",

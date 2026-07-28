@@ -2,8 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from clean_documents import clean_corpus
-
+from scripts.clean_documents import clean_corpus
 
 ARTICLE = """
 ** Article URL: https://example.test/article/1-overview **

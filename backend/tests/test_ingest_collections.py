@@ -6,14 +6,14 @@ from unittest.mock import patch
 
 import chromadb
 
-import rag
-from ingest import (
+from knowledge import retrieval as rag
+from knowledge.common import INDEX_ROUTES, collection_name
+from scripts.ingest import (
     LEGACY_COLLECTION,
     attach_embeddings,
     build_collections,
     load_embedding_store,
 )
-from rag_common import INDEX_ROUTES, collection_name
 
 
 class FakeEmbeddingFunction:
@@ -97,8 +97,7 @@ class IngestCollectionTests(unittest.TestCase):
         )
 
         names = {
-            item.name if hasattr(item, "name") else str(item)
-            for item in client.list_collections()
+            item.name if hasattr(item, "name") else str(item) for item in client.list_collections()
         }
         self.assertIn(LEGACY_COLLECTION, names)
         self.assertEqual(
@@ -203,9 +202,7 @@ class IngestCollectionTests(unittest.TestCase):
         )
         self.assertEqual(result["vector_rows"], 2)
         self.assertEqual(
-            self.client.get_collection(
-                collection_name("v2precomputed", "chest")
-            ).count(),
+            self.client.get_collection(collection_name("v2precomputed", "chest")).count(),
             1,
         )
 

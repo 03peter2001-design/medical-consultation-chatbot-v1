@@ -16,6 +16,10 @@
       "prompt": "頭痛是幾秒內達到最劇烈，還是慢慢加重？",
       "kind": "choice",
       "options": ["瞬間爆炸性", "逐漸加重"],
+      "semantic_options": {
+        "瞬間爆炸性": {"onset": "sudden"},
+        "逐漸加重": {"onset": "gradual"}
+      },
       "allow_other": true
     },
     {
@@ -31,6 +35,9 @@
       "prompt": "這是您至今最嚴重的一次頭痛嗎？",
       "kind": "choice",
       "options": ["是，前所未有的劇痛", "不是，跟以前差不多或較輕"],
+      "semantic_options": {
+        "是，前所未有的劇痛": {"severity": "severe"}
+      },
       "allow_other": true
     },
     {
@@ -74,6 +81,18 @@
       ],
       "multiple": true,
       "allow_other": true,
+      "semantic_options": {
+        "噁心或嘔吐": {"findings": ["nausea"]},
+        "視力模糊或複視": {"findings": ["visual_change_unspecified"]},
+        "頸部僵硬合併發燒": {
+          "findings": ["neck_stiffness", "fever"]
+        },
+        "單側肢體無力或麻木": {
+          "findings": ["focal_neurologic_symptom"]
+        },
+        "講話不清楚": {"findings": ["speech_difficulty"]},
+        "意識改變或嗜睡": {"findings": ["altered_consciousness"]}
+      },
       "exclusive_options": ["以上皆無"]
     },
     {
@@ -82,13 +101,17 @@
       "kind": "choice",
       "options": [
         "近期頭部外傷",
-        "癌症病史或免疫功能低下",
+        "癌症病史",
+        "免疫功能低下",
         "目前服用抗凝血藥物",
         "懷孕或產後六週內",
         "以上皆無"
       ],
       "multiple": true,
       "allow_other": true,
+      "semantic_options": {
+        "近期頭部外傷": {"findings": ["recent_head_trauma"]}
+      },
       "exclusive_options": ["以上皆無"]
     },
     {

@@ -5,8 +5,12 @@ from pathlib import Path
 
 import numpy as np
 
-from classify_chunks import _write_outputs, classify_chunk, load_taxonomy
-from rag_common import TAXONOMY_PATH
+from knowledge.common import TAXONOMY_PATH
+from scripts.classify_chunks import (
+    _write_outputs,
+    classify_chunk,
+    load_taxonomy,
+)
 
 
 class ChunkClassificationTests(unittest.TestCase):
@@ -129,10 +133,7 @@ class ChunkClassificationTests(unittest.TestCase):
                 review,
                 TAXONOMY_PATH,
             )
-            written = [
-                json.loads(line)
-                for line in output.read_text(encoding="utf-8").splitlines()
-            ]
+            written = [json.loads(line) for line in output.read_text(encoding="utf-8").splitlines()]
             embedding_size = embeddings.stat().st_size
 
         self.assertEqual(report["embedding_count"], 1)

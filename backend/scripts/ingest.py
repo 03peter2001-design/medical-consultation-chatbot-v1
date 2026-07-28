@@ -3,8 +3,8 @@
 
 執行：
     cd backend
-    python ingest.py --version v2 --dry-run
-    python ingest.py --version v2
+    python -m scripts.ingest --version v2 --dry-run
+    python -m scripts.ingest --version v2
 
 此腳本絕不刪除 legacy `medical_kb`。只有明確指定 --rebuild 時，
 才會刪除相同 version 的五個目標 collections。
@@ -19,7 +19,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Iterable
 
-from rag_common import (
+from knowledge.common import (
     CHROMA_DIR,
     CLASSIFICATION_REPORT,
     CLASSIFIED_CORPUS,
@@ -30,7 +30,6 @@ from rag_common import (
     collection_name,
 )
 
-
 BATCH_SIZE = 64
 LEGACY_COLLECTION = "medical_kb"
 
@@ -39,10 +38,7 @@ def load_classified_chunks(
     path: Path = CLASSIFIED_CORPUS,
 ) -> Iterable[dict]:
     if not path.exists():
-        raise RuntimeError(
-            f"找不到分類後語料：{path}\n"
-            "請先執行 python classify_chunks.py"
-        )
+        raise RuntimeError(f"找不到分類後語料：{path}\n請先執行 python -m scripts.classify_chunks")
 
     with path.open(encoding="utf-8") as stream:
         for line_number, line in enumerate(stream, start=1):
@@ -51,9 +47,7 @@ def load_classified_chunks(
             try:
                 record = json.loads(line)
             except json.JSONDecodeError as exc:
-                raise RuntimeError(
-                    f"{path} 第 {line_number} 行不是合法 JSON"
-                ) from exc
+                raise RuntimeError(f"{path} 第 {line_number} 行不是合法 JSON") from exc
             missing = {
                 "chunk_id",
                 "article_id",
@@ -62,9 +56,7 @@ def load_classified_chunks(
                 "route_scores",
             } - record.keys()
             if missing:
-                raise RuntimeError(
-                    f"{path} 第 {line_number} 行缺少欄位：{sorted(missing)}"
-                )
+                raise RuntimeError(f"{path} 第 {line_number} 行缺少欄位：{sorted(missing)}")
             yield record
 
 
@@ -121,18 +113,14 @@ def load_embedding_store(
     if not count or not dimension:
         return None
     if model != EMBEDDING_MODEL:
-        raise RuntimeError(
-            f"分類 embedding 模型為 {model}，查詢模型為 {EMBEDDING_MODEL}"
-        )
+        raise RuntimeError(f"分類 embedding 模型為 {model}，查詢模型為 {EMBEDDING_MODEL}")
 
     import numpy as np
 
     expected_bytes = count * dimension * 4
     actual_bytes = embeddings_path.stat().st_size
     if actual_bytes != expected_bytes:
-        raise RuntimeError(
-            f"embedding 檔案大小不符：預期 {expected_bytes}，實際 {actual_bytes}"
-        )
+        raise RuntimeError(f"embedding 檔案大小不符：預期 {expected_bytes}，實際 {actual_bytes}")
     return np.memmap(
         embeddings_path,
         dtype=np.float32,
@@ -148,9 +136,7 @@ def attach_embeddings(records: Iterable[dict], embedding_store):
                 raise RuntimeError("分類語料有 embedding_index，但找不到 embedding 檔")
             index = int(record["embedding_index"])
             if index < 0 or index >= len(embedding_store):
-                raise RuntimeError(
-                    f"embedding_index 超出範圍：{record['chunk_id']} → {index}"
-                )
+                raise RuntimeError(f"embedding_index 超出範圍：{record['chunk_id']} → {index}")
             record["_embedding"] = embedding_store[index]
         yield record
 
@@ -170,10 +156,7 @@ def build_collections(
     rebuild: bool = False,
     batch_size: int = BATCH_SIZE,
 ) -> dict:
-    target_names = {
-        route: collection_name(version, route)
-        for route in INDEX_ROUTES
-    }
+    target_names = {route: collection_name(version, route) for route in INDEX_ROUTES}
     existing = _collection_names(client)
 
     if rebuild:
@@ -184,8 +167,7 @@ def build_collections(
         collisions = sorted(set(target_names.values()) & existing)
         if collisions:
             raise RuntimeError(
-                "目標 collections 已存在；若確定要重建，請加 --rebuild："
-                + ", ".join(collisions)
+                "目標 collections 已存在；若確定要重建，請加 --rebuild：" + ", ".join(collisions)
             )
 
     if LEGACY_COLLECTION not in existing and rebuild:
@@ -252,18 +234,10 @@ def build_collections(
                     "source_tags": ",".join(record.get("source_tags", [])),
                     "route": route,
                     "primary_route": record.get("primary_route", "archive"),
-                    "route_score": float(
-                        record.get("route_scores", {}).get(route, 0.0)
-                    ),
-                    "clinical_stage": record.get(
-                        "clinical_stage", "general"
-                    ),
-                    "safety_tags": ",".join(
-                        record.get("safety_tags", [])
-                    ),
-                    "classification_method": record.get(
-                        "classification_method", ""
-                    ),
+                    "route_score": float(record.get("route_scores", {}).get(route, 0.0)),
+                    "clinical_stage": record.get("clinical_stage", "general"),
+                    "safety_tags": ",".join(record.get("safety_tags", [])),
+                    "classification_method": record.get("classification_method", ""),
                 }
             )
             counts[route] += 1
@@ -291,15 +265,12 @@ def create_embedding_function():
 
     return embedding_functions.SentenceTransformerEmbeddingFunction(
         model_name=EMBEDDING_MODEL,
-        local_files_only=os.getenv("HF_HUB_OFFLINE", "").lower()
-        in {"1", "true", "yes"},
+        local_files_only=os.getenv("HF_HUB_OFFLINE", "").lower() in {"1", "true", "yes"},
     )
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="建立 versioned RAG 多 collection 索引"
-    )
+    parser = argparse.ArgumentParser(description="建立 versioned RAG 多 collection 索引")
     parser.add_argument("--version", default="v2")
     parser.add_argument("--input", type=Path, default=CLASSIFIED_CORPUS)
     parser.add_argument(
@@ -329,13 +300,9 @@ def main() -> None:
     for route in INDEX_ROUTES:
         collection_name(args.version, route)
 
-    embeddings_path = (
-        args.embeddings
-        or args.input.with_name(CLASSIFIED_EMBEDDINGS.name)
-    )
-    classification_report = (
-        args.classification_report
-        or args.input.with_name(CLASSIFICATION_REPORT.name)
+    embeddings_path = args.embeddings or args.input.with_name(CLASSIFIED_EMBEDDINGS.name)
+    classification_report = args.classification_report or args.input.with_name(
+        CLASSIFICATION_REPORT.name
     )
     embedding_store = load_embedding_store(
         embeddings_path,
@@ -347,11 +314,7 @@ def main() -> None:
     )
     stats = calculate_index_stats(records)
     stats["reuses_precomputed_embeddings"] = embedding_store is not None
-    embedding_dimension = (
-        int(embedding_store.shape[1])
-        if embedding_store is not None
-        else 384
-    )
+    embedding_dimension = int(embedding_store.shape[1]) if embedding_store is not None else 384
     estimated_bytes = stats["vector_rows"] * embedding_dimension * 4
     stats["embedding_dimension"] = embedding_dimension
     stats["estimated_embedding_bytes"] = estimated_bytes

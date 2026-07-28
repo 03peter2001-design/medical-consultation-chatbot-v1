@@ -7,10 +7,10 @@ import json
 import statistics
 import time
 from pathlib import Path
+from typing import Any
 
-import rag
-from rag_common import BASE_DIR
-
+from knowledge import retrieval as rag
+from knowledge.common import BASE_DIR
 
 DEFAULT_CASES = BASE_DIR / "tests" / "data" / "rag_gold_cases.json"
 HIGH_SIGNAL_GARBAGE_MARKERS = {
@@ -47,9 +47,7 @@ def evaluate_cases(cases: list[dict], version: str) -> dict:
                 primary_route=case["primary_route"],
                 purpose=case["purpose"],
             )
-            route_ok = set(case["expected_routes"]).issubset(
-                selected_routes
-            )
+            route_ok = set(case["expected_routes"]).issubset(selected_routes)
             route_passes += route_ok
 
             started = time.perf_counter()
@@ -61,13 +59,9 @@ def evaluate_cases(cases: list[dict], version: str) -> dict:
             )
             latencies.append((time.perf_counter() - started) * 1000)
             combined = " ".join(
-                f"{item.get('title', '')} {item.get('text', '')}"
-                for item in results
+                f"{item.get('title', '')} {item.get('text', '')}" for item in results
             ).casefold()
-            must_hit = any(
-                term.casefold() in combined
-                for term in case["must_include_any"]
-            )
+            must_hit = any(term.casefold() in combined for term in case["must_include_any"])
             must_hit_passes += must_hit
             noise_found = any(
                 term.casefold() in combined
@@ -87,9 +81,7 @@ def evaluate_cases(cases: list[dict], version: str) -> dict:
                     "selected_routes": selected_routes,
                     "must_hit": must_hit,
                     "noise_found": noise_found,
-                    "result_titles": [
-                        item.get("title", "") for item in results
-                    ],
+                    "result_titles": [item.get("title", "") for item in results],
                 }
             )
     finally:
@@ -100,9 +92,7 @@ def evaluate_cases(cases: list[dict], version: str) -> dict:
         "case_count": len(cases),
         "route_accuracy": round(route_passes / len(cases), 4),
         "recall_at_6": round(must_hit_passes / len(cases), 4),
-        "red_flag_recall": round(
-            red_flag_hits / red_flag_total, 4
-        ) if red_flag_total else None,
+        "red_flag_recall": round(red_flag_hits / red_flag_total, 4) if red_flag_total else None,
         "noise_failure_count": noise_failures,
         "latency_ms": {
             "mean": round(statistics.mean(latencies), 2),
@@ -130,7 +120,7 @@ def main() -> None:
     if args.compare_legacy:
         reports.append(evaluate_cases(cases, "legacy"))
 
-    result = {"reports": reports}
+    result: dict[str, Any] = {"reports": reports}
     failures = []
     v2_report = reports[0]
     if v2_report["red_flag_recall"] != 1.0:
@@ -143,10 +133,7 @@ def main() -> None:
         legacy_report = reports[1]
         if v2_report["recall_at_6"] < legacy_report["recall_at_6"]:
             failures.append("v2 Recall@6 低於 legacy")
-        if (
-            v2_report["latency_ms"]["p95"]
-            > legacy_report["latency_ms"]["p95"]
-        ):
+        if v2_report["latency_ms"]["p95"] > legacy_report["latency_ms"]["p95"]:
             failures.append("v2 P95 latency 高於 legacy")
     result["acceptance_failures"] = failures
     result["passed"] = not failures

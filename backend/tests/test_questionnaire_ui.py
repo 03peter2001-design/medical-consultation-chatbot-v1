@@ -1,6 +1,6 @@
 import unittest
 
-from questionnaire_ui import build_question_input
+from domain.questionnaire_ui import build_question_input
 
 
 class QuestionnaireUiTests(unittest.TestCase):
@@ -11,9 +11,7 @@ class QuestionnaireUiTests(unittest.TestCase):
         )
         spec = build_question_input(question, step=6, ctype="abdomen")
         self.assertTrue(spec["multiple"])
-        self.assertEqual(
-            spec["options"], ["鈍痛", "刺痛", "陣痛", "持續痛"]
-        )
+        self.assertEqual(spec["options"], ["鈍痛", "刺痛", "陣痛", "持續痛"])
         self.assertTrue(spec["allow_other"])
         self.assertNotIn("選項：", spec["prompt"])
 
@@ -32,9 +30,7 @@ class QuestionnaireUiTests(unittest.TestCase):
             step=7,
             ctype="chest",
         )
-        self.assertEqual(
-            spec["options"], ["左邊", "右邊", "正中間", "兩側都有"]
-        )
+        self.assertEqual(spec["options"], ["左邊", "右邊", "正中間", "兩側都有"])
 
     def test_none_option_is_exclusive(self):
         spec = build_question_input(

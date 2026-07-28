@@ -1,0 +1,331 @@
+{
+  "resourceType": "Bundle",
+  "id": "synthetic-wang-daming-stent-case",
+  "meta": {
+    "tag": [
+      {
+        "system": "urn:uuid:6d6c6eec-2835-4cf4-b83e-02aa7c19a001",
+        "code": "synthetic-test-data",
+        "display": "Synthetic test data"
+      }
+    ]
+  },
+  "type": "transaction",
+  "timestamp": "2026-07-28T10:00:00+08:00",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:10000000-0000-4000-8000-000000000001",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "syn-wang-daming-001",
+        "meta": {
+          "profile": [
+            "https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition/Patient-twcore"
+          ],
+          "tag": [
+            {
+              "system": "urn:uuid:6d6c6eec-2835-4cf4-b83e-02aa7c19a001",
+              "code": "synthetic-test-data",
+              "display": "Synthetic test data"
+            }
+          ]
+        },
+        "identifier": [
+          {
+            "use": "official",
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "NNxxx",
+                  "_code": {
+                    "extension": [
+                      {
+                        "extension": [
+                          {
+                            "url": "suffix",
+                            "valueString": "TWN"
+                          },
+                          {
+                            "url": "valueSet",
+                            "valueCanonical": "http://hl7.org/fhir/ValueSet/iso3166-1-3"
+                          }
+                        ],
+                        "url": "https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition/identifier-suffix"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "text": "中華民國國民身分證統一編號"
+            },
+            "system": "http://www.moi.gov.tw",
+            "value": "A000000001"
+          },
+          {
+            "use": "usual",
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "MR",
+                  "display": "Medical record number"
+                }
+              ],
+              "text": "合成病歷號"
+            },
+            "system": "urn:uuid:6d6c6eec-2835-4cf4-b83e-02aa7c19a002",
+            "value": "SYN-WANG-001"
+          }
+        ],
+        "active": true,
+        "name": [
+          {
+            "use": "official",
+            "text": "王大明",
+            "family": "王",
+            "given": [
+              "大明"
+            ]
+          }
+        ],
+        "gender": "unknown",
+        "birthDate": "1998-01-01",
+        "communication": [
+          {
+            "language": {
+              "coding": [
+                {
+                  "system": "urn:ietf:bcp:47",
+                  "code": "zh-TW",
+                  "display": "Chinese (Taiwan)"
+                }
+              ],
+              "text": "繁體中文"
+            },
+            "preferred": true
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/syn-wang-daming-001"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:10000000-0000-4000-8000-000000000002",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "syn-wang-stent-enc-001",
+        "meta": {
+          "profile": [
+            "https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition/Encounter-twcore"
+          ],
+          "tag": [
+            {
+              "system": "urn:uuid:6d6c6eec-2835-4cf4-b83e-02aa7c19a001",
+              "code": "synthetic-test-data",
+              "display": "Synthetic test data"
+            }
+          ]
+        },
+        "identifier": [
+          {
+            "system": "urn:uuid:6d6c6eec-2835-4cf4-b83e-02aa7c19a003",
+            "value": "SYN-ENC-STENT-WANG-001"
+          }
+        ],
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "IMP",
+          "display": "inpatient encounter"
+        },
+        "type": [
+          {
+            "text": "既往冠狀動脈支架置放住院紀錄"
+          }
+        ],
+        "subject": {
+          "reference": "urn:uuid:10000000-0000-4000-8000-000000000001",
+          "display": "王大明"
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Encounter/syn-wang-stent-enc-001"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:10000000-0000-4000-8000-000000000003",
+      "resource": {
+        "resourceType": "Procedure",
+        "id": "syn-wang-coronary-stent-001",
+        "meta": {
+          "profile": [
+            "https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition/Procedure-twcore"
+          ],
+          "tag": [
+            {
+              "system": "urn:uuid:6d6c6eec-2835-4cf4-b83e-02aa7c19a001",
+              "code": "synthetic-test-data",
+              "display": "Synthetic test data"
+            }
+          ]
+        },
+        "status": "completed",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "36969009",
+              "display": "Placement of stent in coronary artery"
+            }
+          ],
+          "text": "冠狀動脈支架置放術"
+        },
+        "subject": {
+          "reference": "urn:uuid:10000000-0000-4000-8000-000000000001",
+          "display": "王大明"
+        },
+        "encounter": {
+          "reference": "urn:uuid:10000000-0000-4000-8000-000000000002",
+          "display": "既往冠狀動脈支架置放住院紀錄"
+        },
+        "note": [
+          {
+            "text": "合成測試資料。僅記錄曾完成一次冠狀動脈支架置放；手術日期、適應症、血管位置、支架型號及執行院所均未提供，不應由系統推測。"
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Procedure/syn-wang-coronary-stent-001"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:10000000-0000-4000-8000-000000000004",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "syn-wang-occupation-001",
+        "meta": {
+          "profile": [
+            "https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition/Observation-occupation-twcore"
+          ],
+          "tag": [
+            {
+              "system": "urn:uuid:6d6c6eec-2835-4cf4-b83e-02aa7c19a001",
+              "code": "synthetic-test-data",
+              "display": "Synthetic test data"
+            }
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "social-history",
+                "display": "Social History"
+              }
+            ],
+            "text": "社會史"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11341-5",
+              "display": "History of Occupation"
+            }
+          ],
+          "text": "職業歷史"
+        },
+        "subject": {
+          "reference": "urn:uuid:10000000-0000-4000-8000-000000000001",
+          "display": "王大明"
+        },
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "https://twcore.mohw.gov.tw/ig/twcore/CodeSystem/occupation-mol-tw",
+              "code": "21",
+              "display": "科學及工程專業人員"
+            }
+          ],
+          "text": "工程師"
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Observation/syn-wang-occupation-001"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:10000000-0000-4000-8000-000000000005",
+      "resource": {
+        "resourceType": "Provenance",
+        "id": "syn-wang-daming-001",
+        "meta": {
+          "profile": [
+            "https://twcore.mohw.gov.tw/ig/twcore/StructureDefinition/Provenance-twcore"
+          ],
+          "tag": [
+            {
+              "system": "urn:uuid:6d6c6eec-2835-4cf4-b83e-02aa7c19a001",
+              "code": "synthetic-test-data",
+              "display": "Synthetic test data"
+            }
+          ]
+        },
+        "target": [
+          {
+            "reference": "urn:uuid:10000000-0000-4000-8000-000000000001"
+          },
+          {
+            "reference": "urn:uuid:10000000-0000-4000-8000-000000000002"
+          },
+          {
+            "reference": "urn:uuid:10000000-0000-4000-8000-000000000003"
+          },
+          {
+            "reference": "urn:uuid:10000000-0000-4000-8000-000000000004"
+          }
+        ],
+        "occurredDateTime": "2026-07-28T10:00:00+08:00",
+        "recorded": "2026-07-28T10:00:00+08:00",
+        "activity": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-DataOperation",
+              "code": "CREATE",
+              "display": "create"
+            }
+          ]
+        },
+        "agent": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
+                  "code": "author",
+                  "display": "Author"
+                }
+              ]
+            },
+            "who": {
+              "display": "合成 FHIR 測試資料產生器"
+            }
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Provenance/syn-wang-daming-001"
+      }
+    }
+  ]
+}

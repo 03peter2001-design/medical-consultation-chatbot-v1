@@ -1,8 +1,8 @@
+import json
 import unittest
 from datetime import date
-import json
 
-from questionnaires import (
+from domain.questionnaires import (
     CHIEF_QUESTIONNAIRE,
     DISEASE_QUESTIONNAIRES,
     QUESTIONNAIRE_DATA_DIR,
@@ -24,16 +24,11 @@ class QuestionnaireDefinitionTests(unittest.TestCase):
             "headache",
             "abdomen",
         }
-        actual = {
-            path.stem
-            for path in QUESTIONNAIRE_DATA_DIR.glob("*.json")
-        }
+        actual = {path.stem for path in QUESTIONNAIRE_DATA_DIR.glob("*.json")}
         self.assertEqual(actual, expected)
         for category in expected:
             document = json.loads(
-                (QUESTIONNAIRE_DATA_DIR / f"{category}.json").read_text(
-                    encoding="utf-8"
-                )
+                (QUESTIONNAIRE_DATA_DIR / f"{category}.json").read_text(encoding="utf-8")
             )
             self.assertEqual(document["id"], category)
             self.assertTrue(document["questions"])
@@ -63,14 +58,8 @@ class QuestionnaireDefinitionTests(unittest.TestCase):
         )
         for route in DISEASE_QUESTIONNAIRES:
             questionnaire = build_questionnaire(route)
-            self.assertTrue(
-                any(item["section"] == "disease" for item in questionnaire)
-            )
-            onset = next(
-                item
-                for item in questionnaire
-                if item["field"] == "onset"
-            )
+            self.assertTrue(any(item["section"] == "disease" for item in questionnaire))
+            onset = next(item for item in questionnaire if item["field"] == "onset")
             self.assertEqual(onset["kind"], "duration")
             self.assertIn("1週前", onset["quick_options"])
             self.assertIn("個月前", onset["units"])
@@ -85,9 +74,7 @@ class QuestionnaireDefinitionTests(unittest.TestCase):
     def test_optional_chronic_detail_is_skipped(self):
         questionnaire = build_questionnaire("headache")
         chronic_index = next(
-            index
-            for index, item in enumerate(questionnaire)
-            if item["field"] == "chronic"
+            index for index, item in enumerate(questionnaire) if item["field"] == "chronic"
         )
         next_index = next_question_index(
             questionnaire,
@@ -114,9 +101,7 @@ class QuestionnaireDefinitionTests(unittest.TestCase):
     def test_headache_neuro_and_surgery_prefill_skips_both_questions(self):
         questionnaire = build_questionnaire("headache")
         risk_index = next(
-            index
-            for index, item in enumerate(questionnaire)
-            if item["field"] == "risk_flags"
+            index for index, item in enumerate(questionnaire) if item["field"] == "risk_flags"
         )
         self.assertIsNone(
             next_question_index(
@@ -140,9 +125,7 @@ class QuestionnaireParserTests(unittest.TestCase):
         )
 
     def test_future_birth_date_is_rejected(self):
-        self.assertIsNone(
-            parse_birth_date("2027-01-01", today=date(2026, 7, 27))
-        )
+        self.assertIsNone(parse_birth_date("2027-01-01", today=date(2026, 7, 27)))
 
     def test_onset_preserves_months(self):
         self.assertEqual(

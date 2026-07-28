@@ -8,9 +8,9 @@ import os
 import time
 from functools import lru_cache
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable
 
-from rag_common import (
+from knowledge.common import (
     CHROMA_DIR,
     EMBEDDING_MODEL,
     INDEX_ROUTES,
@@ -18,8 +18,10 @@ from rag_common import (
     TAXONOMY_PATH,
     collection_name,
 )
-from rag_translation import get_query_normalizer, get_translation_status
-
+from knowledge.translation import (
+    get_query_normalizer,
+    get_translation_status,
+)
 
 LOGGER = logging.getLogger("rag")
 LEGACY_COLLECTION = "medical_kb"
@@ -127,33 +129,26 @@ def _taxonomy() -> dict:
 class CollectionRegistry:
     def __init__(self, chroma_dir: Path = CHROMA_DIR):
         self.chroma_dir = Path(chroma_dir)
-        self._client = None
-        self._embedding_function = None
-        self._collections: dict[str, object] = {}
+        self._client: Any | None = None
+        self._embedding_function: Any | None = None
+        self._collections: dict[str, Any] = {}
 
     @property
-    def client(self):
+    def client(self) -> Any:
         if self._client is None:
             import chromadb
 
-            self._client = chromadb.PersistentClient(
-                path=str(self.chroma_dir)
-            )
+            self._client = chromadb.PersistentClient(path=str(self.chroma_dir))
         return self._client
 
     @property
-    def embedding_function(self):
+    def embedding_function(self) -> Any:
         if self._embedding_function is None:
             from chromadb.utils import embedding_functions
 
-            self._embedding_function = (
-                embedding_functions.SentenceTransformerEmbeddingFunction(
-                    model_name=EMBEDDING_MODEL,
-                    local_files_only=os.getenv(
-                        "HF_HUB_OFFLINE", ""
-                    ).lower()
-                    in {"1", "true", "yes"},
-                )
+            self._embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
+                model_name=EMBEDDING_MODEL,
+                local_files_only=os.getenv("HF_HUB_OFFLINE", "").lower() in {"1", "true", "yes"},
             )
         return self._embedding_function
 
@@ -165,7 +160,7 @@ class CollectionRegistry:
             names.add(item.name if hasattr(item, "name") else str(item))
         return names
 
-    def get(self, route: str | None = None, version: str | None = None):
+    def get(self, route: str | None = None, version: str | None = None) -> Any:
         version = version or RAG_INDEX_VERSION
         if version == "legacy":
             name = LEGACY_COLLECTION
@@ -199,9 +194,7 @@ def get_rag_status() -> dict:
         active_routes = ["legacy"] if enabled else []
     else:
         active_routes = [
-            route
-            for route in INDEX_ROUTES
-            if collection_name(RAG_INDEX_VERSION, route) in names
+            route for route in INDEX_ROUTES if collection_name(RAG_INDEX_VERSION, route) in names
         ]
         enabled = all(route in active_routes for route in INDEX_ROUTES)
     status = {
@@ -231,9 +224,7 @@ def _expand_query_terms(
     patient_data: dict | None = None,
 ) -> str:
     combined = " ".join(
-        part
-        for part in (query, _flatten_patient_data(patient_data))
-        if part
+        part for part in (query, _flatten_patient_data(patient_data)) if part
     ).casefold()
     expansions = [
         expansion
@@ -264,12 +255,8 @@ def select_routes(
     """
     if purpose not in PURPOSE_QUERY_TERMS:
         purpose = "general"
-    primary_route = (
-        primary_route if primary_route in SYMPTOM_ROUTES else None
-    )
-    combined = " ".join(
-        part for part in (query, _flatten_patient_data(patient_data)) if part
-    )
+    primary_route = primary_route if primary_route in SYMPTOM_ROUTES else None
+    combined = " ".join(part for part in (query, _flatten_patient_data(patient_data)) if part)
     rule_scores = _rule_route_scores(combined)
     semantic_scores = semantic_scores or {}
     scores = {
@@ -294,11 +281,7 @@ def select_routes(
             content_routes.append(supplements[0][0])
     else:
         ranked = sorted(
-            (
-                (route, score)
-                for route, score in scores.items()
-                if score >= 0.42
-            ),
+            ((route, score) for route, score in scores.items() if score >= 0.42),
             key=lambda item: (-item[1], item[0]),
         )
         content_routes.extend(route for route, _ in ranked[:2])
@@ -326,9 +309,7 @@ def _semantic_route_scores(
     if _prototype_embeddings is None:
         _prototype_embeddings = {}
         for route in (*SYMPTOM_ROUTES, "common"):
-            _prototype_embeddings[route] = ef(
-                input=taxonomy["routes"][route]["prototypes"]
-            )
+            _prototype_embeddings[route] = ef(input=taxonomy["routes"][route]["prototypes"])
 
     if query_embedding is None:
         query_embedding = ef(input=[query])[0]
@@ -387,9 +368,7 @@ def _query_collection(
                 "distance": round(float(distance), 4),
                 "chunk_id": metadata.get("chunk_id", ""),
                 "article_id": metadata.get("article_id", ""),
-                "clinical_stage": metadata.get(
-                    "clinical_stage", "general"
-                ),
+                "clinical_stage": metadata.get("clinical_stage", "general"),
                 "route": route,
                 "rank": rank,
             }
@@ -440,9 +419,7 @@ def _query_collection_variants(
                     "distance": round(float(distance), 4),
                     "chunk_id": metadata.get("chunk_id", ""),
                     "article_id": metadata.get("article_id", ""),
-                    "clinical_stage": metadata.get(
-                        "clinical_stage", "general"
-                    ),
+                    "clinical_stage": metadata.get("clinical_stage", "general"),
                     "route": route,
                     "rank": rank,
                     "query_variant": variant,
@@ -484,12 +461,8 @@ def _legacy_retrieve(query: str, final_k: int) -> list[dict]:
                 "url": metadata.get("url", ""),
                 "distance": round(float(distance), 4),
                 "chunk_id": metadata.get("chunk_id", ""),
-                "article_id": metadata.get(
-                    "article_id", metadata.get("url", "")
-                ),
-                "clinical_stage": metadata.get(
-                    "clinical_stage", "general"
-                ),
+                "article_id": metadata.get("article_id", metadata.get("url", "")),
+                "clinical_stage": metadata.get("clinical_stage", "general"),
                 "route": "legacy",
                 "rank": rank,
             }
@@ -506,20 +479,14 @@ def _rrf_merge(
     merged: dict[str, dict] = {}
     for results in result_sets:
         for item in results:
-            identity = item["chunk_id"] or (
-                f"{item['url']}::{item['text'][:100]}"
-            )
-            score = route_weights.get(item["route"], 1.0) / (
-                RRF_K + item.get("rank", 1)
-            )
+            identity = item["chunk_id"] or (f"{item['url']}::{item['text'][:100]}")
+            score = route_weights.get(item["route"], 1.0) / (RRF_K + item.get("rank", 1))
             if identity not in merged:
                 merged[identity] = {
                     **item,
                     "routes": [item["route"]],
                     "query_variants": (
-                        [item["query_variant"]]
-                        if item.get("query_variant")
-                        else []
+                        [item["query_variant"]] if item.get("query_variant") else []
                     ),
                     "rrf_score": score,
                 }
@@ -528,10 +495,7 @@ def _rrf_merge(
                 if item["route"] not in merged[identity]["routes"]:
                     merged[identity]["routes"].append(item["route"])
                 query_variant = item.get("query_variant")
-                if (
-                    query_variant
-                    and query_variant not in merged[identity]["query_variants"]
-                ):
+                if query_variant and query_variant not in merged[identity]["query_variants"]:
                     merged[identity]["query_variants"].append(query_variant)
                 if item["distance"] < merged[identity]["distance"]:
                     merged[identity]["distance"] = item["distance"]
@@ -623,9 +587,7 @@ def retrieve(
 
         if RAG_INDEX_VERSION == "legacy":
             legacy_sets = []
-            for variant, search_query in zip(
-                query_variants, search_queries
-            ):
+            for variant, search_query in zip(query_variants, search_queries):
                 results = _legacy_retrieve(search_query, final_k)
                 for item in results:
                     item["query_variant"] = variant
@@ -634,14 +596,8 @@ def retrieve(
                 return legacy_sets[0]
             return _rrf_merge(legacy_sets, final_k)
 
-        query_embeddings = _registry.embedding_function(
-            input=search_queries
-        )
-        routing_index = (
-            query_variants.index("english")
-            if "english" in query_variants
-            else 0
-        )
+        query_embeddings = _registry.embedding_function(input=search_queries)
+        routing_index = query_variants.index("english") if "english" in query_variants else 0
         semantic_scores = (
             _semantic_route_scores(
                 search_queries[routing_index],
@@ -672,20 +628,16 @@ def retrieve(
                         item["query_variant"] = query_variants[0]
                     result_sets.append(results)
                 else:
-                    variant_results, elapsed = (
-                        _query_collection_variants(
-                            route,
-                            query_embeddings,
-                            query_variants,
-                            PER_COLLECTION_K,
-                        )
+                    variant_results, elapsed = _query_collection_variants(
+                        route,
+                        query_embeddings,
+                        query_variants,
+                        PER_COLLECTION_K,
                     )
                     result_sets.extend(variant_results)
                 timings[route] = round(elapsed * 1000, 1)
             except Exception:
-                LOGGER.exception(
-                    "RAG collection query failed: route=%s", route
-                )
+                LOGGER.exception("RAG collection query failed: route=%s", route)
 
         route_weights = {
             route: (
@@ -717,13 +669,11 @@ def retrieve(
                         item["query_variant"] = query_variants[0]
                     common_result_sets = [common_results]
                 else:
-                    common_result_sets, elapsed = (
-                        _query_collection_variants(
-                            "common",
-                            query_embeddings,
-                            query_variants,
-                            PER_COLLECTION_K,
-                        )
+                    common_result_sets, elapsed = _query_collection_variants(
+                        "common",
+                        query_embeddings,
+                        query_variants,
+                        PER_COLLECTION_K,
                     )
                 timings["common"] = round(elapsed * 1000, 1)
                 merged = _rrf_merge(
@@ -738,18 +688,12 @@ def retrieve(
         fallback_used = False
         if not merged and get_rag_status()["legacy_available"]:
             legacy_sets = []
-            for variant, search_query in zip(
-                query_variants, search_queries
-            ):
+            for variant, search_query in zip(query_variants, search_queries):
                 results = _legacy_retrieve(search_query, final_k)
                 for item in results:
                     item["query_variant"] = variant
                 legacy_sets.append(results)
-            merged = (
-                legacy_sets[0]
-                if len(legacy_sets) == 1
-                else _rrf_merge(legacy_sets, final_k)
-            )
+            merged = legacy_sets[0] if len(legacy_sets) == 1 else _rrf_merge(legacy_sets, final_k)
             fallback_used = bool(merged)
 
         LOGGER.info(
@@ -840,7 +784,5 @@ def build_context(patient_data: dict, ctype: str = "chest") -> str:
         if title_counts.get(title, 0) >= 2:
             continue
         title_counts[title] = title_counts.get(title, 0) + 1
-        context_parts.append(
-            f"[{chunk['source']} — {title}]\n{chunk['text'][:800]}"
-        )
+        context_parts.append(f"[{chunk['source']} — {title}]\n{chunk['text'][:800]}")
     return "\n\n---\n\n".join(context_parts)

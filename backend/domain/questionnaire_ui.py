@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import re
 
-
 _OPTION_LINE = re.compile(r"^選項[：:]\s*(.+)$", re.MULTILINE)
 _PAREN_CHOICE = re.compile(r"[（(]([^（）()]*\s/\s[^（）()]*)[）)]")
 _MULTI_HINT = re.compile(r"[（(]可複選[^）)]*[）)]")
@@ -83,9 +82,7 @@ def build_question_input(
         "kind": "choice",
         "multiple": multiple,
         "options": options,
-        "exclusive_options": [
-            option for option in options if option in _EXCLUSIVE_OPTIONS
-        ],
+        "exclusive_options": [option for option in options if option in _EXCLUSIVE_OPTIONS],
         "allow_other": True,
         "other_label": "其他／補充說明",
         "prompt": prompt,

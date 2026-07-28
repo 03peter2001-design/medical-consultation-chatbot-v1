@@ -11,23 +11,14 @@ from collections import OrderedDict
 from dataclasses import dataclass
 from typing import Any, Mapping
 
-
 LOGGER = logging.getLogger("rag.translation")
 SUPPORTED_TRANSLATORS = {"off", "gemini"}
 SUPPORTED_QUERY_MODES = {"dual", "english"}
 
-_TAIWAN_ID_RE = re.compile(
-    r"(?<![A-Za-z0-9])[A-Z][12]\d{8}(?!\d)", re.IGNORECASE
-)
-_EMAIL_RE = re.compile(
-    r"(?<![\w.+-])[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}(?![\w.-])"
-)
-_MOBILE_RE = re.compile(
-    r"(?<!\d)(?:\+?886[-\s]?)?0?9\d{2}[-\s]?\d{3}[-\s]?\d{3}(?!\d)"
-)
-_LANDLINE_RE = re.compile(
-    r"(?<!\d)(?:\+?886[-\s]?)?0\d[-\s]?\d{3,4}[-\s]?\d{4}(?!\d)"
-)
+_TAIWAN_ID_RE = re.compile(r"(?<![A-Za-z0-9])[A-Z][12]\d{8}(?!\d)", re.IGNORECASE)
+_EMAIL_RE = re.compile(r"(?<![\w.+-])[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}(?![\w.-])")
+_MOBILE_RE = re.compile(r"(?<!\d)(?:\+?886[-\s]?)?0?9\d{2}[-\s]?\d{3}[-\s]?\d{3}(?!\d)")
+_LANDLINE_RE = re.compile(r"(?<!\d)(?:\+?886[-\s]?)?0\d[-\s]?\d{3,4}[-\s]?\d{4}(?!\d)")
 _LABELED_SECRET_RE = re.compile(
     r"(?P<label>身分證(?:字號)?|身份證(?:字號)?|病歷號|"
     r"medical\s*record(?:\s*number)?|mrn)"
@@ -134,8 +125,7 @@ QUERY_NORMALIZATION_SCHEMA = {
             "type": "array",
             "items": {"type": "string"},
             "description": (
-                "English clinical terms directly equivalent to the input; "
-                "never inferred diagnoses."
+                "English clinical terms directly equivalent to the input; never inferred diagnoses."
             ),
         },
         "retrieval_query": {
@@ -237,14 +227,9 @@ class GeminiQueryNormalizer:
             "dual",
             SUPPORTED_QUERY_MODES,
         )
-        self.model = (
-            self.env.get("GEMINI_TRANSLATION_MODEL", "").strip()
-            or "gemini-2.5-flash"
-        )
+        self.model = self.env.get("GEMINI_TRANSLATION_MODEL", "").strip() or "gemini-2.5-flash"
         try:
-            configured_max_chars = int(
-                self.env.get("RAG_TRANSLATION_MAX_INPUT_CHARS", "4000")
-            )
+            configured_max_chars = int(self.env.get("RAG_TRANSLATION_MAX_INPUT_CHARS", "4000"))
         except (TypeError, ValueError):
             configured_max_chars = 4000
         self.max_input_chars = max(
@@ -293,14 +278,10 @@ class GeminiQueryNormalizer:
                 "response_schema": QUERY_NORMALIZATION_SCHEMA,
             }
             if self.model.startswith("gemini-2.5-flash"):
-                config_kwargs["thinking_config"] = types.ThinkingConfig(
-                    thinking_budget=0
-                )
+                config_kwargs["thinking_config"] = types.ThinkingConfig(thinking_budget=0)
             elif self.model.startswith("gemini-2.5-pro"):
                 config_kwargs["max_output_tokens"] = 2048
-                config_kwargs["thinking_config"] = types.ThinkingConfig(
-                    thinking_budget=128
-                )
+                config_kwargs["thinking_config"] = types.ThinkingConfig(thinking_budget=128)
             response = self.client.models.generate_content(
                 model=self.model,
                 contents=redacted,

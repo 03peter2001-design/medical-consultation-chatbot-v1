@@ -2,19 +2,16 @@
 
 from __future__ import annotations
 
+import json
+import re
 from collections.abc import Iterator, Mapping
 from copy import deepcopy
 from datetime import date
 from functools import lru_cache
-import json
 from pathlib import Path
-import re
 from typing import Any
 
-
-QUESTIONNAIRE_DATA_DIR = (
-    Path(__file__).resolve().parent / "questionnaire_data"
-)
+QUESTIONNAIRE_DATA_DIR = Path(__file__).resolve().parents[1] / "questionnaire_data"
 QUESTIONNAIRE_CATEGORIES = {
     "chief",
     "basic",
@@ -49,6 +46,7 @@ _QUESTION_DEFAULTS = {
     "units": [],
     "placeholder": "",
     "condition": None,
+    "semantic_options": {},
 }
 
 
@@ -60,12 +58,9 @@ def _validate_string_list(
     key: str,
 ) -> list[str]:
     if not isinstance(value, list) or any(
-        not isinstance(item, str) or not item.strip()
-        for item in value
+        not isinstance(item, str) or not item.strip() for item in value
     ):
-        raise ValueError(
-            f"{category}.json 的 {field}.{key} 必須是非空字串陣列"
-        )
+        raise ValueError(f"{category}.json 的 {field}.{key} 必須是非空字串陣列")
     return value
 
 
@@ -77,24 +72,18 @@ def _validate_question(
     position: int,
 ) -> dict[str, Any]:
     if not isinstance(raw, dict):
-        raise ValueError(
-            f"{category}.json questions[{position}] 必須是物件"
-        )
+        raise ValueError(f"{category}.json questions[{position}] 必須是物件")
 
     item = {**_QUESTION_DEFAULTS, **raw, "section": section}
     field = item.get("field")
     prompt = item.get("prompt")
     kind = item.get("kind")
     if not isinstance(field, str) or not field.strip():
-        raise ValueError(
-            f"{category}.json questions[{position}] 缺少 field"
-        )
+        raise ValueError(f"{category}.json questions[{position}] 缺少 field")
     if not isinstance(prompt, str) or not prompt.strip():
         raise ValueError(f"{category}.json 的 {field} 缺少 prompt")
     if kind not in ALLOWED_INPUT_KINDS:
-        raise ValueError(
-            f"{category}.json 的 {field}.kind 不支援：{kind}"
-        )
+        raise ValueError(f"{category}.json 的 {field}.kind 不支援：{kind}")
 
     for key in (
         "options",
@@ -110,31 +99,54 @@ def _validate_question(
         )
 
     if kind == "choice" and not item["options"]:
-        raise ValueError(
-            f"{category}.json 的選擇題 {field} 必須提供 options"
-        )
-    if kind == "duration" and (
-        not item["quick_options"] or not item["units"]
-    ):
-        raise ValueError(
-            f"{category}.json 的時間題 {field} "
-            "必須提供 quick_options 與 units"
-        )
+        raise ValueError(f"{category}.json 的選擇題 {field} 必須提供 options")
+    if kind == "duration" and (not item["quick_options"] or not item["units"]):
+        raise ValueError(f"{category}.json 的時間題 {field} 必須提供 quick_options 與 units")
     if not set(item["exclusive_options"]).issubset(item["options"]):
-        raise ValueError(
-            f"{category}.json 的 {field}.exclusive_options "
-            "必須存在於 options"
-        )
+        raise ValueError(f"{category}.json 的 {field}.exclusive_options 必須存在於 options")
+
+    semantic_options = item["semantic_options"]
+    if not isinstance(semantic_options, dict):
+        raise ValueError(f"{category}.json 的 {field}.semantic_options 必須是物件")
+    unknown_semantic_options = set(semantic_options) - set(item["options"])
+    if unknown_semantic_options:
+        raise ValueError(f"{category}.json 的 {field}.semantic_options 只能引用既有選項")
+    for option, facts in semantic_options.items():
+        if not isinstance(facts, dict) or not facts:
+            raise ValueError(f"{category}.json 的 {field}.semantic_options.{option} 必須是非空物件")
+        unknown_fact_keys = set(facts) - {
+            "onset",
+            "severity",
+            "new_or_changed",
+            "findings",
+        }
+        if unknown_fact_keys:
+            raise ValueError(
+                f"{category}.json 的 {field}.semantic_options.{option} "
+                f"含不支援欄位：{sorted(unknown_fact_keys)}"
+            )
+        scalar_domains = {
+            "onset": {"sudden", "gradual"},
+            "severity": {"mild", "moderate", "severe"},
+            "new_or_changed": {"true", "false"},
+        }
+        for fact_key, allowed in scalar_domains.items():
+            if fact_key in facts and facts[fact_key] not in allowed:
+                raise ValueError(
+                    f"{category}.json 的 {field}.semantic_options.{option}.{fact_key} 值不正確"
+                )
+        if "findings" in facts:
+            _validate_string_list(
+                facts["findings"],
+                category=category,
+                field=field,
+                key=f"semantic_options.{option}.findings",
+            )
 
     condition = item.get("condition")
     if condition is not None:
-        if (
-            not isinstance(condition, dict)
-            or not isinstance(condition.get("field"), str)
-        ):
-            raise ValueError(
-                f"{category}.json 的 {field}.condition 格式錯誤"
-            )
+        if not isinstance(condition, dict) or not isinstance(condition.get("field"), str):
+            raise ValueError(f"{category}.json 的 {field}.condition 格式錯誤")
         _validate_string_list(
             condition.get("contains_any"),
             category=category,
@@ -159,9 +171,7 @@ def load_questionnaire_category(
     except FileNotFoundError as exc:
         raise RuntimeError(f"找不到問卷檔案：{path}") from exc
     except json.JSONDecodeError as exc:
-        raise RuntimeError(
-            f"問卷 JSON 格式錯誤：{path}:{exc.lineno}:{exc.colno}"
-        ) from exc
+        raise RuntimeError(f"問卷 JSON 格式錯誤：{path}:{exc.lineno}:{exc.colno}") from exc
 
     if not isinstance(document, dict) or document.get("id") != category:
         raise ValueError(f"{path.name} 的 id 必須是 {category}")
@@ -187,9 +197,7 @@ def load_questionnaire_category(
     return questions
 
 
-class _LazyDiseaseQuestionnaires(
-    Mapping[str, tuple[dict[str, Any], ...]]
-):
+class _LazyDiseaseQuestionnaires(Mapping[str, tuple[dict[str, Any], ...]]):
     """維持既有 mapping 介面，但只在取用路由時載入 JSON。"""
 
     def __getitem__(self, route: str) -> tuple[dict[str, Any], ...]:
@@ -230,9 +238,7 @@ def condition_matches(item: dict[str, Any], data: dict[str, Any]) -> bool:
     if not condition:
         return True
     value = str(data.get(condition["field"], ""))
-    return any(
-        token in value for token in condition.get("contains_any", [])
-    )
+    return any(token in value for token in condition.get("contains_any", []))
 
 
 def next_question_index(
@@ -243,9 +249,8 @@ def next_question_index(
 ) -> int | None:
     skip_fields = skip_fields or set()
     for index in range(current_index + 1, len(questionnaire)):
-        if (
-            questionnaire[index]["field"] not in skip_fields
-            and condition_matches(questionnaire[index], data)
+        if questionnaire[index]["field"] not in skip_fields and condition_matches(
+            questionnaire[index], data
         ):
             return index
     return None
@@ -253,9 +258,7 @@ def next_question_index(
 
 def question_input(item: dict[str, Any]) -> dict[str, Any]:
     return {
-        key: value
-        for key, value in item.items()
-        if key != "condition"
+        key: value for key, value in item.items() if key not in {"condition", "semantic_options"}
     }
 
 
@@ -277,9 +280,7 @@ def progress_meta(
     current_index: int,
     data: dict[str, Any],
 ) -> dict[str, int]:
-    active = [
-        item for item in questionnaire if condition_matches(item, data)
-    ]
+    active = [item for item in questionnaire if condition_matches(item, data)]
     current = sum(
         1
         for index, item in enumerate(questionnaire)
@@ -381,9 +382,7 @@ def parse_birth_date(
     today = today or date.today()
     if value > today:
         return None
-    age = today.year - value.year - (
-        (today.month, today.day) < (value.month, value.day)
-    )
+    age = today.year - value.year - ((today.month, today.day) < (value.month, value.day))
     if age < 0 or age > 130:
         return None
     return value.isoformat(), age

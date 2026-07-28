@@ -5,8 +5,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parents[1]
 CHROMA_DIR = BASE_DIR / "chroma_db"
 CLEAN_CORPUS = BASE_DIR / "clean_docs" / "medical_articles.jsonl"
 CLASSIFIED_DIR = BASE_DIR / "classified_docs"
@@ -14,7 +13,7 @@ CLASSIFIED_CORPUS = CLASSIFIED_DIR / "classified_chunks.jsonl"
 CLASSIFIED_EMBEDDINGS = CLASSIFIED_DIR / "classified_embeddings.f32"
 CLASSIFICATION_REPORT = CLASSIFIED_DIR / "classification_report.json"
 REVIEW_QUEUE = CLASSIFIED_DIR / "review_queue.csv"
-TAXONOMY_PATH = BASE_DIR / "rag_taxonomy.json"
+TAXONOMY_PATH = Path(__file__).resolve().parent / "taxonomy.json"
 
 EMBEDDING_MODEL = "paraphrase-multilingual-MiniLM-L12-v2"
 CHUNK_SIZE = 600
@@ -65,11 +64,7 @@ def chunk_text(text: str) -> list[str]:
             overlap_words: list[str] = []
             overlap_length = 0
             for previous_word in reversed(current):
-                candidate_length = (
-                    len(previous_word)
-                    + (1 if overlap_words else 0)
-                    + overlap_length
-                )
+                candidate_length = len(previous_word) + (1 if overlap_words else 0) + overlap_length
                 if candidate_length > CHUNK_OVERLAP:
                     break
                 overlap_words.append(previous_word)

@@ -6,7 +6,6 @@ import os
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-
 SUPPORTED_PROVIDERS = {"groq", "gemini"}
 DEFAULT_MODELS = {
     "groq": "llama-3.3-70b-versatile",
@@ -94,9 +93,7 @@ class LLMClient:
     def __init__(self, env: Mapping[str, str] | None = None):
         self._env = os.environ if env is None else env
         self.provider = resolve_provider(self._env)
-        configured_model = self._env.get(
-            f"{self.provider.upper()}_MODEL", ""
-        ).strip()
+        configured_model = self._env.get(f"{self.provider.upper()}_MODEL", "").strip()
         self.model = configured_model or DEFAULT_MODELS[self.provider]
         self._client = self._build_client()
 
@@ -180,9 +177,7 @@ class LLMClient:
         if thinking_budget is not None:
             # Gemini 2.5 的 thinking tokens 會計入 max_output_tokens。
             # Flash 預設關閉；Pro 無法關閉，因此使用官方最小值 128。
-            config_kwargs["thinking_config"] = types.ThinkingConfig(
-                thinking_budget=thinking_budget
-            )
+            config_kwargs["thinking_config"] = types.ThinkingConfig(thinking_budget=thinking_budget)
 
         def generate(output_limit: int):
             request_config = {
@@ -210,10 +205,7 @@ class LLMClient:
             reason = _finish_reason(response)
 
         if not text or not text.strip():
-            raise RuntimeError(
-                "gemini 未回傳文字內容"
-                f"（finish_reason={reason}）"
-            )
+            raise RuntimeError(f"gemini 未回傳文字內容（finish_reason={reason}）")
         return text
 
     def transcribe(
@@ -225,9 +217,7 @@ class LLMClient:
         prompt: str,
     ) -> str:
         if self.provider == "groq":
-            model = self._env.get(
-                "GROQ_TRANSCRIPTION_MODEL", "whisper-large-v3-turbo"
-            ).strip()
+            model = self._env.get("GROQ_TRANSCRIPTION_MODEL", "whisper-large-v3-turbo").strip()
             transcription = self._client.audio.transcriptions.create(
                 file=(filename, audio_bytes),
                 model=model,
@@ -250,9 +240,7 @@ class LLMClient:
             "max_output_tokens": 1000,
         }
         if self.model.startswith("gemini-2.5-flash"):
-            transcription_config["thinking_config"] = types.ThinkingConfig(
-                thinking_budget=0
-            )
+            transcription_config["thinking_config"] = types.ThinkingConfig(thinking_budget=0)
 
         response = self._client.models.generate_content(
             model=self.model,

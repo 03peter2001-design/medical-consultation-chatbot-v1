@@ -1,14 +1,16 @@
 import unittest
 from types import SimpleNamespace
 
-from llm import LLMClient, gemini_generation_limits, resolve_provider
+from infrastructure.llm import (
+    LLMClient,
+    gemini_generation_limits,
+    resolve_provider,
+)
 
 
 class ResolveProviderTests(unittest.TestCase):
     def test_keeps_groq_as_default_when_both_keys_exist(self):
-        provider = resolve_provider(
-            {"GROQ_API_KEY": "groq-key", "GEMINI_API_KEY": "gemini-key"}
-        )
+        provider = resolve_provider({"GROQ_API_KEY": "groq-key", "GEMINI_API_KEY": "gemini-key"})
         self.assertEqual(provider, "groq")
 
     def test_uses_gemini_when_it_is_the_only_configured_provider(self):
@@ -63,9 +65,7 @@ class GeminiGenerationTests(unittest.TestCase):
                 if len(self.configs) == 1:
                     return SimpleNamespace(
                         text=None,
-                        candidates=[
-                            SimpleNamespace(finish_reason="MAX_TOKENS")
-                        ],
+                        candidates=[SimpleNamespace(finish_reason="MAX_TOKENS")],
                     )
                 return SimpleNamespace(
                     text="完成內容",

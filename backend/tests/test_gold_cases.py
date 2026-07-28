@@ -2,7 +2,7 @@ import json
 import unittest
 from pathlib import Path
 
-from rag import select_routes
+from knowledge.retrieval import select_routes
 
 
 class GoldCaseTests(unittest.TestCase):

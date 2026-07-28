@@ -5,7 +5,7 @@
 
 執行方式：
     cd backend
-    python clean_documents.py
+    python -m scripts.clean_documents
 """
 
 from __future__ import annotations
@@ -19,8 +19,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Iterable
 
-
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_DOCS_DIR = BASE_DIR / "docs"
 DEFAULT_OUTPUT = BASE_DIR / "clean_docs" / "medical_articles.jsonl"
 DEFAULT_REPORT = BASE_DIR / "clean_docs" / "cleaning_report.json"
@@ -43,16 +42,10 @@ SOURCE_DEFINITIONS = (
     },
 )
 
-ARTICLE_SEPARATOR = re.compile(
-    r"\*\*\s*Article URL:\s*(https?://\S+?)\s*\*\*"
-)
+ARTICLE_SEPARATOR = re.compile(r"\*\*\s*Article URL:\s*(https?://\S+?)\s*\*\*")
 UPDATED_PATTERN = re.compile(r"^Updated:\s*(.+)$", re.IGNORECASE)
-CITATION_ONLY_PATTERN = re.compile(
-    r"^\[(?:\d+(?:\s*[-–,]\s*\d+)*)\]$"
-)
-CITATION_PATTERN = re.compile(
-    r"\s*\[(?:\d+(?:\s*[-–,]\s*\d+)*)\]\s*"
-)
+CITATION_ONLY_PATTERN = re.compile(r"^\[(?:\d+(?:\s*[-–,]\s*\d+)*)\]$")
+CITATION_PATTERN = re.compile(r"\s*\[(?:\d+(?:\s*[-–,]\s*\d+)*)\]\s*")
 
 # 這些字串是網站控制項或圖片佔位符，不具有醫療語意。
 DROP_EXACT = {
@@ -127,14 +120,10 @@ def _extract_article(
     # 3. 頁尾重複導覽列 References
     # 只保留第一與第二個標記之間的正文。
     reference_indexes = [
-        index
-        for index, line in enumerate(lines)
-        if line.casefold() == "references"
+        index for index, line in enumerate(lines) if line.casefold() == "references"
     ]
     if len(reference_indexes) < 2:
-        raise CleaningError(
-            f"找不到正文邊界（References 出現 {len(reference_indexes)} 次）"
-        )
+        raise CleaningError(f"找不到正文邊界（References 出現 {len(reference_indexes)} 次）")
 
     body_lines = lines[reference_indexes[0] + 1 : reference_indexes[1]]
     cleaned_lines: list[str] = []
@@ -212,9 +201,7 @@ def clean_corpus(
             source_count += 1
             stats["raw_articles"] += 1
             try:
-                article = _extract_article(
-                    url, raw_article, source, stats
-                )
+                article = _extract_article(url, raw_article, source, stats)
             except CleaningError as exc:
                 rejected.append(
                     {
@@ -233,12 +220,8 @@ def clean_corpus(
                 continue
 
             stats["duplicate_urls_merged"] += 1
-            tags = sorted(
-                set(existing["source_tags"] + article["source_tags"])
-            )
-            labels = sorted(
-                set(existing["source_labels"] + article["source_labels"])
-            )
+            tags = sorted(set(existing["source_tags"] + article["source_tags"]))
+            labels = sorted(set(existing["source_labels"] + article["source_labels"]))
 
             # 同一網址可能是在不同時間或分類下爬取；保留正文較完整者，
             # 同時合併分類 metadata，避免重複建立向量。
@@ -258,9 +241,7 @@ def clean_corpus(
 
     articles = sorted(by_url.values(), key=lambda item: item["url"])
     stats["unique_articles"] = len(articles)
-    stats["output_characters"] = sum(
-        len(article["text"]) for article in articles
-    )
+    stats["output_characters"] = sum(len(article["text"]) for article in articles)
 
     report = {
         "schema_version": 1,
@@ -283,14 +264,11 @@ def write_clean_corpus(
 
     with output_path.open("w", encoding="utf-8", newline="\n") as stream:
         for article in articles:
-            stream.write(
-                json.dumps(article, ensure_ascii=False, sort_keys=True)
-            )
+            stream.write(json.dumps(article, ensure_ascii=False, sort_keys=True))
             stream.write("\n")
 
     report_path.write_text(
-        json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True)
-        + "\n",
+        json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
     return articles, report

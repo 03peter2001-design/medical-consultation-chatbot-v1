@@ -3,6 +3,7 @@ uvicorn[standard]
 pydantic
 groq
 google-genai
+langgraph>=0.2,<2
 python-dotenv
 pymupdf
 chromadb

@@ -17,7 +17,12 @@ from .chief_complaint import (
     ChiefComplaintExtractor,
     build_fhir_risk_profile,
 )
-from .clinical_facts import facts_from_assessment, facts_from_legacy_data, merge_facts
+from .clinical_facts import (
+    facts_from_assessment,
+    facts_from_legacy_data,
+    filter_question_by_known_facts,
+    merge_facts,
+)
 from .disease_profiles import (
     attach_safety_conditions,
     question_utility,
@@ -205,6 +210,8 @@ class AMIEEngine:
 
         semantic_options = question.get("semantic_options", {})
         onset = EvidenceValue()
+        course = EvidenceValue()
+        duration = EvidenceValue()
         severity = EvidenceValue()
         new_or_changed = EvidenceValue()
         findings: list[ChiefFinding] = []
@@ -213,6 +220,10 @@ class AMIEEngine:
             facts = semantic_options.get(option, {})
             if value := facts.get("onset"):
                 onset = EvidenceValue(value=value, evidence=option)
+            if value := facts.get("course"):
+                course = EvidenceValue(value=value, evidence=option)
+            if value := facts.get("duration"):
+                duration = EvidenceValue(value=value, evidence=option)
             if value := facts.get("severity"):
                 severity = EvidenceValue(value=value, evidence=option)
             if value := facts.get("new_or_changed"):
@@ -239,6 +250,8 @@ class AMIEEngine:
         return ChiefComplaintAssessment(
             primary_symptom=question_route,
             onset=onset,
+            course=course,
+            duration=duration,
             severity=severity,
             is_new_or_changed=new_or_changed,
             findings=findings,
@@ -296,6 +309,12 @@ class AMIEEngine:
         return ChiefComplaintAssessment(
             primary_symptom=primary,
             primary_evidence=primary_evidence,
+            primary_symptom_code=(
+                delta.primary_symptom_code
+                if delta.primary_symptom_code != "unknown"
+                else base.primary_symptom_code
+            ),
+            symptoms=list({item.code: item for item in [*base.symptoms, *delta.symptoms]}.values()),
             symptom_domains=list(
                 dict.fromkeys(
                     [
@@ -305,6 +324,8 @@ class AMIEEngine:
                 )
             ),
             onset=latest_value(delta.onset, base.onset),
+            course=latest_value(delta.course, base.course),
+            duration=latest_value(delta.duration, base.duration),
             severity=latest_value(delta.severity, base.severity),
             is_new_or_changed=latest_value(
                 delta.is_new_or_changed,
@@ -319,6 +340,15 @@ class AMIEEngine:
                         *(route_code(item) for item in delta.route_candidates),
                     ]
                 )
+            ),
+            symptom_assessments=list(
+                {
+                    (item.route, item.symptom_code): item
+                    for item in [
+                        *base.symptom_assessments,
+                        *delta.symptom_assessments,
+                    ]
+                }.values()
             ),
             uncertain_fields=list(
                 dict.fromkeys(
@@ -564,7 +594,11 @@ class AMIEEngine:
         assessment: dict[str, Any] = {}
         if use_disease_vote:
             try:
-                assessment = score_diseases(clinical_facts, computed_from="live")
+                assessment = score_diseases(
+                    clinical_facts,
+                    route=route,
+                    computed_from="live",
+                )
             except Exception as error:
                 scoring_error = f"{type(error).__name__}: {_trim(error, 200)}"
                 assessment = {
@@ -582,6 +616,7 @@ class AMIEEngine:
         required_missing = self._required_missing(
             data,
             state.get("questionnaire", []),
+            clinical_facts,
         )
         candidate_by_field = {item["field"]: item for item in candidates}
         priority_fields = tuple(policy["priority_fields"])
@@ -591,7 +626,14 @@ class AMIEEngine:
         )
         utilities = {}
         if use_disease_vote and not scoring_error:
-            utilities = {item["field"]: question_utility(item, assessment) for item in candidates}
+            utilities = {
+                item["field"]: question_utility(
+                    item,
+                    assessment,
+                    route=route,
+                )
+                for item in candidates
+            }
         if use_disease_vote and selected is None:
             selected = max(
                 candidates,
@@ -699,6 +741,10 @@ class AMIEEngine:
         required_missing = self._required_missing(
             data,
             state.get("questionnaire", []),
+            state.get(
+                "clinical_facts",
+                data.get("_clinical_facts", []),
+            ),
         )
 
         if decision.get("action") == "handoff":
@@ -757,19 +803,31 @@ class AMIEEngine:
     ) -> list[dict[str, Any]]:
         data = state.get("data", {})
         skip = set(state.get("prefilled_fields", []))
-        return [
-            item
-            for item in state.get("questionnaire", [])
-            if item["field"] != "reason"
-            and item["field"] not in data
-            and item["field"] not in skip
-            and condition_matches(item, data)
-        ]
+        remaining = []
+        for item in state.get("questionnaire", []):
+            if (
+                item["field"] == "reason"
+                or item["field"] in data
+                or item["field"] in skip
+                or not condition_matches(item, data)
+            ):
+                continue
+            filtered = filter_question_by_known_facts(
+                item,
+                state.get(
+                    "clinical_facts",
+                    data.get("_clinical_facts", []),
+                ),
+            )
+            if filtered is not None:
+                remaining.append(filtered)
+        return remaining
 
     @staticmethod
     def _required_missing(
         data: dict[str, Any],
         questionnaire: list[dict[str, Any]],
+        clinical_facts: list[dict[str, Any]] | None = None,
     ) -> list[str]:
         selected_routes = [
             route for route in data.get("types", [data.get("type")]) if route in SUPPORTED_ROUTES
@@ -789,6 +847,10 @@ class AMIEEngine:
                 if item_route
                 else base_field in shared_required
             )
-            if required and not _trim(data.get(field, "")):
+            unresolved_question = filter_question_by_known_facts(
+                item,
+                clinical_facts,
+            )
+            if required and not _trim(data.get(field, "")) and unresolved_question is not None:
                 missing.append(field)
         return missing

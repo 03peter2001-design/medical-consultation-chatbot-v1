@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "profile_version": "headache-rag-freeze-2026-07-29",
+  "route": "headache",
+  "generation": {
+    "method": "one-time-rag-assisted-profile-extraction",
+    "model": "configured-offline-llm",
+    "corpus_hash": "4bcf0432bdff8031e4cdf29e6985748ac3910085a90938cb17dd802f5751ca50",
+    "generated_at": "2026-07-29T00:00:00Z"
+  },
+  "sources": [
+    {
+      "id": "migraine-medscape",
+      "title": "Childhood Migraine Variants: Background, Pathophysiology and Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1178141-overview"
+    },
+    {
+      "id": "tension-medscape",
+      "title": "Tension Headache: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/792384-overview"
+    },
+    {
+      "id": "sah-medscape",
+      "title": "Emergent Management of Subarachnoid Hemorrhage: Overview, Prehospital Care, Emergency Department Care",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794076-overview"
+    },
+    {
+      "id": "hemorrhagic-stroke-medscape",
+      "title": "Hemorrhagic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916662-overview"
+    },
+    {
+      "id": "ischemic-stroke-medscape",
+      "title": "Ischemic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916852-overview"
+    },
+    {
+      "id": "meningitis-medscape",
+      "title": "Meningitis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/232915-overview"
+    },
+    {
+      "id": "encephalitis-medscape",
+      "title": "Encephalitis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/791896-overview"
+    },
+    {
+      "id": "brain-neoplasm-medscape",
+      "title": "Brain Neoplasms: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779664-overview"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "migraine",
+      "name": "偏頭痛",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "unilateral_headache", "status": "present", "direction": "support", "weight": 1, "source_ids": ["migraine-medscape"]},
+        {"fact": "pulsating_headache", "status": "present", "direction": "support", "weight": 1, "source_ids": ["migraine-medscape"]},
+        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["migraine-medscape"]},
+        {"fact": "photophobia", "status": "present", "direction": "support", "weight": 1, "source_ids": ["migraine-medscape"]},
+        {"fact": "phonophobia", "status": "present", "direction": "support", "weight": 1, "source_ids": ["migraine-medscape"]},
+        {"fact": "activity_aggravation", "status": "present", "direction": "support", "weight": 1, "source_ids": ["migraine-medscape"]},
+        {"fact": "migraine_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["migraine-medscape"]}
+      ]
+    },
+    {
+      "id": "tension_type_headache",
+      "name": "緊張型頭痛",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "bilateral_headache", "status": "present", "direction": "support", "weight": 1, "source_ids": ["tension-medscape"]},
+        {"fact": "pressure_band_headache", "status": "present", "direction": "support", "weight": 1, "source_ids": ["tension-medscape"]},
+        {"fact": "neck_massage_relief", "status": "present", "direction": "support", "weight": 1, "source_ids": ["tension-medscape"]},
+        {"fact": "nausea", "status": "present", "direction": "oppose", "weight": 1, "source_ids": ["tension-medscape"]}
+      ]
+    },
+    {
+      "id": "cervicogenic_headache",
+      "name": "頸因性頭痛",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "occipital_neck_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["tension-medscape"]},
+        {"fact": "neck_massage_relief", "status": "present", "direction": "support", "weight": 1, "source_ids": ["tension-medscape"]},
+        {"fact": "pressure_band_headache", "status": "present", "direction": "support", "weight": 1, "source_ids": ["tension-medscape"]}
+      ]
+    },
+    {
+      "id": "subarachnoid_hemorrhage",
+      "name": "蜘蛛膜下腔出血",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["sah-medscape"]},
+        {"fact": "severity_severe", "status": "present", "direction": "support", "weight": 1, "source_ids": ["sah-medscape"]},
+        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["sah-medscape"]},
+        {"fact": "vomiting", "status": "present", "direction": "support", "weight": 1, "source_ids": ["sah-medscape"]},
+        {"fact": "altered_consciousness", "status": "present", "direction": "support", "weight": 1, "source_ids": ["sah-medscape"]},
+        {"fact": "aneurysm_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["sah-medscape"]}
+      ]
+    },
+    {
+      "id": "intracranial_hemorrhage",
+      "name": "顱內出血",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["hemorrhagic-stroke-medscape"]},
+        {"fact": "severity_severe", "status": "present", "direction": "support", "weight": 1, "source_ids": ["hemorrhagic-stroke-medscape"]},
+        {"fact": "focal_neurologic_symptom", "status": "present", "direction": "support", "weight": 1, "source_ids": ["hemorrhagic-stroke-medscape"]},
+        {"fact": "speech_difficulty", "status": "present", "direction": "support", "weight": 1, "source_ids": ["hemorrhagic-stroke-medscape"]},
+        {"fact": "altered_consciousness", "status": "present", "direction": "support", "weight": 1, "source_ids": ["hemorrhagic-stroke-medscape"]},
+        {"fact": "anticoagulant_use", "status": "present", "direction": "support", "weight": 1, "source_ids": ["hemorrhagic-stroke-medscape"]},
+        {"fact": "recent_head_trauma", "status": "present", "direction": "support", "weight": 1, "source_ids": ["hemorrhagic-stroke-medscape"]}
+      ]
+    },
+    {
+      "id": "ischemic_stroke_or_tia",
+      "name": "缺血性腦中風或短暫性腦缺血",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "focal_neurologic_symptom", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]},
+        {"fact": "speech_difficulty", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]},
+        {"fact": "visual_change_unspecified", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]},
+        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]}
+      ]
+    },
+    {
+      "id": "posterior_circulation_stroke",
+      "name": "後循環腦中風",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]},
+        {"fact": "visual_change_unspecified", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]},
+        {"fact": "gait_unsteadiness", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]},
+        {"fact": "vertigo", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]},
+        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]}
+      ]
+    },
+    {
+      "id": "meningitis_or_encephalitis",
+      "name": "腦膜炎或腦炎",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "fever", "status": "present", "direction": "support", "weight": 1, "source_ids": ["meningitis-medscape", "encephalitis-medscape"]},
+        {"fact": "neck_stiffness", "status": "present", "direction": "support", "weight": 1, "source_ids": ["meningitis-medscape"]},
+        {"fact": "altered_consciousness", "status": "present", "direction": "support", "weight": 1, "source_ids": ["encephalitis-medscape"]},
+        {"fact": "immunocompromised", "status": "present", "direction": "support", "weight": 1, "source_ids": ["meningitis-medscape", "encephalitis-medscape"]}
+      ]
+    },
+    {
+      "id": "intracranial_mass",
+      "name": "顱內腫瘤或腦轉移",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "onset_gradual", "status": "present", "direction": "support", "weight": 1, "source_ids": ["brain-neoplasm-medscape"]},
+        {"fact": "cough_valsalva_trigger", "status": "present", "direction": "support", "weight": 1, "source_ids": ["brain-neoplasm-medscape"]},
+        {"fact": "visual_change_unspecified", "status": "present", "direction": "support", "weight": 1, "source_ids": ["brain-neoplasm-medscape"]},
+        {"fact": "focal_neurologic_symptom", "status": "present", "direction": "support", "weight": 1, "source_ids": ["brain-neoplasm-medscape"]},
+        {"fact": "cancer_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["brain-neoplasm-medscape"]}
+      ]
+    }
+  ]
+}

@@ -12,6 +12,7 @@ from .models import (
     EvidenceValue,
     RouteEvidence,
     SymptomAssessment,
+    SymptomEvidence,
 )
 from .rule_config import finding_codes, load_safety_rules, supported_routes
 
@@ -143,14 +144,48 @@ def _validated_routes(
     return validated
 
 
+def _validated_symptoms(
+    text: str,
+    symptoms: list[SymptomEvidence],
+    definitions: dict[str, dict[str, str]],
+) -> list[SymptomEvidence]:
+    validated: list[SymptomEvidence] = []
+    seen: set[str] = set()
+    for symptom in symptoms[:12]:
+        code = _trim(symptom.code, 80).lower()
+        evidence = _trim(symptom.evidence, 160)
+        if code not in definitions or code in seen or not _has_grounded_evidence(text, evidence):
+            continue
+        seen.add(code)
+        validated.append(SymptomEvidence(code=code, evidence=evidence))
+    return validated
+
+
 def validate_assessment(
     text: str,
     assessment: ChiefComplaintAssessment,
 ) -> ChiefComplaintAssessment:
     """Discard every model claim that is not grounded in the raw text."""
+    rules = load_safety_rules()
     allowed_routes = supported_routes()
+    symptom_definitions = rules["semantic_extraction"]["symptom_definitions"]
+    symptoms = _validated_symptoms(
+        text,
+        assessment.symptoms,
+        symptom_definitions,
+    )
+    primary_symptom_code = _trim(assessment.primary_symptom_code, 80).lower()
+    primary_concept = next(
+        (item for item in symptoms if item.code == primary_symptom_code),
+        None,
+    )
+    if primary_concept is None:
+        primary_symptom_code = "unknown"
     primary_evidence = _trim(assessment.primary_evidence, 160)
     primary_symptom = assessment.primary_symptom
+    if primary_concept:
+        primary_symptom = symptom_definitions[primary_concept.code]["route"]
+        primary_evidence = primary_concept.evidence
     if primary_symptom not in {*allowed_routes, "other"} or not _has_grounded_evidence(
         text, primary_evidence
     ):
@@ -161,6 +196,16 @@ def validate_assessment(
         text,
         assessment.onset,
         {"sudden", "gradual", "unknown"},
+    )
+    course = _validated_evidence_value(
+        text,
+        assessment.course,
+        {"episodic", "continuous", "recurrent", "unknown"},
+    )
+    duration = _validated_evidence_value(
+        text,
+        assessment.duration,
+        {"brief", "prolonged", "unknown"},
     )
     severity = _validated_evidence_value(
         text,
@@ -189,29 +234,48 @@ def validate_assessment(
         assessment.route_candidates,
         allowed_routes,
     )
+    symptom_routes = [symptom_definitions[item.code]["route"] for item in symptoms]
+    supported_domains = list(dict.fromkeys([*supported_domains, *symptom_routes]))
+    route_candidates = list(dict.fromkeys([*route_candidates, *symptom_routes]))
     if primary_symptom != "unknown" and primary_symptom not in route_candidates:
         route_candidates.insert(0, primary_symptom)
 
     symptom_assessments: list[SymptomAssessment] = []
-    seen_symptom_routes: set[str] = set()
+    seen_symptom_keys: set[tuple[str, str]] = set()
     for symptom in assessment.symptom_assessments[:4]:
-        route = _trim(symptom.route, 40).lower()
+        symptom_code = _trim(symptom.symptom_code, 80).lower()
+        definition = symptom_definitions.get(symptom_code)
+        route = definition["route"] if definition else _trim(symptom.route, 40).lower()
         evidence = _trim(symptom.evidence, 160)
+        key = (route, symptom_code)
         if (
             route not in allowed_routes
-            or route in seen_symptom_routes
+            or key in seen_symptom_keys
             or not _has_grounded_evidence(text, evidence)
         ):
             continue
-        seen_symptom_routes.add(route)
+        if symptom_code != "unknown" and definition is None:
+            continue
+        seen_symptom_keys.add(key)
         symptom_assessments.append(
             SymptomAssessment(
                 route=route,
                 evidence=evidence,
+                symptom_code=symptom_code,
                 onset=_validated_evidence_value(
                     text,
                     symptom.onset,
                     {"sudden", "gradual", "unknown"},
+                ),
+                course=_validated_evidence_value(
+                    text,
+                    symptom.course,
+                    {"episodic", "continuous", "recurrent", "unknown"},
+                ),
+                duration=_validated_evidence_value(
+                    text,
+                    symptom.duration,
+                    {"brief", "prolonged", "unknown"},
                 ),
                 severity=_validated_evidence_value(
                     text,
@@ -235,11 +299,15 @@ def validate_assessment(
     return ChiefComplaintAssessment(
         primary_symptom=primary_symptom,
         primary_evidence=primary_evidence,
+        primary_symptom_code=primary_symptom_code,
+        symptoms=symptoms,
         symptom_domains=cast(
             list[str | RouteEvidence],
             list(dict.fromkeys(supported_domains))[:4],
         ),
         onset=onset,
+        course=course,
+        duration=duration,
         severity=severity,
         is_new_or_changed=is_new_or_changed,
         findings=findings,
@@ -321,6 +389,19 @@ class ChiefComplaintExtractor:
             semantic["severity_definitions"],
             ensure_ascii=False,
         )
+        course_guidance = json.dumps(
+            semantic["course_definitions"],
+            ensure_ascii=False,
+        )
+        duration_guidance = json.dumps(
+            semantic["duration_definitions"],
+            ensure_ascii=False,
+        )
+        symptom_guidance = json.dumps(
+            semantic["symptom_definitions"],
+            ensure_ascii=False,
+        )
+        example_symptom = next(iter(semantic["symptom_definitions"]))
         finding_guidance = json.dumps(
             semantic["finding_definitions"],
             ensure_ascii=False,
@@ -336,23 +417,37 @@ class ChiefComplaintExtractor:
    {route_values}。
    symptom_domains及route_candidates必須是物件陣列，每個物件只能包含
    route與evidence；route只能使用上述值，evidence必須逐字取自病人原文。
-2. onset.value只能是sudden、gradual、unknown。
-3. severity.value只能是mild、moderate、severe、unknown。
-4. is_new_or_changed.value只能是true、false、unknown。
-5. finding.code只能使用下列代碼：
+2. symptoms只能輸出白名單症狀code與逐字evidence；primary_symptom_code
+   必須是其中一個code，不能自行創造症狀。
+3. onset只描述開始方式：sudden、gradual、unknown。
+4. course只描述時間型態：episodic、continuous、recurrent、unknown。
+5. duration只描述持續長短：brief、prolonged、unknown；沒有明確描述就用unknown。
+6. severity.value只能是mild、moderate、severe、unknown。
+7. is_new_or_changed.value只能是true、false、unknown。
+8. finding.code只能使用下列代碼：
    {finding_values}。
-6. findings只放present；negated_findings只放病人明確否認的項目。
-7. 每個非unknown值、route及finding都必須附原文逐字evidence。
-8. 即使有多個症狀，symptom_domains及route_candidates仍不可輸出字串以外
+9. findings只放present；negated_findings只放病人明確否認的項目。
+10. 每個非unknown值、症狀、route及finding都必須附原文逐字evidence。
+11. 即使有多個症狀，symptom_domains及route_candidates仍不可輸出字串以外
    的route值，也不可使用domain、value等其他欄位名稱。
-9. 有多個症狀時，symptom_assessments要為每個症狀分別整理嚴重程度、發作型態、
-   是否新發或改變及相關finding；不可把一個症狀的資訊套用到另一個症狀。
+12. 有多個症狀時，symptom_assessments要為每個症狀分別整理onset、course、
+   duration、嚴重程度、是否新發或改變及相關finding；不可把一個症狀的
+   時間資訊套用到另一個症狀。
 
 語意正規化原則：
 {normalization_guidance}
 
 severity定義：
 {severity_guidance}
+
+course定義：
+{course_guidance}
+
+duration定義：
+{duration_guidance}
+
+症狀白名單：
+{symptom_guidance}
 
 finding定義：
 {finding_guidance}
@@ -361,10 +456,16 @@ finding定義：
 {{
   "primary_symptom": "unknown",
   "primary_evidence": "",
+  "primary_symptom_code": "unknown",
+  "symptoms": [
+    {{"code": "{example_symptom}", "evidence": "原文症狀片段"}}
+  ],
   "symptom_domains": [
     {{"route": "unknown", "evidence": ""}}
   ],
   "onset": {{"value": "unknown", "evidence": ""}},
+  "course": {{"value": "unknown", "evidence": ""}},
+  "duration": {{"value": "unknown", "evidence": ""}},
   "severity": {{"value": "unknown", "evidence": ""}},
   "is_new_or_changed": {{"value": "unknown", "evidence": ""}},
   "findings": [
@@ -378,7 +479,10 @@ finding定義：
     {{
       "route": "unknown",
       "evidence": "",
+      "symptom_code": "unknown",
       "onset": {{"value": "unknown", "evidence": ""}},
+      "course": {{"value": "unknown", "evidence": ""}},
+      "duration": {{"value": "unknown", "evidence": ""}},
       "severity": {{"value": "unknown", "evidence": ""}},
       "is_new_or_changed": {{"value": "unknown", "evidence": ""}},
       "findings": [],

@@ -13,6 +13,8 @@ _CONDITION_KEYS = {
     "primary_in",
     "severity_in",
     "onset_in",
+    "course_in",
+    "duration_in",
     "new_or_changed_in",
     "all_findings",
     "any_findings",
@@ -22,6 +24,8 @@ _CONDITION_KEYS = {
 _VALUE_DOMAINS = {
     "severity_in": {"mild", "moderate", "severe", "unknown"},
     "onset_in": {"sudden", "gradual", "unknown"},
+    "course_in": {"episodic", "continuous", "recurrent", "unknown"},
+    "duration_in": {"brief", "prolonged", "unknown"},
     "new_or_changed_in": {"true", "false", "unknown"},
 }
 
@@ -133,7 +137,20 @@ def _validate_clinical_fact_rules(
             ):
                 raise ValueError(f"clinical_fact_rules.scalar_mappings.{field} 格式不正確")
             scalar_codes.add(code)
-    fact_codes = finding_codes | scalar_codes
+    symptom_mappings = rules.get("symptom_mappings")
+    if not isinstance(symptom_mappings, dict) or not symptom_mappings:
+        raise ValueError("clinical_fact_rules.symptom_mappings 必須是非空物件")
+    symptom_codes: set[str] = set()
+    for symptom, code in symptom_mappings.items():
+        if (
+            not isinstance(symptom, str)
+            or not symptom.strip()
+            or not isinstance(code, str)
+            or not code.strip()
+        ):
+            raise ValueError("clinical_fact_rules.symptom_mappings 格式不正確")
+        symptom_codes.add(code)
+    fact_codes = finding_codes | scalar_codes | symptom_codes
 
     _validate_unique(
         _nonempty_strings(
@@ -200,9 +217,15 @@ def _validate_disease_profile_rules(
     for route, route_rules in rules.items():
         path = f"disease_profile_rules.{route}"
         if not isinstance(route_rules, dict) or set(route_rules) != {
-            "required_must_not_miss_profiles"
+            "generation_query",
+            "required_must_not_miss_profiles",
         }:
             raise ValueError(f"{path} 格式不正確")
+        if (
+            not isinstance(route_rules["generation_query"], str)
+            or not route_rules["generation_query"].strip()
+        ):
+            raise ValueError(f"{path}.generation_query 必須是非空字串")
         profiles = route_rules["required_must_not_miss_profiles"]
         if not isinstance(profiles, dict) or not profiles:
             raise ValueError(f"{path}.required_must_not_miss_profiles 必須是非空物件")
@@ -266,6 +289,37 @@ def validate_safety_rules(document: Any) -> dict[str, Any]:
         raise ValueError(
             "semantic_extraction.severity_definitions 必須完整定義 mild、moderate、severe、unknown"
         )
+    for field, expected_values in (
+        (
+            "course_definitions",
+            {"episodic", "continuous", "recurrent", "unknown"},
+        ),
+        ("duration_definitions", {"brief", "prolonged", "unknown"}),
+    ):
+        definitions = semantic.get(field)
+        if (
+            not isinstance(definitions, dict)
+            or set(definitions) != expected_values
+            or any(
+                not isinstance(value, str) or not value.strip() for value in definitions.values()
+            )
+        ):
+            raise ValueError(f"semantic_extraction.{field} 定義不完整")
+    symptom_definitions = semantic.get("symptom_definitions")
+    symptom_mappings = document["clinical_fact_rules"]["symptom_mappings"]
+    if not isinstance(symptom_definitions, dict) or set(symptom_definitions) != set(
+        symptom_mappings
+    ):
+        raise ValueError("semantic_extraction.symptom_definitions 必須完整對應 symptom_mappings")
+    for symptom, definition in symptom_definitions.items():
+        if (
+            not isinstance(definition, dict)
+            or set(definition) != {"route", "description"}
+            or definition["route"] not in routes
+            or not isinstance(definition["description"], str)
+            or not definition["description"].strip()
+        ):
+            raise ValueError(f"semantic_extraction.symptom_definitions.{symptom} 格式不正確")
     finding_definitions = semantic.get("finding_definitions")
     if (
         not isinstance(finding_definitions, dict)
@@ -420,6 +474,7 @@ def clinical_fact_codes() -> set[str]:
     return {
         *finding_codes(),
         *(code for mapping in rules["scalar_mappings"].values() for code in mapping.values()),
+        *rules["symptom_mappings"].values(),
     }
 
 

@@ -68,6 +68,7 @@ class QuestionnaireDefinitionTests(unittest.TestCase):
     def test_route_selection_and_completion_rules_come_from_json_policy(self):
         chest = load_questionnaire_policy("chest")
         headache = load_questionnaire_policy("headache")
+        abdomen = load_questionnaire_policy("abdomen")
 
         self.assertEqual(chest["schema_version"], 1)
         self.assertEqual(chest["selection_strategy"], "disease_vote")
@@ -75,8 +76,12 @@ class QuestionnaireDefinitionTests(unittest.TestCase):
         self.assertEqual(chest["max_turns"], 24)
         self.assertEqual(chest["priority_fields"][0], "start_type")
         self.assertIn("severity", chest["required_fields"])
-        self.assertEqual(headache["selection_strategy"], "fixed_order")
-        self.assertEqual(headache["priority_fields"], [])
+        self.assertEqual(headache["selection_strategy"], "disease_vote")
+        self.assertEqual(headache["coverage_threshold"], 0.7)
+        self.assertEqual(headache["priority_fields"][0], "start_type")
+        self.assertEqual(abdomen["selection_strategy"], "disease_vote")
+        self.assertEqual(abdomen["coverage_threshold"], 0.7)
+        self.assertIn("severity", abdomen["required_fields"])
 
     def test_multiple_symptom_routes_share_demographics_but_keep_answers_separate(self):
         questionnaire = build_questionnaire(["headache", "abdomen"])

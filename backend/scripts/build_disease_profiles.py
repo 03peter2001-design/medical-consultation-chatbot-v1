@@ -1,4 +1,4 @@
-"""One-time RAG-assisted builder for the frozen chest disease-profile artifact."""
+"""One-time RAG-assisted builder for a frozen route disease-profile artifact."""
 
 from __future__ import annotations
 
@@ -10,15 +10,9 @@ from pathlib import Path
 from typing import Any
 
 from amie.clinical_facts import FACT_CODES
-from amie.disease_profiles import PROFILE_PATH, validate_profile_document
+from amie.disease_profiles import PROFILE_DATA_DIR, validate_profile_document
 from amie.rule_config import disease_profile_rules, load_safety_rules
 from app import runtime
-
-QUERY = (
-    "chest pain differential diagnosis acute coronary syndrome aortic dissection "
-    "pulmonary embolism pneumothorax pericarditis pneumonia costochondritis "
-    "gastroesophageal reflux panic red flags presentation"
-)
 
 
 def _parse_json(text: str) -> Any:
@@ -38,18 +32,19 @@ def _source_id(chunk: dict[str, Any]) -> str:
     return f"rag-{hashlib.sha256(identity.encode()).hexdigest()[:12]}"
 
 
-def build_document() -> dict[str, Any]:
+def build_document(route: str = "chest") -> dict[str, Any]:
     """Retrieve once, extract constrained profiles, and return a validated artifact."""
     if runtime.retrieve is None:
         raise RuntimeError("RAG 向量庫尚未建立")
+    route_rules = disease_profile_rules(route)
     chunks = runtime.retrieve(
-        QUERY,
-        primary_route="chest",
+        route_rules["generation_query"],
+        primary_route=route,
         purpose="diagnosis",
         final_k=20,
     )
     if not chunks:
-        raise RuntimeError("RAG 未找到可用胸痛資料")
+        raise RuntimeError(f"RAG 未找到可用 {route} 資料")
 
     sources_by_id: dict[str, dict[str, str]] = {}
     context_parts = []
@@ -64,7 +59,7 @@ def build_document() -> dict[str, Any]:
         context_parts.append(f"[source_id={source_id}]\n{str(chunk.get('text') or '')[:1200]}")
 
     rules = load_safety_rules()
-    mandatory = disease_profile_rules("chest")["required_must_not_miss_profiles"]
+    mandatory = route_rules["required_must_not_miss_profiles"]
     safety_conditions = {
         condition
         for conditions in rules["urgent_condition_candidates"].values()
@@ -74,10 +69,10 @@ def build_document() -> dict[str, Any]:
         condition for conditions in mandatory.values() for condition in conditions
     }
     if not mandatory_condition_names.issubset(safety_conditions):
-        raise ValueError("Safety 規則與必要胸痛疾病清單不同步")
+        raise ValueError(f"Safety 規則與必要 {route} 疾病清單不同步")
     prompt = f"""
 你是離線醫療知識表抽取器。這不是病人診斷，也不會在執行期呼叫。
-根據提供的固定文獻片段建立胸痛鑑別 profile 草稿。
+根據提供的固定文獻片段建立 {route} 鑑別 profile 草稿。
 
 允許的 fact code：
 {json.dumps(sorted(FACT_CODES), ensure_ascii=False)}
@@ -174,8 +169,8 @@ def build_document() -> dict[str, Any]:
     now = datetime.now(timezone.utc)
     document = {
         "schema_version": 1,
-        "profile_version": f"chest-rag-freeze-{now.date().isoformat()}",
-        "route": "chest",
+        "profile_version": f"{route}-rag-freeze-{now.date().isoformat()}",
+        "route": route,
         "generation": {
             "method": "one-time-rag-assisted-profile-extraction",
             "model": runtime.llm_client.model,
@@ -190,13 +185,18 @@ def build_document() -> dict[str, Any]:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", type=Path, default=PROFILE_PATH)
+    parser.add_argument(
+        "--route",
+        choices=sorted(load_safety_rules()["disease_profile_rules"]),
+        default="chest",
+    )
+    parser.add_argument("--output", type=Path)
     parser.add_argument("--force", action="store_true")
     args = parser.parse_args()
-    output = args.output.resolve()
+    output = (args.output or PROFILE_DATA_DIR / f"{args.route}.json").resolve()
     if output.exists() and not args.force:
         raise SystemExit(f"{output} 已存在；一次性重建需明確加上 --force")
-    document = build_document()
+    document = build_document(args.route)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(
         json.dumps(document, ensure_ascii=False, indent=2) + "\n",

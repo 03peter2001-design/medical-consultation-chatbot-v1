@@ -34,6 +34,11 @@ const FIELD_LABELS = {
 }
 
 const FINDING_LABELS = {
+  onset_sudden: '突然發作',
+  onset_gradual: '逐漸發作',
+  severity_mild: '輕微',
+  severity_moderate: '中等',
+  severity_severe: '劇烈',
   altered_consciousness: '意識改變',
   fever: '發燒',
   focal_neurologic_symptom: '局部神經學症狀',
@@ -45,6 +50,49 @@ const FINDING_LABELS = {
   vision_loss: '視力異常',
   visual_change_unspecified: '視覺改變',
   vomiting: '嘔吐',
+  unilateral_headache: '單側頭痛',
+  bilateral_headache: '雙側頭痛',
+  occipital_neck_pain: '後腦及頸部疼痛',
+  diffuse_headache: '全頭疼痛',
+  pulsating_headache: '搏動性頭痛',
+  pressure_band_headache: '緊束壓迫型頭痛',
+  cough_valsalva_trigger: '咳嗽或用力加重',
+  activity_aggravation: '活動加重',
+  photophobia: '畏光',
+  phonophobia: '畏聲',
+  dark_quiet_relief: '黑暗安靜環境緩解',
+  neck_massage_relief: '按摩頭頸部緩解',
+  cancer_history: '癌症病史',
+  immunocompromised: '免疫功能低下',
+  anticoagulant_use: '使用抗凝血藥物',
+  pregnancy_postpartum: '懷孕或產後',
+  migraine_history: '偏頭痛病史',
+  aneurysm_history: '腦動脈瘤病史',
+  colicky_abdominal_pain: '陣發性腹痛',
+  constant_abdominal_pain: '持續性腹痛',
+  periumbilical_to_rlq: '肚臍周圍轉移至右下腹',
+  abdominal_pain_to_back: '腹痛延伸至背部',
+  fasting_worse: '空腹加重',
+  ruq_pain: '右上腹痛',
+  rlq_pain: '右下腹痛',
+  llq_pain: '左下腹痛',
+  diffuse_abdominal_pain: '全腹痛',
+  flank_pain: '腰脅部疼痛',
+  lower_abdominal_pain: '下腹痛',
+  diarrhea: '腹瀉',
+  constipation: '便秘',
+  bloody_stool: '血便',
+  hematuria: '血尿',
+  missed_period: '月經過期',
+  vaginal_discharge: '陰道分泌物增加',
+  sick_contacts: '群聚腸胃症狀',
+  gallstones_history: '膽結石病史',
+  kidney_stones_history: '腎結石病史',
+  bowel_obstruction_history: '腸阻塞病史',
+  pancreatitis_history: '胰臟炎病史',
+  abdominal_aortic_aneurysm_history: '腹主動脈瘤病史',
+  prior_abdominal_surgery: '腹部手術史',
+  peritoneal_irritation: '腹膜刺激徵象',
 }
 
 const DECISION_SOURCE_LABELS = {
@@ -173,7 +221,9 @@ export function buildClinicalRecord(record = {}) {
       opposing_evidence: (item.opposing || []).map(
         (clue) => clue.evidence || clue.fact,
       ),
-      missingFacts: item.missing_facts || [],
+      missingFacts: (item.missing_facts || []).map(
+        (fact) => FINDING_LABELS[fact] || fact,
+      ),
     }
   }
   const allDifferentials = (diseaseAssessment.ranked || []).map(

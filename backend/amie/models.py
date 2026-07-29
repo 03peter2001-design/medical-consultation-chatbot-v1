@@ -31,12 +31,22 @@ class RouteEvidence(BaseModel):
     evidence: str = ""
 
 
+class SymptomEvidence(BaseModel):
+    """A whitelist symptom concept paired with verbatim patient evidence."""
+
+    code: str
+    evidence: str = ""
+
+
 class SymptomAssessment(BaseModel):
     """Evidence-grounded facts scoped to one symptom route."""
 
     route: ChiefRoute
     evidence: str = ""
+    symptom_code: str = "unknown"
     onset: EvidenceValue = Field(default_factory=EvidenceValue)
+    course: EvidenceValue = Field(default_factory=EvidenceValue)
+    duration: EvidenceValue = Field(default_factory=EvidenceValue)
     severity: EvidenceValue = Field(default_factory=EvidenceValue)
     is_new_or_changed: EvidenceValue = Field(default_factory=EvidenceValue)
     findings: list[ChiefFinding] = Field(default_factory=list)
@@ -48,8 +58,12 @@ class ChiefComplaintAssessment(BaseModel):
 
     primary_symptom: ChiefRoute = "unknown"
     primary_evidence: str = ""
+    primary_symptom_code: str = "unknown"
+    symptoms: list[SymptomEvidence] = Field(default_factory=list)
     symptom_domains: list[ChiefRoute | RouteEvidence] = Field(default_factory=list)
     onset: EvidenceValue = Field(default_factory=EvidenceValue)
+    course: EvidenceValue = Field(default_factory=EvidenceValue)
+    duration: EvidenceValue = Field(default_factory=EvidenceValue)
     severity: EvidenceValue = Field(default_factory=EvidenceValue)
     is_new_or_changed: EvidenceValue = Field(default_factory=EvidenceValue)
     findings: list[ChiefFinding] = Field(default_factory=list)
@@ -80,8 +94,12 @@ class ChiefComplaintAssessment(BaseModel):
         allowed_root = {
             "primary_symptom",
             "primary_evidence",
+            "primary_symptom_code",
+            "symptoms",
             "symptom_domains",
             "onset",
+            "course",
+            "duration",
             "severity",
             "is_new_or_changed",
             "findings",
@@ -97,7 +115,16 @@ class ChiefComplaintAssessment(BaseModel):
             for item in payload.get(field, []):
                 if not isinstance(item, dict) or set(item) - {"route", "evidence"}:
                     raise ValueError(f"{field} 含未允許欄位")
-        for field in ("onset", "severity", "is_new_or_changed"):
+        for item in payload.get("symptoms", []):
+            if not isinstance(item, dict) or set(item) - {"code", "evidence"}:
+                raise ValueError("symptoms 含未允許欄位")
+        for field in (
+            "onset",
+            "course",
+            "duration",
+            "severity",
+            "is_new_or_changed",
+        ):
             item = payload.get(field, {})
             if not isinstance(item, dict) or set(item) - {"value", "evidence"}:
                 raise ValueError(f"{field} 含未允許欄位")
@@ -112,7 +139,10 @@ class ChiefComplaintAssessment(BaseModel):
         symptom_allowed = {
             "route",
             "evidence",
+            "symptom_code",
             "onset",
+            "course",
+            "duration",
             "severity",
             "is_new_or_changed",
             "findings",
@@ -121,7 +151,13 @@ class ChiefComplaintAssessment(BaseModel):
         for item in payload.get("symptom_assessments", []):
             if not isinstance(item, dict) or set(item) - symptom_allowed:
                 raise ValueError("symptom_assessments 含未允許欄位")
-            for field in ("onset", "severity", "is_new_or_changed"):
+            for field in (
+                "onset",
+                "course",
+                "duration",
+                "severity",
+                "is_new_or_changed",
+            ):
                 value = item.get(field, {})
                 if not isinstance(value, dict) or set(value) - {
                     "value",

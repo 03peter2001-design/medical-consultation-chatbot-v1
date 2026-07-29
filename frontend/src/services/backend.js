@@ -51,6 +51,11 @@ export function consultationDetailPath(queueNumber) {
   return `/doctor/consultations/${encodeURIComponent(queueNumber)}`
 }
 
+export const ruleCenterPath = '/doctor/rules'
+export const ruleAuthorizationPath = '/doctor/rules/authorize'
+export const ruleAssistantPath = '/doctor/rules/assistant'
+export const safetyRuleUpdatePath = '/doctor/rules/safety'
+
 async function request(path, options = {}) {
   const response = await fetch(`${backendUrl}${path}`, options)
   const data = await response.json().catch(() => ({}))
@@ -138,6 +143,28 @@ export const api = {
   clearDoctorSession: (sessionId) =>
     request(`/doctor/session/${encodeURIComponent(sessionId)}`, {
       method: 'DELETE',
+    }),
+  loadRuleCenter: () => request(ruleCenterPath),
+  authorizeRuleEditor: (adminToken) =>
+    request(ruleAuthorizationPath, {
+      method: 'POST',
+      headers: { 'X-Rule-Admin-Token': adminToken },
+    }),
+  suggestRuleEdits: (payload, adminToken) =>
+    request(ruleAssistantPath, {
+      ...jsonOptions('POST', payload),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Rule-Admin-Token': adminToken,
+      },
+    }),
+  updateSafetyRules: (payload, adminToken) =>
+    request(safetyRuleUpdatePath, {
+      ...jsonOptions('PUT', payload),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Rule-Admin-Token': adminToken,
+      },
     }),
 }
 

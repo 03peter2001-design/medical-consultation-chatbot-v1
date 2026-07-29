@@ -160,7 +160,11 @@
       "allow_other": true,
       "semantic_options": {
         "冒冷汗": {"findings": ["diaphoresis"]},
-        "感到噁心或已經嘔吐": {"findings": ["nausea"]},
+        "感到噁心或已經嘔吐": {
+          "findings": ["nausea"],
+          "resolution_facts": ["nausea", "vomiting"],
+          "resolved_when": "any"
+        },
         "有昏厥或暈倒": {"findings": ["syncope"]},
         "感到頭暈": {"findings": ["dizziness_unspecified"]},
         "感到呼吸急促": {"findings": ["dyspnea"]},

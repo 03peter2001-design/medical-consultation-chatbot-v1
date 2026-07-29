@@ -57,6 +57,7 @@ const progressState = ref({ current: 0, total: 1, percent: 0 })
 const triageState = ref({
   level: 'routine',
   message: '',
+  possible_conditions: [],
 })
 const recording = ref(false)
 const voiceProcessing = ref(false)
@@ -104,6 +105,13 @@ const loadedPatientName = computed(() =>
 )
 const painMapPreset = computed(() =>
   getPainMapPreset(questionnaireInfo.value?.route),
+)
+const urgentConditions = computed(() =>
+  Array.isArray(triageState.value?.possible_conditions)
+    ? triageState.value.possible_conditions.filter(
+        (condition) => typeof condition === 'string' && condition.trim(),
+      )
+    : [],
 )
 watch(
   [() => messages.value.length, typing, queueNumber],
@@ -388,6 +396,13 @@ onBeforeUnmount(() => {
               <p>{{ triageState.message }}</p>
             </div>
           </div>
+          <div
+            v-if="urgentConditions.length"
+            class="urgent-condition-alert"
+          >
+            <span>可能涉及的緊急疾病</span>
+            <strong>{{ urgentConditions.join('、') }}</strong>
+          </div>
           <p class="urgent-care-disclaimer">
             以上僅為安全規則提示，不代表診斷；請勿等待線上問診結果。
           </p>
@@ -593,6 +608,29 @@ onBeforeUnmount(() => {
   font-weight: 800;
 }
 
+.urgent-condition-alert {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 2px solid #c21f35;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.urgent-condition-alert span {
+  color: #831421;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.urgent-condition-alert strong {
+  color: #b00020;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.45;
+}
+
 .urgent-care-disclaimer {
   color: #7f3a43;
   font-size: 12px;
@@ -745,6 +783,10 @@ onBeforeUnmount(() => {
 
   .urgent-care-heading strong {
     font-size: 17px;
+  }
+
+  .urgent-condition-alert strong {
+    font-size: 18px;
   }
 
   .patient-input-bar {

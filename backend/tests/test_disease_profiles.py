@@ -3,7 +3,10 @@ import json
 import unittest
 from pathlib import Path
 
-from amie.clinical_facts import normalize_fact
+from amie.clinical_facts import (
+    filter_question_by_known_facts,
+    normalize_fact,
+)
 from amie.disease_profiles import (
     attach_safety_conditions,
     load_profile_document,
@@ -25,6 +28,26 @@ def fact(code, status="present", evidence=None):
 
 
 class DiseaseProfileValidationTests(unittest.TestCase):
+    def test_every_deployed_route_has_a_valid_frozen_profile(self):
+        for route, minimum_profiles in (
+            ("chest", 10),
+            ("headache", 9),
+            ("abdomen", 14),
+        ):
+            with self.subTest(route=route):
+                document = load_profile_document(route)
+                self.assertEqual(document["route"], route)
+                self.assertGreaterEqual(
+                    len(document["profiles"]),
+                    minimum_profiles,
+                )
+                self.assertTrue(
+                    all(
+                        profile["review_status"] == "provisional"
+                        for profile in document["profiles"]
+                    )
+                )
+
     def test_deployed_profile_is_versioned_and_provisional(self):
         document = load_profile_document()
 
@@ -98,6 +121,46 @@ class DiseaseProfileValidationTests(unittest.TestCase):
 
 
 class DiseaseScoringTests(unittest.TestCase):
+    def test_known_chief_symptom_is_removed_from_followup_options(self):
+        questionnaire = build_questionnaire("abdomen")
+        associated = next(item for item in questionnaire if item["field"] == "associated")
+
+        filtered = filter_question_by_known_facts(
+            associated,
+            [fact("vomiting", evidence="我有嘔吐")],
+        )
+
+        self.assertIsNotNone(filtered)
+        self.assertNotIn("嘔吐", filtered["options"])
+        self.assertIn("腹瀉", filtered["options"])
+        self.assertNotIn(
+            "vomiting",
+            filtered["semantic_options"]["以上皆無"]["negated_findings"],
+        )
+
+    def test_combined_option_can_be_resolved_by_any_json_fact_alias(self):
+        questionnaire = build_questionnaire("headache")
+        associated = next(item for item in questionnaire if item["field"] == "associated")
+
+        filtered = filter_question_by_known_facts(
+            associated,
+            [fact("vomiting", evidence="已經吐了")],
+        )
+
+        self.assertIsNotNone(filtered)
+        self.assertNotIn("噁心或嘔吐", filtered["options"])
+
+    def test_known_scalar_fact_skips_redundant_onset_question(self):
+        questionnaire = build_questionnaire("abdomen")
+        start_type = next(item for item in questionnaire if item["field"] == "start_type")
+
+        filtered = filter_question_by_known_facts(
+            start_type,
+            [fact("onset_sudden", evidence="突然發作")],
+        )
+
+        self.assertIsNone(filtered)
+
     def test_safety_directions_come_from_json_without_fake_votes(self):
         result = attach_safety_conditions(
             "chest",
@@ -138,7 +201,7 @@ class DiseaseScoringTests(unittest.TestCase):
             result["safety_triggered_conditions"][0],
         )
 
-    def test_non_chest_safety_direction_does_not_invent_profile_id(self):
+    def test_headache_safety_directions_map_to_frozen_profile_ids(self):
         result = attach_safety_conditions(
             "headache",
             [
@@ -150,13 +213,31 @@ class DiseaseScoringTests(unittest.TestCase):
             ],
         )
 
-        self.assertEqual(result["method"], "safety_rule_v1")
+        self.assertEqual(result["method"], "unit_vote_v1")
         self.assertEqual(
             [item["name"] for item in result["safety_triggered_conditions"]],
             ["蜘蛛膜下腔出血", "顱內出血"],
         )
-        self.assertTrue(
-            all(item["profile_id"] is None for item in result["safety_triggered_conditions"])
+        self.assertEqual(
+            [item["profile_id"] for item in result["safety_triggered_conditions"]],
+            ["subarachnoid_hemorrhage", "intracranial_hemorrhage"],
+        )
+
+    def test_abdominal_safety_directions_map_to_frozen_profile_ids(self):
+        result = attach_safety_conditions(
+            "abdomen",
+            [
+                {
+                    "code": "semantic_peritoneal_irritation",
+                    "label": "疑似腹膜刺激徵象",
+                    "evidence": "按壓放開更痛",
+                }
+            ],
+        )
+
+        self.assertEqual(
+            [item["profile_id"] for item in result["safety_triggered_conditions"]],
+            ["perforation_or_peritonitis", "mesenteric_ischemia"],
         )
 
     def test_support_opposition_unknown_and_coverage_are_separate(self):
@@ -220,24 +301,30 @@ class DiseaseScoringTests(unittest.TestCase):
         self.assertTrue(all(item["must_not_miss"] for item in result["must_not_miss"]))
 
     def test_fixed_gold_cases_are_provider_independent(self):
-        path = Path(__file__).parent / "data" / "chest_vote_gold_cases.json"
-        cases = json.loads(path.read_text(encoding="utf-8"))
-
-        for case in cases:
-            facts = [fact(code, evidence=evidence) for code, evidence in case["facts"]]
-            provider_rankings = {
-                provider: [item["id"] for item in score_diseases(facts)["ranked"]]
-                for provider in ("gemini", "groq", "offline-test")
-            }
-            with self.subTest(case=case["id"]):
-                self.assertEqual(
-                    provider_rankings["gemini"][0],
-                    case["expected_first"],
-                )
-                self.assertEqual(
-                    len({tuple(ranking) for ranking in provider_rankings.values()}),
-                    1,
-                )
+        for route in ("chest", "headache", "abdomen"):
+            path = Path(__file__).parent / "data" / f"{route}_vote_gold_cases.json"
+            cases = json.loads(path.read_text(encoding="utf-8"))
+            for case in cases:
+                facts = [fact(code, evidence=evidence) for code, evidence in case["facts"]]
+                provider_rankings = {
+                    provider: [
+                        item["id"]
+                        for item in score_diseases(
+                            facts,
+                            route=route,
+                        )["ranked"]
+                    ]
+                    for provider in ("gemini", "groq", "offline-test")
+                }
+                with self.subTest(route=route, case=case["id"]):
+                    self.assertEqual(
+                        provider_rankings["gemini"][0],
+                        case["expected_first"],
+                    )
+                    self.assertEqual(
+                        len({tuple(ranking) for ranking in provider_rankings.values()}),
+                        1,
+                    )
 
 
 if __name__ == "__main__":

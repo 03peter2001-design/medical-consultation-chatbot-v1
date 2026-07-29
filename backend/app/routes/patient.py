@@ -17,7 +17,11 @@ from amie import (
     preferred_route,
     prioritized_routes,
 )
-from amie.clinical_facts import facts_from_assessment, merge_facts
+from amie.clinical_facts import (
+    facts_from_assessment,
+    filter_question_by_known_facts,
+    merge_facts,
+)
 from amie.disease_profiles import attach_safety_conditions
 from amie.models import ChiefComplaintAssessment
 from amie.rule_config import load_safety_rules
@@ -231,6 +235,13 @@ def _question_payload(
             "model_error": event.get("model_error", ""),
         }
 
+    triage = {
+        "level": session.get("triage_level", "routine"),
+        "message": (URGENT_CARE_MESSAGE if session.get("triage_level") == "urgent" else ""),
+    }
+    if triage["level"] == "urgent":
+        triage["possible_conditions"] = _urgent_possible_conditions(session)
+
     return {
         "reply": reply,
         "session_id": session["session_id"],
@@ -238,10 +249,7 @@ def _question_payload(
         "user_display": user_display,
         "step": -1 if completed else index,
         "queue_number": queue_number,
-        "triage": {
-            "level": session.get("triage_level", "routine"),
-            "message": (URGENT_CARE_MESSAGE if session.get("triage_level") == "urgent" else ""),
-        },
+        "triage": triage,
         "question_input": (structured_question_input(current) if current else None),
         "questionnaire": (questionnaire_meta(current, data.get("type")) if current else None),
         "progress": (
@@ -507,7 +515,11 @@ def _assess_chief_complaint(
         scoped_assessment = ChiefComplaintAssessment(
             primary_symptom=symptom.route,
             primary_evidence=symptom.evidence,
+            primary_symptom_code=symptom.symptom_code,
+            symptoms=[item for item in assessment.symptoms if item.code == symptom.symptom_code],
             onset=symptom.onset,
+            course=symptom.course,
+            duration=symptom.duration,
             severity=symptom.severity,
             is_new_or_changed=symptom.is_new_or_changed,
             findings=symptom.findings,
@@ -745,8 +757,20 @@ async def _chat_amie(
         routes = _complaint_routes(data, route)
         data["types"] = routes
         questionnaire = build_questionnaire(routes)
+        questionnaire = [
+            filtered
+            for item in questionnaire
+            if (
+                filtered := filter_question_by_known_facts(
+                    item,
+                    data.get("_clinical_facts", []),
+                )
+            )
+            is not None
+        ]
         session["questionnaire"] = questionnaire
         _copy_prefills_to_secondary_routes(session, questionnaire)
+        index = -1
 
     session["turn_count"] += 1
 
@@ -815,6 +839,8 @@ async def _chat_amie(
         )
 
     session["index"] = next_index
+    questionnaire[next_index] = next_question
+    session["questionnaire"] = questionnaire
     session["step"] = session["turn_count"]
     if result.acknowledgement:
         reply = f"{result.acknowledgement}\n\n{next_question['prompt']}"
@@ -935,8 +961,20 @@ async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
         routes = _complaint_routes(data, route)
         data["types"] = routes
         questionnaire = build_questionnaire(routes)
+        questionnaire = [
+            filtered
+            for item in questionnaire
+            if (
+                filtered := filter_question_by_known_facts(
+                    item,
+                    data.get("_clinical_facts", []),
+                )
+            )
+            is not None
+        ]
         session["questionnaire"] = questionnaire
         _copy_prefills_to_secondary_routes(session, questionnaire)
+        index = -1
 
     prefilled_fields = set(session.get("prefilled_fields", []))
     next_index = next_question_index(

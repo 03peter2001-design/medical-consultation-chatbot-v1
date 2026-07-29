@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "profile_version": "abdomen-rag-freeze-2026-07-29",
+  "route": "abdomen",
+  "generation": {
+    "method": "one-time-rag-assisted-profile-extraction",
+    "model": "configured-offline-llm",
+    "corpus_hash": "5f2b8ba76479ab0f684f820b88d16bedea587cc040f112fe91707474a3e16e9d",
+    "generated_at": "2026-07-29T00:00:00Z"
+  },
+  "sources": [
+    {
+      "id": "abdominal-emergency-medscape",
+      "title": "Abdominal Pain in Elderly Persons: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/776663-overview"
+    },
+    {
+      "id": "appendicitis-medscape",
+      "title": "Appendicitis: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/773895-overview"
+    },
+    {
+      "id": "cholecystitis-medscape",
+      "title": "Acute Cholecystitis and Biliary Colic: Overview, Risk Factors, Evaluation of Biliary Colic and Cholecystitis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1950020-overview"
+    },
+    {
+      "id": "pancreatitis-medscape",
+      "title": "Emergent Management of Pancreatitis: Overview, Emergency Department Management, Surgical Consultation",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/775867-overview"
+    },
+    {
+      "id": "gastroenteritis-medscape",
+      "title": "Bacterial Gastroenteritis: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/176400-overview"
+    },
+    {
+      "id": "bowel-obstruction-medscape",
+      "title": "Small-Bowel Obstruction: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/774140-overview"
+    },
+    {
+      "id": "diverticulitis-medscape",
+      "title": "Diverticulitis: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/173388-overview"
+    },
+    {
+      "id": "ectopic-medscape",
+      "title": "Emergent Management of Ectopic Pregnancy: Practice Essentials, Ultrasonography, Other Diagnostic Imaging Modalities",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/796451-overview"
+    },
+    {
+      "id": "peptic-ulcer-medscape",
+      "title": "Peptic Ulcer Disease: Background, Anatomy, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/181753-overview"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "gastrointestinal_bleeding",
+      "name": "消化道出血",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "bloody_stool", "status": "present", "direction": "support", "weight": 1, "source_ids": ["peptic-ulcer-medscape", "abdominal-emergency-medscape"]},
+        {"fact": "major_bleeding", "status": "present", "direction": "support", "weight": 1, "source_ids": ["peptic-ulcer-medscape", "abdominal-emergency-medscape"]},
+        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
+        {"fact": "diaphoresis", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]}
+      ]
+    },
+    {
+      "id": "internal_bleeding",
+      "name": "腹腔內出血",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
+        {"fact": "severity_severe", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
+        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
+        {"fact": "diaphoresis", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]}
+      ]
+    },
+    {
+      "id": "ruptured_abdominal_aortic_aneurysm",
+      "name": "腹主動脈瘤破裂",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
+        {"fact": "severity_severe", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
+        {"fact": "abdominal_pain_to_back", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
+        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
+        {"fact": "abdominal_aortic_aneurysm_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]}
+      ]
+    },
+    {
+      "id": "ruptured_ectopic_pregnancy",
+      "name": "子宮外孕破裂",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "lower_abdominal_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ectopic-medscape"]},
+        {"fact": "missed_period", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ectopic-medscape"]},
+        {"fact": "vaginal_bleeding", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ectopic-medscape"]},
+        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ectopic-medscape"]}
+      ]
+    },
+    {
+      "id": "perforation_or_peritonitis",
+      "name": "消化道穿孔或腹膜炎",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape", "peptic-ulcer-medscape"]},
+        {"fact": "severity_severe", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape", "peptic-ulcer-medscape"]},
+        {"fact": "peritoneal_irritation", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape", "peptic-ulcer-medscape"]},
+        {"fact": "diffuse_abdominal_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]}
+      ]
+    },
+    {
+      "id": "mesenteric_ischemia",
+      "name": "腸繫膜缺血",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
+        {"fact": "severity_severe", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
+        {"fact": "constant_abdominal_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
+        {"fact": "bloody_stool", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]}
+      ]
+    },
+    {
+      "id": "appendicitis",
+      "name": "急性闌尾炎",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "periumbilical_to_rlq", "status": "present", "direction": "support", "weight": 1, "source_ids": ["appendicitis-medscape"]},
+        {"fact": "rlq_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["appendicitis-medscape"]},
+        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["appendicitis-medscape"]},
+        {"fact": "fever", "status": "present", "direction": "support", "weight": 1, "source_ids": ["appendicitis-medscape"]},
+        {"fact": "diarrhea", "status": "present", "direction": "oppose", "weight": 1, "source_ids": ["appendicitis-medscape"]}
+      ]
+    },
+    {
+      "id": "cholecystitis_or_biliary_colic",
+      "name": "急性膽囊炎或膽絞痛",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "ruq_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cholecystitis-medscape"]},
+        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cholecystitis-medscape"]},
+        {"fact": "vomiting", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cholecystitis-medscape"]},
+        {"fact": "fever", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cholecystitis-medscape"]},
+        {"fact": "gallstones_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cholecystitis-medscape"]}
+      ]
+    },
+    {
+      "id": "acute_pancreatitis",
+      "name": "急性胰臟炎",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "abdominal_pain_to_back", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pancreatitis-medscape"]},
+        {"fact": "constant_abdominal_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pancreatitis-medscape"]},
+        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pancreatitis-medscape"]},
+        {"fact": "vomiting", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pancreatitis-medscape"]},
+        {"fact": "pancreatitis_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pancreatitis-medscape"]}
+      ]
+    },
+    {
+      "id": "gastroenteritis",
+      "name": "急性腸胃炎",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "diarrhea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["gastroenteritis-medscape"]},
+        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["gastroenteritis-medscape"]},
+        {"fact": "vomiting", "status": "present", "direction": "support", "weight": 1, "source_ids": ["gastroenteritis-medscape"]},
+        {"fact": "fever", "status": "present", "direction": "support", "weight": 1, "source_ids": ["gastroenteritis-medscape"]},
+        {"fact": "sick_contacts", "status": "present", "direction": "support", "weight": 1, "source_ids": ["gastroenteritis-medscape"]},
+        {"fact": "bloody_stool", "status": "present", "direction": "oppose", "weight": 1, "source_ids": ["gastroenteritis-medscape"]}
+      ]
+    },
+    {
+      "id": "bowel_obstruction",
+      "name": "腸阻塞",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "colicky_abdominal_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["bowel-obstruction-medscape"]},
+        {"fact": "vomiting", "status": "present", "direction": "support", "weight": 1, "source_ids": ["bowel-obstruction-medscape"]},
+        {"fact": "constipation", "status": "present", "direction": "support", "weight": 1, "source_ids": ["bowel-obstruction-medscape"]},
+        {"fact": "bowel_obstruction_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["bowel-obstruction-medscape"]},
+        {"fact": "prior_abdominal_surgery", "status": "present", "direction": "support", "weight": 1, "source_ids": ["bowel-obstruction-medscape"]}
+      ]
+    },
+    {
+      "id": "diverticulitis",
+      "name": "憩室炎",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "llq_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["diverticulitis-medscape"]},
+        {"fact": "fever", "status": "present", "direction": "support", "weight": 1, "source_ids": ["diverticulitis-medscape"]},
+        {"fact": "constant_abdominal_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["diverticulitis-medscape"]},
+        {"fact": "constipation", "status": "present", "direction": "support", "weight": 1, "source_ids": ["diverticulitis-medscape"]}
+      ]
+    },
+    {
+      "id": "renal_colic",
+      "name": "腎結石或輸尿管結石",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "flank_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
+        {"fact": "colicky_abdominal_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
+        {"fact": "hematuria", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
+        {"fact": "kidney_stones_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]}
+      ]
+    },
+    {
+      "id": "peptic_ulcer_or_gastritis",
+      "name": "消化性潰瘍或胃炎",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "fasting_worse", "status": "present", "direction": "support", "weight": 1, "source_ids": ["peptic-ulcer-medscape"]},
+        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["peptic-ulcer-medscape"]},
+        {"fact": "acid_regurgitation", "status": "present", "direction": "support", "weight": 1, "source_ids": ["peptic-ulcer-medscape"]},
+        {"fact": "bloody_stool", "status": "present", "direction": "support", "weight": 1, "source_ids": ["peptic-ulcer-medscape"]}
+      ]
+    }
+  ]
+}

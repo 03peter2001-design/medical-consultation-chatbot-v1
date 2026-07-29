@@ -20,7 +20,10 @@ class SafetyRuleConfigTests(unittest.TestCase):
             set(rules["semantic_extraction"]["finding_definitions"]),
             set(rules["finding_codes"]),
         )
-        self.assertEqual(rules["raw_rules"]["combinations"], [])
+        self.assertIn(
+            "acute_monocular_visual_change_combination",
+            {rule["code"] for rule in rules["raw_rules"]["combinations"]},
+        )
         self.assertGreater(len(rules["structured_rules"]), 10)
         self.assertIn(
             "急性冠心症（含心肌梗塞）",
@@ -93,7 +96,12 @@ class SafetyRuleConfigTests(unittest.TestCase):
             for route in rules["supported_routes"]
             for question in build_questionnaire(route)
             for facts in question.get("semantic_options", {}).values()
-            for finding in facts.get("findings", [])
+            for key in (
+                "findings",
+                "negated_findings",
+                "resolution_facts",
+            )
+            for finding in facts.get(key, [])
         }
 
         self.assertTrue(referenced)

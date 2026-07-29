@@ -80,6 +80,7 @@ def _assessment_for_record(record: dict) -> dict:
     elif uses_disease_vote and not assessment:
         assessment = score_diseases(
             facts_from_legacy_data(data),
+            route=str(route),
             computed_from="legacy_recalculation",
         )
     return assessment

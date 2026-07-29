@@ -112,3 +112,52 @@ class LoadPatientRequest(BaseModel):
         if not normalized:
             raise ValueError("問診編號不可為空")
         return normalized[:16]
+
+
+class SafetyRuleUpdateRequest(BaseModel):
+    session_id: str
+    expected_revision: str
+    confirmation: str
+    change_note: str
+    safety_groups: list[dict]
+
+    @validator("session_id")
+    def rule_session_id_not_empty(cls, value):
+        normalized = value.strip()
+        if not normalized:
+            raise ValueError("session_id 不可為空")
+        return normalized[:64]
+
+    @validator("expected_revision")
+    def revision_format(cls, value):
+        normalized = value.strip().lower()
+        if len(normalized) != 64 or any(
+            character not in "0123456789abcdef" for character in normalized
+        ):
+            raise ValueError("expected_revision 格式不正確")
+        return normalized
+
+    @validator("confirmation", "change_note")
+    def trim_rule_update_text(cls, value):
+        return value.strip()[:500]
+
+
+class SafetyRuleAssistantRequest(BaseModel):
+    message: str
+    selected_labels: list[str]
+    safety_groups: list[dict]
+    history: list[dict] = Field(default_factory=list)
+
+    @validator("message")
+    def assistant_message_length(cls, value):
+        normalized = value.strip()
+        if not normalized:
+            raise ValueError("message 不可為空")
+        return normalized[:1000]
+
+    @validator("selected_labels")
+    def selected_rule_count(cls, value):
+        normalized = [item.strip()[:80] for item in value if isinstance(item, str) and item.strip()]
+        if not 1 <= len(normalized) <= 5:
+            raise ValueError("每次請勾選 1 至 5 個 Safety 標籤")
+        return normalized

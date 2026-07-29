@@ -3,7 +3,7 @@
   "section": "disease",
   "policy": {
     "schema_version": 1,
-    "selection_strategy": "fixed_order",
+    "selection_strategy": "disease_vote",
     "required_fields": [
       "onset",
       "start_type",
@@ -13,8 +13,8 @@
       "current_meds",
       "allergy"
     ],
-    "priority_fields": [],
-    "coverage_threshold": 0,
+    "priority_fields": ["start_type", "worst_ever", "associated", "risk_flags"],
+    "coverage_threshold": 0.7,
     "max_turns": 24
   },
   "questions": [
@@ -44,7 +44,13 @@
       "kind": "choice",
       "options": ["單側", "兩側都痛", "前額", "後腦勺及頸部", "整個頭"],
       "multiple": true,
-      "allow_other": true
+      "allow_other": true,
+      "semantic_options": {
+        "單側": {"findings": ["unilateral_headache"]},
+        "兩側都痛": {"findings": ["bilateral_headache"]},
+        "後腦勺及頸部": {"findings": ["occipital_neck_pain"]},
+        "整個頭": {"findings": ["diffuse_headache"]}
+      }
     },
     {
       "field": "worst_ever",
@@ -62,7 +68,12 @@
       "kind": "choice",
       "options": ["像脈搏一樣的跳痛", "悶脹痛", "像被緊緊束住", "針刺般的刺痛"],
       "multiple": true,
-      "allow_other": true
+      "allow_other": true,
+      "semantic_options": {
+        "像脈搏一樣的跳痛": {"findings": ["pulsating_headache"]},
+        "悶脹痛": {"findings": ["pressure_band_headache"]},
+        "像被緊緊束住": {"findings": ["pressure_band_headache"]}
+      }
     },
     {
       "field": "aggravate",
@@ -70,7 +81,13 @@
       "kind": "choice",
       "options": ["咳嗽或用力", "彎腰低頭", "身體活動", "光線刺激", "聲音刺激"],
       "multiple": true,
-      "allow_other": true
+      "allow_other": true,
+      "semantic_options": {
+        "咳嗽或用力": {"findings": ["cough_valsalva_trigger"]},
+        "身體活動": {"findings": ["activity_aggravation"]},
+        "光線刺激": {"findings": ["photophobia"]},
+        "聲音刺激": {"findings": ["phonophobia"]}
+      }
     },
     {
       "field": "relieve",
@@ -78,7 +95,11 @@
       "kind": "choice",
       "options": ["休息", "使用止痛藥", "待在黑暗安靜的地方", "按摩頭頸部"],
       "multiple": true,
-      "allow_other": true
+      "allow_other": true,
+      "semantic_options": {
+        "待在黑暗安靜的地方": {"findings": ["dark_quiet_relief"]},
+        "按摩頭頸部": {"findings": ["neck_massage_relief"]}
+      }
     },
     {
       "field": "associated",
@@ -98,8 +119,22 @@
       "multiple": true,
       "allow_other": true,
       "semantic_options": {
-        "噁心或嘔吐": {"findings": ["nausea"]},
-        "視力模糊或複視": {"findings": ["visual_change_unspecified"]},
+        "噁心或嘔吐": {
+          "findings": ["nausea", "vomiting"],
+          "resolved_when": "any"
+        },
+        "畏光": {"findings": ["photophobia"]},
+        "畏聲": {"findings": ["phonophobia"]},
+        "視力模糊或複視": {
+          "findings": ["visual_change_unspecified"],
+          "resolution_facts": [
+            "blurred_vision",
+            "visual_change_unspecified",
+            "diplopia",
+            "vision_loss"
+          ],
+          "resolved_when": "any"
+        },
         "頸部僵硬合併發燒": {
           "findings": ["neck_stiffness", "fever"]
         },
@@ -107,7 +142,21 @@
           "findings": ["focal_neurologic_symptom"]
         },
         "講話不清楚": {"findings": ["speech_difficulty"]},
-        "意識改變或嗜睡": {"findings": ["altered_consciousness"]}
+        "意識改變或嗜睡": {"findings": ["altered_consciousness"]},
+        "以上皆無": {
+          "negated_findings": [
+            "nausea",
+            "vomiting",
+            "photophobia",
+            "phonophobia",
+            "visual_change_unspecified",
+            "neck_stiffness",
+            "fever",
+            "focal_neurologic_symptom",
+            "speech_difficulty",
+            "altered_consciousness"
+          ]
+        }
       },
       "exclusive_options": ["以上皆無"]
     },
@@ -126,7 +175,20 @@
       "multiple": true,
       "allow_other": true,
       "semantic_options": {
-        "近期頭部外傷": {"findings": ["recent_head_trauma"]}
+        "近期頭部外傷": {"findings": ["recent_head_trauma"]},
+        "癌症病史": {"findings": ["cancer_history"]},
+        "免疫功能低下": {"findings": ["immunocompromised"]},
+        "目前服用抗凝血藥物": {"findings": ["anticoagulant_use"]},
+        "懷孕或產後六週內": {"findings": ["pregnancy_postpartum"]},
+        "以上皆無": {
+          "negated_findings": [
+            "recent_head_trauma",
+            "cancer_history",
+            "immunocompromised",
+            "anticoagulant_use",
+            "pregnancy_postpartum"
+          ]
+        }
       },
       "exclusive_options": ["以上皆無"]
     },
@@ -147,6 +209,13 @@
       ],
       "multiple": true,
       "allow_other": true,
+      "semantic_options": {
+        "腦動脈瘤": {"findings": ["aneurysm_history"]},
+        "偏頭痛病史": {"findings": ["migraine_history"]},
+        "以上皆無": {
+          "negated_findings": ["aneurysm_history", "migraine_history"]
+        }
+      },
       "exclusive_options": ["以上皆無"]
     },
     {

@@ -1,6 +1,7 @@
 import unittest
 
 from app.routes.patient import (
+    _assess_chief_complaint,
     _complaint_routes,
     _copy_prefills_to_secondary_routes,
     _question_payload,
@@ -9,6 +10,20 @@ from domain.questionnaires import build_questionnaire
 
 
 class PatientTriagePayloadTests(unittest.TestCase):
+    def test_headache_with_right_eye_blurring_stops_at_raw_safety(self):
+        data = {}
+
+        route, flags = _assess_chief_complaint(
+            "我頭痛，右眼突然看東西很模糊",
+            data,
+        )
+
+        self.assertEqual(route, "headache")
+        self.assertTrue(
+            any(flag["code"] == "acute_monocular_visual_change_combination" for flag in flags)
+        )
+        self.assertNotIn("_chief_assessment", data)
+
     def test_keeps_all_evidenced_symptom_routes(self):
         data = {
             "_chief_assessment": {
@@ -33,7 +48,7 @@ class PatientTriagePayloadTests(unittest.TestCase):
         self.assertEqual(session["data"]["abdomen__surgery"], "未曾手術")
         self.assertIn("abdomen__surgery", session["prefilled_fields"])
 
-    def test_urgent_payload_does_not_expose_disease_candidates(self):
+    def test_urgent_payload_exposes_only_safety_rule_candidates(self):
         session = {
             "session_id": "urgent-payload-test",
             "engine": "amie",
@@ -68,7 +83,14 @@ class PatientTriagePayloadTests(unittest.TestCase):
         )
 
         self.assertEqual(payload["triage"]["level"], "urgent")
-        self.assertNotIn("possible_conditions", payload["triage"])
+        self.assertEqual(
+            payload["triage"]["possible_conditions"],
+            [
+                "急性冠心症（含心肌梗塞）",
+                "致命性心律不整",
+            ],
+        )
+        self.assertNotIn("disease_assessment", payload)
         self.assertIn("立即處理", payload["triage"]["message"])
 
     def test_routine_payload_does_not_expose_condition_candidates(self):

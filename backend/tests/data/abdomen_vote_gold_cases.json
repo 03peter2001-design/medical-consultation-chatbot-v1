@@ -1,0 +1,53 @@
+[
+  {
+    "id": "appendicitis_pattern",
+    "facts": [
+      ["periumbilical_to_rlq", "由肚臍周圍轉移到右下腹"],
+      ["rlq_pain", "右下腹"],
+      ["nausea", "噁心"],
+      ["fever", "發燒"]
+    ],
+    "expected_first": "appendicitis"
+  },
+  {
+    "id": "gastroenteritis_pattern",
+    "facts": [
+      ["diarrhea", "腹瀉"],
+      ["nausea", "噁心"],
+      ["vomiting", "嘔吐"],
+      ["sick_contacts", "家人也有相同症狀"]
+    ],
+    "expected_first": "gastroenteritis"
+  },
+  {
+    "id": "bowel_obstruction_pattern",
+    "facts": [
+      ["colicky_abdominal_pain", "陣痛"],
+      ["vomiting", "嘔吐"],
+      ["constipation", "便秘"],
+      ["prior_abdominal_surgery", "曾接受腹部手術"]
+    ],
+    "expected_first": "bowel_obstruction"
+  },
+  {
+    "id": "ruptured_aaa_pattern",
+    "facts": [
+      ["onset_sudden", "突然發作"],
+      ["severity_severe", "劇烈難忍"],
+      ["abdominal_pain_to_back", "由前痛到背後"],
+      ["syncope", "暈倒"],
+      ["abdominal_aortic_aneurysm_history", "腹主動脈瘤病史"]
+    ],
+    "expected_first": "ruptured_abdominal_aortic_aneurysm"
+  },
+  {
+    "id": "renal_colic_pattern",
+    "facts": [
+      ["flank_pain", "右側腰痛"],
+      ["colicky_abdominal_pain", "陣痛"],
+      ["hematuria", "血尿"],
+      ["kidney_stones_history", "腎結石病史"]
+    ],
+    "expected_first": "renal_colic"
+  }
+]

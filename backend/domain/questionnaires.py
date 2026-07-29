@@ -130,10 +130,14 @@ def _validate_question(
             raise ValueError(f"{category}.json 的 {field}.semantic_options.{option} 必須是非空物件")
         unknown_fact_keys = set(facts) - {
             "onset",
+            "course",
+            "duration",
             "severity",
             "new_or_changed",
             "findings",
             "negated_findings",
+            "resolution_facts",
+            "resolved_when",
         }
         if unknown_fact_keys:
             raise ValueError(
@@ -142,6 +146,8 @@ def _validate_question(
             )
         scalar_domains = {
             "onset": {"sudden", "gradual"},
+            "course": {"episodic", "continuous", "recurrent"},
+            "duration": {"brief", "prolonged"},
             "severity": {"mild", "moderate", "severe"},
             "new_or_changed": {"true", "false"},
         }
@@ -150,7 +156,16 @@ def _validate_question(
                 raise ValueError(
                     f"{category}.json 的 {field}.semantic_options.{option}.{fact_key} 值不正確"
                 )
-        for findings_key in ("findings", "negated_findings"):
+        if facts.get("resolved_when", "all") not in {"all", "any"}:
+            raise ValueError(
+                f"{category}.json 的 {field}.semantic_options.{option}."
+                "resolved_when 只能是 all 或 any"
+            )
+        for findings_key in (
+            "findings",
+            "negated_findings",
+            "resolution_facts",
+        ):
             if findings_key in facts:
                 _validate_string_list(
                     facts[findings_key],

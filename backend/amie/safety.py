@@ -159,6 +159,14 @@ def _structured_rule_evidence(
             assessment.onset.value,
             assessment.onset.evidence,
         ),
+        "course_in": (
+            assessment.course.value,
+            assessment.course.evidence,
+        ),
+        "duration_in": (
+            assessment.duration.value,
+            assessment.duration.evidence,
+        ),
         "new_or_changed_in": (
             assessment.is_new_or_changed.value,
             assessment.is_new_or_changed.evidence,

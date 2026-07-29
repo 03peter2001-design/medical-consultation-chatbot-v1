@@ -6,6 +6,10 @@ import {
   consultationListPath,
   formatApiErrorDetail,
   resolveBackendUrl,
+  ruleAssistantPath,
+  ruleAuthorizationPath,
+  ruleCenterPath,
+  safetyRuleUpdatePath,
 } from '../src/services/backend.js'
 
 test('uses the page hostname and default backend port', () => {
@@ -57,6 +61,13 @@ test('encodes a consultation identifier for delete requests', () => {
     consultationDetailPath('急診/001'),
     '/doctor/consultations/%E6%80%A5%E8%A8%BA%2F001',
   )
+})
+
+test('uses dedicated doctor rule management endpoints', () => {
+  assert.equal(ruleCenterPath, '/doctor/rules')
+  assert.equal(ruleAuthorizationPath, '/doctor/rules/authorize')
+  assert.equal(ruleAssistantPath, '/doctor/rules/assistant')
+  assert.equal(safetyRuleUpdatePath, '/doctor/rules/safety')
 })
 
 test('formats FastAPI validation errors with their field path', () => {

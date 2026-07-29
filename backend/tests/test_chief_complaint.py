@@ -7,6 +7,7 @@ from amie.chief_complaint import (
     preferred_route,
     prioritized_routes,
 )
+from amie.clinical_facts import facts_from_assessment
 from amie.models import ChiefComplaintAssessment
 from amie.safety import detect_structured_red_flags
 
@@ -64,6 +65,69 @@ def headache_payload(**overrides):
 
 
 class ChiefComplaintExtractorTests(unittest.TestCase):
+    def test_extracts_whitelist_symptom_and_separate_time_dimensions(self):
+        complaint = "我突然一陣一陣頭痛，而且已經持續很久"
+        payload = headache_payload(
+            primary_symptom="unknown",
+            primary_evidence="",
+            primary_symptom_code="headache",
+            symptoms=[
+                {
+                    "code": "headache",
+                    "evidence": "頭痛",
+                }
+            ],
+            symptom_domains=[],
+            onset={"value": "sudden", "evidence": "突然"},
+            course={"value": "episodic", "evidence": "一陣一陣"},
+            duration={"value": "prolonged", "evidence": "持續很久"},
+            severity={"value": "unknown", "evidence": ""},
+            findings=[],
+            route_candidates=[],
+        )
+
+        assessment, error = ChiefComplaintExtractor(FakeLLM(payload)).extract(complaint)
+        facts = facts_from_assessment(
+            assessment,
+            turn=1,
+            source="test",
+        )
+
+        self.assertEqual(error, "")
+        self.assertEqual(assessment.primary_symptom, "headache")
+        self.assertEqual(assessment.primary_symptom_code, "headache")
+        self.assertEqual(assessment.course.value, "episodic")
+        self.assertEqual(assessment.duration.value, "prolonged")
+        self.assertEqual(
+            {fact["code"] for fact in facts},
+            {
+                "symptom_headache",
+                "onset_sudden",
+                "course_episodic",
+                "duration_prolonged",
+            },
+        )
+
+    def test_rejects_unknown_symptom_code_but_keeps_grounded_legacy_route(self):
+        complaint = "我頭痛"
+        payload = headache_payload(
+            primary_symptom_code="model_invented_symptom",
+            symptoms=[
+                {
+                    "code": "model_invented_symptom",
+                    "evidence": "頭痛",
+                }
+            ],
+            findings=[],
+        )
+
+        assessment, error = ChiefComplaintExtractor(FakeLLM(payload)).extract(complaint)
+
+        self.assertEqual(error, "")
+        self.assertEqual(assessment.primary_symptom, "headache")
+        self.assertEqual(assessment.primary_symptom_code, "unknown")
+        self.assertEqual(assessment.symptoms, [])
+
     def test_extracts_grounded_structure_and_route(self):
         complaint = "我頭暈目眩，噁心想吐，頭痛到感覺快要裂開，視線模糊"
         llm = FakeLLM(headache_payload())
@@ -311,6 +375,42 @@ class ChiefComplaintExtractorTests(unittest.TestCase):
 
 
 class StructuredSafetyTests(unittest.TestCase):
+    def test_headache_blurred_vision_is_urgent_without_severe_pain(self):
+        assessment = ChiefComplaintAssessment.model_validate(
+            headache_payload(
+                severity={"value": "unknown", "evidence": ""},
+                findings=[
+                    {
+                        "code": "blurred_vision",
+                        "status": "present",
+                        "evidence": "看東西很模糊",
+                    }
+                ],
+            )
+        )
+
+        flags = detect_structured_red_flags(assessment, {})
+
+        self.assertTrue(any(flag["code"] == "semantic_headache_visual_change" for flag in flags))
+
+    def test_semantic_monocular_visual_change_is_urgent_without_severe_pain(self):
+        assessment = ChiefComplaintAssessment.model_validate(
+            headache_payload(
+                severity={"value": "unknown", "evidence": ""},
+                findings=[
+                    {
+                        "code": "monocular_visual_change",
+                        "status": "present",
+                        "evidence": "右邊眼睛突然霧掉",
+                    }
+                ],
+            )
+        )
+
+        flags = detect_structured_red_flags(assessment, {})
+
+        self.assertTrue(any(flag["code"] == "semantic_monocular_visual_change" for flag in flags))
+
     def test_severe_headache_visual_combination_is_urgent(self):
         assessment = ChiefComplaintAssessment.model_validate(headache_payload())
         flags = detect_structured_red_flags(assessment, {})

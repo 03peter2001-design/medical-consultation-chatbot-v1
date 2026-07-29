@@ -16,7 +16,8 @@ from .rule_config import (
     load_safety_rules,
 )
 
-PROFILE_PATH = Path(__file__).resolve().parent / "disease_data" / "chest.json"
+PROFILE_DATA_DIR = Path(__file__).resolve().parent / "disease_data"
+PROFILE_PATH = PROFILE_DATA_DIR / "chest.json"
 SCHEMA_VERSION = 1
 METHOD = "unit_vote_v1"
 
@@ -176,19 +177,20 @@ def read_profile_document(path: Path = PROFILE_PATH) -> dict[str, Any]:
     return validate_profile_document(document)
 
 
-@lru_cache(maxsize=1)
-def load_profile_document() -> dict[str, Any]:
-    return read_profile_document()
+@lru_cache(maxsize=None)
+def load_profile_document(route: str = "chest") -> dict[str, Any]:
+    return read_profile_document(PROFILE_DATA_DIR / f"{route}.json")
 
 
 def score_diseases(
     facts: list[dict[str, Any]] | None,
     *,
+    route: str = "chest",
     computed_from: str = "live",
     document: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Apply signed profile votes without calling an LLM or retriever."""
-    deployed = document or load_profile_document()
+    deployed = document or load_profile_document(route)
     fact_map = {fact["code"]: fact for fact in merge_facts([], facts)}
     ranked: list[dict[str, Any]] = []
     for profile in deployed["profiles"]:
@@ -272,7 +274,7 @@ def attach_safety_conditions(
     deployed = document
     if deployed is None:
         try:
-            candidate = load_profile_document()
+            candidate = load_profile_document(route)
             if candidate.get("route") == route:
                 deployed = candidate
         except Exception:
@@ -284,6 +286,7 @@ def attach_safety_conditions(
         try:
             result = score_diseases(
                 facts,
+                route=route,
                 computed_from=computed_from,
                 document=deployed,
             )
@@ -369,10 +372,11 @@ def question_utility(
     question: dict[str, Any],
     assessment: dict[str, Any],
     *,
+    route: str = "chest",
     document: dict[str, Any] | None = None,
 ) -> int:
     """Count pairwise vote disagreements a question can resolve."""
-    deployed = document or load_profile_document()
+    deployed = document or load_profile_document(route)
     question_codes = question_fact_codes(question)
     if not question_codes:
         return 0

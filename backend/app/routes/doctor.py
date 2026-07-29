@@ -5,12 +5,17 @@ from __future__ import annotations
 import time
 import traceback
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Header, HTTPException, Query
 
 from amie.clinical_facts import facts_from_legacy_data
 from amie.disease_profiles import attach_safety_conditions, score_diseases
 from app import runtime
-from app.models import DoctorChatRequest, LoadPatientRequest
+from app.models import (
+    DoctorChatRequest,
+    LoadPatientRequest,
+    SafetyRuleAssistantRequest,
+    SafetyRuleUpdateRequest,
+)
 from app.prompts.doctor import (
     DOCTOR_SYSTEM_PROMPT,
     STRUCTURED_NOTE_SYSTEM_PROMPT,
@@ -24,6 +29,12 @@ from app.services.rag import (
     deduplicate_sources,
     retrieve_context_block,
 )
+from app.services.rule_management import (
+    authorize_rule_editor,
+    rule_center_payload,
+    suggest_safety_rule_edits,
+    update_safety_rules,
+)
 from domain.questionnaires import (
     DISEASE_ROUTES,
     load_questionnaire_policy,
@@ -34,6 +45,73 @@ from domain.terminology_reference import (
 )
 
 router = APIRouter(prefix="/doctor", tags=["doctor"])
+
+
+@router.get("/rules")
+def get_rule_center():
+    return rule_center_payload()
+
+
+def _rule_permission_error(error: PermissionError) -> HTTPException:
+    status = 503 if "尚未設定" in str(error) else 403
+    return HTTPException(status_code=status, detail=str(error))
+
+
+@router.post("/rules/authorize")
+def post_rule_authorization(
+    x_rule_admin_token: str = Header(default=""),
+):
+    try:
+        return authorize_rule_editor(x_rule_admin_token)
+    except PermissionError as error:
+        raise _rule_permission_error(error) from error
+
+
+@router.post("/rules/assistant")
+def post_rule_assistant(
+    request: SafetyRuleAssistantRequest,
+    x_rule_admin_token: str = Header(default=""),
+):
+    try:
+        authorize_rule_editor(x_rule_admin_token)
+        return suggest_safety_rule_edits(
+            llm_client=runtime.llm_client,
+            message=request.message,
+            selected_labels=request.selected_labels,
+            groups=request.safety_groups,
+            history=request.history,
+        )
+    except PermissionError as error:
+        raise _rule_permission_error(error) from error
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except Exception as error:
+        raise HTTPException(
+            status_code=503,
+            detail=f"規則微調助理暫時無法使用：{type(error).__name__}",
+        ) from error
+
+
+@router.put("/rules/safety")
+def put_safety_rules(
+    request: SafetyRuleUpdateRequest,
+    x_rule_admin_token: str = Header(default=""),
+):
+    try:
+        return update_safety_rules(
+            admin_token=x_rule_admin_token,
+            expected_revision=request.expected_revision,
+            confirmation=request.confirmation,
+            change_note=request.change_note,
+            actor_session_id=request.session_id,
+            groups=request.safety_groups,
+        )
+    except PermissionError as error:
+        raise _rule_permission_error(error) from error
+    except RuntimeError as error:
+        raise HTTPException(status_code=409, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
 
 
 def _cleanup_sessions() -> None:
@@ -131,6 +209,7 @@ def load_patient(request: LoadPatientRequest):
     elif uses_disease_vote and not disease_assessment:
         disease_assessment = score_diseases(
             facts_from_legacy_data(stored_data),
+            route=str(route),
             computed_from="legacy_recalculation",
         )
     amie_state["differential_hypotheses"] = []

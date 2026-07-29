@@ -31,6 +31,68 @@ class _Repository:
 
 
 class DiseaseApiIsolationTests(unittest.TestCase):
+    def test_doctor_load_recalculates_headache_and_abdomen_legacy_cases(self):
+        records = [
+            {
+                "queue_number": "20001",
+                "type": "headache",
+                "reason": "單側跳痛",
+                "data": {
+                    "reason": "單側跳痛",
+                    "location": "單側",
+                    "quality": "像脈搏一樣的跳痛",
+                },
+            },
+            {
+                "queue_number": "20002",
+                "type": "abdomen",
+                "reason": "右下腹痛",
+                "data": {
+                    "reason": "右下腹痛",
+                    "location": "右下腹",
+                    "quality": "由肚臍周圍痛轉移到右下腹",
+                    "associated": "噁心",
+                },
+            },
+        ]
+        for record in records:
+            record.update(
+                {
+                    "summary": "摘要",
+                    "report": "報告",
+                    "structured_note": None,
+                    "structured_sources": [],
+                    "triage_level": "routine",
+                    "status": "completed",
+                }
+            )
+            with (
+                self.subTest(route=record["type"]),
+                patch(
+                    "app.routes.doctor.runtime.consultation_repository",
+                    _Repository(record),
+                ),
+                patch("app.routes.doctor.runtime.doctor_sessions", {}),
+                patch(
+                    "app.routes.doctor.terminology_reference",
+                    return_value={},
+                ),
+            ):
+                response = load_patient(
+                    LoadPatientRequest(
+                        queue_number=record["queue_number"],
+                        session_id=f"doctor-{record['type']}",
+                    )
+                )
+
+            assessment = response["disease_assessment"]
+            self.assertEqual(
+                assessment["computed_from"],
+                "legacy_recalculation",
+            )
+            self.assertTrue(assessment["profile_version"].startswith(record["type"]))
+            self.assertTrue(assessment["top"])
+
     def test_doctor_load_rebuilds_safety_directions_for_legacy_urgent_case(self):
         record = {
             "queue_number": "54321",

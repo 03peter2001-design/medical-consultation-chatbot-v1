@@ -157,6 +157,60 @@ class AMIEEngineTests(unittest.TestCase):
         self.assertEqual(result.disease_assessment["top"][0]["id"], "acute_coronary_syndrome")
         self.assertEqual(llm.calls, [])
 
+    def test_chief_vomiting_is_not_repeated_in_abdominal_followup(self):
+        extraction = {
+            "primary_symptom": "abdomen",
+            "primary_evidence": "肚子痛",
+            "symptom_domains": [{"route": "abdomen", "evidence": "肚子痛"}],
+            "onset": {"value": "unknown", "evidence": ""},
+            "severity": {"value": "unknown", "evidence": ""},
+            "is_new_or_changed": {"value": "unknown", "evidence": ""},
+            "findings": [
+                {
+                    "code": "vomiting",
+                    "status": "present",
+                    "evidence": "嘔吐",
+                }
+            ],
+            "negated_findings": [],
+            "route_candidates": [{"route": "abdomen", "evidence": "肚子痛"}],
+            "symptom_assessments": [],
+            "uncertain_fields": [],
+        }
+        data = {
+            **self.base_data,
+            "type": "abdomen",
+            "reason": "我肚子痛、嘔吐",
+            "start_type": "逐漸出現",
+            "severity": "中等，已影響活動",
+            "_chief_assessment": {"extraction": extraction},
+            "_clinical_facts": [
+                {
+                    "code": "vomiting",
+                    "status": "present",
+                    "evidence": "嘔吐",
+                    "source": "chief_semantic_extraction",
+                    "turn": 1,
+                }
+            ],
+        }
+
+        result = AMIEEngine(FakeLLM()).run_turn(
+            route="abdomen",
+            answer=data["reason"],
+            current_field="reason",
+            data=data,
+            questionnaire=build_questionnaire("abdomen"),
+            prefilled_fields=self.prefilled,
+        )
+
+        self.assertEqual(result.next_question["field"], "associated")
+        self.assertNotIn("嘔吐", result.next_question["options"])
+        self.assertNotIn(
+            "vomiting",
+            result.next_question["semantic_options"]["以上皆無"]["negated_findings"],
+        )
+
     def test_semantic_output_with_extra_route_key_is_rejected(self):
         llm = FakeLLM(
             semantic_response={
@@ -356,13 +410,16 @@ class AMIEEngineTests(unittest.TestCase):
 
         self.assertEqual(result.action, "complete")
         self.assertEqual(result.triage_level, "urgent")
-        self.assertEqual(
-            result.red_flags[0]["code"],
-            "semantic_severe_headache_visual_change",
+        self.assertTrue(
+            {
+                "semantic_headache_visual_change",
+                "semantic_severe_headache_visual_change",
+            }.issubset({flag["code"] for flag in result.red_flags})
         )
-        self.assertEqual(
-            [item["name"] for item in result.disease_assessment["safety_triggered_conditions"]],
-            ["蜘蛛膜下腔出血", "顱內出血"],
+        self.assertTrue(
+            {"蜘蛛膜下腔出血", "顱內出血"}.issubset(
+                {item["name"] for item in result.disease_assessment["safety_triggered_conditions"]}
+            )
         )
         self.assertEqual(len(llm.calls), 1)
 
@@ -394,13 +451,15 @@ class AMIEEngineTests(unittest.TestCase):
         )
 
         self.assertEqual(result.triage_level, "urgent")
-        self.assertEqual(
-            result.red_flags[0]["code"],
-            "semantic_severe_headache_visual_change",
+        self.assertTrue(
+            {
+                "semantic_headache_visual_change",
+                "semantic_severe_headache_visual_change",
+            }.issubset({flag["code"] for flag in result.red_flags})
         )
         self.assertEqual(llm.calls, [])
 
-    def test_standard_option_skips_extractor_and_uses_fixed_order(self):
+    def test_headache_standard_option_skips_extractor_and_uses_disease_vote(self):
         llm = FakeLLM()
         result = AMIEEngine(llm).run_turn(
             route="headache",
@@ -417,7 +476,12 @@ class AMIEEngineTests(unittest.TestCase):
         )
 
         self.assertEqual(result.action, "ask")
-        self.assertEqual(result.next_question["field"], "smoke")
+        self.assertEqual(result.next_question["field"], "worst_ever")
+        self.assertEqual(result.disease_assessment["method"], "unit_vote_v1")
+        self.assertIn(
+            "onset_gradual",
+            [fact["code"] for fact in result.clinical_facts],
+        )
         self.assertEqual(llm.calls, [])
 
     def test_chest_severity_option_maps_directly_to_a_clinical_fact(self):
@@ -434,6 +498,89 @@ class AMIEEngineTests(unittest.TestCase):
         self.assertIn(
             "severity_moderate",
             {fact["code"] for fact in result.clinical_facts},
+        )
+        self.assertEqual(llm.calls, [])
+
+    def test_abdominal_episodic_option_maps_to_time_course_fact(self):
+        llm = FakeLLM()
+        result = AMIEEngine(llm).run_turn(
+            route="abdomen",
+            answer="陣痛",
+            current_field="quality",
+            data={
+                **self.base_data,
+                "type": "abdomen",
+                "reason": "肚子痛",
+                "quality": "陣痛",
+            },
+            questionnaire=build_questionnaire("abdomen"),
+            prefilled_fields=self.prefilled,
+        )
+
+        fact_codes = {fact["code"] for fact in result.clinical_facts}
+        self.assertIn("course_episodic", fact_codes)
+        self.assertIn("colicky_abdominal_pain", fact_codes)
+        self.assertEqual(llm.calls, [])
+
+    def test_abdominal_peritoneal_option_triggers_safety_and_fixed_directions(
+        self,
+    ):
+        llm = FakeLLM()
+        result = AMIEEngine(llm).run_turn(
+            route="abdomen",
+            answer="腹部僵硬或按壓放開更痛",
+            current_field="associated",
+            data={
+                **self.base_data,
+                "type": "abdomen",
+                "reason": "腹痛",
+                "associated": "腹部僵硬或按壓放開更痛",
+            },
+            questionnaire=build_questionnaire("abdomen"),
+            prefilled_fields=self.prefilled,
+        )
+
+        self.assertEqual(result.action, "complete")
+        self.assertEqual(result.triage_level, "urgent")
+        self.assertEqual(
+            result.red_flags[0]["code"],
+            "peritonism",
+        )
+        self.assertEqual(
+            [
+                item["profile_id"]
+                for item in result.disease_assessment["safety_triggered_conditions"]
+            ],
+            ["perforation_or_peritonitis", "mesenteric_ischemia"],
+        )
+        self.assertEqual(llm.calls, [])
+
+    def test_abdominal_pregnancy_bleeding_option_triggers_ectopic_direction(
+        self,
+    ):
+        llm = FakeLLM()
+        result = AMIEEngine(llm).run_turn(
+            route="abdomen",
+            answer="月經過期、陰道出血",
+            current_field="associated",
+            data={
+                **self.base_data,
+                "type": "abdomen",
+                "reason": "下腹痛",
+                "associated": "月經過期、陰道出血",
+            },
+            questionnaire=build_questionnaire("abdomen"),
+            prefilled_fields=self.prefilled,
+        )
+
+        self.assertEqual(result.triage_level, "urgent")
+        self.assertEqual(
+            result.red_flags[0]["code"],
+            "semantic_pregnancy_abdominal_bleeding",
+        )
+        self.assertEqual(
+            result.disease_assessment["safety_triggered_conditions"][0]["profile_id"],
+            "ruptured_ectopic_pregnancy",
         )
         self.assertEqual(llm.calls, [])
 
@@ -661,6 +808,33 @@ class SafetyRuleTests(unittest.TestCase):
             {"reason": "頭痛"},
         )
         self.assertTrue(any(flag["code"] == "focal_neurologic_deficit" for flag in flags))
+
+    def test_monocular_blurred_vision_triggers_before_semantic_extraction(self):
+        complaint = "我頭痛，右眼突然看東西很模糊"
+        flags = detect_red_flags(
+            "headache",
+            complaint,
+            {"reason": complaint},
+        )
+
+        flag = next(
+            item for item in flags if item["code"] == "acute_monocular_visual_change_combination"
+        )
+        self.assertEqual(flag["label"], "單眼視力模糊或喪失")
+        self.assertEqual(flag["evidence"], "右眼、模糊")
+        self.assertIn("視網膜動脈阻塞", flag["possible_conditions"])
+
+    def test_negated_monocular_blurred_vision_does_not_trigger(self):
+        complaint = "我頭痛，右眼看東西沒有模糊"
+
+        self.assertEqual(
+            detect_red_flags(
+                "headache",
+                complaint,
+                {"reason": complaint},
+            ),
+            [],
+        )
 
     def test_paraphrased_headache_combination_is_left_to_semantics(self):
         complaint = "我頭暈目眩，噁心想吐，頭痛到感覺快要裂開，視線模糊"

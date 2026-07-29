@@ -1,0 +1,32 @@
+services:
+  fhir-root-proxy:
+    image: nginx:alpine
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./smart-deployment/fhir-proxy.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
+
+  smart-launcher:
+    image: smartonfhir/smart-launcher-2:latest
+    depends_on:
+      fhir-root-proxy:
+        condition: service_started
+    environment:
+      FHIR_SERVER_R2: ""
+      FHIR_SERVER_R3: ""
+      FHIR_SERVER_R4: "http://fhir-root-proxy"
+      SECRET: "${SMART_LAUNCHER_SECRET:-local-development-only-change-me}"
+    ports:
+      - "127.0.0.1:${SMART_LAUNCHER_PORT:-8090}:80"
+    restart: unless-stopped
+
+  smart-app:
+    build:
+      context: ./smart-app
+    image: chest-pain-ai-doctor-smart-app:local
+    working_dir: /app
+    command: ["python", "-m", "http.server", "80", "--bind", "0.0.0.0"]
+    ports:
+      - "127.0.0.1:${SMART_APP_PORT:-5174}:80"
+    restart: unless-stopped

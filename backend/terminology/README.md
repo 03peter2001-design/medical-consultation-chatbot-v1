@@ -41,9 +41,15 @@ The root Compose workflow starts HAPI, waits for it to become healthy and
 installs the complete locked set:
 
 ```bash
-docker compose -f compose.fhir.yml up -d
+docker compose -f compose.fhir.yml --profile setup up -d
 docker compose -f compose.fhir.yml logs twcore-installer
 ```
+
+The `setup` profile prevents an ordinary later `docker compose up -d` from
+reinstalling the same large package set. The installer also writes the lock
+SHA-256 to `Basic/twcore-package-set` in HAPI. A later installer run skips the
+upload when that database marker still matches `packages.lock.json`; use
+`--force` to reinstall intentionally.
 
 For an already-running HAPI server:
 

@@ -8,6 +8,7 @@ from domain.questionnaires import (
     QUESTIONNAIRE_DATA_DIR,
     build_questionnaire,
     load_questionnaire_category,
+    load_questionnaire_policy,
     next_question_index,
     parse_birth_date,
     parse_onset_answer,
@@ -63,6 +64,19 @@ class QuestionnaireDefinitionTests(unittest.TestCase):
             self.assertEqual(onset["kind"], "duration")
             self.assertIn("1週前", onset["quick_options"])
             self.assertIn("個月前", onset["units"])
+
+    def test_route_selection_and_completion_rules_come_from_json_policy(self):
+        chest = load_questionnaire_policy("chest")
+        headache = load_questionnaire_policy("headache")
+
+        self.assertEqual(chest["schema_version"], 1)
+        self.assertEqual(chest["selection_strategy"], "disease_vote")
+        self.assertEqual(chest["coverage_threshold"], 0.7)
+        self.assertEqual(chest["max_turns"], 24)
+        self.assertEqual(chest["priority_fields"][0], "start_type")
+        self.assertIn("severity", chest["required_fields"])
+        self.assertEqual(headache["selection_strategy"], "fixed_order")
+        self.assertEqual(headache["priority_fields"], [])
 
     def test_multiple_symptom_routes_share_demographics_but_keep_answers_separate(self):
         questionnaire = build_questionnaire(["headache", "abdomen"])

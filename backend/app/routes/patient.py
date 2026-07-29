@@ -17,13 +17,14 @@ from amie import (
     preferred_route,
     prioritized_routes,
 )
+from amie.clinical_facts import facts_from_assessment, merge_facts
+from amie.disease_profiles import attach_safety_conditions
 from amie.models import ChiefComplaintAssessment
 from amie.rule_config import load_safety_rules
 from app.models import ChatRequest
 from app.runtime import (
     AMIE_DEBUG_TRACE,
     INTERVIEW_ENGINE,
-    RAG_ENABLED,
     SESSION_TTL,
     URGENT_CARE_MESSAGE,
     consultation_repository,
@@ -48,7 +49,6 @@ from app.services.input_validation import (
     store_question_answer,
     validate_question_answer,
 )
-from app.services.rag import retrieve_context_block
 from domain.questionnaires import (
     CHIEF_QUESTIONNAIRE,
     ROUTE_LABELS,
@@ -77,6 +77,7 @@ def _cleanup_sessions():
 
 
 ROUTE_KEYWORDS = load_safety_rules()["route_keywords"]
+SUPPORTED_PATIENT_ROUTES = frozenset(ROUTE_KEYWORDS)
 URGENT_CONDITION_CANDIDATES = load_safety_rules()["urgent_condition_candidates"]
 
 
@@ -204,6 +205,32 @@ def _question_payload(
     else:
         amie_progress = None
 
+    debug_event = None
+    if AMIE_DEBUG_TRACE and session.get("engine") == "amie" and session.get("transcript"):
+        event = session["transcript"][-1]
+        blocked = {
+            "disease_assessment",
+            "disease_votes",
+            "differential_hypotheses",
+        }
+        debug_event = {
+            "turn": event.get("turn"),
+            "question": event.get("question"),
+            "answer": event.get("answer"),
+            "decision": {
+                key: value
+                for key, value in (event.get("decision") or {}).items()
+                if key not in blocked
+            },
+            "result": {
+                key: value
+                for key, value in (event.get("result") or {}).items()
+                if key not in blocked
+            },
+            "reason": event.get("reason", ""),
+            "model_error": event.get("model_error", ""),
+        }
+
     return {
         "reply": reply,
         "session_id": session["session_id"],
@@ -214,11 +241,6 @@ def _question_payload(
         "triage": {
             "level": session.get("triage_level", "routine"),
             "message": (URGENT_CARE_MESSAGE if session.get("triage_level") == "urgent" else ""),
-            "possible_conditions": (
-                _urgent_possible_conditions(session)
-                if session.get("triage_level") == "urgent"
-                else []
-            ),
         },
         "question_input": (structured_question_input(current) if current else None),
         "questionnaire": (questionnaire_meta(current, data.get("type")) if current else None),
@@ -227,11 +249,7 @@ def _question_payload(
             if completed
             else (amie_progress or progress_meta(questionnaire, index, data))
         ),
-        "amie_debug": (
-            session.get("transcript", [])[-1]
-            if AMIE_DEBUG_TRACE and session.get("engine") == "amie" and session.get("transcript")
-            else None
-        ),
+        "amie_debug": debug_event,
     }
 
 
@@ -371,20 +389,28 @@ async def _complete_urgent_chief_complaint(
     *,
     user_input: str,
     route: str | None,
-    red_flags: list[dict[str, str]],
+    red_flags: list[dict[str, object]],
     background_tasks: BackgroundTasks,
 ) -> dict:
     """Persist a severe chief complaint before classification or planning."""
-    resolved_route = route if route in {"chest", "headache", "abdomen"} else "other"
+    resolved_route = str(route) if route in SUPPORTED_PATIENT_ROUTES else "other"
     data = session["data"]
     data["reason"] = user_input
     data["type"] = resolved_route
     if resolved_route != "other":
         session["questionnaire"] = build_questionnaire(resolved_route)
+    disease_assessment = attach_safety_conditions(
+        resolved_route,
+        red_flags,
+        facts=data.get("_clinical_facts", []),
+    )
+    data["_disease_assessment"] = disease_assessment
     state = {
         "triage_level": "urgent",
         "red_flags": red_flags,
         "differential_hypotheses": [],
+        "disease_assessment": disease_assessment,
+        "clinical_facts": list(data.get("_clinical_facts", [])),
         "knowledge_gaps": [],
         "evidence_timeline": [
             {
@@ -458,6 +484,15 @@ def _assess_chief_complaint(
         data["_chief_assessment"]["requires_handoff"] = True
         return "safety_unavailable", []
 
+    data["_clinical_facts"] = merge_facts(
+        data.get("_clinical_facts", []),
+        facts_from_assessment(
+            assessment,
+            turn=1,
+            source="chief_semantic_extraction",
+        ),
+    )
+
     ranked_routes = prioritized_routes(assessment, risk_profile)
     data["_chief_assessment"]["route_priority"] = ranked_routes
     data["_chief_assessment"]["secondary_routes"] = ranked_routes[1:]
@@ -508,13 +543,8 @@ def _assess_chief_complaint(
 
 def _complaint_routes(data: dict, primary_route: str) -> list[str]:
     """Keep every evidenced supported symptom, with the primary route first."""
-    supported = {"chest", "headache", "abdomen"}
     assessed = data.get("_chief_assessment", {}).get("route_priority", [])
-    routes = [
-        route
-        for route in [primary_route, *assessed]
-        if route in supported
-    ]
+    routes = [route for route in [primary_route, *assessed] if route in SUPPORTED_PATIENT_ROUTES]
     return list(dict.fromkeys(routes))
 
 
@@ -535,15 +565,7 @@ def _copy_prefills_to_secondary_routes(session: dict, questionnaire: list[dict])
 def _get_amie_engine() -> AMIEEngine:
     global _amie_engine_instance
     if _amie_engine_instance is None:
-        retriever = (
-            retrieve_context_block
-            if RAG_ENABLED and "retrieve_context_block" in globals()
-            else None
-        )
-        _amie_engine_instance = AMIEEngine(
-            llm_client,
-            retriever=retriever,
-        )
+        _amie_engine_instance = AMIEEngine(llm_client)
     return _amie_engine_instance
 
 
@@ -698,7 +720,7 @@ async def _chat_amie(
                 reason=("語意安全檢查暫時無法完成，請由現場醫療人員確認"),
                 user_display=user_display,
             )
-        if route not in {"chest", "headache", "abdomen"}:
+        if route not in SUPPORTED_PATIENT_ROUTES:
             session["amie_state"] = {
                 "red_flags": [],
                 "knowledge_gaps": ["目前系統不支援此主訴路由"],
@@ -898,7 +920,7 @@ async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
                 user_display=user_display,
                 completed=True,
             )
-        if route not in ("chest", "headache", "abdomen"):
+        if route not in SUPPORTED_PATIENT_ROUTES:
             session["step"] = -1
             session["index"] = -1
             return _question_payload(

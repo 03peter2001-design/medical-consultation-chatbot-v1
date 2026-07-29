@@ -32,6 +32,7 @@ services:
 
   twcore-installer:
     image: python:3.12-alpine
+    profiles: ["setup"]
     depends_on:
       hapi:
         condition: service_started

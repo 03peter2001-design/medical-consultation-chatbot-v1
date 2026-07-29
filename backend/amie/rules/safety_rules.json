@@ -1,10 +1,99 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "supported_routes": [
     "chest",
     "headache",
     "abdomen"
   ],
+  "clinical_fact_rules": {
+    "record_fields": ["code", "status", "evidence", "source", "turn"],
+    "statuses": ["present", "absent"],
+    "scalar_mappings": {
+      "onset": {
+        "sudden": "onset_sudden",
+        "gradual": "onset_gradual"
+      },
+      "severity": {
+        "mild": "severity_mild",
+        "moderate": "severity_moderate",
+        "severe": "severity_severe"
+      }
+    },
+    "legacy_text_fields": [
+      "reason",
+      "start_type",
+      "location",
+      "fixed",
+      "tender",
+      "severity",
+      "quality",
+      "aggravate",
+      "relieve",
+      "associated",
+      "cardio",
+      "chronic"
+    ],
+    "legacy_terms": {
+      "acid_regurgitation": ["胃酸", "反酸", "酸水"],
+      "burning_pain": ["灼熱", "燒灼"],
+      "chest_pressure": ["重物壓迫", "壓迫", "胸悶", "胸緊"],
+      "cough_sputum": ["咳嗽有痰", "咳痰"],
+      "diaphoresis": ["冒冷汗", "冷汗"],
+      "dyspnea": ["呼吸急促", "呼吸困難", "喘不過氣"],
+      "exertional_trigger": ["耗費體力的活動", "活動時", "走路時", "運動"],
+      "fever": ["發燒", "高燒"],
+      "hemoptysis": ["咳血"],
+      "meal_related": ["飯後", "進食", "吃東西"],
+      "movement_trigger": ["轉身", "抬手", "活動胸部"],
+      "nausea": ["噁心", "想吐"],
+      "pain_radiates_back": ["延伸到背部", "放射到背部"],
+      "palpitations": ["心跳加速", "心跳不規則", "心悸"],
+      "pleuritic_pain": ["深呼吸", "呼吸時痛"],
+      "positional_relief": ["坐姿", "坐起", "前傾"],
+      "recent_infection": ["最近感冒", "近期感染"],
+      "reproducible_tenderness": ["壓痛", "按壓會痛"],
+      "stress_trigger": ["感到有壓力", "緊張", "焦慮"],
+      "syncope": ["昏厥", "暈倒"],
+      "tearing_pain": ["撕裂"]
+    },
+    "legacy_field_rules": [
+      {
+        "field": "start_type",
+        "match": "contains_any",
+        "values": ["突然"],
+        "code": "onset_sudden",
+        "status": "present",
+        "evidence": "$value"
+      },
+      {
+        "field": "location",
+        "match": "contains_any",
+        "values": ["左邊", "右邊"],
+        "code": "unilateral_chest_pain",
+        "status": "present",
+        "evidence": "$value"
+      },
+      {
+        "field": "tender",
+        "match": "equals_any",
+        "values": ["沒有"],
+        "code": "reproducible_tenderness",
+        "status": "absent",
+        "evidence": "沒有壓痛"
+      }
+    ]
+  },
+  "disease_profile_rules": {
+    "chest": {
+      "required_must_not_miss_profiles": {
+        "acute_coronary_syndrome": ["急性冠心症（含心肌梗塞）"],
+        "aortic_dissection": ["主動脈剝離"],
+        "pulmonary_embolism": ["肺栓塞"],
+        "pneumothorax": ["氣胸"],
+        "cardiac_arrhythmia": ["致命性心律不整"]
+      }
+    }
+  },
   "urgent_condition_candidates": {
     "意識狀態異常": [
       "腦中風或顱內出血",
@@ -133,7 +222,26 @@
     "neck_stiffness",
     "major_bleeding",
     "recent_head_trauma",
-    "vaginal_bleeding"
+    "vaginal_bleeding",
+    "acid_regurgitation",
+    "burning_pain",
+    "chest_pressure",
+    "cough_sputum",
+    "dyspnea",
+    "exertional_trigger",
+    "hemoptysis",
+    "localized_pain",
+    "meal_related",
+    "movement_trigger",
+    "pain_radiates_back",
+    "palpitations",
+    "pleuritic_pain",
+    "positional_relief",
+    "recent_infection",
+    "reproducible_tenderness",
+    "stress_trigger",
+    "tachycardia",
+    "unilateral_chest_pain"
   ],
   "semantic_extraction": {
     "normalization_instructions": [
@@ -172,7 +280,26 @@
       "neck_stiffness": "頸部僵硬或難以前彎。",
       "major_bleeding": "明確描述大量或持續性出血。",
       "recent_head_trauma": "近期頭部撞擊或外傷。",
-      "vaginal_bleeding": "非預期的陰道出血。"
+      "vaginal_bleeding": "非預期的陰道出血。",
+      "acid_regurgitation": "胃酸逆流、反酸或酸水回到口中。",
+      "burning_pain": "胸部呈灼熱或燒灼感。",
+      "chest_pressure": "胸部有壓迫、緊縮或重物壓住的感覺。",
+      "cough_sputum": "咳嗽並伴隨痰液。",
+      "dyspnea": "呼吸急促或呼吸困難，但未達無法正常呼吸。",
+      "exertional_trigger": "症狀由走路、運動或體力活動誘發或加重。",
+      "hemoptysis": "咳出血液。",
+      "localized_pain": "疼痛可明確定位在局部小範圍。",
+      "meal_related": "症狀與進食或飯後有明確關係。",
+      "movement_trigger": "轉身、抬手或胸廓動作會誘發或加重疼痛。",
+      "pain_radiates_back": "胸部疼痛延伸或放射至背部。",
+      "palpitations": "感到心跳加速、不規則或明顯心悸。",
+      "pleuritic_pain": "深呼吸或咳嗽時胸痛加重。",
+      "positional_relief": "坐起或前傾等姿勢可緩解症狀。",
+      "recent_infection": "症狀前近期有感冒或其他感染。",
+      "reproducible_tenderness": "按壓胸壁可重現疼痛。",
+      "stress_trigger": "壓力、緊張或焦慮時誘發或加重症狀。",
+      "tachycardia": "有明確快速心跳的描述或量測。",
+      "unilateral_chest_pain": "胸痛主要位於單側。"
     }
   },
   "negation": {

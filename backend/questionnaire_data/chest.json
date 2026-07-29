@@ -1,6 +1,31 @@
 {
   "id": "chest",
   "section": "disease",
+  "policy": {
+    "schema_version": 1,
+    "selection_strategy": "disease_vote",
+    "required_fields": [
+      "onset",
+      "location",
+      "severity",
+      "quality",
+      "aggravate",
+      "associated",
+      "current_meds",
+      "allergy"
+    ],
+    "priority_fields": [
+      "start_type",
+      "associated",
+      "severity",
+      "quality",
+      "aggravate",
+      "tender",
+      "location"
+    ],
+    "coverage_threshold": 0.7,
+    "max_turns": 24
+  },
   "questions": [
     {
       "field": "onset",
@@ -28,13 +53,21 @@
       "kind": "choice",
       "options": ["左邊", "右邊", "正中間", "兩側都有"],
       "multiple": true,
-      "allow_other": true
+      "allow_other": true,
+      "semantic_options": {
+        "左邊": {"findings": ["unilateral_chest_pain"]},
+        "右邊": {"findings": ["unilateral_chest_pain"]},
+        "正中間": {"findings": ["localized_pain"]}
+      }
     },
     {
       "field": "fixed",
       "prompt": "胸痛的位置是否會移動？",
       "kind": "choice",
       "options": ["痛點固定", "痛點會移動"],
+      "semantic_options": {
+        "痛點固定": {"findings": ["localized_pain"]}
+      },
       "allow_other": true
     },
     {
@@ -42,22 +75,56 @@
       "prompt": "用手按壓疼痛部位時，是否會有壓痛感？",
       "kind": "choice",
       "options": ["有", "沒有"],
+      "semantic_options": {
+        "有": {"findings": ["reproducible_tenderness"]},
+        "沒有": {"negated_findings": ["reproducible_tenderness"]}
+      },
+      "allow_other": true
+    },
+    {
+      "field": "severity",
+      "prompt": "目前胸痛的嚴重程度如何？",
+      "kind": "choice",
+      "options": ["輕微", "中等", "嚴重到難以忍受"],
+      "semantic_options": {
+        "輕微": {"severity": "mild"},
+        "中等": {"severity": "moderate"},
+        "嚴重到難以忍受": {"severity": "severe"}
+      },
       "allow_other": true
     },
     {
       "field": "quality",
       "prompt": "您會如何描述這種疼痛？",
       "kind": "choice",
-      "options": ["刺痛", "鈍痛", "感覺有重物壓迫"],
+      "options": ["刺痛", "鈍痛", "感覺有重物壓迫", "灼熱感", "撕裂感"],
       "multiple": true,
+      "semantic_options": {
+        "感覺有重物壓迫": {"findings": ["chest_pressure"]},
+        "灼熱感": {"findings": ["burning_pain"]},
+        "撕裂感": {"findings": ["tearing_pain"]}
+      },
       "allow_other": true
     },
     {
       "field": "aggravate",
       "prompt": "哪些情況會使疼痛加重？",
       "kind": "choice",
-      "options": ["深呼吸", "耗費體力的活動", "感到有壓力的時候"],
+      "options": [
+        "深呼吸",
+        "耗費體力的活動",
+        "感到有壓力的時候",
+        "轉身或抬手",
+        "進食或飯後"
+      ],
       "multiple": true,
+      "semantic_options": {
+        "深呼吸": {"findings": ["pleuritic_pain"]},
+        "耗費體力的活動": {"findings": ["exertional_trigger"]},
+        "感到有壓力的時候": {"findings": ["stress_trigger"]},
+        "轉身或抬手": {"findings": ["movement_trigger"]},
+        "進食或飯後": {"findings": ["meal_related"]}
+      },
       "allow_other": true
     },
     {
@@ -66,6 +133,9 @@
       "kind": "choice",
       "options": ["休息", "用藥", "坐姿", "按摩疼痛部位"],
       "multiple": true,
+      "semantic_options": {
+        "坐姿": {"findings": ["positional_relief"]}
+      },
       "allow_other": true
     },
     {
@@ -80,6 +150,9 @@
         "感到頭暈",
         "感到心跳加速或心跳不規則",
         "咳嗽有痰",
+        "咳血",
+        "發燒",
+        "胃酸逆流或反酸",
         "肚子痛",
         "以上皆無"
       ],
@@ -89,7 +162,31 @@
         "冒冷汗": {"findings": ["diaphoresis"]},
         "感到噁心或已經嘔吐": {"findings": ["nausea"]},
         "有昏厥或暈倒": {"findings": ["syncope"]},
-        "感到頭暈": {"findings": ["dizziness_unspecified"]}
+        "感到頭暈": {"findings": ["dizziness_unspecified"]},
+        "感到呼吸急促": {"findings": ["dyspnea"]},
+        "感到心跳加速或心跳不規則": {
+          "findings": ["palpitations", "tachycardia"]
+        },
+        "咳嗽有痰": {"findings": ["cough_sputum"]},
+        "咳血": {"findings": ["hemoptysis"]},
+        "發燒": {"findings": ["fever"]},
+        "胃酸逆流或反酸": {"findings": ["acid_regurgitation"]},
+        "以上皆無": {
+          "negated_findings": [
+            "dyspnea",
+            "diaphoresis",
+            "nausea",
+            "vomiting",
+            "syncope",
+            "dizziness_unspecified",
+            "palpitations",
+            "tachycardia",
+            "cough_sputum",
+            "hemoptysis",
+            "fever",
+            "acid_regurgitation"
+          ]
+        }
       },
       "exclusive_options": ["以上皆無"]
     },

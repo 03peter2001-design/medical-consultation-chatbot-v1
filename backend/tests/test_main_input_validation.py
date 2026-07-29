@@ -60,9 +60,7 @@ class MainInputValidationTests(unittest.TestCase):
 
     def test_secondary_symptom_duration_uses_its_own_fields(self):
         questionnaire = build_questionnaire(["headache", "abdomen"])
-        question = next(
-            item for item in questionnaire if item["field"] == "abdomen__onset"
-        )
+        question = next(item for item in questionnaire if item["field"] == "abdomen__onset")
         data = {"onset": "1天前"}
 
         self.assertIsNone(validate_question_answer(question, "3小時前"))

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "acs_exertional_pressure",
+    "facts": [
+      ["chest_pressure", "胸口像被壓住"],
+      ["exertional_trigger", "走路時發作"],
+      ["diaphoresis", "冒冷汗"]
+    ],
+    "expected_first": "acute_coronary_syndrome"
+  },
+  {
+    "id": "reproducible_chest_wall_pain",
+    "facts": [
+      ["reproducible_tenderness", "按壓會痛"],
+      ["localized_pain", "痛點很固定"],
+      ["movement_trigger", "抬手時更痛"]
+    ],
+    "expected_first": "costochondritis"
+  },
+  {
+    "id": "meal_related_burning_reflux",
+    "facts": [
+      ["burning_pain", "胸口灼熱"],
+      ["meal_related", "吃飽後發作"],
+      ["acid_regurgitation", "有反酸"]
+    ],
+    "expected_first": "gastroesophageal_reflux"
+  },
+  {
+    "id": "pleuritic_dyspnea_hemoptysis",
+    "facts": [
+      ["dyspnea", "呼吸急促"],
+      ["pleuritic_pain", "深呼吸更痛"],
+      ["hemoptysis", "咳血"]
+    ],
+    "expected_first": "pulmonary_embolism"
+  }
+]

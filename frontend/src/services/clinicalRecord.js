@@ -16,6 +16,7 @@ const FIELD_LABELS = {
   start_type: '發作型態',
   location: '症狀位置',
   worst_ever: '嚴重程度',
+  severity: '嚴重程度',
   quality: '疼痛性質',
   aggravate: '加重因素',
   relieve: '緩解因素',
@@ -54,6 +55,7 @@ const DECISION_SOURCE_LABELS = {
   deterministic_fallback: '確定性 fallback',
   gemini_planner: 'Gemini 規劃器',
   gemini_planner_with_rag: 'Gemini 規劃器＋RAG',
+  deterministic_disease_vote: '固定疾病表投票',
 }
 
 const ACTION_LABELS = {
@@ -103,6 +105,7 @@ export function buildClinicalRecord(record = {}) {
     'start_type',
     'location',
     'worst_ever',
+    'severity',
     'quality',
     'aggravate',
     'relieve',
@@ -119,6 +122,8 @@ export function buildClinicalRecord(record = {}) {
   const chief = record.chief_assessment || {}
   const extraction = chief.extraction || {}
   const amie = record.amie_state || {}
+  const diseaseAssessment =
+    record.disease_assessment || amie.disease_assessment || {}
   const redFlags = amie.red_flags || chief.safety_flags || []
   const trace = record.amie_trace || []
   const fallbackTimeline = amie.evidence_timeline || []
@@ -148,8 +153,54 @@ export function buildClinicalRecord(record = {}) {
           : fact.label,
     }))
   })
-  const differentials = (amie.differential_hypotheses || []).map(
-    (hypothesis) => {
+  const mapAssessment = (item) => {
+    const coding = item.coding
+      ? resolveConditionCoding(item.name, item.coding, codings, data)
+      : null
+    return {
+      id: item.id,
+      condition: item.name,
+      coding,
+      netVotes: Number(item.net_votes || 0),
+      supportVotes: Number(item.support_votes || 0),
+      opposeVotes: Number(item.oppose_votes || 0),
+      coverage: Number(item.coverage || 0),
+      provisional: item.review_status === 'provisional',
+      mustNotMiss: Boolean(item.must_not_miss),
+      supporting_evidence: (item.supporting || []).map(
+        (clue) => clue.evidence || clue.fact,
+      ),
+      opposing_evidence: (item.opposing || []).map(
+        (clue) => clue.evidence || clue.fact,
+      ),
+      missingFacts: item.missing_facts || [],
+    }
+  }
+  const allDifferentials = (diseaseAssessment.ranked || []).map(
+    mapAssessment,
+  )
+  const differentials = (diseaseAssessment.top || []).map(mapAssessment)
+  const mustNotMiss = (diseaseAssessment.must_not_miss || []).map(
+    mapAssessment,
+  )
+  const safetyTriggeredConditions = (
+    diseaseAssessment.safety_triggered_conditions || []
+  ).map((item) => ({
+    id: item.profile_id || '',
+    condition: item.name,
+    coding: item.coding
+      ? resolveConditionCoding(item.name, item.coding, codings, data)
+      : null,
+    source: item.source || 'safety_rule',
+    triggers: (item.triggered_by || []).map((trigger) => ({
+      ruleCode: trigger.rule_code || '',
+      ruleLabel: trigger.rule_label || '',
+      evidence: trigger.evidence || '',
+    })),
+  }))
+  const legacyDifferentials = (
+    record.legacy_differential_hypotheses || []
+  ).map((hypothesis) => {
       const coding = resolveConditionCoding(
         hypothesis.condition,
         hypothesis.coding,
@@ -157,8 +208,7 @@ export function buildClinicalRecord(record = {}) {
         data,
       )
       return { ...hypothesis, coding }
-    },
-  )
+    })
 
   return {
     identity: {
@@ -203,6 +253,17 @@ export function buildClinicalRecord(record = {}) {
       codings,
     ),
     differentials,
+    allDifferentials,
+    mustNotMiss,
+    safetyTriggeredConditions,
+    legacyDifferentials,
+    diseaseAssessment: {
+      status: diseaseAssessment.status || 'unavailable',
+      profileVersion: diseaseAssessment.profile_version || '',
+      method: diseaseAssessment.method || '',
+      provisional: Boolean(diseaseAssessment.provisional),
+      computedFrom: diseaseAssessment.computed_from || '',
+    },
     terminologyReference: record.terminology_reference || null,
     knowledgeGaps: amie.knowledge_gaps || [],
     timeline: trace.length
@@ -221,6 +282,20 @@ export function buildClinicalRecord(record = {}) {
               label: FIELD_LABELS[field] || field,
               value: String(value),
             })),
+            clinicalFacts: (result.clinical_facts || []).map((fact) => ({
+              code: fact.code,
+              label: FINDING_LABELS[fact.code] || fact.code,
+              status: fact.status,
+              evidence: fact.evidence || '',
+            })),
+            diseaseVotes: (
+              result.disease_assessment?.top || []
+            ).map((item) => ({
+              id: item.id,
+              name: item.name,
+              netVotes: item.net_votes,
+              coverage: item.coverage,
+            })),
             triage:
               result.triage_level === 'urgent' ? 'urgent' : 'routine',
             actionLabel:
@@ -233,6 +308,7 @@ export function buildClinicalRecord(record = {}) {
             nextQuestion: decision.next_question || '',
             needsRetrieval: Boolean(decision.needs_retrieval),
             retrievalQuery: decision.retrieval_query || '',
+            questionUtility: Number(decision.question_utility || 0),
             reason: event.reason || '',
             modelError: event.model_error || '',
           }
@@ -249,6 +325,8 @@ export function buildClinicalRecord(record = {}) {
             label: FIELD_LABELS[field] || field,
             value: String(value),
           })),
+          clinicalFacts: event.clinical_facts || [],
+          diseaseVotes: event.disease_votes || [],
           triage: 'routine',
           actionLabel: '舊版紀錄',
           sourceLabel: '舊版 evidence timeline',
@@ -256,6 +334,7 @@ export function buildClinicalRecord(record = {}) {
           nextQuestion: '',
           needsRetrieval: false,
           retrievalQuery: '',
+          questionUtility: 0,
           reason: event.audit_reason || '',
           modelError: '',
         })),

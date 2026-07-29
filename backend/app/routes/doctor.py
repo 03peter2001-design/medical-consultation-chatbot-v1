@@ -7,6 +7,8 @@ import traceback
 
 from fastapi import APIRouter, HTTPException, Query
 
+from amie.clinical_facts import facts_from_legacy_data
+from amie.disease_profiles import attach_safety_conditions, score_diseases
 from app import runtime
 from app.models import DoctorChatRequest, LoadPatientRequest
 from app.prompts.doctor import (
@@ -18,12 +20,13 @@ from app.services.clinical_summary import (
     clinical_patient_data,
     model_patient_summary,
 )
-from app.services.differential_coding import (
-    suggest_missing_differential_codings,
-)
 from app.services.rag import (
     deduplicate_sources,
     retrieve_context_block,
+)
+from domain.questionnaires import (
+    DISEASE_ROUTES,
+    load_questionnaire_policy,
 )
 from domain.terminology_reference import (
     filter_supported_codings,
@@ -105,11 +108,33 @@ def load_patient(request: LoadPatientRequest):
         for key, value in (record.get("data") or {}).items()
         if not key.startswith("_") and key != "pain_locations"
     }
-    amie_state = dict(record.get("data", {}).get("_amie") or {})
-    amie_state["differential_hypotheses"] = suggest_missing_differential_codings(
-        amie_state.get("differential_hypotheses"),
-        runtime.llm_client,
+    stored_data = record.get("data", {})
+    amie_state = dict(stored_data.get("_amie") or {})
+    legacy_differentials = list(amie_state.get("differential_hypotheses") or [])
+    disease_assessment = dict(
+        stored_data.get("_disease_assessment") or amie_state.get("disease_assessment") or {}
     )
+    route = record.get("type")
+    uses_disease_vote = (
+        route in DISEASE_ROUTES
+        and load_questionnaire_policy(route)["selection_strategy"] == "disease_vote"
+    )
+    red_flags = list(amie_state.get("red_flags") or [])
+    if red_flags and not disease_assessment.get("safety_triggered_conditions"):
+        disease_assessment = attach_safety_conditions(
+            str(route or ""),
+            red_flags,
+            facts=facts_from_legacy_data(stored_data),
+            computed_from="legacy_recalculation",
+            assessment=disease_assessment or None,
+        )
+    elif uses_disease_vote and not disease_assessment:
+        disease_assessment = score_diseases(
+            facts_from_legacy_data(stored_data),
+            computed_from="legacy_recalculation",
+        )
+    amie_state["differential_hypotheses"] = []
+    amie_state["disease_assessment"] = disease_assessment
     return {
         "queue_number": record["queue_number"],
         "type": record["type"],
@@ -125,6 +150,8 @@ def load_patient(request: LoadPatientRequest):
         "structured_sources": structured_sources,
         "pain_locations": record.get("data", {}).get("pain_locations", []),
         "amie_state": amie_state,
+        "disease_assessment": disease_assessment,
+        "legacy_differential_hypotheses": legacy_differentials,
         "amie_trace": record.get("data", {}).get("_amie_trace", []),
         "chief_assessment": record.get("data", {}).get("_chief_assessment"),
         "triage_level": record.get("triage_level", "routine"),

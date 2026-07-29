@@ -11,7 +11,7 @@ class SafetyRuleConfigTests(unittest.TestCase):
     def test_deployed_rule_file_is_valid_and_versioned(self):
         rules = load_safety_rules()
 
-        self.assertEqual(rules["schema_version"], 1)
+        self.assertEqual(rules["schema_version"], 2)
         self.assertEqual(
             set(rules["route_keywords"]),
             set(rules["supported_routes"]),
@@ -65,6 +65,24 @@ class SafetyRuleConfigTests(unittest.TestCase):
         del rules["urgent_condition_candidates"]["意識狀態異常"]
 
         with self.assertRaisesRegex(ValueError, "缺少安全規則標籤"):
+            validate_safety_rules(rules)
+
+    def test_clinical_fact_and_mandatory_disease_rules_are_validated_from_json(
+        self,
+    ):
+        rules = copy.deepcopy(load_safety_rules())
+        rules["clinical_fact_rules"]["legacy_terms"]["model_invented_fact"] = ["測試"]
+        with self.assertRaisesRegex(ValueError, "未知 fact"):
+            validate_safety_rules(rules)
+
+        rules = copy.deepcopy(load_safety_rules())
+        rules["disease_profile_rules"]["chest"]["required_must_not_miss_profiles"][
+            "invented_profile"
+        ] = ["不存在的 Safety 疾病"]
+        with self.assertRaisesRegex(
+            ValueError,
+            "未對應 urgent_condition_candidates",
+        ):
             validate_safety_rules(rules)
 
     def test_questionnaire_semantic_options_reference_known_findings(self):

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from domain.questionnaires import DISEASE_ROUTES, ROUTE_LABELS
+
 
 def _route_value(
     data: dict,
@@ -34,18 +36,11 @@ def _onset_display(data: dict, route: str, *, primary_route: str) -> str:
 
 def build_summary(data: dict, *, include_identity: bool = True) -> str:
     ctype = data.get("type", "chest")
-    routes = [
-        route
-        for route in data.get("types", [ctype])
-        if route in {"chest", "headache", "abdomen"}
+    routes: list[str] = [
+        str(route) for route in data.get("types", [ctype]) if route in DISEASE_ROUTES
     ] or [ctype]
     primary_route = routes[0]
-    route_labels = {
-        "chest": "胸痛",
-        "headache": "頭痛",
-        "abdomen": "腹痛",
-    }
-    default_reason = "、".join(route_labels.get(route, route) for route in routes)
+    default_reason = "、".join(ROUTE_LABELS.get(route) or route for route in routes)
     identity_line = (
         f"- 姓名：{data.get('name', '未提供')}\n- 出生日期：{data.get('birth_date', '未提供')}\n"
         if include_identity
@@ -60,6 +55,7 @@ def build_summary(data: dict, *, include_identity: bool = True) -> str:
 
     symptom_blocks = []
     for route in routes:
+
         def value(field: str) -> str:
             return _route_value(
                 data,

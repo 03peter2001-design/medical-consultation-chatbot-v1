@@ -56,21 +56,19 @@ test('builds a scannable clinical record from structured patient data', () => {
         },
       ],
     },
-    amie_state: {
-      differential_hypotheses: [
-        {
-          condition: '顱內出血',
-          coding: {
-            system: 'http://snomed.info/sct',
-            code: '1386000',
-            display: 'Intracranial hemorrhage',
-            source: 'fhir',
-          },
-          supporting_evidence: ['高血壓'],
-          opposing_evidence: ['無局部無力'],
+    legacy_differential_hypotheses: [
+      {
+        condition: '顱內出血',
+        coding: {
+          system: 'http://snomed.info/sct',
+          code: '1386000',
+          display: 'Intracranial hemorrhage',
+          source: 'fhir',
         },
-      ],
-    },
+        supporting_evidence: ['高血壓'],
+        opposing_evidence: ['無局部無力'],
+      },
+    ],
     amie_trace: [
       {
         turn: 1,
@@ -124,8 +122,9 @@ test('builds a scannable clinical record from structured patient data', () => {
   assert.equal(result.redFlags[0].label, '突發視力喪失')
   assert.equal(result.findings[0].label, '視力異常')
   assert.equal(result.historyFacts[1].tone, 'clear')
-  assert.equal(result.differentials[0].condition, '顱內出血')
-  assert.equal(result.differentials[0].coding.code, '1386000')
+  assert.equal(result.differentials.length, 0)
+  assert.equal(result.legacyDifferentials[0].condition, '顱內出血')
+  assert.equal(result.legacyDifferentials[0].coding.code, '1386000')
   assert.equal(result.historyFacts[0].codings[0].code, '38341003')
   assert.equal(result.terminologyReference.version, '1.0.0')
   assert.equal(result.timeline.length, 1)
@@ -134,6 +133,48 @@ test('builds a scannable clinical record from structured patient data', () => {
   assert.equal(result.timeline[0].sourceLabel, 'Safety 規則')
   assert.equal(result.timeline[0].extractedFacts[0].label, '伴隨症狀')
   assert.match(result.timeline[0].reason, /停止追問/)
+})
+
+test('maps safety-triggered conditions separately from disease votes', () => {
+  const result = buildClinicalRecord({
+    type: 'chest',
+    triage_level: 'urgent',
+    patient_data: {
+      reason: '胸痛而且冒冷汗',
+    },
+    disease_assessment: {
+      status: 'safety_triggered',
+      method: 'unit_vote_v1',
+      top: [],
+      ranked: [],
+      safety_triggered_conditions: [
+        {
+          name: '急性冠心症（含心肌梗塞）',
+          profile_id: 'acute_coronary_syndrome',
+          source: 'safety_rule',
+          triggered_by: [
+            {
+              rule_code: 'chest_diaphoresis',
+              rule_label: '胸部不適合併冒冷汗',
+              evidence: '冒冷汗',
+            },
+          ],
+        },
+      ],
+    },
+  })
+
+  assert.equal(result.differentials.length, 0)
+  assert.equal(result.safetyTriggeredConditions.length, 1)
+  assert.equal(
+    result.safetyTriggeredConditions[0].id,
+    'acute_coronary_syndrome',
+  )
+  assert.equal(
+    result.safetyTriggeredConditions[0].triggers[0].evidence,
+    '冒冷汗',
+  )
+  assert.equal(result.safetyTriggeredConditions[0].coding, null)
 })
 
 test('shows facts from every selected symptom pipeline', () => {
@@ -160,7 +201,7 @@ test('shows facts from every selected symptom pipeline', () => {
   )
 })
 
-test('reuses an unambiguous source FHIR coding for the same differential', () => {
+test('reuses an unambiguous source FHIR coding for a legacy audit entry', () => {
   const result = buildClinicalRecord({
     clinical_codings: [
       {
@@ -174,22 +215,20 @@ test('reuses an unambiguous source FHIR coding for the same differential', () =>
     patient_data: {
       chronic: '高血壓',
     },
-    amie_state: {
-      differential_hypotheses: [
-        {
-          condition: '高血壓',
-          supporting_evidence: ['既往病史'],
-          opposing_evidence: [],
-        },
-      ],
-    },
+    legacy_differential_hypotheses: [
+      {
+        condition: '高血壓',
+        supporting_evidence: ['既往病史'],
+        opposing_evidence: [],
+      },
+    ],
   })
 
-  assert.equal(result.differentials[0].coding.code, '38341003')
-  assert.equal(result.differentials[0].coding.source, 'fhir')
+  assert.equal(result.legacyDifferentials[0].coding.code, '38341003')
+  assert.equal(result.legacyDifferentials[0].coding.source, 'fhir')
 })
 
-test('does not guess a differential coding when source codings are ambiguous', () => {
+test('does not guess a legacy audit coding when source codings are ambiguous', () => {
   const result = buildClinicalRecord({
     clinical_codings: [
       {
@@ -210,44 +249,80 @@ test('does not guess a differential coding when source codings are ambiguous', (
     patient_data: {
       chronic: '高血壓、第二型糖尿病',
     },
-    amie_state: {
-      differential_hypotheses: [
-        {
-          condition: '高血壓',
-          supporting_evidence: [],
-          opposing_evidence: [],
-        },
-      ],
-    },
+    legacy_differential_hypotheses: [
+      {
+        condition: '高血壓',
+        supporting_evidence: [],
+        opposing_evidence: [],
+      },
+    ],
   })
 
-  assert.equal(result.differentials[0].coding, null)
+  assert.equal(result.legacyDifferentials[0].coding, null)
 })
 
-test('shows a validated AI-suggested SNOMED coding for a differential', () => {
+test('shows a validated AI-suggested SNOMED coding only in legacy audit', () => {
   const result = buildClinicalRecord({
-    amie_state: {
-      differential_hypotheses: [
-        {
-          condition: '胸痛',
-          coding: {
-            system: 'http://snomed.info/sct',
-            code: '29857009',
-            display: 'Chest pain',
-            source: 'ai-suggested',
-          },
-          supporting_evidence: ['活動時胸悶'],
-          opposing_evidence: [],
+    legacy_differential_hypotheses: [
+      {
+        condition: '胸痛',
+        coding: {
+          system: 'http://snomed.info/sct',
+          code: '29857009',
+          display: 'Chest pain',
+          source: 'ai-suggested',
         },
-      ],
-    },
+        supporting_evidence: ['活動時胸悶'],
+        opposing_evidence: [],
+      },
+    ],
   })
 
-  assert.deepEqual(result.differentials[0].coding, {
+  assert.deepEqual(result.legacyDifferentials[0].coding, {
     field: '',
     system: 'http://snomed.info/sct',
     code: '29857009',
     display: 'Chest pain',
     source: 'ai-suggested',
   })
+})
+
+test('maps deterministic disease votes separately from coverage', () => {
+  const item = {
+    id: 'acute_coronary_syndrome',
+    name: '急性冠心症',
+    coding: null,
+    must_not_miss: true,
+    review_status: 'provisional',
+    net_votes: 2,
+    support_votes: 3,
+    oppose_votes: 1,
+    coverage: 0.75,
+    supporting: [
+      { fact: 'chest_pressure', evidence: '胸口像被壓住' },
+    ],
+    opposing: [
+      { fact: 'chest_wall_tenderness', evidence: '按壓會痛' },
+    ],
+    missing_facts: ['diaphoresis'],
+  }
+  const result = buildClinicalRecord({
+    disease_assessment: {
+      profile_version: 'chest-v1',
+      method: 'unit_vote_v1',
+      status: 'ready',
+      provisional: true,
+      computed_from: 'live',
+      top: [item],
+      ranked: [item],
+      must_not_miss: [item],
+    },
+  })
+
+  assert.equal(result.differentials[0].condition, '急性冠心症')
+  assert.equal(result.differentials[0].netVotes, 2)
+  assert.equal(result.differentials[0].coverage, 0.75)
+  assert.equal(result.mustNotMiss[0].mustNotMiss, true)
+  assert.equal(result.diseaseAssessment.method, 'unit_vote_v1')
+  assert.equal(result.diseaseAssessment.provisional, true)
 })

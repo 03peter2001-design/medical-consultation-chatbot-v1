@@ -1,17 +1,19 @@
 # AI 預問診系統（Medical Consultation Chatbot）
 
-AI 輔助預問診系統。使用者（病患端）用文字或語音回答一系列問題，系統會即時判斷主訴類型（胸痛／頭痛／腹痛），走對應的問診流程，最後透過 LLM（Groq 或 Gemini）產生一份結構化的 AI 初步評估報告；醫師端則可以用問診編號查詢病人資料、閱讀 AI 報告，並針對追加的補充資訊自動生成結構化病歷分析。
+AI 輔助預問診系統。使用者（病患端）用文字或語音回答一系列問題，系統會即時判斷主訴類型（胸痛／頭痛／腹痛），走對應的問診流程。胸痛鑑別使用版本化固定疾病表投票；LLM 只抽取有逐字證據的臨床線索，不產生疾病或分數。醫師端可以用問診編號查詢病人資料、閱讀固定排名與摘要，並針對追加資訊產生結構化病歷分析。
 
 ## 目前功能
 
-- **病患端**（Vue 路由 `/#/`）：先收集自由主訴與尚未匯入的基本資料，再由 Gemini-backed AMIE-inspired 狀態圖從核准問題庫動態選擇下一題；選擇題支援單選／複選與自由補充，也可點選正／背面人體圖標記疼痛位置
-- **狀態感知問診**：自由主訴先經原文確定性 safety；明確警訊不呼叫模型、直接終止。未命中時由 LLM 只做結構化語意抽取，每個 finding 必須附原文 evidence 並通過程式驗證，再由第二層確定性 safety 決定 urgent／routine；LLM 不可直接分級。routine 才進入 LangGraph 的臨床事實抽取、條件式 RAG、Mx 背景推理與動態選題。urgent 立即顯示「建議儘早就醫」並核發三位數編號；routine 完成時核發五位數編號
+- **病患端**（Vue 路由 `/#/`）：先收集自由主訴與尚未匯入的基本資料；胸痛依安全必問題與疾病表區辨力選題，頭痛／腹痛依核准問卷固定順序追問。選擇題支援單選／複選與自由補充，也可點選正／背面人體圖標記疼痛位置
+- **狀態感知問診**：自由主訴先經原文確定性 Safety；明確警訊不呼叫模型、直接終止，醫師端會以 Safety JSON 的 `possible_conditions` 顯示安全規則觸發的鑑別方向與原始證據，不將其偽裝成疾病票數。未命中時 LLM 只能輸出白名單臨床事實，每項都必須附原文逐字 evidence 並通過程式驗證。Safety 仍獨立且優先；胸痛由程式執行「支持票－反對票」、完整度與穩定排序，執行期不查 RAG，也不讓 LLM 產生疾病、分數或下一題。urgent 核發三位數編號，routine 完成時核發五位數編號
+- **版本化胸痛疾病表**：`backend/amie/disease_data/chest.json` 是一次性 RAG＋離線 LLM 建表後提交版本控制的凍結產物，包含來源、corpus SHA-256、模型、不能漏診標記與整數權重。目前標記為 `provisional`，票數及完整度都不是患病機率或正式診斷
+- **JSON 規則驅動**：fact 白名單、scalar／舊病例映射及必要不能漏診疾病均位於 `backend/amie/rules/safety_rules.json`；必要欄位、選題策略、安全題順序、完整度門檻與輪數上限位於各路由的 `backend/questionnaire_data/*.json`。Python 只驗證設定並執行固定公式
 - 使用身分證字號從 FHIR 載入病歷時，姓名、性別、出生日期與血型等既有基本資料不會重問；一般病史同樣只補問 FHIR 尚未提供的欄位。身分證字號本身不會送入 `/chat`、RAG 或外部模型
 - FHIR `$everything` 中的 `Condition`、`Procedure`、`MedicationStatement`、`MedicationRequest`、`AllergyIntolerance` 與 `QuestionnaireResponse` 會映射到一般病史、心肺／神經／腹部疾病史、手術史、用藥與過敏欄位；本次就診的 `encounter-diagnosis` 不會誤當成既往病史
 - **醫師端**（Vue 路由 `/#/doctor`）：左側病例資料庫可瀏覽、分頁及依姓名／問診編號／主訴搜尋，點選後同步查看疼痛位置與 AI 報告，並可經二次確認永久刪除病例
-- **問診結果資料庫**：routine 與 urgent 都會先將結構化問卷及分流結果寫入 SQLite、立即核發五位數或三位數編號；HTTP 回應送出後才在背景執行摘要 RAG 與 LLM，完成後更新 AI 初評、六段式臨床分析、引用來源及 `summary_ready` 狀態。摘要失敗不會讓病人失去編號，醫師端可辨識 `summary_pending`／`summary_partial`／`summary_failed`
-- **測試期 AMIE 稽核軌跡**：每輪保存題目、病人回答、結構化抽取、Safety 結果、實際 action、下一題、決策來源、RAG 使用情形與簡短稽核理由；軌跡隨病例存入 SQLite，醫師端的「問診時間軸」會逐輪顯示。這是可供稽核的決策摘要，不是模型隱藏思維鏈
-- **RAG（檢索增強生成）**：清理 `backend/docs/` 中急診醫學、感染科與檢驗醫學三份爬蟲語料，切成 chunks 後分類到胸痛、頭痛、腹痛、共通與安全五個 versioned Chroma collections。檢索會依主訴動態選庫、固定加入安全庫，必要時追加共通或另一個症狀庫，再以 RRF 合併及去重
+- **問診結果資料庫**：routine 與 urgent 都會先將結構化問卷、ClinicalFact、評分快照及分流結果寫入 SQLite、立即核發五位數或三位數編號；HTTP 回應送出後才在背景執行摘要及六段式臨床分析。摘要失敗不會讓病人失去編號，醫師端可辨識 `summary_pending`／`summary_partial`／`summary_failed`
+- **測試期 AMIE 稽核軌跡**：每輪保存題目、病人回答、ClinicalFact、Safety 結果、投票快照、下一題、選題區辨分與簡短稽核理由，並標記為 `deterministic_disease_vote`。這是可供稽核的決策摘要，不是模型隱藏思維鏈
+- **RAG（檢索增強生成）**：清理 `backend/docs/` 中急診醫學、感染科與檢驗醫學語料並建立 versioned Chroma collections。RAG 只供一次性疾病表建置、背景理學檢查／檢驗／影像建議，以及醫師主動聊天使用；不得參與病患疾病候選或票數計算
 - **雙語檢索（實驗功能）**：可保留中文原查詢，並以 Gemini 產生去識別化的結構化英文查詢，同時檢索相同 collections；翻譯失敗時會退回原本的多語 embedding 查詢
 - 目前支援 3 種問診情境：**胸痛、頭痛、腹痛**。主訴抽取器會同時提出有原文證據的分科候選；若抽取失敗或仍不明確，才退回既有 LLM 分科，再載入對應問卷
 
@@ -44,8 +46,10 @@ medical-consultation-chatbot-v1/
 │   ├── knowledge/            # RAG 檢索、共用常數與翻譯
 │   ├── scripts/              # 語料清理、分類、建庫與評估 CLI
 │   ├── data/                  # 本機問診資料庫（自動建立，不上傳 Git）
-│   ├── amie/                  # AMIE-inspired LangGraph、狀態模型與安全規則
+│   ├── amie/                  # LangGraph、ClinicalFact、固定疾病表與安全規則
 │   │   ├── chief_complaint.py # 主訴語意抽取、evidence驗證與FHIR風險輪廓
+│   │   ├── disease_profiles.py # 疾病表驗證、確定性投票及選題區辨力
+│   │   └── disease_data/      # 版本化、凍結的胸痛疾病表
 │   ├── questionnaire_data/   # 主訴、基本、病史及三種疾病問卷 JSON
 │   ├── requirements.txt       # Python 套件需求
 │   ├── docs/                  # RAG 知識庫來源文件（.txt）
@@ -64,6 +68,78 @@ medical-consultation-chatbot-v1/
 git clone git@github.com:03peter2001-design/medical-consultation-chatbot-v1.git
 cd medical-consultation-chatbot-v1
 ```
+
+### 自動建制（建議）
+
+執行前請先安裝以下系統層依賴；專案腳本會安裝 Python 與 npm 套件，但不會
+用 `sudo` 修改作業系統：
+
+| 工具 | 需求 | 安裝說明 |
+| --- | --- | --- |
+| Git、Bash | 可執行 `.sh` | [Git 官方下載](https://git-scm.com/downloads) |
+| Python | 3.12+，且包含 `venv` | [Python 官方下載](https://www.python.org/downloads/) |
+| Node.js、npm | Node.js 18+，建議使用 LTS | [Node.js 官方下載](https://nodejs.org/en/download) |
+| Docker | Docker Engine 或 Docker Desktop | [Docker Engine 安裝](https://docs.docker.com/engine/install/) |
+| Docker Compose | 支援 `docker compose` 的 v2 plugin | [Compose 安裝](https://docs.docker.com/compose/install/) |
+
+Ubuntu／Debian 可先安裝基本工具；Python 3.12 與 Node.js 是否由系統 repository
+提供，取決於發行版版本，缺少時請使用上表的官方安裝方式：
+
+```bash
+sudo apt update
+sudo apt install -y git bash python3-venv
+```
+
+執行建制前可先確認：
+
+```bash
+git --version
+python3 --version          # 必須是 3.12+
+node --version             # 必須是 18+
+npm --version
+docker --version
+docker compose version
+docker info                # 確認目前使用者有權存取 Docker daemon
+```
+
+Windows 建議在 WSL2 中執行 Shell 腳本，並啟用 Docker Desktop 的 WSL
+integration。macOS 可使用 Docker Desktop。確認上述指令成功後，在專案根目錄
+執行：
+
+```bash
+./scripts/bootstrap.sh
+```
+
+Shell 腳本會先尋找 Python 3.12+ 並建立 `backend/venv`，再自動安裝或更新
+Python dependencies、安裝 npm dependencies、建置 Vue frontend、啟動
+HAPI/PostgreSQL，並安裝 TW Core。再次執行時會根據來源雜湊、輸出檔、
+container 狀態與 HAPI 資料庫內的 terminology lock 標記跳過未變更步驟。
+
+若系統的 Python 指令不是 `python3.12` 或 `python3`，可指定：
+
+```bash
+PYTHON_BIN=/path/to/python3.12 ./scripts/bootstrap.sh
+```
+
+如果 `backend/.env` 尚未存在，腳本會從 `.env.example` 建立；完成後仍須填入
+自己的 Gemini 或 Groq API key。常用選項：
+
+```bash
+# 包含耗時的 RAG v2 清理、分類與建庫
+./scripts/bootstrap.sh --with-rag
+
+# 忽略快取狀態，重跑所有選定步驟
+./scripts/bootstrap.sh --force
+
+# 只準備後端與前端，不處理 FHIR
+./scripts/bootstrap.sh --skip-fhir
+```
+
+也可使用 `--skip-backend` 或 `--skip-frontend`。建制狀態只保存在被 Git
+忽略的 `.build-state/`；FHIR package 狀態則跟 PostgreSQL volume 一起保存，
+因此移除資料庫後會正確重新安裝，不會被本機建制快取誤判。
+
+以下章節保留各步驟的手動操作方式。
 
 ### 2. 設定後端環境
 
@@ -113,11 +189,11 @@ Gemini Key 可至 [Google AI Studio](https://aistudio.google.com/app/apikey) 申
 
 `LLM_PROVIDER` 若省略，系統會優先使用 `GROQ_API_KEY`，沒有 Groq Key 時再使用 `GEMINI_API_KEY`，因此既有設定不需要修改。模型也可用 `GEMINI_MODEL` 或 `GROQ_MODEL` 覆寫，預設分別為 `gemini-2.5-flash` 與 `llama-3.3-70b-versatile`。
 
-`INTERVIEW_ENGINE=amie` 啟用 Gemini-backed AMIE-inspired 動態問診；
+`INTERVIEW_ENGINE=amie` 啟用 evidence-grounded 語意抽取與確定性問診；
 若需要 A/B 比較或緊急回退，可改成 `INTERVIEW_ENGINE=legacy` 使用原本的
 順序式問卷。可用 `AMIE_MAX_TURNS` 設定動態問診輪數上限（預設 24）。
-測試期 `AMIE_DEBUG_TRACE=true` 會在病患端逐輪顯示結果、決定與理由；
-正式提供病人使用前應設為 `false`，醫師端仍會保留完整稽核軌跡。
+測試期 `AMIE_DEBUG_TRACE=true` 會在病患端顯示去除疾病票數與排名後的
+流程結果；醫師端仍會保留完整稽核軌跡。
 
 這裡的 AMIE 是依公開研究方法實作的流程，不是 Google 官方 AMIE
 模型或服務。第一版不包含 self-play 訓練，也不產生數字診斷機率。
@@ -214,7 +290,7 @@ npm run dev
 Compose 設定。從新的 clone 在專案根目錄執行：
 
 ```bash
-docker compose -f compose.fhir.yml up -d
+docker compose -f compose.fhir.yml --profile setup up -d
 ```
 
 第一次啟動會建立 PostgreSQL schema，接著 `twcore-installer` 會依鎖定順序
@@ -229,18 +305,26 @@ docker compose -f compose.fhir.yml logs twcore-installer
 可能需要數分鐘；`twcore-installer` 完成後正常狀態是結束碼 0，而 HAPI 與
 PostgreSQL 會繼續執行。資料保存在 Compose volume，正常停止不會消失：
 
+這個流程只需要此 repository 與 Docker；Docker 仍須從 registry 拉取已鎖定
+版本的 HAPI、PostgreSQL 與 Python images。基於授權與發行範圍，完整
+SNOMED CT 與 LOINC 資料不包含在 TW Core 依賴中，必須另行合法取得。
+
 ```bash
 docker compose -f compose.fhir.yml down
 ```
 
-如需對既有資料庫重新驗證並安裝鎖定套件，可執行：
+`setup` profile 的用途是避免日後一般 `docker compose up -d` 重複安裝及
+重建相同索引；installer 也會比對 HAPI 資料庫內的 lock SHA-256，相符時直接
+跳過。如需對既有資料庫強制重新安裝鎖定套件，可執行：
 
 ```bash
-docker compose -f compose.fhir.yml run --rm twcore-installer
+docker compose -f compose.fhir.yml --profile setup run --rm twcore-installer \
+  python -m scripts.install_twcore --server http://hapi:8080/fhir --force
 ```
 
 HAPI 預設只綁定本機 `127.0.0.1:8080`。若 8080 已被占用，可在啟動時指定
-其他連接埠，例如 `FHIR_PORT=18080 docker compose -f compose.fhir.yml up -d`。
+其他連接埠，例如
+`FHIR_PORT=18080 docker compose -f compose.fhir.yml --profile setup up -d`。
 Compose 內的資料庫密碼只供本機開發，不可直接用於正式環境。
 
 Vue 病患端可直接連接這台開發用 HAPI Server。先複製前端設定：
@@ -352,6 +436,7 @@ A: 這是正常的，這兩個東西本來就不會被上傳到 GitHub（見 `.g
 - [x] 加入可選的 Gemini 中英 dual-query 檢索與失敗 fallback
 - [ ] 完成 RAG 安全庫、低信心分類與黃金測試集的醫療專業審查
 - [ ] 正式環境改用具備身分驗證、授權與稽核的 FHIR 後端代理
-- [x] 導入 Gemini-backed AMIE-inspired 動態追問與 urgent／routine 分級
-- [ ] 加入獨立的語意向量證據支持度與可校準停止條件
+- [x] 導入 ClinicalFact 白名單、版本化胸痛疾病表與確定性投票
+- [x] 加入安全題優先、投票區辨力選題、70% 停止條件與 24 輪轉交
+- [ ] 由醫師審查並校準胸痛疾病表權重與 SNOMED CT Coding
 - [ ] 建立經醫師審查的 self-play 資料與 MedGemma 微調流程

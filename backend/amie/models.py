@@ -75,112 +75,68 @@ class ChiefComplaintAssessment(BaseModel):
             if start < 0 or end <= start:
                 raise
             payload = json.loads(cleaned[start : end + 1])
-        if isinstance(payload, dict):
-            for field in ("symptom_domains", "route_candidates"):
-                values = payload.get(field)
+        if not isinstance(payload, dict):
+            raise ValueError("語意抽取輸出必須是 JSON 物件")
+        allowed_root = {
+            "primary_symptom",
+            "primary_evidence",
+            "symptom_domains",
+            "onset",
+            "severity",
+            "is_new_or_changed",
+            "findings",
+            "negated_findings",
+            "route_candidates",
+            "symptom_assessments",
+            "uncertain_fields",
+        }
+        unexpected = set(payload) - allowed_root
+        if unexpected:
+            raise ValueError(f"語意抽取含未允許欄位：{sorted(unexpected)}")
+        for field in ("symptom_domains", "route_candidates"):
+            for item in payload.get(field, []):
+                if not isinstance(item, dict) or set(item) - {"route", "evidence"}:
+                    raise ValueError(f"{field} 含未允許欄位")
+        for field in ("onset", "severity", "is_new_or_changed"):
+            item = payload.get(field, {})
+            if not isinstance(item, dict) or set(item) - {"value", "evidence"}:
+                raise ValueError(f"{field} 含未允許欄位")
+        for field in ("findings", "negated_findings"):
+            for item in payload.get(field, []):
+                if not isinstance(item, dict) or set(item) - {
+                    "code",
+                    "status",
+                    "evidence",
+                }:
+                    raise ValueError(f"{field} 含未允許欄位")
+        symptom_allowed = {
+            "route",
+            "evidence",
+            "onset",
+            "severity",
+            "is_new_or_changed",
+            "findings",
+            "negated_findings",
+        }
+        for item in payload.get("symptom_assessments", []):
+            if not isinstance(item, dict) or set(item) - symptom_allowed:
+                raise ValueError("symptom_assessments 含未允許欄位")
+            for field in ("onset", "severity", "is_new_or_changed"):
+                value = item.get(field, {})
+                if not isinstance(value, dict) or set(value) - {
+                    "value",
+                    "evidence",
+                }:
+                    raise ValueError(f"symptom_assessments.{field} 含未允許欄位")
+            for field in ("findings", "negated_findings"):
+                values = item.get(field, [])
                 if not isinstance(values, list):
-                    continue
-                payload[field] = [
-                    {
-                        "route": next(
-                            (
-                                item.get(key)
-                                for key in ("route", "domain", "value", "code", "symptom")
-                                if item.get(key)
-                            ),
-                            "",
-                        ),
-                        "evidence": item.get("evidence", ""),
-                    }
-                    if isinstance(item, dict)
-                    else item
-                    for item in values
-                ]
-        if hasattr(cls, "model_validate"):
-            return cls.model_validate(payload)
-        return cls.parse_obj(payload)
-
-    def as_dict(self) -> dict[str, Any]:
-        if hasattr(self, "model_dump"):
-            return self.model_dump()
-        return self.dict()
-
-
-class DifferentialCoding(BaseModel):
-    """A model-suggested SNOMED CT code that still requires clinical review."""
-
-    system: str
-    code: str
-    display: str
-    source: str = "ai-suggested"
-
-
-class DifferentialHypothesis(BaseModel):
-    """A qualitative hypothesis, deliberately not a probability score."""
-
-    condition: str
-    coding: DifferentialCoding | None = None
-    supporting_evidence: list[str] = Field(default_factory=list)
-    opposing_evidence: list[str] = Field(default_factory=list)
-
-    def as_dict(self) -> dict[str, Any]:
-        if hasattr(self, "model_dump"):
-            return self.model_dump()
-        return self.dict()
-
-
-class AMIEDecision(BaseModel):
-    """One auditable state transition proposed by the reasoning agent."""
-
-    action: Literal["ask", "complete"] = "ask"
-    next_field: str | None = None
-    extracted_facts: dict[str, str] = Field(default_factory=dict)
-    negated_findings: list[str] = Field(default_factory=list)
-    differential_hypotheses: list[DifferentialHypothesis] = Field(default_factory=list)
-    knowledge_gaps: list[str] = Field(default_factory=list)
-    needs_retrieval: bool = False
-    retrieval_query: str = ""
-    acknowledgement: str = ""
-    audit_reason: str = ""
-
-    @classmethod
-    def from_model_text(cls, text: str) -> "AMIEDecision":
-        """Parse a JSON object even if the provider wrapped it in a code fence."""
-        cleaned = text.strip()
-        cleaned = re.sub(
-            r"^```(?:json)?\s*|\s*```$",
-            "",
-            cleaned,
-            flags=re.IGNORECASE,
-        ).strip()
-        try:
-            payload = json.loads(cleaned)
-        except json.JSONDecodeError:
-            start = cleaned.find("{")
-            end = cleaned.rfind("}")
-            if start < 0 or end <= start:
-                raise
-            payload = json.loads(cleaned[start : end + 1])
-
-        if isinstance(payload, dict):
-            for hypothesis in payload.get("differential_hypotheses", []):
-                if not isinstance(hypothesis, dict):
-                    continue
-                coding = hypothesis.get("coding")
-                valid = (
-                    isinstance(coding, dict)
-                    and coding.get("system") == "http://snomed.info/sct"
-                    and str(coding.get("code", "")).isdigit()
-                    and 6 <= len(str(coding["code"])) <= 18
-                    and bool(str(coding.get("display", "")).strip())
-                )
-                if valid:
-                    coding["code"] = str(coding["code"]).strip()
-                    coding["display"] = str(coding["display"]).strip()[:200]
-                    coding["source"] = "ai-suggested"
-                else:
-                    hypothesis["coding"] = None
-
+                    raise ValueError(f"symptom_assessments.{field} 必須是陣列")
+                if any(
+                    not isinstance(value, dict) or set(value) - {"code", "status", "evidence"}
+                    for value in values
+                ):
+                    raise ValueError(f"symptom_assessments.{field} 含未允許欄位")
         if hasattr(cls, "model_validate"):
             return cls.model_validate(payload)
         return cls.parse_obj(payload)
@@ -201,6 +157,8 @@ class AMIEEngineResult(BaseModel):
     handoff_reason: str = ""
     red_flags: list[dict[str, Any]] = Field(default_factory=list)
     differential_hypotheses: list[dict[str, Any]] = Field(default_factory=list)
+    disease_assessment: dict[str, Any] = Field(default_factory=dict)
+    clinical_facts: list[dict[str, Any]] = Field(default_factory=list)
     knowledge_gaps: list[str] = Field(default_factory=list)
     evidence_timeline: list[dict[str, Any]] = Field(default_factory=list)
     rag_sources: list[dict[str, Any]] = Field(default_factory=list)

@@ -33,7 +33,7 @@ class PatientTriagePayloadTests(unittest.TestCase):
         self.assertEqual(session["data"]["abdomen__surgery"], "未曾手術")
         self.assertIn("abdomen__surgery", session["prefilled_fields"])
 
-    def test_urgent_payload_exposes_deduplicated_possible_conditions(self):
+    def test_urgent_payload_does_not_expose_disease_candidates(self):
         session = {
             "session_id": "urgent-payload-test",
             "engine": "amie",
@@ -68,13 +68,7 @@ class PatientTriagePayloadTests(unittest.TestCase):
         )
 
         self.assertEqual(payload["triage"]["level"], "urgent")
-        self.assertEqual(
-            payload["triage"]["possible_conditions"],
-            [
-                "急性冠心症（含心肌梗塞）",
-                "致命性心律不整",
-            ],
-        )
+        self.assertNotIn("possible_conditions", payload["triage"])
         self.assertIn("立即處理", payload["triage"]["message"])
 
     def test_routine_payload_does_not_expose_condition_candidates(self):
@@ -88,7 +82,7 @@ class PatientTriagePayloadTests(unittest.TestCase):
             reply="請描述主訴",
         )
 
-        self.assertEqual(payload["triage"]["possible_conditions"], [])
+        self.assertNotIn("possible_conditions", payload["triage"])
 
 
 if __name__ == "__main__":

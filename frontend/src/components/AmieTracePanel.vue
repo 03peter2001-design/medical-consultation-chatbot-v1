@@ -21,8 +21,7 @@ function sourceLabel(source) {
       route_guard: '主訴路由守門',
       deterministic_flow: '確定性流程',
       deterministic_fallback: '確定性 fallback',
-      gemini_planner: 'Gemini 規劃器',
-      gemini_planner_with_rag: 'Gemini 規劃器＋RAG',
+      deterministic_disease_vote: '固定疾病表投票',
     }[source] || source || '未記錄'
   )
 }
@@ -49,9 +48,12 @@ function sourceLabel(source) {
       <p>
         <b>結果</b>
         {{
-          Object.entries(trace.result?.extracted_facts || {})
-            .map(([field, value]) => `${field}=${value}`)
-            .join('、') || '本輪沒有額外抽取欄位'
+          (trace.result?.clinical_facts || [])
+            .map(
+              (fact) =>
+                `${fact.code}=${fact.status === 'absent' ? '否認' : '有'}`,
+            )
+            .join('、') || '本輪沒有新增標準線索'
         }}
       </p>
       <p>

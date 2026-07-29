@@ -31,7 +31,7 @@ def headache_payload(**overrides):
     payload = {
         "primary_symptom": "headache",
         "primary_evidence": "頭痛",
-        "symptom_domains": ["headache"],
+        "symptom_domains": [{"route": "headache", "evidence": "頭痛"}],
         "onset": {"value": "unknown", "evidence": ""},
         "severity": {
             "value": "severe",
@@ -56,7 +56,7 @@ def headache_payload(**overrides):
             },
         ],
         "negated_findings": [],
-        "route_candidates": ["headache"],
+        "route_candidates": [{"route": "headache", "evidence": "頭痛"}],
         "uncertain_fields": ["onset"],
     }
     payload.update(overrides)
@@ -120,7 +120,7 @@ class ChiefComplaintExtractorTests(unittest.TestCase):
             "primary_evidence": "兇悶",
             "symptom_domains": [
                 {
-                    "domain": "chest",
+                    "route": "chest",
                     "evidence": "兇悶",
                 }
             ],
@@ -152,11 +152,11 @@ class ChiefComplaintExtractorTests(unittest.TestCase):
             "primary_evidence": "頭痛",
             "symptom_domains": [
                 {
-                    "domain": "headache",
+                    "route": "headache",
                     "evidence": "頭痛",
                 },
                 {
-                    "domain": "abdomen",
+                    "route": "abdomen",
                     "evidence": "肚子痛",
                 },
             ],
@@ -197,8 +197,14 @@ class ChiefComplaintExtractorTests(unittest.TestCase):
             primary_evidence="頭痛",
             severity={"value": "mild", "evidence": "頭痛有點痛"},
             findings=[],
-            symptom_domains=["headache", "abdomen"],
-            route_candidates=["headache", "abdomen"],
+            symptom_domains=[
+                {"route": "headache", "evidence": "頭痛"},
+                {"route": "abdomen", "evidence": "肚子痛"},
+            ],
+            route_candidates=[
+                {"route": "headache", "evidence": "頭痛"},
+                {"route": "abdomen", "evidence": "肚子痛"},
+            ],
             symptom_assessments=[
                 {
                     "route": "headache",
@@ -225,7 +231,7 @@ class ChiefComplaintExtractorTests(unittest.TestCase):
         payload = headache_payload(
             symptom_domains=[
                 {
-                    "domain": "abdomen",
+                    "route": "abdomen",
                     "evidence": "肚子痛",
                 }
             ],

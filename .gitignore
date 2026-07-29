@@ -15,6 +15,7 @@ htmlcov/
 .ruff_cache/
 .vulture_whitelist.py
 .DS_Store
+.build-state/
 
 SMART-APP-Exercise-1
 package

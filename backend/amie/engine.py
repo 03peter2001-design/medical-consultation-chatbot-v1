@@ -1,23 +1,29 @@
-"""State-aware, Gemini-backed interview graph inspired by AMIE research."""
+"""State-aware interview graph with semantic extraction and deterministic scoring."""
 
 from __future__ import annotations
 
-import json
 import os
 import re
-from collections.abc import Callable
 from typing import Any, TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
-from domain.questionnaires import condition_matches, parse_onset_answer
+from domain.questionnaires import (
+    condition_matches,
+    load_questionnaire_policy,
+)
 
 from .chief_complaint import (
     ChiefComplaintExtractor,
     build_fhir_risk_profile,
 )
+from .clinical_facts import facts_from_assessment, facts_from_legacy_data, merge_facts
+from .disease_profiles import (
+    attach_safety_conditions,
+    question_utility,
+    score_diseases,
+)
 from .models import (
-    AMIEDecision,
     AMIEEngineResult,
     ChiefComplaintAssessment,
     ChiefFinding,
@@ -27,41 +33,6 @@ from .rule_config import supported_routes
 from .safety import detect_red_flags, detect_structured_red_flags
 
 SUPPORTED_ROUTES = supported_routes()
-PROTECTED_MODEL_FIELDS = {
-    "name",
-    "birth_date",
-    "national_id",
-    "id_number",
-    "patient_id",
-}
-BASIC_FIELDS = ("name", "gender", "birth_date", "blood_type")
-REQUIRED_FIELDS = {
-    "chest": {
-        "onset",
-        "location",
-        "quality",
-        "aggravate",
-        "associated",
-        "current_meds",
-        "allergy",
-    },
-    "headache": {
-        "onset",
-        "start_type",
-        "worst_ever",
-        "associated",
-        "risk_flags",
-        "current_meds",
-        "allergy",
-    },
-    "abdomen": {
-        "onset",
-        "location",
-        "associated",
-        "current_meds",
-        "allergy",
-    },
-}
 
 
 class AMIEGraphState(TypedDict, total=False):
@@ -80,14 +51,13 @@ class AMIEGraphState(TypedDict, total=False):
     handoff_reason: str
     red_flags: list[dict[str, Any]]
     differential_hypotheses: list[dict[str, Any]]
+    disease_assessment: dict[str, Any]
+    clinical_facts: list[dict[str, Any]]
     knowledge_gaps: list[str]
     evidence_timeline: list[dict[str, Any]]
     rag_context: str
     rag_sources: list[dict[str, Any]]
     model_error: str
-
-
-Retriever = Callable[..., tuple[str, list[dict[str, Any]]]]
 
 
 def _bounded_int(value: str | None, default: int, low: int, high: int) -> int:
@@ -102,34 +72,33 @@ def _trim(value: Any, limit: int = 500) -> str:
     return str(value).strip()[:limit]
 
 
-def _redact_identifiers(text: str) -> str:
-    text = re.sub(r"\b[A-Z][12]\d{8}\b", "[已遮蔽身分證]", text)
-    text = re.sub(r"\b\d{8,12}\b", "[已遮蔽識別碼]", text)
-    return text
-
-
 class AMIEEngine:
     """Run one state transition per patient answer.
 
-    The graph controls safety, optional retrieval, and question selection.
-    The injected LLM is currently Gemini, while its interface remains replaceable
-    by a future MedGemma service.
+    The injected LLM only extracts evidence-grounded clinical facts. Safety,
+    disease voting, completion, and question selection remain deterministic.
     """
 
     def __init__(
         self,
         llm_client: Any,
         *,
-        retriever: Retriever | None = None,
         max_turns: int | None = None,
     ):
         self.llm = llm_client
-        self.retriever = retriever
-        self.max_turns = max_turns or _bounded_int(
-            os.getenv("AMIE_MAX_TURNS"),
-            default=24,
-            low=8,
-            high=40,
+        policy_default = max(
+            load_questionnaire_policy(route)["max_turns"] for route in SUPPORTED_ROUTES
+        )
+        configured_max_turns = os.getenv("AMIE_MAX_TURNS")
+        self.max_turns = max_turns or (
+            _bounded_int(
+                configured_max_turns,
+                default=policy_default,
+                low=1,
+                high=100,
+            )
+            if configured_max_turns is not None
+            else policy_default
         )
         self.chief_extractor = ChiefComplaintExtractor(llm_client)
         self.graph = self._build_graph()
@@ -138,8 +107,6 @@ class AMIEEngine:
         workflow = StateGraph(AMIEGraphState)
         workflow.add_node("safety", self._safety_node)
         workflow.add_node("plan", self._plan_node)
-        workflow.add_node("retrieve", self._retrieve_node)
-        workflow.add_node("mx_refine", self._mx_refine_node)
         workflow.add_node("validate", self._validate_node)
         workflow.add_edge(START, "safety")
         workflow.add_conditional_edges(
@@ -151,13 +118,7 @@ class AMIEEngine:
                 "routine": "plan",
             },
         )
-        workflow.add_conditional_edges(
-            "plan",
-            self._retrieval_branch,
-            {"retrieve": "retrieve", "validate": "validate"},
-        )
-        workflow.add_edge("retrieve", "mx_refine")
-        workflow.add_edge("mx_refine", "validate")
+        workflow.add_edge("plan", "validate")
         workflow.add_edge("validate", END)
         return workflow.compile()
 
@@ -170,14 +131,24 @@ class AMIEEngine:
         return "routine"
 
     @staticmethod
+    def _question_for_field(
+        state: AMIEGraphState,
+        field: str,
+    ) -> dict[str, Any] | None:
+        return next(
+            (item for item in state.get("questionnaire", []) if item.get("field") == field),
+            None,
+        )
+
+    @staticmethod
     def _structured_answer_assessment(
         state: AMIEGraphState,
     ) -> ChiefComplaintAssessment | None:
         """Convert a validated UI option into semantic facts without an LLM."""
         current_field = state.get("current_field", "")
-        question = next(
-            (item for item in state.get("questionnaire", []) if item.get("field") == current_field),
-            None,
+        question = AMIEEngine._question_for_field(
+            state,
+            current_field,
         )
         if not question:
             return None
@@ -207,14 +178,8 @@ class AMIEEngine:
             return None
 
         options = set(question.get("options", []))
-        field_prefix = (
-            current_field[: -len(base_field)]
-            if current_field != base_field
-            else ""
-        )
-        if base_field == "location" and state.get("data", {}).get(
-            f"{field_prefix}pain_locations"
-        ):
+        field_prefix = current_field[: -len(base_field)] if current_field != base_field else ""
+        if base_field == "location" and state.get("data", {}).get(f"{field_prefix}pain_locations"):
             return ChiefComplaintAssessment(primary_symptom=question_route)
 
         selected: list[str] = []
@@ -243,6 +208,7 @@ class AMIEEngine:
         severity = EvidenceValue()
         new_or_changed = EvidenceValue()
         findings: list[ChiefFinding] = []
+        negated_findings: list[ChiefFinding] = []
         for option in selected:
             facts = semantic_options.get(option, {})
             if value := facts.get("onset"):
@@ -262,12 +228,21 @@ class AMIEEngine:
                 )
                 for code in facts.get("findings", [])
             )
+            negated_findings.extend(
+                ChiefFinding(
+                    code=code,
+                    status="absent",
+                    evidence=option,
+                )
+                for code in facts.get("negated_findings", [])
+            )
         return ChiefComplaintAssessment(
             primary_symptom=question_route,
             onset=onset,
             severity=severity,
             is_new_or_changed=new_or_changed,
             findings=findings,
+            negated_findings=negated_findings,
         )
 
     @staticmethod
@@ -314,14 +289,18 @@ class AMIEEngine:
         primary_evidence = (
             delta.primary_evidence if delta.primary_evidence else base.primary_evidence
         )
+
+        def route_code(item: str | Any) -> str:
+            return str(getattr(item, "route", item))
+
         return ChiefComplaintAssessment(
             primary_symptom=primary,
             primary_evidence=primary_evidence,
             symptom_domains=list(
                 dict.fromkeys(
                     [
-                        *base.symptom_domains,
-                        *delta.symptom_domains,
+                        *(route_code(item) for item in base.symptom_domains),
+                        *(route_code(item) for item in delta.symptom_domains),
                     ]
                 )
             ),
@@ -336,8 +315,8 @@ class AMIEEngine:
             route_candidates=list(
                 dict.fromkeys(
                     [
-                        *base.route_candidates,
-                        *delta.route_candidates,
+                        *(route_code(item) for item in base.route_candidates),
+                        *(route_code(item) for item in delta.route_candidates),
                     ]
                 )
             ),
@@ -375,6 +354,10 @@ class AMIEEngine:
             "triage_level": previous_state.get("triage_level", "routine"),
             "red_flags": list(previous_state.get("red_flags", [])),
             "differential_hypotheses": list(previous_state.get("differential_hypotheses", [])),
+            "disease_assessment": dict(previous_state.get("disease_assessment", {})),
+            "clinical_facts": list(
+                previous_state.get("clinical_facts", data.get("_clinical_facts", []))
+            ),
             "knowledge_gaps": list(previous_state.get("knowledge_gaps", [])),
             "evidence_timeline": list(previous_state.get("evidence_timeline", [])),
             "rag_sources": list(previous_state.get("rag_sources", [])),
@@ -391,6 +374,8 @@ class AMIEEngine:
             handoff_reason=result.get("handoff_reason", ""),
             red_flags=result.get("red_flags", []),
             differential_hypotheses=result.get("differential_hypotheses", []),
+            disease_assessment=result.get("disease_assessment", {}),
+            clinical_facts=result.get("clinical_facts", []),
             knowledge_gaps=result.get("knowledge_gaps", []),
             evidence_timeline=result.get("evidence_timeline", []),
             rag_sources=result.get("rag_sources", []),
@@ -410,18 +395,33 @@ class AMIEEngine:
             *(flag for flag in new_flags if flag.get("code") not in seen),
         ]
         if flags:
+            data = dict(state.get("data", {}))
+            clinical_facts = list(state.get("clinical_facts", data.get("_clinical_facts", [])))
+            assessment = attach_safety_conditions(
+                state.get("route", ""),
+                flags,
+                facts=clinical_facts,
+            )
+            data["_disease_assessment"] = assessment
             return {
+                "data": data,
                 "red_flags": flags,
                 "triage_level": "urgent",
                 "action": "complete",
                 "next_question": None,
                 "acknowledgement": "",
+                "disease_assessment": assessment,
+                "clinical_facts": clinical_facts,
             }
 
         # Identity fields remain local. All clinical free text gets a
         # semantic safety pass before the planning model may select a
         # follow-up question.
-        if state.get("current_field") in BASIC_FIELDS:
+        current_question = self._question_for_field(
+            state,
+            state.get("current_field", ""),
+        )
+        if current_question and current_question.get("section") == "basic":
             return {
                 "red_flags": [],
                 "triage_level": "routine",
@@ -429,6 +429,20 @@ class AMIEEngine:
 
         data = dict(state.get("data", {}))
         delta = self._structured_answer_assessment(state)
+        structured_answer = delta is not None
+        reused_chief_extraction = False
+        if delta is None and state.get("current_field") == "reason":
+            stored_extraction = (
+                data.get("_chief_assessment", {}).get("extraction")
+                if isinstance(data.get("_chief_assessment"), dict)
+                else None
+            )
+            if stored_extraction:
+                try:
+                    delta = ChiefComplaintAssessment.model_validate(stored_extraction)
+                    reused_chief_extraction = True
+                except Exception:
+                    delta = None
         semantic_error = ""
         if delta is None:
             delta, semantic_error = self.chief_extractor.extract(state.get("answer", ""))
@@ -465,12 +479,34 @@ class AMIEEngine:
             "model_error": "",
         }
         data["_semantic_safety_state"] = assessment.as_dict()
+        clinical_facts = merge_facts(
+            state.get("clinical_facts", data.get("_clinical_facts", [])),
+            facts_from_assessment(
+                delta,
+                turn=state.get("turn_count", 0),
+                source=(
+                    "structured_option"
+                    if structured_answer
+                    else "chief_semantic_extraction"
+                    if reused_chief_extraction
+                    else "semantic_extraction"
+                ),
+            ),
+        )
+        data["_clinical_facts"] = clinical_facts
         if not semantic_flags:
             return {
                 "data": data,
                 "red_flags": [],
                 "triage_level": "routine",
+                "clinical_facts": clinical_facts,
             }
+        disease_assessment = attach_safety_conditions(
+            state.get("route", ""),
+            semantic_flags,
+            facts=clinical_facts,
+        )
+        data["_disease_assessment"] = disease_assessment
         return {
             "data": data,
             "red_flags": semantic_flags,
@@ -478,160 +514,178 @@ class AMIEEngine:
             "action": "complete",
             "next_question": None,
             "acknowledgement": "",
+            "clinical_facts": clinical_facts,
+            "disease_assessment": disease_assessment,
         }
 
     def _plan_node(self, state: AMIEGraphState) -> dict[str, Any]:
         candidates = self._remaining_questions(state)
         if not candidates:
             return {
-                "decision": AMIEDecision(
-                    action="complete",
-                    audit_reason=("所有適用且核准的問題皆已完成，流程可結束。"),
-                ).as_dict()
+                "decision": {
+                    "action": "complete",
+                    "next_field": None,
+                    "needs_retrieval": False,
+                    "retrieval_query": "",
+                    "audit_reason": "所有適用且核准的問題皆已完成，流程可結束。",
+                }
             }
 
-        # Basic identity collection stays deterministic and local. In
-        # particular, a patient's typed name or birth date is never sent to
-        # the external model. Once the last basic field is collected, analyze
-        # the already-redacted free-text chief complaint instead.
         current_field = state.get("current_field", "")
         basic_candidate = next(
-            (item for field in BASIC_FIELDS for item in candidates if item["field"] == field),
+            (item for item in candidates if item.get("section") == "basic"),
             None,
         )
-        if current_field in BASIC_FIELDS and basic_candidate:
-            return {
-                "decision": AMIEDecision(
-                    action="ask",
-                    next_field=basic_candidate["field"],
-                    audit_reason="基本資料於院內以確定性流程收集",
-                ).as_dict()
-            }
-
-        planning_state = state.copy()
-        if current_field in BASIC_FIELDS:
-            planning_state["answer"] = _trim(state.get("data", {}).get("reason", ""), 1000)
-
-        prompt = self._decision_prompt(planning_state, candidates)
-        decision, error = self._ask_model(prompt)
-        data = self._merge_extracted_facts(
-            state.get("data", {}),
-            state.get("questionnaire", []),
-            decision.extracted_facts,
-        )
-        timeline = list(state.get("evidence_timeline", []))
-        if (
-            decision.extracted_facts
-            or decision.negated_findings
-            or decision.differential_hypotheses
-        ):
-            timeline.append(
-                {
-                    "turn": state.get("turn_count", 0),
-                    "answer_excerpt": _trim(state.get("answer", ""), 240),
-                    "extracted_facts": decision.extracted_facts,
-                    "negated_findings": decision.negated_findings[:12],
-                    "differential_hypotheses": [
-                        item.as_dict() for item in decision.differential_hypotheses[:8]
-                    ],
-                    "audit_reason": _trim(decision.audit_reason, 300),
-                }
-            )
-
-        hypotheses = [item.as_dict() for item in decision.differential_hypotheses[:8]]
-        return {
-            "decision": decision.as_dict(),
-            "data": data,
-            "differential_hypotheses": (
-                hypotheses if hypotheses else state.get("differential_hypotheses", [])
-            ),
-            "knowledge_gaps": decision.knowledge_gaps[:12],
-            "evidence_timeline": timeline[-30:],
-            "model_error": error,
-        }
-
-    def _retrieval_branch(self, state: AMIEGraphState) -> str:
-        decision = state.get("decision", {})
-        if (
-            self.retriever
-            and decision.get("needs_retrieval")
-            and _trim(decision.get("retrieval_query", ""))
-        ):
-            return "retrieve"
-        return "validate"
-
-    def _retrieve_node(self, state: AMIEGraphState) -> dict[str, Any]:
-        decision = state.get("decision", {})
-        query = _redact_identifiers(_trim(decision.get("retrieval_query", ""), 300))
-        if not query or not self.retriever:
-            return {"rag_context": "", "rag_sources": []}
-        try:
-            context, sources = self.retriever(
-                query,
-                n_results=4,
-                primary_route=state.get("route"),
-                patient_data=self._clinical_snapshot(state.get("data", {})),
-                purpose="diagnosis",
-            )
-        except Exception as exc:
-            return {
-                "rag_context": "",
-                "model_error": (
-                    f"{state.get('model_error', '')}; RAG查詢失敗：{type(exc).__name__}"
-                ).strip("; "),
-            }
-        existing = list(state.get("rag_sources", []))
-        seen = {(item.get("title"), item.get("url")) for item in existing}
-        for source in sources:
-            key = (source.get("title"), source.get("url"))
-            if key not in seen:
-                existing.append(source)
-                seen.add(key)
-        return {
-            "rag_context": context[:6000],
-            "rag_sources": existing[-20:],
-        }
-
-    def _mx_refine_node(self, state: AMIEGraphState) -> dict[str, Any]:
-        context = state.get("rag_context", "")
-        if not context:
-            return {}
-        candidates = self._remaining_questions(state)
-        prompt = self._decision_prompt(
+        current_question = self._question_for_field(
             state,
-            candidates,
-            rag_context=context,
-            previous_decision=state.get("decision"),
+            current_field,
         )
-        decision, error = self._ask_model(prompt, mx_agent=True)
-        data = self._merge_extracted_facts(
-            state.get("data", {}),
+        if current_question and current_question.get("section") == "basic" and basic_candidate:
+            return {
+                "decision": {
+                    "action": "ask",
+                    "next_field": basic_candidate["field"],
+                    "needs_retrieval": False,
+                    "retrieval_query": "",
+                    "audit_reason": "基本資料於院內以確定性流程收集",
+                }
+            }
+
+        data = dict(state.get("data", {}))
+        clinical_facts = merge_facts(
+            state.get("clinical_facts", data.get("_clinical_facts", [])),
+            facts_from_legacy_data(data),
+        )
+        data["_clinical_facts"] = clinical_facts
+        route = state.get("route", "")
+        policy = load_questionnaire_policy(route)
+        use_disease_vote = policy["selection_strategy"] == "disease_vote"
+        scoring_error = ""
+        assessment: dict[str, Any] = {}
+        if use_disease_vote:
+            try:
+                assessment = score_diseases(clinical_facts, computed_from="live")
+            except Exception as error:
+                scoring_error = f"{type(error).__name__}: {_trim(error, 200)}"
+                assessment = {
+                    "schema_version": 1,
+                    "method": "unit_vote_v1",
+                    "status": "unavailable",
+                    "computed_from": "live",
+                    "top": [],
+                    "ranked": [],
+                    "must_not_miss": [],
+                }
+        if assessment:
+            data["_disease_assessment"] = assessment
+
+        required_missing = self._required_missing(
+            data,
             state.get("questionnaire", []),
-            decision.extracted_facts,
         )
-        hypotheses = [
-            (item.model_dump() if hasattr(item, "model_dump") else item.dict())
-            for item in decision.differential_hypotheses[:8]
-        ]
-        update = {
-            "decision": decision.as_dict(),
-            "data": data,
-            "knowledge_gaps": decision.knowledge_gaps[:12],
-            "model_error": (
-                f"{state.get('model_error', '')}; {error}".strip("; ")
-                if error
-                else state.get("model_error", "")
-            ),
+        candidate_by_field = {item["field"]: item for item in candidates}
+        priority_fields = tuple(policy["priority_fields"])
+        selected = next(
+            (candidate_by_field[field] for field in priority_fields if field in candidate_by_field),
+            None,
+        )
+        utilities = {}
+        if use_disease_vote and not scoring_error:
+            utilities = {item["field"]: question_utility(item, assessment) for item in candidates}
+        if use_disease_vote and selected is None:
+            selected = max(
+                candidates,
+                key=lambda item: (
+                    utilities.get(item["field"], 0),
+                    -candidates.index(item),
+                ),
+            )
+        elif not use_disease_vote:
+            selected = candidates[0]
+
+        top = assessment.get("top", [])
+        coverage_ready = bool(top) and all(
+            item["coverage"] >= policy["coverage_threshold"] for item in top
+        )
+        no_score_changing_question = not any(utilities.values())
+        can_complete = (
+            not scoring_error
+            and not required_missing
+            and (
+                not use_disease_vote
+                and not candidates
+                or use_disease_vote
+                and (coverage_ready or no_score_changing_question)
+            )
+        )
+        action = "handoff" if scoring_error else "complete" if can_complete else "ask"
+        next_field = selected["field"] if action == "ask" and selected else None
+        reason = (
+            "固定疾病表無法使用，停止自動評分並轉交醫療人員。"
+            if scoring_error
+            else "最低必要資料已完成，且候選疾病完整度已達門檻。"
+            if coverage_ready and can_complete
+            else "最低必要資料已完成，剩餘問題不會改變目前疾病票數。"
+            if no_score_changing_question and can_complete
+            else "依安全優先順序選擇下一題。"
+            if selected and selected["field"] in priority_fields
+            else "依目前候選疾病間的投票區辨力選擇下一題。"
+            if use_disease_vote
+            else "非胸痛路由依核准問卷固定順序追問。"
+        )
+        decision = {
+            "action": action,
+            "next_field": next_field,
+            "extracted_facts": {},
+            "negated_findings": [],
+            "knowledge_gaps": sorted(
+                {
+                    fact
+                    for item in assessment.get("top", [])
+                    for fact in item.get("missing_facts", [])
+                }
+            )[:12],
+            "needs_retrieval": False,
+            "retrieval_query": "",
+            "acknowledgement": "",
+            "audit_reason": reason,
+            "question_utility": utilities.get(next_field, 0) if next_field else 0,
+            "scoring_method": assessment.get("method", ""),
         }
-        if hypotheses:
-            update["differential_hypotheses"] = hypotheses
-        return update
+        timeline = list(state.get("evidence_timeline", []))
+        timeline.append(
+            {
+                "turn": state.get("turn_count", 0),
+                "answer_excerpt": _trim(state.get("answer", ""), 240),
+                "clinical_facts": clinical_facts,
+                "disease_votes": [
+                    {
+                        "id": item["id"],
+                        "net_votes": item["net_votes"],
+                        "coverage": item["coverage"],
+                    }
+                    for item in assessment.get("top", [])
+                ],
+                "audit_reason": reason,
+            }
+        )
+        return {
+            "decision": decision,
+            "data": data,
+            "differential_hypotheses": [],
+            "disease_assessment": assessment,
+            "clinical_facts": clinical_facts,
+            "knowledge_gaps": decision["knowledge_gaps"],
+            "evidence_timeline": timeline[-30:],
+            "rag_sources": [],
+            "model_error": scoring_error,
+        }
 
     def _validate_node(self, state: AMIEGraphState) -> dict[str, Any]:
         data = state.get("data", {})
         candidates = self._remaining_questions({**state, "data": data})
         basic = next(
-            (item for field in BASIC_FIELDS for item in candidates if item["field"] == field),
+            (item for item in candidates if item.get("section") == "basic"),
             None,
         )
         if basic:
@@ -642,6 +696,29 @@ class AMIEEngine:
             }
 
         decision = state.get("decision", {})
+        required_missing = self._required_missing(
+            data,
+            state.get("questionnaire", []),
+        )
+
+        if decision.get("action") == "handoff":
+            return {
+                "action": "handoff",
+                "next_question": None,
+                "handoff_reason": (
+                    decision.get("audit_reason") or "自動問診無法安全繼續，請由醫療人員確認"
+                ),
+            }
+
+        if decision.get("action") == "complete" and not required_missing:
+            return {
+                "action": "complete",
+                "next_question": None,
+                "acknowledgement": _trim(
+                    decision.get("acknowledgement"),
+                    120,
+                ),
+            }
 
         if state.get("turn_count", 0) >= self.max_turns:
             return {
@@ -650,15 +727,7 @@ class AMIEEngine:
                 "handoff_reason": ("已達動態問診輪數上限，仍有資訊需要醫療人員確認"),
             }
 
-        required_missing = self._required_missing(data, state.get("questionnaire", []))
         by_field = {item["field"]: item for item in candidates}
-
-        if decision.get("action") == "complete" and not required_missing:
-            return {
-                "action": "complete",
-                "next_question": None,
-                "acknowledgement": _trim(decision.get("acknowledgement"), 120),
-            }
 
         selected = by_field.get(decision.get("next_field"))
         if selected is None:
@@ -682,142 +751,6 @@ class AMIEEngine:
             "acknowledgement": _trim(decision.get("acknowledgement"), 120),
         }
 
-    def _ask_model(
-        self,
-        prompt: str,
-        *,
-        mx_agent: bool = False,
-    ) -> tuple[AMIEDecision, str]:
-        role = (
-            "你是AMIE-inspired背景管理推理（Mx）代理人。"
-            if mx_agent
-            else "你是AMIE-inspired狀態感知問診規劃代理人。"
-        )
-        try:
-            text = self.llm.generate_text(
-                [
-                    {
-                        "role": "system",
-                        "content": (
-                            f"{role}"
-                            "你的輸出只供程式控制流程，不直接向病人顯示。"
-                            "不得輸出思維鏈，只能輸出指定JSON與簡短稽核理由。"
-                            "不得把語意支持度當作患病機率。"
-                        ),
-                    },
-                    {"role": "user", "content": prompt},
-                ],
-                temperature=0.1,
-                max_tokens=1000,
-            )
-            return AMIEDecision.from_model_text(text), ""
-        except Exception as exc:
-            return (
-                AMIEDecision(
-                    action="ask",
-                    audit_reason="模型輸出失敗，使用確定性問題庫fallback",
-                ),
-                f"{type(exc).__name__}: {_trim(exc, 200)}",
-            )
-
-    def _decision_prompt(
-        self,
-        state: AMIEGraphState,
-        candidates: list[dict[str, Any]],
-        *,
-        rag_context: str = "",
-        previous_decision: dict[str, Any] | None = None,
-    ) -> str:
-        route = state.get("route", "")
-        candidate_payload = [
-            {
-                "field": item["field"],
-                "section": item["section"],
-                "prompt": item["prompt"],
-                "options": item.get("options", [])[:20],
-            }
-            for item in candidates
-            if item["field"] not in BASIC_FIELDS
-        ]
-        allowed_extract_fields = [
-            item["field"]
-            for item in state.get("questionnaire", [])
-            if item["field"] not in PROTECTED_MODEL_FIELDS
-        ]
-        required_missing = self._required_missing(
-            state.get("data", {}),
-            state.get("questionnaire", []),
-        )
-        knowledge = f"\n\n【已檢索醫療知識】\n{rag_context[:6000]}" if rag_context else ""
-        prior = (
-            "\n\n【檢索前決策】\n"
-            + json.dumps(
-                previous_decision,
-                ensure_ascii=False,
-            )[:2500]
-            if previous_decision
-            else ""
-        )
-        return f"""
-根據目前累積狀態，抽取本輪回答中的臨床事實，並決定下一步。
-
-問診路由：{route}
-安全分級：{state.get("triage_level", "routine")}
-已偵測警訊：
-{json.dumps(state.get("red_flags", []), ensure_ascii=False)}
-本輪病人回答：{_redact_identifiers(_trim(state.get("answer", ""), 1000))}
-去識別化臨床狀態：
-{json.dumps(self._clinical_snapshot(state.get("data", {})), ensure_ascii=False)[:5000]}
-
-尚未詢問的候選問題：
-{json.dumps(candidate_payload, ensure_ascii=False)[:9000]}
-
-仍缺少的最低必要欄位：
-{json.dumps(required_missing, ensure_ascii=False)}
-
-可抽取欄位：
-{json.dumps(allowed_extract_fields, ensure_ascii=False)}
-{prior}{knowledge}
-
-規則：
-1. extracted_facts只能使用「可抽取欄位」中的field，不可推測姓名、生日或識別資訊。
-2. 已明確取得的資料不要重複詢問；一次只能選一個next_field。
-3. 優先詢問可辨識急症或最能區分鑑別方向的資訊缺口。
-4. 一般病史追問不需要RAG；只有需要指引、藥物或外部醫療依據時才設定needs_retrieval=true。
-5. routine流程中，action=complete只適用於最低必要欄位已齊全且沒有高價值問題。
-6. differential_hypotheses只能列定性假說及正反證據，不可提供數字機率。
-   每個候選方向都必須附最符合的SNOMED CT概念：system固定為
-   http://snomed.info/sct，code使用純數字概念ID，display使用正式英文名稱。
-   coding是供醫師確認的建議術語，不代表確診。
-7. acknowledgement最多60個繁體中文字，不可診斷、不可建議用藥。
-8. audit_reason只寫一至兩句可稽核理由，不得輸出隱藏思維鏈。
-
-只回傳以下JSON，不要Markdown：
-{{
-  "action": "ask",
-  "next_field": "候選問題的field或null",
-  "extracted_facts": {{"field": "病人明確說出的值"}},
-  "negated_findings": ["病人明確否認的症狀"],
-  "differential_hypotheses": [
-    {{
-      "condition": "候選方向",
-      "coding": {{
-        "system": "http://snomed.info/sct",
-        "code": "SNOMED CT純數字概念ID",
-        "display": "SNOMED CT正式英文名稱"
-      }},
-      "supporting_evidence": ["證據"],
-      "opposing_evidence": ["反對證據"]
-    }}
-  ],
-  "knowledge_gaps": ["尚缺資訊"],
-  "needs_retrieval": false,
-  "retrieval_query": "",
-  "acknowledgement": "簡短同理或承接語",
-  "audit_reason": "簡短選題理由"
-}}
-""".strip()
-
     def _remaining_questions(
         self,
         state: AMIEGraphState,
@@ -839,60 +772,23 @@ class AMIEEngine:
         questionnaire: list[dict[str, Any]],
     ) -> list[str]:
         selected_routes = [
-            route
-            for route in data.get("types", [data.get("type")])
-            if route in SUPPORTED_ROUTES
+            route for route in data.get("types", [data.get("type")]) if route in SUPPORTED_ROUTES
         ]
-        shared_required = set().union(
-            *(REQUIRED_FIELDS[route] for route in selected_routes)
-        )
+        required_by_route = {
+            route: set(load_questionnaire_policy(route)["required_fields"])
+            for route in selected_routes
+        }
+        shared_required = set().union(*required_by_route.values())
         missing: list[str] = []
         for item in questionnaire:
             field = item["field"]
             base_field = item.get("base_field", field)
             item_route = item.get("route")
             required = (
-                base_field in REQUIRED_FIELDS.get(item_route, set())
+                base_field in required_by_route.get(item_route, set())
                 if item_route
                 else base_field in shared_required
             )
             if required and not _trim(data.get(field, "")):
                 missing.append(field)
         return missing
-
-    def _merge_extracted_facts(
-        self,
-        data: dict[str, Any],
-        questionnaire: list[dict[str, Any]],
-        facts: dict[str, str],
-    ) -> dict[str, Any]:
-        merged = dict(data)
-        allowed = {
-            item["field"] for item in questionnaire if item["field"] not in PROTECTED_MODEL_FIELDS
-        }
-        for field, raw_value in facts.items():
-            value = _trim(raw_value)
-            if field not in allowed or not value or merged.get(field):
-                continue
-            merged[field] = value
-            question = next(
-                (item for item in questionnaire if item["field"] == field),
-                None,
-            )
-            base_field = question.get("base_field", field) if question else field
-            if base_field == "onset":
-                parsed = parse_onset_answer(value)
-                if parsed:
-                    prefix = field[: -len(base_field)] if field != base_field else ""
-                    merged[f"{prefix}onset_num"], merged[f"{prefix}onset_unit"] = parsed
-        return merged
-
-    @staticmethod
-    def _clinical_snapshot(data: dict[str, Any]) -> dict[str, Any]:
-        return {
-            key: value
-            for key, value in data.items()
-            if key not in PROTECTED_MODEL_FIELDS
-            and not key.startswith("_")
-            and value not in (None, "", [], {})
-        }

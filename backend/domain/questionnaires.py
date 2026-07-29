@@ -12,15 +12,29 @@ from pathlib import Path
 from typing import Any
 
 QUESTIONNAIRE_DATA_DIR = Path(__file__).resolve().parents[1] / "questionnaire_data"
-QUESTIONNAIRE_CATEGORIES = {
-    "chief",
-    "basic",
-    "history",
-    "chest",
-    "headache",
-    "abdomen",
-}
-DISEASE_ROUTES = ("chest", "headache", "abdomen")
+
+
+def _discover_questionnaire_categories() -> tuple[frozenset[str], tuple[str, ...]]:
+    categories: set[str] = set()
+    disease_routes: list[str] = []
+    for path in sorted(QUESTIONNAIRE_DATA_DIR.glob("*.json")):
+        try:
+            document = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise RuntimeError(f"無法讀取問卷分類索引：{path}") from exc
+        configured_id = document.get("id") if isinstance(document, dict) else None
+        if configured_id != path.stem:
+            raise ValueError(f"{path.name} 的 id 必須是 {path.stem}")
+        category = path.stem
+        categories.add(category)
+        if document.get("section") == "disease":
+            disease_routes.append(category)
+    if not categories or not disease_routes:
+        raise RuntimeError("questionnaire_data 缺少問卷分類或疾病路由")
+    return frozenset(categories), tuple(disease_routes)
+
+
+QUESTIONNAIRE_CATEGORIES, DISEASE_ROUTES = _discover_questionnaire_categories()
 ALLOWED_INPUT_KINDS = {"text", "choice", "date", "duration"}
 
 SECTION_LABELS = {
@@ -119,6 +133,7 @@ def _validate_question(
             "severity",
             "new_or_changed",
             "findings",
+            "negated_findings",
         }
         if unknown_fact_keys:
             raise ValueError(
@@ -135,13 +150,14 @@ def _validate_question(
                 raise ValueError(
                     f"{category}.json 的 {field}.semantic_options.{option}.{fact_key} 值不正確"
                 )
-        if "findings" in facts:
-            _validate_string_list(
-                facts["findings"],
-                category=category,
-                field=field,
-                key=f"semantic_options.{option}.findings",
-            )
+        for findings_key in ("findings", "negated_findings"):
+            if findings_key in facts:
+                _validate_string_list(
+                    facts[findings_key],
+                    category=category,
+                    field=field,
+                    key=f"semantic_options.{option}.{findings_key}",
+                )
 
     condition = item.get("condition")
     if condition is not None:
@@ -195,6 +211,65 @@ def load_questionnaire_category(
     if len(fields) != len(set(fields)):
         raise ValueError(f"{path.name} 不可有重複 field")
     return questions
+
+
+@lru_cache(maxsize=len(DISEASE_ROUTES))
+def load_questionnaire_policy(route: str) -> dict[str, Any]:
+    """Load deterministic selection and completion rules from route JSON."""
+    if route not in DISEASE_ROUTES:
+        raise ValueError(f"不支援的問卷政策路由：{route}")
+    path = QUESTIONNAIRE_DATA_DIR / f"{route}.json"
+    try:
+        document = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError as exc:
+        raise RuntimeError(f"找不到問卷政策檔案：{path}") from exc
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"問卷政策 JSON 格式錯誤：{path}:{exc.lineno}:{exc.colno}") from exc
+    policy = document.get("policy") if isinstance(document, dict) else None
+    expected_keys = {
+        "schema_version",
+        "selection_strategy",
+        "required_fields",
+        "priority_fields",
+        "coverage_threshold",
+        "max_turns",
+    }
+    if not isinstance(policy, dict) or set(policy) != expected_keys:
+        raise ValueError(f"{path.name} 的 policy 格式不正確")
+    if policy["schema_version"] != 1:
+        raise ValueError(f"{path.name} 的 policy.schema_version 必須是 1")
+    if policy["selection_strategy"] not in {
+        "disease_vote",
+        "fixed_order",
+    }:
+        raise ValueError(f"{path.name} 的 selection_strategy 不正確")
+    required = _validate_string_list(
+        policy["required_fields"],
+        category=route,
+        field="policy",
+        key="required_fields",
+    )
+    priority = policy["priority_fields"]
+    if not isinstance(priority, list) or any(
+        not isinstance(item, str) or not item.strip() for item in priority
+    ):
+        raise ValueError(f"{path.name} 的 policy.priority_fields 必須是字串陣列")
+    if len(required) != len(set(required)) or len(priority) != len(set(priority)):
+        raise ValueError(f"{path.name} 的 policy 欄位不可重複")
+    question_fields = {item["field"] for item in load_questionnaire_category(route)}
+    if not set(priority).issubset(question_fields):
+        raise ValueError(f"{path.name} 的 priority_fields 含未知問題")
+    threshold = policy["coverage_threshold"]
+    if (
+        not isinstance(threshold, (int, float))
+        or isinstance(threshold, bool)
+        or not 0 <= threshold <= 1
+    ):
+        raise ValueError(f"{path.name} 的 coverage_threshold 必須介於 0 與 1")
+    max_turns = policy["max_turns"]
+    if not isinstance(max_turns, int) or isinstance(max_turns, bool) or not 1 <= max_turns <= 100:
+        raise ValueError(f"{path.name} 的 max_turns 必須介於 1 與 100")
+    return deepcopy(policy)
 
 
 class _LazyDiseaseQuestionnaires(Mapping[str, tuple[dict[str, Any], ...]]):

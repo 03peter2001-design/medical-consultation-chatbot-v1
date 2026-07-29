@@ -1,6 +1,22 @@
 {
   "id": "headache",
   "section": "disease",
+  "policy": {
+    "schema_version": 1,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "onset",
+      "start_type",
+      "worst_ever",
+      "associated",
+      "risk_flags",
+      "current_meds",
+      "allergy"
+    ],
+    "priority_fields": [],
+    "coverage_threshold": 0,
+    "max_turns": 24
+  },
   "questions": [
     {
       "field": "onset",

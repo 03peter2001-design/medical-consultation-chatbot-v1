@@ -280,6 +280,7 @@ npm run dev
 
 - `http://localhost:5173/#/` → 病患端（開始問診）
 - `http://localhost:5173/#/doctor` → 醫師端（輸入問診編號查詢病人）
+- `http://localhost:5173/#/doctor/terminology/snomed` → SNOMED CT 編碼查詢
 
 正式建置可執行 `npm run build`，輸出位於 `frontend/dist/`。根目錄的
 `index.html` 與 `doctor.html` 是重構前的舊版，暫時保留供比對與相容使用。
@@ -308,6 +309,57 @@ PostgreSQL 會繼續執行。資料保存在 Compose volume，正常停止不會
 這個流程只需要此 repository 與 Docker；Docker 仍須從 registry 拉取已鎖定
 版本的 HAPI、PostgreSQL 與 Python images。基於授權與發行範圍，完整
 SNOMED CT 與 LOINC 資料不包含在 TW Core 依賴中，必須另行合法取得。
+
+#### 安裝 SNOMED CT
+
+SNOMED CT 檔案較大且受授權條款限制，因此不包含在 Git repository。每位
+開發者或部署者都必須自行透過 SNOMED International／MLDS 取得有權使用的
+**International RF2 Production ZIP**，不要解壓，放到：
+
+```text
+backend/terminology/snomed/
+```
+
+`.gitignore` 已排除該目錄內的檔案及常見 RF2 檔名。啟動 HAPI 後執行：
+
+```bash
+docker compose -f compose.fhir.yml up -d postgres hapi
+docker compose -f compose.fhir.yml --profile snomed run --rm snomed-installer
+```
+
+installer 會先確認 ZIP 內含 RF2 Snapshot 必要檔案，再透過 HAPI
+`CodeSystem/$upload-external-code-system` 匯入 `http://snomed.info/sct`。
+若 TW Core 相依套件建立了重複的 `content=not-present` SNOMED placeholder，
+installer 會保留一筆並移除其餘占位資源；只要任何一筆已有實際 terminology
+內容就會停止，不會自動刪除。
+完成後會以 SNOMED CT 胸痛代碼 `29857009` 執行 `$validate-code`；再次執行
+相同 release 時會依 SHA-256 marker 跳過。授權檔案只以唯讀方式掛載進本機
+installer container，不會被加入 image 或 Git。第一次執行會從 HAPI FHIR
+官方 GitHub release 建置相同版本的 CLI installer image；CLI ZIP 也會驗證
+鎖定的 SHA-256。HAPI 會在 CLI 接受上傳後於背景建立 terminology index；
+installer 會繼續等待，直到驗證碼可查詢才回報完成。
+同一流程也會從授權 RF2 Snapshot 建立
+`backend/terminology/snomed/snomed-search.sqlite3`，供查詢頁進行快速英文
+全文搜尋。此索引與 RF2 ZIP 一樣被 `.gitignore` 排除；若先前已完成匯入，
+可單獨建立索引：
+
+```bash
+cd backend
+python -m scripts.build_snomed_search_index \
+  terminology/snomed/SnomedCT_InternationalRF2_PRODUCTION_20250701T120000Z.zip
+```
+
+查詢頁的英文文字搜尋使用這份本機 RF2 索引；純數字 concept ID 則仍透過
+HAPI `CodeSystem/$lookup` 驗證。這可避免 HAPI 對大型 in-memory ValueSet
+expansion 的數量限制。
+
+醫師端固定疾病表的 SNOMED CT 對照位於
+`backend/amie/disease_data/snomed_codings.json`。後端載入疾病表時會套用
+這份對照；複合疾病方向可包含多個 coding，前端會逐一顯示。此檔目前對應
+International Edition `20250701`，其中 41 個代碼均已透過本機 HAPI
+`CodeSystem/$validate-code` 驗證。更新 RF2 版本或對照內容後必須重新驗證，
+並重啟後端以清除已快取的疾病表。術語代碼有效不代表疾病表已完成臨床審查；
+醫師校準前仍維持 `provisional`。
 
 ```bash
 docker compose -f compose.fhir.yml down

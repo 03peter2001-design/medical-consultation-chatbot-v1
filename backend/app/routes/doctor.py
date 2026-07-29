@@ -8,7 +8,11 @@ import traceback
 from fastapi import APIRouter, Header, HTTPException, Query
 
 from amie.clinical_facts import facts_from_legacy_data
-from amie.disease_profiles import attach_safety_conditions, score_diseases
+from amie.disease_profiles import (
+    attach_profile_codings,
+    attach_safety_conditions,
+    score_diseases,
+)
 from app import runtime
 from app.models import (
     DoctorChatRequest,
@@ -35,6 +39,7 @@ from app.services.rule_management import (
     suggest_safety_rule_edits,
     update_safety_rules,
 )
+from app.services.snomed_search import search_snomed
 from domain.questionnaires import (
     DISEASE_ROUTES,
     load_questionnaire_policy,
@@ -50,6 +55,23 @@ router = APIRouter(prefix="/doctor", tags=["doctor"])
 @router.get("/rules")
 def get_rule_center():
     return rule_center_payload()
+
+
+@router.get("/terminology/snomed")
+def get_snomed_search(
+    query: str = Query(min_length=2, max_length=120),
+    limit: int = Query(default=20, ge=1, le=50),
+    offset: int = Query(default=0, ge=0),
+):
+    try:
+        return search_snomed(query, limit=limit, offset=offset)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except RuntimeError as error:
+        raise HTTPException(
+            status_code=503,
+            detail=f"SNOMED CT 術語服務暫時無法使用：{error}",
+        ) from error
 
 
 def _rule_permission_error(error: PermissionError) -> HTTPException:
@@ -212,6 +234,10 @@ def load_patient(request: LoadPatientRequest):
             route=str(route),
             computed_from="legacy_recalculation",
         )
+    disease_assessment = attach_profile_codings(
+        str(route or ""),
+        disease_assessment,
+    )
     amie_state["differential_hypotheses"] = []
     amie_state["disease_assessment"] = disease_assessment
     return {

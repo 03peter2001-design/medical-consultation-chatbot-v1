@@ -151,6 +151,20 @@ test('maps safety-triggered conditions separately from disease votes', () => {
         {
           name: '急性冠心症（含心肌梗塞）',
           profile_id: 'acute_coronary_syndrome',
+          coding: [
+            {
+              system: 'http://snomed.info/sct',
+              code: '394659003',
+              display: 'ACS - Acute coronary syndrome',
+              verified: true,
+            },
+            {
+              system: 'http://snomed.info/sct',
+              code: '22298006',
+              display: 'Myocardial infarction',
+              verified: true,
+            },
+          ],
           source: 'safety_rule',
           triggered_by: [
             {
@@ -174,7 +188,20 @@ test('maps safety-triggered conditions separately from disease votes', () => {
     result.safetyTriggeredConditions[0].triggers[0].evidence,
     '冒冷汗',
   )
-  assert.equal(result.safetyTriggeredConditions[0].coding, null)
+  assert.equal(
+    result.safetyTriggeredConditions[0].coding.code,
+    '394659003',
+  )
+  assert.deepEqual(
+    result.safetyTriggeredConditions[0].codings.map(
+      (coding) => coding.code,
+    ),
+    ['394659003', '22298006'],
+  )
+  assert.equal(
+    result.safetyTriggeredConditions[0].coding.source,
+    'snomed-registry',
+  )
 })
 
 test('shows facts from every selected symptom pipeline', () => {

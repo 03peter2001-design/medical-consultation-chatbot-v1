@@ -78,3 +78,32 @@ SNOMED CT releases. TW Core references those external systems but does not
 redistribute their complete terminology content. Full SNOMED CT validation
 still requires a licensed release or terminology service, and full LOINC
 validation requires a separately obtained LOINC release.
+
+## Local SNOMED CT release
+
+SNOMED CT is licensed content and is deliberately excluded from this
+repository. Each developer or deployer must obtain an authorized International
+RF2 Production ZIP from SNOMED International and place it in:
+
+```text
+backend/terminology/snomed/
+```
+
+Do not extract or commit the release. The repository ignores both RF2 ZIP files
+and directories named like an extracted SNOMED CT release. Verify a local file
+without contacting HAPI:
+
+```bash
+cd backend
+python -m scripts.install_snomed --verify-only
+```
+
+正常安裝會另外產生 `snomed/snomed-search.sqlite3`，供醫師端 SNOMED CT
+查詢頁進行英文全文搜尋。若 HAPI 已經安裝完成而只缺搜尋索引，可執行：
+
+```bash
+python -m scripts.build_snomed_search_index \
+  terminology/snomed/SnomedCT_InternationalRF2_PRODUCTION_20250701T120000Z.zip
+```
+
+RF2 ZIP、SQLite 搜尋索引及其暫存檔都屬本機授權資料，不得提交到 Git。

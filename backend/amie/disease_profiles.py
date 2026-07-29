@@ -18,6 +18,7 @@ from .rule_config import (
 
 PROFILE_DATA_DIR = Path(__file__).resolve().parent / "disease_data"
 PROFILE_PATH = PROFILE_DATA_DIR / "chest.json"
+SNOMED_CODING_PATH = PROFILE_DATA_DIR / "snomed_codings.json"
 SCHEMA_VERSION = 1
 METHOD = "unit_vote_v1"
 
@@ -26,6 +27,74 @@ def _nonempty(value: Any, path: str) -> str:
     if not isinstance(value, str) or not value.strip():
         raise ValueError(f"{path} 必須是非空字串")
     return value.strip()
+
+
+def _validated_snomed_coding(coding: Any, path: str) -> dict[str, Any]:
+    if (
+        not isinstance(coding, dict)
+        or set(coding) != {"system", "code", "display", "verified"}
+        or coding.get("system") != "http://snomed.info/sct"
+        or not str(coding.get("code", "")).isdigit()
+        or coding.get("verified") is not True
+        or not str(coding.get("display", "")).strip()
+    ):
+        raise ValueError(f"{path} 未驗證")
+    return coding
+
+
+@lru_cache(maxsize=1)
+def load_snomed_coding_registry() -> dict[str, Any]:
+    registry = json.loads(SNOMED_CODING_PATH.read_text(encoding="utf-8"))
+    if set(registry) != {
+        "schema_version",
+        "system",
+        "edition_uri",
+        "version_date",
+        "verified_at",
+        "routes",
+    }:
+        raise ValueError("SNOMED coding registry 欄位不符合 schema")
+    if (
+        registry.get("schema_version") != 1
+        or registry.get("system") != "http://snomed.info/sct"
+        or not re.fullmatch(r"\d{8}", str(registry.get("version_date", "")))
+        or not isinstance(registry.get("routes"), dict)
+    ):
+        raise ValueError("SNOMED coding registry metadata 不正確")
+    _nonempty(registry.get("edition_uri"), "edition_uri")
+    _nonempty(registry.get("verified_at"), "verified_at")
+    return registry
+
+
+def _attach_verified_snomed_codings(document: dict[str, Any]) -> dict[str, Any]:
+    route = str(document.get("route") or "")
+    route_mappings = load_snomed_coding_registry()["routes"].get(route)
+    if not isinstance(route_mappings, dict):
+        raise ValueError(f"{route} 缺少 SNOMED coding registry")
+
+    profiles = document.get("profiles")
+    if not isinstance(profiles, list):
+        return document
+    profile_ids = {profile.get("id") for profile in profiles if isinstance(profile, dict)}
+    if set(route_mappings) != profile_ids:
+        raise ValueError(f"{route} 疾病表與 SNOMED coding registry 不同步")
+
+    system = load_snomed_coding_registry()["system"]
+    for profile in profiles:
+        raw_codings = route_mappings[profile["id"]]
+        if not isinstance(raw_codings, list) or not raw_codings:
+            raise ValueError(f"{profile['id']} 缺少 SNOMED coding")
+        profile["coding"] = [
+            {
+                "system": system,
+                "code": str(coding.get("code") or ""),
+                "display": str(coding.get("display") or ""),
+                "verified": True,
+            }
+            for coding in raw_codings
+            if isinstance(coding, dict)
+        ]
+    return document
 
 
 def validate_profile_document(document: Any) -> dict[str, Any]:
@@ -115,15 +184,14 @@ def validate_profile_document(document: Any) -> dict[str, Any]:
             _nonempty(profile.get("reviewed_at"), f"{path}.reviewed_at")
         coding = profile.get("coding")
         if coding is not None:
-            if (
-                not isinstance(coding, dict)
-                or set(coding) != {"system", "code", "display", "verified"}
-                or coding.get("system") != "http://snomed.info/sct"
-                or not str(coding.get("code", "")).isdigit()
-                or not coding.get("verified")
-                or not str(coding.get("display", "")).strip()
-            ):
+            coding_items = coding if isinstance(coding, list) else [coding]
+            if not coding_items:
                 raise ValueError(f"{path}.coding 未驗證")
+            for coding_index, coding_item in enumerate(coding_items):
+                _validated_snomed_coding(
+                    coding_item,
+                    f"{path}.coding[{coding_index}]",
+                )
 
         clues = profile.get("clues")
         if not isinstance(clues, list) or not clues:
@@ -174,7 +242,7 @@ def read_profile_document(path: Path = PROFILE_PATH) -> dict[str, Any]:
         document = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as error:
         raise ValueError(f"疾病表 JSON 格式錯誤：{error.lineno}:{error.colno}") from error
-    return validate_profile_document(document)
+    return validate_profile_document(_attach_verified_snomed_codings(document))
 
 
 @lru_cache(maxsize=None)
@@ -258,6 +326,37 @@ def score_diseases(
         "ranked": ranked,
         "must_not_miss": [item for item in ranked if item["must_not_miss"]],
     }
+
+
+def attach_profile_codings(
+    route: str,
+    assessment: dict[str, Any] | None,
+    *,
+    document: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Hydrate current and legacy assessments from the verified registry."""
+    result = deepcopy(assessment or {})
+    if not result:
+        return result
+    try:
+        deployed = document or load_profile_document(route)
+    except Exception:
+        return result
+    profiles = {profile["id"]: profile.get("coding") for profile in deployed.get("profiles", [])}
+    for collection_name in ("top", "ranked", "must_not_miss"):
+        for item in result.get(collection_name, []):
+            if not isinstance(item, dict):
+                continue
+            profile_id = str(item.get("id") or "")
+            if profile_id in profiles:
+                item["coding"] = deepcopy(profiles[profile_id])
+    for item in result.get("safety_triggered_conditions", []):
+        if not isinstance(item, dict):
+            continue
+        profile_id = str(item.get("profile_id") or "")
+        if profile_id in profiles:
+            item["coding"] = deepcopy(profiles[profile_id])
+    return result
 
 
 def attach_safety_conditions(
@@ -352,7 +451,7 @@ def attach_safety_conditions(
 
     result["status"] = "safety_triggered"
     result["safety_triggered_conditions"] = list(conditions.values())
-    return result
+    return attach_profile_codings(route, result, document=deployed)
 
 
 def question_fact_codes(question: dict[str, Any]) -> set[str]:

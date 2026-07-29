@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "system": "http://snomed.info/sct",
+  "edition_uri": "http://snomed.info/sct/900000000000207008",
+  "version_date": "20250701",
+  "verified_at": "2026-07-29",
+  "routes": {
+    "chest": {
+      "acute_coronary_syndrome": [
+        {"code": "394659003", "display": "ACS - Acute coronary syndrome"}
+      ],
+      "aortic_dissection": [
+        {"code": "308546005", "display": "Dissecting aneurysm of aorta"}
+      ],
+      "pulmonary_embolism": [
+        {"code": "59282003", "display": "PE - Pulmonary embolism"}
+      ],
+      "pneumothorax": [
+        {"code": "36118008", "display": "Pneumothorax (disorder)"}
+      ],
+      "acute_pericarditis": [
+        {"code": "15555002", "display": "Acute pericarditis (disorder)"}
+      ],
+      "pneumonia_or_pleurisy": [
+        {"code": "233604007", "display": "Pneumonia (disorder)"},
+        {"code": "196075003", "display": "Pleurisy (disorder)"}
+      ],
+      "costochondritis": [
+        {"code": "64109004", "display": "Costal chondritis"}
+      ],
+      "gastroesophageal_reflux": [
+        {"code": "235595009", "display": "Gastrooesophageal reflux disease"}
+      ],
+      "panic_or_anxiety": [
+        {"code": "371631005", "display": "Episodic paroxysmal anxiety disorder"},
+        {"code": "48694002", "display": "Anxiety reaction"}
+      ],
+      "cardiac_arrhythmia": [
+        {"code": "698247007", "display": "Cardiac arrhythmia"}
+      ]
+    },
+    "headache": {
+      "migraine": [
+        {"code": "37796009", "display": "Migraine (disorder)"}
+      ],
+      "tension_type_headache": [
+        {"code": "398057008", "display": "Tension headache"}
+      ],
+      "cervicogenic_headache": [
+        {"code": "279016001", "display": "Cervicogenic headache (finding)"}
+      ],
+      "subarachnoid_hemorrhage": [
+        {"code": "21454007", "display": "Subarachnoid intracranial hemorrhage"}
+      ],
+      "intracranial_hemorrhage": [
+        {"code": "1386000", "display": "Intracranial hemorrhage (disorder)"}
+      ],
+      "ischemic_stroke_or_tia": [
+        {"code": "432504007", "display": "Cerebral infarction"},
+        {"code": "266257000", "display": "TIA - transient ischaemic attack"}
+      ],
+      "posterior_circulation_stroke": [
+        {"code": "230715005", "display": "Posterior circulation stroke of uncertain pathology (disorder)"}
+      ],
+      "meningitis_or_encephalitis": [
+        {"code": "7180009", "display": "Meningitis (disorder)"},
+        {"code": "45170000", "display": "Encephalitis (disorder)"}
+      ],
+      "intracranial_mass": [
+        {"code": "254935002", "display": "Intracranial neoplasm (disorder)"}
+      ]
+    },
+    "abdomen": {
+      "gastrointestinal_bleeding": [
+        {"code": "74474003", "display": "GI - Gastrointestinal bleed"}
+      ],
+      "internal_bleeding": [
+        {"code": "45626005", "display": "Nontraumatic haemoperitoneum"}
+      ],
+      "ruptured_abdominal_aortic_aneurysm": [
+        {"code": "233985008", "display": "Abdominal aortic aneurysm (disorder)"}
+      ],
+      "ruptured_ectopic_pregnancy": [
+        {"code": "17433009", "display": "Ruptured ectopic pregnancy (disorder)"}
+      ],
+      "perforation_or_peritonitis": [
+        {"code": "56905009", "display": "Intestinal perforation"},
+        {"code": "48661000", "display": "Peritonitis (disorder)"}
+      ],
+      "mesenteric_ischemia": [
+        {"code": "91489000", "display": "Acute vascular insufficiency of intestine (disorder)"}
+      ],
+      "appendicitis": [
+        {"code": "85189001", "display": "Acute appendicitis (disorder)"}
+      ],
+      "cholecystitis_or_biliary_colic": [
+        {"code": "65275009", "display": "Inflamed gallbladder"},
+        {"code": "37389005", "display": "Biliary colic (finding)"}
+      ],
+      "acute_pancreatitis": [
+        {"code": "197456007", "display": "Acute pancreatitis (disorder)"}
+      ],
+      "gastroenteritis": [
+        {"code": "69776003", "display": "Acute gastroenteritis (disorder)"}
+      ],
+      "bowel_obstruction": [
+        {"code": "81060008", "display": "Intestinal obstruction (disorder)"}
+      ],
+      "diverticulitis": [
+        {"code": "307496006", "display": "Diverticulitis (disorder)"}
+      ],
+      "renal_colic": [
+        {"code": "95570007", "display": "Kidney stone (disorder)"},
+        {"code": "31054009", "display": "Ureteric stone (disorder)"}
+      ],
+      "peptic_ulcer_or_gastritis": [
+        {"code": "13200003", "display": "PU - Peptic ulcer"},
+        {"code": "4556007", "display": "Gastritis (disorder)"}
+      ]
+    }
+  }
+}

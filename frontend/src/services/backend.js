@@ -56,6 +56,19 @@ export const ruleAuthorizationPath = '/doctor/rules/authorize'
 export const ruleAssistantPath = '/doctor/rules/assistant'
 export const safetyRuleUpdatePath = '/doctor/rules/safety'
 
+export function snomedSearchPath({
+  query,
+  limit = 20,
+  offset = 0,
+}) {
+  const params = new URLSearchParams({
+    query: String(query || '').trim(),
+    limit: String(limit),
+    offset: String(offset),
+  })
+  return `/doctor/terminology/snomed?${params.toString()}`
+}
+
 async function request(path, options = {}) {
   const response = await fetch(`${backendUrl}${path}`, options)
   const data = await response.json().catch(() => ({}))
@@ -144,6 +157,7 @@ export const api = {
     request(`/doctor/session/${encodeURIComponent(sessionId)}`, {
       method: 'DELETE',
     }),
+  searchSnomed: (options) => request(snomedSearchPath(options)),
   loadRuleCenter: () => request(ruleCenterPath),
   authorizeRuleEditor: (adminToken) =>
     request(ruleAuthorizationPath, {

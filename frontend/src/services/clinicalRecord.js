@@ -2,6 +2,7 @@ import {
   codingKey,
   normalizeCoding,
   resolveConditionCoding,
+  resolveConditionCodings,
 } from './terminology.js'
 
 const TYPE_LABELS = {
@@ -202,13 +203,17 @@ export function buildClinicalRecord(record = {}) {
     }))
   })
   const mapAssessment = (item) => {
-    const coding = item.coding
-      ? resolveConditionCoding(item.name, item.coding, codings, data)
-      : null
+    const conditionCodings = resolveConditionCodings(
+      item.name,
+      item.coding,
+      codings,
+      data,
+    )
     return {
       id: item.id,
       condition: item.name,
-      coding,
+      coding: conditionCodings[0] || null,
+      codings: conditionCodings,
       netVotes: Number(item.net_votes || 0),
       supportVotes: Number(item.support_votes || 0),
       opposeVotes: Number(item.oppose_votes || 0),
@@ -235,19 +240,26 @@ export function buildClinicalRecord(record = {}) {
   )
   const safetyTriggeredConditions = (
     diseaseAssessment.safety_triggered_conditions || []
-  ).map((item) => ({
-    id: item.profile_id || '',
-    condition: item.name,
-    coding: item.coding
-      ? resolveConditionCoding(item.name, item.coding, codings, data)
-      : null,
-    source: item.source || 'safety_rule',
-    triggers: (item.triggered_by || []).map((trigger) => ({
-      ruleCode: trigger.rule_code || '',
-      ruleLabel: trigger.rule_label || '',
-      evidence: trigger.evidence || '',
-    })),
-  }))
+  ).map((item) => {
+    const conditionCodings = resolveConditionCodings(
+      item.name,
+      item.coding,
+      codings,
+      data,
+    )
+    return {
+      id: item.profile_id || '',
+      condition: item.name,
+      coding: conditionCodings[0] || null,
+      codings: conditionCodings,
+      source: item.source || 'safety_rule',
+      triggers: (item.triggered_by || []).map((trigger) => ({
+        ruleCode: trigger.rule_code || '',
+        ruleLabel: trigger.rule_label || '',
+        evidence: trigger.evidence || '',
+      })),
+    }
+  })
   const legacyDifferentials = (
     record.legacy_differential_hypotheses || []
   ).map((hypothesis) => {

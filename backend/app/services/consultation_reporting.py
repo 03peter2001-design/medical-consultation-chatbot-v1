@@ -8,7 +8,11 @@ import traceback
 from typing import cast
 
 from amie.clinical_facts import facts_from_legacy_data
-from amie.disease_profiles import attach_safety_conditions, score_diseases
+from amie.disease_profiles import (
+    attach_profile_codings,
+    attach_safety_conditions,
+    score_diseases,
+)
 from app import runtime
 from app.prompts.report import build_report_prompt
 from app.services.clinical_summary import clinical_patient_data, model_patient_summary
@@ -83,7 +87,7 @@ def _assessment_for_record(record: dict) -> dict:
             route=str(route),
             computed_from="legacy_recalculation",
         )
-    return assessment
+    return attach_profile_codings(str(route or ""), assessment)
 
 
 def _render_vote_assessment(assessment: dict) -> str:

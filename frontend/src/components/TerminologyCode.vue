@@ -17,6 +17,9 @@ const sourceLabel = computed(() => {
   if (props.coding.source === 'ai-suggested') {
     return 'AI 建議編碼，待醫師確認'
   }
+  if (props.coding.source === 'snomed-registry') {
+    return '本機 HAPI SNOMED CT 已驗證'
+  }
   return 'FHIR 原始編碼'
 })
 </script>

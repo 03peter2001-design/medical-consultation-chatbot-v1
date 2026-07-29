@@ -47,5 +47,26 @@ services:
       - ./backend:/workspace/backend:ro
     restart: "no"
 
+  snomed-installer:
+    build:
+      context: .
+      dockerfile: backend/terminology/Dockerfile.snomed-installer
+      args:
+        HAPI_FHIR_VERSION: 8.8.0
+        HAPI_FHIR_CLI_SHA256: 62ef764efdb406974a87a16b9d79e05973e4fe62ba3fef1375d43d9c0cb62928
+    image: chest-pain-ai-doctor/snomed-installer:hapi-8.8.0
+    profiles: ["snomed"]
+    depends_on:
+      hapi:
+        condition: service_started
+    working_dir: /workspace/backend
+    command:
+      - --server
+      - http://hapi:8080/fhir
+    volumes:
+      - ./backend:/workspace/backend:ro
+      - ./backend/terminology/snomed:/workspace/backend/terminology/snomed
+    restart: "no"
+
 volumes:
   hapi-postgres-data:

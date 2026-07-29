@@ -10,6 +10,7 @@ import {
   ruleAuthorizationPath,
   ruleCenterPath,
   safetyRuleUpdatePath,
+  snomedSearchPath,
 } from '../src/services/backend.js'
 
 test('uses the page hostname and default backend port', () => {
@@ -68,6 +69,17 @@ test('uses dedicated doctor rule management endpoints', () => {
   assert.equal(ruleAuthorizationPath, '/doctor/rules/authorize')
   assert.equal(ruleAssistantPath, '/doctor/rules/assistant')
   assert.equal(safetyRuleUpdatePath, '/doctor/rules/safety')
+})
+
+test('builds an encoded SNOMED CT search query', () => {
+  assert.equal(
+    snomedSearchPath({
+      query: ' acute coronary syndrome ',
+      limit: 25,
+      offset: 50,
+    }),
+    '/doctor/terminology/snomed?query=acute+coronary+syndrome&limit=25&offset=50',
+  )
 })
 
 test('formats FastAPI validation errors with their field path', () => {

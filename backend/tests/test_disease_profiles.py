@@ -8,6 +8,7 @@ from amie.clinical_facts import (
     normalize_fact,
 )
 from amie.disease_profiles import (
+    attach_profile_codings,
     attach_safety_conditions,
     load_profile_document,
     question_utility,
@@ -47,6 +48,7 @@ class DiseaseProfileValidationTests(unittest.TestCase):
                         for profile in document["profiles"]
                     )
                 )
+                self.assertTrue(all(profile["coding"] for profile in document["profiles"]))
 
     def test_deployed_profile_is_versioned_and_provisional(self):
         document = load_profile_document()
@@ -121,6 +123,25 @@ class DiseaseProfileValidationTests(unittest.TestCase):
 
 
 class DiseaseScoringTests(unittest.TestCase):
+    def test_legacy_assessment_is_hydrated_with_verified_codings(self):
+        result = attach_profile_codings(
+            "headache",
+            {
+                "ranked": [
+                    {
+                        "id": "meningitis_or_encephalitis",
+                        "name": "腦膜炎或腦炎",
+                        "coding": None,
+                    }
+                ]
+            },
+        )
+
+        self.assertEqual(
+            [coding["code"] for coding in result["ranked"][0]["coding"]],
+            ["7180009", "45170000"],
+        )
+
     def test_known_chief_symptom_is_removed_from_followup_options(self):
         questionnaire = build_questionnaire("abdomen")
         associated = next(item for item in questionnaire if item["field"] == "associated")
@@ -184,7 +205,14 @@ class DiseaseScoringTests(unittest.TestCase):
                 {
                     "name": "急性冠心症（含心肌梗塞）",
                     "profile_id": "acute_coronary_syndrome",
-                    "coding": None,
+                    "coding": [
+                        {
+                            "system": "http://snomed.info/sct",
+                            "code": "394659003",
+                            "display": "ACS - Acute coronary syndrome",
+                            "verified": True,
+                        }
+                    ],
                     "source": "safety_rule",
                     "triggered_by": [
                         {

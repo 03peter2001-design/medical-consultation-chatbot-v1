@@ -62,8 +62,9 @@ const visibleDirectionCount = computed(() => {
           <h4>
             <span>{{ item.condition }}</span>
             <TerminologyCode
-              v-if="item.coding"
-              :coding="item.coding"
+              v-for="coding in item.codings || []"
+              :key="`${coding.system}-${coding.code}`"
+              :coding="coding"
             />
           </h4>
           <ul>
@@ -104,10 +105,16 @@ const visibleDirectionCount = computed(() => {
           <h4>
             <span>{{ hypothesis.condition }}</span>
             <TerminologyCode
-              v-if="hypothesis.coding"
-              :coding="hypothesis.coding"
+              v-for="coding in hypothesis.codings || []"
+              :key="`${coding.system}-${coding.code}`"
+              :coding="coding"
             />
-            <small v-else class="uncoded-condition">未編碼</small>
+            <small
+              v-if="!hypothesis.codings?.length"
+              class="uncoded-condition"
+            >
+              未編碼
+            </small>
             <small class="vote-summary">
               淨票 {{ hypothesis.netVotes }} · 支持
               {{ hypothesis.supportVotes }} · 反對

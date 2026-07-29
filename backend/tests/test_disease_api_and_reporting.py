@@ -31,6 +31,45 @@ class _Repository:
 
 
 class DiseaseApiIsolationTests(unittest.TestCase):
+    def test_doctor_load_hydrates_coding_in_stored_assessment(self):
+        record = {
+            "queue_number": "20000",
+            "type": "headache",
+            "reason": "頭痛",
+            "summary": "摘要",
+            "report": "報告",
+            "data": {
+                "reason": "頭痛",
+                "_disease_assessment": {
+                    "ranked": [
+                        {
+                            "id": "meningitis_or_encephalitis",
+                            "name": "腦膜炎或腦炎",
+                            "coding": None,
+                        }
+                    ]
+                },
+            },
+            "structured_note": None,
+            "structured_sources": [],
+            "triage_level": "routine",
+            "status": "completed",
+        }
+
+        with (
+            patch("app.routes.doctor.runtime.consultation_repository", _Repository(record)),
+            patch("app.routes.doctor.runtime.doctor_sessions", {}),
+            patch("app.routes.doctor.terminology_reference", return_value={}),
+        ):
+            response = load_patient(
+                LoadPatientRequest(queue_number="20000", session_id="doctor-coding")
+            )
+
+        self.assertEqual(
+            [coding["code"] for coding in response["disease_assessment"]["ranked"][0]["coding"]],
+            ["7180009", "45170000"],
+        )
+
     def test_doctor_load_recalculates_headache_and_abdomen_legacy_cases(self):
         records = [
             {

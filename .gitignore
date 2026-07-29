@@ -17,5 +17,11 @@ htmlcov/
 .DS_Store
 .build-state/
 
+# Licensed SNOMED CT RF2 releases must be obtained by each deployer.
+SnomedCT_*RF2*.zip
+SnomedCT_*RF2*/
+backend/terminology/snomed/*
+!backend/terminology/snomed/.gitkeep
+
 SMART-APP-Exercise-1
 package

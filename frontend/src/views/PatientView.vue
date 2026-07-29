@@ -3,6 +3,7 @@ import {
   computed,
   nextTick,
   onBeforeUnmount,
+  onMounted,
   ref,
   watch,
 } from 'vue'
@@ -29,8 +30,13 @@ import {
   normalizeNationalId,
   patientDisplayName,
 } from '../services/fhir.js'
+import {
+  hasSmartLaunchContext,
+  initializeSmartPatient,
+} from '../services/smart.js'
 const sessionId = `pt_${Date.now()}`
 const maxBirthDate = new Date().toISOString().slice(0, 10)
+const smartLaunchDetected = hasSmartLaunchContext()
 
 const avatar = useAvatar()
 const messages = ref([])
@@ -47,6 +53,7 @@ const overlayVisible = ref(true)
 const nationalId = ref('A000000000')
 const fhirPatient = ref(null)
 const fhirResourceCount = ref(0)
+const smartContext = ref(null)
 const clientKey = ref('')
 const agentId = ref('')
 const mobileAvatarOpen = ref(false)
@@ -102,6 +109,12 @@ const nationalIdValid = computed(() =>
 )
 const loadedPatientName = computed(() =>
   fhirPatient.value ? patientDisplayName(fhirPatient.value) : '',
+)
+const effectiveDirectFhirEnabled = computed(
+  () => directFhirEnabled && !smartLaunchDetected,
+)
+const patientContextStatus = computed(() =>
+  smartContext.value ? 'SMART 已授權' : 'FHIR 已載入',
 )
 const painMapPreset = computed(() =>
   getPainMapPreset(questionnaireInfo.value?.route),
@@ -161,17 +174,65 @@ async function initializeBackendSession(patientRecord = null) {
   )
 }
 
-async function startConsultation({ skipFhir = false } = {}) {
+async function finishConsultationStart(
+  patientRecord = null,
+  {
+    successMessage = '',
+  } = {},
+) {
+  const data = await initializeBackendSession(patientRecord)
+  started.value = true
+  overlayVisible.value = false
+  setQuestionState(data)
+  if (successMessage) addMessage('ai', successMessage)
+  addMessage('ai', data.reply)
+  void avatar.speak(data.reply)
+  focusInput()
+}
+
+async function startSmartConsultation() {
   if (started.value || starting.value) return
   starting.value = true
   startError.value = ''
+
+  try {
+    const record = await initializeSmartPatient()
+    fhirPatient.value = record.patient
+    fhirResourceCount.value = record.resources.length
+    smartContext.value = record.smart
+    const encounter = record.smart.encounterId
+      ? `，Encounter/${record.smart.encounterId}`
+      : ''
+    await finishConsultationStart(record, {
+      successMessage:
+        `已透過 SMART on FHIR 授權載入 ${patientDisplayName(record.patient)}` +
+        `（Patient/${record.patient.id}${encounter}），共 ${record.resources.length} 筆相關 FHIR Resources。` +
+        '已帶入基本資料與既往病史；只有病歷未提供的欄位會再詢問。',
+    })
+  } catch (error) {
+    startError.value =
+      `無法完成 SMART on FHIR 授權或載入病歷（${error.message}）。` +
+      '\n請回到 EHR 重新選擇病人並啟動此 App。'
+  } finally {
+    starting.value = false
+  }
+}
+
+async function startConsultation({ skipFhir = false } = {}) {
+  if (started.value || starting.value) return
+  if (smartLaunchDetected && !skipFhir) {
+    await startSmartConsultation()
+    return
+  }
+  starting.value = true
+  startError.value = ''
   let startStage =
-    directFhirEnabled && !skipFhir ? 'fhir' : 'backend'
+    effectiveDirectFhirEnabled.value && !skipFhir ? 'fhir' : 'backend'
 
   try {
     let patient = null
     let patientRecord = null
-    if (directFhirEnabled && !skipFhir) {
+    if (effectiveDirectFhirEnabled.value && !skipFhir) {
       nationalId.value = normalizeNationalId(nationalId.value)
       const record = await loadPatientByNationalId(nationalId.value, {
         baseUrl: fhirBaseUrl,
@@ -183,19 +244,11 @@ async function startConsultation({ skipFhir = false } = {}) {
       startStage = 'backend'
     }
 
-    const data = await initializeBackendSession(patientRecord)
-    started.value = true
-    overlayVisible.value = false
-    setQuestionState(data)
-    if (patient) {
-      addMessage(
-        'ai',
-        `已從測試 HAPI 載入 ${patientDisplayName(patient)}（Patient/${patient.id}），共 ${fhirResourceCount.value} 筆相關 FHIR Resources。已帶入基本資料；只有病歷未提供的病史欄位會再詢問。`,
-      )
-    }
-    addMessage('ai', data.reply)
-    void avatar.speak(data.reply)
-    focusInput()
+    await finishConsultationStart(patientRecord, {
+      successMessage: patient
+        ? `已從測試 HAPI 載入 ${patientDisplayName(patient)}（Patient/${patient.id}），共 ${fhirResourceCount.value} 筆相關 FHIR Resources。已帶入基本資料；只有病歷未提供的病史欄位會再詢問。`
+        : '',
+    })
   } catch (error) {
     startError.value =
       startStage === 'fhir'
@@ -205,6 +258,10 @@ async function startConsultation({ skipFhir = false } = {}) {
     starting.value = false
   }
 }
+
+onMounted(() => {
+  if (smartLaunchDetected) void startSmartConsultation()
+})
 
 function handleResponse(data, rawFallback) {
   addMessage('user', data.user_display ?? rawFallback)
@@ -340,9 +397,10 @@ onBeforeUnmount(() => {
     <StartConsultationOverlay
       v-model:national-id="nationalId"
       :visible="overlayVisible"
-      :direct-fhir-enabled="directFhirEnabled"
+      :direct-fhir-enabled="effectiveDirectFhirEnabled"
       :fhir-base-url="fhirBaseUrl"
       :national-id-valid="nationalIdValid"
+      :smart-launch="smartLaunchDetected"
       :starting="starting"
       :error="startError"
       @start="startConsultation"
@@ -378,9 +436,12 @@ onBeforeUnmount(() => {
     <main class="patient-layout">
       <section class="consultation-panel">
         <div v-if="fhirPatient" class="patient-context-bar">
-          <span class="context-status">FHIR 已載入</span>
+          <span class="context-status">{{ patientContextStatus }}</span>
           <strong>{{ loadedPatientName }}</strong>
           <span>Patient/{{ fhirPatient.id }}</span>
+          <span v-if="smartContext?.encounterId">
+            Encounter/{{ smartContext.encounterId }}
+          </span>
           <span>{{ fhirResourceCount }} 筆 Resources</span>
         </div>
         <div

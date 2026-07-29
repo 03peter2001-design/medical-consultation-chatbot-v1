@@ -46,6 +46,20 @@ test('supports a complete backend URL override', () => {
   )
 })
 
+test('supports a same-origin backend proxy path', () => {
+  assert.equal(
+    resolveBackendUrl(
+      {
+        search: '',
+        protocol: 'https:',
+        hostname: 'ehr-app.example.test',
+      },
+      '/api/',
+    ),
+    '/api',
+  )
+})
+
 test('builds an encoded consultation list query', () => {
   assert.equal(
     consultationListPath({

@@ -6,6 +6,7 @@ defineProps({
   directFhirEnabled: { type: Boolean, default: false },
   fhirBaseUrl: { type: String, default: '' },
   nationalIdValid: { type: Boolean, default: false },
+  smartLaunch: { type: Boolean, default: false },
   starting: { type: Boolean, default: false },
   error: { type: String, default: '' },
 })
@@ -34,6 +35,9 @@ function normalizeInput() {
     <div v-if="directFhirEnabled" class="test-mode-badge">
       測試模式 · 前端直連 HAPI
     </div>
+    <div v-else-if="smartLaunch" class="smart-mode-badge">
+      SMART on FHIR · OAuth 授權模式
+    </div>
     <div v-if="directFhirEnabled" class="identity-lookup">
       <label for="national-id">身分證字號</label>
       <input
@@ -52,7 +56,11 @@ function normalizeInput() {
         直接以 Patient.identifier 查詢 {{ fhirBaseUrl }}
       </small>
     </div>
-    <p>
+    <p v-if="smartLaunch">
+      正在使用 EHR Launch Context 載入目前病人病歷<br />
+      access token 只保留在這個瀏覽器工作階段
+    </p>
+    <p v-else>
       Avatar 為選用功能<br />
       未連接也可以直接開始文字或語音問診
     </p>
@@ -67,6 +75,8 @@ function normalizeInput() {
           ? '載入中…'
           : error
             ? '重新載入'
+            : smartLaunch
+              ? '載入授權病歷並開始'
             : directFhirEnabled
               ? '載入病歷並開始問診'
               : '開始問診'
@@ -139,6 +149,17 @@ function normalizeInput() {
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
   letter-spacing: 0.06em;
+}
+
+.smart-mode-badge {
+  padding: 6px 11px;
+  border: 1px solid rgb(8 127 109 / 28%);
+  border-radius: 999px;
+  background: var(--green-soft);
+  color: var(--green);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
 }
 
 .identity-lookup {

@@ -3,7 +3,10 @@ const runtimeLocation =
     ? { search: '', protocol: 'http:', hostname: '127.0.0.1' }
     : window.location
 
-export function resolveBackendUrl(locationLike = runtimeLocation) {
+export function resolveBackendUrl(
+  locationLike = runtimeLocation,
+  configuredBaseUrl = import.meta.env?.VITE_BACKEND_BASE_URL,
+) {
   const params = new URLSearchParams(locationLike.search || '')
   const override = params.get('backend')?.trim()
 
@@ -18,6 +21,21 @@ export function resolveBackendUrl(locationLike = runtimeLocation) {
       }
     } catch {
       console.warn('忽略無效的 backend 網址參數：', override)
+    }
+  }
+
+  const configured = configuredBaseUrl?.trim()
+  if (configured?.startsWith('/')) {
+    return configured.replace(/\/+$/, '') || '/'
+  }
+  if (configured) {
+    try {
+      const url = new URL(configured)
+      if (url.protocol === 'http:' || url.protocol === 'https:') {
+        return url.toString().replace(/\/+$/, '')
+      }
+    } catch {
+      console.warn('忽略無效的 VITE_BACKEND_BASE_URL：', configured)
     }
   }
 

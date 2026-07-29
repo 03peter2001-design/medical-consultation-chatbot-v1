@@ -21,10 +21,11 @@
   <body>
     <p>正在連接 SMART 授權伺服器……</p>
     <script>
+      sessionStorage.setItem("chest-pain-ai-doctor.smart.pending", "1");
       FHIR.oauth2.authorize({
         clientId: "my_web_app",
         scope: "launch/patient patient/*.read",
-        redirectUri: "index.html",
+        redirectUri: new URL("/?smart=1", window.location.href).toString(),
       });
     </script>
   </body>

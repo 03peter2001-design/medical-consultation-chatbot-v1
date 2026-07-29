@@ -6,7 +6,7 @@ from collections.abc import Iterable
 from copy import deepcopy
 from typing import Any
 
-from .models import ChiefComplaintAssessment
+from .models import ChiefComplaintAssessment, QuestionnaireAnswerEvidence
 from .rule_config import clinical_fact_codes, clinical_fact_rules
 
 FACT_CODES = frozenset(clinical_fact_codes())
@@ -106,10 +106,22 @@ def questionnaire_prefills_from_assessment(
 ) -> dict[str, str]:
     """Map explicit, symptom-scoped facts onto matching questionnaire fields.
 
-    This is deliberately narrow: only verbatim onset times are copied. Other
-    semantic facts resolve choice options through ``filter_question_by_known_facts``.
+    Model answers are allowlisted against the deployed questionnaire before
+    reaching this function. Typed semantic facts continue to resolve choice
+    options through ``filter_question_by_known_facts``.
     """
     questions = list(questionnaire)
+    prefills: dict[str, str] = {}
+    for answer in assessment.questionnaire_answers:
+        for item in questions:
+            if item.get("route") != answer.route or item.get("base_field") != answer.field:
+                continue
+            selected = answer.value.split("、")
+            is_complete = not item.get("multiple") or (
+                bool(selected) and set(selected).issubset(set(item.get("exclusive_options", [])))
+            )
+            if is_complete:
+                prefills[item["field"]] = answer.value
     routes: list[str] = list(
         dict.fromkeys(
             str(item["route"])
@@ -131,11 +143,41 @@ def questionnaire_prefills_from_assessment(
     elif route_hint in routes and assessment.onset_time.value != "unknown":
         scoped_times.setdefault(str(route_hint), assessment.onset_time.value)
 
-    return {
-        item["field"]: scoped_times[item["route"]]
-        for item in questions
-        if (item.get("base_field") == "onset" and item.get("route") in scoped_times)
+    for item in questions:
+        if item.get("base_field") == "onset" and item.get("route") in scoped_times:
+            prefills.setdefault(item["field"], scoped_times[item["route"]])
+    return prefills
+
+
+def filter_question_by_questionnaire_answers(
+    question: dict[str, Any],
+    answers: Iterable[QuestionnaireAnswerEvidence] | None,
+) -> dict[str, Any]:
+    """Remove known partial selections without completing a multiple-choice field."""
+    filtered = deepcopy(question)
+    if not filtered.get("multiple"):
+        return filtered
+    known = {
+        selected
+        for answer in answers or []
+        if (
+            answer.route == filtered.get("route")
+            and answer.field == filtered.get("base_field", filtered.get("field"))
+        )
+        for selected in answer.value.split("、")
     }
+    if not known:
+        return filtered
+    filtered["options"] = [option for option in filtered.get("options", []) if option not in known]
+    filtered["semantic_options"] = {
+        option: mapping
+        for option, mapping in filtered.get("semantic_options", {}).items()
+        if option not in known
+    }
+    filtered["exclusive_options"] = [
+        option for option in filtered.get("exclusive_options", []) if option in filtered["options"]
+    ]
+    return filtered
 
 
 def facts_from_legacy_data(data: dict[str, Any]) -> list[dict[str, Any]]:

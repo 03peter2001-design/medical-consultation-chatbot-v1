@@ -4,12 +4,16 @@ from __future__ import annotations
 
 import json
 import re
+from functools import lru_cache
 from typing import Any, cast
+
+from domain.questionnaires import DISEASE_ROUTES, load_questionnaire_category
 
 from .models import (
     ChiefComplaintAssessment,
     ChiefFinding,
     EvidenceValue,
+    QuestionnaireAnswerEvidence,
     RouteEvidence,
     SymptomAssessment,
     SymptomEvidence,
@@ -29,6 +33,12 @@ _ONSET_TIME_PHRASE = re.compile(
     r"(?:分鐘|小時|天|週|星期|個月|年)(?:前|之前)"
     r")"
 )
+_ONGOING_DURATION_PHRASE = re.compile(
+    r"(?:已經)?持續(?:了)?"
+    r"(?P<value>(?:\d+(?:\.\d+)?|[零〇一二兩三四五六七八九十百半]+)"
+    r"(?:分鐘|小時|天|週|星期|個月|年))"
+    r"(?:了)?"
+)
 
 # Only these symptom concepts are allowed to start one of the deployed
 # pain questionnaires. Associated findings such as dizziness, visual change,
@@ -42,6 +52,37 @@ _QUESTIONNAIRE_ROUTING_SYMPTOMS = frozenset(
         "abdominal_pain",
     }
 )
+
+
+@lru_cache(maxsize=1)
+def _questionnaire_answer_definitions() -> dict[str, dict[str, dict[str, Any]]]:
+    """Return deployed information needs keyed by questionnaire route and field."""
+    return {
+        route: {
+            item["field"]: item
+            for item in load_questionnaire_category(route)
+            if item["kind"] in {"choice", "duration"}
+        }
+        for route in DISEASE_ROUTES
+    }
+
+
+def _questionnaire_answer_catalog(
+    routes: list[str] | tuple[str, ...] = DISEASE_ROUTES,
+) -> list[dict[str, Any]]:
+    return [
+        {
+            "route": route,
+            "field": field,
+            "question": question["prompt"],
+            "kind": question["kind"],
+            "multiple": bool(question["multiple"]),
+            **({"options": question["options"]} if question["kind"] == "choice" else {}),
+        }
+        for route, questions in _questionnaire_answer_definitions().items()
+        if route in routes
+        for field, question in questions.items()
+    ]
 
 
 def _trim(value: Any, limit: int = 500) -> str:
@@ -119,9 +160,15 @@ def _validated_onset_time(
     if not _has_grounded_evidence(text, evidence):
         return EvidenceValue()
     match = _ONSET_TIME_PHRASE.search(evidence)
-    if not match:
-        return EvidenceValue()
-    return EvidenceValue(value=match.group(0), evidence=evidence)
+    if match:
+        return EvidenceValue(value=match.group(0), evidence=evidence)
+    duration_match = _ONGOING_DURATION_PHRASE.search(evidence)
+    if duration_match:
+        return EvidenceValue(
+            value=duration_match.group("value"),
+            evidence=evidence,
+        )
+    return EvidenceValue()
 
 
 def _deterministic_onset_time(text: str) -> EvidenceValue:
@@ -131,6 +178,12 @@ def _deterministic_onset_time(text: str) -> EvidenceValue:
         if re.match(r"(?:就|才|便)?(?:開始|出現|發作)", following):
             value = match.group(0)
             return EvidenceValue(value=value, evidence=value)
+    duration_match = _ONGOING_DURATION_PHRASE.search(text)
+    if duration_match:
+        return EvidenceValue(
+            value=duration_match.group("value"),
+            evidence=duration_match.group(0),
+        )
     return EvidenceValue()
 
 
@@ -230,6 +283,99 @@ def _validated_symptoms(
     return validated
 
 
+def _validated_questionnaire_answers(
+    text: str,
+    answers: list[QuestionnaireAnswerEvidence],
+) -> list[QuestionnaireAnswerEvidence]:
+    definitions = _questionnaire_answer_definitions()
+    validated: list[QuestionnaireAnswerEvidence] = []
+    seen: set[tuple[str, str]] = set()
+    for answer in answers[:24]:
+        route = _trim(answer.route, 40).lower()
+        field = _trim(answer.field, 80)
+        value = _trim(answer.value, 300)
+        evidence = _trim(answer.evidence, 160)
+        question = definitions.get(route, {}).get(field)
+        key = (route, field)
+        if not question or key in seen or not _has_grounded_evidence(text, evidence):
+            continue
+        if question["kind"] == "choice":
+            selected = value.split("、")
+            if (
+                not selected
+                or any(item not in question["options"] for item in selected)
+                or (not question["multiple"] and len(selected) != 1)
+            ):
+                continue
+        else:
+            # Duration answers remain verbatim; the normal input validator
+            # checks them again if the patient later edits the value.
+            value = evidence
+        seen.add(key)
+        validated.append(
+            QuestionnaireAnswerEvidence(
+                route=route,
+                field=field,
+                value=value,
+                evidence=evidence,
+            )
+        )
+    return validated
+
+
+def _literal_questionnaire_answers(text: str) -> list[QuestionnaireAnswerEvidence]:
+    """Recover unambiguous option phrases even when the model omits them."""
+    recovered: list[QuestionnaireAnswerEvidence] = []
+    for route, questions in _questionnaire_answer_definitions().items():
+        for field, question in questions.items():
+            if question["kind"] != "choice":
+                continue
+            if question["multiple"]:
+                matched_options = [
+                    option
+                    for option in question["options"]
+                    if (len(_normalized(option)) >= 2 and _has_grounded_evidence(text, option))
+                ]
+                if matched_options:
+                    recovered.append(
+                        QuestionnaireAnswerEvidence(
+                            route=route,
+                            field=field,
+                            value="、".join(matched_options),
+                            evidence=(
+                                matched_options[0] if len(matched_options) == 1 else text[:160]
+                            ),
+                        )
+                    )
+                continue
+            matches: list[tuple[str, str]] = []
+            for option in question["options"]:
+                fragments = re.split(r"[，,、/／]|或", option)
+                evidence = next(
+                    (
+                        fragment
+                        for fragment in fragments
+                        if len(_normalized(fragment)) >= 5
+                        and _has_grounded_evidence(text, fragment)
+                    ),
+                    "",
+                )
+                if evidence:
+                    matches.append((option, evidence))
+            if len(matches) != 1:
+                continue
+            value, evidence = matches[0]
+            recovered.append(
+                QuestionnaireAnswerEvidence(
+                    route=route,
+                    field=field,
+                    value=value,
+                    evidence=evidence,
+                )
+            )
+    return recovered
+
+
 def validate_assessment(
     text: str,
     assessment: ChiefComplaintAssessment,
@@ -243,6 +389,16 @@ def validate_assessment(
         text,
         assessment.symptoms,
         symptom_definitions,
+    )
+    questionnaire_answers = _validated_questionnaire_answers(
+        text,
+        assessment.questionnaire_answers,
+    )
+    answered_fields = {(answer.route, answer.field) for answer in questionnaire_answers}
+    questionnaire_answers.extend(
+        answer
+        for answer in _literal_questionnaire_answers(text)
+        if (answer.route, answer.field) not in answered_fields
     )
     route_evidence: dict[str, list[str]] = {}
     for symptom in symptoms:
@@ -425,6 +581,7 @@ def validate_assessment(
             list(dict.fromkeys(route_candidates))[:4],
         ),
         symptom_assessments=symptom_assessments,
+        questionnaire_answers=questionnaire_answers[:24],
         uncertain_fields=[
             _trim(field, 80) for field in assessment.uncertain_fields[:12] if _trim(field, 80)
         ],
@@ -476,7 +633,7 @@ class ChiefComplaintExtractor:
                     },
                 ],
                 temperature=0,
-                max_tokens=900,
+                max_tokens=1200,
             )
             parsed = ChiefComplaintAssessment.from_model_text(response)
             return validate_assessment(redacted, parsed), ""
@@ -514,6 +671,17 @@ class ChiefComplaintExtractor:
             semantic["finding_definitions"],
             ensure_ascii=False,
         )
+        matched_routes = [
+            route
+            for route, keywords in rules["route_keywords"].items()
+            if any(keyword in text for keyword in keywords)
+        ]
+        questionnaire_catalog = json.dumps(
+            _questionnaire_answer_catalog(
+                matched_routes if len(matched_routes) == 1 else DISEASE_ROUTES
+            ),
+            ensure_ascii=False,
+        )
         return f"""
 請將以下病人自由主訴轉成結構化JSON。不要判斷urgent，不要診斷。
 
@@ -533,7 +701,8 @@ class ChiefComplaintExtractor:
 5. course只描述時間型態：episodic、continuous、recurrent、unknown。
 6. duration只描述持續長短：brief、prolonged、unknown；沒有明確描述就用unknown。
 7. severity.value只能是mild、moderate、severe、unknown。
-8. is_new_or_changed.value只能是true、false、unknown。
+8. is_new_or_changed.value只能是JSON字串"true"、"false"、"unknown"，
+   不可輸出JSON boolean。
 9. finding.code只能使用下列代碼：
    {finding_values}。
 10. findings只放present；negated_findings只放病人明確否認的項目。
@@ -547,6 +716,11 @@ class ChiefComplaintExtractor:
    對應的症狀問卷。頭暈、頭部外傷、視覺異常、噁心或嘔吐若沒有上述症狀，
    不得輸出 headache、chest 或 abdomen route；它們只能記錄為finding或
    非路由症狀。
+15. questionnaire_answers記錄病人原文已回答的核准問卷資訊。route、field
+   及value必須使用下方目錄中的原值；evidence必須逐字取自病人原文。
+   沒有回答的欄位不可輸出，也不可自行創造答案。multiple=true的題目中，
+   單一已知選項只代表部分答案，不代表整題已完成；仍要將該症狀輸出為
+   finding，讓系統移除已知選項後繼續詢問其他選項。
 
 語意正規化原則：
 {normalization_guidance}
@@ -565,6 +739,9 @@ duration定義：
 
 finding定義：
 {finding_guidance}
+
+可預填的問卷資訊目錄：
+{questionnaire_catalog}
 
 只回傳：
 {{
@@ -605,6 +782,7 @@ finding定義：
       "negated_findings": []
     }}
   ],
+  "questionnaire_answers": [],
   "uncertain_fields": []
 }}
 """.strip()

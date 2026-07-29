@@ -38,6 +38,15 @@ class SymptomEvidence(BaseModel):
     evidence: str = ""
 
 
+class QuestionnaireAnswerEvidence(BaseModel):
+    """An allowlisted questionnaire answer already supplied in free text."""
+
+    route: ChiefRoute
+    field: str
+    value: str
+    evidence: str = ""
+
+
 class SymptomAssessment(BaseModel):
     """Evidence-grounded facts scoped to one symptom route."""
 
@@ -72,6 +81,7 @@ class ChiefComplaintAssessment(BaseModel):
     negated_findings: list[ChiefFinding] = Field(default_factory=list)
     route_candidates: list[ChiefRoute | RouteEvidence] = Field(default_factory=list)
     symptom_assessments: list[SymptomAssessment] = Field(default_factory=list)
+    questionnaire_answers: list[QuestionnaireAnswerEvidence] = Field(default_factory=list)
     uncertain_fields: list[str] = Field(default_factory=list)
 
     @classmethod
@@ -109,6 +119,7 @@ class ChiefComplaintAssessment(BaseModel):
             "negated_findings",
             "route_candidates",
             "symptom_assessments",
+            "questionnaire_answers",
             "uncertain_fields",
         }
         unexpected = set(payload) - allowed_root
@@ -121,6 +132,14 @@ class ChiefComplaintAssessment(BaseModel):
         for item in payload.get("symptoms", []):
             if not isinstance(item, dict) or set(item) - {"code", "evidence"}:
                 raise ValueError("symptoms 含未允許欄位")
+        for item in payload.get("questionnaire_answers", []):
+            if not isinstance(item, dict) or set(item) != {
+                "route",
+                "field",
+                "value",
+                "evidence",
+            }:
+                raise ValueError("questionnaire_answers 格式不正確")
         for field in (
             "onset_time",
             "onset",
@@ -132,6 +151,8 @@ class ChiefComplaintAssessment(BaseModel):
             item = payload.get(field, {})
             if not isinstance(item, dict) or set(item) - {"value", "evidence"}:
                 raise ValueError(f"{field} 含未允許欄位")
+            if field == "is_new_or_changed" and isinstance(item.get("value"), bool):
+                item["value"] = str(item["value"]).lower()
         for field in ("findings", "negated_findings"):
             for item in payload.get(field, []):
                 if not isinstance(item, dict) or set(item) - {
@@ -170,6 +191,8 @@ class ChiefComplaintAssessment(BaseModel):
                     "evidence",
                 }:
                     raise ValueError(f"symptom_assessments.{field} 含未允許欄位")
+                if field == "is_new_or_changed" and isinstance(value.get("value"), bool):
+                    value["value"] = str(value["value"]).lower()
             for field in ("findings", "negated_findings"):
                 values = item.get(field, [])
                 if not isinstance(values, list):

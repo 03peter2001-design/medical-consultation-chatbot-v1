@@ -7,9 +7,15 @@ from amie.chief_complaint import (
     preferred_route,
     prioritized_routes,
 )
-from amie.clinical_facts import facts_from_assessment
+from amie.clinical_facts import (
+    facts_from_assessment,
+    filter_question_by_known_facts,
+    filter_question_by_questionnaire_answers,
+    questionnaire_prefills_from_assessment,
+)
 from amie.models import ChiefComplaintAssessment
 from amie.safety import detect_structured_red_flags
+from domain.questionnaires import build_questionnaire
 
 
 class FakeLLM:
@@ -527,6 +533,79 @@ class StructuredSafetyTests(unittest.TestCase):
         self.assertEqual(assessment.onset_time.value, "一小時之前")
         self.assertEqual(assessment.onset_time.evidence, "一小時之前")
 
+    def test_accepts_json_boolean_for_unchanged_symptom(self):
+        complaint = "我頭痛且有些畏光，已經持續一個月了，痛的程度跟以前差不多"
+        payload = headache_payload(
+            primary_symptom_code="headache",
+            symptoms=[{"code": "headache", "evidence": "頭痛"}],
+            severity={"value": "unknown", "evidence": ""},
+            duration={"value": "prolonged", "evidence": "已經持續一個月了"},
+            is_new_or_changed={
+                "value": False,
+                "evidence": "跟以前差不多",
+            },
+            findings=[
+                {
+                    "code": "photophobia",
+                    "status": "present",
+                    "evidence": "畏光",
+                }
+            ],
+            symptom_assessments=[
+                {
+                    "route": "headache",
+                    "evidence": "頭痛",
+                    "symptom_code": "headache",
+                    "duration": {
+                        "value": "prolonged",
+                        "evidence": "已經持續一個月了",
+                    },
+                    "is_new_or_changed": {
+                        "value": False,
+                        "evidence": "跟以前差不多",
+                    },
+                    "findings": [
+                        {
+                            "code": "photophobia",
+                            "status": "present",
+                            "evidence": "畏光",
+                        }
+                    ],
+                }
+            ],
+        )
+
+        assessment, error = ChiefComplaintExtractor(FakeLLM(payload)).extract(complaint)
+
+        self.assertEqual(error, "")
+        self.assertEqual(assessment.primary_symptom, "headache")
+        self.assertEqual(assessment.onset_time.value, "一個月")
+        self.assertEqual(assessment.onset_time.evidence, "已經持續一個月了")
+        self.assertEqual(assessment.is_new_or_changed.value, "false")
+        self.assertEqual(
+            assessment.symptom_assessments[0].is_new_or_changed.value,
+            "false",
+        )
+        self.assertEqual(
+            {finding.code for finding in assessment.findings},
+            {"photophobia"},
+        )
+        answered = {
+            (answer.route, answer.field): (answer.value, answer.evidence)
+            for answer in assessment.questionnaire_answers
+        }
+        self.assertEqual(
+            answered[("headache", "worst_ever")],
+            ("不是，跟以前差不多或較輕", "跟以前差不多"),
+        )
+        self.assertEqual(
+            questionnaire_prefills_from_assessment(
+                assessment,
+                build_questionnaire("headache"),
+            )["worst_ever"],
+            "不是，跟以前差不多或較輕",
+        )
+
     def test_does_not_assign_trauma_time_to_later_dizziness(self):
         complaint = "我一小時前撞到頭，現在開始頭暈"
         payload = {
@@ -550,6 +629,64 @@ class StructuredSafetyTests(unittest.TestCase):
 
         self.assertEqual(error, "")
         self.assertEqual(assessment.onset_time.value, "unknown")
+
+    def test_partial_multiple_choice_answer_keeps_question_and_removes_known_option(self):
+        complaint = "我頭痛而且有些畏光"
+        payload = headache_payload(
+            primary_symptom_code="headache",
+            symptoms=[{"code": "headache", "evidence": "頭痛"}],
+            severity={"value": "unknown", "evidence": ""},
+            findings=[],
+            questionnaire_answers=[],
+        )
+
+        assessment, error = ChiefComplaintExtractor(FakeLLM(payload)).extract(complaint)
+        questionnaire = build_questionnaire("headache")
+        associated = next(item for item in questionnaire if item["field"] == "associated")
+        facts = facts_from_assessment(
+            assessment,
+            turn=1,
+            source="test",
+        )
+        filtered = filter_question_by_known_facts(associated, facts)
+        filtered = filter_question_by_questionnaire_answers(
+            filtered,
+            assessment.questionnaire_answers,
+        )
+        prefills = questionnaire_prefills_from_assessment(
+            assessment,
+            questionnaire,
+        )
+
+        self.assertEqual(error, "")
+        self.assertNotIn("associated", prefills)
+        self.assertIsNotNone(filtered)
+        self.assertNotIn("畏光", filtered["options"])
+        self.assertIn("畏聲", filtered["options"])
+        self.assertIn("以上皆無", filtered["options"])
+
+    def test_exclusive_multiple_choice_answer_completes_the_field(self):
+        assessment = ChiefComplaintAssessment.model_validate(
+            {
+                "primary_symptom": "headache",
+                "primary_evidence": "頭痛",
+                "questionnaire_answers": [
+                    {
+                        "route": "headache",
+                        "field": "associated",
+                        "value": "以上皆無",
+                        "evidence": "以上皆無",
+                    }
+                ],
+            }
+        )
+
+        prefills = questionnaire_prefills_from_assessment(
+            assessment,
+            build_questionnaire("headache"),
+        )
+
+        self.assertEqual(prefills["associated"], "以上皆無")
 
     def test_local_route_can_anchor_structured_safety(self):
         payload = headache_payload(

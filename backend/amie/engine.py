@@ -352,6 +352,15 @@ class AMIEEngine:
                     ]
                 }.values()
             ),
+            questionnaire_answers=list(
+                {
+                    (item.route, item.field): item
+                    for item in [
+                        *base.questionnaire_answers,
+                        *delta.questionnaire_answers,
+                    ]
+                }.values()
+            ),
             uncertain_fields=list(
                 dict.fromkeys(
                     [

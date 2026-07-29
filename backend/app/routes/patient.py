@@ -20,6 +20,7 @@ from amie import (
 from amie.clinical_facts import (
     facts_from_assessment,
     filter_question_by_known_facts,
+    filter_question_by_questionnaire_answers,
     merge_facts,
     questionnaire_prefills_from_assessment,
 )
@@ -594,6 +595,11 @@ def _apply_chief_questionnaire_prefills(
             questionnaire,
         )
     )
+    for index, item in enumerate(questionnaire):
+        questionnaire[index] = filter_question_by_questionnaire_answers(
+            item,
+            assessment.questionnaire_answers,
+        )
 
 
 def _get_amie_engine() -> AMIEEngine:

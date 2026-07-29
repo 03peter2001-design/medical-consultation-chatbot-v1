@@ -16,6 +16,7 @@ htmlcov/
 .vulture_whitelist.py
 .DS_Store
 .build-state/
+.rag-cache/
 
 # Licensed SNOMED CT RF2 releases must be obtained by each deployer.
 SnomedCT_*RF2*.zip

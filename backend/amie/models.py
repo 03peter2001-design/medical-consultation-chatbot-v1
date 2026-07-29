@@ -31,6 +31,18 @@ class RouteEvidence(BaseModel):
     evidence: str = ""
 
 
+class SymptomAssessment(BaseModel):
+    """Evidence-grounded facts scoped to one symptom route."""
+
+    route: ChiefRoute
+    evidence: str = ""
+    onset: EvidenceValue = Field(default_factory=EvidenceValue)
+    severity: EvidenceValue = Field(default_factory=EvidenceValue)
+    is_new_or_changed: EvidenceValue = Field(default_factory=EvidenceValue)
+    findings: list[ChiefFinding] = Field(default_factory=list)
+    negated_findings: list[ChiefFinding] = Field(default_factory=list)
+
+
 class ChiefComplaintAssessment(BaseModel):
     """Evidence-grounded semantic extraction, not a diagnosis or triage."""
 
@@ -43,6 +55,7 @@ class ChiefComplaintAssessment(BaseModel):
     findings: list[ChiefFinding] = Field(default_factory=list)
     negated_findings: list[ChiefFinding] = Field(default_factory=list)
     route_candidates: list[ChiefRoute | RouteEvidence] = Field(default_factory=list)
+    symptom_assessments: list[SymptomAssessment] = Field(default_factory=list)
     uncertain_fields: list[str] = Field(default_factory=list)
 
     @classmethod
@@ -93,10 +106,20 @@ class ChiefComplaintAssessment(BaseModel):
         return self.dict()
 
 
+class DifferentialCoding(BaseModel):
+    """A model-suggested SNOMED CT code that still requires clinical review."""
+
+    system: str
+    code: str
+    display: str
+    source: str = "ai-suggested"
+
+
 class DifferentialHypothesis(BaseModel):
     """A qualitative hypothesis, deliberately not a probability score."""
 
     condition: str
+    coding: DifferentialCoding | None = None
     supporting_evidence: list[str] = Field(default_factory=list)
     opposing_evidence: list[str] = Field(default_factory=list)
 
@@ -139,6 +162,25 @@ class AMIEDecision(BaseModel):
                 raise
             payload = json.loads(cleaned[start : end + 1])
 
+        if isinstance(payload, dict):
+            for hypothesis in payload.get("differential_hypotheses", []):
+                if not isinstance(hypothesis, dict):
+                    continue
+                coding = hypothesis.get("coding")
+                valid = (
+                    isinstance(coding, dict)
+                    and coding.get("system") == "http://snomed.info/sct"
+                    and str(coding.get("code", "")).isdigit()
+                    and 6 <= len(str(coding["code"])) <= 18
+                    and bool(str(coding.get("display", "")).strip())
+                )
+                if valid:
+                    coding["code"] = str(coding["code"]).strip()
+                    coding["display"] = str(coding["display"]).strip()[:200]
+                    coding["source"] = "ai-suggested"
+                else:
+                    hypothesis["coding"] = None
+
         if hasattr(cls, "model_validate"):
             return cls.model_validate(payload)
         return cls.parse_obj(payload)
@@ -157,7 +199,7 @@ class AMIEEngineResult(BaseModel):
     next_question: dict[str, Any] | None = None
     acknowledgement: str = ""
     handoff_reason: str = ""
-    red_flags: list[dict[str, str]] = Field(default_factory=list)
+    red_flags: list[dict[str, Any]] = Field(default_factory=list)
     differential_hypotheses: list[dict[str, Any]] = Field(default_factory=list)
     knowledge_gaps: list[str] = Field(default_factory=list)
     evidence_timeline: list[dict[str, Any]] = Field(default_factory=list)

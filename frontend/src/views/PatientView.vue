@@ -54,7 +54,11 @@ const selectedPainLocationIds = ref([])
 const questionInput = ref(null)
 const questionnaireInfo = ref(null)
 const progressState = ref({ current: 0, total: 1, percent: 0 })
-const triageState = ref({ level: 'routine', message: '' })
+const triageState = ref({
+  level: 'routine',
+  message: '',
+  possible_conditions: [],
+})
 const recording = ref(false)
 const voiceProcessing = ref(false)
 const chatbox = ref(null)
@@ -85,7 +89,8 @@ const microphoneLabel = computed(() => {
 const showBodyMap = computed(
   () =>
     started.value &&
-    questionInput.value?.field === 'location' &&
+    (questionInput.value?.base_field ?? questionInput.value?.field) ===
+      'location' &&
     questionnaireInfo.value?.section === 'disease' &&
     !completed.value,
 )
@@ -100,6 +105,13 @@ const loadedPatientName = computed(() =>
 )
 const painMapPreset = computed(() =>
   getPainMapPreset(questionnaireInfo.value?.route),
+)
+const urgentConditions = computed(() =>
+  Array.isArray(triageState.value?.possible_conditions)
+    ? triageState.value.possible_conditions.filter(
+        (condition) => typeof condition === 'string' && condition.trim(),
+      )
+    : [],
 )
 
 watch(
@@ -376,9 +388,25 @@ onBeforeUnmount(() => {
           v-if="triageState.level === 'urgent'"
           class="urgent-care-banner"
           role="alert"
+          aria-live="assertive"
         >
-          <strong>建議儘早就醫</strong>
-          <span>{{ triageState.message }}</span>
+          <div class="urgent-care-heading">
+            <span class="urgent-care-icon" aria-hidden="true">!</span>
+            <div>
+              <strong>安全警示：問診已中斷</strong>
+              <p>{{ triageState.message }}</p>
+            </div>
+          </div>
+          <div
+            v-if="urgentConditions.length"
+            class="urgent-condition-alert"
+          >
+            <span>可能涉及的緊急疾病</span>
+            <strong>{{ urgentConditions.join('、') }}</strong>
+          </div>
+          <p class="urgent-care-disclaimer">
+            以上僅為安全規則提示，不代表診斷；請勿等待線上問診結果。
+          </p>
         </div>
         <div class="progress-bar" aria-label="問診進度">
           <span
@@ -535,22 +563,78 @@ onBeforeUnmount(() => {
 .urgent-care-banner {
   display: flex;
   flex: 0 0 auto;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-  padding: 13px 20px;
-  border-bottom: 1px solid rgb(166 96 18 / 28%);
-  background: #fff5e7;
-  color: #71410d;
-  font-size: 15px;
-  line-height: 1.55;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgb(180 35 53 / 34%);
+  background: #fff0f1;
+  color: #6f1622;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-.urgent-care-banner strong {
-  flex: 0 0 auto;
-  color: var(--warning);
+.urgent-care-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.urgent-care-heading > div {
+  min-width: 0;
+}
+
+.urgent-care-heading strong {
+  display: block;
+  color: #a41624;
   font-family: 'Noto Sans TC', sans-serif;
+  font-size: 18px;
   letter-spacing: 0.04em;
+}
+
+.urgent-care-heading p {
+  margin-top: 2px;
+}
+
+.urgent-care-icon {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  place-items: center;
+  border-radius: 50%;
+  background: #b42335;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.urgent-condition-alert {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 2px solid #c21f35;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.urgent-condition-alert span {
+  color: #831421;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.urgent-condition-alert strong {
+  color: #b00020;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.45;
+}
+
+.urgent-care-disclaimer {
+  color: #7f3a43;
+  font-size: 12px;
 }
 
 .progress-bar {
@@ -692,6 +776,18 @@ onBeforeUnmount(() => {
 
   .patient-context-bar span:last-child {
     display: none;
+  }
+
+  .urgent-care-banner {
+    padding: 14px 12px;
+  }
+
+  .urgent-care-heading strong {
+    font-size: 17px;
+  }
+
+  .urgent-condition-alert strong {
+    font-size: 18px;
   }
 
   .patient-input-bar {

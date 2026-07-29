@@ -11,6 +11,7 @@ from .models import (
     ChiefFinding,
     EvidenceValue,
     RouteEvidence,
+    SymptomAssessment,
 )
 from .rule_config import finding_codes, load_safety_rules, supported_routes
 
@@ -191,6 +192,46 @@ def validate_assessment(
     if primary_symptom != "unknown" and primary_symptom not in route_candidates:
         route_candidates.insert(0, primary_symptom)
 
+    symptom_assessments: list[SymptomAssessment] = []
+    seen_symptom_routes: set[str] = set()
+    for symptom in assessment.symptom_assessments[:4]:
+        route = _trim(symptom.route, 40).lower()
+        evidence = _trim(symptom.evidence, 160)
+        if (
+            route not in allowed_routes
+            or route in seen_symptom_routes
+            or not _has_grounded_evidence(text, evidence)
+        ):
+            continue
+        seen_symptom_routes.add(route)
+        symptom_assessments.append(
+            SymptomAssessment(
+                route=route,
+                evidence=evidence,
+                onset=_validated_evidence_value(
+                    text,
+                    symptom.onset,
+                    {"sudden", "gradual", "unknown"},
+                ),
+                severity=_validated_evidence_value(
+                    text,
+                    symptom.severity,
+                    {"mild", "moderate", "severe", "unknown"},
+                ),
+                is_new_or_changed=_validated_evidence_value(
+                    text,
+                    symptom.is_new_or_changed,
+                    {"true", "false", "unknown"},
+                ),
+                findings=_validated_findings(text, symptom.findings),
+                negated_findings=_validated_findings(
+                    text,
+                    symptom.negated_findings,
+                    force_absent=True,
+                ),
+            )
+        )
+
     return ChiefComplaintAssessment(
         primary_symptom=primary_symptom,
         primary_evidence=primary_evidence,
@@ -207,6 +248,7 @@ def validate_assessment(
             list[str | RouteEvidence],
             list(dict.fromkeys(route_candidates))[:4],
         ),
+        symptom_assessments=symptom_assessments,
         uncertain_fields=[
             _trim(field, 80) for field in assessment.uncertain_fields[:12] if _trim(field, 80)
         ],
@@ -303,6 +345,8 @@ class ChiefComplaintExtractor:
 7. 每個非unknown值、route及finding都必須附原文逐字evidence。
 8. 即使有多個症狀，symptom_domains及route_candidates仍不可輸出字串以外
    的route值，也不可使用domain、value等其他欄位名稱。
+9. 有多個症狀時，symptom_assessments要為每個症狀分別整理嚴重程度、發作型態、
+   是否新發或改變及相關finding；不可把一個症狀的資訊套用到另一個症狀。
 
 語意正規化原則：
 {normalization_guidance}
@@ -330,16 +374,91 @@ finding定義：
   "route_candidates": [
     {{"route": "unknown", "evidence": ""}}
   ],
+  "symptom_assessments": [
+    {{
+      "route": "unknown",
+      "evidence": "",
+      "onset": {{"value": "unknown", "evidence": ""}},
+      "severity": {{"value": "unknown", "evidence": ""}},
+      "is_new_or_changed": {{"value": "unknown", "evidence": ""}},
+      "findings": [],
+      "negated_findings": []
+    }}
+  ],
   "uncertain_fields": []
 }}
 """.strip()
 
 
+def prioritized_routes(
+    assessment: ChiefComplaintAssessment | None,
+    risk_profile: dict[str, dict[str, Any]] | None = None,
+) -> list[str]:
+    """Rank evidenced symptom routes while retaining every supported route."""
+    if not assessment:
+        return []
+    allowed_routes = supported_routes()
+    candidates = [
+        route
+        for route in assessment.route_candidates
+        if isinstance(route, str) and route in allowed_routes
+    ]
+    profiles = {
+        profile.route: profile
+        for profile in assessment.symptom_assessments
+        if profile.route in allowed_routes
+    }
+    for route in profiles:
+        if route not in candidates:
+            candidates.append(route)
+    if (
+        assessment.primary_symptom in allowed_routes
+        and assessment.primary_evidence
+        and assessment.primary_symptom not in candidates
+    ):
+        candidates.insert(0, assessment.primary_symptom)
+
+    risks = risk_profile or {}
+    rules = load_safety_rules()["structured_rules"]
+    route_risks: dict[str, set[str]] = {route: set() for route in allowed_routes}
+    for rule in rules:
+        primary_routes = rule.get("when", {}).get("primary_in", [])
+        requested_risks = {
+            *rule.get("when", {}).get("all_risks", []),
+            *rule.get("when", {}).get("any_risks", []),
+        }
+        for route in primary_routes:
+            if route in route_risks:
+                route_risks[route].update(requested_risks)
+
+    severity_score = {"severe": 30, "moderate": 20, "mild": 10}
+    onset_score = {"sudden": 12, "gradual": 4}
+
+    def priority(route: str) -> int:
+        profile = profiles.get(route)
+        if not profile:
+            return 0
+        score = severity_score.get(profile.severity.value, 0)
+        score += onset_score.get(profile.onset.value, 0)
+        score += 6 if profile.is_new_or_changed.value == "true" else 0
+        score += len({finding.code for finding in profile.findings if finding.status == "present"})
+        score += 3 * sum(
+            bool(risks.get(risk, {}).get("present")) for risk in route_risks.get(route, set())
+        )
+        return score
+
+    return sorted(candidates, key=priority, reverse=True)
+
+
 def preferred_route(
     assessment: ChiefComplaintAssessment | None,
+    risk_profile: dict[str, dict[str, Any]] | None = None,
 ) -> str | None:
     if not assessment:
         return None
+    ranked = prioritized_routes(assessment, risk_profile)
+    if assessment.symptom_assessments and ranked:
+        return ranked[0]
     allowed_routes = supported_routes()
     if assessment.primary_symptom in {*allowed_routes, "other"} and assessment.primary_evidence:
         return assessment.primary_symptom

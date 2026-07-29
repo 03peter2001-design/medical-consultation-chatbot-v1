@@ -64,6 +64,21 @@ class QuestionnaireDefinitionTests(unittest.TestCase):
             self.assertIn("1週前", onset["quick_options"])
             self.assertIn("個月前", onset["units"])
 
+    def test_multiple_symptom_routes_share_demographics_but_keep_answers_separate(self):
+        questionnaire = build_questionnaire(["headache", "abdomen"])
+        fields = [item["field"] for item in questionnaire]
+        disease = [item for item in questionnaire if item["section"] == "disease"]
+
+        self.assertEqual(fields.count("name"), 1)
+        self.assertEqual(len(fields), len(set(fields)))
+        self.assertEqual(
+            [item["route"] for item in disease if item["base_field"] == "onset"],
+            ["headache", "abdomen"],
+        )
+        self.assertIn("onset", fields)
+        self.assertIn("abdomen__onset", fields)
+        self.assertIn("abdomen__location", fields)
+
     def test_selectable_basic_fields_are_structured(self):
         questionnaire = build_questionnaire("chest")
         by_field = {item["field"]: item for item in questionnaire}

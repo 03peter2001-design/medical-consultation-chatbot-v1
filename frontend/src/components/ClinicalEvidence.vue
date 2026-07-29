@@ -75,7 +75,8 @@ defineProps({
       <aside class="terminology-note">
         <strong>標準術語</strong>
         <span>
-          僅顯示 FHIR 原始 Coding；「未編碼」不會由系統自行猜測。
+          FHIR 原始 Coding 會直接標示；鑑別診斷的 SNOMED CT
+          為 AI 建議編碼，仍須由醫師或術語伺服器確認。
           <template v-if="clinical.terminologyReference">
             本機參照
             {{ clinical.terminologyReference.package }}#{{

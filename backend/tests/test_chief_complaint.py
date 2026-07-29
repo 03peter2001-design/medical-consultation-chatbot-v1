@@ -5,6 +5,7 @@ from amie.chief_complaint import (
     ChiefComplaintExtractor,
     build_fhir_risk_profile,
     preferred_route,
+    prioritized_routes,
 )
 from amie.models import ChiefComplaintAssessment
 from amie.safety import detect_structured_red_flags
@@ -189,6 +190,35 @@ class ChiefComplaintExtractorTests(unittest.TestCase):
             ["headache", "abdomen"],
         )
         self.assertEqual(preferred_route(assessment), "headache")
+
+    def test_prioritizes_more_severe_symptom_and_retains_secondary_route(self):
+        complaint = "我頭痛有點痛，肚子痛到受不了而且突然發作"
+        payload = headache_payload(
+            primary_evidence="頭痛",
+            severity={"value": "mild", "evidence": "頭痛有點痛"},
+            findings=[],
+            symptom_domains=["headache", "abdomen"],
+            route_candidates=["headache", "abdomen"],
+            symptom_assessments=[
+                {
+                    "route": "headache",
+                    "evidence": "頭痛",
+                    "severity": {"value": "mild", "evidence": "頭痛有點痛"},
+                },
+                {
+                    "route": "abdomen",
+                    "evidence": "肚子痛",
+                    "onset": {"value": "sudden", "evidence": "突然發作"},
+                    "severity": {"value": "severe", "evidence": "肚子痛到受不了"},
+                },
+            ],
+        )
+
+        assessment, error = ChiefComplaintExtractor(FakeLLM(payload)).extract(complaint)
+
+        self.assertEqual(error, "")
+        self.assertEqual(prioritized_routes(assessment), ["abdomen", "headache"])
+        self.assertEqual(preferred_route(assessment), "abdomen")
 
     def test_discards_object_route_without_verbatim_evidence(self):
         complaint = "我頭痛"

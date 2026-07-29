@@ -1,20 +1,74 @@
-# Local FHIR terminology reference
+# Vendored TW Core FHIR packages
 
-The checked-in archive is the official `tw.gov.mohw.twcore#1.0.0`
-FHIR R4 package published by Taiwan's Ministry of Health and Welfare.
+This directory contains the complete FHIR NPM package dependency closure used
+to install `tw.gov.mohw.twcore#1.0.0` into HAPI FHIR R4. A fresh clone does not
+need a separate HAPI Starter checkout or a live FHIR package registry during
+package installation.
 
-- Registry source: `https://packages.fhir.org/tw.gov.mohw.twcore/1.0.0`
-- Canonical: `https://twcore.mohw.gov.tw/ig/twcore`
-- Downloaded: 2026-07-28
-- SHA-256:
-  `a9ea37f16ea163b2c584ce7d423a5095587a1c027d0d4e4a5cdb0e7445e4932d`
+## Reproducibility
 
-The extracted JSON files are unmodified resources from that package and are
-the subset used by the application to identify the official SNOMED CT and
-LOINC system URIs and applicable TW Core profiles.
+`packages.lock.json` is the source of truth. It records installation order,
+package name, exact version, manifest license value, relative archive path and
+SHA-256 for every archive. `python -m scripts.install_twcore` checks every
+manifest and hash before contacting HAPI.
 
-This repository does **not** create a free-text-to-code lookup table.
-Incoming codes are retained only when they already exist in a FHIR `Coding`.
-Full SNOMED CT terminology lookup requires a licensed release or terminology
-server; TW Core references SNOMED CT but does not redistribute the complete
-SNOMED CT concept release.
+The package set contains:
+
+| Package | Version | Why it is included |
+| --- | --- | --- |
+| `hl7.fhir.r4.core` | 4.0.1 | FHIR R4 base definitions |
+| `hl7.fhir.r4.examples` | 4.0.1 | SDC dependency |
+| `hl7.fhir.uv.extensions.r4` | 5.2.0 | TW Core and terminology extensions |
+| `hl7.terminology.r4` | 5.0.0 | IPS-pinned terminology dependency |
+| `fhir.dicom` | 2022.4.20221006 | IPS transitive dependency |
+| `hl7.fhir.uv.ips` | 1.1.0 | TW Core direct dependency |
+| `hl7.fhir.uv.sdc` | 3.0.0 | TW Core direct dependency |
+| `hl7.terminology.r4` | 7.0.0 | TW Core direct terminology dependency |
+| `tw.gov.mohw.twcore` | 1.0.0 | Taiwan Core Implementation Guide |
+
+Both terminology versions are intentional: IPS 1.1.0 pins 5.0.0 while TW Core
+1.0.0 pins 7.0.0. HAPI stores FHIR packages by package name and version.
+
+The TW Core archive was downloaded from
+`https://packages.fhir.org/tw.gov.mohw.twcore/1.0.0`; the dependency archives
+under `packages/` use the equivalent registry URL formed from each locked name
+and version. The archive manifests label the HL7 and TW Core packages
+`CC0-1.0`; the DICOM package manifest labels itself `free`.
+
+## Install
+
+The root Compose workflow starts HAPI, waits for it to become healthy and
+installs the complete locked set:
+
+```bash
+docker compose -f compose.fhir.yml up -d
+docker compose -f compose.fhir.yml logs twcore-installer
+```
+
+For an already-running HAPI server:
+
+```bash
+cd backend
+python -m scripts.install_twcore
+```
+
+Set `FHIR_BASE_URL` or pass `--server` when HAPI is not available at
+`http://127.0.0.1:8080/fhir`. To verify local files without contacting HAPI:
+
+```bash
+cd backend
+python -m scripts.install_twcore --verify-only
+```
+
+The extracted `twcore-1.0.0/` files are an unmodified application-facing subset
+used to identify official system URIs and relevant profiles. The complete
+archive is the file installed into HAPI.
+
+## Scope
+
+These archives reproduce the TW Core profiles, extensions, ValueSets,
+CodeSystems and package dependencies. They do **not** contain the full LOINC or
+SNOMED CT releases. TW Core references those external systems but does not
+redistribute their complete terminology content. Full SNOMED CT validation
+still requires a licensed release or terminology service, and full LOINC
+validation requires a separately obtained LOINC release.

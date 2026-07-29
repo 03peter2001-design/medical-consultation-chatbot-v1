@@ -22,6 +22,10 @@ class SafetyRuleConfigTests(unittest.TestCase):
         )
         self.assertEqual(rules["raw_rules"]["combinations"], [])
         self.assertGreater(len(rules["structured_rules"]), 10)
+        self.assertIn(
+            "急性冠心症（含心肌梗塞）",
+            rules["urgent_condition_candidates"]["胸部不適合併冒冷汗"],
+        )
 
     def test_unknown_finding_reference_is_rejected(self):
         rules = copy.deepcopy(load_safety_rules())
@@ -32,6 +36,7 @@ class SafetyRuleConfigTests(unittest.TestCase):
 
     def test_new_phrase_rule_can_be_added_without_python_change(self):
         rules = copy.deepcopy(load_safety_rules())
+        rules["urgent_condition_candidates"]["由 JSON 加入的測試規則"] = ["測試用緊急疾病"]
         rules["raw_rules"]["universal"].append(
             {
                 "code": "configured_test_rule",
@@ -50,6 +55,17 @@ class SafetyRuleConfigTests(unittest.TestCase):
             )
 
         self.assertEqual(flags[0]["code"], "configured_test_rule")
+        self.assertEqual(
+            flags[0]["possible_conditions"],
+            ("測試用緊急疾病",),
+        )
+
+    def test_every_urgent_rule_requires_condition_candidates(self):
+        rules = copy.deepcopy(load_safety_rules())
+        del rules["urgent_condition_candidates"]["意識狀態異常"]
+
+        with self.assertRaisesRegex(ValueError, "缺少安全規則標籤"):
+            validate_safety_rules(rules)
 
     def test_questionnaire_semantic_options_reference_known_findings(self):
         rules = load_safety_rules()

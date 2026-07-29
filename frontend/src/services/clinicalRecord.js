@@ -94,6 +94,28 @@ function findingLabel(finding) {
 
 export function buildClinicalRecord(record = {}) {
   const data = record.patient_data || {}
+  const routes = Array.isArray(data.types) && data.types.length
+    ? data.types
+    : [record.type].filter(Boolean)
+  const routeLabels = routes.map((route) => TYPE_LABELS[route] || route)
+  const symptomFields = [
+    'onset',
+    'start_type',
+    'location',
+    'worst_ever',
+    'quality',
+    'aggravate',
+    'relieve',
+    'associated',
+    'risk_flags',
+    'contact_history',
+    'fixed',
+    'tender',
+    'cardio',
+    'neuro',
+    'abdomen_hx',
+    'surgery',
+  ]
   const chief = record.chief_assessment || {}
   const extraction = chief.extraction || {}
   const amie = record.amie_state || {}
@@ -109,6 +131,23 @@ export function buildClinicalRecord(record = {}) {
           (candidate) => codingKey(candidate) === codingKey(coding),
         ) === index,
     )
+  const symptomFacts = routes.flatMap((route, routeIndex) => {
+    const prefix = routeIndex === 0 ? '' : `${route}__`
+    return labeledFacts(
+      data,
+      symptomFields.map((field) => `${prefix}${field}`),
+      codings,
+    ).map((fact) => ({
+      ...fact,
+      label:
+        routes.length > 1
+          ? `${TYPE_LABELS[route] || route} · ${
+              FIELD_LABELS[fact.key.replace(prefix, '')] ||
+              fact.key.replace(prefix, '')
+            }`
+          : fact.label,
+    }))
+  })
   const differentials = (amie.differential_hypotheses || []).map(
     (hypothesis) => {
       const coding = resolveConditionCoding(
@@ -128,7 +167,7 @@ export function buildClinicalRecord(record = {}) {
       gender: data.gender || '未提供',
       age: isPresent(data.age) ? `${data.age}歲` : '年齡未提供',
       bloodType: data.blood_type || '血型未提供',
-      type: TYPE_LABELS[record.type] || record.type || '未分類',
+      type: routeLabels.join('、') || '未分類',
       triage: record.triage_level === 'urgent' ? '優先處理' : '一般處理',
       urgent: record.triage_level === 'urgent',
       bloodTypeCodings: codings.filter(
@@ -147,21 +186,7 @@ export function buildClinicalRecord(record = {}) {
         label: findingLabel(finding),
         evidence: finding.evidence || '',
       })),
-    symptomFacts: labeledFacts(
-      data,
-      [
-        'onset',
-        'start_type',
-        'location',
-        'worst_ever',
-        'quality',
-        'aggravate',
-        'relieve',
-        'associated',
-        'risk_flags',
-      ],
-      codings,
-    ),
+    symptomFacts,
     historyFacts: labeledFacts(
       data,
       [

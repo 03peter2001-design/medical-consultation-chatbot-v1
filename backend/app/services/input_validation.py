@@ -91,7 +91,7 @@ def validate_question_answer(
     if _is_invalid_answer(answer):
         return "請輸入內容後再送出。"
 
-    field = question.get("field", "")
+    field = question.get("base_field", question.get("field", ""))
     kind = question.get("kind", "text")
     if field == "location" and pain_location_ids:
         return None
@@ -117,11 +117,13 @@ def store_question_answer(
 ) -> tuple[str, str]:
     """Store validated input as submitted, deriving only structural fields."""
     field = question["field"]
+    base_field = question.get("base_field", field)
+    field_prefix = field[: -len(base_field)] if field != base_field else ""
     stored_answer = answer
 
-    if field == "location" and pain_location_ids:
+    if base_field == "location" and pain_location_ids:
         pain_locations = serialize_pain_locations(pain_location_ids)
-        data["pain_locations"] = pain_locations
+        data[f"{field_prefix}pain_locations"] = pain_locations
         stored_answer = "、".join(location["label"] for location in pain_locations)
 
     if question.get("kind") == "date":
@@ -137,9 +139,11 @@ def store_question_answer(
     data[field] = stored_answer
     if question.get("kind") == "duration":
         parts = _duration_parts(question, stored_answer)
+        onset_num_field = f"{field_prefix}onset_num"
+        onset_unit_field = f"{field_prefix}onset_unit"
         if parts:
-            data["onset_num"], data["onset_unit"] = parts
+            data[onset_num_field], data[onset_unit_field] = parts
         else:
-            data.pop("onset_num", None)
-            data.pop("onset_unit", None)
+            data.pop(onset_num_field, None)
+            data.pop(onset_unit_field, None)
     return stored_answer, stored_answer

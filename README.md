@@ -29,6 +29,7 @@ medical-consultation-chatbot-v1/
 │   └── package.json
 ├── index.html               # 舊版病患端（相容保留）
 ├── doctor.html              # 舊版醫師端（相容保留）
+├── compose.fhir.yml         # HAPI FHIR、PostgreSQL 與 TW Core 自動安裝
 ├── backend/
 │   ├── main.py               # FastAPI ASGI 入口（匯出 app）
 │   ├── app/                  # HTTP 應用層
@@ -207,9 +208,42 @@ npm run dev
 正式建置可執行 `npm run build`，輸出位於 `frontend/dist/`。根目錄的
 `index.html` 與 `doctor.html` 是重構前的舊版，暫時保留供比對與相容使用。
 
-### 7.（選用）連接測試用 HAPI FHIR Server
+### 7.（選用）啟動含 TW Core 的 HAPI FHIR Server
 
-Vue 病患端可直接連接開發環境中的 HAPI FHIR Server。先複製前端設定：
+專案已包含 HAPI FHIR 8.8.0、PostgreSQL 16 與 TW Core 自動安裝所需的
+Compose 設定。從新的 clone 在專案根目錄執行：
+
+```bash
+docker compose -f compose.fhir.yml up -d
+```
+
+第一次啟動會建立 PostgreSQL schema，接著 `twcore-installer` 會依鎖定順序
+安裝專案內附的 9 個 FHIR NPM packages。這些檔案包含 TW Core 1.0.0 的
+所有直接及傳遞依賴，安裝時不必另外下載 FHIR packages。可用以下指令確認：
+
+```bash
+docker compose -f compose.fhir.yml logs twcore-installer
+```
+
+看到 `Installed 9 locked FHIR packages` 即完成。首次建立 terminology index
+可能需要數分鐘；`twcore-installer` 完成後正常狀態是結束碼 0，而 HAPI 與
+PostgreSQL 會繼續執行。資料保存在 Compose volume，正常停止不會消失：
+
+```bash
+docker compose -f compose.fhir.yml down
+```
+
+如需對既有資料庫重新驗證並安裝鎖定套件，可執行：
+
+```bash
+docker compose -f compose.fhir.yml run --rm twcore-installer
+```
+
+HAPI 預設只綁定本機 `127.0.0.1:8080`。若 8080 已被占用，可在啟動時指定
+其他連接埠，例如 `FHIR_PORT=18080 docker compose -f compose.fhir.yml up -d`。
+Compose 內的資料庫密碼只供本機開發，不可直接用於正式環境。
+
+Vue 病患端可直接連接這台開發用 HAPI Server。先複製前端設定：
 
 ```bash
 cd frontend
@@ -228,6 +262,10 @@ VITE_FHIR_BASE_URL=http://localhost:8080/fhir
 `Patient/{id}/$everything`。HAPI Server 必須允許前端開發網址的 CORS。
 可匯入的測試 FHIR Bundle 位於
 `backend/fhir_samples/synthetic_chest_pain_case.json`。
+
+若未使用本專案的 Compose，也可對其他已啟用 runtime IG upload 的 HAPI
+執行 `cd backend && python -m scripts.install_twcore`。套件清單、來源、
+授權標示與 SHA-256 位於 `backend/terminology/packages.lock.json`。
 
 身分證直接查詢只供本機或受控測試環境使用。正式環境不應讓瀏覽器直接
 存取臨床 FHIR Server，應改由具備驗證、授權與稽核的院內後端代理處理。

@@ -78,7 +78,7 @@ class AMIEGraphState(TypedDict, total=False):
     triage_level: str
     acknowledgement: str
     handoff_reason: str
-    red_flags: list[dict[str, str]]
+    red_flags: list[dict[str, Any]]
     differential_hypotheses: list[dict[str, Any]]
     knowledge_gaps: list[str]
     evidence_timeline: list[dict[str, Any]]
@@ -181,6 +181,8 @@ class AMIEEngine:
         )
         if not question:
             return None
+        question_route = question.get("route") or state.get("route", "unknown")
+        base_field = question.get("base_field", current_field)
 
         kind = question.get("kind")
         answer = _trim(state.get("answer", ""), 1000)
@@ -200,13 +202,20 @@ class AMIEEngine:
             )
             if answer not in quick_options and not is_numeric_duration:
                 return None
-            return ChiefComplaintAssessment(primary_symptom=state.get("route", "unknown"))
+            return ChiefComplaintAssessment(primary_symptom=question_route)
         if kind != "choice":
             return None
 
         options = set(question.get("options", []))
-        if current_field == "location" and state.get("data", {}).get("pain_locations"):
-            return ChiefComplaintAssessment(primary_symptom=state.get("route", "unknown"))
+        field_prefix = (
+            current_field[: -len(base_field)]
+            if current_field != base_field
+            else ""
+        )
+        if base_field == "location" and state.get("data", {}).get(
+            f"{field_prefix}pain_locations"
+        ):
+            return ChiefComplaintAssessment(primary_symptom=question_route)
 
         selected: list[str] = []
         remaining = answer
@@ -254,7 +263,7 @@ class AMIEEngine:
                 for code in facts.get("findings", [])
             )
         return ChiefComplaintAssessment(
-            primary_symptom=state.get("route", "unknown"),
+            primary_symptom=question_route,
             onset=onset,
             severity=severity,
             is_new_or_changed=new_or_changed,
@@ -641,10 +650,7 @@ class AMIEEngine:
                 "handoff_reason": ("已達動態問診輪數上限，仍有資訊需要醫療人員確認"),
             }
 
-        required_missing = self._required_missing(
-            state.get("route", ""),
-            data,
-        )
+        required_missing = self._required_missing(data, state.get("questionnaire", []))
         by_field = {item["field"]: item for item in candidates}
 
         if decision.get("action") == "complete" and not required_missing:
@@ -739,8 +745,8 @@ class AMIEEngine:
             if item["field"] not in PROTECTED_MODEL_FIELDS
         ]
         required_missing = self._required_missing(
-            route,
             state.get("data", {}),
+            state.get("questionnaire", []),
         )
         knowledge = f"\n\n【已檢索醫療知識】\n{rag_context[:6000]}" if rag_context else ""
         prior = (
@@ -780,6 +786,9 @@ class AMIEEngine:
 4. 一般病史追問不需要RAG；只有需要指引、藥物或外部醫療依據時才設定needs_retrieval=true。
 5. routine流程中，action=complete只適用於最低必要欄位已齊全且沒有高價值問題。
 6. differential_hypotheses只能列定性假說及正反證據，不可提供數字機率。
+   每個候選方向都必須附最符合的SNOMED CT概念：system固定為
+   http://snomed.info/sct，code使用純數字概念ID，display使用正式英文名稱。
+   coding是供醫師確認的建議術語，不代表確診。
 7. acknowledgement最多60個繁體中文字，不可診斷、不可建議用藥。
 8. audit_reason只寫一至兩句可稽核理由，不得輸出隱藏思維鏈。
 
@@ -792,6 +801,11 @@ class AMIEEngine:
   "differential_hypotheses": [
     {{
       "condition": "候選方向",
+      "coding": {{
+        "system": "http://snomed.info/sct",
+        "code": "SNOMED CT純數字概念ID",
+        "display": "SNOMED CT正式英文名稱"
+      }},
       "supporting_evidence": ["證據"],
       "opposing_evidence": ["反對證據"]
     }}
@@ -819,31 +833,32 @@ class AMIEEngine:
             and condition_matches(item, data)
         ]
 
-    def _required_missing(
-        self,
-        route: str,
-        data: dict[str, Any],
-    ) -> list[str]:
-        required = REQUIRED_FIELDS.get(route, set())
-        questionnaire_order = [item["field"] for item in self._questionnaire_for_order(route, data)]
-        return [
-            field
-            for field in questionnaire_order
-            if field in required and not _trim(data.get(field, ""))
-        ]
-
     @staticmethod
-    def _questionnaire_for_order(
-        route: str,
+    def _required_missing(
         data: dict[str, Any],
-    ) -> list[dict[str, Any]]:
-        # The caller only needs the stable field order. Import lazily to avoid
-        # loading unrelated disease questionnaires during process startup.
-        from domain.questionnaires import build_questionnaire
-
-        if route not in SUPPORTED_ROUTES:
-            return []
-        return build_questionnaire(route)
+        questionnaire: list[dict[str, Any]],
+    ) -> list[str]:
+        selected_routes = [
+            route
+            for route in data.get("types", [data.get("type")])
+            if route in SUPPORTED_ROUTES
+        ]
+        shared_required = set().union(
+            *(REQUIRED_FIELDS[route] for route in selected_routes)
+        )
+        missing: list[str] = []
+        for item in questionnaire:
+            field = item["field"]
+            base_field = item.get("base_field", field)
+            item_route = item.get("route")
+            required = (
+                base_field in REQUIRED_FIELDS.get(item_route, set())
+                if item_route
+                else base_field in shared_required
+            )
+            if required and not _trim(data.get(field, "")):
+                missing.append(field)
+        return missing
 
     def _merge_extracted_facts(
         self,
@@ -860,10 +875,16 @@ class AMIEEngine:
             if field not in allowed or not value or merged.get(field):
                 continue
             merged[field] = value
-            if field == "onset":
+            question = next(
+                (item for item in questionnaire if item["field"] == field),
+                None,
+            )
+            base_field = question.get("base_field", field) if question else field
+            if base_field == "onset":
                 parsed = parse_onset_answer(value)
                 if parsed:
-                    merged["onset_num"], merged["onset_unit"] = parsed
+                    prefix = field[: -len(base_field)] if field != base_field else ""
+                    merged[f"{prefix}onset_num"], merged[f"{prefix}onset_unit"] = parsed
         return merged
 
     @staticmethod

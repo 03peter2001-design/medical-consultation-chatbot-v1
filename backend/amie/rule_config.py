@@ -52,6 +52,28 @@ def _validate_rule_identity(rule: Any, path: str) -> dict[str, Any]:
     return rule
 
 
+def _validate_urgent_condition_candidates(
+    document: dict[str, Any],
+    rule_labels: set[str],
+) -> None:
+    candidates = document.get("urgent_condition_candidates")
+    if not isinstance(candidates, dict) or not candidates:
+        raise ValueError("urgent_condition_candidates 必須是非空物件")
+    for label, conditions in candidates.items():
+        if not isinstance(label, str) or not label.strip():
+            raise ValueError("urgent_condition_candidates 的 key 必須是非空字串")
+        _validate_unique(
+            _nonempty_strings(
+                conditions,
+                f"urgent_condition_candidates.{label}",
+            ),
+            f"urgent_condition_candidates.{label}",
+        )
+    missing = rule_labels - set(candidates)
+    if missing:
+        raise ValueError(f"urgent_condition_candidates 缺少安全規則標籤：{sorted(missing)}")
+
+
 def _validate_phrase_rules(rules: Any, path: str) -> list[str]:
     if not isinstance(rules, list):
         raise ValueError(f"{path} 必須是陣列")
@@ -217,6 +239,17 @@ def validate_safety_rules(document: Any) -> dict[str, Any]:
             if invalid:
                 raise ValueError(f"{path}.when.{key} 含未定義值：{sorted(invalid)}")
     _validate_unique(structured_codes, "structured_rules.code")
+    urgent_labels = {
+        rule["label"]
+        for rule in [
+            *raw_rules["universal"],
+            *(item for rules in route_rules.values() for item in rules),
+            *combinations,
+            *structured,
+        ]
+        if rule.get("level", "urgent") == "urgent"
+    }
+    _validate_urgent_condition_candidates(document, urgent_labels)
     return document
 
 

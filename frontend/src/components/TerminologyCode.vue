@@ -10,11 +10,15 @@ const props = defineProps({
 const systemLabel = computed(() =>
   codingSystemLabel(props.coding.system),
 )
-const sourceLabel = computed(() =>
-  props.coding.source === 'twcore-package'
-    ? 'TW Core 官方套件'
-    : 'FHIR 原始編碼',
-)
+const sourceLabel = computed(() => {
+  if (props.coding.source === 'twcore-package') {
+    return 'TW Core 官方套件'
+  }
+  if (props.coding.source === 'ai-suggested') {
+    return 'AI 建議編碼，待醫師確認'
+  }
+  return 'FHIR 原始編碼'
+})
 </script>
 
 <template>

@@ -18,6 +18,9 @@ from app.services.clinical_summary import (
     clinical_patient_data,
     model_patient_summary,
 )
+from app.services.differential_coding import (
+    suggest_missing_differential_codings,
+)
 from app.services.rag import (
     deduplicate_sources,
     retrieve_context_block,
@@ -102,6 +105,11 @@ def load_patient(request: LoadPatientRequest):
         for key, value in (record.get("data") or {}).items()
         if not key.startswith("_") and key != "pain_locations"
     }
+    amie_state = dict(record.get("data", {}).get("_amie") or {})
+    amie_state["differential_hypotheses"] = suggest_missing_differential_codings(
+        amie_state.get("differential_hypotheses"),
+        runtime.llm_client,
+    )
     return {
         "queue_number": record["queue_number"],
         "type": record["type"],
@@ -116,7 +124,7 @@ def load_patient(request: LoadPatientRequest):
         "structured_note": structured_note,
         "structured_sources": structured_sources,
         "pain_locations": record.get("data", {}).get("pain_locations", []),
-        "amie_state": record.get("data", {}).get("_amie"),
+        "amie_state": amie_state,
         "amie_trace": record.get("data", {}).get("_amie_trace", []),
         "chief_assessment": record.get("data", {}).get("_chief_assessment"),
         "triage_level": record.get("triage_level", "routine"),

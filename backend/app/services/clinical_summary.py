@@ -3,15 +3,28 @@
 from __future__ import annotations
 
 
-def _onset_display(data: dict) -> str:
+def _route_value(
+    data: dict,
+    route: str,
+    field: str,
+    *,
+    primary_route: str,
+    default: str = "未填",
+) -> str:
+    key = field if route == primary_route else f"{route}__{field}"
+    return str(data.get(key) or default)
+
+
+def _onset_display(data: dict, route: str, *, primary_route: str) -> str:
+    prefix = "" if route == primary_route else f"{route}__"
     return str(
-        data.get("onset")
+        data.get(f"{prefix}onset")
         or " ".join(
             filter(
                 None,
                 [
-                    str(data.get("onset_num", "")).strip(),
-                    str(data.get("onset_unit", "")).strip(),
+                    str(data.get(f"{prefix}onset_num", "")).strip(),
+                    str(data.get(f"{prefix}onset_unit", "")).strip(),
                 ],
             )
         )
@@ -21,11 +34,18 @@ def _onset_display(data: dict) -> str:
 
 def build_summary(data: dict, *, include_identity: bool = True) -> str:
     ctype = data.get("type", "chest")
-    default_reason = {
+    routes = [
+        route
+        for route in data.get("types", [ctype])
+        if route in {"chest", "headache", "abdomen"}
+    ] or [ctype]
+    primary_route = routes[0]
+    route_labels = {
         "chest": "胸痛",
         "headache": "頭痛",
         "abdomen": "腹痛",
-    }.get(ctype, "胸痛")
+    }
+    default_reason = "、".join(route_labels.get(route, route) for route in routes)
     identity_line = (
         f"- 姓名：{data.get('name', '未提供')}\n- 出生日期：{data.get('birth_date', '未提供')}\n"
         if include_identity
@@ -38,59 +58,64 @@ def build_summary(data: dict, *, include_identity: bool = True) -> str:
 - 就診原因：{data.get("reason", default_reason)}
 """
 
-    if ctype == "headache":
-        symptom_block = f"""
+    symptom_blocks = []
+    for route in routes:
+        def value(field: str) -> str:
+            return _route_value(
+                data,
+                route,
+                field,
+                primary_route=primary_route,
+            )
+
+        onset = _onset_display(data, route, primary_route=primary_route)
+        if route == "headache":
+            symptom_blocks.append(f"""
 頭痛問卷：
-- 發作時間：{_onset_display(data)}
-- 發作方式：{data.get("start_type", "未填")}
-- 疼痛位置：{data.get("location", "未填")}
-- 是否此生最痛一次：{data.get("worst_ever", "未填")}
-- 疼痛性質：{data.get("quality", "未填")}
-- 加重因素：{data.get("aggravate", "未填")}
-- 緩解因素：{data.get("relieve", "未填")}
-- 伴隨症狀：{data.get("associated", "未填")}
-- 危險因子（外傷／免疫低下／抗凝血劑／懷孕產後）：{data.get("risk_flags", "未填")}
-
-病史：
-- 抽菸：{data.get("smoke", "未填")}
-- 神經血管疾病史：{data.get("neuro", "未填")}"""
-    elif ctype == "abdomen":
-        symptom_block = f"""
+- 發作時間：{onset}
+- 發作方式：{value("start_type")}
+- 疼痛位置：{value("location")}
+- 是否此生最痛一次：{value("worst_ever")}
+- 疼痛性質：{value("quality")}
+- 加重因素：{value("aggravate")}
+- 緩解因素：{value("relieve")}
+- 伴隨症狀：{value("associated")}
+- 危險因子（外傷／免疫低下／抗凝血劑／懷孕產後）：{value("risk_flags")}
+- 神經血管疾病史：{value("neuro")}
+- 頭痛相關手術史：{value("surgery")}""")
+        elif route == "abdomen":
+            symptom_blocks.append(f"""
 腹痛問卷：
-- 發作時間：{_onset_display(data)}
-- 疼痛性質：{data.get("quality", "未填")}
-- 疼痛位置：{data.get("location", "未填")}
-- 伴隨症狀：{data.get("associated", "未填")}
-- 家人/同行是否有相同症狀：{data.get("contact_history", "未填")}
-
-病史：
-- 抽菸：{data.get("smoke", "未填")}
-- 腹部相關病史：{data.get("abdomen_hx", "未填")}"""
-    else:
-        symptom_block = f"""
+- 發作時間：{onset}
+- 疼痛性質：{value("quality")}
+- 疼痛位置：{value("location")}
+- 伴隨症狀：{value("associated")}
+- 家人/同行是否有相同症狀：{value("contact_history")}
+- 腹部相關病史：{value("abdomen_hx")}
+- 腹部手術史：{value("surgery")}""")
+        else:
+            symptom_blocks.append(f"""
 胸痛問卷：
-- 發作時間：{_onset_display(data)}
-- 發作方式：{data.get("start_type", "未填")}
-- 疼痛位置：{data.get("location", "未填")}
-- 痛點型態：{data.get("fixed", "未填")}
-- 壓痛：{data.get("tender", "未填")}
-- 疼痛性質：{data.get("quality", "未填")}
-- 加重因素：{data.get("aggravate", "未填")}
-- 緩解因素：{data.get("relieve", "未填")}
-- 伴隨症狀：{data.get("associated", "未填")}
-
-病史：
-- 抽菸：{data.get("smoke", "未填")}
-- 心肺疾病史：{data.get("cardio", "未填")}"""
+- 發作時間：{onset}
+- 發作方式：{value("start_type")}
+- 疼痛位置：{value("location")}
+- 痛點型態：{value("fixed")}
+- 壓痛：{value("tender")}
+- 疼痛性質：{value("quality")}
+- 加重因素：{value("aggravate")}
+- 緩解因素：{value("relieve")}
+- 伴隨症狀：{value("associated")}
+- 心肺疾病史：{value("cardio")}
+- 胸痛相關手術史：{value("surgery")}""")
 
     tail = f"""
+- 抽菸：{data.get("smoke", "未填")}
 - 慢性疾病：{data.get("chronic", "未填")}{" (" + data["chronic_detail"] + ")" if data.get("chronic_detail") else ""}
 - 過去藥物治療：{data.get("past_meds", "未填")}
-- 手術史：{data.get("surgery", "未填")}{" (" + data["surgery_detail"] + ")" if data.get("surgery_detail") else ""}
 - 目前用藥：{data.get("current_meds", "沒有")}
 - 過敏史：{data.get("allergy", "沒有")}
 """
-    return (base + symptom_block + tail).strip()
+    return (base + "".join(symptom_blocks) + "\n\n一般病史：" + tail).strip()
 
 
 def clinical_patient_data(data: dict | None) -> dict:

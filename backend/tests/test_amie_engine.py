@@ -86,6 +86,11 @@ class AMIEEngineTests(unittest.TestCase):
                 differential_hypotheses=[
                     {
                         "condition": "心血管相關胸痛",
+                        "coding": {
+                            "system": "http://snomed.info/sct",
+                            "code": "29857009",
+                            "display": "Chest pain",
+                        },
                         "supporting_evidence": ["活動時胸悶"],
                         "opposing_evidence": [],
                     }
@@ -107,6 +112,15 @@ class AMIEEngineTests(unittest.TestCase):
         self.assertEqual(result.data["onset_unit"], "分鐘前")
         self.assertEqual(result.data["aggravate"], "走路時加重")
         self.assertEqual(len(result.evidence_timeline), 1)
+        self.assertEqual(
+            result.differential_hypotheses[0]["coding"],
+            {
+                "system": "http://snomed.info/sct",
+                "code": "29857009",
+                "display": "Chest pain",
+                "source": "ai-suggested",
+            },
+        )
         self.assertEqual(result.decision["next_field"], "associated")
         self.assertEqual(
             result.decision["audit_reason"],
@@ -195,6 +209,27 @@ class AMIEEngineTests(unittest.TestCase):
         self.assertEqual(result.action, "ask")
         self.assertNotEqual(result.action, "handoff")
         self.assertEqual(result.model_error, "")
+
+    def test_multiple_route_questionnaire_requires_both_symptom_pipelines(self):
+        questionnaire = build_questionnaire(["headache", "abdomen"])
+        data = {
+            "type": "headache",
+            "types": ["headache", "abdomen"],
+            "onset": "1天前",
+            "start_type": "逐漸加重",
+            "worst_ever": "否",
+            "associated": "噁心",
+            "risk_flags": "以上皆無",
+            "current_meds": "沒有",
+            "allergy": "沒有",
+        }
+
+        missing = AMIEEngine._required_missing(data, questionnaire)
+
+        self.assertNotIn("onset", missing)
+        self.assertIn("abdomen__onset", missing)
+        self.assertIn("abdomen__location", missing)
+        self.assertIn("abdomen__associated", missing)
 
     def test_basic_identity_answer_never_calls_external_model(self):
         llm = FakeLLM()

@@ -15,8 +15,9 @@ class SafetyFlag:
     label: str
     evidence: str
     level: str = "urgent"
+    possible_conditions: tuple[str, ...] = ()
 
-    def as_dict(self) -> dict[str, str]:
+    def as_dict(self) -> dict[str, Any]:
         return asdict(self)
 
 
@@ -49,7 +50,7 @@ def _first_affirmed(
     )
 
 
-def _deduplicate(flags: list[SafetyFlag]) -> list[dict[str, str]]:
+def _deduplicate(flags: list[SafetyFlag]) -> list[dict[str, Any]]:
     seen: set[str] = set()
     result = []
     for flag in flags:
@@ -64,6 +65,7 @@ def _phrase_flag(
     rule: dict[str, Any],
     text: str,
     negation: dict[str, Any],
+    condition_candidates: dict[str, list[str]],
 ) -> SafetyFlag | None:
     evidence = _first_affirmed(text, rule["terms"], negation)
     if not evidence:
@@ -73,6 +75,7 @@ def _phrase_flag(
         label=rule["label"],
         evidence=evidence,
         level=rule.get("level", "urgent"),
+        possible_conditions=tuple(condition_candidates.get(rule["label"], [])),
     )
 
 
@@ -80,7 +83,7 @@ def detect_red_flags(
     route: str | None,
     answer: str,
     patient_data: dict[str, Any],
-) -> list[dict[str, str]]:
+) -> list[dict[str, Any]]:
     """Evaluate configured raw-text rules without calling an LLM."""
     rules = load_safety_rules()
     clinical_values = " ".join(
@@ -99,6 +102,7 @@ def detect_red_flags(
     text = f"{answer} {clinical_values}"
     negation = rules["negation"]
     raw_rules = rules["raw_rules"]
+    condition_candidates = rules["urgent_condition_candidates"]
     flags: list[SafetyFlag] = []
 
     phrase_rules = [
@@ -106,7 +110,12 @@ def detect_red_flags(
         *raw_rules["routes"].get(route or "", []),
     ]
     for rule in phrase_rules:
-        if flag := _phrase_flag(rule, text, negation):
+        if flag := _phrase_flag(
+            rule,
+            text,
+            negation,
+            condition_candidates,
+        ):
             flags.append(flag)
 
     for rule in raw_rules["combinations"]:
@@ -122,6 +131,7 @@ def detect_red_flags(
                     label=rule["label"],
                     evidence="、".join(item for item in evidence if item),
                     level=rule.get("level", "urgent"),
+                    possible_conditions=tuple(condition_candidates.get(rule["label"], [])),
                 )
             )
     return _deduplicate(flags)
@@ -197,10 +207,11 @@ def detect_structured_red_flags(
     assessment: ChiefComplaintAssessment,
     fhir_risk_profile: dict[str, dict[str, Any]] | None = None,
     route_hint: str | None = None,
-) -> list[dict[str, str]]:
+) -> list[dict[str, Any]]:
     """Evaluate JSON policy against evidence-validated semantic facts."""
     rules = load_safety_rules()
     risk_profile = fhir_risk_profile or {}
+    condition_candidates = rules["urgent_condition_candidates"]
     present = {
         finding.code: finding.evidence
         for finding in assessment.findings
@@ -230,6 +241,7 @@ def detect_structured_red_flags(
                 label=rule["label"],
                 evidence="、".join(evidence),
                 level=rule.get("level", "urgent"),
+                possible_conditions=tuple(condition_candidates.get(rule["label"], [])),
             )
         )
     return _deduplicate(flags)

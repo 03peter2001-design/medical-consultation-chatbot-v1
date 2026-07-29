@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import re
-from collections.abc import Iterator, Mapping
+from collections.abc import Iterable, Iterator, Mapping
 from copy import deepcopy
 from datetime import date
 from functools import lru_cache
@@ -219,16 +219,41 @@ HISTORY_QUESTIONNAIRE = load_questionnaire_category("history")
 DISEASE_QUESTIONNAIRES = _LazyDiseaseQuestionnaires()
 
 
-def build_questionnaire(route: str) -> list[dict[str, Any]]:
-    """組合主訴、基本資料、病史與指定疾病問卷。"""
-    if route not in DISEASE_ROUTES:
-        raise ValueError(f"不支援的疾病問卷路由：{route}")
+def normalize_questionnaire_routes(routes: str | Iterable[str]) -> list[str]:
+    """Return stable, deduplicated disease routes for one consultation."""
+    values = [routes] if isinstance(routes, str) else list(routes)
+    normalized = list(dict.fromkeys(values))
+    unsupported = [route for route in normalized if route not in DISEASE_ROUTES]
+    if unsupported or not normalized:
+        invalid = unsupported[0] if unsupported else ""
+        raise ValueError(f"不支援的疾病問卷路由：{invalid}")
+    return normalized
+
+
+def build_questionnaire(routes: str | Iterable[str]) -> list[dict[str, Any]]:
+    """組合共用問題與一個或多個症狀問卷。
+
+    第一個（優先）症狀保留既有欄位名稱，以相容既有病歷；後續症狀使用
+    ``route__field`` 儲存，避免 onset、location 等同名答案互相覆蓋。
+    """
+    normalized_routes = normalize_questionnaire_routes(routes)
+    disease_questions: list[dict[str, Any]] = []
+    for position, route in enumerate(normalized_routes):
+        for source in DISEASE_QUESTIONNAIRES[route]:
+            item = deepcopy(source)
+            base_field = item["field"]
+            item["base_field"] = base_field
+            item["route"] = route
+            if position:
+                item["field"] = f"{route}__{base_field}"
+            disease_questions.append(item)
+
     return deepcopy(
         [
             *CHIEF_QUESTIONNAIRE,
             *BASIC_QUESTIONNAIRE,
             *HISTORY_QUESTIONNAIRE,
-            *DISEASE_QUESTIONNAIRES[route],
+            *disease_questions,
         ]
     )
 
@@ -267,11 +292,12 @@ def questionnaire_meta(
     route: str | None,
 ) -> dict[str, Any]:
     section = item["section"]
+    item_route = item.get("route") or route
     return {
         "section": section,
         "label": SECTION_LABELS[section],
-        "route": route,
-        "route_label": ROUTE_LABELS.get(route or "", ""),
+        "route": item_route,
+        "route_label": ROUTE_LABELS.get(item_route or "", ""),
     }
 
 

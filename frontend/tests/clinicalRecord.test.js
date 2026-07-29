@@ -136,6 +136,30 @@ test('builds a scannable clinical record from structured patient data', () => {
   assert.match(result.timeline[0].reason, /停止追問/)
 })
 
+test('shows facts from every selected symptom pipeline', () => {
+  const result = buildClinicalRecord({
+    type: 'headache',
+    patient_data: {
+      types: ['headache', 'abdomen'],
+      onset: '1天前',
+      location: '前額',
+      abdomen__onset: '3小時前',
+      abdomen__location: '右下腹',
+    },
+  })
+
+  assert.equal(result.identity.type, '頭痛、腹痛')
+  assert.deepEqual(
+    result.symptomFacts.map(({ label, value }) => ({ label, value })),
+    [
+      { label: '頭痛 · 發作時間', value: '1天前' },
+      { label: '頭痛 · 症狀位置', value: '前額' },
+      { label: '腹痛 · 發作時間', value: '3小時前' },
+      { label: '腹痛 · 症狀位置', value: '右下腹' },
+    ],
+  )
+})
+
 test('reuses an unambiguous source FHIR coding for the same differential', () => {
   const result = buildClinicalRecord({
     clinical_codings: [
@@ -198,4 +222,32 @@ test('does not guess a differential coding when source codings are ambiguous', (
   })
 
   assert.equal(result.differentials[0].coding, null)
+})
+
+test('shows a validated AI-suggested SNOMED coding for a differential', () => {
+  const result = buildClinicalRecord({
+    amie_state: {
+      differential_hypotheses: [
+        {
+          condition: '胸痛',
+          coding: {
+            system: 'http://snomed.info/sct',
+            code: '29857009',
+            display: 'Chest pain',
+            source: 'ai-suggested',
+          },
+          supporting_evidence: ['活動時胸悶'],
+          opposing_evidence: [],
+        },
+      ],
+    },
+  })
+
+  assert.deepEqual(result.differentials[0].coding, {
+    field: '',
+    system: 'http://snomed.info/sct',
+    code: '29857009',
+    display: 'Chest pain',
+    source: 'ai-suggested',
+  })
 })

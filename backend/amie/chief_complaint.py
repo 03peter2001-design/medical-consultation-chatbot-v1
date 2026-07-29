@@ -21,6 +21,27 @@ _DIRECT_IDENTIFIER = re.compile(
     flags=re.IGNORECASE,
 )
 _NORMALIZE_EVIDENCE = re.compile(r"[\s，,。.!！?？；;：:'\"「」『』、]+")
+_ONSET_TIME_PHRASE = re.compile(
+    r"(?:"
+    r"剛剛|方才|"
+    r"(?:約|大約)?"
+    r"(?:\d+(?:\.\d+)?|[零〇一二兩三四五六七八九十百半]+)"
+    r"(?:分鐘|小時|天|週|星期|個月|年)(?:前|之前)"
+    r")"
+)
+
+# Only these symptom concepts are allowed to start one of the deployed
+# pain questionnaires. Associated findings such as dizziness, visual change,
+# or vomiting remain available to safety rules, but are not evidence that the
+# patient reported headache, chest pain, or abdominal pain.
+_QUESTIONNAIRE_ROUTING_SYMPTOMS = frozenset(
+    {
+        "headache",
+        "chest_pain",
+        "chest_tightness",
+        "abdominal_pain",
+    }
+)
 
 
 def _trim(value: Any, limit: int = 500) -> str:
@@ -89,6 +110,30 @@ def _validated_evidence_value(
     return EvidenceValue(value=value, evidence=evidence)
 
 
+def _validated_onset_time(
+    text: str,
+    item: EvidenceValue,
+) -> EvidenceValue:
+    """Keep a verbatim elapsed onset time, never an inferred clock value."""
+    evidence = _trim(item.evidence, 160)
+    if not _has_grounded_evidence(text, evidence):
+        return EvidenceValue()
+    match = _ONSET_TIME_PHRASE.search(evidence)
+    if not match:
+        return EvidenceValue()
+    return EvidenceValue(value=match.group(0), evidence=evidence)
+
+
+def _deterministic_onset_time(text: str) -> EvidenceValue:
+    """Recover only elapsed times explicitly linked to symptom onset."""
+    for match in _ONSET_TIME_PHRASE.finditer(text):
+        following = text[match.end() : match.end() + 8]
+        if re.match(r"(?:就|才|便)?(?:開始|出現|發作)", following):
+            value = match.group(0)
+            return EvidenceValue(value=value, evidence=value)
+    return EvidenceValue()
+
+
 def _validated_findings(
     text: str,
     findings: list[ChiefFinding],
@@ -127,16 +172,40 @@ def _validated_routes(
     text: str,
     routes: list[str | RouteEvidence],
     allowed_routes: set[str],
+    route_evidence: dict[str, list[str]],
+    route_keywords: dict[str, list[str]],
 ) -> list[str]:
+    def evidence_supports_route(route: str, evidence: str) -> bool:
+        normalized_evidence = _normalized(evidence)
+        if not normalized_evidence:
+            return False
+        if any(
+            _normalized(keyword) in normalized_evidence for keyword in route_keywords.get(route, [])
+        ):
+            return True
+        return any(
+            (
+                _normalized(symptom_evidence) in normalized_evidence
+                or normalized_evidence in _normalized(symptom_evidence)
+            )
+            for symptom_evidence in route_evidence.get(route, [])
+            if _normalized(symptom_evidence)
+        )
+
     validated: list[str] = []
     for item in routes[:12]:
         if isinstance(item, RouteEvidence):
             route = _trim(item.route, 40).lower()
             evidence = _trim(item.evidence, 160)
-            if not _has_grounded_evidence(text, evidence):
+            if not _has_grounded_evidence(text, evidence) or not evidence_supports_route(
+                route,
+                evidence,
+            ):
                 continue
         else:
             route = _trim(item, 40).lower()
+            if not route_evidence.get(route):
+                continue
         if route not in allowed_routes and route != "other":
             continue
         if route not in validated:
@@ -169,11 +238,19 @@ def validate_assessment(
     rules = load_safety_rules()
     allowed_routes = supported_routes()
     symptom_definitions = rules["semantic_extraction"]["symptom_definitions"]
+    route_keywords = rules["route_keywords"]
     symptoms = _validated_symptoms(
         text,
         assessment.symptoms,
         symptom_definitions,
     )
+    route_evidence: dict[str, list[str]] = {}
+    for symptom in symptoms:
+        if symptom.code not in _QUESTIONNAIRE_ROUTING_SYMPTOMS:
+            continue
+        route = symptom_definitions[symptom.code]["route"]
+        route_evidence.setdefault(route, []).append(symptom.evidence)
+
     primary_symptom_code = _trim(assessment.primary_symptom_code, 80).lower()
     primary_concept = next(
         (item for item in symptoms if item.code == primary_symptom_code),
@@ -183,15 +260,25 @@ def validate_assessment(
         primary_symptom_code = "unknown"
     primary_evidence = _trim(assessment.primary_evidence, 160)
     primary_symptom = assessment.primary_symptom
-    if primary_concept:
+    if primary_concept and primary_concept.code in _QUESTIONNAIRE_ROUTING_SYMPTOMS:
         primary_symptom = symptom_definitions[primary_concept.code]["route"]
         primary_evidence = primary_concept.evidence
-    if primary_symptom not in {*allowed_routes, "other"} or not _has_grounded_evidence(
-        text, primary_evidence
-    ):
+    validated_primary_routes = _validated_routes(
+        text,
+        [RouteEvidence(route=primary_symptom, evidence=primary_evidence)],
+        allowed_routes,
+        route_evidence,
+        route_keywords,
+    )
+    if not validated_primary_routes:
         primary_symptom = "unknown"
         primary_evidence = ""
+    else:
+        primary_symptom = validated_primary_routes[0]
 
+    onset_time = _validated_onset_time(text, assessment.onset_time)
+    if onset_time.value == "unknown":
+        onset_time = _deterministic_onset_time(text)
     onset = _validated_evidence_value(
         text,
         assessment.onset,
@@ -228,13 +315,21 @@ def validate_assessment(
         text,
         assessment.symptom_domains,
         allowed_routes,
+        route_evidence,
+        route_keywords,
     )
     route_candidates = _validated_routes(
         text,
         assessment.route_candidates,
         allowed_routes,
+        route_evidence,
+        route_keywords,
     )
-    symptom_routes = [symptom_definitions[item.code]["route"] for item in symptoms]
+    symptom_routes = [
+        symptom_definitions[item.code]["route"]
+        for item in symptoms
+        if item.code in _QUESTIONNAIRE_ROUTING_SYMPTOMS
+    ]
     supported_domains = list(dict.fromkeys([*supported_domains, *symptom_routes]))
     route_candidates = list(dict.fromkeys([*route_candidates, *symptom_routes]))
     if primary_symptom != "unknown" and primary_symptom not in route_candidates:
@@ -248,10 +343,18 @@ def validate_assessment(
         route = definition["route"] if definition else _trim(symptom.route, 40).lower()
         evidence = _trim(symptom.evidence, 160)
         key = (route, symptom_code)
+        validated_profile_routes = _validated_routes(
+            text,
+            [RouteEvidence(route=route, evidence=evidence)],
+            allowed_routes,
+            route_evidence,
+            route_keywords,
+        )
         if (
-            route not in allowed_routes
+            not validated_profile_routes
             or key in seen_symptom_keys
             or not _has_grounded_evidence(text, evidence)
+            or (definition is not None and symptom_code not in _QUESTIONNAIRE_ROUTING_SYMPTOMS)
         ):
             continue
         if symptom_code != "unknown" and definition is None:
@@ -262,6 +365,10 @@ def validate_assessment(
                 route=route,
                 evidence=evidence,
                 symptom_code=symptom_code,
+                onset_time=_validated_onset_time(
+                    text,
+                    symptom.onset_time,
+                ),
                 onset=_validated_evidence_value(
                     text,
                     symptom.onset,
@@ -305,6 +412,7 @@ def validate_assessment(
             list[str | RouteEvidence],
             list(dict.fromkeys(supported_domains))[:4],
         ),
+        onset_time=onset_time,
         onset=onset,
         course=course,
         duration=duration,
@@ -420,19 +528,25 @@ class ChiefComplaintExtractor:
 2. symptoms只能輸出白名單症狀code與逐字evidence；primary_symptom_code
    必須是其中一個code，不能自行創造症狀。
 3. onset只描述開始方式：sudden、gradual、unknown。
-4. course只描述時間型態：episodic、continuous、recurrent、unknown。
-5. duration只描述持續長短：brief、prolonged、unknown；沒有明確描述就用unknown。
-6. severity.value只能是mild、moderate、severe、unknown。
-7. is_new_or_changed.value只能是true、false、unknown。
-8. finding.code只能使用下列代碼：
+4. onset_time記錄「幾分鐘／小時／天／週／月／年前開始」等明確時間；
+   value及evidence都必須來自原文。沒有明確時間就用unknown。
+5. course只描述時間型態：episodic、continuous、recurrent、unknown。
+6. duration只描述持續長短：brief、prolonged、unknown；沒有明確描述就用unknown。
+7. severity.value只能是mild、moderate、severe、unknown。
+8. is_new_or_changed.value只能是true、false、unknown。
+9. finding.code只能使用下列代碼：
    {finding_values}。
-9. findings只放present；negated_findings只放病人明確否認的項目。
-10. 每個非unknown值、症狀、route及finding都必須附原文逐字evidence。
-11. 即使有多個症狀，symptom_domains及route_candidates仍不可輸出字串以外
+10. findings只放present；negated_findings只放病人明確否認的項目。
+11. 每個非unknown值、症狀、route及finding都必須附原文逐字evidence。
+12. 即使有多個症狀，symptom_domains及route_candidates仍不可輸出字串以外
    的route值，也不可使用domain、value等其他欄位名稱。
-12. 有多個症狀時，symptom_assessments要為每個症狀分別整理onset、course、
-   duration、嚴重程度、是否新發或改變及相關finding；不可把一個症狀的
-   時間資訊套用到另一個症狀。
+13. 有多個症狀時，symptom_assessments要為每個症狀分別整理onset_time、
+   onset、course、duration、嚴重程度、是否新發或改變及相關finding；
+   不可把一個症狀的時間資訊套用到另一個症狀。
+14. 只有 headache、chest_pain、chest_tightness、abdominal_pain 可以啟動
+   對應的症狀問卷。頭暈、頭部外傷、視覺異常、噁心或嘔吐若沒有上述症狀，
+   不得輸出 headache、chest 或 abdomen route；它們只能記錄為finding或
+   非路由症狀。
 
 語意正規化原則：
 {normalization_guidance}
@@ -463,6 +577,7 @@ finding定義：
   "symptom_domains": [
     {{"route": "unknown", "evidence": ""}}
   ],
+  "onset_time": {{"value": "unknown", "evidence": ""}},
   "onset": {{"value": "unknown", "evidence": ""}},
   "course": {{"value": "unknown", "evidence": ""}},
   "duration": {{"value": "unknown", "evidence": ""}},
@@ -480,6 +595,7 @@ finding定義：
       "route": "unknown",
       "evidence": "",
       "symptom_code": "unknown",
+      "onset_time": {{"value": "unknown", "evidence": ""}},
       "onset": {{"value": "unknown", "evidence": ""}},
       "course": {{"value": "unknown", "evidence": ""}},
       "duration": {{"value": "unknown", "evidence": ""}},

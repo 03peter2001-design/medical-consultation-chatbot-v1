@@ -1,6 +1,10 @@
 import unittest
+from unittest.mock import Mock, patch
 
+from amie.engine import AMIEEngine
+from amie.models import ChiefComplaintAssessment
 from app.routes.patient import (
+    _apply_chief_questionnaire_prefills,
     _assess_chief_complaint,
     _complaint_routes,
     _copy_prefills_to_secondary_routes,
@@ -26,14 +30,76 @@ class PatientTriagePayloadTests(unittest.TestCase):
 
     def test_keeps_all_evidenced_symptom_routes(self):
         data = {
+            "type": "headache",
+            "types": ["headache"],
             "_chief_assessment": {
                 "route_priority": ["headache", "abdomen"],
-            }
+            },
         }
 
         self.assertEqual(
             _complaint_routes(data, "headache"),
             ["headache", "abdomen"],
+        )
+
+    def test_dizziness_without_headache_is_not_sent_to_headache_questionnaire(self):
+        assessment = ChiefComplaintAssessment.model_validate(
+            {
+                "primary_symptom": "unknown",
+                "primary_evidence": "",
+                "findings": [
+                    {
+                        "code": "recent_head_trauma",
+                        "status": "present",
+                        "evidence": "撞到頭",
+                    },
+                    {
+                        "code": "dizziness_unspecified",
+                        "status": "present",
+                        "evidence": "頭暈",
+                    },
+                ],
+            }
+        )
+        extractor = Mock()
+        extractor.extract.return_value = (assessment, "")
+
+        with (
+            patch("app.routes.patient._get_chief_extractor", return_value=extractor),
+            patch(
+                "app.routes.patient.classify_complaint",
+                side_effect=AssertionError("不得用第二次分類覆蓋語意抽取結果"),
+            ),
+        ):
+            route, flags = _assess_chief_complaint(
+                "我早上撞到頭，從一小時之前就開始頭暈",
+                {},
+            )
+
+        self.assertEqual(route, "other")
+        self.assertEqual(flags, [])
+
+    def test_explicit_chief_onset_time_prefills_and_skips_onset_question(self):
+        data = {
+            "_chief_assessment": {
+                "extraction": {
+                    "primary_symptom": "headache",
+                    "primary_evidence": "頭痛",
+                    "onset_time": {
+                        "value": "一小時之前",
+                        "evidence": "一小時之前",
+                    },
+                }
+            }
+        }
+        questionnaire = build_questionnaire("headache")
+
+        _apply_chief_questionnaire_prefills(data, questionnaire)
+
+        self.assertEqual(data["onset"], "一小時之前")
+        self.assertNotIn(
+            "onset",
+            AMIEEngine._required_missing(data, questionnaire),
         )
 
     def test_copies_imported_history_to_secondary_route_field(self):

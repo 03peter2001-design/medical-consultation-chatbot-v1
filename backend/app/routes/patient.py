@@ -21,6 +21,7 @@ from amie.clinical_facts import (
     facts_from_assessment,
     filter_question_by_known_facts,
     merge_facts,
+    questionnaire_prefills_from_assessment,
 )
 from amie.disease_profiles import attach_safety_conditions
 from amie.models import ChiefComplaintAssessment
@@ -539,9 +540,10 @@ def _assess_chief_complaint(
             all_flags,
         )
 
-    route = route_hint or preferred_route(assessment, risk_profile)
-    if not route:
-        route = classify_complaint(text)
+    # Successful semantic extraction is authoritative for questionnaire
+    # eligibility. Do not ask a second, unconstrained classifier to turn an
+    # associated finding (for example dizziness) into a pain complaint.
+    route = route_hint or preferred_route(assessment, risk_profile) or "other"
 
     # The semantic extractor can discover a route that keyword matching did
     # not. Re-run the raw policy with that route before AMIE planning.
@@ -572,6 +574,26 @@ def _copy_prefills_to_secondary_routes(session: dict, questionnaire: list[dict])
         data[field] = data[base_field]
         prefilled.add(field)
     session["prefilled_fields"] = sorted(prefilled)
+
+
+def _apply_chief_questionnaire_prefills(
+    data: dict,
+    questionnaire: list[dict],
+) -> None:
+    """Skip questions whose route-scoped answer was explicit in the chief complaint."""
+    extraction = data.get("_chief_assessment", {}).get("extraction")
+    if not extraction:
+        return
+    try:
+        assessment = ChiefComplaintAssessment.model_validate(extraction)
+    except Exception:
+        return
+    data.update(
+        questionnaire_prefills_from_assessment(
+            assessment,
+            questionnaire,
+        )
+    )
 
 
 def _get_amie_engine() -> AMIEEngine:
@@ -757,6 +779,7 @@ async def _chat_amie(
         routes = _complaint_routes(data, route)
         data["types"] = routes
         questionnaire = build_questionnaire(routes)
+        _apply_chief_questionnaire_prefills(data, questionnaire)
         questionnaire = [
             filtered
             for item in questionnaire
@@ -961,6 +984,7 @@ async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
         routes = _complaint_routes(data, route)
         data["types"] = routes
         questionnaire = build_questionnaire(routes)
+        _apply_chief_questionnaire_prefills(data, questionnaire)
         questionnaire = [
             filtered
             for item in questionnaire

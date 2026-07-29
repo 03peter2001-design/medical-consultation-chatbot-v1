@@ -22,6 +22,7 @@ from .clinical_facts import (
     facts_from_legacy_data,
     filter_question_by_known_facts,
     merge_facts,
+    questionnaire_prefills_from_assessment,
 )
 from .disease_profiles import (
     attach_safety_conditions,
@@ -323,6 +324,7 @@ class AMIEEngine:
                     ]
                 )
             ),
+            onset_time=latest_value(delta.onset_time, base.onset_time),
             onset=latest_value(delta.onset, base.onset),
             course=latest_value(delta.course, base.course),
             duration=latest_value(delta.duration, base.duration),
@@ -508,6 +510,13 @@ class AMIEEngine:
             "safety_flags": semantic_flags,
             "model_error": "",
         }
+        data.update(
+            questionnaire_prefills_from_assessment(
+                assessment,
+                state.get("questionnaire", []),
+                route_hint=(state.get("route") if state.get("current_field") != "reason" else None),
+            )
+        )
         data["_semantic_safety_state"] = assessment.as_dict()
         clinical_facts = merge_facts(
             state.get("clinical_facts", data.get("_clinical_facts", [])),

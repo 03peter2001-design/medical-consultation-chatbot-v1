@@ -146,6 +146,13 @@ class ChiefComplaintExtractorTests(unittest.TestCase):
         complaint = "我很dizzy，想兔，投痛到真的受不了"
         payload = headache_payload(
             primary_evidence="投痛",
+            primary_symptom_code="headache",
+            symptoms=[
+                {
+                    "code": "headache",
+                    "evidence": "投痛",
+                }
+            ],
             severity={
                 "value": "severe",
                 "evidence": "投痛到真的受不了",
@@ -182,6 +189,13 @@ class ChiefComplaintExtractorTests(unittest.TestCase):
         payload = {
             "primary_symptom": "chest",
             "primary_evidence": "兇悶",
+            "primary_symptom_code": "chest_tightness",
+            "symptoms": [
+                {
+                    "code": "chest_tightness",
+                    "evidence": "兇悶",
+                }
+            ],
             "symptom_domains": [
                 {
                     "route": "chest",
@@ -208,6 +222,59 @@ class ChiefComplaintExtractorTests(unittest.TestCase):
         self.assertEqual(assessment.symptom_domains, ["chest"])
         self.assertEqual(assessment.route_candidates, ["chest"])
         self.assertEqual(preferred_route(assessment), "chest")
+
+    def test_dizziness_after_head_trauma_does_not_start_headache_route(self):
+        complaint = "我早上撞到頭，從一小時之前就開始頭暈"
+        payload = {
+            "primary_symptom": "headache",
+            "primary_evidence": "頭暈",
+            "primary_symptom_code": "unknown",
+            "symptoms": [],
+            "symptom_domains": [{"route": "headache", "evidence": "頭暈"}],
+            "onset": {"value": "unknown", "evidence": ""},
+            "course": {"value": "continuous", "evidence": "從一小時之前就開始頭暈"},
+            "duration": {"value": "unknown", "evidence": ""},
+            "severity": {"value": "unknown", "evidence": ""},
+            "is_new_or_changed": {"value": "unknown", "evidence": ""},
+            "findings": [
+                {
+                    "code": "recent_head_trauma",
+                    "status": "present",
+                    "evidence": "撞到頭",
+                },
+                {
+                    "code": "dizziness_unspecified",
+                    "status": "present",
+                    "evidence": "頭暈",
+                },
+            ],
+            "negated_findings": [],
+            "route_candidates": [{"route": "headache", "evidence": "頭暈"}],
+            "symptom_assessments": [
+                {
+                    "route": "headache",
+                    "evidence": "頭暈",
+                    "symptom_code": "unknown",
+                    "course": {
+                        "value": "continuous",
+                        "evidence": "從一小時之前就開始頭暈",
+                    },
+                }
+            ],
+            "uncertain_fields": [],
+        }
+
+        assessment, error = ChiefComplaintExtractor(FakeLLM(payload)).extract(complaint)
+
+        self.assertEqual(error, "")
+        self.assertEqual(assessment.primary_symptom, "unknown")
+        self.assertEqual(assessment.route_candidates, [])
+        self.assertEqual(assessment.symptom_assessments, [])
+        self.assertIsNone(preferred_route(assessment))
+        self.assertEqual(
+            {finding.code for finding in assessment.findings},
+            {"recent_head_trauma", "dizziness_unspecified"},
+        )
 
     def test_accepts_multiple_evidenced_symptom_domains(self):
         complaint = "我頭痛，肚子痛"
@@ -423,6 +490,8 @@ class StructuredSafetyTests(unittest.TestCase):
         complaint = "我投痛到真的受不了，眼前霧成一片"
         payload = headache_payload(
             primary_evidence="投痛",
+            primary_symptom_code="headache",
+            symptoms=[{"code": "headache", "evidence": "投痛"}],
             severity={
                 "value": "severe",
                 "evidence": "投痛到真的受不了",
@@ -442,6 +511,45 @@ class StructuredSafetyTests(unittest.TestCase):
         self.assertTrue(
             any(flag["code"] == "semantic_severe_headache_visual_change" for flag in flags)
         )
+
+    def test_extracts_explicit_onset_time_without_inference(self):
+        complaint = "我從一小時之前就開始頭痛"
+        payload = headache_payload(
+            primary_symptom_code="headache",
+            symptoms=[{"code": "headache", "evidence": "頭痛"}],
+            severity={"value": "unknown", "evidence": ""},
+            findings=[],
+        )
+
+        assessment, error = ChiefComplaintExtractor(FakeLLM(payload)).extract(complaint)
+
+        self.assertEqual(error, "")
+        self.assertEqual(assessment.onset_time.value, "一小時之前")
+        self.assertEqual(assessment.onset_time.evidence, "一小時之前")
+
+    def test_does_not_assign_trauma_time_to_later_dizziness(self):
+        complaint = "我一小時前撞到頭，現在開始頭暈"
+        payload = {
+            "primary_symptom": "unknown",
+            "primary_evidence": "",
+            "findings": [
+                {
+                    "code": "recent_head_trauma",
+                    "status": "present",
+                    "evidence": "撞到頭",
+                },
+                {
+                    "code": "dizziness_unspecified",
+                    "status": "present",
+                    "evidence": "頭暈",
+                },
+            ],
+        }
+
+        assessment, error = ChiefComplaintExtractor(FakeLLM(payload)).extract(complaint)
+
+        self.assertEqual(error, "")
+        self.assertEqual(assessment.onset_time.value, "unknown")
 
     def test_local_route_can_anchor_structured_safety(self):
         payload = headache_payload(

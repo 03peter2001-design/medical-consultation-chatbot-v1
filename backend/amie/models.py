@@ -44,6 +44,7 @@ class SymptomAssessment(BaseModel):
     route: ChiefRoute
     evidence: str = ""
     symptom_code: str = "unknown"
+    onset_time: EvidenceValue = Field(default_factory=EvidenceValue)
     onset: EvidenceValue = Field(default_factory=EvidenceValue)
     course: EvidenceValue = Field(default_factory=EvidenceValue)
     duration: EvidenceValue = Field(default_factory=EvidenceValue)
@@ -61,6 +62,7 @@ class ChiefComplaintAssessment(BaseModel):
     primary_symptom_code: str = "unknown"
     symptoms: list[SymptomEvidence] = Field(default_factory=list)
     symptom_domains: list[ChiefRoute | RouteEvidence] = Field(default_factory=list)
+    onset_time: EvidenceValue = Field(default_factory=EvidenceValue)
     onset: EvidenceValue = Field(default_factory=EvidenceValue)
     course: EvidenceValue = Field(default_factory=EvidenceValue)
     duration: EvidenceValue = Field(default_factory=EvidenceValue)
@@ -97,6 +99,7 @@ class ChiefComplaintAssessment(BaseModel):
             "primary_symptom_code",
             "symptoms",
             "symptom_domains",
+            "onset_time",
             "onset",
             "course",
             "duration",
@@ -119,6 +122,7 @@ class ChiefComplaintAssessment(BaseModel):
             if not isinstance(item, dict) or set(item) - {"code", "evidence"}:
                 raise ValueError("symptoms 含未允許欄位")
         for field in (
+            "onset_time",
             "onset",
             "course",
             "duration",
@@ -140,6 +144,7 @@ class ChiefComplaintAssessment(BaseModel):
             "route",
             "evidence",
             "symptom_code",
+            "onset_time",
             "onset",
             "course",
             "duration",
@@ -152,6 +157,7 @@ class ChiefComplaintAssessment(BaseModel):
             if not isinstance(item, dict) or set(item) - symptom_allowed:
                 raise ValueError("symptom_assessments 含未允許欄位")
             for field in (
+                "onset_time",
                 "onset",
                 "course",
                 "duration",

@@ -98,6 +98,46 @@ def facts_from_assessment(
     return merge_facts([], facts)
 
 
+def questionnaire_prefills_from_assessment(
+    assessment: ChiefComplaintAssessment,
+    questionnaire: Iterable[dict[str, Any]],
+    *,
+    route_hint: str | None = None,
+) -> dict[str, str]:
+    """Map explicit, symptom-scoped facts onto matching questionnaire fields.
+
+    This is deliberately narrow: only verbatim onset times are copied. Other
+    semantic facts resolve choice options through ``filter_question_by_known_facts``.
+    """
+    questions = list(questionnaire)
+    routes: list[str] = list(
+        dict.fromkeys(
+            str(item["route"])
+            for item in questions
+            if item.get("route") and item.get("base_field") == "onset"
+        )
+    )
+    scoped_times: dict[str, str] = {
+        item.route: item.onset_time.value
+        for item in assessment.symptom_assessments
+        if item.route in routes and item.onset_time.value != "unknown"
+    }
+    if (
+        len(routes) == 1
+        and assessment.primary_symptom == routes[0]
+        and assessment.onset_time.value != "unknown"
+    ):
+        scoped_times.setdefault(routes[0], assessment.onset_time.value)
+    elif route_hint in routes and assessment.onset_time.value != "unknown":
+        scoped_times.setdefault(str(route_hint), assessment.onset_time.value)
+
+    return {
+        item["field"]: scoped_times[item["route"]]
+        for item in questions
+        if (item.get("base_field") == "onset" and item.get("route") in scoped_times)
+    }
+
+
 def facts_from_legacy_data(data: dict[str, Any]) -> list[dict[str, Any]]:
     """Reconstruct conservative facts from stored questionnaires without an LLM."""
     rules = clinical_fact_rules()

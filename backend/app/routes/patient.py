@@ -60,6 +60,7 @@ from domain.questionnaires import (
     ROUTE_LABELS,
     build_questionnaire,
     condition_matches,
+    filter_question_by_context,
     next_question_index,
     parse_birth_date,
     progress_meta,
@@ -198,6 +199,10 @@ def _question_payload(
     index = session.get("index", 0)
     data = session.get("data", {})
     current = questionnaire[index] if not completed and 0 <= index < len(questionnaire) else None
+    if current is not None:
+        current = filter_question_by_context(current, data)
+        if isinstance(questionnaire, list):
+            questionnaire[index] = current
     if session.get("engine") == "amie":
         active = [item for item in questionnaire if condition_matches(item, data)]
         completed_fields = set(data) | set(session.get("prefilled_fields", []))

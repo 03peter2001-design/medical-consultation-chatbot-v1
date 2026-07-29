@@ -10,6 +10,7 @@ from langgraph.graph import END, START, StateGraph
 
 from domain.questionnaires import (
     condition_matches,
+    filter_question_by_context,
     load_questionnaire_policy,
 )
 
@@ -830,8 +831,9 @@ class AMIEEngine:
                 or not condition_matches(item, data)
             ):
                 continue
+            contextual = filter_question_by_context(item, data)
             filtered = filter_question_by_known_facts(
-                item,
+                contextual,
                 state.get(
                     "clinical_facts",
                     data.get("_clinical_facts", []),
@@ -857,6 +859,7 @@ class AMIEEngine:
         shared_required = set().union(*required_by_route.values())
         missing: list[str] = []
         for item in questionnaire:
+            item = filter_question_by_context(item, data)
             field = item["field"]
             base_field = item.get("base_field", field)
             item_route = item.get("route")

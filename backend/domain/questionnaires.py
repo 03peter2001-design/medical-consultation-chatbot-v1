@@ -60,6 +60,7 @@ _QUESTION_DEFAULTS = {
     "units": [],
     "placeholder": "",
     "condition": None,
+    "option_conditions": {},
     "semantic_options": {},
 }
 
@@ -173,6 +174,25 @@ def _validate_question(
                     field=field,
                     key=f"semantic_options.{option}.{findings_key}",
                 )
+
+    option_conditions = item["option_conditions"]
+    if not isinstance(option_conditions, dict):
+        raise ValueError(f"{category}.json 的 {field}.option_conditions 必須是物件")
+    if set(option_conditions) - set(item["options"]):
+        raise ValueError(f"{category}.json 的 {field}.option_conditions 只能引用既有選項")
+    for option, option_condition in option_conditions.items():
+        if (
+            not isinstance(option_condition, dict)
+            or set(option_condition) != {"field", "exclude_equals_any"}
+            or not isinstance(option_condition["field"], str)
+        ):
+            raise ValueError(f"{category}.json 的 {field}.option_conditions.{option} 格式錯誤")
+        _validate_string_list(
+            option_condition["exclude_equals_any"],
+            category=category,
+            field=field,
+            key=f"option_conditions.{option}.exclude_equals_any",
+        )
 
     condition = item.get("condition")
     if condition is not None:
@@ -356,6 +376,65 @@ def condition_matches(item: dict[str, Any], data: dict[str, Any]) -> bool:
     return any(token in value for token in condition.get("contains_any", []))
 
 
+def filter_question_by_context(
+    item: dict[str, Any],
+    data: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Remove options that conflict with known patient context."""
+    filtered = deepcopy(item)
+    conditions = filtered.get("option_conditions", {})
+    if filtered.get("kind") != "choice" or not conditions:
+        return filtered
+
+    removed: set[str] = set()
+    for option, condition in conditions.items():
+        context_value = str(data.get(condition["field"], "")).strip()
+        if context_value in condition["exclude_equals_any"]:
+            removed.add(option)
+    if not removed:
+        return filtered
+
+    original_semantics = filtered.get("semantic_options", {})
+    retained_options = [option for option in filtered.get("options", []) if option not in removed]
+    retained_nonexclusive = set(retained_options) - set(filtered.get("exclusive_options", []))
+    removed_codes = {
+        code
+        for option in removed
+        for key in ("findings", "negated_findings")
+        for code in original_semantics.get(option, {}).get(key, [])
+    }
+    retained_codes = {
+        code
+        for option in retained_nonexclusive
+        for key in ("findings", "negated_findings")
+        for code in original_semantics.get(option, {}).get(key, [])
+    }
+    context_only_codes = removed_codes - retained_codes
+
+    semantics: dict[str, dict[str, Any]] = {}
+    for option, mapping in original_semantics.items():
+        if option in removed:
+            continue
+        cleaned = deepcopy(mapping)
+        for key in ("findings", "negated_findings", "resolution_facts"):
+            if key not in cleaned:
+                continue
+            values = [code for code in cleaned[key] if code not in context_only_codes]
+            if values:
+                cleaned[key] = values
+            else:
+                cleaned.pop(key)
+        if cleaned:
+            semantics[option] = cleaned
+
+    filtered["options"] = retained_options
+    filtered["semantic_options"] = semantics
+    filtered["exclusive_options"] = [
+        option for option in filtered.get("exclusive_options", []) if option in retained_options
+    ]
+    return filtered
+
+
 def next_question_index(
     questionnaire: list[dict[str, Any]],
     current_index: int,
@@ -373,7 +452,9 @@ def next_question_index(
 
 def question_input(item: dict[str, Any]) -> dict[str, Any]:
     return {
-        key: value for key, value in item.items() if key not in {"condition", "semantic_options"}
+        key: value
+        for key, value in item.items()
+        if key not in {"condition", "option_conditions", "semantic_options"}
     }
 
 

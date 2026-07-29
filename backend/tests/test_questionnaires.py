@@ -7,6 +7,7 @@ from domain.questionnaires import (
     DISEASE_QUESTIONNAIRES,
     QUESTIONNAIRE_DATA_DIR,
     build_questionnaire,
+    filter_question_by_context,
     load_questionnaire_category,
     load_questionnaire_policy,
     next_question_index,
@@ -149,6 +150,66 @@ class QuestionnaireDefinitionTests(unittest.TestCase):
     def test_initial_questionnaire_only_asks_for_chief_complaint(self):
         self.assertEqual(len(CHIEF_QUESTIONNAIRE), 1)
         self.assertEqual(CHIEF_QUESTIONNAIRE[0]["kind"], "text")
+
+    def test_male_context_removes_female_specific_options(self):
+        abdomen = {item["field"]: item for item in build_questionnaire("abdomen")}
+        associated = filter_question_by_context(
+            abdomen["associated"],
+            {"gender": "男性"},
+        )
+        surgery = filter_question_by_context(
+            abdomen["surgery"],
+            {"gender": "男性"},
+        )
+        headache_risk = next(
+            item for item in build_questionnaire("headache") if item["field"] == "risk_flags"
+        )
+        headache_risk = filter_question_by_context(
+            headache_risk,
+            {"gender": "男性"},
+        )
+
+        self.assertTrue(
+            {
+                "月經過期",
+                "陰道出血",
+                "陰道分泌物增加",
+            }.isdisjoint(associated["options"])
+        )
+        self.assertNotIn("剖腹產", surgery["options"])
+        self.assertNotIn("子宮切除", surgery["options"])
+        self.assertNotIn("懷孕或產後六週內", headache_risk["options"])
+        self.assertTrue(
+            {
+                "missed_period",
+                "vaginal_bleeding",
+                "vaginal_discharge",
+            }.isdisjoint(associated["semantic_options"]["以上皆無"]["negated_findings"])
+        )
+        self.assertNotIn(
+            "pregnancy_postpartum",
+            headache_risk["semantic_options"]["以上皆無"]["negated_findings"],
+        )
+        self.assertEqual(
+            surgery["semantic_options"]["未曾手術"]["negated_findings"],
+            ["prior_abdominal_surgery"],
+        )
+
+    def test_female_or_unknown_context_keeps_female_specific_options(self):
+        associated = next(
+            item for item in build_questionnaire("abdomen") if item["field"] == "associated"
+        )
+
+        for data in (
+            {"gender": "女性"},
+            {"gender": "其他"},
+            {"gender": "不便透露"},
+            {},
+        ):
+            filtered = filter_question_by_context(associated, data)
+            self.assertIn("月經過期", filtered["options"])
+            self.assertIn("陰道出血", filtered["options"])
+            self.assertIn("陰道分泌物增加", filtered["options"])
 
 
 class QuestionnaireParserTests(unittest.TestCase):

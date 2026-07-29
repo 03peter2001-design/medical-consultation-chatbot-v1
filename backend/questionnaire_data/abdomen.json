@@ -131,6 +131,14 @@
       ],
       "multiple": true,
       "allow_other": true,
+      "option_conditions": {
+        "月經過期": {"field": "gender", "exclude_equals_any": ["男性"]},
+        "陰道出血": {"field": "gender", "exclude_equals_any": ["男性"]},
+        "陰道分泌物增加": {
+          "field": "gender",
+          "exclude_equals_any": ["男性"]
+        }
+      },
       "semantic_options": {
         "腹瀉": {"findings": ["diarrhea"]},
         "發燒發冷": {"findings": ["fever"]},
@@ -232,6 +240,10 @@
       ],
       "multiple": true,
       "allow_other": true,
+      "option_conditions": {
+        "剖腹產": {"field": "gender", "exclude_equals_any": ["男性"]},
+        "子宮切除": {"field": "gender", "exclude_equals_any": ["男性"]}
+      },
       "semantic_options": {
         "剖腹產": {"findings": ["prior_abdominal_surgery"]},
         "闌尾切除": {"findings": ["prior_abdominal_surgery"]},

@@ -15,6 +15,22 @@ AI 輔助預問診系統。使用者（病患端）用文字或語音回答一�
 - **測試期 AMIE 稽核軌跡**：每輪保存題目、病人回答、ClinicalFact、Safety 結果、投票快照、下一題、選題區辨分與簡短稽核理由，並標記為 `deterministic_disease_vote`。這是可供稽核的決策摘要，不是模型隱藏思維鏈
 - **RAG（檢索增強生成）**：清理 `backend/docs/` 中急診醫學、感染科與檢驗醫學語料並建立 versioned Chroma collections。RAG 只供一次性疾病表建置、背景理學檢查／檢驗／影像建議，以及醫師主動聊天使用；不得參與病患疾病候選或票數計算
 - **雙語檢索（實驗功能）**：可保留中文原查詢，並以 Gemini 產生去識別化的結構化英文查詢，同時檢索相同 collections；翻譯失敗時會退回原本的多語 embedding 查詢
+
+目前的執行邊界是「Gemini 理解與正規化、本機知識搜尋與規則」：
+
+```text
+醫師端 RAG：問題 → 去識別化 → Gemini 醫療術語英文化
+                   → 中文原查詢＋英文查詢
+                   → 本機 embedding / Chroma 搜尋
+                   → 本機來源片段 → Gemini 整理回答
+病患端 AMIE：病人原話 → Gemini 抽取具原文證據的臨床事實
+                     → 本機 Safety / 問卷 / 疾病表計票與下一題
+```
+
+`RAG_QUERY_TRANSLATION=gemini`、`RAG_QUERY_MODE=dual` 會保留中文原查詢，
+同時加入 Gemini 產生的結構化英文醫療查詢，再由本機 embedding 與 Chroma
+分批檢索、RRF 合併及去重。AMIE 執行期不查 RAG；Gemini 只抽取有原文證據的
+臨床事實，不負責決定疾病名稱、票數、Safety 結果或下一題。
 - 目前支援 3 種問診情境：**胸痛、頭痛、腹痛**。主訴抽取器會同時提出有原文證據的分科候選；若抽取失敗或仍不明確，才退回既有 LLM 分科，再載入對應問卷
 
 ## 專案結構
@@ -253,9 +269,9 @@ Gemini 回傳必須符合固定 JSON Schema，任何 API、格式或內容驗證
 自動退回原本的多語 embedding 查詢。日誌只記錄是否使用翻譯、耗時與
 查詢 variant，不記錄原文或翻譯內容。
 
-此功能預設為 `off`。一般 Gemini Developer API 的服務條款與資料治理不應
-直接視為符合臨床或個資規範；正式病人流程啟用前，仍須完成機構法務、
-資安、資料保護與醫療審查。
+程式在未設定時仍預設為 `off`；本專案的本機研究設定則開啟 `gemini + dual`。
+一般 Gemini Developer API 的服務條款與資料治理不應直接視為符合臨床或
+個資規範；正式病人流程啟用前，仍須完成機構法務、資安、資料保護與醫療審查。
 
 ### 5. 啟動後端
 
@@ -403,10 +419,68 @@ VITE_FHIR_BASE_URL=http://localhost:8080/fhir
 執行 `cd backend && python -m scripts.install_twcore`。套件清單、來源、
 授權標示與 SHA-256 位於 `backend/terminology/packages.lock.json`。
 
-身分證直接查詢只供本機或受控測試環境使用。正式環境不應讓瀏覽器直接
-存取臨床 FHIR Server，應改由具備驗證、授權與稽核的院內後端代理處理。
+身分證直接查詢只供本機或受控測試環境使用。正式環境不可使用未授權的
+FHIR 直連模式，應使用 SMART on FHIR OAuth、最小權限 scopes、機構核准的
+client registration、稽核與資料治理。
 
-### 8.（選用）設定 D-ID 虛擬數位人語音互動
+### 8. 啟動完整 SMART on FHIR 應用
+
+`compose.smart.yml` 會建置並啟動 FastAPI、正式 Vue frontend、SMART
+Launcher、local CORS gateway 及 FHIR proxy。Gateway 會依實際 localhost
+port 回傳 CORS header，並禁止快取 discovery/metadata。OAuth callback
+不再停留在示範資料頁，而會直接
+開啟病患端問診；前端透過 access token 讀取 launch-context Patient 的
+`$everything`，再沿用既有的 TW Core／FHIR 病歷映射與缺漏補問流程。
+
+先確認 HAPI 已啟動、合成病例已匯入，且 `backend/.env` 已設定：
+
+```bash
+./scripts/start-smart.sh
+```
+
+接著開啟：
+
+```text
+http://127.0.0.1:5174/start.html
+```
+
+選擇合成病人後，流程為：
+
+```text
+EHR Launch → OAuth 授權 → Patient launch context → FHIR $everything
+→ 病歷預填 → AI 預問診 → 問診編號／醫師端
+```
+
+Vue 與 FastAPI 由同一個 App origin 的 `/api` reverse proxy 串接；FHIR
+access token 只由瀏覽器中的 SMART client 用於 FHIR Server，不會送入
+`/chat`、RAG 或外部模型。SMART stack 的問診資料保存在 Docker volume
+`consultation-data`，停止服務不會刪除：
+
+```bash
+docker compose -f compose.smart.yml down
+```
+
+SMART backend image 會另外安裝 `requirements-rag.txt`，PyTorch 固定從官方
+CPU-only wheel index 安裝，並將主機已建立的 `backend/chroma_db` 掛載到容器。
+Hugging Face model cache 預設重用 `~/.cache/huggingface/hub`；可在啟動前以
+`RAG_HF_HUB_CACHE=/其他路徑` 覆寫。SMART 執行期會以 offline、唯讀方式載入
+模型快取，並關閉 Hugging Face 與 Chroma telemetry。首次使用前若尚未建立
+索引或 embedding model cache，先執行：
+
+```bash
+./scripts/bootstrap.sh --with-rag
+```
+
+`start-smart.sh` 會檢查索引與 `/api/health` 的 `rag_enabled`，未完整載入
+作用中的 collections 時會停止並顯示原因。啟動成功後，醫師端 RAG 文獻聊天、
+背景理學檢查／檢驗／影像建議及六段式分析都會使用本機向量索引；RAG 仍不參與
+病患端疾病票數與 Safety 決策。
+
+目前 scopes 僅包含病人資料讀取；系統不會自動把 AI 內容寫回 FHIR。
+正式回寫必須另建醫師確認、版本衝突、Provenance、AuditEvent 及失敗復原
+流程。這個本機 Launcher 只供合成資料開發，不是正式身分系統。
+
+### 9.（選用）設定 D-ID 虛擬數位人語音互動
 
 病患端網頁左側有一個「D-ID 設定」欄位，需要輸入：
 - **Client Key**：去 [studio.d-id.com](https://studio.d-id.com) 註冊後取得
@@ -502,14 +576,64 @@ A: 前端會自動使用目前網頁的 hostname，並以 `8000` 作為預設後
 **Q: `.env` 或 `chroma_db` 不見了？**
 A: 這是正常的，這兩個東西本來就不會被上傳到 GitHub（見 `.gitignore`），照步驟 3、4 自己重新建立即可。
 
+## 未來展望：正式 SMART 臨床應用
+
+> 本節是尚未進入實作的概念規劃，不代表目前系統已支援正式院方登入、
+> 健保卡驗證或正式醫療環境部署。實際執行仍需配合院方 EHR、身分系統、
+> 資訊安全政策與臨床流程確認。完整規劃請見 [future.md](future.md)。
+
+未來預計保留目前系統作為功能開發與合成資料測試用的開發端，另建立正式
+臨床應用端。臨床應用端會將 Patient Shell 與 Clinician Shell 分開建置與部署，
+但共用受後端保護的臨床服務；病患主動完成並送出問診後，個案才會進入醫師的
+待處理佇列。
+
+預計的身分驗證與問診管線如下：
+
+```text
+病患入口
+→ SMART／院方 OIDC
+→ 後端驗證與安全 Session
+→ 讀取授權範圍內的 FHIR 病歷
+→ 病歷預填與 AMIE 問診
+→ 病患主動送出
+→ 進入醫師待處理佇列
+
+醫師入口／EHR Launch
+→ SMART／院方 OIDC
+→ 後端角色授權
+→ 已送出個案或目前 Patient／Encounter
+→ RAG、SNOMED 與規則工具
+```
+
+正式應用預計改採後端 BFF 模式：FHIR access token 只保存在後端，瀏覽器
+使用 HttpOnly Session cookie；API 依 `patient`、`clinician` 與 `rule_admin`
+角色授權，並搭配最小 FHIR scopes、HTTPS、CSRF 防護及集中式稽核。現有
+RAG、Gemini 醫療術語英文化、本機檢索、AMIE、SNOMED 與規則中心的責任邊界
+維持不變。
+
+推動此架構前仍需院方提供或共同確認：
+
+- EHR／FHIR Server 規格及 SMART client registration
+- OIDC／SSO issuer、redirect URI、claims 與醫師角色對應
+- Patient、Practitioner 與 Encounter launch context 的提供方式
+- 正式網域、TLS、Session 儲存、臨床資料庫、稽核及個資治理政策
+- 健保卡或其他第三方身分驗證的院方介接方式
+
+SMART 授權與 launch context 將以
+[HL7 SMART App Launch](https://hl7.org/fhir/smart-app-launch/STU2.2/app-launch.html)
+及 [SMART Scopes and Launch Context](https://hl7.org/fhir/smart-app-launch/scopes-and-launch-context.html)
+為基礎，再依院方實際支援版本調整。
+
 ## 開發規劃
 
 - [x] 將前端重構為 Vue 3 + Vite
+- [x] 將 SMART OAuth launch context 與完整 Vue 預問診流程整合
 - [x] 將主訴、基本資料、一般病史與疾病問卷拆成獨立 JSON
 - [x] 建立胸痛、頭痛、腹痛、共通與安全的 RAG v2 collections
 - [x] 加入可選的 Gemini 中英 dual-query 檢索與失敗 fallback
 - [ ] 完成 RAG 安全庫、低信心分類與黃金測試集的醫療專業審查
-- [ ] 正式環境改用具備身分驗證、授權與稽核的 FHIR 後端代理
+- [ ] 完成正式 SMART client registration、後端身分驗證、最小權限與稽核
+- [ ] 建立醫師確認後的 FHIR 回寫、Provenance 與 AuditEvent 流程
 - [x] 導入 ClinicalFact 白名單、版本化胸痛／頭痛／腹痛疾病表與確定性投票
 - [x] 加入安全題優先、投票區辨力選題、70% 停止條件與 24 輪轉交
 - [ ] 由醫師審查並校準三路由疾病表權重與 SNOMED CT Coding

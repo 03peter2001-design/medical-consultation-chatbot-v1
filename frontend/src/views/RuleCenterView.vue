@@ -1,9 +1,13 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import AppHeader from '../components/AppHeader.vue'
 import { api, connectionError } from '../services/backend.js'
+import {
+  getRuleSaveChecks,
+  getRuleSaveValidationError,
+} from '../services/ruleEditor.js'
 
 const sessionId = `rule_admin_${Date.now()}`
 const rulebook = ref(null)
@@ -16,14 +20,18 @@ const saving = ref(false)
 const assistantBusy = ref(false)
 const error = ref('')
 const success = ref('')
+const saveSucceeded = ref(false)
 const adminToken = ref('')
 const searchText = ref('')
 const activeCategory = ref('all')
 const selectedLabels = ref([])
 const changeNote = ref('')
 const confirmation = ref('')
+const saveValidationError = ref('')
 const assistantMessage = ref('')
 const assistantHistory = ref([])
+const featureSearch = ref('')
+const activeFeatureCategory = ref('all')
 
 const routeLabels = {
   chest: '胸痛',
@@ -38,6 +46,15 @@ const categoryOptions = [
   { id: 'headache', label: '頭痛' },
   { id: 'abdomen', label: '腹痛' },
   { id: 'structured', label: '結構化' },
+]
+
+const featureCategoryOptions = [
+  { id: 'all', label: '全部特徵' },
+  { id: 'safety', label: 'Safety' },
+  { id: 'chest', label: '胸痛' },
+  { id: 'headache', label: '頭痛' },
+  { id: 'abdomen', label: '腹痛' },
+  { id: 'common', label: '共通' },
 ]
 
 const visibleGroups = computed(() => {
@@ -70,14 +87,33 @@ const selectedGroups = computed(() =>
   ),
 )
 
-const canSave = computed(
-  () =>
-    editing.value &&
-    authorized.value &&
-    selectedLabels.value.length > 0 &&
-    changeNote.value.trim().length >= 4 &&
-    confirmation.value === rulebook.value?.confirmation_text &&
-    !saving.value,
+const visibleFacts = computed(() => {
+  const query = featureSearch.value.trim().toLowerCase()
+  return (rulebook.value?.fact_catalog || []).filter((fact) => {
+    const categoryMatch =
+      activeFeatureCategory.value === 'all' ||
+      fact.categories.includes(activeFeatureCategory.value)
+    if (!categoryMatch) return false
+    return (
+      !query ||
+      `${fact.code} ${fact.description}`.toLowerCase().includes(query)
+    )
+  })
+})
+
+const saveChecks = computed(() =>
+  getRuleSaveChecks({
+    authorized: authorized.value,
+    editing: editing.value,
+    selectedCount: selectedLabels.value.length,
+    changeNote: changeNote.value,
+    confirmation: confirmation.value,
+    confirmationText: rulebook.value?.confirmation_text,
+  }),
+)
+
+const canSave = computed(() =>
+  saveChecks.value.every((check) => check.complete),
 )
 
 function cloneGroups(groups) {
@@ -85,15 +121,33 @@ function cloneGroups(groups) {
     ...group,
     categories: group.categories || [],
     conditionsText: group.possible_conditions.join('\n'),
-    rules: group.rules.map((rule) => ({
-      ...rule,
-      termsText: (rule.terms || []).join('\n'),
-      conditionText: JSON.stringify(
-        rule.when || rule.all_term_groups || {},
-        null,
-        2,
-      ),
-    })),
+    rules: group.rules.map((rule) => {
+      const when = rule.when || {}
+      const featureMode = when.all_findings
+        ? 'all_findings'
+        : 'any_findings'
+      const otherConditions = Object.fromEntries(
+        Object.entries(when).filter(
+          ([key]) =>
+            key !== 'any_findings' && key !== 'all_findings',
+        ),
+      )
+      return {
+        ...rule,
+        termsText: (rule.terms || []).join('\n'),
+        featureMode,
+        selectedFeatures: [
+          ...(when[featureMode] || []),
+        ],
+        conditionText: JSON.stringify(
+          rule.kind === 'structured'
+            ? otherConditions
+            : rule.all_term_groups || {},
+          null,
+          2,
+        ),
+      }
+    }),
   }))
 }
 
@@ -120,6 +174,13 @@ function categoryLabel(category) {
   )
 }
 
+function factCategoryLabel(category) {
+  return (
+    featureCategoryOptions.find((item) => item.id === category)
+      ?.label || category
+  )
+}
+
 function buildPayloadGroups() {
   return draftGroups.value.map((group) => ({
     original_label: group.original_label,
@@ -143,8 +204,16 @@ function buildPayloadGroups() {
         } catch {
           throw new Error(`${rule.code} 的 JSON 條件格式錯誤`)
         }
-        if (rule.kind === 'structured') result.when = parsed
-        else result.all_term_groups = parsed
+        if (rule.kind === 'structured') {
+          delete parsed.any_findings
+          delete parsed.all_findings
+          if (rule.selectedFeatures.length) {
+            parsed[rule.featureMode] = [
+              ...new Set(rule.selectedFeatures),
+            ]
+          }
+          result.when = parsed
+        } else result.all_term_groups = parsed
       }
       return result
     }),
@@ -193,8 +262,21 @@ function beginEdit() {
   changeNote.value = ''
   confirmation.value = ''
   success.value = ''
+  saveSucceeded.value = false
   error.value = ''
+  saveValidationError.value = ''
   editing.value = true
+}
+
+async function openGroupEditor(originalLabel, event) {
+  if (!authorized.value || editing.value) return
+  event?.preventDefault()
+  selectedLabels.value = [originalLabel]
+  beginEdit()
+  await nextTick()
+  document
+    .querySelector('.editor-workspace')
+    ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
 function cancelEdit() {
@@ -202,6 +284,7 @@ function cancelEdit() {
   editing.value = false
   assistantHistory.value = []
   error.value = ''
+  saveValidationError.value = ''
 }
 
 function toggleVisible() {
@@ -254,6 +337,10 @@ async function askAssistant() {
 }
 
 async function saveRules() {
+  if (saving.value) return
+  saveValidationError.value = getRuleSaveValidationError(
+    saveChecks.value,
+  )
   if (!canSave.value) return
   if (
     !window.confirm(
@@ -270,8 +357,8 @@ async function saveRules() {
       {
         session_id: sessionId,
         expected_revision: rulebook.value.revision,
-        confirmation: confirmation.value,
-        change_note: changeNote.value,
+        confirmation: confirmation.value.trim(),
+        change_note: changeNote.value.trim(),
         safety_groups: buildPayloadGroups(),
       },
       adminToken.value,
@@ -282,8 +369,10 @@ async function saveRules() {
     selectedLabels.value = []
     confirmation.value = ''
     changeNote.value = ''
+    saveValidationError.value = ''
     assistantHistory.value = []
     success.value = 'Safety 規則已驗證、建立快照並立即更新。'
+    saveSucceeded.value = true
   } catch (requestError) {
     error.value = requestError.message
   } finally {
@@ -312,8 +401,30 @@ onMounted(loadRules)
       status-tone="online"
     >
       <RouterLink class="nav-link" to="/doctor">← 返回醫師工作區</RouterLink>
+      <RouterLink class="nav-link" to="/doctor/terminology/snomed">
+        SNOMED CT
+      </RouterLink>
       <RouterLink class="nav-link" to="/">病患問診端</RouterLink>
     </AppHeader>
+
+    <div
+      v-if="saveSucceeded"
+      class="save-success-toast"
+      role="status"
+      aria-live="assertive"
+    >
+      <div>
+        <strong>Safety 規則更新成功</strong>
+        <span>新版本已保存並立即套用至後續問診。</span>
+      </div>
+      <button
+        type="button"
+        aria-label="關閉更新成功提示"
+        @click="saveSucceeded = false"
+      >
+        ×
+      </button>
+    </div>
 
     <main class="rule-center">
       <div v-if="loading" class="state-card">正在載入規則…</div>
@@ -478,7 +589,11 @@ onMounted(loadRules)
                 selected: selectedLabels.includes(group.original_label),
               }"
             >
-              <summary>
+              <summary
+                @click="
+                  openGroupEditor(group.original_label, $event)
+                "
+              >
                 <label
                   v-if="authorized"
                   class="select-rule"
@@ -507,7 +622,7 @@ onMounted(loadRules)
                     </span>
                   </div>
                 </div>
-                <span>展開</span>
+                <span>{{ authorized ? '點擊編輯' : '展開' }}</span>
               </summary>
 
               <ul class="condition-tags">
@@ -632,8 +747,113 @@ onMounted(loadRules)
                   觸發詞（一行一項）
                   <textarea v-model="rule.termsText" rows="4" />
                 </label>
+                <div
+                  v-else-if="rule.kind === 'structured'"
+                  class="semantic-feature-editor"
+                >
+                  <header class="feature-heading">
+                    <div>
+                      <strong>語意特徵條件</strong>
+                      <small>
+                        已選 {{ rule.selectedFeatures.length }} 個
+                      </small>
+                    </div>
+                    <label>
+                      判斷方式
+                      <select v-model="rule.featureMode">
+                        <option value="any_findings">
+                          任一特徵成立
+                        </option>
+                        <option value="all_findings">
+                          所有特徵皆成立
+                        </option>
+                      </select>
+                    </label>
+                  </header>
+
+                  <div class="feature-toolbar">
+                    <label>
+                      搜尋語意特徵
+                      <input
+                        v-model="featureSearch"
+                        type="search"
+                        placeholder="例如：意識、視力、altered_consciousness"
+                      />
+                    </label>
+                    <div
+                      class="category-tabs feature-tabs"
+                      aria-label="語意特徵分類"
+                    >
+                      <button
+                        v-for="category in featureCategoryOptions"
+                        :key="category.id"
+                        :class="{
+                          active:
+                            activeFeatureCategory === category.id,
+                        }"
+                        @click="
+                          activeFeatureCategory = category.id
+                        "
+                      >
+                        {{ category.label }}
+                      </button>
+                    </div>
+                    <small>
+                      顯示 {{ visibleFacts.length }} /
+                      {{ rulebook.fact_catalog.length }} 個特徵
+                    </small>
+                  </div>
+
+                  <div class="feature-grid">
+                    <label
+                      v-for="fact in visibleFacts"
+                      :key="fact.code"
+                      class="feature-option"
+                      :class="{
+                        selected:
+                          rule.selectedFeatures.includes(fact.code),
+                      }"
+                    >
+                      <input
+                        v-model="rule.selectedFeatures"
+                        type="checkbox"
+                        :value="fact.code"
+                      />
+                      <span>
+                        <code>{{ fact.code }}</code>
+                        <b>{{ fact.description }}</b>
+                        <small>
+                          {{
+                            fact.categories
+                              .map(factCategoryLabel)
+                              .join(' · ')
+                          }}
+                        </small>
+                      </span>
+                    </label>
+                  </div>
+                  <div
+                    v-if="!visibleFacts.length"
+                    class="empty-result compact"
+                  >
+                    找不到符合條件的語意特徵。
+                  </div>
+
+                  <label class="advanced-condition">
+                    其他進階條件 JSON
+                    <small>
+                      primary、severity、onset、risk 等條件會保留於此；
+                      語意特徵請使用上方勾選器。
+                    </small>
+                    <textarea
+                      v-model="rule.conditionText"
+                      class="json-editor"
+                      rows="6"
+                    />
+                  </label>
+                </div>
                 <label v-else>
-                  結構條件 JSON
+                  複合原文條件 JSON
                   <textarea
                     v-model="rule.conditionText"
                     class="json-editor"
@@ -652,6 +872,7 @@ onMounted(loadRules)
                 rows="2"
                 maxlength="500"
                 placeholder="例如：依 2026-07 急診科會議調整頭痛警訊用語"
+                @input="saveValidationError = ''"
               />
             </label>
             <label>
@@ -659,9 +880,32 @@ onMounted(loadRules)
               <input
                 v-model="confirmation"
                 :placeholder="rulebook.confirmation_text"
+                @input="saveValidationError = ''"
               />
             </label>
-            <button class="primary-action" :disabled="!canSave">
+            <div class="save-readiness" aria-live="polite">
+              <strong>更新前檢查</strong>
+              <ul>
+                <li
+                  v-for="check in saveChecks"
+                  :key="check.id"
+                  :class="{ complete: check.complete }"
+                >
+                  <span aria-hidden="true">
+                    {{ check.complete ? '✓' : '○' }}
+                  </span>
+                  {{ check.label }}
+                </li>
+              </ul>
+              <p v-if="saveValidationError">
+                {{ saveValidationError }}
+              </p>
+            </div>
+            <button
+              type="submit"
+              class="primary-action"
+              :disabled="saving"
+            >
               {{ saving ? '驗證與更新中…' : '驗證並更新 Safety 規則' }}
             </button>
           </form>
@@ -684,6 +928,41 @@ onMounted(loadRules)
   margin: 0 auto;
   padding: 28px;
   overflow-y: auto;
+}
+
+.save-success-toast {
+  position: fixed;
+  z-index: 100;
+  top: calc(var(--header-height) + 14px);
+  right: 20px;
+  display: flex;
+  align-items: flex-start;
+  width: min(390px, calc(100vw - 40px));
+  padding: 14px 16px;
+  border: 1px solid rgb(8 127 109 / 35%);
+  border-radius: 9px;
+  background: var(--green-soft);
+  box-shadow: 0 12px 30px rgb(32 51 69 / 18%);
+  color: var(--green);
+}
+
+.save-success-toast > div {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+}
+
+.save-success-toast span {
+  font-size: 12px;
+}
+
+.save-success-toast button {
+  padding: 0 0 0 12px;
+  background: transparent;
+  color: var(--green);
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
 }
 
 .page-heading,
@@ -1129,7 +1408,8 @@ label {
 }
 
 input,
-textarea {
+textarea,
+select {
   width: 100%;
   padding: 9px 10px;
   border: 1px solid var(--border);
@@ -1139,6 +1419,117 @@ textarea {
   font: inherit;
   font-weight: 400;
   line-height: 1.5;
+}
+
+.semantic-feature-editor {
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface-2);
+}
+
+.feature-heading {
+  align-items: flex-end;
+}
+
+.feature-heading > div {
+  display: grid;
+  gap: 2px;
+}
+
+.feature-heading small,
+.feature-toolbar > small,
+.advanced-condition small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.feature-heading label {
+  width: min(240px, 100%);
+}
+
+.feature-toolbar {
+  display: grid;
+  gap: 8px;
+}
+
+.feature-toolbar > label {
+  max-width: 560px;
+}
+
+.feature-tabs button {
+  padding: 5px 9px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  max-height: 390px;
+  padding: 2px;
+  overflow-y: auto;
+}
+
+.feature-option {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 8px;
+  padding: 9px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface-1);
+  cursor: pointer;
+}
+
+.feature-option.selected {
+  border-color: var(--blue);
+  background: var(--blue-soft);
+}
+
+.feature-option input {
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+}
+
+.feature-option > span {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.feature-option code {
+  overflow: hidden;
+  color: var(--blue);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.feature-option b {
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.feature-option small {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.empty-result.compact {
+  margin-top: 0;
+  padding: 12px;
+}
+
+.advanced-condition {
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
 }
 
 .json-editor {
@@ -1234,6 +1625,10 @@ textarea {
   background: var(--surface-1);
 }
 
+.selected-editor .implementation {
+  margin: 10px 0 0;
+}
+
 .save-panel {
   margin-top: 16px;
   padding: 16px;
@@ -1244,6 +1639,41 @@ textarea {
 
 .save-panel .primary-action {
   justify-self: start;
+}
+
+.save-readiness {
+  display: grid;
+  gap: 7px;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface-1);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.save-readiness ul {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.save-readiness li {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+
+.save-readiness li.complete {
+  color: var(--green);
+}
+
+.save-readiness p {
+  margin: 2px 0 0;
+  color: var(--danger);
+  font-weight: 700;
 }
 
 .state-card {
@@ -1264,8 +1694,18 @@ textarea {
 }
 
 @media (max-width: 620px) {
+  .save-success-toast {
+    right: 12px;
+    left: 12px;
+    width: auto;
+  }
+
   .rule-center {
     padding: 16px 12px;
+  }
+
+  .rule-section {
+    padding: 12px;
   }
 
   .page-heading,
@@ -1291,6 +1731,25 @@ textarea {
   }
 
   .assistant-input {
+    grid-template-columns: 1fr;
+  }
+
+  .assistant-panel,
+  .editor-workspace {
+    padding: 10px;
+  }
+
+  .selected-editor,
+  .semantic-feature-editor {
+    padding: 8px;
+  }
+
+  .feature-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .feature-grid {
     grid-template-columns: 1fr;
   }
 }

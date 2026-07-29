@@ -44,6 +44,15 @@ class RuleManagementTests(unittest.TestCase):
         self.assertTrue(payload["safety_groups"])
         self.assertTrue(all(group["rules"] for group in payload["safety_groups"]))
         self.assertTrue(all(group["categories"] for group in payload["safety_groups"]))
+        self.assertEqual(len(payload["fact_catalog"]), payload["fact_count"])
+        catalog = {item["code"]: item for item in payload["fact_catalog"]}
+        self.assertEqual(set(catalog), set(payload["fact_codes"]))
+        self.assertIn(
+            "safety",
+            catalog["altered_consciousness"]["categories"],
+        )
+        self.assertIn("chest", catalog["chest_pressure"]["categories"])
+        self.assertTrue(all(item["description"] for item in payload["fact_catalog"]))
 
     def test_editor_must_unlock_with_matching_token(self):
         with patch.dict(os.environ, {}, clear=True):
@@ -102,6 +111,35 @@ class RuleManagementTests(unittest.TestCase):
         self.assertEqual(
             next(rule for rule in all_rules if rule["code"] == phrase_rule["code"])["terms"],
             ["醫師校訂觸發詞"],
+        )
+
+    def test_structured_rule_features_can_be_selected_from_catalog(self):
+        current = load_safety_rules()
+        groups = rule_management._rule_groups(current)
+        edited = copy.deepcopy(groups)
+        structured = next(
+            rule
+            for group in edited
+            for rule in group["rules"]
+            if rule["code"] == "semantic_altered_consciousness"
+        )
+        structured["when"] = {
+            "all_findings": [
+                "altered_consciousness",
+                "syncope",
+            ]
+        }
+
+        candidate = rule_management._candidate_document(current, edited)
+        saved = next(
+            rule
+            for rule in candidate["structured_rules"]
+            if rule["code"] == "semantic_altered_consciousness"
+        )
+
+        self.assertEqual(
+            saved["when"],
+            structured["when"],
         )
 
     def test_update_requires_configured_matching_token_and_current_revision(self):

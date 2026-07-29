@@ -19,7 +19,10 @@ from amie.rule_config import (
     load_safety_rules,
     validate_safety_rules,
 )
-from domain.questionnaires import load_questionnaire_policy
+from domain.questionnaires import (
+    load_questionnaire_category,
+    load_questionnaire_policy,
+)
 
 AUDIT_DIR = SAFETY_RULES_PATH.parents[2] / "data" / "safety_rule_audit"
 _UPDATE_LOCK = threading.Lock()
@@ -30,6 +33,13 @@ _CATEGORY_ORDER = {
     "headache": 2,
     "abdomen": 3,
     "structured": 4,
+}
+_FACT_CATEGORY_ORDER = {
+    "safety": 0,
+    "chest": 1,
+    "headache": 2,
+    "abdomen": 3,
+    "common": 4,
 }
 
 
@@ -147,6 +157,48 @@ def authorize_rule_editor(admin_token: str) -> dict[str, bool]:
     return {"authorized": True}
 
 
+def _fact_catalog(rules: dict[str, Any]) -> list[dict[str, Any]]:
+    categories = {code: set() for code in rules["finding_codes"]}
+    for rule in rules["structured_rules"]:
+        for key in ("any_findings", "all_findings"):
+            for code in rule["when"].get(key, []):
+                categories[code].add("safety")
+
+    for route in rules["supported_routes"]:
+        for question in load_questionnaire_category(route):
+            for option in question.get("semantic_options", {}).values():
+                for key in (
+                    "findings",
+                    "negated_findings",
+                    "resolution_facts",
+                ):
+                    for code in option.get(key, []):
+                        if code in categories:
+                            categories[code].add(route)
+        profile = load_profile_document(route)
+        for disease in profile["profiles"]:
+            for clue in disease["clues"]:
+                code = clue["fact"]
+                if code in categories:
+                    categories[code].add(route)
+
+    definitions = rules["semantic_extraction"]["finding_definitions"]
+    catalog = []
+    for code in rules["finding_codes"]:
+        assigned = categories[code] or {"common"}
+        catalog.append(
+            {
+                "code": code,
+                "description": definitions[code],
+                "categories": sorted(
+                    assigned,
+                    key=lambda item: _FACT_CATEGORY_ORDER.get(item, 99),
+                ),
+            }
+        )
+    return catalog
+
+
 def rule_center_payload() -> dict[str, Any]:
     rules = load_safety_rules()
     routes = []
@@ -197,6 +249,7 @@ def rule_center_payload() -> dict[str, Any]:
         "routes": routes,
         "fact_count": len(rules["finding_codes"]),
         "fact_codes": list(rules["finding_codes"]),
+        "fact_catalog": _fact_catalog(rules),
         "safety_groups": _rule_groups(rules),
     }
 

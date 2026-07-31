@@ -1,10 +1,499 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "supported_routes": [
     "chest",
     "headache",
     "abdomen"
   ],
+  "clinical_fact_rules": {
+    "record_fields": [
+      "code",
+      "status",
+      "evidence",
+      "source",
+      "turn"
+    ],
+    "statuses": [
+      "present",
+      "absent"
+    ],
+    "scalar_mappings": {
+      "onset": {
+        "sudden": "onset_sudden",
+        "gradual": "onset_gradual"
+      },
+      "course": {
+        "episodic": "course_episodic",
+        "continuous": "course_continuous",
+        "recurrent": "course_recurrent"
+      },
+      "duration": {
+        "brief": "duration_brief",
+        "prolonged": "duration_prolonged"
+      },
+      "severity": {
+        "mild": "severity_mild",
+        "moderate": "severity_moderate",
+        "severe": "severity_severe"
+      }
+    },
+    "symptom_mappings": {
+      "headache": "symptom_headache",
+      "chest_pain": "symptom_chest_pain",
+      "chest_tightness": "chest_pressure",
+      "abdominal_pain": "symptom_abdominal_pain",
+      "blurred_vision": "blurred_vision",
+      "vision_loss": "vision_loss",
+      "vomiting": "vomiting"
+    },
+    "legacy_text_fields": [
+      "reason",
+      "start_type",
+      "location",
+      "fixed",
+      "tender",
+      "severity",
+      "quality",
+      "aggravate",
+      "relieve",
+      "associated",
+      "cardio",
+      "chronic",
+      "risk_flags",
+      "neuro",
+      "abdomen_hx",
+      "contact_history",
+      "surgery"
+    ],
+    "legacy_terms": {
+      "acid_regurgitation": [
+        "胃酸",
+        "反酸",
+        "酸水"
+      ],
+      "burning_pain": [
+        "灼熱",
+        "燒灼"
+      ],
+      "chest_pressure": [
+        "重物壓迫",
+        "壓迫",
+        "胸悶",
+        "胸緊"
+      ],
+      "cough_sputum": [
+        "咳嗽有痰",
+        "咳痰"
+      ],
+      "diaphoresis": [
+        "冒冷汗",
+        "冷汗"
+      ],
+      "dyspnea": [
+        "呼吸急促",
+        "呼吸困難",
+        "喘不過氣"
+      ],
+      "exertional_trigger": [
+        "耗費體力的活動",
+        "活動時",
+        "走路時",
+        "運動"
+      ],
+      "fever": [
+        "發燒",
+        "高燒"
+      ],
+      "hemoptysis": [
+        "咳血"
+      ],
+      "meal_related": [
+        "飯後",
+        "進食",
+        "吃東西"
+      ],
+      "movement_trigger": [
+        "轉身",
+        "抬手",
+        "活動胸部"
+      ],
+      "nausea": [
+        "噁心",
+        "想吐"
+      ],
+      "pain_radiates_back": [
+        "延伸到背部",
+        "放射到背部"
+      ],
+      "palpitations": [
+        "心跳加速",
+        "心跳不規則",
+        "心悸"
+      ],
+      "pleuritic_pain": [
+        "深呼吸",
+        "呼吸時痛"
+      ],
+      "positional_relief": [
+        "坐姿",
+        "坐起",
+        "前傾"
+      ],
+      "recent_infection": [
+        "最近感冒",
+        "近期感染"
+      ],
+      "reproducible_tenderness": [
+        "壓痛",
+        "按壓會痛"
+      ],
+      "stress_trigger": [
+        "感到有壓力",
+        "緊張",
+        "焦慮"
+      ],
+      "syncope": [
+        "昏厥",
+        "暈倒"
+      ],
+      "tearing_pain": [
+        "撕裂"
+      ],
+      "unilateral_headache": [
+        "單側"
+      ],
+      "bilateral_headache": [
+        "兩側都痛"
+      ],
+      "occipital_neck_pain": [
+        "後腦勺及頸部"
+      ],
+      "diffuse_headache": [
+        "整個頭"
+      ],
+      "pulsating_headache": [
+        "脈搏一樣的跳痛",
+        "跳痛"
+      ],
+      "pressure_band_headache": [
+        "緊緊束住",
+        "悶脹痛"
+      ],
+      "cough_valsalva_trigger": [
+        "咳嗽或用力"
+      ],
+      "activity_aggravation": [
+        "身體活動"
+      ],
+      "photophobia": [
+        "畏光",
+        "光線刺激"
+      ],
+      "phonophobia": [
+        "畏聲",
+        "聲音刺激"
+      ],
+      "dark_quiet_relief": [
+        "黑暗安靜"
+      ],
+      "neck_massage_relief": [
+        "按摩頭頸部"
+      ],
+      "cancer_history": [
+        "癌症病史",
+        "惡性腫瘤"
+      ],
+      "immunocompromised": [
+        "免疫功能低下",
+        "免疫低下"
+      ],
+      "anticoagulant_use": [
+        "抗凝血藥物",
+        "抗凝血"
+      ],
+      "pregnancy_postpartum": [
+        "懷孕",
+        "產後六週"
+      ],
+      "migraine_history": [
+        "偏頭痛病史"
+      ],
+      "aneurysm_history": [
+        "腦動脈瘤"
+      ],
+      "colicky_abdominal_pain": [
+        "陣痛"
+      ],
+      "constant_abdominal_pain": [
+        "持續痛"
+      ],
+      "periumbilical_to_rlq": [
+        "肚臍周圍痛轉移到右下腹"
+      ],
+      "abdominal_pain_to_back": [
+        "由前痛到背後"
+      ],
+      "fasting_worse": [
+        "飢餓時會加劇疼痛"
+      ],
+      "ruq_pain": [
+        "右上腹"
+      ],
+      "rlq_pain": [
+        "右下腹"
+      ],
+      "llq_pain": [
+        "左下腹"
+      ],
+      "diffuse_abdominal_pain": [
+        "全腹痛"
+      ],
+      "flank_pain": [
+        "左側腰痛",
+        "右側腰痛"
+      ],
+      "lower_abdominal_pain": [
+        "肚臍以下腹痛"
+      ],
+      "diarrhea": [
+        "腹瀉"
+      ],
+      "constipation": [
+        "便秘"
+      ],
+      "bloody_stool": [
+        "血便"
+      ],
+      "hematuria": [
+        "血尿"
+      ],
+      "missed_period": [
+        "月經過期"
+      ],
+      "vaginal_discharge": [
+        "陰道分泌物增加"
+      ],
+      "sick_contacts": [
+        "同行的人也有相同症狀",
+        "家中也有相同症狀"
+      ],
+      "gallstones_history": [
+        "肝膽結石"
+      ],
+      "kidney_stones_history": [
+        "腎結石"
+      ],
+      "bowel_obstruction_history": [
+        "腸阻塞"
+      ],
+      "pancreatitis_history": [
+        "胰臟炎"
+      ],
+      "abdominal_aortic_aneurysm_history": [
+        "腹主動脈瘤"
+      ],
+      "prior_abdominal_surgery": [
+        "剖腹產",
+        "闌尾切除",
+        "子宮切除",
+        "膽囊切除",
+        "大腸切除手術",
+        "胃切除手術"
+      ],
+      "peritoneal_irritation": [
+        "腹部僵硬",
+        "按壓放開更痛"
+      ]
+    },
+    "legacy_field_rules": [
+      {
+        "field": "start_type",
+        "match": "contains_any",
+        "values": [
+          "突然"
+        ],
+        "code": "onset_sudden",
+        "status": "present",
+        "evidence": "$value"
+      },
+      {
+        "field": "location",
+        "match": "contains_any",
+        "values": [
+          "左邊",
+          "右邊"
+        ],
+        "code": "unilateral_chest_pain",
+        "status": "present",
+        "evidence": "$value"
+      },
+      {
+        "field": "tender",
+        "match": "equals_any",
+        "values": [
+          "沒有"
+        ],
+        "code": "reproducible_tenderness",
+        "status": "absent",
+        "evidence": "沒有壓痛"
+      }
+    ]
+  },
+  "disease_profile_rules": {
+    "chest": {
+      "generation_query": "chest pain differential diagnosis acute coronary syndrome aortic dissection pulmonary embolism pneumothorax pericarditis pneumonia costochondritis gastroesophageal reflux panic red flags presentation",
+      "required_must_not_miss_profiles": {
+        "acute_coronary_syndrome": [
+          "急性冠心症（含心肌梗塞）"
+        ],
+        "aortic_dissection": [
+          "主動脈剝離"
+        ],
+        "pulmonary_embolism": [
+          "肺栓塞"
+        ],
+        "pneumothorax": [
+          "氣胸"
+        ],
+        "cardiac_arrhythmia": [
+          "致命性心律不整"
+        ]
+      }
+    },
+    "headache": {
+      "generation_query": "headache differential diagnosis migraine tension headache subarachnoid hemorrhage intracranial hemorrhage stroke meningitis encephalitis intracranial mass red flags presentation",
+      "required_must_not_miss_profiles": {
+        "subarachnoid_hemorrhage": [
+          "蜘蛛膜下腔出血"
+        ],
+        "intracranial_hemorrhage": [
+          "顱內出血"
+        ],
+        "ischemic_stroke_or_tia": [
+          "腦中風或短暫性腦缺血"
+        ],
+        "posterior_circulation_stroke": [
+          "後循環腦中風"
+        ],
+        "meningitis_or_encephalitis": [
+          "腦膜炎",
+          "腦炎",
+          "腦膜炎或其他中樞神經感染"
+        ],
+        "intracranial_mass": [
+          "顱內腫瘤或腦轉移"
+        ]
+      }
+    },
+    "abdomen": {
+      "generation_query": "abdominal pain differential diagnosis gastrointestinal bleeding internal bleeding ruptured abdominal aortic aneurysm ectopic pregnancy perforation peritonitis mesenteric ischemia appendicitis cholecystitis pancreatitis bowel obstruction gastroenteritis",
+      "required_must_not_miss_profiles": {
+        "gastrointestinal_bleeding": [
+          "消化道出血"
+        ],
+        "internal_bleeding": [
+          "內出血"
+        ],
+        "ruptured_abdominal_aortic_aneurysm": [
+          "腹主動脈瘤破裂"
+        ],
+        "ruptured_ectopic_pregnancy": [
+          "子宮外孕破裂"
+        ],
+        "perforation_or_peritonitis": [
+          "消化道穿孔或腹膜炎"
+        ],
+        "mesenteric_ischemia": [
+          "腸繫膜缺血"
+        ]
+      }
+    }
+  },
+  "urgent_condition_candidates": {
+    "意識狀態異常": [
+      "腦中風或顱內出血",
+      "癲癇發作",
+      "嚴重低血糖"
+    ],
+    "嚴重呼吸困難": [
+      "急性冠心症（含心肌梗塞）",
+      "肺栓塞",
+      "氣胸"
+    ],
+    "疑似大量出血": [
+      "消化道出血",
+      "內出血"
+    ],
+    "單眼視力模糊或喪失": [
+      "腦中風或短暫性腦缺血",
+      "視網膜動脈阻塞",
+      "急性閉角型青光眼",
+      "視神經或視網膜急症"
+    ],
+    "胸部不適合併昏厥": [
+      "急性冠心症（含心肌梗塞）",
+      "致命性心律不整",
+      "肺栓塞"
+    ],
+    "胸部不適合併冒冷汗": [
+      "急性冠心症（含心肌梗塞）"
+    ],
+    "撕裂樣胸背痛": [
+      "主動脈剝離"
+    ],
+    "突發爆炸性頭痛": [
+      "蜘蛛膜下腔出血",
+      "顱內出血"
+    ],
+    "疑似局部神經功能異常": [
+      "腦中風或短暫性腦缺血"
+    ],
+    "頭痛合併發燒與頸部僵硬": [
+      "腦膜炎",
+      "腦炎"
+    ],
+    "腹痛合併昏厥": [
+      "內出血",
+      "腹主動脈瘤破裂",
+      "子宮外孕破裂"
+    ],
+    "疑似腹膜刺激徵象": [
+      "消化道穿孔或腹膜炎",
+      "腸繫膜缺血"
+    ],
+    "可能懷孕合併腹痛出血": [
+      "子宮外孕破裂"
+    ],
+    "突發視力喪失": [
+      "腦中風或短暫性腦缺血",
+      "視網膜動脈阻塞"
+    ],
+    "頭痛合併視覺異常": [
+      "腦中風或短暫性腦缺血",
+      "急性閉角型青光眼",
+      "顱內壓升高或其他顱內病變"
+    ],
+    "劇烈頭痛合併視覺異常": [
+      "蜘蛛膜下腔出血",
+      "顱內出血"
+    ],
+    "突發劇烈頭痛": [
+      "蜘蛛膜下腔出血",
+      "顱內出血"
+    ],
+    "疑似突發急性前庭症候群": [
+      "後循環腦中風"
+    ],
+    "頭部外傷合併抗栓藥物史": [
+      "顱內出血"
+    ],
+    "新發頭痛合併惡性腫瘤病史": [
+      "顱內腫瘤或腦轉移"
+    ],
+    "新發頭痛合併免疫低下": [
+      "腦膜炎或其他中樞神經感染"
+    ]
+  },
   "route_keywords": {
     "chest": [
       "胸痛",
@@ -50,6 +539,7 @@
     "blurred_vision",
     "visual_change_unspecified",
     "vision_loss",
+    "monocular_visual_change",
     "diplopia",
     "focal_weakness",
     "focal_neurologic_symptom",
@@ -59,7 +549,69 @@
     "neck_stiffness",
     "major_bleeding",
     "recent_head_trauma",
-    "vaginal_bleeding"
+    "vaginal_bleeding",
+    "acid_regurgitation",
+    "burning_pain",
+    "chest_pressure",
+    "cough_sputum",
+    "dyspnea",
+    "exertional_trigger",
+    "hemoptysis",
+    "localized_pain",
+    "meal_related",
+    "movement_trigger",
+    "pain_radiates_back",
+    "palpitations",
+    "pleuritic_pain",
+    "positional_relief",
+    "recent_infection",
+    "reproducible_tenderness",
+    "stress_trigger",
+    "tachycardia",
+    "unilateral_chest_pain",
+    "unilateral_headache",
+    "bilateral_headache",
+    "occipital_neck_pain",
+    "diffuse_headache",
+    "pulsating_headache",
+    "pressure_band_headache",
+    "cough_valsalva_trigger",
+    "activity_aggravation",
+    "photophobia",
+    "phonophobia",
+    "dark_quiet_relief",
+    "neck_massage_relief",
+    "cancer_history",
+    "immunocompromised",
+    "anticoagulant_use",
+    "pregnancy_postpartum",
+    "migraine_history",
+    "aneurysm_history",
+    "colicky_abdominal_pain",
+    "constant_abdominal_pain",
+    "periumbilical_to_rlq",
+    "abdominal_pain_to_back",
+    "fasting_worse",
+    "ruq_pain",
+    "rlq_pain",
+    "llq_pain",
+    "diffuse_abdominal_pain",
+    "flank_pain",
+    "lower_abdominal_pain",
+    "diarrhea",
+    "constipation",
+    "bloody_stool",
+    "hematuria",
+    "missed_period",
+    "vaginal_discharge",
+    "sick_contacts",
+    "gallstones_history",
+    "kidney_stones_history",
+    "bowel_obstruction_history",
+    "pancreatitis_history",
+    "abdominal_aortic_aneurysm_history",
+    "prior_abdominal_surgery",
+    "peritoneal_irritation"
   ],
   "semantic_extraction": {
     "normalization_instructions": [
@@ -75,6 +627,47 @@
       "severe": "患者明確表達症狀非常強烈、難以忍受或接近可承受極限；必須結合症狀部位判斷。",
       "unknown": "原文不足以可靠判斷強度。"
     },
+    "course_definitions": {
+      "episodic": "症狀一陣一陣出現，中間有緩解或消失。",
+      "continuous": "症狀持續存在，未描述中間完全消失。",
+      "recurrent": "症狀曾在不同時間反覆發作，不只單次病程內波動。",
+      "unknown": "原文不足以判斷症狀的時間型態。"
+    },
+    "duration_definitions": {
+      "brief": "患者明確描述症狀只維持很短時間。",
+      "prolonged": "患者明確描述症狀持續很久、長時間未緩解。",
+      "unknown": "原文沒有可安全正規化的持續時間描述。"
+    },
+    "symptom_definitions": {
+      "headache": {
+        "route": "headache",
+        "description": "頭部疼痛、頭脹或頭部明顯不適。"
+      },
+      "chest_pain": {
+        "route": "chest",
+        "description": "胸部疼痛。"
+      },
+      "chest_tightness": {
+        "route": "chest",
+        "description": "胸悶、胸緊或胸部壓迫感。"
+      },
+      "abdominal_pain": {
+        "route": "abdomen",
+        "description": "腹部、肚子或胃部疼痛。"
+      },
+      "blurred_vision": {
+        "route": "headache",
+        "description": "視線或視力變得模糊。"
+      },
+      "vision_loss": {
+        "route": "headache",
+        "description": "部分或全部視力喪失。"
+      },
+      "vomiting": {
+        "route": "abdomen",
+        "description": "已經發生嘔吐。"
+      }
+    },
     "finding_definitions": {
       "altered_consciousness": "意識改變、反應異常或無法正常喚醒。",
       "syncope": "短暫失去意識或昏倒。",
@@ -89,6 +682,7 @@
       "blurred_vision": "視線或視力變得模糊。",
       "visual_change_unspecified": "結構化選項表示視覺異常，但未區分模糊、複視或視力喪失。",
       "vision_loss": "部分或全部視力突然喪失。",
+      "monocular_visual_change": "單側眼睛新出現視力模糊、看不清楚或部分／全部視力喪失。",
       "diplopia": "看見重影或複視。",
       "focal_weakness": "單側或局部肢體無力。",
       "focal_neurologic_symptom": "結構化選項表示單側無力或麻木等局部神經症狀。",
@@ -98,7 +692,69 @@
       "neck_stiffness": "頸部僵硬或難以前彎。",
       "major_bleeding": "明確描述大量或持續性出血。",
       "recent_head_trauma": "近期頭部撞擊或外傷。",
-      "vaginal_bleeding": "非預期的陰道出血。"
+      "vaginal_bleeding": "非預期的陰道出血。",
+      "acid_regurgitation": "胃酸逆流、反酸或酸水回到口中。",
+      "burning_pain": "胸部呈灼熱或燒灼感。",
+      "chest_pressure": "胸部有壓迫、緊縮或重物壓住的感覺。",
+      "cough_sputum": "咳嗽並伴隨痰液。",
+      "dyspnea": "呼吸急促或呼吸困難，但未達無法正常呼吸。",
+      "exertional_trigger": "症狀由走路、運動或體力活動誘發或加重。",
+      "hemoptysis": "咳出血液。",
+      "localized_pain": "疼痛可明確定位在局部小範圍。",
+      "meal_related": "症狀與進食或飯後有明確關係。",
+      "movement_trigger": "轉身、抬手或胸廓動作會誘發或加重疼痛。",
+      "pain_radiates_back": "胸部疼痛延伸或放射至背部。",
+      "palpitations": "感到心跳加速、不規則或明顯心悸。",
+      "pleuritic_pain": "深呼吸或咳嗽時胸痛加重。",
+      "positional_relief": "坐起或前傾等姿勢可緩解症狀。",
+      "recent_infection": "症狀前近期有感冒或其他感染。",
+      "reproducible_tenderness": "按壓胸壁可重現疼痛。",
+      "stress_trigger": "壓力、緊張或焦慮時誘發或加重症狀。",
+      "tachycardia": "有明確快速心跳的描述或量測。",
+      "unilateral_chest_pain": "胸痛主要位於單側。",
+      "unilateral_headache": "頭痛主要位於單側。",
+      "bilateral_headache": "頭痛位於雙側。",
+      "occipital_neck_pain": "疼痛主要位於後腦或頸部。",
+      "diffuse_headache": "頭痛分布於整個頭部。",
+      "pulsating_headache": "頭痛呈隨脈搏跳動的搏動感。",
+      "pressure_band_headache": "頭痛呈悶脹、緊束或帶狀壓迫感。",
+      "cough_valsalva_trigger": "咳嗽、出力或閉氣用力會加重頭痛。",
+      "activity_aggravation": "一般身體活動會加重頭痛。",
+      "photophobia": "光線會加重不適或需要避光。",
+      "phonophobia": "聲音會加重不適或需要安靜。",
+      "dark_quiet_relief": "待在黑暗安靜環境可緩解症狀。",
+      "neck_massage_relief": "按摩頭頸部可緩解症狀。",
+      "cancer_history": "患者有癌症或惡性腫瘤病史。",
+      "immunocompromised": "患者有免疫功能低下或免疫抑制狀態。",
+      "anticoagulant_use": "患者目前使用抗凝血藥物。",
+      "pregnancy_postpartum": "患者可能懷孕或處於產後六週內。",
+      "migraine_history": "患者過去有偏頭痛病史。",
+      "aneurysm_history": "患者過去有腦動脈瘤病史。",
+      "colicky_abdominal_pain": "腹痛呈陣發性絞痛或一陣一陣發作。",
+      "constant_abdominal_pain": "腹痛持續存在而非間歇發作。",
+      "periumbilical_to_rlq": "疼痛由肚臍周圍轉移至右下腹。",
+      "abdominal_pain_to_back": "腹痛由前腹延伸或放射至背部。",
+      "fasting_worse": "飢餓或空腹時疼痛加重。",
+      "ruq_pain": "疼痛主要位於右上腹。",
+      "rlq_pain": "疼痛主要位於右下腹。",
+      "llq_pain": "疼痛主要位於左下腹。",
+      "diffuse_abdominal_pain": "疼痛分布於全腹。",
+      "flank_pain": "疼痛主要位於單側或雙側腰脅部。",
+      "lower_abdominal_pain": "疼痛主要位於下腹部。",
+      "diarrhea": "患者明確表示腹瀉。",
+      "constipation": "患者明確表示便秘或無法排便。",
+      "bloody_stool": "患者明確表示糞便帶血。",
+      "hematuria": "患者明確表示尿液帶血。",
+      "missed_period": "患者明確表示月經逾期。",
+      "vaginal_discharge": "患者明確表示陰道分泌物增加。",
+      "sick_contacts": "同住家人或同行者有相同腸胃症狀。",
+      "gallstones_history": "患者有膽結石或肝膽結石病史。",
+      "kidney_stones_history": "患者有腎結石病史。",
+      "bowel_obstruction_history": "患者有腸阻塞病史。",
+      "pancreatitis_history": "患者有胰臟炎病史。",
+      "abdominal_aortic_aneurysm_history": "患者有腹主動脈瘤病史。",
+      "prior_abdominal_surgery": "患者過去接受過腹部或骨盆手術。",
+      "peritoneal_irritation": "腹部僵硬或按壓後放開時疼痛明顯加劇。"
     }
   },
   "negation": {
@@ -142,6 +798,25 @@
         "terms": [
           "大量出血",
           "大量吐血"
+        ]
+      },
+      {
+        "code": "acute_monocular_visual_change",
+        "label": "單眼視力模糊或喪失",
+        "level": "urgent",
+        "terms": [
+          "右眼視力模糊",
+          "左眼視力模糊",
+          "單眼視力模糊",
+          "一隻眼睛視力模糊",
+          "右眼看不清楚",
+          "左眼看不清楚",
+          "單眼看不清楚",
+          "一隻眼睛看不清楚",
+          "右眼看不到",
+          "左眼看不到",
+          "單眼失明",
+          "單眼視力喪失"
         ]
       }
     ],
@@ -233,7 +908,37 @@
         }
       ]
     },
-    "combinations": []
+    "combinations": [
+      {
+        "code": "acute_monocular_visual_change_combination",
+        "label": "單眼視力模糊或喪失",
+        "level": "urgent",
+        "route": "headache",
+        "all_term_groups": [
+          {
+            "terms": [
+              "右眼",
+              "左眼",
+              "單眼",
+              "一隻眼睛",
+              "一邊眼睛"
+            ]
+          },
+          {
+            "terms": [
+              "模糊",
+              "看不清楚",
+              "看不清",
+              "看不到",
+              "失明",
+              "視力喪失",
+              "霧掉",
+              "霧霧的"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "fhir_history_fields": [
     "current_meds",
@@ -242,7 +947,8 @@
     "cardio",
     "neuro",
     "abdomen_hx",
-    "risk_flags"
+    "risk_flags",
+    "associated"
   ],
   "fhir_risk_patterns": {
     "antithrombotic_use": [
@@ -294,7 +1000,8 @@
       "level": "urgent",
       "when": {
         "any_findings": [
-          "altered_consciousness"
+          "altered_consciousness",
+          "syncope"
         ]
       }
     },
@@ -365,6 +1072,33 @@
       "when": {
         "any_findings": [
           "vision_loss"
+        ]
+      }
+    },
+    {
+      "code": "semantic_monocular_visual_change",
+      "label": "單眼視力模糊或喪失",
+      "level": "urgent",
+      "when": {
+        "any_findings": [
+          "monocular_visual_change"
+        ]
+      }
+    },
+    {
+      "code": "semantic_headache_visual_change",
+      "label": "頭痛合併視覺異常",
+      "level": "urgent",
+      "when": {
+        "primary_in": [
+          "headache"
+        ],
+        "any_findings": [
+          "blurred_vision",
+          "visual_change_unspecified",
+          "vision_loss",
+          "monocular_visual_change",
+          "diplopia"
         ]
       }
     },
@@ -467,10 +1201,6 @@
         "all_findings": [
           "vertigo",
           "gait_unsteadiness"
-        ],
-        "any_findings": [
-          "nausea",
-          "vomiting"
         ]
       }
     },
@@ -479,11 +1209,11 @@
       "label": "頭部外傷合併抗栓藥物史",
       "level": "urgent",
       "when": {
-        "all_findings": [
-          "recent_head_trauma"
-        ],
         "all_risks": [
           "antithrombotic_use"
+        ],
+        "all_findings": [
+          "recent_head_trauma"
         ]
       }
     },
@@ -520,6 +1250,32 @@
       }
     },
     {
+      "code": "semantic_abdominal_syncope",
+      "label": "腹痛合併昏厥",
+      "level": "urgent",
+      "when": {
+        "primary_in": [
+          "abdomen"
+        ],
+        "any_findings": [
+          "syncope"
+        ]
+      }
+    },
+    {
+      "code": "semantic_peritoneal_irritation",
+      "label": "疑似腹膜刺激徵象",
+      "level": "urgent",
+      "when": {
+        "primary_in": [
+          "abdomen"
+        ],
+        "any_findings": [
+          "peritoneal_irritation"
+        ]
+      }
+    },
+    {
       "code": "semantic_pregnancy_abdominal_bleeding",
       "label": "可能懷孕合併腹痛出血",
       "level": "urgent",
@@ -527,11 +1283,11 @@
         "primary_in": [
           "abdomen"
         ],
-        "all_findings": [
-          "vaginal_bleeding"
-        ],
         "all_risks": [
           "pregnancy_possible"
+        ],
+        "all_findings": [
+          "vaginal_bleeding"
         ]
       }
     }

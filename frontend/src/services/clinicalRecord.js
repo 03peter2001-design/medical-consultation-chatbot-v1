@@ -2,6 +2,7 @@ import {
   codingKey,
   normalizeCoding,
   resolveConditionCoding,
+  resolveConditionCodings,
 } from './terminology.js'
 
 const TYPE_LABELS = {
@@ -16,6 +17,7 @@ const FIELD_LABELS = {
   start_type: '發作型態',
   location: '症狀位置',
   worst_ever: '嚴重程度',
+  severity: '嚴重程度',
   quality: '疼痛性質',
   aggravate: '加重因素',
   relieve: '緩解因素',
@@ -33,6 +35,11 @@ const FIELD_LABELS = {
 }
 
 const FINDING_LABELS = {
+  onset_sudden: '突然發作',
+  onset_gradual: '逐漸發作',
+  severity_mild: '輕微',
+  severity_moderate: '中等',
+  severity_severe: '劇烈',
   altered_consciousness: '意識改變',
   fever: '發燒',
   focal_neurologic_symptom: '局部神經學症狀',
@@ -44,6 +51,49 @@ const FINDING_LABELS = {
   vision_loss: '視力異常',
   visual_change_unspecified: '視覺改變',
   vomiting: '嘔吐',
+  unilateral_headache: '單側頭痛',
+  bilateral_headache: '雙側頭痛',
+  occipital_neck_pain: '後腦及頸部疼痛',
+  diffuse_headache: '全頭疼痛',
+  pulsating_headache: '搏動性頭痛',
+  pressure_band_headache: '緊束壓迫型頭痛',
+  cough_valsalva_trigger: '咳嗽或用力加重',
+  activity_aggravation: '活動加重',
+  photophobia: '畏光',
+  phonophobia: '畏聲',
+  dark_quiet_relief: '黑暗安靜環境緩解',
+  neck_massage_relief: '按摩頭頸部緩解',
+  cancer_history: '癌症病史',
+  immunocompromised: '免疫功能低下',
+  anticoagulant_use: '使用抗凝血藥物',
+  pregnancy_postpartum: '懷孕或產後',
+  migraine_history: '偏頭痛病史',
+  aneurysm_history: '腦動脈瘤病史',
+  colicky_abdominal_pain: '陣發性腹痛',
+  constant_abdominal_pain: '持續性腹痛',
+  periumbilical_to_rlq: '肚臍周圍轉移至右下腹',
+  abdominal_pain_to_back: '腹痛延伸至背部',
+  fasting_worse: '空腹加重',
+  ruq_pain: '右上腹痛',
+  rlq_pain: '右下腹痛',
+  llq_pain: '左下腹痛',
+  diffuse_abdominal_pain: '全腹痛',
+  flank_pain: '腰脅部疼痛',
+  lower_abdominal_pain: '下腹痛',
+  diarrhea: '腹瀉',
+  constipation: '便秘',
+  bloody_stool: '血便',
+  hematuria: '血尿',
+  missed_period: '月經過期',
+  vaginal_discharge: '陰道分泌物增加',
+  sick_contacts: '群聚腸胃症狀',
+  gallstones_history: '膽結石病史',
+  kidney_stones_history: '腎結石病史',
+  bowel_obstruction_history: '腸阻塞病史',
+  pancreatitis_history: '胰臟炎病史',
+  abdominal_aortic_aneurysm_history: '腹主動脈瘤病史',
+  prior_abdominal_surgery: '腹部手術史',
+  peritoneal_irritation: '腹膜刺激徵象',
 }
 
 const DECISION_SOURCE_LABELS = {
@@ -54,6 +104,7 @@ const DECISION_SOURCE_LABELS = {
   deterministic_fallback: '確定性 fallback',
   gemini_planner: 'Gemini 規劃器',
   gemini_planner_with_rag: 'Gemini 規劃器＋RAG',
+  deterministic_disease_vote: '固定疾病表投票',
 }
 
 const ACTION_LABELS = {
@@ -94,9 +145,34 @@ function findingLabel(finding) {
 
 export function buildClinicalRecord(record = {}) {
   const data = record.patient_data || {}
+  const routes = Array.isArray(data.types) && data.types.length
+    ? data.types
+    : [record.type].filter(Boolean)
+  const routeLabels = routes.map((route) => TYPE_LABELS[route] || route)
+  const symptomFields = [
+    'onset',
+    'start_type',
+    'location',
+    'worst_ever',
+    'severity',
+    'quality',
+    'aggravate',
+    'relieve',
+    'associated',
+    'risk_flags',
+    'contact_history',
+    'fixed',
+    'tender',
+    'cardio',
+    'neuro',
+    'abdomen_hx',
+    'surgery',
+  ]
   const chief = record.chief_assessment || {}
   const extraction = chief.extraction || {}
   const amie = record.amie_state || {}
+  const diseaseAssessment =
+    record.disease_assessment || amie.disease_assessment || {}
   const redFlags = amie.red_flags || chief.safety_flags || []
   const trace = record.amie_trace || []
   const fallbackTimeline = amie.evidence_timeline || []
@@ -109,8 +185,84 @@ export function buildClinicalRecord(record = {}) {
           (candidate) => codingKey(candidate) === codingKey(coding),
         ) === index,
     )
-  const differentials = (amie.differential_hypotheses || []).map(
-    (hypothesis) => {
+  const symptomFacts = routes.flatMap((route, routeIndex) => {
+    const prefix = routeIndex === 0 ? '' : `${route}__`
+    return labeledFacts(
+      data,
+      symptomFields.map((field) => `${prefix}${field}`),
+      codings,
+    ).map((fact) => ({
+      ...fact,
+      label:
+        routes.length > 1
+          ? `${TYPE_LABELS[route] || route} · ${
+              FIELD_LABELS[fact.key.replace(prefix, '')] ||
+              fact.key.replace(prefix, '')
+            }`
+          : fact.label,
+    }))
+  })
+  const mapAssessment = (item) => {
+    const conditionCodings = resolveConditionCodings(
+      item.name,
+      item.coding,
+      codings,
+      data,
+    )
+    return {
+      id: item.id,
+      condition: item.name,
+      coding: conditionCodings[0] || null,
+      codings: conditionCodings,
+      netVotes: Number(item.net_votes || 0),
+      supportVotes: Number(item.support_votes || 0),
+      opposeVotes: Number(item.oppose_votes || 0),
+      coverage: Number(item.coverage || 0),
+      provisional: item.review_status === 'provisional',
+      mustNotMiss: Boolean(item.must_not_miss),
+      supporting_evidence: (item.supporting || []).map(
+        (clue) => clue.evidence || clue.fact,
+      ),
+      opposing_evidence: (item.opposing || []).map(
+        (clue) => clue.evidence || clue.fact,
+      ),
+      missingFacts: (item.missing_facts || []).map(
+        (fact) => FINDING_LABELS[fact] || fact,
+      ),
+    }
+  }
+  const allDifferentials = (diseaseAssessment.ranked || []).map(
+    mapAssessment,
+  )
+  const differentials = (diseaseAssessment.top || []).map(mapAssessment)
+  const mustNotMiss = (diseaseAssessment.must_not_miss || []).map(
+    mapAssessment,
+  )
+  const safetyTriggeredConditions = (
+    diseaseAssessment.safety_triggered_conditions || []
+  ).map((item) => {
+    const conditionCodings = resolveConditionCodings(
+      item.name,
+      item.coding,
+      codings,
+      data,
+    )
+    return {
+      id: item.profile_id || '',
+      condition: item.name,
+      coding: conditionCodings[0] || null,
+      codings: conditionCodings,
+      source: item.source || 'safety_rule',
+      triggers: (item.triggered_by || []).map((trigger) => ({
+        ruleCode: trigger.rule_code || '',
+        ruleLabel: trigger.rule_label || '',
+        evidence: trigger.evidence || '',
+      })),
+    }
+  })
+  const legacyDifferentials = (
+    record.legacy_differential_hypotheses || []
+  ).map((hypothesis) => {
       const coding = resolveConditionCoding(
         hypothesis.condition,
         hypothesis.coding,
@@ -118,8 +270,7 @@ export function buildClinicalRecord(record = {}) {
         data,
       )
       return { ...hypothesis, coding }
-    },
-  )
+    })
 
   return {
     identity: {
@@ -128,7 +279,7 @@ export function buildClinicalRecord(record = {}) {
       gender: data.gender || '未提供',
       age: isPresent(data.age) ? `${data.age}歲` : '年齡未提供',
       bloodType: data.blood_type || '血型未提供',
-      type: TYPE_LABELS[record.type] || record.type || '未分類',
+      type: routeLabels.join('、') || '未分類',
       triage: record.triage_level === 'urgent' ? '優先處理' : '一般處理',
       urgent: record.triage_level === 'urgent',
       bloodTypeCodings: codings.filter(
@@ -147,21 +298,7 @@ export function buildClinicalRecord(record = {}) {
         label: findingLabel(finding),
         evidence: finding.evidence || '',
       })),
-    symptomFacts: labeledFacts(
-      data,
-      [
-        'onset',
-        'start_type',
-        'location',
-        'worst_ever',
-        'quality',
-        'aggravate',
-        'relieve',
-        'associated',
-        'risk_flags',
-      ],
-      codings,
-    ),
+    symptomFacts,
     historyFacts: labeledFacts(
       data,
       [
@@ -178,6 +315,17 @@ export function buildClinicalRecord(record = {}) {
       codings,
     ),
     differentials,
+    allDifferentials,
+    mustNotMiss,
+    safetyTriggeredConditions,
+    legacyDifferentials,
+    diseaseAssessment: {
+      status: diseaseAssessment.status || 'unavailable',
+      profileVersion: diseaseAssessment.profile_version || '',
+      method: diseaseAssessment.method || '',
+      provisional: Boolean(diseaseAssessment.provisional),
+      computedFrom: diseaseAssessment.computed_from || '',
+    },
     terminologyReference: record.terminology_reference || null,
     knowledgeGaps: amie.knowledge_gaps || [],
     timeline: trace.length
@@ -196,6 +344,20 @@ export function buildClinicalRecord(record = {}) {
               label: FIELD_LABELS[field] || field,
               value: String(value),
             })),
+            clinicalFacts: (result.clinical_facts || []).map((fact) => ({
+              code: fact.code,
+              label: FINDING_LABELS[fact.code] || fact.code,
+              status: fact.status,
+              evidence: fact.evidence || '',
+            })),
+            diseaseVotes: (
+              result.disease_assessment?.top || []
+            ).map((item) => ({
+              id: item.id,
+              name: item.name,
+              netVotes: item.net_votes,
+              coverage: item.coverage,
+            })),
             triage:
               result.triage_level === 'urgent' ? 'urgent' : 'routine',
             actionLabel:
@@ -208,6 +370,7 @@ export function buildClinicalRecord(record = {}) {
             nextQuestion: decision.next_question || '',
             needsRetrieval: Boolean(decision.needs_retrieval),
             retrievalQuery: decision.retrieval_query || '',
+            questionUtility: Number(decision.question_utility || 0),
             reason: event.reason || '',
             modelError: event.model_error || '',
           }
@@ -224,6 +387,8 @@ export function buildClinicalRecord(record = {}) {
             label: FIELD_LABELS[field] || field,
             value: String(value),
           })),
+          clinicalFacts: event.clinical_facts || [],
+          diseaseVotes: event.disease_votes || [],
           triage: 'routine',
           actionLabel: '舊版紀錄',
           sourceLabel: '舊版 evidence timeline',
@@ -231,6 +396,7 @@ export function buildClinicalRecord(record = {}) {
           nextQuestion: '',
           needsRetrieval: false,
           retrievalQuery: '',
+          questionUtility: 0,
           reason: event.audit_reason || '',
           modelError: '',
         })),

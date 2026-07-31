@@ -58,6 +58,19 @@ class MainInputValidationTests(unittest.TestCase):
                 self.assertNotIn("onset_num", data)
                 self.assertNotIn("onset_unit", data)
 
+    def test_secondary_symptom_duration_uses_its_own_fields(self):
+        questionnaire = build_questionnaire(["headache", "abdomen"])
+        question = next(item for item in questionnaire if item["field"] == "abdomen__onset")
+        data = {"onset": "1天前"}
+
+        self.assertIsNone(validate_question_answer(question, "3小時前"))
+        store_question_answer(data, question, "3小時前")
+
+        self.assertEqual(data["onset"], "1天前")
+        self.assertEqual(data["abdomen__onset"], "3小時前")
+        self.assertEqual(data["abdomen__onset_num"], "3")
+        self.assertEqual(data["abdomen__onset_unit"], "小時前")
+
     def test_invalid_structured_values_are_rejected(self):
         gender = question_for("gender")
         onset = question_for("onset")

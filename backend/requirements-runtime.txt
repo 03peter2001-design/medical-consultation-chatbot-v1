@@ -1,0 +1,10 @@
+# Runtime-only dependencies for the web/API container.
+# RAG corpus build and local vector search dependencies remain in requirements.txt.
+fastapi
+uvicorn[standard]
+pydantic
+groq
+google-genai
+langgraph>=0.2,<2
+python-dotenv
+python-multipart

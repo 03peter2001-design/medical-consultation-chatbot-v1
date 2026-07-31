@@ -6,6 +6,11 @@ import {
   consultationListPath,
   formatApiErrorDetail,
   resolveBackendUrl,
+  ruleAssistantPath,
+  ruleAuthorizationPath,
+  ruleCenterPath,
+  safetyRuleUpdatePath,
+  snomedSearchPath,
 } from '../src/services/backend.js'
 
 test('uses the page hostname and default backend port', () => {
@@ -41,6 +46,20 @@ test('supports a complete backend URL override', () => {
   )
 })
 
+test('supports a same-origin backend proxy path', () => {
+  assert.equal(
+    resolveBackendUrl(
+      {
+        search: '',
+        protocol: 'https:',
+        hostname: 'ehr-app.example.test',
+      },
+      '/api/',
+    ),
+    '/api',
+  )
+})
+
 test('builds an encoded consultation list query', () => {
   assert.equal(
     consultationListPath({
@@ -56,6 +75,24 @@ test('encodes a consultation identifier for delete requests', () => {
   assert.equal(
     consultationDetailPath('急診/001'),
     '/doctor/consultations/%E6%80%A5%E8%A8%BA%2F001',
+  )
+})
+
+test('uses dedicated doctor rule management endpoints', () => {
+  assert.equal(ruleCenterPath, '/doctor/rules')
+  assert.equal(ruleAuthorizationPath, '/doctor/rules/authorize')
+  assert.equal(ruleAssistantPath, '/doctor/rules/assistant')
+  assert.equal(safetyRuleUpdatePath, '/doctor/rules/safety')
+})
+
+test('builds an encoded SNOMED CT search query', () => {
+  assert.equal(
+    snomedSearchPath({
+      query: ' acute coronary syndrome ',
+      limit: 25,
+      offset: 50,
+    }),
+    '/doctor/terminology/snomed?query=acute+coronary+syndrome&limit=25&offset=50',
   )
 })
 

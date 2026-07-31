@@ -1,0 +1,14 @@
+.env
+.venv
+venv
+__pycache__
+*.pyc
+.coverage
+.ruff_cache
+.import_linter_cache
+chroma_db
+classified_docs
+clean_docs
+data
+terminology/snomed
+tests

@@ -3,6 +3,7 @@ import {
   computed,
   nextTick,
   onBeforeUnmount,
+  onMounted,
   ref,
   watch,
 } from 'vue'
@@ -29,8 +30,13 @@ import {
   normalizeNationalId,
   patientDisplayName,
 } from '../services/fhir.js'
+import {
+  hasSmartLaunchContext,
+  initializeSmartPatient,
+} from '../services/smart.js'
 const sessionId = `pt_${Date.now()}`
 const maxBirthDate = new Date().toISOString().slice(0, 10)
+const smartLaunchDetected = hasSmartLaunchContext()
 
 const avatar = useAvatar()
 const messages = ref([])
@@ -47,6 +53,7 @@ const overlayVisible = ref(true)
 const nationalId = ref('A000000000')
 const fhirPatient = ref(null)
 const fhirResourceCount = ref(0)
+const smartContext = ref(null)
 const clientKey = ref('')
 const agentId = ref('')
 const mobileAvatarOpen = ref(false)
@@ -54,7 +61,11 @@ const selectedPainLocationIds = ref([])
 const questionInput = ref(null)
 const questionnaireInfo = ref(null)
 const progressState = ref({ current: 0, total: 1, percent: 0 })
-const triageState = ref({ level: 'routine', message: '' })
+const triageState = ref({
+  level: 'routine',
+  message: '',
+  possible_conditions: [],
+})
 const recording = ref(false)
 const voiceProcessing = ref(false)
 const chatbox = ref(null)
@@ -85,7 +96,8 @@ const microphoneLabel = computed(() => {
 const showBodyMap = computed(
   () =>
     started.value &&
-    questionInput.value?.field === 'location' &&
+    (questionInput.value?.base_field ?? questionInput.value?.field) ===
+      'location' &&
     questionnaireInfo.value?.section === 'disease' &&
     !completed.value,
 )
@@ -98,10 +110,22 @@ const nationalIdValid = computed(() =>
 const loadedPatientName = computed(() =>
   fhirPatient.value ? patientDisplayName(fhirPatient.value) : '',
 )
+const effectiveDirectFhirEnabled = computed(
+  () => directFhirEnabled && !smartLaunchDetected,
+)
+const patientContextStatus = computed(() =>
+  smartContext.value ? 'SMART 已授權' : 'FHIR 已載入',
+)
 const painMapPreset = computed(() =>
   getPainMapPreset(questionnaireInfo.value?.route),
 )
-
+const urgentConditions = computed(() =>
+  Array.isArray(triageState.value?.possible_conditions)
+    ? triageState.value.possible_conditions.filter(
+        (condition) => typeof condition === 'string' && condition.trim(),
+      )
+    : [],
+)
 watch(
   [() => messages.value.length, typing, queueNumber],
   async () => {
@@ -150,17 +174,65 @@ async function initializeBackendSession(patientRecord = null) {
   )
 }
 
-async function startConsultation({ skipFhir = false } = {}) {
+async function finishConsultationStart(
+  patientRecord = null,
+  {
+    successMessage = '',
+  } = {},
+) {
+  const data = await initializeBackendSession(patientRecord)
+  started.value = true
+  overlayVisible.value = false
+  setQuestionState(data)
+  if (successMessage) addMessage('ai', successMessage)
+  addMessage('ai', data.reply)
+  void avatar.speak(data.reply)
+  focusInput()
+}
+
+async function startSmartConsultation() {
   if (started.value || starting.value) return
   starting.value = true
   startError.value = ''
+
+  try {
+    const record = await initializeSmartPatient()
+    fhirPatient.value = record.patient
+    fhirResourceCount.value = record.resources.length
+    smartContext.value = record.smart
+    const encounter = record.smart.encounterId
+      ? `，Encounter/${record.smart.encounterId}`
+      : ''
+    await finishConsultationStart(record, {
+      successMessage:
+        `已透過 SMART on FHIR 授權載入 ${patientDisplayName(record.patient)}` +
+        `（Patient/${record.patient.id}${encounter}），共 ${record.resources.length} 筆相關 FHIR Resources。` +
+        '已帶入基本資料與既往病史；只有病歷未提供的欄位會再詢問。',
+    })
+  } catch (error) {
+    startError.value =
+      `無法完成 SMART on FHIR 授權或載入病歷（${error.message}）。` +
+      '\n請回到 EHR 重新選擇病人並啟動此 App。'
+  } finally {
+    starting.value = false
+  }
+}
+
+async function startConsultation({ skipFhir = false } = {}) {
+  if (started.value || starting.value) return
+  if (smartLaunchDetected && !skipFhir) {
+    await startSmartConsultation()
+    return
+  }
+  starting.value = true
+  startError.value = ''
   let startStage =
-    directFhirEnabled && !skipFhir ? 'fhir' : 'backend'
+    effectiveDirectFhirEnabled.value && !skipFhir ? 'fhir' : 'backend'
 
   try {
     let patient = null
     let patientRecord = null
-    if (directFhirEnabled && !skipFhir) {
+    if (effectiveDirectFhirEnabled.value && !skipFhir) {
       nationalId.value = normalizeNationalId(nationalId.value)
       const record = await loadPatientByNationalId(nationalId.value, {
         baseUrl: fhirBaseUrl,
@@ -172,19 +244,11 @@ async function startConsultation({ skipFhir = false } = {}) {
       startStage = 'backend'
     }
 
-    const data = await initializeBackendSession(patientRecord)
-    started.value = true
-    overlayVisible.value = false
-    setQuestionState(data)
-    if (patient) {
-      addMessage(
-        'ai',
-        `已從測試 HAPI 載入 ${patientDisplayName(patient)}（Patient/${patient.id}），共 ${fhirResourceCount.value} 筆相關 FHIR Resources。已帶入基本資料；只有病歷未提供的病史欄位會再詢問。`,
-      )
-    }
-    addMessage('ai', data.reply)
-    void avatar.speak(data.reply)
-    focusInput()
+    await finishConsultationStart(patientRecord, {
+      successMessage: patient
+        ? `已從測試 HAPI 載入 ${patientDisplayName(patient)}（Patient/${patient.id}），共 ${fhirResourceCount.value} 筆相關 FHIR Resources。已帶入基本資料；只有病歷未提供的病史欄位會再詢問。`
+        : '',
+    })
   } catch (error) {
     startError.value =
       startStage === 'fhir'
@@ -194,6 +258,10 @@ async function startConsultation({ skipFhir = false } = {}) {
     starting.value = false
   }
 }
+
+onMounted(() => {
+  if (smartLaunchDetected) void startSmartConsultation()
+})
 
 function handleResponse(data, rawFallback) {
   addMessage('user', data.user_display ?? rawFallback)
@@ -329,9 +397,10 @@ onBeforeUnmount(() => {
     <StartConsultationOverlay
       v-model:national-id="nationalId"
       :visible="overlayVisible"
-      :direct-fhir-enabled="directFhirEnabled"
+      :direct-fhir-enabled="effectiveDirectFhirEnabled"
       :fhir-base-url="fhirBaseUrl"
       :national-id-valid="nationalIdValid"
+      :smart-launch="smartLaunchDetected"
       :starting="starting"
       :error="startError"
       @start="startConsultation"
@@ -367,18 +436,37 @@ onBeforeUnmount(() => {
     <main class="patient-layout">
       <section class="consultation-panel">
         <div v-if="fhirPatient" class="patient-context-bar">
-          <span class="context-status">FHIR 已載入</span>
+          <span class="context-status">{{ patientContextStatus }}</span>
           <strong>{{ loadedPatientName }}</strong>
           <span>Patient/{{ fhirPatient.id }}</span>
+          <span v-if="smartContext?.encounterId">
+            Encounter/{{ smartContext.encounterId }}
+          </span>
           <span>{{ fhirResourceCount }} 筆 Resources</span>
         </div>
         <div
           v-if="triageState.level === 'urgent'"
           class="urgent-care-banner"
           role="alert"
+          aria-live="assertive"
         >
-          <strong>建議儘早就醫</strong>
-          <span>{{ triageState.message }}</span>
+          <div class="urgent-care-heading">
+            <span class="urgent-care-icon" aria-hidden="true">!</span>
+            <div>
+              <strong>安全警示：問診已中斷</strong>
+              <p>{{ triageState.message }}</p>
+            </div>
+          </div>
+          <div
+            v-if="urgentConditions.length"
+            class="urgent-condition-alert"
+          >
+            <span>可能涉及的緊急疾病</span>
+            <strong>{{ urgentConditions.join('、') }}</strong>
+          </div>
+          <p class="urgent-care-disclaimer">
+            以上僅為安全規則提示，不代表診斷；請勿等待線上問診結果。
+          </p>
         </div>
         <div class="progress-bar" aria-label="問診進度">
           <span
@@ -535,22 +623,78 @@ onBeforeUnmount(() => {
 .urgent-care-banner {
   display: flex;
   flex: 0 0 auto;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-  padding: 13px 20px;
-  border-bottom: 1px solid rgb(166 96 18 / 28%);
-  background: #fff5e7;
-  color: #71410d;
-  font-size: 15px;
-  line-height: 1.55;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgb(180 35 53 / 34%);
+  background: #fff0f1;
+  color: #6f1622;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-.urgent-care-banner strong {
-  flex: 0 0 auto;
-  color: var(--warning);
+.urgent-care-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.urgent-care-heading > div {
+  min-width: 0;
+}
+
+.urgent-care-heading strong {
+  display: block;
+  color: #a41624;
   font-family: 'Noto Sans TC', sans-serif;
+  font-size: 18px;
   letter-spacing: 0.04em;
+}
+
+.urgent-care-heading p {
+  margin-top: 2px;
+}
+
+.urgent-care-icon {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  place-items: center;
+  border-radius: 50%;
+  background: #b42335;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.urgent-condition-alert {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 2px solid #c21f35;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.urgent-condition-alert span {
+  color: #831421;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.urgent-condition-alert strong {
+  color: #b00020;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.45;
+}
+
+.urgent-care-disclaimer {
+  color: #7f3a43;
+  font-size: 12px;
 }
 
 .progress-bar {
@@ -692,6 +836,18 @@ onBeforeUnmount(() => {
 
   .patient-context-bar span:last-child {
     display: none;
+  }
+
+  .urgent-care-banner {
+    padding: 14px 12px;
+  }
+
+  .urgent-care-heading strong {
+    font-size: 17px;
+  }
+
+  .urgent-condition-alert strong {
+    font-size: 18px;
   }
 
   .patient-input-bar {

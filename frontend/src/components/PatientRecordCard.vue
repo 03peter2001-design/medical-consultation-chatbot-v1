@@ -286,8 +286,32 @@ const painLocationIds = computed(() =>
 }
 
 .identity-meta .complaint {
-  min-width: min(100%, 440px);
-  flex: 1;
+  display: grid;
+  min-width: 0;
+  flex: 1 0 100%;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  margin-top: 3px;
+  padding: 12px 14px;
+  border: 1px solid #c4d9e7;
+  border-left: 4px solid #2568b2;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #eef6fb 0%, #f8fbfd 100%);
+}
+
+.identity-meta .complaint dt {
+  color: #2568b2;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.identity-meta .complaint dd {
+  color: #16334a;
+  font-size: clamp(17px, 1.6vw, 20px);
+  font-weight: 700;
+  line-height: 1.5;
 }
 
 .identity-meta dt {
@@ -620,6 +644,13 @@ const painLocationIds = computed(() =>
   .identity-meta > div {
     display: grid;
     gap: 1px;
+  }
+
+  .identity-meta .complaint {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    margin-top: 5px;
+    padding: 11px 12px;
   }
 
   .red-flag-banner,

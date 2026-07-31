@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>啟動本機 SMART App</title>
+    <script src="/vendor/fhir-client.js"></script>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        color: #16302b;
+        background: #f2f7f5;
+        font: 16px/1.6 system-ui, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <p>正在連接 SMART 授權伺服器……</p>
+    <script>
+      sessionStorage.setItem("chest-pain-ai-doctor.smart.pending", "1");
+      FHIR.oauth2.authorize({
+        clientId: "my_web_app",
+        scope: "launch patient/*.read",
+        redirectUri: new URL("/?smart=1", window.location.href).toString(),
+      });
+    </script>
+  </body>
+</html>

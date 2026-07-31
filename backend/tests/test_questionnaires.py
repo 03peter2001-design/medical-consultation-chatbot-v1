@@ -7,7 +7,9 @@ from domain.questionnaires import (
     DISEASE_QUESTIONNAIRES,
     QUESTIONNAIRE_DATA_DIR,
     build_questionnaire,
+    filter_question_by_context,
     load_questionnaire_category,
+    load_questionnaire_policy,
     next_question_index,
     parse_birth_date,
     parse_onset_answer,
@@ -64,6 +66,39 @@ class QuestionnaireDefinitionTests(unittest.TestCase):
             self.assertIn("1週前", onset["quick_options"])
             self.assertIn("個月前", onset["units"])
 
+    def test_route_selection_and_completion_rules_come_from_json_policy(self):
+        chest = load_questionnaire_policy("chest")
+        headache = load_questionnaire_policy("headache")
+        abdomen = load_questionnaire_policy("abdomen")
+
+        self.assertEqual(chest["schema_version"], 1)
+        self.assertEqual(chest["selection_strategy"], "disease_vote")
+        self.assertEqual(chest["coverage_threshold"], 0.7)
+        self.assertEqual(chest["max_turns"], 24)
+        self.assertEqual(chest["priority_fields"][0], "start_type")
+        self.assertIn("severity", chest["required_fields"])
+        self.assertEqual(headache["selection_strategy"], "disease_vote")
+        self.assertEqual(headache["coverage_threshold"], 0.7)
+        self.assertEqual(headache["priority_fields"][0], "start_type")
+        self.assertEqual(abdomen["selection_strategy"], "disease_vote")
+        self.assertEqual(abdomen["coverage_threshold"], 0.7)
+        self.assertIn("severity", abdomen["required_fields"])
+
+    def test_multiple_symptom_routes_share_demographics_but_keep_answers_separate(self):
+        questionnaire = build_questionnaire(["headache", "abdomen"])
+        fields = [item["field"] for item in questionnaire]
+        disease = [item for item in questionnaire if item["section"] == "disease"]
+
+        self.assertEqual(fields.count("name"), 1)
+        self.assertEqual(len(fields), len(set(fields)))
+        self.assertEqual(
+            [item["route"] for item in disease if item["base_field"] == "onset"],
+            ["headache", "abdomen"],
+        )
+        self.assertIn("onset", fields)
+        self.assertIn("abdomen__onset", fields)
+        self.assertIn("abdomen__location", fields)
+
     def test_selectable_basic_fields_are_structured(self):
         questionnaire = build_questionnaire("chest")
         by_field = {item["field"]: item for item in questionnaire}
@@ -115,6 +150,66 @@ class QuestionnaireDefinitionTests(unittest.TestCase):
     def test_initial_questionnaire_only_asks_for_chief_complaint(self):
         self.assertEqual(len(CHIEF_QUESTIONNAIRE), 1)
         self.assertEqual(CHIEF_QUESTIONNAIRE[0]["kind"], "text")
+
+    def test_male_context_removes_female_specific_options(self):
+        abdomen = {item["field"]: item for item in build_questionnaire("abdomen")}
+        associated = filter_question_by_context(
+            abdomen["associated"],
+            {"gender": "男性"},
+        )
+        surgery = filter_question_by_context(
+            abdomen["surgery"],
+            {"gender": "男性"},
+        )
+        headache_risk = next(
+            item for item in build_questionnaire("headache") if item["field"] == "risk_flags"
+        )
+        headache_risk = filter_question_by_context(
+            headache_risk,
+            {"gender": "男性"},
+        )
+
+        self.assertTrue(
+            {
+                "月經過期",
+                "陰道出血",
+                "陰道分泌物增加",
+            }.isdisjoint(associated["options"])
+        )
+        self.assertNotIn("剖腹產", surgery["options"])
+        self.assertNotIn("子宮切除", surgery["options"])
+        self.assertNotIn("懷孕或產後六週內", headache_risk["options"])
+        self.assertTrue(
+            {
+                "missed_period",
+                "vaginal_bleeding",
+                "vaginal_discharge",
+            }.isdisjoint(associated["semantic_options"]["以上皆無"]["negated_findings"])
+        )
+        self.assertNotIn(
+            "pregnancy_postpartum",
+            headache_risk["semantic_options"]["以上皆無"]["negated_findings"],
+        )
+        self.assertEqual(
+            surgery["semantic_options"]["未曾手術"]["negated_findings"],
+            ["prior_abdominal_surgery"],
+        )
+
+    def test_female_or_unknown_context_keeps_female_specific_options(self):
+        associated = next(
+            item for item in build_questionnaire("abdomen") if item["field"] == "associated"
+        )
+
+        for data in (
+            {"gender": "女性"},
+            {"gender": "其他"},
+            {"gender": "不便透露"},
+            {},
+        ):
+            filtered = filter_question_by_context(associated, data)
+            self.assertIn("月經過期", filtered["options"])
+            self.assertIn("陰道出血", filtered["options"])
+            self.assertIn("陰道分泌物增加", filtered["options"])
 
 
 class QuestionnaireParserTests(unittest.TestCase):

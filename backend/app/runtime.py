@@ -33,8 +33,8 @@ DOCTOR_SESSION_TTL = 60 * 60
 DOCTOR_HISTORY_MAX_TURNS = 8
 
 URGENT_CARE_MESSAGE = (
-    "根據您目前提供的症狀，建議儘早就醫，由醫療人員進一步評估。"
-    "若症狀持續或加重，請立即告知現場醫護人員。"
+    "根據您目前提供的症狀，可能有需要立即處理的危險狀況。"
+    "請立刻告知現場醫護人員；若不在醫療院所，請聯絡當地緊急醫療服務。"
 )
 
 consultation_repository = ConsultationRepository.from_environment()

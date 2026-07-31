@@ -1,0 +1,18 @@
+FROM eclipse-temurin:21-jre-alpine
+
+ARG HAPI_FHIR_VERSION=8.8.0
+ARG HAPI_FHIR_CLI_SHA256=62ef764efdb406974a87a16b9d79e05973e4fe62ba3fef1375d43d9c0cb62928
+
+RUN apk add --no-cache curl python3 unzip \
+    && mkdir -p /opt/hapi-fhir-cli \
+    && curl -fL \
+      "https://github.com/hapifhir/hapi-fhir/releases/download/v${HAPI_FHIR_VERSION}/hapi-fhir-${HAPI_FHIR_VERSION}-cli.zip" \
+      -o /tmp/hapi-fhir-cli.zip \
+    && echo "${HAPI_FHIR_CLI_SHA256}  /tmp/hapi-fhir-cli.zip" | sha256sum -c - \
+    && unzip -p /tmp/hapi-fhir-cli.zip hapi-fhir-cli.jar \
+      > /opt/hapi-fhir-cli/hapi-fhir-cli.jar \
+    && rm /tmp/hapi-fhir-cli.zip
+
+ENV HAPI_FHIR_CLI_JAR=/opt/hapi-fhir-cli/hapi-fhir-cli.jar
+WORKDIR /workspace/backend
+ENTRYPOINT ["python3", "-m", "scripts.install_snomed"]

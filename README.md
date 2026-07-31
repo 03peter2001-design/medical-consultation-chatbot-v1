@@ -1,18 +1,36 @@
 # AI 預問診系統（Medical Consultation Chatbot）
 
-AI 輔助預問診系統。使用者（病患端）用文字或語音回答一系列問題，系統會即時判斷主訴類型（胸痛／頭痛／腹痛），走對應的問診流程，最後透過 LLM（Groq 或 Gemini）產生一份結構化的 AI 初步評估報告；醫師端則可以用問診編號查詢病人資料、閱讀 AI 報告，並針對追加的補充資訊自動生成結構化病歷分析。
+AI 輔助預問診系統。使用者（病患端）用文字或語音回答一系列問題，系統會即時判斷主訴類型（胸痛／頭痛／腹痛），走對應的問診流程。三種主訴都使用版本化固定疾病表投票；LLM 只抽取有逐字證據的臨床線索，不產生疾病或分數。醫師端可以用問診編號查詢病人資料、閱讀固定排名與摘要，並針對追加資訊產生結構化病歷分析。
 
 ## 目前功能
 
-- **病患端**（Vue 路由 `/#/`）：先收集自由主訴與尚未匯入的基本資料，再由 Gemini-backed AMIE-inspired 狀態圖從核准問題庫動態選擇下一題；選擇題支援單選／複選與自由補充，也可點選正／背面人體圖標記疼痛位置
-- **狀態感知問診**：自由主訴先經原文確定性 safety；明確警訊不呼叫模型、直接終止。未命中時由 LLM 只做結構化語意抽取，每個 finding 必須附原文 evidence 並通過程式驗證，再由第二層確定性 safety 決定 urgent／routine；LLM 不可直接分級。routine 才進入 LangGraph 的臨床事實抽取、條件式 RAG、Mx 背景推理與動態選題。urgent 立即顯示「建議儘早就醫」並核發三位數編號；routine 完成時核發五位數編號
+- **病患端**（Vue 路由 `/#/`）：先收集自由主訴與尚未匯入的基本資料；胸痛、頭痛與腹痛都先問安全必問題，再依固定疾病表的區辨力選題。選擇題支援單選／複選與自由補充，也可點選正／背面人體圖標記疼痛位置
+- **狀態感知問診**：自由主訴先經原文確定性 Safety；明確警訊不呼叫模型、直接終止，醫師端會以 Safety JSON 的 `possible_conditions` 顯示安全規則觸發的鑑別方向與原始證據，不將其偽裝成疾病票數。未命中時 LLM 只能輸出白名單臨床事實，每項都必須附原文逐字 evidence 並通過程式驗證。Safety 仍獨立且優先；三種主訴都由程式執行「支持票－反對票」、完整度與穩定排序，執行期不查 RAG，也不讓 LLM 產生疾病、分數或下一題。urgent 核發三位數編號，routine 完成時核發五位數編號
+- **版本化疾病表**：`backend/amie/disease_data/{chest,headache,abdomen}.json` 是一次性 RAG＋離線 LLM 建表後提交版本控制的凍結產物，包含來源、corpus SHA-256、模型、不能漏診標記與整數權重。目前標記為 `provisional`，票數及完整度都不是患病機率或正式診斷
+- **JSON 規則驅動**：fact 白名單、scalar／舊病例映射及必要不能漏診疾病均位於 `backend/amie/rules/safety_rules.json`；必要欄位、選題策略、安全題順序、完整度門檻與輪數上限位於各路由的 `backend/questionnaire_data/*.json`。Python 只驗證設定並執行固定公式
 - 使用身分證字號從 FHIR 載入病歷時，姓名、性別、出生日期與血型等既有基本資料不會重問；一般病史同樣只補問 FHIR 尚未提供的欄位。身分證字號本身不會送入 `/chat`、RAG 或外部模型
 - FHIR `$everything` 中的 `Condition`、`Procedure`、`MedicationStatement`、`MedicationRequest`、`AllergyIntolerance` 與 `QuestionnaireResponse` 會映射到一般病史、心肺／神經／腹部疾病史、手術史、用藥與過敏欄位；本次就診的 `encounter-diagnosis` 不會誤當成既往病史
 - **醫師端**（Vue 路由 `/#/doctor`）：左側病例資料庫可瀏覽、分頁及依姓名／問診編號／主訴搜尋，點選後同步查看疼痛位置與 AI 報告，並可經二次確認永久刪除病例
-- **問診結果資料庫**：routine 與 urgent 都會先將結構化問卷及分流結果寫入 SQLite、立即核發五位數或三位數編號；HTTP 回應送出後才在背景執行摘要 RAG 與 LLM，完成後更新 AI 初評、六段式臨床分析、引用來源及 `summary_ready` 狀態。摘要失敗不會讓病人失去編號，醫師端可辨識 `summary_pending`／`summary_partial`／`summary_failed`
-- **測試期 AMIE 稽核軌跡**：每輪保存題目、病人回答、結構化抽取、Safety 結果、實際 action、下一題、決策來源、RAG 使用情形與簡短稽核理由；軌跡隨病例存入 SQLite，醫師端的「問診時間軸」會逐輪顯示。這是可供稽核的決策摘要，不是模型隱藏思維鏈
-- **RAG（檢索增強生成）**：清理 `backend/docs/` 中急診醫學、感染科與檢驗醫學三份爬蟲語料，切成 chunks 後分類到胸痛、頭痛、腹痛、共通與安全五個 versioned Chroma collections。檢索會依主訴動態選庫、固定加入安全庫，必要時追加共通或另一個症狀庫，再以 RRF 合併及去重
+- **問診結果資料庫**：routine 與 urgent 都會先將結構化問卷、ClinicalFact、評分快照及分流結果寫入 SQLite、立即核發五位數或三位數編號；HTTP 回應送出後才在背景執行摘要及六段式臨床分析。摘要失敗不會讓病人失去編號，醫師端可辨識 `summary_pending`／`summary_partial`／`summary_failed`
+- **測試期 AMIE 稽核軌跡**：每輪保存題目、病人回答、ClinicalFact、Safety 結果、投票快照、下一題、選題區辨分與簡短稽核理由，並標記為 `deterministic_disease_vote`。這是可供稽核的決策摘要，不是模型隱藏思維鏈
+- **RAG（檢索增強生成）**：清理 `backend/docs/` 中急診醫學、感染科與檢驗醫學語料並建立 versioned Chroma collections。RAG 只供一次性疾病表建置、背景理學檢查／檢驗／影像建議，以及醫師主動聊天使用；不得參與病患疾病候選或票數計算
 - **雙語檢索（實驗功能）**：可保留中文原查詢，並以 Gemini 產生去識別化的結構化英文查詢，同時檢索相同 collections；翻譯失敗時會退回原本的多語 embedding 查詢
+
+目前的執行邊界是「Gemini 理解與正規化、本機知識搜尋與規則」：
+
+```text
+醫師端 RAG：問題 → 去識別化 → Gemini 醫療術語英文化
+                   → 中文原查詢＋英文查詢
+                   → 本機 embedding / Chroma 搜尋
+                   → 本機來源片段 → Gemini 整理回答
+病患端 AMIE：病人原話 → Gemini 抽取具原文證據的臨床事實
+                     → 本機 Safety / 問卷 / 疾病表計票與下一題
+```
+
+`RAG_QUERY_TRANSLATION=gemini`、`RAG_QUERY_MODE=dual` 會保留中文原查詢，
+同時加入 Gemini 產生的結構化英文醫療查詢，再由本機 embedding 與 Chroma
+分批檢索、RRF 合併及去重。AMIE 執行期不查 RAG；Gemini 只抽取有原文證據的
+臨床事實，不負責決定疾病名稱、票數、Safety 結果或下一題。
 - 目前支援 3 種問診情境：**胸痛、頭痛、腹痛**。主訴抽取器會同時提出有原文證據的分科候選；若抽取失敗或仍不明確，才退回既有 LLM 分科，再載入對應問卷
 
 ## 專案結構
@@ -29,6 +47,7 @@ medical-consultation-chatbot-v1/
 │   └── package.json
 ├── index.html               # 舊版病患端（相容保留）
 ├── doctor.html              # 舊版醫師端（相容保留）
+├── compose.fhir.yml         # HAPI FHIR、PostgreSQL 與 TW Core 自動安裝
 ├── backend/
 │   ├── main.py               # FastAPI ASGI 入口（匯出 app）
 │   ├── app/                  # HTTP 應用層
@@ -43,8 +62,10 @@ medical-consultation-chatbot-v1/
 │   ├── knowledge/            # RAG 檢索、共用常數與翻譯
 │   ├── scripts/              # 語料清理、分類、建庫與評估 CLI
 │   ├── data/                  # 本機問診資料庫（自動建立，不上傳 Git）
-│   ├── amie/                  # AMIE-inspired LangGraph、狀態模型與安全規則
+│   ├── amie/                  # LangGraph、ClinicalFact、固定疾病表與安全規則
 │   │   ├── chief_complaint.py # 主訴語意抽取、evidence驗證與FHIR風險輪廓
+│   │   ├── disease_profiles.py # 疾病表驗證、確定性投票及選題區辨力
+│   │   └── disease_data/      # 版本化、凍結的三路由疾病表
 │   ├── questionnaire_data/   # 主訴、基本、病史及三種疾病問卷 JSON
 │   ├── requirements.txt       # Python 套件需求
 │   ├── docs/                  # RAG 知識庫來源文件（.txt）
@@ -63,6 +84,78 @@ medical-consultation-chatbot-v1/
 git clone git@github.com:03peter2001-design/medical-consultation-chatbot-v1.git
 cd medical-consultation-chatbot-v1
 ```
+
+### 自動建制（建議）
+
+執行前請先安裝以下系統層依賴；專案腳本會安裝 Python 與 npm 套件，但不會
+用 `sudo` 修改作業系統：
+
+| 工具 | 需求 | 安裝說明 |
+| --- | --- | --- |
+| Git、Bash | 可執行 `.sh` | [Git 官方下載](https://git-scm.com/downloads) |
+| Python | 3.12+，且包含 `venv` | [Python 官方下載](https://www.python.org/downloads/) |
+| Node.js、npm | Node.js 18+，建議使用 LTS | [Node.js 官方下載](https://nodejs.org/en/download) |
+| Docker | Docker Engine 或 Docker Desktop | [Docker Engine 安裝](https://docs.docker.com/engine/install/) |
+| Docker Compose | 支援 `docker compose` 的 v2 plugin | [Compose 安裝](https://docs.docker.com/compose/install/) |
+
+Ubuntu／Debian 可先安裝基本工具；Python 3.12 與 Node.js 是否由系統 repository
+提供，取決於發行版版本，缺少時請使用上表的官方安裝方式：
+
+```bash
+sudo apt update
+sudo apt install -y git bash python3-venv
+```
+
+執行建制前可先確認：
+
+```bash
+git --version
+python3 --version          # 必須是 3.12+
+node --version             # 必須是 18+
+npm --version
+docker --version
+docker compose version
+docker info                # 確認目前使用者有權存取 Docker daemon
+```
+
+Windows 建議在 WSL2 中執行 Shell 腳本，並啟用 Docker Desktop 的 WSL
+integration。macOS 可使用 Docker Desktop。確認上述指令成功後，在專案根目錄
+執行：
+
+```bash
+./scripts/bootstrap.sh
+```
+
+Shell 腳本會先尋找 Python 3.12+ 並建立 `backend/venv`，再自動安裝或更新
+Python dependencies、安裝 npm dependencies、建置 Vue frontend、啟動
+HAPI/PostgreSQL，並安裝 TW Core。再次執行時會根據來源雜湊、輸出檔、
+container 狀態與 HAPI 資料庫內的 terminology lock 標記跳過未變更步驟。
+
+若系統的 Python 指令不是 `python3.12` 或 `python3`，可指定：
+
+```bash
+PYTHON_BIN=/path/to/python3.12 ./scripts/bootstrap.sh
+```
+
+如果 `backend/.env` 尚未存在，腳本會從 `.env.example` 建立；完成後仍須填入
+自己的 Gemini 或 Groq API key。常用選項：
+
+```bash
+# 包含耗時的 RAG v2 清理、分類與建庫
+./scripts/bootstrap.sh --with-rag
+
+# 忽略快取狀態，重跑所有選定步驟
+./scripts/bootstrap.sh --force
+
+# 只準備後端與前端，不處理 FHIR
+./scripts/bootstrap.sh --skip-fhir
+```
+
+也可使用 `--skip-backend` 或 `--skip-frontend`。建制狀態只保存在被 Git
+忽略的 `.build-state/`；FHIR package 狀態則跟 PostgreSQL volume 一起保存，
+因此移除資料庫後會正確重新安裝，不會被本機建制快取誤判。
+
+以下章節保留各步驟的手動操作方式。
 
 ### 2. 設定後端環境
 
@@ -112,11 +205,11 @@ Gemini Key 可至 [Google AI Studio](https://aistudio.google.com/app/apikey) 申
 
 `LLM_PROVIDER` 若省略，系統會優先使用 `GROQ_API_KEY`，沒有 Groq Key 時再使用 `GEMINI_API_KEY`，因此既有設定不需要修改。模型也可用 `GEMINI_MODEL` 或 `GROQ_MODEL` 覆寫，預設分別為 `gemini-2.5-flash` 與 `llama-3.3-70b-versatile`。
 
-`INTERVIEW_ENGINE=amie` 啟用 Gemini-backed AMIE-inspired 動態問診；
+`INTERVIEW_ENGINE=amie` 啟用 evidence-grounded 語意抽取與確定性問診；
 若需要 A/B 比較或緊急回退，可改成 `INTERVIEW_ENGINE=legacy` 使用原本的
 順序式問卷。可用 `AMIE_MAX_TURNS` 設定動態問診輪數上限（預設 24）。
-測試期 `AMIE_DEBUG_TRACE=true` 會在病患端逐輪顯示結果、決定與理由；
-正式提供病人使用前應設為 `false`，醫師端仍會保留完整稽核軌跡。
+測試期 `AMIE_DEBUG_TRACE=true` 會在病患端顯示去除疾病票數與排名後的
+流程結果；醫師端仍會保留完整稽核軌跡。
 
 這裡的 AMIE 是依公開研究方法實作的流程，不是 Google 官方 AMIE
 模型或服務。第一版不包含 self-play 訓練，也不產生數字診斷機率。
@@ -176,9 +269,9 @@ Gemini 回傳必須符合固定 JSON Schema，任何 API、格式或內容驗證
 自動退回原本的多語 embedding 查詢。日誌只記錄是否使用翻譯、耗時與
 查詢 variant，不記錄原文或翻譯內容。
 
-此功能預設為 `off`。一般 Gemini Developer API 的服務條款與資料治理不應
-直接視為符合臨床或個資規範；正式病人流程啟用前，仍須完成機構法務、
-資安、資料保護與醫療審查。
+程式在未設定時仍預設為 `off`；本專案的本機研究設定則開啟 `gemini + dual`。
+一般 Gemini Developer API 的服務條款與資料治理不應直接視為符合臨床或
+個資規範；正式病人流程啟用前，仍須完成機構法務、資安、資料保護與醫療審查。
 
 ### 5. 啟動後端
 
@@ -203,13 +296,106 @@ npm run dev
 
 - `http://localhost:5173/#/` → 病患端（開始問診）
 - `http://localhost:5173/#/doctor` → 醫師端（輸入問診編號查詢病人）
+- `http://localhost:5173/#/doctor/terminology/snomed` → SNOMED CT 編碼查詢
 
 正式建置可執行 `npm run build`，輸出位於 `frontend/dist/`。根目錄的
 `index.html` 與 `doctor.html` 是重構前的舊版，暫時保留供比對與相容使用。
 
-### 7.（選用）連接測試用 HAPI FHIR Server
+### 7.（選用）啟動含 TW Core 的 HAPI FHIR Server
 
-Vue 病患端可直接連接開發環境中的 HAPI FHIR Server。先複製前端設定：
+專案已包含 HAPI FHIR 8.8.0、PostgreSQL 16 與 TW Core 自動安裝所需的
+Compose 設定。從新的 clone 在專案根目錄執行：
+
+```bash
+docker compose -f compose.fhir.yml --profile setup up -d
+```
+
+第一次啟動會建立 PostgreSQL schema，接著 `twcore-installer` 會依鎖定順序
+安裝專案內附的 9 個 FHIR NPM packages。這些檔案包含 TW Core 1.0.0 的
+所有直接及傳遞依賴，安裝時不必另外下載 FHIR packages。可用以下指令確認：
+
+```bash
+docker compose -f compose.fhir.yml logs twcore-installer
+```
+
+看到 `Installed 9 locked FHIR packages` 即完成。首次建立 terminology index
+可能需要數分鐘；`twcore-installer` 完成後正常狀態是結束碼 0，而 HAPI 與
+PostgreSQL 會繼續執行。資料保存在 Compose volume，正常停止不會消失：
+
+這個流程只需要此 repository 與 Docker；Docker 仍須從 registry 拉取已鎖定
+版本的 HAPI、PostgreSQL 與 Python images。基於授權與發行範圍，完整
+SNOMED CT 與 LOINC 資料不包含在 TW Core 依賴中，必須另行合法取得。
+
+#### 安裝 SNOMED CT
+
+SNOMED CT 檔案較大且受授權條款限制，因此不包含在 Git repository。每位
+開發者或部署者都必須自行透過 SNOMED International／MLDS 取得有權使用的
+**International RF2 Production ZIP**，不要解壓，放到：
+
+```text
+backend/terminology/snomed/
+```
+
+`.gitignore` 已排除該目錄內的檔案及常見 RF2 檔名。啟動 HAPI 後執行：
+
+```bash
+docker compose -f compose.fhir.yml up -d postgres hapi
+docker compose -f compose.fhir.yml --profile snomed run --rm snomed-installer
+```
+
+installer 會先確認 ZIP 內含 RF2 Snapshot 必要檔案，再透過 HAPI
+`CodeSystem/$upload-external-code-system` 匯入 `http://snomed.info/sct`。
+若 TW Core 相依套件建立了重複的 `content=not-present` SNOMED placeholder，
+installer 會保留一筆並移除其餘占位資源；只要任何一筆已有實際 terminology
+內容就會停止，不會自動刪除。
+完成後會以 SNOMED CT 胸痛代碼 `29857009` 執行 `$validate-code`；再次執行
+相同 release 時會依 SHA-256 marker 跳過。授權檔案只以唯讀方式掛載進本機
+installer container，不會被加入 image 或 Git。第一次執行會從 HAPI FHIR
+官方 GitHub release 建置相同版本的 CLI installer image；CLI ZIP 也會驗證
+鎖定的 SHA-256。HAPI 會在 CLI 接受上傳後於背景建立 terminology index；
+installer 會繼續等待，直到驗證碼可查詢才回報完成。
+同一流程也會從授權 RF2 Snapshot 建立
+`backend/terminology/snomed/snomed-search.sqlite3`，供查詢頁進行快速英文
+全文搜尋。此索引與 RF2 ZIP 一樣被 `.gitignore` 排除；若先前已完成匯入，
+可單獨建立索引：
+
+```bash
+cd backend
+python -m scripts.build_snomed_search_index \
+  terminology/snomed/SnomedCT_InternationalRF2_PRODUCTION_20250701T120000Z.zip
+```
+
+查詢頁的英文文字搜尋使用這份本機 RF2 索引；純數字 concept ID 則仍透過
+HAPI `CodeSystem/$lookup` 驗證。這可避免 HAPI 對大型 in-memory ValueSet
+expansion 的數量限制。
+
+醫師端固定疾病表的 SNOMED CT 對照位於
+`backend/amie/disease_data/snomed_codings.json`。後端載入疾病表時會套用
+這份對照；複合疾病方向可包含多個 coding，前端會逐一顯示。此檔目前對應
+International Edition `20250701`，其中 41 個代碼均已透過本機 HAPI
+`CodeSystem/$validate-code` 驗證。更新 RF2 版本或對照內容後必須重新驗證，
+並重啟後端以清除已快取的疾病表。術語代碼有效不代表疾病表已完成臨床審查；
+醫師校準前仍維持 `provisional`。
+
+```bash
+docker compose -f compose.fhir.yml down
+```
+
+`setup` profile 的用途是避免日後一般 `docker compose up -d` 重複安裝及
+重建相同索引；installer 也會比對 HAPI 資料庫內的 lock SHA-256，相符時直接
+跳過。如需對既有資料庫強制重新安裝鎖定套件，可執行：
+
+```bash
+docker compose -f compose.fhir.yml --profile setup run --rm twcore-installer \
+  python -m scripts.install_twcore --server http://hapi:8080/fhir --force
+```
+
+HAPI 預設只綁定本機 `127.0.0.1:8080`。若 8080 已被占用，可在啟動時指定
+其他連接埠，例如
+`FHIR_PORT=18080 docker compose -f compose.fhir.yml --profile setup up -d`。
+Compose 內的資料庫密碼只供本機開發，不可直接用於正式環境。
+
+Vue 病患端可直接連接這台開發用 HAPI Server。先複製前端設定：
 
 ```bash
 cd frontend
@@ -229,10 +415,72 @@ VITE_FHIR_BASE_URL=http://localhost:8080/fhir
 可匯入的測試 FHIR Bundle 位於
 `backend/fhir_samples/synthetic_chest_pain_case.json`。
 
-身分證直接查詢只供本機或受控測試環境使用。正式環境不應讓瀏覽器直接
-存取臨床 FHIR Server，應改由具備驗證、授權與稽核的院內後端代理處理。
+若未使用本專案的 Compose，也可對其他已啟用 runtime IG upload 的 HAPI
+執行 `cd backend && python -m scripts.install_twcore`。套件清單、來源、
+授權標示與 SHA-256 位於 `backend/terminology/packages.lock.json`。
 
-### 8.（選用）設定 D-ID 虛擬數位人語音互動
+身分證直接查詢只供本機或受控測試環境使用。正式環境不可使用未授權的
+FHIR 直連模式，應使用 SMART on FHIR OAuth、最小權限 scopes、機構核准的
+client registration、稽核與資料治理。
+
+### 8. 啟動完整 SMART on FHIR 應用
+
+`compose.smart.yml` 會建置並啟動 FastAPI、正式 Vue frontend、SMART
+Launcher、local CORS gateway 及 FHIR proxy。Gateway 會依實際 localhost
+port 回傳 CORS header，並禁止快取 discovery/metadata。OAuth callback
+不再停留在示範資料頁，而會直接
+開啟病患端問診；前端透過 access token 讀取 launch-context Patient 的
+`$everything`，再沿用既有的 TW Core／FHIR 病歷映射與缺漏補問流程。
+
+先確認 HAPI 已啟動、合成病例已匯入，且 `backend/.env` 已設定：
+
+```bash
+./scripts/start-smart.sh
+```
+
+接著開啟：
+
+```text
+http://127.0.0.1:5174/start.html
+```
+
+選擇合成病人後，流程為：
+
+```text
+EHR Launch → OAuth 授權 → Patient launch context → FHIR $everything
+→ 病歷預填 → AI 預問診 → 問診編號／醫師端
+```
+
+Vue 與 FastAPI 由同一個 App origin 的 `/api` reverse proxy 串接；FHIR
+access token 只由瀏覽器中的 SMART client 用於 FHIR Server，不會送入
+`/chat`、RAG 或外部模型。SMART stack 的問診資料保存在 Docker volume
+`consultation-data`，停止服務不會刪除：
+
+```bash
+docker compose -f compose.smart.yml down
+```
+
+SMART backend image 會另外安裝 `requirements-rag.txt`，PyTorch 固定從官方
+CPU-only wheel index 安裝，並將主機已建立的 `backend/chroma_db` 掛載到容器。
+Hugging Face model cache 預設重用 `~/.cache/huggingface/hub`；可在啟動前以
+`RAG_HF_HUB_CACHE=/其他路徑` 覆寫。SMART 執行期會以 offline、唯讀方式載入
+模型快取，並關閉 Hugging Face 與 Chroma telemetry。首次使用前若尚未建立
+索引或 embedding model cache，先執行：
+
+```bash
+./scripts/bootstrap.sh --with-rag
+```
+
+`start-smart.sh` 會檢查索引與 `/api/health` 的 `rag_enabled`，未完整載入
+作用中的 collections 時會停止並顯示原因。啟動成功後，醫師端 RAG 文獻聊天、
+背景理學檢查／檢驗／影像建議及六段式分析都會使用本機向量索引；RAG 仍不參與
+病患端疾病票數與 Safety 決策。
+
+目前 scopes 僅包含病人資料讀取；系統不會自動把 AI 內容寫回 FHIR。
+正式回寫必須另建醫師確認、版本衝突、Provenance、AuditEvent 及失敗復原
+流程。這個本機 Launcher 只供合成資料開發，不是正式身分系統。
+
+### 9.（選用）設定 D-ID 虛擬數位人語音互動
 
 病患端網頁左側有一個「D-ID 設定」欄位，需要輸入：
 - **Client Key**：去 [studio.d-id.com](https://studio.d-id.com) 註冊後取得
@@ -289,6 +537,28 @@ pre-commit run --all-files
 
 醫師端輸入問診編號 **`00000`** 可以直接載入一筆預先寫好的測試胸痛病人資料，方便開發/展示時不用每次都重新跑一次完整問診。這筆資料的 AI 初步評估是預先寫死的文字（並非即時呼叫模型產生），報告內文有清楚標註「測試用假病人資料」，不會被誤認為真實案例。
 
+## 醫師端規則中心
+
+醫師工作區右上角的「規則中心」可查看實際執行中的全局流程、三種主訴的
+疾病表版本與問卷停止政策，以及全部 Safety 規則、觸發條件和觸發後的
+鑑別標籤。Safety 的規則內容仍以
+`backend/amie/rules/safety_rules.json` 作為唯一來源，不會散落在 Python
+程式內。
+
+規則中心預設為唯讀。若要允許醫師編輯，請在後端 `.env` 設定高強度的
+`SAFETY_RULE_ADMIN_TOKEN` 並重新啟動。醫師必須先輸入權杖並通過後端驗證，
+介面才會顯示勾選與編輯控制。標籤可依共通、胸痛、頭痛、腹痛及結構化規則
+分類，也能搜尋標籤、rule code、觸發詞與鑑別方向。
+
+勾選標籤後可直接編輯，或使用規則微調助理以對話產生草稿。LLM 每次最多
+處理五個已勾選標籤，不能新增或刪除 rule code，也不能直接儲存；所有草稿
+都必須先通過完整 JSON 驗證並由醫師檢視。正式儲存仍需變更理由、指定確認
+文字和相同管理權杖。後端會檢查版本衝突、先保存前一版稽核快照，再以原子
+方式更新。稽核快照位於 `backend/data/safety_rule_audit/`。
+
+目前的權杖是原型環境保護措施；正式部署仍應由具備醫師身分驗證、角色授權
+與集中式稽核的後端管理服務接管。
+
 ## 常見問題
 
 **Q: 啟動後端時出現 `[RAG] 未找到 chroma_db`？**
@@ -306,14 +576,65 @@ A: 前端會自動使用目前網頁的 hostname，並以 `8000` 作為預設後
 **Q: `.env` 或 `chroma_db` 不見了？**
 A: 這是正常的，這兩個東西本來就不會被上傳到 GitHub（見 `.gitignore`），照步驟 3、4 自己重新建立即可。
 
+## 未來展望：正式 SMART 臨床應用
+
+> 本節是尚未進入實作的概念規劃，不代表目前系統已支援正式院方登入、
+> 健保卡驗證或正式醫療環境部署。實際執行仍需配合院方 EHR、身分系統、
+> 資訊安全政策與臨床流程確認。完整規劃請見 [future.md](future.md)。
+
+未來預計保留目前系統作為功能開發與合成資料測試用的開發端，另建立正式
+臨床應用端。臨床應用端會將 Patient Shell 與 Clinician Shell 分開建置與部署，
+但共用受後端保護的臨床服務；病患主動完成並送出問診後，個案才會進入醫師的
+待處理佇列。
+
+預計的身分驗證與問診管線如下：
+
+```text
+病患入口
+→ SMART／院方 OIDC
+→ 後端驗證與安全 Session
+→ 讀取授權範圍內的 FHIR 病歷
+→ 病歷預填與 AMIE 問診
+→ 病患主動送出
+→ 進入醫師待處理佇列
+
+醫師入口／EHR Launch
+→ SMART／院方 OIDC
+→ 後端角色授權
+→ 已送出個案或目前 Patient／Encounter
+→ RAG、SNOMED 與規則工具
+```
+
+正式應用預計改採後端 BFF 模式：FHIR access token 只保存在後端，瀏覽器
+使用 HttpOnly Session cookie；API 依 `patient`、`clinician` 與 `rule_admin`
+角色授權，並搭配最小 FHIR scopes、HTTPS、CSRF 防護及集中式稽核。現有
+RAG、Gemini 醫療術語英文化、本機檢索、AMIE、SNOMED 與規則中心的責任邊界
+維持不變。
+
+推動此架構前仍需院方提供或共同確認：
+
+- EHR／FHIR Server 規格及 SMART client registration
+- OIDC／SSO issuer、redirect URI、claims 與醫師角色對應
+- Patient、Practitioner 與 Encounter launch context 的提供方式
+- 正式網域、TLS、Session 儲存、臨床資料庫、稽核及個資治理政策
+- 健保卡或其他第三方身分驗證的院方介接方式
+
+SMART 授權與 launch context 將以
+[HL7 SMART App Launch](https://hl7.org/fhir/smart-app-launch/STU2.2/app-launch.html)
+及 [SMART Scopes and Launch Context](https://hl7.org/fhir/smart-app-launch/scopes-and-launch-context.html)
+為基礎，再依院方實際支援版本調整。
+
 ## 開發規劃
 
 - [x] 將前端重構為 Vue 3 + Vite
+- [x] 將 SMART OAuth launch context 與完整 Vue 預問診流程整合
 - [x] 將主訴、基本資料、一般病史與疾病問卷拆成獨立 JSON
 - [x] 建立胸痛、頭痛、腹痛、共通與安全的 RAG v2 collections
 - [x] 加入可選的 Gemini 中英 dual-query 檢索與失敗 fallback
 - [ ] 完成 RAG 安全庫、低信心分類與黃金測試集的醫療專業審查
-- [ ] 正式環境改用具備身分驗證、授權與稽核的 FHIR 後端代理
-- [x] 導入 Gemini-backed AMIE-inspired 動態追問與 urgent／routine 分級
-- [ ] 加入獨立的語意向量證據支持度與可校準停止條件
+- [ ] 完成正式 SMART client registration、後端身分驗證、最小權限與稽核
+- [ ] 建立醫師確認後的 FHIR 回寫、Provenance 與 AuditEvent 流程
+- [x] 導入 ClinicalFact 白名單、版本化胸痛／頭痛／腹痛疾病表與確定性投票
+- [x] 加入安全題優先、投票區辨力選題、70% 停止條件與 24 輪轉交
+- [ ] 由醫師審查並校準三路由疾病表權重與 SNOMED CT Coding
 - [ ] 建立經醫師審查的 self-play 資料與 MedGemma 微調流程

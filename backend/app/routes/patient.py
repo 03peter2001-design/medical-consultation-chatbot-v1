@@ -15,13 +15,22 @@ from amie import (
     detect_red_flags,
     detect_structured_red_flags,
     preferred_route,
+    prioritized_routes,
 )
+from amie.clinical_facts import (
+    facts_from_assessment,
+    filter_question_by_known_facts,
+    filter_question_by_questionnaire_answers,
+    merge_facts,
+    questionnaire_prefills_from_assessment,
+)
+from amie.disease_profiles import attach_safety_conditions
+from amie.models import ChiefComplaintAssessment
 from amie.rule_config import load_safety_rules
 from app.models import ChatRequest
 from app.runtime import (
     AMIE_DEBUG_TRACE,
     INTERVIEW_ENGINE,
-    RAG_ENABLED,
     SESSION_TTL,
     URGENT_CARE_MESSAGE,
     consultation_repository,
@@ -46,12 +55,12 @@ from app.services.input_validation import (
     store_question_answer,
     validate_question_answer,
 )
-from app.services.rag import retrieve_context_block
 from domain.questionnaires import (
     CHIEF_QUESTIONNAIRE,
     ROUTE_LABELS,
     build_questionnaire,
     condition_matches,
+    filter_question_by_context,
     next_question_index,
     parse_birth_date,
     progress_meta,
@@ -75,6 +84,8 @@ def _cleanup_sessions():
 
 
 ROUTE_KEYWORDS = load_safety_rules()["route_keywords"]
+SUPPORTED_PATIENT_ROUTES = frozenset(ROUTE_KEYWORDS)
+URGENT_CONDITION_CANDIDATES = load_safety_rules()["urgent_condition_candidates"]
 
 
 def route_keyword_hits(text: str) -> dict[str, bool]:
@@ -89,6 +100,22 @@ def local_complaint_route(text: str) -> str | None:
     hits = route_keyword_hits(text)
     matched = [route for route, is_match in hits.items() if is_match]
     return matched[0] if len(matched) == 1 else None
+
+
+def _urgent_possible_conditions(session: dict) -> list[str]:
+    """Return stable, deduplicated candidates attached to triggered rules."""
+    flags = session.get("amie_state", {}).get("red_flags", [])
+    conditions = []
+    for flag in flags:
+        configured = flag.get("possible_conditions") or (
+            URGENT_CONDITION_CANDIDATES.get(flag.get("label", ""), [])
+        )
+        conditions.extend(
+            condition.strip()
+            for condition in configured
+            if isinstance(condition, str) and condition.strip()
+        )
+    return list(dict.fromkeys(conditions))
 
 
 def classify_complaint(text: str) -> str:
@@ -172,6 +199,10 @@ def _question_payload(
     index = session.get("index", 0)
     data = session.get("data", {})
     current = questionnaire[index] if not completed and 0 <= index < len(questionnaire) else None
+    if current is not None:
+        current = filter_question_by_context(current, data)
+        if isinstance(questionnaire, list):
+            questionnaire[index] = current
     if session.get("engine") == "amie":
         active = [item for item in questionnaire if condition_matches(item, data)]
         completed_fields = set(data) | set(session.get("prefilled_fields", []))
@@ -185,6 +216,39 @@ def _question_payload(
     else:
         amie_progress = None
 
+    debug_event = None
+    if AMIE_DEBUG_TRACE and session.get("engine") == "amie" and session.get("transcript"):
+        event = session["transcript"][-1]
+        blocked = {
+            "disease_assessment",
+            "disease_votes",
+            "differential_hypotheses",
+        }
+        debug_event = {
+            "turn": event.get("turn"),
+            "question": event.get("question"),
+            "answer": event.get("answer"),
+            "decision": {
+                key: value
+                for key, value in (event.get("decision") or {}).items()
+                if key not in blocked
+            },
+            "result": {
+                key: value
+                for key, value in (event.get("result") or {}).items()
+                if key not in blocked
+            },
+            "reason": event.get("reason", ""),
+            "model_error": event.get("model_error", ""),
+        }
+
+    triage = {
+        "level": session.get("triage_level", "routine"),
+        "message": (URGENT_CARE_MESSAGE if session.get("triage_level") == "urgent" else ""),
+    }
+    if triage["level"] == "urgent":
+        triage["possible_conditions"] = _urgent_possible_conditions(session)
+
     return {
         "reply": reply,
         "session_id": session["session_id"],
@@ -192,10 +256,7 @@ def _question_payload(
         "user_display": user_display,
         "step": -1 if completed else index,
         "queue_number": queue_number,
-        "triage": {
-            "level": session.get("triage_level", "routine"),
-            "message": (URGENT_CARE_MESSAGE if session.get("triage_level") == "urgent" else ""),
-        },
+        "triage": triage,
         "question_input": (structured_question_input(current) if current else None),
         "questionnaire": (questionnaire_meta(current, data.get("type")) if current else None),
         "progress": (
@@ -203,11 +264,7 @@ def _question_payload(
             if completed
             else (amie_progress or progress_meta(questionnaire, index, data))
         ),
-        "amie_debug": (
-            session.get("transcript", [])[-1]
-            if AMIE_DEBUG_TRACE and session.get("engine") == "amie" and session.get("transcript")
-            else None
-        ),
+        "amie_debug": debug_event,
     }
 
 
@@ -297,10 +354,14 @@ async def _complete_urgent_consultation(
     data = session["data"]
     red_flags = session.get("amie_state", {}).get("red_flags", [])
     flag_labels = "、".join(flag.get("label", "") for flag in red_flags if flag.get("label"))
+    possible_conditions = _urgent_possible_conditions(session)
+    condition_summary = "、".join(possible_conditions)
+    condition_line = f"可能涉及的緊急疾病：{condition_summary}\n" if condition_summary else ""
     report = (
         "【儘早就醫警示】\n"
         f"{URGENT_CARE_MESSAGE}\n"
         f"觸發項目：{flag_labels or '問診安全規則'}\n\n"
+        f"{condition_line}"
         "此內容為預問診分級提示，不是正式診斷。\n\n"
         "【AI 預問診摘要】\n摘要產生中，請稍候。"
     )
@@ -343,20 +404,28 @@ async def _complete_urgent_chief_complaint(
     *,
     user_input: str,
     route: str | None,
-    red_flags: list[dict[str, str]],
+    red_flags: list[dict[str, object]],
     background_tasks: BackgroundTasks,
 ) -> dict:
     """Persist a severe chief complaint before classification or planning."""
-    resolved_route = route if route in {"chest", "headache", "abdomen"} else "other"
+    resolved_route = str(route) if route in SUPPORTED_PATIENT_ROUTES else "other"
     data = session["data"]
     data["reason"] = user_input
     data["type"] = resolved_route
     if resolved_route != "other":
         session["questionnaire"] = build_questionnaire(resolved_route)
+    disease_assessment = attach_safety_conditions(
+        resolved_route,
+        red_flags,
+        facts=data.get("_clinical_facts", []),
+    )
+    data["_disease_assessment"] = disease_assessment
     state = {
         "triage_level": "urgent",
         "red_flags": red_flags,
         "differential_hypotheses": [],
+        "disease_assessment": disease_assessment,
+        "clinical_facts": list(data.get("_clinical_facts", [])),
         "knowledge_gaps": [],
         "evidence_timeline": [
             {
@@ -403,7 +472,7 @@ def _get_chief_extractor() -> ChiefComplaintExtractor:
 def _assess_chief_complaint(
     text: str,
     data: dict,
-) -> tuple[str, list[dict[str, str]]]:
+) -> tuple[str, list[dict[str, object]]]:
     """Run raw safety, semantic extraction, structured safety, then routing."""
     route_hint = local_complaint_route(text)
     raw_flags = detect_red_flags(
@@ -430,21 +499,57 @@ def _assess_chief_complaint(
         data["_chief_assessment"]["requires_handoff"] = True
         return "safety_unavailable", []
 
-    structured_flags = detect_structured_red_flags(
-        assessment,
-        risk_profile,
-        route_hint,
+    data["_clinical_facts"] = merge_facts(
+        data.get("_clinical_facts", []),
+        facts_from_assessment(
+            assessment,
+            turn=1,
+            source="chief_semantic_extraction",
+        ),
     )
-    if structured_flags:
-        data["_chief_assessment"]["safety_flags"] = structured_flags
+
+    ranked_routes = prioritized_routes(assessment, risk_profile)
+    data["_chief_assessment"]["route_priority"] = ranked_routes
+    data["_chief_assessment"]["secondary_routes"] = ranked_routes[1:]
+
+    raw_route_flags = [
+        flag
+        for candidate in ranked_routes
+        for flag in detect_red_flags(candidate, text, {"reason": text})
+    ]
+    structured_flags = detect_structured_red_flags(assessment, risk_profile, route_hint)
+    for symptom in assessment.symptom_assessments:
+        scoped_assessment = ChiefComplaintAssessment(
+            primary_symptom=symptom.route,
+            primary_evidence=symptom.evidence,
+            primary_symptom_code=symptom.symptom_code,
+            symptoms=[item for item in assessment.symptoms if item.code == symptom.symptom_code],
+            onset=symptom.onset,
+            course=symptom.course,
+            duration=symptom.duration,
+            severity=symptom.severity,
+            is_new_or_changed=symptom.is_new_or_changed,
+            findings=symptom.findings,
+            negated_findings=symptom.negated_findings,
+            route_candidates=[symptom.route],
+        )
+        structured_flags.extend(
+            detect_structured_red_flags(scoped_assessment, risk_profile, symptom.route)
+        )
+    all_flags = list(
+        {flag["code"]: flag for flag in [*raw_route_flags, *structured_flags]}.values()
+    )
+    if all_flags:
+        data["_chief_assessment"]["safety_flags"] = all_flags
         return (
-            route_hint or preferred_route(assessment) or "other",
-            structured_flags,
+            route_hint or preferred_route(assessment, risk_profile) or "other",
+            all_flags,
         )
 
-    route = route_hint or preferred_route(assessment)
-    if not route:
-        route = classify_complaint(text)
+    # Successful semantic extraction is authoritative for questionnaire
+    # eligibility. Do not ask a second, unconstrained classifier to turn an
+    # associated finding (for example dizziness) into a pain complaint.
+    route = route_hint or preferred_route(assessment, risk_profile) or "other"
 
     # The semantic extractor can discover a route that keyword matching did
     # not. Re-run the raw policy with that route before AMIE planning.
@@ -456,18 +561,56 @@ def _assess_chief_complaint(
     return route, route_flags
 
 
+def _complaint_routes(data: dict, primary_route: str) -> list[str]:
+    """Keep every evidenced supported symptom, with the primary route first."""
+    assessed = data.get("_chief_assessment", {}).get("route_priority", [])
+    routes = [route for route in [primary_route, *assessed] if route in SUPPORTED_PATIENT_ROUTES]
+    return list(dict.fromkeys(routes))
+
+
+def _copy_prefills_to_secondary_routes(session: dict, questionnaire: list[dict]) -> None:
+    """Reuse imported disease history without collapsing route-scoped answers."""
+    data = session["data"]
+    prefilled = set(session.get("prefilled_fields", []))
+    for item in questionnaire:
+        field = item["field"]
+        base_field = item.get("base_field", field)
+        if field == base_field or base_field not in prefilled or base_field not in data:
+            continue
+        data[field] = data[base_field]
+        prefilled.add(field)
+    session["prefilled_fields"] = sorted(prefilled)
+
+
+def _apply_chief_questionnaire_prefills(
+    data: dict,
+    questionnaire: list[dict],
+) -> None:
+    """Skip questions whose route-scoped answer was explicit in the chief complaint."""
+    extraction = data.get("_chief_assessment", {}).get("extraction")
+    if not extraction:
+        return
+    try:
+        assessment = ChiefComplaintAssessment.model_validate(extraction)
+    except Exception:
+        return
+    data.update(
+        questionnaire_prefills_from_assessment(
+            assessment,
+            questionnaire,
+        )
+    )
+    for index, item in enumerate(questionnaire):
+        questionnaire[index] = filter_question_by_questionnaire_answers(
+            item,
+            assessment.questionnaire_answers,
+        )
+
+
 def _get_amie_engine() -> AMIEEngine:
     global _amie_engine_instance
     if _amie_engine_instance is None:
-        retriever = (
-            retrieve_context_block
-            if RAG_ENABLED and "retrieve_context_block" in globals()
-            else None
-        )
-        _amie_engine_instance = AMIEEngine(
-            llm_client,
-            retriever=retriever,
-        )
+        _amie_engine_instance = AMIEEngine(llm_client)
     return _amie_engine_instance
 
 
@@ -622,7 +765,7 @@ async def _chat_amie(
                 reason=("語意安全檢查暫時無法完成，請由現場醫療人員確認"),
                 user_display=user_display,
             )
-        if route not in {"chest", "headache", "abdomen"}:
+        if route not in SUPPORTED_PATIENT_ROUTES:
             session["amie_state"] = {
                 "red_flags": [],
                 "knowledge_gaps": ["目前系統不支援此主訴路由"],
@@ -644,13 +787,29 @@ async def _chat_amie(
                 reason="主訴不在目前支援的胸痛、頭痛或腹痛路由",
                 user_display=user_display,
             )
-        questionnaire = build_questionnaire(route)
+        routes = _complaint_routes(data, route)
+        data["types"] = routes
+        questionnaire = build_questionnaire(routes)
+        _apply_chief_questionnaire_prefills(data, questionnaire)
+        questionnaire = [
+            filtered
+            for item in questionnaire
+            if (
+                filtered := filter_question_by_known_facts(
+                    item,
+                    data.get("_clinical_facts", []),
+                )
+            )
+            is not None
+        ]
         session["questionnaire"] = questionnaire
+        _copy_prefills_to_secondary_routes(session, questionnaire)
+        index = -1
 
     session["turn_count"] += 1
 
     result = _get_amie_engine().run_turn(
-        route=data.get("type", ""),
+        route=current.get("route") or data.get("type", ""),
         answer=user_input,
         current_field=field,
         data=data,
@@ -714,6 +873,8 @@ async def _chat_amie(
         )
 
     session["index"] = next_index
+    questionnaire[next_index] = next_question
+    session["questionnaire"] = questionnaire
     session["step"] = session["turn_count"]
     if result.acknowledgement:
         reply = f"{result.acknowledgement}\n\n{next_question['prompt']}"
@@ -721,7 +882,7 @@ async def _chat_amie(
         reply = _section_transition_reply(
             current["section"],
             next_question,
-            data["type"],
+            next_question.get("route") or data["type"],
             set(session.get("prefilled_fields", [])),
         )
     return _question_payload(
@@ -819,7 +980,7 @@ async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
                 user_display=user_display,
                 completed=True,
             )
-        if route not in ("chest", "headache", "abdomen"):
+        if route not in SUPPORTED_PATIENT_ROUTES:
             session["step"] = -1
             session["index"] = -1
             return _question_payload(
@@ -831,8 +992,24 @@ async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
                 user_display=user_display,
                 completed=True,
             )
-        questionnaire = build_questionnaire(route)
+        routes = _complaint_routes(data, route)
+        data["types"] = routes
+        questionnaire = build_questionnaire(routes)
+        _apply_chief_questionnaire_prefills(data, questionnaire)
+        questionnaire = [
+            filtered
+            for item in questionnaire
+            if (
+                filtered := filter_question_by_known_facts(
+                    item,
+                    data.get("_clinical_facts", []),
+                )
+            )
+            is not None
+        ]
         session["questionnaire"] = questionnaire
+        _copy_prefills_to_secondary_routes(session, questionnaire)
+        index = -1
 
     prefilled_fields = set(session.get("prefilled_fields", []))
     next_index = next_question_index(
@@ -857,7 +1034,7 @@ async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
         reply=_section_transition_reply(
             previous_section,
             next_question,
-            data["type"],
+            next_question.get("route") or data["type"],
             prefilled_fields,
         ),
         user_display=user_display,

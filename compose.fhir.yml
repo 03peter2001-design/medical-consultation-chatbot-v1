@@ -1,0 +1,72 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: hapi
+      POSTGRES_USER: hapi
+      POSTGRES_PASSWORD: hapi
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hapi -d hapi"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    volumes:
+      - hapi-postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  hapi:
+    image: hapiproject/hapi:v8.8.0-1
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hapi
+      SPRING_DATASOURCE_USERNAME: hapi
+      SPRING_DATASOURCE_PASSWORD: hapi
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect
+      HAPI_FHIR_IG_RUNTIME_UPLOAD_ENABLED: "true"
+    ports:
+      - "127.0.0.1:${FHIR_PORT:-8080}:8080"
+    restart: unless-stopped
+
+  twcore-installer:
+    image: python:3.12-alpine
+    profiles: ["setup"]
+    depends_on:
+      hapi:
+        condition: service_started
+    working_dir: /workspace/backend
+    command:
+      - python
+      - -m
+      - scripts.install_twcore
+      - --server
+      - http://hapi:8080/fhir
+    volumes:
+      - ./backend:/workspace/backend:ro
+    restart: "no"
+
+  snomed-installer:
+    build:
+      context: .
+      dockerfile: backend/terminology/Dockerfile.snomed-installer
+      args:
+        HAPI_FHIR_VERSION: 8.8.0
+        HAPI_FHIR_CLI_SHA256: 62ef764efdb406974a87a16b9d79e05973e4fe62ba3fef1375d43d9c0cb62928
+    image: chest-pain-ai-doctor/snomed-installer:hapi-8.8.0
+    profiles: ["snomed"]
+    depends_on:
+      hapi:
+        condition: service_started
+    working_dir: /workspace/backend
+    command:
+      - --server
+      - http://hapi:8080/fhir
+    volumes:
+      - ./backend:/workspace/backend:ro
+      - ./backend/terminology/snomed:/workspace/backend/terminology/snomed
+    restart: "no"
+
+volumes:
+  hapi-postgres-data:

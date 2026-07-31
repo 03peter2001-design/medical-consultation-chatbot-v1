@@ -1,0 +1,4 @@
+# Runtime dependencies used only by local RAG retrieval.
+# PyTorch is installed from the official CPU-only wheel index in Dockerfile.
+chromadb==1.5.9
+sentence-transformers==5.6.1

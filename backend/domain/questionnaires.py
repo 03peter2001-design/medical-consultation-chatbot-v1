@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import re
-from collections.abc import Iterator, Mapping
+from collections.abc import Iterable, Iterator, Mapping
 from copy import deepcopy
 from datetime import date
 from functools import lru_cache
@@ -12,15 +12,29 @@ from pathlib import Path
 from typing import Any
 
 QUESTIONNAIRE_DATA_DIR = Path(__file__).resolve().parents[1] / "questionnaire_data"
-QUESTIONNAIRE_CATEGORIES = {
-    "chief",
-    "basic",
-    "history",
-    "chest",
-    "headache",
-    "abdomen",
-}
-DISEASE_ROUTES = ("chest", "headache", "abdomen")
+
+
+def _discover_questionnaire_categories() -> tuple[frozenset[str], tuple[str, ...]]:
+    categories: set[str] = set()
+    disease_routes: list[str] = []
+    for path in sorted(QUESTIONNAIRE_DATA_DIR.glob("*.json")):
+        try:
+            document = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise RuntimeError(f"無法讀取問卷分類索引：{path}") from exc
+        configured_id = document.get("id") if isinstance(document, dict) else None
+        if configured_id != path.stem:
+            raise ValueError(f"{path.name} 的 id 必須是 {path.stem}")
+        category = path.stem
+        categories.add(category)
+        if document.get("section") == "disease":
+            disease_routes.append(category)
+    if not categories or not disease_routes:
+        raise RuntimeError("questionnaire_data 缺少問卷分類或疾病路由")
+    return frozenset(categories), tuple(disease_routes)
+
+
+QUESTIONNAIRE_CATEGORIES, DISEASE_ROUTES = _discover_questionnaire_categories()
 ALLOWED_INPUT_KINDS = {"text", "choice", "date", "duration"}
 
 SECTION_LABELS = {
@@ -46,6 +60,7 @@ _QUESTION_DEFAULTS = {
     "units": [],
     "placeholder": "",
     "condition": None,
+    "option_conditions": {},
     "semantic_options": {},
 }
 
@@ -116,9 +131,14 @@ def _validate_question(
             raise ValueError(f"{category}.json 的 {field}.semantic_options.{option} 必須是非空物件")
         unknown_fact_keys = set(facts) - {
             "onset",
+            "course",
+            "duration",
             "severity",
             "new_or_changed",
             "findings",
+            "negated_findings",
+            "resolution_facts",
+            "resolved_when",
         }
         if unknown_fact_keys:
             raise ValueError(
@@ -127,6 +147,8 @@ def _validate_question(
             )
         scalar_domains = {
             "onset": {"sudden", "gradual"},
+            "course": {"episodic", "continuous", "recurrent"},
+            "duration": {"brief", "prolonged"},
             "severity": {"mild", "moderate", "severe"},
             "new_or_changed": {"true", "false"},
         }
@@ -135,13 +157,42 @@ def _validate_question(
                 raise ValueError(
                     f"{category}.json 的 {field}.semantic_options.{option}.{fact_key} 值不正確"
                 )
-        if "findings" in facts:
-            _validate_string_list(
-                facts["findings"],
-                category=category,
-                field=field,
-                key=f"semantic_options.{option}.findings",
+        if facts.get("resolved_when", "all") not in {"all", "any"}:
+            raise ValueError(
+                f"{category}.json 的 {field}.semantic_options.{option}."
+                "resolved_when 只能是 all 或 any"
             )
+        for findings_key in (
+            "findings",
+            "negated_findings",
+            "resolution_facts",
+        ):
+            if findings_key in facts:
+                _validate_string_list(
+                    facts[findings_key],
+                    category=category,
+                    field=field,
+                    key=f"semantic_options.{option}.{findings_key}",
+                )
+
+    option_conditions = item["option_conditions"]
+    if not isinstance(option_conditions, dict):
+        raise ValueError(f"{category}.json 的 {field}.option_conditions 必須是物件")
+    if set(option_conditions) - set(item["options"]):
+        raise ValueError(f"{category}.json 的 {field}.option_conditions 只能引用既有選項")
+    for option, option_condition in option_conditions.items():
+        if (
+            not isinstance(option_condition, dict)
+            or set(option_condition) != {"field", "exclude_equals_any"}
+            or not isinstance(option_condition["field"], str)
+        ):
+            raise ValueError(f"{category}.json 的 {field}.option_conditions.{option} 格式錯誤")
+        _validate_string_list(
+            option_condition["exclude_equals_any"],
+            category=category,
+            field=field,
+            key=f"option_conditions.{option}.exclude_equals_any",
+        )
 
     condition = item.get("condition")
     if condition is not None:
@@ -197,6 +248,65 @@ def load_questionnaire_category(
     return questions
 
 
+@lru_cache(maxsize=len(DISEASE_ROUTES))
+def load_questionnaire_policy(route: str) -> dict[str, Any]:
+    """Load deterministic selection and completion rules from route JSON."""
+    if route not in DISEASE_ROUTES:
+        raise ValueError(f"不支援的問卷政策路由：{route}")
+    path = QUESTIONNAIRE_DATA_DIR / f"{route}.json"
+    try:
+        document = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError as exc:
+        raise RuntimeError(f"找不到問卷政策檔案：{path}") from exc
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"問卷政策 JSON 格式錯誤：{path}:{exc.lineno}:{exc.colno}") from exc
+    policy = document.get("policy") if isinstance(document, dict) else None
+    expected_keys = {
+        "schema_version",
+        "selection_strategy",
+        "required_fields",
+        "priority_fields",
+        "coverage_threshold",
+        "max_turns",
+    }
+    if not isinstance(policy, dict) or set(policy) != expected_keys:
+        raise ValueError(f"{path.name} 的 policy 格式不正確")
+    if policy["schema_version"] != 1:
+        raise ValueError(f"{path.name} 的 policy.schema_version 必須是 1")
+    if policy["selection_strategy"] not in {
+        "disease_vote",
+        "fixed_order",
+    }:
+        raise ValueError(f"{path.name} 的 selection_strategy 不正確")
+    required = _validate_string_list(
+        policy["required_fields"],
+        category=route,
+        field="policy",
+        key="required_fields",
+    )
+    priority = policy["priority_fields"]
+    if not isinstance(priority, list) or any(
+        not isinstance(item, str) or not item.strip() for item in priority
+    ):
+        raise ValueError(f"{path.name} 的 policy.priority_fields 必須是字串陣列")
+    if len(required) != len(set(required)) or len(priority) != len(set(priority)):
+        raise ValueError(f"{path.name} 的 policy 欄位不可重複")
+    question_fields = {item["field"] for item in load_questionnaire_category(route)}
+    if not set(priority).issubset(question_fields):
+        raise ValueError(f"{path.name} 的 priority_fields 含未知問題")
+    threshold = policy["coverage_threshold"]
+    if (
+        not isinstance(threshold, (int, float))
+        or isinstance(threshold, bool)
+        or not 0 <= threshold <= 1
+    ):
+        raise ValueError(f"{path.name} 的 coverage_threshold 必須介於 0 與 1")
+    max_turns = policy["max_turns"]
+    if not isinstance(max_turns, int) or isinstance(max_turns, bool) or not 1 <= max_turns <= 100:
+        raise ValueError(f"{path.name} 的 max_turns 必須介於 1 與 100")
+    return deepcopy(policy)
+
+
 class _LazyDiseaseQuestionnaires(Mapping[str, tuple[dict[str, Any], ...]]):
     """維持既有 mapping 介面，但只在取用路由時載入 JSON。"""
 
@@ -219,16 +329,41 @@ HISTORY_QUESTIONNAIRE = load_questionnaire_category("history")
 DISEASE_QUESTIONNAIRES = _LazyDiseaseQuestionnaires()
 
 
-def build_questionnaire(route: str) -> list[dict[str, Any]]:
-    """組合主訴、基本資料、病史與指定疾病問卷。"""
-    if route not in DISEASE_ROUTES:
-        raise ValueError(f"不支援的疾病問卷路由：{route}")
+def normalize_questionnaire_routes(routes: str | Iterable[str]) -> list[str]:
+    """Return stable, deduplicated disease routes for one consultation."""
+    values = [routes] if isinstance(routes, str) else list(routes)
+    normalized = list(dict.fromkeys(values))
+    unsupported = [route for route in normalized if route not in DISEASE_ROUTES]
+    if unsupported or not normalized:
+        invalid = unsupported[0] if unsupported else ""
+        raise ValueError(f"不支援的疾病問卷路由：{invalid}")
+    return normalized
+
+
+def build_questionnaire(routes: str | Iterable[str]) -> list[dict[str, Any]]:
+    """組合共用問題與一個或多個症狀問卷。
+
+    第一個（優先）症狀保留既有欄位名稱，以相容既有病歷；後續症狀使用
+    ``route__field`` 儲存，避免 onset、location 等同名答案互相覆蓋。
+    """
+    normalized_routes = normalize_questionnaire_routes(routes)
+    disease_questions: list[dict[str, Any]] = []
+    for position, route in enumerate(normalized_routes):
+        for source in DISEASE_QUESTIONNAIRES[route]:
+            item = deepcopy(source)
+            base_field = item["field"]
+            item["base_field"] = base_field
+            item["route"] = route
+            if position:
+                item["field"] = f"{route}__{base_field}"
+            disease_questions.append(item)
+
     return deepcopy(
         [
             *CHIEF_QUESTIONNAIRE,
             *BASIC_QUESTIONNAIRE,
             *HISTORY_QUESTIONNAIRE,
-            *DISEASE_QUESTIONNAIRES[route],
+            *disease_questions,
         ]
     )
 
@@ -239,6 +374,65 @@ def condition_matches(item: dict[str, Any], data: dict[str, Any]) -> bool:
         return True
     value = str(data.get(condition["field"], ""))
     return any(token in value for token in condition.get("contains_any", []))
+
+
+def filter_question_by_context(
+    item: dict[str, Any],
+    data: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Remove options that conflict with known patient context."""
+    filtered = deepcopy(item)
+    conditions = filtered.get("option_conditions", {})
+    if filtered.get("kind") != "choice" or not conditions:
+        return filtered
+
+    removed: set[str] = set()
+    for option, condition in conditions.items():
+        context_value = str(data.get(condition["field"], "")).strip()
+        if context_value in condition["exclude_equals_any"]:
+            removed.add(option)
+    if not removed:
+        return filtered
+
+    original_semantics = filtered.get("semantic_options", {})
+    retained_options = [option for option in filtered.get("options", []) if option not in removed]
+    retained_nonexclusive = set(retained_options) - set(filtered.get("exclusive_options", []))
+    removed_codes = {
+        code
+        for option in removed
+        for key in ("findings", "negated_findings")
+        for code in original_semantics.get(option, {}).get(key, [])
+    }
+    retained_codes = {
+        code
+        for option in retained_nonexclusive
+        for key in ("findings", "negated_findings")
+        for code in original_semantics.get(option, {}).get(key, [])
+    }
+    context_only_codes = removed_codes - retained_codes
+
+    semantics: dict[str, dict[str, Any]] = {}
+    for option, mapping in original_semantics.items():
+        if option in removed:
+            continue
+        cleaned = deepcopy(mapping)
+        for key in ("findings", "negated_findings", "resolution_facts"):
+            if key not in cleaned:
+                continue
+            values = [code for code in cleaned[key] if code not in context_only_codes]
+            if values:
+                cleaned[key] = values
+            else:
+                cleaned.pop(key)
+        if cleaned:
+            semantics[option] = cleaned
+
+    filtered["options"] = retained_options
+    filtered["semantic_options"] = semantics
+    filtered["exclusive_options"] = [
+        option for option in filtered.get("exclusive_options", []) if option in retained_options
+    ]
+    return filtered
 
 
 def next_question_index(
@@ -258,7 +452,9 @@ def next_question_index(
 
 def question_input(item: dict[str, Any]) -> dict[str, Any]:
     return {
-        key: value for key, value in item.items() if key not in {"condition", "semantic_options"}
+        key: value
+        for key, value in item.items()
+        if key not in {"condition", "option_conditions", "semantic_options"}
     }
 
 
@@ -267,11 +463,12 @@ def questionnaire_meta(
     route: str | None,
 ) -> dict[str, Any]:
     section = item["section"]
+    item_route = item.get("route") or route
     return {
         "section": section,
         "label": SECTION_LABELS[section],
-        "route": route,
-        "route_label": ROUTE_LABELS.get(route or "", ""),
+        "route": item_route,
+        "route_label": ROUTE_LABELS.get(item_route or "", ""),
     }
 
 

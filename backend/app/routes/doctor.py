@@ -5,10 +5,21 @@ from __future__ import annotations
 import time
 import traceback
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Header, HTTPException, Query
 
+from amie.clinical_facts import facts_from_legacy_data
+from amie.disease_profiles import (
+    attach_profile_codings,
+    attach_safety_conditions,
+    score_diseases,
+)
 from app import runtime
-from app.models import DoctorChatRequest, LoadPatientRequest
+from app.models import (
+    DoctorChatRequest,
+    LoadPatientRequest,
+    SafetyRuleAssistantRequest,
+    SafetyRuleUpdateRequest,
+)
 from app.prompts.doctor import (
     DOCTOR_SYSTEM_PROMPT,
     STRUCTURED_NOTE_SYSTEM_PROMPT,
@@ -22,12 +33,107 @@ from app.services.rag import (
     deduplicate_sources,
     retrieve_context_block,
 )
+from app.services.rule_management import (
+    authorize_rule_editor,
+    rule_center_payload,
+    suggest_safety_rule_edits,
+    update_safety_rules,
+)
+from app.services.snomed_search import search_snomed
+from domain.questionnaires import (
+    DISEASE_ROUTES,
+    load_questionnaire_policy,
+)
 from domain.terminology_reference import (
     filter_supported_codings,
     terminology_reference,
 )
 
 router = APIRouter(prefix="/doctor", tags=["doctor"])
+
+
+@router.get("/rules")
+def get_rule_center():
+    return rule_center_payload()
+
+
+@router.get("/terminology/snomed")
+def get_snomed_search(
+    query: str = Query(min_length=2, max_length=120),
+    limit: int = Query(default=20, ge=1, le=50),
+    offset: int = Query(default=0, ge=0),
+):
+    try:
+        return search_snomed(query, limit=limit, offset=offset)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except RuntimeError as error:
+        raise HTTPException(
+            status_code=503,
+            detail=f"SNOMED CT 術語服務暫時無法使用：{error}",
+        ) from error
+
+
+def _rule_permission_error(error: PermissionError) -> HTTPException:
+    status = 503 if "尚未設定" in str(error) else 403
+    return HTTPException(status_code=status, detail=str(error))
+
+
+@router.post("/rules/authorize")
+def post_rule_authorization(
+    x_rule_admin_token: str = Header(default=""),
+):
+    try:
+        return authorize_rule_editor(x_rule_admin_token)
+    except PermissionError as error:
+        raise _rule_permission_error(error) from error
+
+
+@router.post("/rules/assistant")
+def post_rule_assistant(
+    request: SafetyRuleAssistantRequest,
+    x_rule_admin_token: str = Header(default=""),
+):
+    try:
+        authorize_rule_editor(x_rule_admin_token)
+        return suggest_safety_rule_edits(
+            llm_client=runtime.llm_client,
+            message=request.message,
+            selected_labels=request.selected_labels,
+            groups=request.safety_groups,
+            history=request.history,
+        )
+    except PermissionError as error:
+        raise _rule_permission_error(error) from error
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except Exception as error:
+        raise HTTPException(
+            status_code=503,
+            detail=f"規則微調助理暫時無法使用：{type(error).__name__}",
+        ) from error
+
+
+@router.put("/rules/safety")
+def put_safety_rules(
+    request: SafetyRuleUpdateRequest,
+    x_rule_admin_token: str = Header(default=""),
+):
+    try:
+        return update_safety_rules(
+            admin_token=x_rule_admin_token,
+            expected_revision=request.expected_revision,
+            confirmation=request.confirmation,
+            change_note=request.change_note,
+            actor_session_id=request.session_id,
+            groups=request.safety_groups,
+        )
+    except PermissionError as error:
+        raise _rule_permission_error(error) from error
+    except RuntimeError as error:
+        raise HTTPException(status_code=409, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
 
 
 def _cleanup_sessions() -> None:
@@ -102,6 +208,38 @@ def load_patient(request: LoadPatientRequest):
         for key, value in (record.get("data") or {}).items()
         if not key.startswith("_") and key != "pain_locations"
     }
+    stored_data = record.get("data", {})
+    amie_state = dict(stored_data.get("_amie") or {})
+    legacy_differentials = list(amie_state.get("differential_hypotheses") or [])
+    disease_assessment = dict(
+        stored_data.get("_disease_assessment") or amie_state.get("disease_assessment") or {}
+    )
+    route = record.get("type")
+    uses_disease_vote = (
+        route in DISEASE_ROUTES
+        and load_questionnaire_policy(route)["selection_strategy"] == "disease_vote"
+    )
+    red_flags = list(amie_state.get("red_flags") or [])
+    if red_flags and not disease_assessment.get("safety_triggered_conditions"):
+        disease_assessment = attach_safety_conditions(
+            str(route or ""),
+            red_flags,
+            facts=facts_from_legacy_data(stored_data),
+            computed_from="legacy_recalculation",
+            assessment=disease_assessment or None,
+        )
+    elif uses_disease_vote and not disease_assessment:
+        disease_assessment = score_diseases(
+            facts_from_legacy_data(stored_data),
+            route=str(route),
+            computed_from="legacy_recalculation",
+        )
+    disease_assessment = attach_profile_codings(
+        str(route or ""),
+        disease_assessment,
+    )
+    amie_state["differential_hypotheses"] = []
+    amie_state["disease_assessment"] = disease_assessment
     return {
         "queue_number": record["queue_number"],
         "type": record["type"],
@@ -116,7 +254,9 @@ def load_patient(request: LoadPatientRequest):
         "structured_note": structured_note,
         "structured_sources": structured_sources,
         "pain_locations": record.get("data", {}).get("pain_locations", []),
-        "amie_state": record.get("data", {}).get("_amie"),
+        "amie_state": amie_state,
+        "disease_assessment": disease_assessment,
+        "legacy_differential_hypotheses": legacy_differentials,
         "amie_trace": record.get("data", {}).get("_amie_trace", []),
         "chief_assessment": record.get("data", {}).get("_chief_assessment"),
         "triage_level": record.get("triage_level", "routine"),

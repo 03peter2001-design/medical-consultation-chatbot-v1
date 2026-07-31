@@ -1,5 +1,4 @@
 backend/venv/
-backend/.env
 backend/chroma_db/
 backend/clean_docs/
 backend/classified_docs/
@@ -8,6 +7,7 @@ frontend/node_modules/
 frontend/dist/
 __pycache__/
 *.pyc
+.env
 .coverage
 coverage.xml
 htmlcov/
@@ -15,6 +15,14 @@ htmlcov/
 .ruff_cache/
 .vulture_whitelist.py
 .DS_Store
+.build-state/
+.rag-cache/
+
+# Licensed SNOMED CT RF2 releases must be obtained by each deployer.
+SnomedCT_*RF2*.zip
+SnomedCT_*RF2*/
+backend/terminology/snomed/*
+!backend/terminology/snomed/.gitkeep
 
 SMART-APP-Exercise-1
 package

@@ -3,7 +3,10 @@ const runtimeLocation =
     ? { search: '', protocol: 'http:', hostname: '127.0.0.1' }
     : window.location
 
-export function resolveBackendUrl(locationLike = runtimeLocation) {
+export function resolveBackendUrl(
+  locationLike = runtimeLocation,
+  configuredBaseUrl = import.meta.env?.VITE_BACKEND_BASE_URL,
+) {
   const params = new URLSearchParams(locationLike.search || '')
   const override = params.get('backend')?.trim()
 
@@ -18,6 +21,21 @@ export function resolveBackendUrl(locationLike = runtimeLocation) {
       }
     } catch {
       console.warn('忽略無效的 backend 網址參數：', override)
+    }
+  }
+
+  const configured = configuredBaseUrl?.trim()
+  if (configured?.startsWith('/')) {
+    return configured.replace(/\/+$/, '') || '/'
+  }
+  if (configured) {
+    try {
+      const url = new URL(configured)
+      if (url.protocol === 'http:' || url.protocol === 'https:') {
+        return url.toString().replace(/\/+$/, '')
+      }
+    } catch {
+      console.warn('忽略無效的 VITE_BACKEND_BASE_URL：', configured)
     }
   }
 
@@ -49,6 +67,24 @@ export function consultationListPath({
 
 export function consultationDetailPath(queueNumber) {
   return `/doctor/consultations/${encodeURIComponent(queueNumber)}`
+}
+
+export const ruleCenterPath = '/doctor/rules'
+export const ruleAuthorizationPath = '/doctor/rules/authorize'
+export const ruleAssistantPath = '/doctor/rules/assistant'
+export const safetyRuleUpdatePath = '/doctor/rules/safety'
+
+export function snomedSearchPath({
+  query,
+  limit = 20,
+  offset = 0,
+}) {
+  const params = new URLSearchParams({
+    query: String(query || '').trim(),
+    limit: String(limit),
+    offset: String(offset),
+  })
+  return `/doctor/terminology/snomed?${params.toString()}`
 }
 
 async function request(path, options = {}) {
@@ -138,6 +174,29 @@ export const api = {
   clearDoctorSession: (sessionId) =>
     request(`/doctor/session/${encodeURIComponent(sessionId)}`, {
       method: 'DELETE',
+    }),
+  searchSnomed: (options) => request(snomedSearchPath(options)),
+  loadRuleCenter: () => request(ruleCenterPath),
+  authorizeRuleEditor: (adminToken) =>
+    request(ruleAuthorizationPath, {
+      method: 'POST',
+      headers: { 'X-Rule-Admin-Token': adminToken },
+    }),
+  suggestRuleEdits: (payload, adminToken) =>
+    request(ruleAssistantPath, {
+      ...jsonOptions('POST', payload),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Rule-Admin-Token': adminToken,
+      },
+    }),
+  updateSafetyRules: (payload, adminToken) =>
+    request(safetyRuleUpdatePath, {
+      ...jsonOptions('PUT', payload),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Rule-Admin-Token': adminToken,
+      },
     }),
 }
 

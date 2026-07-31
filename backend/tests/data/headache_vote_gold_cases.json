@@ -1,0 +1,40 @@
+[
+  {
+    "id": "migraine_pattern",
+    "facts": [
+      ["unilateral_headache", "單側頭痛"],
+      ["pulsating_headache", "像脈搏一樣跳痛"],
+      ["nausea", "噁心"],
+      ["photophobia", "畏光"],
+      ["phonophobia", "畏聲"]
+    ],
+    "expected_first": "migraine"
+  },
+  {
+    "id": "tension_pattern",
+    "facts": [
+      ["bilateral_headache", "兩側都痛"],
+      ["pressure_band_headache", "像被緊緊束住"],
+      ["neck_massage_relief", "按摩頭頸部會緩解"]
+    ],
+    "expected_first": "tension_type_headache"
+  },
+  {
+    "id": "subarachnoid_pattern",
+    "facts": [
+      ["onset_sudden", "瞬間爆炸性"],
+      ["severity_severe", "前所未有的劇痛"],
+      ["aneurysm_history", "有腦動脈瘤病史"]
+    ],
+    "expected_first": "subarachnoid_hemorrhage"
+  },
+  {
+    "id": "meningitis_pattern",
+    "facts": [
+      ["fever", "發燒"],
+      ["neck_stiffness", "頸部僵硬"],
+      ["immunocompromised", "免疫功能低下"]
+    ],
+    "expected_first": "meningitis_or_encephalitis"
+  }
+]

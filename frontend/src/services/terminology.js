@@ -111,6 +111,34 @@ export function resolveConditionCoding(
   return uniqueCodingMatches(matches)
 }
 
+export function resolveConditionCodings(
+  condition,
+  explicitCoding = null,
+  sourceCodings = [],
+  patientData = {},
+) {
+  const explicit = (
+    Array.isArray(explicitCoding) ? explicitCoding : [explicitCoding]
+  )
+    .map((coding) =>
+      normalizeCoding(coding, {
+        display: condition,
+        source: 'snomed-registry',
+      }),
+    )
+    .filter(Boolean)
+
+  if (explicit.length) return uniqueCodings(explicit)
+
+  const resolved = resolveConditionCoding(
+    condition,
+    null,
+    sourceCodings,
+    patientData,
+  )
+  return resolved ? [resolved] : []
+}
+
 function supportedCodings(concept, fallback = {}) {
   return (concept?.coding || [])
     .map((coding) =>

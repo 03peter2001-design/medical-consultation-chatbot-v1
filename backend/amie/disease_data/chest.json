@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "profile_version": "chest-rag-freeze-2026-07-29",
+  "route": "chest",
+  "generation": {
+    "method": "one-time-rag-assisted-profile-extraction",
+    "model": "configured-offline-llm",
+    "corpus_hash": "458977bb7be5280dea5725389c36f12adaf3f1af62fa655557a462ac77289525",
+    "generated_at": "2026-07-29T00:00:00Z"
+  },
+  "sources": [
+    {
+      "id": "acs-medscape",
+      "title": "Acute Coronary Syndrome: Practice Essentials, Background, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1910735-overview"
+    },
+    {
+      "id": "aortic-medscape",
+      "title": "Acute Aortic Dissection: Overview, Pathophysiology & Risk Factors, Prehospital Care",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/756835-overview"
+    },
+    {
+      "id": "pe-medscape",
+      "title": "Pulmonary Embolism (PE): Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/300901-overview"
+    },
+    {
+      "id": "pericarditis-medscape",
+      "title": "Acute Pericarditis: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/156951-overview"
+    },
+    {
+      "id": "costochondritis-medscape",
+      "title": "Costochondritis: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/808554-overview"
+    },
+    {
+      "id": "cap-medscape",
+      "title": "Community-Acquired Pneumonia: Practice Essentials, Overview, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/234240-overview"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "acute_coronary_syndrome",
+      "name": "急性冠心症",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "chest_pressure", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
+        {"fact": "exertional_trigger", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
+        {"fact": "diaphoresis", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
+        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
+        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
+        {"fact": "reproducible_tenderness", "status": "present", "direction": "oppose", "weight": 1, "source_ids": ["acs-medscape"]}
+      ]
+    },
+    {
+      "id": "aortic_dissection",
+      "name": "主動脈剝離",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["aortic-medscape"]},
+        {"fact": "tearing_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["aortic-medscape"]},
+        {"fact": "pain_radiates_back", "status": "present", "direction": "support", "weight": 1, "source_ids": ["aortic-medscape"]},
+        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["aortic-medscape"]}
+      ]
+    },
+    {
+      "id": "pulmonary_embolism",
+      "name": "肺栓塞",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "dyspnea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]},
+        {"fact": "pleuritic_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]},
+        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]},
+        {"fact": "tachycardia", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]},
+        {"fact": "hemoptysis", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]}
+      ]
+    },
+    {
+      "id": "pneumothorax",
+      "name": "氣胸",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]},
+        {"fact": "dyspnea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]},
+        {"fact": "pleuritic_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]},
+        {"fact": "unilateral_chest_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]}
+      ]
+    },
+    {
+      "id": "acute_pericarditis",
+      "name": "急性心包膜炎",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "pleuritic_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pericarditis-medscape"]},
+        {"fact": "positional_relief", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pericarditis-medscape"]},
+        {"fact": "recent_infection", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pericarditis-medscape"]}
+      ]
+    },
+    {
+      "id": "pneumonia_or_pleurisy",
+      "name": "肺炎或胸膜炎",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "fever", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cap-medscape"]},
+        {"fact": "cough_sputum", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cap-medscape"]},
+        {"fact": "pleuritic_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cap-medscape"]}
+      ]
+    },
+    {
+      "id": "costochondritis",
+      "name": "肋軟骨炎或胸壁疼痛",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "reproducible_tenderness", "status": "present", "direction": "support", "weight": 1, "source_ids": ["costochondritis-medscape"]},
+        {"fact": "localized_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["costochondritis-medscape"]},
+        {"fact": "movement_trigger", "status": "present", "direction": "support", "weight": 1, "source_ids": ["costochondritis-medscape"]},
+        {"fact": "chest_pressure", "status": "present", "direction": "oppose", "weight": 1, "source_ids": ["costochondritis-medscape"]}
+      ]
+    },
+    {
+      "id": "gastroesophageal_reflux",
+      "name": "胃食道逆流或食道相關胸痛",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "burning_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
+        {"fact": "meal_related", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
+        {"fact": "acid_regurgitation", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
+        {"fact": "exertional_trigger", "status": "present", "direction": "oppose", "weight": 1, "source_ids": ["acs-medscape"]}
+      ]
+    },
+    {
+      "id": "panic_or_anxiety",
+      "name": "焦慮或恐慌相關胸部症狀",
+      "coding": null,
+      "must_not_miss": false,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "stress_trigger", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
+        {"fact": "palpitations", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
+        {"fact": "dizziness_unspecified", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
+        {"fact": "dyspnea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]}
+      ]
+    },
+    {
+      "id": "cardiac_arrhythmia",
+      "name": "心律不整",
+      "coding": null,
+      "must_not_miss": true,
+      "review_status": "provisional",
+      "reviewer": null,
+      "reviewed_at": null,
+      "clues": [
+        {"fact": "palpitations", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
+        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
+        {"fact": "dizziness_unspecified", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
+        {"fact": "tachycardia", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]}
+      ]
+    }
+  ]
+}

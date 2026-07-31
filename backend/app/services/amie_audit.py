@@ -8,6 +8,8 @@ def save_amie_state(session: dict, result) -> None:
         "triage_level": result.triage_level,
         "decision": result.decision,
         "differential_hypotheses": result.differential_hypotheses,
+        "disease_assessment": result.disease_assessment,
+        "clinical_facts": result.clinical_facts,
         "knowledge_gaps": result.knowledge_gaps,
         "evidence_timeline": result.evidence_timeline,
         "rag_sources": result.rag_sources,
@@ -16,11 +18,13 @@ def save_amie_state(session: dict, result) -> None:
     }
     session["amie_state"] = state
     session["data"]["_amie"] = {key: value for key, value in state.items() if key != "model_error"}
+    session["data"]["_clinical_facts"] = list(result.clinical_facts or [])
+    session["data"]["_disease_assessment"] = dict(result.disease_assessment or {})
 
 
 def _decision_source(
     *,
-    field: str,
+    section: str,
     decision: dict,
     model_error: str,
     red_flags: list[dict],
@@ -29,13 +33,13 @@ def _decision_source(
         return "safety_rule"
     if model_error:
         return "deterministic_fallback"
-    if field in {"name", "gender", "birth_date", "blood_type"}:
+    if section == "basic":
         return "deterministic_flow"
     if str(decision.get("audit_reason", "")).startswith("所有適用且核准的問題"):
         return "deterministic_flow"
-    if decision.get("needs_retrieval"):
-        return "gemini_planner_with_rag"
-    return "gemini_planner"
+    if decision.get("scoring_method"):
+        return "deterministic_disease_vote"
+    return "deterministic_flow"
 
 
 def append_amie_trace(
@@ -86,6 +90,8 @@ def append_amie_trace(
             "triage_level": result.triage_level,
             "knowledge_gaps": result.knowledge_gaps,
             "differential_hypotheses": result.differential_hypotheses,
+            "disease_assessment": result.disease_assessment,
+            "clinical_facts": result.clinical_facts,
         },
         "decision": {
             "action": result.action,
@@ -94,8 +100,9 @@ def append_amie_trace(
             "next_question": (result.next_question.get("prompt") if result.next_question else None),
             "needs_retrieval": bool(decision.get("needs_retrieval")),
             "retrieval_query": decision.get("retrieval_query", ""),
+            "question_utility": decision.get("question_utility", 0),
             "source": _decision_source(
-                field=current_question.get("field", ""),
+                section=current_question.get("section", ""),
                 decision=decision,
                 model_error=result.model_error,
                 red_flags=result.red_flags,
@@ -137,6 +144,11 @@ def append_manual_amie_trace(
             "triage_level": triage_level,
             "knowledge_gaps": session.get("amie_state", {}).get("knowledge_gaps", []),
             "differential_hypotheses": [],
+            "disease_assessment": session.get("data", {}).get(
+                "_disease_assessment",
+                {},
+            ),
+            "clinical_facts": session.get("data", {}).get("_clinical_facts", []),
         },
         "decision": {
             "action": action,
@@ -145,6 +157,7 @@ def append_manual_amie_trace(
             "next_question": None,
             "needs_retrieval": False,
             "retrieval_query": "",
+            "question_utility": 0,
             "source": source,
         },
         "reason": reason,

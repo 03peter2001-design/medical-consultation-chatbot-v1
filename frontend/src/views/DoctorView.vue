@@ -379,6 +379,10 @@ onBeforeUnmount(() => {
         </svg>
       </template>
       <RouterLink class="nav-link" to="/">← 病患問診端</RouterLink>
+      <RouterLink class="nav-link" to="/doctor/terminology/snomed">
+        SNOMED CT
+      </RouterLink>
+      <RouterLink class="nav-link" to="/doctor/rules">規則中心</RouterLink>
       <button class="utility-button clear-button" @click="clearChat">
         清除對話
       </button>

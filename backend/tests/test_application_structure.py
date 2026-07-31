@@ -42,6 +42,11 @@ class ApplicationStructureTests(unittest.TestCase):
             },
             "app/routes/patient.py": {("POST", "/chat")},
             "app/routes/doctor.py": {
+                ("GET", "/rules"),
+                ("GET", "/terminology/snomed"),
+                ("POST", "/rules/authorize"),
+                ("POST", "/rules/assistant"),
+                ("PUT", "/rules/safety"),
                 ("GET", "/consultations"),
                 ("DELETE", "/consultations/{queue_number}"),
                 ("POST", "/load_patient"),

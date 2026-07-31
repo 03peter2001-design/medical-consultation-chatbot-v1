@@ -1,8 +1,31 @@
 <script setup>
+import { computed, ref } from 'vue'
+
 import TerminologyCode from './TerminologyCode.vue'
 
-defineProps({
+const props = defineProps({
   clinical: { type: Object, required: true },
+})
+
+const showAll = ref(false)
+const visibleDifferentials = computed(() =>
+  showAll.value
+    ? props.clinical.allDifferentials
+    : props.clinical.differentials,
+)
+const safetyDirections = computed(
+  () => props.clinical.safetyTriggeredConditions || [],
+)
+const visibleDirectionCount = computed(() => {
+  const keys = [
+    ...safetyDirections.value.map(
+      (item) => item.id || item.condition,
+    ),
+    ...visibleDifferentials.value.map(
+      (item) => item.id || item.condition,
+    ),
+  ]
+  return new Set(keys).size
 })
 </script>
 
@@ -11,30 +34,95 @@ defineProps({
     <section class="evidence-panel">
       <div class="panel-heading">
         <div>
-          <span>依問診證據整理</span>
-          <h3>鑑別診斷</h3>
+          <span>
+            {{
+              safetyDirections.length
+                ? 'Safety 規則 · 固定鑑別方向'
+                : '固定疾病表 · 線索投票'
+            }}
+          </span>
+          <h3>鑑別方向</h3>
         </div>
-        <strong>{{ clinical.differentials.length }} 項</strong>
+        <strong>{{ visibleDirectionCount }} 項</strong>
       </div>
 
-      <div v-if="clinical.differentials.length" class="evidence-table">
+      <section
+        v-if="safetyDirections.length"
+        class="safety-directions"
+        aria-label="Safety 規則觸發的鑑別方向"
+      >
+        <div class="safety-directions-heading">
+          <strong>Safety 規則觸發的鑑別方向</strong>
+          <span>優先於疾病票數</span>
+        </div>
+        <article
+          v-for="item in safetyDirections"
+          :key="item.id || item.condition"
+        >
+          <h4>
+            <span>{{ item.condition }}</span>
+            <TerminologyCode
+              v-for="coding in item.codings || []"
+              :key="`${coding.system}-${coding.code}`"
+              :coding="coding"
+            />
+          </h4>
+          <ul>
+            <li
+              v-for="trigger in item.triggers"
+              :key="`${trigger.ruleCode}-${trigger.evidence}`"
+            >
+              <b>{{ trigger.ruleLabel || '安全規則命中' }}</b>
+              <span v-if="trigger.evidence">
+                證據：「{{ trigger.evidence }}」
+              </span>
+            </li>
+          </ul>
+        </article>
+        <p>
+          此清單來自固定 Safety 規則，不代表疾病票數、患病機率或正式診斷。
+        </p>
+      </section>
+
+      <div
+        v-if="clinical.diseaseAssessment.provisional"
+        class="provisional-note"
+      >
+        疾病表尚未經醫師校準；票數是線索相容排序，不是患病機率。
+      </div>
+
+      <div v-if="visibleDifferentials.length" class="evidence-table">
         <div class="evidence-table-head" aria-hidden="true">
-          <span>可能診斷</span>
+          <span>鑑別方向／票數</span>
           <span>支持證據</span>
           <span>反對證據</span>
         </div>
         <article
-          v-for="hypothesis in clinical.differentials"
-          :key="hypothesis.condition"
+          v-for="hypothesis in visibleDifferentials"
+          :key="hypothesis.id || hypothesis.condition"
           class="evidence-row"
         >
           <h4>
             <span>{{ hypothesis.condition }}</span>
             <TerminologyCode
-              v-if="hypothesis.coding"
-              :coding="hypothesis.coding"
+              v-for="coding in hypothesis.codings || []"
+              :key="`${coding.system}-${coding.code}`"
+              :coding="coding"
             />
-            <small v-else class="uncoded-condition">未編碼</small>
+            <small
+              v-if="!hypothesis.codings?.length"
+              class="uncoded-condition"
+            >
+              未編碼
+            </small>
+            <small class="vote-summary">
+              淨票 {{ hypothesis.netVotes }} · 支持
+              {{ hypothesis.supportVotes }} · 反對
+              {{ hypothesis.opposeVotes }}
+            </small>
+            <small class="coverage">
+              資料完整度 {{ Math.round(hypothesis.coverage * 100) }}%
+            </small>
           </h4>
           <ul class="supporting">
             <li
@@ -58,12 +146,47 @@ defineProps({
               尚無反對證據
             </li>
           </ul>
+          <details
+            v-if="hypothesis.missingFacts?.length"
+            class="missing-facts"
+          >
+            <summary>尚缺 {{ hypothesis.missingFacts.length }} 項線索</summary>
+            <span>{{ hypothesis.missingFacts.join('、') }}</span>
+          </details>
         </article>
       </div>
-      <div v-else class="panel-empty">
-        <strong>尚未建立鑑別診斷</strong>
-        <span>目前資料不足，請參考臨床警訊與 AI 初步評估。</span>
+      <div
+        v-else-if="!safetyDirections.length"
+        class="panel-empty"
+      >
+        <strong>目前沒有足夠支持線索</strong>
+        <span>請參考原始問診、臨床警訊與仍需補充的資料。</span>
       </div>
+
+      <button
+        v-if="
+          clinical.allDifferentials.length >
+          clinical.differentials.length
+        "
+        type="button"
+        class="toggle-all"
+        @click="showAll = !showAll"
+      >
+        {{ showAll ? '只顯示前五名' : `查看全部 ${clinical.allDifferentials.length} 項` }}
+      </button>
+
+      <section
+        v-if="clinical.mustNotMiss.length"
+        class="must-not-miss"
+      >
+        <strong>不能漏診</strong>
+        <span
+          v-for="item in clinical.mustNotMiss"
+          :key="item.id"
+        >
+          {{ item.condition }} · 淨票 {{ item.netVotes }}
+        </span>
+      </section>
 
       <div v-if="clinical.knowledgeGaps.length" class="knowledge-gaps">
         <strong>仍需補充</strong>
@@ -75,7 +198,8 @@ defineProps({
       <aside class="terminology-note">
         <strong>標準術語</strong>
         <span>
-          僅顯示 FHIR 原始 Coding；「未編碼」不會由系統自行猜測。
+          FHIR 原始 Coding 會直接標示；疾病表只顯示已驗證並凍結的
+          SNOMED CT，未驗證項目維持未編碼。
           <template v-if="clinical.terminologyReference">
             本機參照
             {{ clinical.terminologyReference.package }}#{{
@@ -84,6 +208,24 @@ defineProps({
           </template>
         </span>
       </aside>
+
+      <details
+        v-if="clinical.legacyDifferentials.length"
+        class="legacy-differentials"
+      >
+        <summary>
+          舊版 LLM 鑑別紀錄（{{ clinical.legacyDifferentials.length }}）
+        </summary>
+        <p>僅供稽核，不參與目前疾病表投票。</p>
+        <ul>
+          <li
+            v-for="item in clinical.legacyDifferentials"
+            :key="item.condition"
+          >
+            {{ item.condition }}
+          </li>
+        </ul>
+      </details>
     </section>
 
     <section class="evidence-panel timeline-panel">
@@ -116,6 +258,9 @@ defineProps({
                 urgent
               </span>
               <span v-if="event.needsRetrieval">使用 RAG</span>
+              <span v-if="event.questionUtility">
+                選題區辨分 {{ event.questionUtility }}
+              </span>
             </div>
             <dl v-if="event.extractedFacts.length" class="trace-facts">
               <div
@@ -126,6 +271,33 @@ defineProps({
                 <dd>{{ fact.value }}</dd>
               </div>
             </dl>
+            <div
+              v-if="event.clinicalFacts.length"
+              class="trace-clinical-facts"
+            >
+              <b>標準線索</b>
+              <span
+                v-for="fact in event.clinicalFacts"
+                :key="`${event.turn}-${fact.code}`"
+              >
+                {{ fact.label }} ·
+                {{ fact.status === 'absent' ? '否認' : '有' }}
+                <small v-if="fact.evidence">「{{ fact.evidence }}」</small>
+              </span>
+            </div>
+            <div
+              v-if="event.diseaseVotes.length"
+              class="trace-votes"
+            >
+              <b>本輪前五名</b>
+              <span
+                v-for="item in event.diseaseVotes"
+                :key="`${event.turn}-${item.id}`"
+              >
+                {{ item.name }} {{ item.netVotes }}票 ·
+                {{ Math.round(item.coverage * 100) }}%
+              </span>
+            </div>
             <p class="trace-decision">
               <b>決定</b>
               <template v-if="event.nextQuestion">
@@ -206,6 +378,85 @@ defineProps({
   line-height: 1.6;
 }
 
+.provisional-note {
+  margin-bottom: 12px;
+  padding: 9px 11px;
+  border: 1px solid #e8c77d;
+  border-radius: 6px;
+  background: #fff8e8;
+  color: #7a5510;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.safety-directions {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 12px;
+  border: 1px solid #e7a9a9;
+  border-left: 4px solid #b92f2f;
+  border-radius: 6px;
+  background: #fff7f7;
+}
+
+.safety-directions-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.safety-directions-heading strong {
+  color: #8f2525;
+  font-size: 13px;
+}
+
+.safety-directions-heading span {
+  color: #a32929;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.safety-directions article {
+  padding-top: 8px;
+  border-top: 1px solid #f0cccc;
+}
+
+.safety-directions h4 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: #651d1d;
+  font-size: 14px;
+}
+
+.safety-directions ul {
+  display: grid;
+  gap: 3px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.safety-directions li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  color: #714040;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.safety-directions > p {
+  margin: 0;
+  color: #7a5555;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
 .evidence-table {
   overflow: hidden;
   border: 1px solid #d6e0e9;
@@ -216,6 +467,114 @@ defineProps({
 .evidence-row {
   display: grid;
   grid-template-columns: minmax(140px, 0.9fr) minmax(170px, 1.2fr) minmax(170px, 1.2fr);
+}
+
+.vote-summary,
+.coverage {
+  display: block;
+  margin-top: 5px;
+  color: #536b80;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.missing-facts {
+  grid-column: 1 / -1;
+  padding: 8px 12px 10px;
+  border-top: 1px dashed #d6e0e9;
+  color: #6b7f92;
+  font-size: 11px;
+}
+
+.missing-facts summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.missing-facts span {
+  display: block;
+  margin-top: 5px;
+  line-height: 1.5;
+}
+
+.toggle-all {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: 1px solid #b8cce0;
+  border-radius: 6px;
+  background: #f7fbff;
+  color: #2568b2;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.must-not-miss {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+  padding: 11px;
+  border: 1px solid #efb5b5;
+  border-radius: 6px;
+  background: #fff7f7;
+}
+
+.must-not-miss strong {
+  width: 100%;
+  color: #a32929;
+  font-size: 12px;
+}
+
+.must-not-miss span {
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: #fbe1e1;
+  color: #8f2525;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.legacy-differentials {
+  margin-top: 11px;
+  color: #6b7f92;
+  font-size: 12px;
+}
+
+.legacy-differentials summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.trace-clinical-facts,
+.trace-votes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.trace-clinical-facts b,
+.trace-votes b {
+  width: 100%;
+  color: #435c72;
+  font-size: 11px;
+}
+
+.trace-clinical-facts span,
+.trace-votes span {
+  padding: 4px 6px;
+  border-radius: 4px;
+  background: #edf4fa;
+  color: #425d73;
+  font-size: 10px;
+}
+
+.trace-clinical-facts small {
+  color: #6b7f92;
 }
 
 .evidence-table-head {

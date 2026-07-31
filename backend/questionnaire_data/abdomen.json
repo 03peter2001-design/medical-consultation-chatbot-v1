@@ -1,6 +1,22 @@
 {
   "id": "abdomen",
   "section": "disease",
+  "policy": {
+    "schema_version": 1,
+    "selection_strategy": "disease_vote",
+    "required_fields": [
+      "onset",
+      "start_type",
+      "severity",
+      "location",
+      "associated",
+      "current_meds",
+      "allergy"
+    ],
+    "priority_fields": ["start_type", "severity", "associated", "location"],
+    "coverage_threshold": 0.7,
+    "max_turns": 24
+  },
   "questions": [
     {
       "field": "onset",
@@ -10,6 +26,29 @@
       "units": ["分鐘前", "小時前", "天前", "週前", "個月前", "年前"],
       "allow_other": true,
       "placeholder": "例如：30分鐘前、1個月前"
+    },
+    {
+      "field": "start_type",
+      "prompt": "腹痛是突然發作，還是逐漸出現？",
+      "kind": "choice",
+      "options": ["突然發作", "逐漸出現"],
+      "semantic_options": {
+        "突然發作": {"onset": "sudden"},
+        "逐漸出現": {"onset": "gradual"}
+      },
+      "allow_other": true
+    },
+    {
+      "field": "severity",
+      "prompt": "目前腹痛的程度如何？",
+      "kind": "choice",
+      "options": ["輕微，仍可正常活動", "中等，已影響活動", "劇烈，難以忍受"],
+      "semantic_options": {
+        "輕微，仍可正常活動": {"severity": "mild"},
+        "中等，已影響活動": {"severity": "moderate"},
+        "劇烈，難以忍受": {"severity": "severe"}
+      },
+      "allow_other": true
     },
     {
       "field": "quality",
@@ -25,7 +64,22 @@
         "飢餓時會加劇疼痛"
       ],
       "multiple": true,
-      "allow_other": true
+      "allow_other": true,
+      "semantic_options": {
+        "陣痛": {
+          "course": "episodic",
+          "findings": ["colicky_abdominal_pain"]
+        },
+        "持續痛": {
+          "course": "continuous",
+          "findings": ["constant_abdominal_pain"]
+        },
+        "由前痛到背後": {"findings": ["abdominal_pain_to_back"]},
+        "由肚臍周圍痛轉移到右下腹": {
+          "findings": ["periumbilical_to_rlq"]
+        },
+        "飢餓時會加劇疼痛": {"findings": ["fasting_worse"]}
+      }
     },
     {
       "field": "location",
@@ -42,7 +96,16 @@
         "肚臍以下腹痛"
       ],
       "multiple": true,
-      "allow_other": true
+      "allow_other": true,
+      "semantic_options": {
+        "右上腹": {"findings": ["ruq_pain"]},
+        "右下腹": {"findings": ["rlq_pain"]},
+        "左下腹": {"findings": ["llq_pain"]},
+        "全腹痛": {"findings": ["diffuse_abdominal_pain"]},
+        "左側腰痛": {"findings": ["flank_pain"]},
+        "右側腰痛": {"findings": ["flank_pain"]},
+        "肚臍以下腹痛": {"findings": ["lower_abdominal_pain"]}
+      }
     },
     {
       "field": "associated",
@@ -59,12 +122,59 @@
         "胃酸逆流",
         "血尿",
         "月經過期",
+        "陰道出血",
         "陰道分泌物增加",
+        "昏厥或暈倒",
+        "腹部僵硬或按壓放開更痛",
         "呼吸道症狀",
         "以上皆無"
       ],
       "multiple": true,
       "allow_other": true,
+      "option_conditions": {
+        "月經過期": {"field": "gender", "exclude_equals_any": ["男性"]},
+        "陰道出血": {"field": "gender", "exclude_equals_any": ["男性"]},
+        "陰道分泌物增加": {
+          "field": "gender",
+          "exclude_equals_any": ["男性"]
+        }
+      },
+      "semantic_options": {
+        "腹瀉": {"findings": ["diarrhea"]},
+        "發燒發冷": {"findings": ["fever"]},
+        "噁心": {"findings": ["nausea"]},
+        "嘔吐": {"findings": ["vomiting"]},
+        "便秘": {"findings": ["constipation"]},
+        "血便": {"findings": ["bloody_stool"]},
+        "冒冷汗": {"findings": ["diaphoresis"]},
+        "胃酸逆流": {"findings": ["acid_regurgitation"]},
+        "血尿": {"findings": ["hematuria"]},
+        "月經過期": {"findings": ["missed_period"]},
+        "陰道出血": {"findings": ["vaginal_bleeding"]},
+        "陰道分泌物增加": {"findings": ["vaginal_discharge"]},
+        "昏厥或暈倒": {"findings": ["syncope"]},
+        "腹部僵硬或按壓放開更痛": {
+          "findings": ["peritoneal_irritation"]
+        },
+        "以上皆無": {
+          "negated_findings": [
+            "diarrhea",
+            "fever",
+            "nausea",
+            "vomiting",
+            "constipation",
+            "bloody_stool",
+            "diaphoresis",
+            "acid_regurgitation",
+            "hematuria",
+            "missed_period",
+            "vaginal_bleeding",
+            "vaginal_discharge",
+            "syncope",
+            "peritoneal_irritation"
+          ]
+        }
+      },
       "exclusive_options": ["以上皆無"]
     },
     {
@@ -72,7 +182,11 @@
       "prompt": "家中或同行的人是否也有相同症狀？",
       "kind": "choice",
       "options": ["是", "否"],
-      "allow_other": true
+      "allow_other": true,
+      "semantic_options": {
+        "是": {"findings": ["sick_contacts"]},
+        "否": {"negated_findings": ["sick_contacts"]}
+      }
     },
     {
       "field": "abdomen_hx",
@@ -91,6 +205,24 @@
       ],
       "multiple": true,
       "allow_other": true,
+      "semantic_options": {
+        "肝膽結石": {"findings": ["gallstones_history"]},
+        "腎結石": {"findings": ["kidney_stones_history"]},
+        "腸阻塞": {"findings": ["bowel_obstruction_history"]},
+        "胰臟炎": {"findings": ["pancreatitis_history"]},
+        "腹主動脈瘤": {
+          "findings": ["abdominal_aortic_aneurysm_history"]
+        },
+        "以上皆無": {
+          "negated_findings": [
+            "gallstones_history",
+            "kidney_stones_history",
+            "bowel_obstruction_history",
+            "pancreatitis_history",
+            "abdominal_aortic_aneurysm_history"
+          ]
+        }
+      },
       "exclusive_options": ["以上皆無"]
     },
     {
@@ -108,6 +240,21 @@
       ],
       "multiple": true,
       "allow_other": true,
+      "option_conditions": {
+        "剖腹產": {"field": "gender", "exclude_equals_any": ["男性"]},
+        "子宮切除": {"field": "gender", "exclude_equals_any": ["男性"]}
+      },
+      "semantic_options": {
+        "剖腹產": {"findings": ["prior_abdominal_surgery"]},
+        "闌尾切除": {"findings": ["prior_abdominal_surgery"]},
+        "子宮切除": {"findings": ["prior_abdominal_surgery"]},
+        "膽囊切除": {"findings": ["prior_abdominal_surgery"]},
+        "大腸切除手術": {"findings": ["prior_abdominal_surgery"]},
+        "胃切除手術": {"findings": ["prior_abdominal_surgery"]},
+        "未曾手術": {
+          "negated_findings": ["prior_abdominal_surgery"]
+        }
+      },
       "exclusive_options": ["未曾手術"]
     }
   ]

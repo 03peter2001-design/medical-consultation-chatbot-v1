@@ -8,10 +8,36 @@ from app.routes.patient import router as patient_router
 from app.routes.system import router as system_router
 from app.services.seed_data import seed_test_patient
 
+API_V1_PREFIX = "/v1"
+
+OPENAPI_TAGS = [
+    {
+        "name": "system",
+        "description": "Service health and speech transcription.",
+    },
+    {
+        "name": "patient",
+        "description": "Patient-facing pre-consultation workflow.",
+    },
+    {
+        "name": "doctor",
+        "description": "Physician consultation, terminology, and governance operations.",
+    },
+]
+
 
 def create_app() -> FastAPI:
     seed_test_patient()
-    app = FastAPI(title="AI 預問診系統", version="2.2.0")
+    app = FastAPI(
+        title="AI 預問診系統 API",
+        version="1.0.0",
+        description=(
+            "Versioned contract for the patient pre-consultation and physician "
+            "workspace. Use `/v1` routes for new integrations; unversioned routes "
+            "remain temporarily available as a compatibility layer."
+        ),
+        openapi_tags=OPENAPI_TAGS,
+    )
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
@@ -19,9 +45,16 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    app.include_router(system_router)
-    app.include_router(patient_router)
-    app.include_router(doctor_router)
+    app.include_router(system_router, prefix=API_V1_PREFIX)
+    app.include_router(patient_router, prefix=API_V1_PREFIX)
+    app.include_router(doctor_router, prefix=API_V1_PREFIX)
+
+    # Keep existing clients working during the v1 migration. These aliases are
+    # intentionally excluded from OpenAPI so the published contract has one
+    # canonical path for every operation.
+    app.include_router(system_router, include_in_schema=False)
+    app.include_router(patient_router, include_in_schema=False)
+    app.include_router(doctor_router, include_in_schema=False)
     return app
 
 

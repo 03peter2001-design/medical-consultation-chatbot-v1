@@ -1,16 +1,28 @@
 <script setup>
+import { computed } from 'vue'
+
+import { splitStructuredNote } from '../services/structuredNote.js'
 import SourceTags from './SourceTags.vue'
 
-defineProps({
+const props = defineProps({
   text: { type: String, required: true },
   sources: { type: Array, default: () => [] },
+  hideEmr: { type: Boolean, default: false },
+})
+
+const displayText = computed(() => {
+  if (!props.hideEmr) return props.text
+  return (
+    splitStructuredNote(props.text).clinicalDecision ||
+    '目前沒有其他臨床決策內容。'
+  )
 })
 </script>
 
 <template>
   <section class="structured-report">
     <div class="report-title">🩺 結構化病歷分析（EMR + 臨床決策）</div>
-    <pre>{{ text }}</pre>
+    <pre>{{ displayText }}</pre>
     <SourceTags :sources="sources" />
   </section>
 </template>

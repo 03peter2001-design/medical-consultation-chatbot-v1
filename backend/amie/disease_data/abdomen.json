@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "profile_version": "abdomen-rag-freeze-2026-07-29",
   "route": "abdomen",
   "generation": {
@@ -73,11 +73,49 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "major_bleeding",
+        "semantic_major_bleeding"
+      ],
       "clues": [
-        {"fact": "bloody_stool", "status": "present", "direction": "support", "weight": 1, "source_ids": ["peptic-ulcer-medscape", "abdominal-emergency-medscape"]},
-        {"fact": "major_bleeding", "status": "present", "direction": "support", "weight": 1, "source_ids": ["peptic-ulcer-medscape", "abdominal-emergency-medscape"]},
-        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
-        {"fact": "diaphoresis", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]}
+        {
+          "fact": "bloody_stool",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "peptic-ulcer-medscape",
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "major_bleeding",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "peptic-ulcer-medscape",
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "syncope",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "diaphoresis",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        }
       ]
     },
     {
@@ -88,11 +126,49 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "major_bleeding",
+        "abdominal_syncope",
+        "semantic_major_bleeding",
+        "semantic_abdominal_syncope"
+      ],
       "clues": [
-        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
-        {"fact": "severity_severe", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
-        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
-        {"fact": "diaphoresis", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]}
+        {
+          "fact": "onset_sudden",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "severity_severe",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "syncope",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "diaphoresis",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        }
       ]
     },
     {
@@ -103,12 +179,56 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "abdominal_syncope",
+        "semantic_abdominal_syncope"
+      ],
       "clues": [
-        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
-        {"fact": "severity_severe", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
-        {"fact": "abdominal_pain_to_back", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
-        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
-        {"fact": "abdominal_aortic_aneurysm_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]}
+        {
+          "fact": "onset_sudden",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "severity_severe",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "abdominal_pain_to_back",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "syncope",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "abdominal_aortic_aneurysm_history",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        }
       ]
     },
     {
@@ -119,11 +239,49 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "abdominal_syncope",
+        "pregnancy_bleeding",
+        "semantic_abdominal_syncope",
+        "semantic_pregnancy_abdominal_bleeding"
+      ],
       "clues": [
-        {"fact": "lower_abdominal_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ectopic-medscape"]},
-        {"fact": "missed_period", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ectopic-medscape"]},
-        {"fact": "vaginal_bleeding", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ectopic-medscape"]},
-        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ectopic-medscape"]}
+        {
+          "fact": "lower_abdominal_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "ectopic-medscape"
+          ]
+        },
+        {
+          "fact": "missed_period",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "ectopic-medscape"
+          ]
+        },
+        {
+          "fact": "vaginal_bleeding",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "ectopic-medscape"
+          ]
+        },
+        {
+          "fact": "syncope",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "ectopic-medscape"
+          ]
+        }
       ]
     },
     {
@@ -134,11 +292,50 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "peritonism",
+        "semantic_peritoneal_irritation"
+      ],
       "clues": [
-        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape", "peptic-ulcer-medscape"]},
-        {"fact": "severity_severe", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape", "peptic-ulcer-medscape"]},
-        {"fact": "peritoneal_irritation", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape", "peptic-ulcer-medscape"]},
-        {"fact": "diffuse_abdominal_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]}
+        {
+          "fact": "onset_sudden",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape",
+            "peptic-ulcer-medscape"
+          ]
+        },
+        {
+          "fact": "severity_severe",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape",
+            "peptic-ulcer-medscape"
+          ]
+        },
+        {
+          "fact": "peritoneal_irritation",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape",
+            "peptic-ulcer-medscape"
+          ]
+        },
+        {
+          "fact": "diffuse_abdominal_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        }
       ]
     },
     {
@@ -149,11 +346,47 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "peritonism",
+        "semantic_peritoneal_irritation"
+      ],
       "clues": [
-        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
-        {"fact": "severity_severe", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
-        {"fact": "constant_abdominal_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
-        {"fact": "bloody_stool", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]}
+        {
+          "fact": "onset_sudden",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "severity_severe",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "constant_abdominal_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "bloody_stool",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        }
       ]
     },
     {
@@ -164,12 +397,53 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "periumbilical_to_rlq", "status": "present", "direction": "support", "weight": 1, "source_ids": ["appendicitis-medscape"]},
-        {"fact": "rlq_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["appendicitis-medscape"]},
-        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["appendicitis-medscape"]},
-        {"fact": "fever", "status": "present", "direction": "support", "weight": 1, "source_ids": ["appendicitis-medscape"]},
-        {"fact": "diarrhea", "status": "present", "direction": "oppose", "weight": 1, "source_ids": ["appendicitis-medscape"]}
+        {
+          "fact": "periumbilical_to_rlq",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "appendicitis-medscape"
+          ]
+        },
+        {
+          "fact": "rlq_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "appendicitis-medscape"
+          ]
+        },
+        {
+          "fact": "nausea",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "appendicitis-medscape"
+          ]
+        },
+        {
+          "fact": "fever",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "appendicitis-medscape"
+          ]
+        },
+        {
+          "fact": "diarrhea",
+          "status": "present",
+          "direction": "oppose",
+          "weight": 1,
+          "source_ids": [
+            "appendicitis-medscape"
+          ]
+        }
       ]
     },
     {
@@ -180,12 +454,53 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "ruq_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cholecystitis-medscape"]},
-        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cholecystitis-medscape"]},
-        {"fact": "vomiting", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cholecystitis-medscape"]},
-        {"fact": "fever", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cholecystitis-medscape"]},
-        {"fact": "gallstones_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cholecystitis-medscape"]}
+        {
+          "fact": "ruq_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "cholecystitis-medscape"
+          ]
+        },
+        {
+          "fact": "nausea",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "cholecystitis-medscape"
+          ]
+        },
+        {
+          "fact": "vomiting",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "cholecystitis-medscape"
+          ]
+        },
+        {
+          "fact": "fever",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "cholecystitis-medscape"
+          ]
+        },
+        {
+          "fact": "gallstones_history",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "cholecystitis-medscape"
+          ]
+        }
       ]
     },
     {
@@ -196,12 +511,53 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "abdominal_pain_to_back", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pancreatitis-medscape"]},
-        {"fact": "constant_abdominal_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pancreatitis-medscape"]},
-        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pancreatitis-medscape"]},
-        {"fact": "vomiting", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pancreatitis-medscape"]},
-        {"fact": "pancreatitis_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pancreatitis-medscape"]}
+        {
+          "fact": "abdominal_pain_to_back",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pancreatitis-medscape"
+          ]
+        },
+        {
+          "fact": "constant_abdominal_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pancreatitis-medscape"
+          ]
+        },
+        {
+          "fact": "nausea",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pancreatitis-medscape"
+          ]
+        },
+        {
+          "fact": "vomiting",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pancreatitis-medscape"
+          ]
+        },
+        {
+          "fact": "pancreatitis_history",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pancreatitis-medscape"
+          ]
+        }
       ]
     },
     {
@@ -212,13 +568,62 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "diarrhea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["gastroenteritis-medscape"]},
-        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["gastroenteritis-medscape"]},
-        {"fact": "vomiting", "status": "present", "direction": "support", "weight": 1, "source_ids": ["gastroenteritis-medscape"]},
-        {"fact": "fever", "status": "present", "direction": "support", "weight": 1, "source_ids": ["gastroenteritis-medscape"]},
-        {"fact": "sick_contacts", "status": "present", "direction": "support", "weight": 1, "source_ids": ["gastroenteritis-medscape"]},
-        {"fact": "bloody_stool", "status": "present", "direction": "oppose", "weight": 1, "source_ids": ["gastroenteritis-medscape"]}
+        {
+          "fact": "diarrhea",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "gastroenteritis-medscape"
+          ]
+        },
+        {
+          "fact": "nausea",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "gastroenteritis-medscape"
+          ]
+        },
+        {
+          "fact": "vomiting",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "gastroenteritis-medscape"
+          ]
+        },
+        {
+          "fact": "fever",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "gastroenteritis-medscape"
+          ]
+        },
+        {
+          "fact": "sick_contacts",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "gastroenteritis-medscape"
+          ]
+        },
+        {
+          "fact": "bloody_stool",
+          "status": "present",
+          "direction": "oppose",
+          "weight": 1,
+          "source_ids": [
+            "gastroenteritis-medscape"
+          ]
+        }
       ]
     },
     {
@@ -229,12 +634,53 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "colicky_abdominal_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["bowel-obstruction-medscape"]},
-        {"fact": "vomiting", "status": "present", "direction": "support", "weight": 1, "source_ids": ["bowel-obstruction-medscape"]},
-        {"fact": "constipation", "status": "present", "direction": "support", "weight": 1, "source_ids": ["bowel-obstruction-medscape"]},
-        {"fact": "bowel_obstruction_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["bowel-obstruction-medscape"]},
-        {"fact": "prior_abdominal_surgery", "status": "present", "direction": "support", "weight": 1, "source_ids": ["bowel-obstruction-medscape"]}
+        {
+          "fact": "colicky_abdominal_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "bowel-obstruction-medscape"
+          ]
+        },
+        {
+          "fact": "vomiting",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "bowel-obstruction-medscape"
+          ]
+        },
+        {
+          "fact": "constipation",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "bowel-obstruction-medscape"
+          ]
+        },
+        {
+          "fact": "bowel_obstruction_history",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "bowel-obstruction-medscape"
+          ]
+        },
+        {
+          "fact": "prior_abdominal_surgery",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "bowel-obstruction-medscape"
+          ]
+        }
       ]
     },
     {
@@ -245,11 +691,44 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "llq_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["diverticulitis-medscape"]},
-        {"fact": "fever", "status": "present", "direction": "support", "weight": 1, "source_ids": ["diverticulitis-medscape"]},
-        {"fact": "constant_abdominal_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["diverticulitis-medscape"]},
-        {"fact": "constipation", "status": "present", "direction": "support", "weight": 1, "source_ids": ["diverticulitis-medscape"]}
+        {
+          "fact": "llq_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "diverticulitis-medscape"
+          ]
+        },
+        {
+          "fact": "fever",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "diverticulitis-medscape"
+          ]
+        },
+        {
+          "fact": "constant_abdominal_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "diverticulitis-medscape"
+          ]
+        },
+        {
+          "fact": "constipation",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "diverticulitis-medscape"
+          ]
+        }
       ]
     },
     {
@@ -260,11 +739,44 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "flank_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
-        {"fact": "colicky_abdominal_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
-        {"fact": "hematuria", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]},
-        {"fact": "kidney_stones_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["abdominal-emergency-medscape"]}
+        {
+          "fact": "flank_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "colicky_abdominal_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "hematuria",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        },
+        {
+          "fact": "kidney_stones_history",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "abdominal-emergency-medscape"
+          ]
+        }
       ]
     },
     {
@@ -275,11 +787,44 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "fasting_worse", "status": "present", "direction": "support", "weight": 1, "source_ids": ["peptic-ulcer-medscape"]},
-        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["peptic-ulcer-medscape"]},
-        {"fact": "acid_regurgitation", "status": "present", "direction": "support", "weight": 1, "source_ids": ["peptic-ulcer-medscape"]},
-        {"fact": "bloody_stool", "status": "present", "direction": "support", "weight": 1, "source_ids": ["peptic-ulcer-medscape"]}
+        {
+          "fact": "fasting_worse",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "peptic-ulcer-medscape"
+          ]
+        },
+        {
+          "fact": "nausea",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "peptic-ulcer-medscape"
+          ]
+        },
+        {
+          "fact": "acid_regurgitation",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "peptic-ulcer-medscape"
+          ]
+        },
+        {
+          "fact": "bloody_stool",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "peptic-ulcer-medscape"
+          ]
+        }
       ]
     }
   ]

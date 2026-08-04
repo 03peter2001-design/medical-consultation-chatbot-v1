@@ -14,8 +14,23 @@ from amie.disease_profiles import (
     score_diseases,
 )
 from app import runtime
+from app.contracts import (
+    ConsultationDeletedResponse,
+    ConsultationListResponse,
+    DoctorChatResponse,
+    LoadPatientResponse,
+    RuleAssistantResponse,
+    RuleAuthorizationResponse,
+    RuleCenterResponse,
+    SessionClearedResponse,
+    SnomedSearchResponse,
+    StatusResponse,
+    error_responses,
+)
 from app.models import (
+    DiseaseProfileUpdateRequest,
     DoctorChatRequest,
+    FactLabelUpdateRequest,
     LoadPatientRequest,
     SafetyRuleAssistantRequest,
     SafetyRuleUpdateRequest,
@@ -37,6 +52,8 @@ from app.services.rule_management import (
     authorize_rule_editor,
     rule_center_payload,
     suggest_safety_rule_edits,
+    update_disease_profile,
+    update_fact_labels,
     update_safety_rules,
 )
 from app.services.snomed_search import search_snomed
@@ -52,12 +69,21 @@ from domain.terminology_reference import (
 router = APIRouter(prefix="/doctor", tags=["doctor"])
 
 
-@router.get("/rules")
+@router.get(
+    "/rules",
+    response_model=RuleCenterResponse,
+    summary="Read the governed Safety, fact, and disease rule center",
+)
 def get_rule_center():
     return rule_center_payload()
 
 
-@router.get("/terminology/snomed")
+@router.get(
+    "/terminology/snomed",
+    response_model=SnomedSearchResponse,
+    responses=error_responses(422, 503),
+    summary="Search the configured SNOMED CT terminology index",
+)
 def get_snomed_search(
     query: str = Query(min_length=2, max_length=120),
     limit: int = Query(default=20, ge=1, le=50),
@@ -79,7 +105,12 @@ def _rule_permission_error(error: PermissionError) -> HTTPException:
     return HTTPException(status_code=status, detail=str(error))
 
 
-@router.post("/rules/authorize")
+@router.post(
+    "/rules/authorize",
+    response_model=RuleAuthorizationResponse,
+    responses=error_responses(403, 503),
+    summary="Verify a rule administrator token",
+)
 def post_rule_authorization(
     x_rule_admin_token: str = Header(default=""),
 ):
@@ -89,7 +120,12 @@ def post_rule_authorization(
         raise _rule_permission_error(error) from error
 
 
-@router.post("/rules/assistant")
+@router.post(
+    "/rules/assistant",
+    response_model=RuleAssistantResponse,
+    responses=error_responses(403, 422, 503),
+    summary="Generate a validated, unsaved Safety rule draft",
+)
 def post_rule_assistant(
     request: SafetyRuleAssistantRequest,
     x_rule_admin_token: str = Header(default=""),
@@ -100,8 +136,8 @@ def post_rule_assistant(
             llm_client=runtime.llm_client,
             message=request.message,
             selected_labels=request.selected_labels,
-            groups=request.safety_groups,
-            history=request.history,
+            groups=[group.model_dump(exclude_none=True) for group in request.safety_groups],
+            history=[item.model_dump() for item in request.history],
         )
     except PermissionError as error:
         raise _rule_permission_error(error) from error
@@ -114,7 +150,12 @@ def post_rule_assistant(
         ) from error
 
 
-@router.put("/rules/safety")
+@router.put(
+    "/rules/safety",
+    response_model=RuleCenterResponse,
+    responses=error_responses(403, 409, 422, 503),
+    summary="Publish clinician-reviewed Safety rule changes",
+)
 def put_safety_rules(
     request: SafetyRuleUpdateRequest,
     x_rule_admin_token: str = Header(default=""),
@@ -126,7 +167,64 @@ def put_safety_rules(
             confirmation=request.confirmation,
             change_note=request.change_note,
             actor_session_id=request.session_id,
-            groups=request.safety_groups,
+            groups=[group.model_dump(exclude_none=True) for group in request.safety_groups],
+        )
+    except PermissionError as error:
+        raise _rule_permission_error(error) from error
+    except RuntimeError as error:
+        raise HTTPException(status_code=409, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+
+
+@router.put(
+    "/rules/fact-labels",
+    response_model=RuleCenterResponse,
+    responses=error_responses(403, 409, 422, 503),
+    summary="Publish clinician-reviewed ClinicalFact label changes",
+)
+def put_fact_labels(
+    request: FactLabelUpdateRequest,
+    x_rule_admin_token: str = Header(default=""),
+):
+    try:
+        return update_fact_labels(
+            admin_token=x_rule_admin_token,
+            expected_revision=request.expected_revision,
+            confirmation=request.confirmation,
+            change_note=request.change_note,
+            actor_session_id=request.session_id,
+            labels=[item.model_dump() for item in request.fact_labels],
+        )
+    except PermissionError as error:
+        raise _rule_permission_error(error) from error
+    except RuntimeError as error:
+        raise HTTPException(status_code=409, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+
+
+@router.put(
+    "/rules/disease-profiles/{route}",
+    response_model=RuleCenterResponse,
+    responses=error_responses(403, 409, 422, 503),
+    summary="Publish clinician-reviewed disease profile changes",
+)
+def put_disease_profile(
+    route: str,
+    request: DiseaseProfileUpdateRequest,
+    x_rule_admin_token: str = Header(default=""),
+):
+    try:
+        return update_disease_profile(
+            route=route,
+            admin_token=x_rule_admin_token,
+            expected_revision=request.expected_revision,
+            confirmation=request.confirmation,
+            change_note=request.change_note,
+            reviewer=request.reviewer,
+            actor_session_id=request.session_id,
+            profiles=[profile.model_dump() for profile in request.profiles],
         )
     except PermissionError as error:
         raise _rule_permission_error(error) from error
@@ -147,7 +245,12 @@ def _cleanup_sessions() -> None:
         del runtime.doctor_sessions[session_id]
 
 
-@router.get("/consultations")
+@router.get(
+    "/consultations",
+    response_model=ConsultationListResponse,
+    responses=error_responses(422),
+    summary="List searchable consultation summaries",
+)
 def list_consultations(
     search: str = Query(default="", max_length=100),
     limit: int = Query(default=30, ge=1, le=100),
@@ -160,7 +263,12 @@ def list_consultations(
     )
 
 
-@router.delete("/consultations/{queue_number}")
+@router.delete(
+    "/consultations/{queue_number}",
+    response_model=ConsultationDeletedResponse,
+    responses=error_responses(400, 404, 422),
+    summary="Permanently delete a consultation",
+)
 def delete_consultation(queue_number: str):
     normalized = queue_number.strip()[:16]
     if not normalized:
@@ -176,7 +284,12 @@ def delete_consultation(queue_number: str):
     return {"status": "deleted", "queue_number": normalized}
 
 
-@router.post("/load_patient")
+@router.post(
+    "/load_patient",
+    response_model=LoadPatientResponse,
+    responses=error_responses(404, 422),
+    summary="Load a consultation into a physician session",
+)
 def load_patient(request: LoadPatientRequest):
     record = runtime.consultation_repository.get(request.queue_number)
     if not record:
@@ -266,7 +379,12 @@ def load_patient(request: LoadPatientRequest):
     }
 
 
-@router.delete("/patient/{session_id}")
+@router.delete(
+    "/patient/{session_id}",
+    response_model=StatusResponse,
+    responses=error_responses(422),
+    summary="Unload the patient from a physician session",
+)
 def unload_patient(session_id: str):
     if session_id in runtime.doctor_sessions:
         runtime.doctor_sessions[session_id]["patient"] = None
@@ -274,7 +392,12 @@ def unload_patient(session_id: str):
     return {"status": "ok"}
 
 
-@router.post("/chat")
+@router.post(
+    "/chat",
+    response_model=DoctorChatResponse,
+    responses=error_responses(400, 422, 500, 503),
+    summary="Ask the physician RAG assistant about the loaded patient",
+)
 async def doctor_chat(request: DoctorChatRequest):
     _cleanup_sessions()
     if not request.message:
@@ -402,7 +525,12 @@ async def doctor_chat(request: DoctorChatRequest):
     }
 
 
-@router.delete("/session/{session_id}")
+@router.delete(
+    "/session/{session_id}",
+    response_model=SessionClearedResponse,
+    responses=error_responses(422),
+    summary="Clear a physician conversation session",
+)
 def doctor_reset(session_id: str):
     runtime.doctor_sessions.pop(session_id, None)
     return {"status": "ok", "cleared": session_id}

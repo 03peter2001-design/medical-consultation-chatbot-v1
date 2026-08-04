@@ -654,6 +654,10 @@ class ChiefComplaintExtractor:
             semantic["severity_definitions"],
             ensure_ascii=False,
         )
+        onset_guidance = json.dumps(
+            semantic["onset_definitions"],
+            ensure_ascii=False,
+        )
         course_guidance = json.dumps(
             semantic["course_definitions"],
             ensure_ascii=False,
@@ -724,6 +728,9 @@ class ChiefComplaintExtractor:
 
 語意正規化原則：
 {normalization_guidance}
+
+onset定義：
+{onset_guidance}
 
 severity定義：
 {severity_guidance}

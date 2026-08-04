@@ -12,6 +12,18 @@
 Python 僅負責載入、驗證及執行規則。修改 JSON 後需重啟後端，規則才會
 重新載入。
 
+規則中心的 ClinicalFact 標籤治理會校訂 `semantic_extraction` 內的 onset、
+severity、course、duration、symptom 與 finding 說明，並以
+`safety_fact_codes` 保存醫師勾選的直接 Safety 標籤。直接 Safety fact 以
+`present` 命中時會立即結束一般問診；`structured_rules` 與原文規則仍負責需要
+多個條件才成立的 Safety。每次發布必須完整保留所有 ClinicalFact code；code、
+對應疾病、方向及票數不在此流程變更。
+
+規則的 `code` 是穩定識別碼。不能漏診疾病會在
+`amie/disease_data/*.json` 以 `safety_rule_codes` 綁定這些觸發器。
+命中時系統直接用 profile id 附上相關危險疾病；
+`urgent_condition_candidates` 仍保留為未收錄於三張疾病表的額外鑑別方向與向後相容輸出。
+
 `raw_rules` 不應窮舉所有口語、同義詞或錯字；它只保留在模型不可用時仍
 必須直接辨識的明確表達。一般自然語言由 `semantic_extraction` 正規化，
 再交由 `structured_rules` 判斷。若語意抽取失敗，系統會轉交醫療人員，

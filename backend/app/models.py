@@ -1,4 +1,6 @@
-"""Pydantic request models used by the HTTP API."""
+"""Pydantic request models used by the HTTP API contract."""
+
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field, validator
 
@@ -119,7 +121,7 @@ class SafetyRuleUpdateRequest(BaseModel):
     expected_revision: str
     confirmation: str
     change_note: str
-    safety_groups: list[dict]
+    safety_groups: list["SafetyRuleGroup"]
 
     @validator("session_id")
     def rule_session_id_not_empty(cls, value):
@@ -142,11 +144,68 @@ class SafetyRuleUpdateRequest(BaseModel):
         return value.strip()[:500]
 
 
+class FactLabelUpdateRequest(BaseModel):
+    session_id: str
+    expected_revision: str
+    confirmation: str
+    change_note: str
+    fact_labels: list["FactLabelUpdate"]
+
+    @validator("session_id")
+    def fact_session_id_not_empty(cls, value):
+        normalized = value.strip()
+        if not normalized:
+            raise ValueError("session_id 不可為空")
+        return normalized[:64]
+
+    @validator("expected_revision")
+    def fact_revision_format(cls, value):
+        normalized = value.strip().lower()
+        if len(normalized) != 64 or any(
+            character not in "0123456789abcdef" for character in normalized
+        ):
+            raise ValueError("expected_revision 格式不正確")
+        return normalized
+
+    @validator("confirmation", "change_note")
+    def trim_fact_update_text(cls, value):
+        return value.strip()[:500]
+
+
+class DiseaseProfileUpdateRequest(BaseModel):
+    session_id: str
+    expected_revision: str
+    confirmation: str
+    change_note: str
+    reviewer: str
+    profiles: list["DiseaseProfileUpdate"]
+
+    @validator("session_id")
+    def profile_session_id_not_empty(cls, value):
+        normalized = value.strip()
+        if not normalized:
+            raise ValueError("session_id 不可為空")
+        return normalized[:64]
+
+    @validator("expected_revision")
+    def profile_revision_format(cls, value):
+        normalized = value.strip().lower()
+        if len(normalized) != 64 or any(
+            character not in "0123456789abcdef" for character in normalized
+        ):
+            raise ValueError("expected_revision 格式不正確")
+        return normalized
+
+    @validator("confirmation", "change_note", "reviewer")
+    def trim_profile_update_text(cls, value):
+        return value.strip()[:500]
+
+
 class SafetyRuleAssistantRequest(BaseModel):
     message: str
     selected_labels: list[str]
-    safety_groups: list[dict]
-    history: list[dict] = Field(default_factory=list)
+    safety_groups: list["SafetyRuleGroup"]
+    history: list["AssistantHistoryItem"] = Field(default_factory=list)
 
     @validator("message")
     def assistant_message_length(cls, value):
@@ -161,3 +220,57 @@ class SafetyRuleAssistantRequest(BaseModel):
         if not 1 <= len(normalized) <= 5:
             raise ValueError("每次請勾選 1 至 5 個 Safety 標籤")
         return normalized
+
+
+class AssistantHistoryItem(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str = Field(min_length=1, max_length=1000)
+
+
+class SafetyRuleItem(BaseModel):
+    """Editable Safety rule shape shared by rule reads and writes."""
+
+    code: str
+    kind: Literal["phrase", "combination", "structured"]
+    scope: Literal["universal", "route", "combination", "structured"]
+    route: str = ""
+    level: str = "urgent"
+    terms: list[str] | None = None
+    all_term_groups: list[dict[str, list[str]]] | None = None
+    when: dict[str, Any] | None = None
+
+
+class SafetyRuleGroup(BaseModel):
+    original_label: str
+    label: str
+    possible_conditions: list[str]
+    rules: list[SafetyRuleItem]
+    categories: list[str] = Field(default_factory=list)
+    applicable_routes: list[str] = Field(default_factory=list)
+
+
+class FactLabelUpdate(BaseModel):
+    code: str
+    description: str = Field(min_length=1, max_length=300)
+    is_safety: bool
+
+
+class DiseaseClueUpdate(BaseModel):
+    fact: str
+    status: Literal["present", "absent"]
+    direction: Literal["support", "oppose"]
+    weight: int = Field(ge=1)
+
+
+class DiseaseProfileUpdate(BaseModel):
+    id: str
+    clues: list[DiseaseClueUpdate]
+    safety_rule_codes: list[str]
+
+
+# Resolve the forward references while keeping the public request classes near
+# the top of this module, where existing imports expect to find them.
+SafetyRuleUpdateRequest.model_rebuild()
+FactLabelUpdateRequest.model_rebuild()
+DiseaseProfileUpdateRequest.model_rebuild()
+SafetyRuleAssistantRequest.model_rebuild()

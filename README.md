@@ -10,7 +10,7 @@ AI 輔助預問診系統。使用者（病患端）用文字或語音回答一�
 - **JSON 規則驅動**：fact 白名單、scalar／舊病例映射及必要不能漏診疾病均位於 `backend/amie/rules/safety_rules.json`；必要欄位、選題策略、安全題順序、完整度門檻與輪數上限位於各路由的 `backend/questionnaire_data/*.json`。Python 只驗證設定並執行固定公式
 - 使用身分證字號從 FHIR 載入病歷時，姓名、性別、出生日期與血型等既有基本資料不會重問；一般病史同樣只補問 FHIR 尚未提供的欄位。身分證字號本身不會送入 `/chat`、RAG 或外部模型
 - FHIR `$everything` 中的 `Condition`、`Procedure`、`MedicationStatement`、`MedicationRequest`、`AllergyIntolerance` 與 `QuestionnaireResponse` 會映射到一般病史、心肺／神經／腹部疾病史、手術史、用藥與過敏欄位；本次就診的 `encounter-diagnosis` 不會誤當成既往病史
-- **醫師端**（Vue 路由 `/#/doctor`）：左側病例資料庫可瀏覽、分頁及依姓名／問診編號／主訴搜尋，點選後同步查看疼痛位置與 AI 報告，並可經二次確認永久刪除病例
+- **醫師端**（Vue 路由 `/#/doctor`）：左側病例資料庫可瀏覽、分頁及依姓名／問診編號／主訴搜尋；點選後可查看疼痛位置與約 300 字的醫師速覽摘要。Gemini 負責壓縮既有病史，可能疾病與理由只取自固定疾病表及病人原始支持線索，不讓模型自行新增疾病；病例亦可經二次確認永久刪除
 - **問診結果資料庫**：routine 與 urgent 都會先將結構化問卷、ClinicalFact、評分快照及分流結果寫入 SQLite、立即核發五位數或三位數編號；HTTP 回應送出後才在背景執行摘要及六段式臨床分析。摘要失敗不會讓病人失去編號，醫師端可辨識 `summary_pending`／`summary_partial`／`summary_failed`
 - **測試期 AMIE 稽核軌跡**：每輪保存題目、病人回答、ClinicalFact、Safety 結果、投票快照、下一題、選題區辨分與簡短稽核理由，並標記為 `deterministic_disease_vote`。這是可供稽核的決策摘要，不是模型隱藏思維鏈
 - **RAG（檢索增強生成）**：清理 `backend/docs/` 中急診醫學、感染科與檢驗醫學語料並建立 versioned Chroma collections。RAG 只供一次性疾病表建置、背景理學檢查／檢驗／影像建議，以及醫師主動聊天使用；不得參與病患疾病候選或票數計算
@@ -281,6 +281,31 @@ uvicorn main:app --reload
 
 後端預設會跑在 `http://127.0.0.1:8000`。看到終端機顯示 `[RAG] 向量庫已載入，RAG 功能啟用` 代表 RAG 有正確載入。
 
+#### API 協議與自動文件
+
+正式 API 使用 `/v1` 前綴。FastAPI 會從 Pydantic request／response model
+自動產生同一份 OpenAPI 協議：
+
+- Swagger UI：`http://127.0.0.1:8000/docs`
+- ReDoc：`http://127.0.0.1:8000/redoc`
+- 即時規格：`http://127.0.0.1:8000/openapi.json`
+- 版本控制規格：`docs/openapi.json`
+
+修改 API model 或路由後，重新產生並檢查規格及前端型別：
+
+```bash
+cd backend
+python -m scripts.export_openapi
+python -m scripts.export_openapi --check
+
+cd ../frontend
+npm run api:types
+npm run api:check
+```
+
+前端產物位於 `frontend/src/generated/api.d.ts`，請勿手動編輯。既有未加
+版本的路徑暫時保留為不列入 OpenAPI 的相容別名；新程式一律使用 `/v1`。
+
 ### 6. 啟動 Vue 前端
 
 另開一個終端機，在專案根目錄執行：
@@ -471,7 +496,7 @@ Hugging Face model cache 預設重用 `~/.cache/huggingface/hub`；可在啟動�
 ./scripts/bootstrap.sh --with-rag
 ```
 
-`start-smart.sh` 會檢查索引與 `/api/health` 的 `rag_enabled`，未完整載入
+`start-smart.sh` 會檢查索引與 `/api/v1/health` 的 `rag_enabled`，未完整載入
 作用中的 collections 時會停止並顯示原因。啟動成功後，醫師端 RAG 文獻聊天、
 背景理學檢查／檢驗／影像建議及六段式分析都會使用本機向量索引；RAG 仍不參與
 病患端疾病票數與 Safety 決策。
@@ -555,6 +580,30 @@ pre-commit run --all-files
 都必須先通過完整 JSON 驗證並由醫師檢視。正式儲存仍需變更理由、指定確認
 文字和相同管理權杖。後端會檢查版本衝突、先保存前一版稽核快照，再以原子
 方式更新。稽核快照位於 `backend/data/safety_rule_audit/`。
+
+疾病規則由同一個疾病中心治理。醫師先選擇胸痛、頭痛或腹痛疾病表及特定疾病，
+再從 Safety、胸痛、頭痛、腹痛與共通分類中搜尋 ClinicalFact 標籤。既有疾病可
+新增或移除白名單標籤、設定「存在／不存在」、支持／反對方向，並將整數權重
+調整為 1 至 10；疾病本身仍不可新增或刪除。新標籤會沿用該疾病既有的來源集合，
+並由發布醫師對臨床依據負責。
+
+同一疾病頁面另有「Safety 緊急觸發」頁籤。每個 `must_not_miss`
+疾病必須至少綁定一組穩定的 `safety_rule_codes`；該綁定儲存在疾病
+profile，因此不會因顯示名稱變更而斷鏈。Safety 引擎仍在每輪投票前執行；
+只有明確綁定的緊急觸發器會標記 `urgent`，普通支持票不會自動升級分流。
+折疊的進階設定使用單一 ClinicalFact 標籤清單。醫師可搜尋並校訂完整白名單的
+標準說明，也可勾選「設為 Safety 標籤」；未勾選的標籤只參與疾病投票，勾選後
+只要該 fact 以 `present` 命中，就會直接標記 `urgent`、停止一般問診。穩定 code
+不可更名或刪除，疾病綁定與票數仍由上方疾病治理負責。標籤設定使用獨立的
+`PUT /doctor/rules/fact-labels` 發布流程；既有需要多條件、特定原文或 FHIR 風險
+才成立的規則則收在同頁的「組合與原文 Safety 規則」。兩者皆使用版本衝突檢查、
+指定確認文字與 Safety 稽核目錄。
+
+發布疾病票數前必須填寫審查醫師姓名、變更理由，並輸入指定確認文字。後端會
+驗證完整疾病與線索集合、檢查版本衝突、將受影響疾病標記為 `reviewed`、產生新
+`profile_version`，再保存前一版及逐項標籤增刪、方向與權重差異後原子更新。疾病表稽核快照位於
+`backend/data/disease_profile_audit/`。稽核內容同時包含標籤增刪、票數變更與
+Safety rule code 綁定差異。
 
 目前的權杖是原型環境保護措施；正式部署仍應由具備醫師身分驗證、角色授權
 與集中式稽核的後端管理服務接管。

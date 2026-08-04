@@ -102,12 +102,13 @@ function pushMessage(role, text, sources = []) {
   })
 }
 
-function pushStructured(text, sources = []) {
+function pushStructured(text, sources = [], hideEmr = false) {
   items.value.push({
     id: nextId(),
     kind: 'structured',
     text,
     sources,
+    hideEmr,
   })
 }
 
@@ -222,7 +223,7 @@ async function loadPatient(queueNumberOverride = '') {
     ]
 
     if (record.structured_note) {
-      pushStructured(record.structured_note, record.structured_sources)
+      pushStructured(record.structured_note, record.structured_sources, true)
     } else {
       items.value.push({
         id: nextId(),
@@ -491,6 +492,7 @@ onBeforeUnmount(() => {
             v-else-if="item.kind === 'structured'"
             :text="item.text"
             :sources="item.sources"
+            :hide-emr="item.hideEmr"
           />
           <div v-else-if="item.kind === 'unavailable'" class="unavailable">
             ⚠️ {{ item.text }}

@@ -2,8 +2,11 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 
 import {
+  apiVersionPrefix,
   consultationDetailPath,
   consultationListPath,
+  diseaseProfileUpdatePath,
+  factLabelUpdatePath,
   formatApiErrorDetail,
   resolveBackendUrl,
   ruleAssistantPath,
@@ -12,6 +15,10 @@ import {
   safetyRuleUpdatePath,
   snomedSearchPath,
 } from '../src/services/backend.js'
+
+test('uses the canonical versioned API prefix', () => {
+  assert.equal(apiVersionPrefix, '/v1')
+})
 
 test('uses the page hostname and default backend port', () => {
   assert.equal(
@@ -67,22 +74,27 @@ test('builds an encoded consultation list query', () => {
       limit: 20,
       offset: 40,
     }),
-    '/doctor/consultations?limit=20&offset=40&search=%E7%8E%8B%E5%B0%8F%E6%98%8E+%E8%83%B8%E7%97%9B',
+    '/v1/doctor/consultations?limit=20&offset=40&search=%E7%8E%8B%E5%B0%8F%E6%98%8E+%E8%83%B8%E7%97%9B',
   )
 })
 
 test('encodes a consultation identifier for delete requests', () => {
   assert.equal(
     consultationDetailPath('急診/001'),
-    '/doctor/consultations/%E6%80%A5%E8%A8%BA%2F001',
+    '/v1/doctor/consultations/%E6%80%A5%E8%A8%BA%2F001',
   )
 })
 
 test('uses dedicated doctor rule management endpoints', () => {
-  assert.equal(ruleCenterPath, '/doctor/rules')
-  assert.equal(ruleAuthorizationPath, '/doctor/rules/authorize')
-  assert.equal(ruleAssistantPath, '/doctor/rules/assistant')
-  assert.equal(safetyRuleUpdatePath, '/doctor/rules/safety')
+  assert.equal(ruleCenterPath, '/v1/doctor/rules')
+  assert.equal(ruleAuthorizationPath, '/v1/doctor/rules/authorize')
+  assert.equal(ruleAssistantPath, '/v1/doctor/rules/assistant')
+  assert.equal(safetyRuleUpdatePath, '/v1/doctor/rules/safety')
+  assert.equal(factLabelUpdatePath, '/v1/doctor/rules/fact-labels')
+  assert.equal(
+    diseaseProfileUpdatePath('chest/pilot'),
+    '/v1/doctor/rules/disease-profiles/chest%2Fpilot',
+  )
 })
 
 test('builds an encoded SNOMED CT search query', () => {
@@ -92,7 +104,7 @@ test('builds an encoded SNOMED CT search query', () => {
       limit: 25,
       offset: 50,
     }),
-    '/doctor/terminology/snomed?query=acute+coronary+syndrome&limit=25&offset=50',
+    '/v1/doctor/terminology/snomed?query=acute+coronary+syndrome&limit=25&offset=50',
   )
 })
 

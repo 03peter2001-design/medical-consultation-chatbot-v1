@@ -50,6 +50,11 @@ export function resolveBackendUrl(
 }
 
 export const backendUrl = resolveBackendUrl()
+export const apiVersionPrefix = '/v1'
+
+function apiPath(path) {
+  return `${apiVersionPrefix}${path}`
+}
 
 export function consultationListPath({
   search = '',
@@ -62,17 +67,26 @@ export function consultationListPath({
   })
   const normalizedSearch = search.trim()
   if (normalizedSearch) params.set('search', normalizedSearch)
-  return `/doctor/consultations?${params.toString()}`
+  return apiPath(`/doctor/consultations?${params.toString()}`)
 }
 
 export function consultationDetailPath(queueNumber) {
-  return `/doctor/consultations/${encodeURIComponent(queueNumber)}`
+  return apiPath(
+    `/doctor/consultations/${encodeURIComponent(queueNumber)}`,
+  )
 }
 
-export const ruleCenterPath = '/doctor/rules'
-export const ruleAuthorizationPath = '/doctor/rules/authorize'
-export const ruleAssistantPath = '/doctor/rules/assistant'
-export const safetyRuleUpdatePath = '/doctor/rules/safety'
+export const ruleCenterPath = apiPath('/doctor/rules')
+export const ruleAuthorizationPath = apiPath('/doctor/rules/authorize')
+export const ruleAssistantPath = apiPath('/doctor/rules/assistant')
+export const safetyRuleUpdatePath = apiPath('/doctor/rules/safety')
+export const factLabelUpdatePath = apiPath('/doctor/rules/fact-labels')
+
+export function diseaseProfileUpdatePath(route) {
+  return apiPath(
+    `/doctor/rules/disease-profiles/${encodeURIComponent(route)}`,
+  )
+}
 
 export function snomedSearchPath({
   query,
@@ -84,7 +98,7 @@ export function snomedSearchPath({
     limit: String(limit),
     offset: String(offset),
   })
-  return `/doctor/terminology/snomed?${params.toString()}`
+  return apiPath(`/doctor/terminology/snomed?${params.toString()}`)
 }
 
 async function request(path, options = {}) {
@@ -123,7 +137,7 @@ function jsonOptions(method, body) {
 }
 
 export const api = {
-  health: () => request('/health'),
+  health: () => request(apiPath('/health')),
   listConsultations: (options) =>
     request(consultationListPath(options)),
   deleteConsultation: (queueNumber) =>
@@ -137,7 +151,7 @@ export const api = {
     patientPrefill = null,
   ) =>
     request(
-      '/chat',
+      apiPath('/chat'),
       jsonOptions('POST', {
         message,
         session_id: sessionId,
@@ -148,23 +162,26 @@ export const api = {
   transcribe: (audioBlob) => {
     const formData = new FormData()
     formData.append('audio', audioBlob, 'audio.webm')
-    return request('/transcribe', { method: 'POST', body: formData })
+    return request(apiPath('/transcribe'), {
+      method: 'POST',
+      body: formData,
+    })
   },
   loadPatient: (queueNumber, sessionId) =>
     request(
-      '/doctor/load_patient',
+      apiPath('/doctor/load_patient'),
       jsonOptions('POST', {
         session_id: sessionId,
         queue_number: queueNumber,
       }),
     ),
   unloadPatient: (sessionId) =>
-    request(`/doctor/patient/${encodeURIComponent(sessionId)}`, {
+    request(apiPath(`/doctor/patient/${encodeURIComponent(sessionId)}`), {
       method: 'DELETE',
     }),
   doctorChat: (message, sessionId, mode) =>
     request(
-      '/doctor/chat',
+      apiPath('/doctor/chat'),
       jsonOptions('POST', {
         message,
         session_id: sessionId,
@@ -172,7 +189,7 @@ export const api = {
       }),
     ),
   clearDoctorSession: (sessionId) =>
-    request(`/doctor/session/${encodeURIComponent(sessionId)}`, {
+    request(apiPath(`/doctor/session/${encodeURIComponent(sessionId)}`), {
       method: 'DELETE',
     }),
   searchSnomed: (options) => request(snomedSearchPath(options)),
@@ -192,6 +209,22 @@ export const api = {
     }),
   updateSafetyRules: (payload, adminToken) =>
     request(safetyRuleUpdatePath, {
+      ...jsonOptions('PUT', payload),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Rule-Admin-Token': adminToken,
+      },
+    }),
+  updateFactLabels: (payload, adminToken) =>
+    request(factLabelUpdatePath, {
+      ...jsonOptions('PUT', payload),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Rule-Admin-Token': adminToken,
+      },
+    }),
+  updateDiseaseProfile: (route, payload, adminToken) =>
+    request(diseaseProfileUpdatePath(route), {
       ...jsonOptions('PUT', payload),
       headers: {
         'Content-Type': 'application/json',

@@ -613,6 +613,7 @@
     "prior_abdominal_surgery",
     "peritoneal_irritation"
   ],
+  "safety_fact_codes": [],
   "semantic_extraction": {
     "normalization_instructions": [
       "依整句上下文判斷概念，可處理常見錯字、同音字、中英混用與口語表達。",
@@ -621,6 +622,11 @@
       "不要將未指明部位的疼痛，直接推定為胸痛、頭痛或腹痛。",
       "不要把語意不明的 dizzy 或頭暈直接當成 vertigo；未描述旋轉感時使用 dizziness_unspecified。"
     ],
+    "onset_definitions": {
+      "sudden": "症狀突然開始或急性發作。",
+      "gradual": "症狀逐漸開始或慢慢加重。",
+      "unknown": "原文不足以可靠判斷症狀開始方式。"
+    },
     "severity_definitions": {
       "mild": "患者明確描述症狀輕微，對活動影響很小。",
       "moderate": "患者明確描述症狀介於輕微與難以忍受之間，已造成一定影響。",

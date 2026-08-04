@@ -7,13 +7,22 @@ import traceback
 from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from app import runtime
+from app.contracts import (
+    HealthResponse,
+    TranscriptionResponse,
+    error_responses,
+)
 
-router = APIRouter()
+router = APIRouter(tags=["system"])
 
 WHISPER_PROMPT = "繁體中文醫療問診。請忠實轉錄病人的原話，不要改寫、推測或正規化病人的用詞。"
 
 
-@router.get("/health")
+@router.get(
+    "/health",
+    response_model=HealthResponse,
+    summary="Read service health and dependency status",
+)
 def health():
     current_rag_status = runtime.get_rag_status() if runtime.get_rag_status else runtime.RAG_STATUS
     return {
@@ -41,7 +50,12 @@ def health():
     }
 
 
-@router.post("/transcribe")
+@router.post(
+    "/transcribe",
+    response_model=TranscriptionResponse,
+    responses=error_responses(400, 413, 422, 500),
+    summary="Transcribe a Traditional Chinese medical audio recording",
+)
 async def transcribe(audio: UploadFile = File(...)):
     if not audio.content_type or "audio" not in audio.content_type:
         raise HTTPException(status_code=400, detail="請上傳音訊檔案")

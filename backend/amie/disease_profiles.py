@@ -19,7 +19,7 @@ from .rule_config import (
 PROFILE_DATA_DIR = Path(__file__).resolve().parent / "disease_data"
 PROFILE_PATH = PROFILE_DATA_DIR / "chest.json"
 SNOMED_CODING_PATH = PROFILE_DATA_DIR / "snomed_codings.json"
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 METHOD = "unit_vote_v1"
 
 
@@ -40,6 +40,28 @@ def _validated_snomed_coding(coding: Any, path: str) -> dict[str, Any]:
     ):
         raise ValueError(f"{path} 未驗證")
     return coding
+
+
+def configured_safety_rule_routes() -> dict[str, set[str]]:
+    """Return the consultation routes on which each Safety rule can execute."""
+    rules = load_safety_rules()
+    raw = rules["raw_rules"]
+    supported = set(rules["supported_routes"])
+    result = {rule["code"]: set(supported) for rule in raw["universal"]}
+    for route, route_rules in raw["routes"].items():
+        for rule in route_rules:
+            result[rule["code"]] = {route}
+    for rule in raw["combinations"]:
+        result[rule["code"]] = {rule["route"]}
+    for rule in rules["structured_rules"]:
+        primary_routes = set(rule["when"].get("primary_in", [])) & supported
+        result[rule["code"]] = primary_routes or set(supported)
+    return result
+
+
+def configured_safety_rule_codes() -> set[str]:
+    """Return stable rule codes that may be linked to disease profiles."""
+    return set(configured_safety_rule_routes())
 
 
 @lru_cache(maxsize=1)
@@ -100,7 +122,7 @@ def _attach_verified_snomed_codings(document: dict[str, Any]) -> dict[str, Any]:
 def validate_profile_document(document: Any) -> dict[str, Any]:
     """Reject unsafe or non-reproducible disease-table artifacts."""
     if not isinstance(document, dict) or document.get("schema_version") != SCHEMA_VERSION:
-        raise ValueError("疾病表 schema_version 必須是 1")
+        raise ValueError(f"疾病表 schema_version 必須是 {SCHEMA_VERSION}")
     if set(document) != {
         "schema_version",
         "profile_version",
@@ -164,6 +186,7 @@ def validate_profile_document(document: Any) -> dict[str, Any]:
             "review_status",
             "reviewer",
             "reviewed_at",
+            "safety_rule_codes",
             "clues",
         }:
             raise ValueError(f"{path} 欄位不符合 schema")
@@ -182,6 +205,27 @@ def validate_profile_document(document: Any) -> dict[str, Any]:
         if profile["review_status"] == "reviewed":
             _nonempty(profile.get("reviewer"), f"{path}.reviewer")
             _nonempty(profile.get("reviewed_at"), f"{path}.reviewed_at")
+        safety_rule_codes = profile.get("safety_rule_codes")
+        if (
+            not isinstance(safety_rule_codes, list)
+            or any(not isinstance(code, str) or not code.strip() for code in safety_rule_codes)
+            or len(safety_rule_codes) != len(set(safety_rule_codes))
+        ):
+            raise ValueError(f"{path}.safety_rule_codes 必須是不重複的字串陣列")
+        unknown_safety_codes = set(safety_rule_codes) - configured_safety_rule_codes()
+        if unknown_safety_codes:
+            raise ValueError(f"{path}.safety_rule_codes 含未知規則：{sorted(unknown_safety_codes)}")
+        wrong_route_codes = {
+            code for code in safety_rule_codes if route not in configured_safety_rule_routes()[code]
+        }
+        if wrong_route_codes:
+            raise ValueError(
+                f"{path}.safety_rule_codes 含不適用於 {route} 的規則：{sorted(wrong_route_codes)}"
+            )
+        if profile["must_not_miss"] and not safety_rule_codes:
+            raise ValueError(f"{path} 為不能漏診疾病，至少需要一條 Safety 觸發規則")
+        if not profile["must_not_miss"] and safety_rule_codes:
+            raise ValueError(f"{path} 非不能漏診疾病，不可綁定 Safety 觸發規則")
         coding = profile.get("coding")
         if coding is not None:
             coding_items = coding if isinstance(coding, list) else [coding]
@@ -296,6 +340,7 @@ def score_diseases(
                 "coding": profile.get("coding"),
                 "must_not_miss": bool(profile.get("must_not_miss")),
                 "review_status": profile["review_status"],
+                "safety_rule_codes": list(profile["safety_rule_codes"]),
                 "net_votes": support_votes - oppose_votes,
                 "support_votes": support_votes,
                 "oppose_votes": oppose_votes,
@@ -417,31 +462,48 @@ def attach_safety_conditions(
     except ValueError:
         pass
     profile_by_id = {profile["id"]: profile for profile in (deployed or {}).get("profiles", [])}
+    linked_profiles_by_rule: dict[str, list[str]] = {}
+    for profile in profile_by_id.values():
+        for rule_code in profile.get("safety_rule_codes", []):
+            linked_profiles_by_rule.setdefault(rule_code, []).append(profile["id"])
 
     conditions: dict[str, dict[str, Any]] = {}
     for flag in flags:
         label = str(flag.get("label") or "").strip()
         names = list(condition_candidates.get(label, []))
+        rule_code = str(flag.get("code") or "").strip()
         trigger = {
-            "rule_code": str(flag.get("code") or "").strip(),
+            "rule_code": rule_code,
             "rule_label": label,
             "evidence": str(flag.get("evidence") or "").strip(),
         }
+        for profile_id in linked_profiles_by_rule.get(rule_code, []):
+            profile = profile_by_id[profile_id]
+            entry = conditions.setdefault(
+                f"profile:{profile_id}",
+                {
+                    "name": profile["name"],
+                    "profile_id": profile_id,
+                    "coding": deepcopy(profile.get("coding")),
+                    "source": "safety_rule",
+                    "triggered_by": [],
+                },
+            )
+            if trigger not in entry["triggered_by"]:
+                entry["triggered_by"].append(trigger)
         for raw_name in names:
             name = str(raw_name).strip()
             if not name:
                 continue
             profile_id = profile_ids.get(name)
+            profile = profile_by_id.get(profile_id, {}) if profile_id else {}
+            key = f"profile:{profile_id}" if profile_id else f"name:{name}"
             entry = conditions.setdefault(
-                name,
+                key,
                 {
-                    "name": name,
+                    "name": str(profile.get("name") or name),
                     "profile_id": profile_id,
-                    "coding": (
-                        deepcopy(profile_by_id.get(profile_id, {}).get("coding"))
-                        if profile_id
-                        else None
-                    ),
+                    "coding": (deepcopy(profile.get("coding")) if profile_id else None),
                     "source": "safety_rule",
                     "triggered_by": [],
                 },

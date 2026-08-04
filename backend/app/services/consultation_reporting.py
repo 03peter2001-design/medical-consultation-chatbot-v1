@@ -62,6 +62,99 @@ def _validated_history_summary(record: dict, candidate: object) -> str:
     return summary
 
 
+def _single_paragraph(text: object) -> str:
+    """Collapse model formatting so the physician report stays scan-friendly."""
+    return re.sub(r"\s+", " ", str(text or "")).strip()
+
+
+def _truncate_summary_part(text: str, limit: int) -> str:
+    """Keep generated prose compact and prefer ending at a sentence boundary."""
+    if len(text) <= limit:
+        return text
+    window = text[: limit + 1]
+    boundary = max(window.rfind(mark) for mark in "。；！？")
+    if boundary >= limit // 2:
+        return window[: boundary + 1]
+    return f"{text[: limit - 1].rstrip('，、； ')}…"
+
+
+def _brief_evidence(value: object) -> str:
+    return _truncate_summary_part(_single_paragraph(value), 36)
+
+
+def _supported_condition_summaries(assessment: dict) -> list[tuple[str, list[str]]]:
+    """Return at most three fixed-table conditions with verbatim evidence."""
+    result: list[tuple[str, list[str]]] = []
+    seen: set[str] = set()
+
+    def already_seen(name: str) -> bool:
+        return any(name in existing or existing in name for existing in seen)
+
+    for item in assessment.get("safety_triggered_conditions", []):
+        name = str(item.get("name") or "").strip()
+        if not name or already_seen(name):
+            continue
+        evidence = list(
+            dict.fromkeys(
+                _brief_evidence(trigger.get("evidence") or trigger.get("rule_label") or "")
+                for trigger in item.get("triggered_by", [])
+                if _single_paragraph(trigger.get("evidence") or trigger.get("rule_label") or "")
+            )
+        )
+        result.append((name, evidence[:1]))
+        seen.add(name)
+        if len(result) == 3:
+            return result
+
+    for item in assessment.get("top", []):
+        name = str(item.get("name") or "").strip()
+        if (
+            not name
+            or already_seen(name)
+            or int(item.get("support_votes") or 0) <= 0
+            or int(item.get("net_votes") or 0) <= 0
+        ):
+            continue
+        evidence = list(
+            dict.fromkeys(
+                _brief_evidence(clue.get("evidence") or "")
+                for clue in item.get("supporting", [])
+                if _single_paragraph(clue.get("evidence") or "")
+            )
+        )
+        if not evidence:
+            continue
+        result.append((name, evidence[:1]))
+        seen.add(name)
+        if len(result) == 3:
+            break
+    return result
+
+
+def _render_physician_quick_summary(
+    record: dict,
+    candidate: object,
+    assessment: dict,
+) -> str:
+    """Combine Gemini's history prose with deterministic differential evidence."""
+    history = _truncate_summary_part(
+        _single_paragraph(_validated_history_summary(record, candidate)),
+        220,
+    )
+    conditions = _supported_condition_summaries(assessment)
+    if conditions:
+        rendered_conditions = "；".join(
+            f"{name}（依據：{'、'.join(evidence)}）" for name, evidence in conditions
+        )
+        differential = f"可能疾病包括{rendered_conditions}。"
+    else:
+        differential = "目前資料不足，尚無具支持線索的可能疾病可供排序。"
+    return (
+        f"{history.rstrip('。；，, ')}。{differential}"
+        "以上為固定疾病表的線索相容結果，並非正式診斷。"
+    )
+
+
 def _assessment_for_record(record: dict) -> dict:
     data = record.get("data") or {}
     assessment = dict(
@@ -362,19 +455,20 @@ def generate_ai_report(record: dict) -> str | None:
             {
                 "role": "system",
                 "content": (
-                    "你是醫療預問診病史整理助手。只能重述既有資料，"
-                    "不得提出疾病、鑑別診斷、檢查或治療建議。"
+                    "你是協助醫師快速掌握病況的醫療預問診病史整理助手。"
+                    "只能重述既有資料；疾病與理由由後端固定規則補入，"
+                    "你不得自行提出疾病、鑑別診斷、檢查或治療建議。"
                 ),
             },
             {"role": "user", "content": build_report_prompt(data)},
         ],
         temperature=0.3,
-        max_tokens=600,
+        max_tokens=500,
     )
-    normalized = _validated_history_summary(record, report)
+    assessment = _assessment_for_record(record)
+    normalized = _render_physician_quick_summary(record, report, assessment)
     if not normalized:
         return None
-    normalized = f"{normalized}\n\n{_render_vote_assessment(_assessment_for_record(record))}"
     if record.get("triage_level") != "urgent":
         return normalized
 
@@ -386,7 +480,7 @@ def generate_ai_report(record: dict) -> str | None:
         )[0]
         .strip()
     )
-    return (f"{safety_report}\n\n【AI 預問診摘要】\n{normalized}").strip()
+    return (f"{safety_report}\n\n【醫師速覽摘要】\n{normalized}").strip()
 
 
 def process_background_summaries(queue_number: str) -> None:

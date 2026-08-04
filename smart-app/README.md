@@ -43,7 +43,7 @@ The API image installs `backend/requirements-runtime.txt` plus the reviewed
 CPU-only RAG dependencies, and mounts the host `backend/chroma_db` and cached
 embedding model read-only. Run `./scripts/bootstrap.sh --with-rag` before the
 first SMART startup. `start-smart.sh` verifies the index, model cache, and
-backend `rag_enabled` health response before reporting the stack ready. RAG
+backend `/api/v1/health` `rag_enabled` response before reporting the stack ready. RAG
 supports clinician research features and background reporting; the
 deterministic patient interview does not use RAG for Safety or disease votes.
 

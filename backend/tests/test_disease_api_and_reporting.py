@@ -6,9 +6,12 @@ from app.models import LoadPatientRequest
 from app.routes.doctor import load_patient
 from app.routes.patient import _question_payload
 from app.services.consultation_reporting import (
+    _render_physician_quick_summary,
     _render_structured_note,
     _render_vote_assessment,
+    _supported_condition_summaries,
     _validated_workup_items,
+    generate_ai_report,
 )
 
 
@@ -353,9 +356,80 @@ class DiseaseReportRestrictionTests(unittest.TestCase):
         rendered = _render_vote_assessment(assessment)
 
         self.assertIn("Safety 規則觸發的鑑別方向", rendered)
-        self.assertIn("急性冠心症（含心肌梗塞）", rendered)
+        self.assertIn("急性冠心症", rendered)
         self.assertIn("冒冷汗", rendered)
         self.assertNotIn("沒有取得足夠的支持線索", rendered)
+
+    def test_quick_summary_uses_only_supported_fixed_table_conditions(self):
+        conditions = _supported_condition_summaries(self.assessment)
+
+        self.assertTrue(conditions)
+        self.assertLessEqual(len(conditions), 3)
+        self.assertTrue(all(evidence for _, evidence in conditions))
+        self.assertNotIn(
+            "肋軟骨炎或胸壁疼痛",
+            [name for name, _ in conditions],
+        )
+
+    def test_quick_summary_is_one_paragraph_with_conditions_and_reasons(self):
+        summary = _render_physician_quick_summary(
+            {"data": {"reason": "走路時胸口像被壓住"}},
+            "病人走路時出現胸口壓迫感。\n無其他已知資料。",
+            self.assessment,
+        )
+
+        self.assertNotIn("\n", summary)
+        self.assertIn("可能疾病包括", summary)
+        self.assertIn("急性冠心症", summary)
+        self.assertIn("依據：", summary)
+        self.assertIn("並非正式診斷", summary)
+
+    def test_quick_summary_states_when_supporting_evidence_is_insufficient(self):
+        summary = _render_physician_quick_summary(
+            {"data": {"reason": "胸部不適"}},
+            "病人主訴胸部不適。",
+            score_diseases([]),
+        )
+
+        self.assertIn("資料不足", summary)
+        self.assertNotIn("可能疾病包括", summary)
+
+    def test_quick_summary_bounds_overlong_model_prose_and_evidence(self):
+        assessment = score_diseases([clinical_fact("chest_pressure", "非常長的病人原始描述" * 20)])
+        summary = _render_physician_quick_summary(
+            {"data": {"reason": "胸口壓迫"}},
+            "病史內容" * 100,
+            assessment,
+        )
+
+        self.assertLessEqual(len(summary), 420)
+        self.assertIn("…", summary)
+
+    def test_generated_report_combines_gemini_history_with_fixed_assessment(self):
+        record = {
+            "type": "chest",
+            "triage_level": "routine",
+            "data": {
+                "type": "chest",
+                "gender": "男",
+                "age": "58",
+                "reason": "走路時胸口壓迫",
+                "_disease_assessment": self.assessment,
+            },
+        }
+        with patch(
+            "app.services.consultation_reporting.runtime.llm_client.generate_text",
+            return_value="58歲男性，走路時出現胸口壓迫感。",
+        ) as generate_text:
+            report = generate_ai_report(record)
+
+        self.assertIsNotNone(report)
+        self.assertNotIn("\n", report)
+        self.assertIn("58歲男性", report)
+        self.assertIn("可能疾病包括急性冠心症", report)
+        self.assertIn("胸口像被壓住", report)
+        self.assertNotIn("淨票", report)
+        self.assertEqual(generate_text.call_args.kwargs["max_tokens"], 500)
 
 
 if __name__ == "__main__":

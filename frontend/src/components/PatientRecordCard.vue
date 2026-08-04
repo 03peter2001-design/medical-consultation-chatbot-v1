@@ -3,6 +3,7 @@ import { computed } from 'vue'
 
 import { getPainMapPreset } from '../data/bodyPainRegions.js'
 import { buildClinicalRecord } from '../services/clinicalRecord.js'
+import { splitStructuredNote } from '../services/structuredNote.js'
 import BodyPainMap from './BodyPainMap.vue'
 import ClinicalEvidence from './ClinicalEvidence.vue'
 import TerminologyCode from './TerminologyCode.vue'
@@ -12,6 +13,9 @@ const props = defineProps({
 })
 
 const clinical = computed(() => buildClinicalRecord(props.record))
+const emrSummary = computed(
+  () => splitStructuredNote(props.record.structured_note).emrSummary,
+)
 const painMapPreset = computed(() => getPainMapPreset(props.record.type))
 const painLocationIds = computed(() =>
   (props.record.pain_locations || [])
@@ -61,6 +65,22 @@ const painLocationIds = computed(() =>
             <dd>{{ clinical.complaint }}</dd>
           </div>
         </dl>
+
+        <section
+          v-if="emrSummary"
+          class="emr-summary"
+          aria-labelledby="emr-summary-title"
+        >
+          <div class="emr-summary-heading">
+            <span class="emr-mark" aria-hidden="true">EMR</span>
+            <div>
+              <small>結構化病歷重點</small>
+              <h3 id="emr-summary-title">病歷摘要 EMR</h3>
+            </div>
+            <strong>快速掌握病況</strong>
+          </div>
+          <p>{{ emrSummary }}</p>
+        </section>
       </div>
     </header>
 
@@ -210,12 +230,12 @@ const painLocationIds = computed(() =>
       <details class="narrative-panel">
         <summary>
           <span>
-            <small>AI 產生</small>
-            <strong>初步評估</strong>
+            <small>Gemini 整理 · 固定疾病表</small>
+            <strong>醫師速覽摘要</strong>
           </span>
-          <em>展開完整評估</em>
+          <em>展開約 300 字摘要</em>
         </summary>
-        <p>{{ record.report || '未提供初步評估' }}</p>
+        <p>{{ record.report || '尚未產生醫師速覽摘要' }}</p>
       </details>
     </div>
   </article>
@@ -324,6 +344,76 @@ const painLocationIds = computed(() =>
 .identity-meta dd {
   color: #2c4357;
   font-size: 15px;
+}
+
+.emr-summary {
+  margin-top: 12px;
+  overflow: hidden;
+  border: 1px solid #8fc8bf;
+  border-left: 5px solid #087f6d;
+  border-radius: 9px;
+  background: linear-gradient(120deg, #effaf7 0%, #f8fcfb 58%, #edf7fb 100%);
+  box-shadow: 0 5px 16px rgb(23 72 88 / 9%);
+}
+
+.emr-summary-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid #cce3df;
+}
+
+.emr-mark {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border-radius: 8px;
+  background: #087f6d;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.emr-summary-heading div {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 1px;
+}
+
+.emr-summary-heading small {
+  color: #53766f;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+
+.emr-summary-heading h3 {
+  color: #15584f;
+  font-size: 17px;
+  line-height: 1.3;
+}
+
+.emr-summary-heading > strong {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  border: 1px solid #add5ce;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 75%);
+  color: #087f6d;
+  font-size: 11px;
+}
+
+.emr-summary > p {
+  padding: 13px 15px 15px;
+  color: #203f3b;
+  font-size: 15px;
+  font-weight: 550;
+  line-height: 1.75;
+  white-space: pre-wrap;
 }
 
 .inline-codings,
@@ -651,6 +741,21 @@ const painLocationIds = computed(() =>
     gap: 4px;
     margin-top: 5px;
     padding: 11px 12px;
+  }
+
+  .emr-summary-heading {
+    align-items: flex-start;
+    padding: 11px 12px 9px;
+  }
+
+  .emr-summary-heading > strong {
+    display: none;
+  }
+
+  .emr-summary > p {
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.7;
   }
 
   .red-flag-banner,

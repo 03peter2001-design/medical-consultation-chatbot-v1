@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "profile_version": "chest-rag-freeze-2026-07-29",
   "route": "chest",
   "generation": {
@@ -55,13 +55,69 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "severe_breathing",
+        "chest_syncope",
+        "chest_diaphoresis",
+        "semantic_severe_breathing",
+        "semantic_chest_syncope",
+        "semantic_chest_diaphoresis"
+      ],
       "clues": [
-        {"fact": "chest_pressure", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
-        {"fact": "exertional_trigger", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
-        {"fact": "diaphoresis", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
-        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
-        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
-        {"fact": "reproducible_tenderness", "status": "present", "direction": "oppose", "weight": 1, "source_ids": ["acs-medscape"]}
+        {
+          "fact": "chest_pressure",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        },
+        {
+          "fact": "exertional_trigger",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        },
+        {
+          "fact": "diaphoresis",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        },
+        {
+          "fact": "nausea",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        },
+        {
+          "fact": "syncope",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        },
+        {
+          "fact": "reproducible_tenderness",
+          "status": "present",
+          "direction": "oppose",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        }
       ]
     },
     {
@@ -72,11 +128,47 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "tearing_chest_pain",
+        "semantic_chest_tearing_pain"
+      ],
       "clues": [
-        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["aortic-medscape"]},
-        {"fact": "tearing_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["aortic-medscape"]},
-        {"fact": "pain_radiates_back", "status": "present", "direction": "support", "weight": 1, "source_ids": ["aortic-medscape"]},
-        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["aortic-medscape"]}
+        {
+          "fact": "onset_sudden",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "aortic-medscape"
+          ]
+        },
+        {
+          "fact": "tearing_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "aortic-medscape"
+          ]
+        },
+        {
+          "fact": "pain_radiates_back",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "aortic-medscape"
+          ]
+        },
+        {
+          "fact": "syncope",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "aortic-medscape"
+          ]
+        }
       ]
     },
     {
@@ -87,12 +179,58 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "severe_breathing",
+        "chest_syncope",
+        "semantic_severe_breathing",
+        "semantic_chest_syncope"
+      ],
       "clues": [
-        {"fact": "dyspnea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]},
-        {"fact": "pleuritic_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]},
-        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]},
-        {"fact": "tachycardia", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]},
-        {"fact": "hemoptysis", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]}
+        {
+          "fact": "dyspnea",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pe-medscape"
+          ]
+        },
+        {
+          "fact": "pleuritic_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pe-medscape"
+          ]
+        },
+        {
+          "fact": "syncope",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pe-medscape"
+          ]
+        },
+        {
+          "fact": "tachycardia",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pe-medscape"
+          ]
+        },
+        {
+          "fact": "hemoptysis",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pe-medscape"
+          ]
+        }
       ]
     },
     {
@@ -103,11 +241,47 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "severe_breathing",
+        "semantic_severe_breathing"
+      ],
       "clues": [
-        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]},
-        {"fact": "dyspnea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]},
-        {"fact": "pleuritic_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]},
-        {"fact": "unilateral_chest_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pe-medscape"]}
+        {
+          "fact": "onset_sudden",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pe-medscape"
+          ]
+        },
+        {
+          "fact": "dyspnea",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pe-medscape"
+          ]
+        },
+        {
+          "fact": "pleuritic_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pe-medscape"
+          ]
+        },
+        {
+          "fact": "unilateral_chest_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pe-medscape"
+          ]
+        }
       ]
     },
     {
@@ -118,10 +292,35 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "pleuritic_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pericarditis-medscape"]},
-        {"fact": "positional_relief", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pericarditis-medscape"]},
-        {"fact": "recent_infection", "status": "present", "direction": "support", "weight": 1, "source_ids": ["pericarditis-medscape"]}
+        {
+          "fact": "pleuritic_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pericarditis-medscape"
+          ]
+        },
+        {
+          "fact": "positional_relief",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pericarditis-medscape"
+          ]
+        },
+        {
+          "fact": "recent_infection",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "pericarditis-medscape"
+          ]
+        }
       ]
     },
     {
@@ -132,10 +331,35 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "fever", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cap-medscape"]},
-        {"fact": "cough_sputum", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cap-medscape"]},
-        {"fact": "pleuritic_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["cap-medscape"]}
+        {
+          "fact": "fever",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "cap-medscape"
+          ]
+        },
+        {
+          "fact": "cough_sputum",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "cap-medscape"
+          ]
+        },
+        {
+          "fact": "pleuritic_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "cap-medscape"
+          ]
+        }
       ]
     },
     {
@@ -146,11 +370,44 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "reproducible_tenderness", "status": "present", "direction": "support", "weight": 1, "source_ids": ["costochondritis-medscape"]},
-        {"fact": "localized_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["costochondritis-medscape"]},
-        {"fact": "movement_trigger", "status": "present", "direction": "support", "weight": 1, "source_ids": ["costochondritis-medscape"]},
-        {"fact": "chest_pressure", "status": "present", "direction": "oppose", "weight": 1, "source_ids": ["costochondritis-medscape"]}
+        {
+          "fact": "reproducible_tenderness",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "costochondritis-medscape"
+          ]
+        },
+        {
+          "fact": "localized_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "costochondritis-medscape"
+          ]
+        },
+        {
+          "fact": "movement_trigger",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "costochondritis-medscape"
+          ]
+        },
+        {
+          "fact": "chest_pressure",
+          "status": "present",
+          "direction": "oppose",
+          "weight": 1,
+          "source_ids": [
+            "costochondritis-medscape"
+          ]
+        }
       ]
     },
     {
@@ -161,11 +418,44 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "burning_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
-        {"fact": "meal_related", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
-        {"fact": "acid_regurgitation", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
-        {"fact": "exertional_trigger", "status": "present", "direction": "oppose", "weight": 1, "source_ids": ["acs-medscape"]}
+        {
+          "fact": "burning_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        },
+        {
+          "fact": "meal_related",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        },
+        {
+          "fact": "acid_regurgitation",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        },
+        {
+          "fact": "exertional_trigger",
+          "status": "present",
+          "direction": "oppose",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        }
       ]
     },
     {
@@ -176,11 +466,44 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "stress_trigger", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
-        {"fact": "palpitations", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
-        {"fact": "dizziness_unspecified", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
-        {"fact": "dyspnea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]}
+        {
+          "fact": "stress_trigger",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        },
+        {
+          "fact": "palpitations",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        },
+        {
+          "fact": "dizziness_unspecified",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        },
+        {
+          "fact": "dyspnea",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        }
       ]
     },
     {
@@ -191,11 +514,47 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "chest_syncope",
+        "semantic_chest_syncope"
+      ],
       "clues": [
-        {"fact": "palpitations", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
-        {"fact": "syncope", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
-        {"fact": "dizziness_unspecified", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]},
-        {"fact": "tachycardia", "status": "present", "direction": "support", "weight": 1, "source_ids": ["acs-medscape"]}
+        {
+          "fact": "palpitations",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        },
+        {
+          "fact": "syncope",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        },
+        {
+          "fact": "dizziness_unspecified",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        },
+        {
+          "fact": "tachycardia",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "acs-medscape"
+          ]
+        }
       ]
     }
   ]

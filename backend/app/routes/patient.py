@@ -27,6 +27,7 @@ from amie.clinical_facts import (
 from amie.disease_profiles import attach_safety_conditions
 from amie.models import ChiefComplaintAssessment
 from amie.rule_config import load_safety_rules
+from app.contracts import PatientChatResponse, error_responses
 from app.models import ChatRequest
 from app.runtime import (
     AMIE_DEBUG_TRACE,
@@ -161,7 +162,7 @@ def classify_complaint(text: str) -> str:
 def _prefilled_patient_data(
     req: ChatRequest,
 ) -> tuple[dict, set[str]]:
-    prefill = req.patient_prefill.dict(exclude_none=True) if req.patient_prefill else {}
+    prefill = req.patient_prefill.model_dump(exclude_none=True) if req.patient_prefill else {}
     prefill.pop("source", None)
     clinical_codings = filter_supported_codings(prefill.pop("clinical_codings", []))
     data: dict = {}
@@ -892,7 +893,12 @@ async def _chat_amie(
     )
 
 
-@router.post("/chat")
+@router.post(
+    "/chat",
+    response_model=PatientChatResponse,
+    responses=error_responses(422, 500, 503),
+    summary="Advance or start a patient pre-consultation interview",
+)
 async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
     _cleanup_sessions()
 
@@ -947,7 +953,6 @@ async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
             session,
             reply=f"{validation_error}\n\n{current['prompt']}",
         )
-
     field = current["field"]
     user_input, user_display = store_question_answer(
         data,

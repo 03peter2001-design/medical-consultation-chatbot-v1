@@ -1,4 +1,4 @@
-"""Prompt construction for patient-facing consultation summaries."""
+"""Prompt construction for the physician quick-view history summary."""
 
 from __future__ import annotations
 
@@ -25,22 +25,16 @@ def build_report_prompt(data: dict) -> str:
 
 {summary}
 
-請輸出以下格式的評估摘要：
-
-【基本資料】
-性別／年齡
-
-【主訴】
-{chief_label}發作狀況（時間、位置、性質）
-
-【伴隨症狀】
-列出重要伴隨症狀
-
-【過去病史】
-慢性病、手術、用藥史
+請將資料整理成一段供醫師快速閱讀的病史摘要，依序交代：
+性別與年齡、{chief_label}主訴、發作時間、位置、性質、加重或緩解因素、
+重要伴隨症狀，以及與判斷有關的既往病史、用藥和過敏史。
 
 限制：
-- 總長不超過250字
+- 使用繁體中文，語氣專業、簡單、直接
+- 只輸出一個自然段落，不要標題、條列、Markdown 或前言
+- 以160至220字為目標；資料不足時寧可簡短，不得補寫
 - 只能重述上方已有資料，不得新增任何臨床事實
-- 不得輸出「初步評估」「鑑別診斷」或「建議」段落
+- 這一段不要提出疾病、鑑別診斷、患病機率、檢查或治療建議；
+  可能疾病與理由會由系統依固定疾病表另外接在同一段文字後方，
+  組成總長約300字的醫師速覽摘要
 """

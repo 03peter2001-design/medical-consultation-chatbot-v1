@@ -330,22 +330,39 @@ a {
 
 @media (max-width: 760px) {
   .app-header {
+    gap: 8px;
     padding: 0 12px;
   }
 
+  .app-title {
+    flex: 0 1 110px;
+    min-width: 64px;
+    font-size: 16px;
+  }
+
   .app-subtitle,
-  .connection-status .status-text {
+  .connection-status {
     display: none;
   }
 
   .header-actions {
+    min-width: 0;
     gap: 6px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  .header-actions::-webkit-scrollbar {
+    display: none;
   }
 
   .nav-link,
   .utility-button {
+    flex: 0 0 auto;
     min-height: 38px;
     padding: 7px 9px;
+    white-space: nowrap;
   }
 
   .chat-message {

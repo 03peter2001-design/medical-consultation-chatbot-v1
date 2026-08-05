@@ -95,6 +95,60 @@ class RuleManagementTests(unittest.TestCase):
                 {"authorized": True},
             )
 
+    def test_publisher_uses_facade_patched_dependencies(self):
+        current = load_safety_rules()
+        groups = rule_management._rule_groups(current)
+        groups[0]["label"] = f"{groups[0]['label']}（seam test）"
+        original_revision = rule_management._revision
+        original_candidate_document = rule_management._candidate_document
+
+        with (
+            patch.object(rule_management, "_require_admin_token") as require_token,
+            patch.object(
+                rule_management,
+                "_revision",
+                wraps=original_revision,
+            ) as revision,
+            patch.object(
+                rule_management,
+                "_candidate_document",
+                wraps=original_candidate_document,
+            ) as candidate_document,
+            patch.object(
+                rule_management,
+                "_atomic_write",
+                side_effect=RuntimeError("patched atomic writer"),
+            ) as atomic_write,
+        ):
+            with self.assertRaisesRegex(RuntimeError, "patched atomic writer"):
+                rule_management.update_safety_rules(
+                    admin_token="patched-token",
+                    expected_revision=original_revision(current),
+                    confirmation="更新安全規則",
+                    change_note="驗證 facade dependency seam",
+                    actor_session_id="seam-test",
+                    groups=groups,
+                )
+
+        require_token.assert_called_once_with("patched-token")
+        candidate_document.assert_called_once_with(current, groups)
+        self.assertEqual(revision.call_count, 2)
+        atomic_write.assert_called_once()
+
+    def test_rule_center_uses_facade_patched_profile_loader(self):
+        original_loader = rule_management.load_profile_document
+        with patch.object(
+            rule_management,
+            "load_profile_document",
+            wraps=original_loader,
+        ) as profile_loader:
+            payload = rule_management.rule_center_payload()
+
+        self.assertEqual(
+            [call.args[0] for call in profile_loader.call_args_list],
+            [item["route"] for item in payload["routes"]],
+        )
+
     def test_general_fact_label_governance_updates_descriptions_only(self):
         current = load_safety_rules()
         labels = [

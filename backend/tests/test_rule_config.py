@@ -25,6 +25,7 @@ class SafetyRuleConfigTests(unittest.TestCase):
             {rule["code"] for rule in rules["raw_rules"]["combinations"]},
         )
         self.assertGreater(len(rules["structured_rules"]), 10)
+        self.assertEqual(rules["safety_fact_codes"], [])
         self.assertIn(
             "急性冠心症（含心肌梗塞）",
             rules["urgent_condition_candidates"]["胸部不適合併冒冷汗"],
@@ -86,6 +87,21 @@ class SafetyRuleConfigTests(unittest.TestCase):
             ValueError,
             "未對應 urgent_condition_candidates",
         ):
+            validate_safety_rules(rules)
+
+    def test_onset_definitions_are_required_for_fact_label_governance(self):
+        rules = copy.deepcopy(load_safety_rules())
+        del rules["semantic_extraction"]["onset_definitions"]["sudden"]
+        with self.assertRaisesRegex(ValueError, "onset_definitions"):
+            validate_safety_rules(rules)
+
+    def test_direct_safety_facts_must_use_known_clinical_fact_codes(self):
+        rules = copy.deepcopy(load_safety_rules())
+        rules["safety_fact_codes"] = ["severity_severe"]
+        validate_safety_rules(rules)
+
+        rules["safety_fact_codes"] = ["not_a_clinical_fact"]
+        with self.assertRaisesRegex(ValueError, "safety_fact_codes"):
             validate_safety_rules(rules)
 
     def test_questionnaire_semantic_options_reference_known_findings(self):

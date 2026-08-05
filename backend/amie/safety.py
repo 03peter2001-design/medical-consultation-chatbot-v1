@@ -5,8 +5,9 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Any
 
+from .clinical_facts import facts_from_assessment
 from .models import ChiefComplaintAssessment
-from .rule_config import load_safety_rules
+from .rule_config import clinical_fact_descriptions, load_safety_rules
 
 
 @dataclass(frozen=True)
@@ -233,6 +234,22 @@ def detect_structured_red_flags(
     )
 
     flags: list[SafetyFlag] = []
+    direct_safety_codes = set(rules["safety_fact_codes"])
+    descriptions = clinical_fact_descriptions(rules)
+    for fact in facts_from_assessment(
+        assessment,
+        turn=0,
+        source="direct_safety_fact",
+    ):
+        if fact["status"] != "present" or fact["code"] not in direct_safety_codes:
+            continue
+        flags.append(
+            SafetyFlag(
+                code=f"clinical_fact:{fact['code']}",
+                label=descriptions[fact["code"]],
+                evidence=fact["evidence"],
+            )
+        )
     for rule in rules["structured_rules"]:
         evidence = _structured_rule_evidence(
             rule["when"],

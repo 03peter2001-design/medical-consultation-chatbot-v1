@@ -30,9 +30,19 @@ class ApplicationStructureTests(unittest.TestCase):
         }
 
         self.assertEqual(functions, {"create_app"})
-        self.assertIn("app.include_router(system_router)", source)
-        self.assertIn("app.include_router(patient_router)", source)
-        self.assertIn("app.include_router(doctor_router)", source)
+        self.assertIn(
+            "app.include_router(system_router, prefix=API_V1_PREFIX)",
+            source,
+        )
+        self.assertIn(
+            "app.include_router(patient_router, prefix=API_V1_PREFIX)",
+            source,
+        )
+        self.assertIn(
+            "app.include_router(doctor_router, prefix=API_V1_PREFIX)",
+            source,
+        )
+        self.assertEqual(source.count("include_in_schema=False"), 3)
 
     def test_routes_remain_grouped_by_feature(self):
         expected = {
@@ -47,6 +57,8 @@ class ApplicationStructureTests(unittest.TestCase):
                 ("POST", "/rules/authorize"),
                 ("POST", "/rules/assistant"),
                 ("PUT", "/rules/safety"),
+                ("PUT", "/rules/fact-labels"),
+                ("PUT", "/rules/disease-profiles/{route}"),
                 ("GET", "/consultations"),
                 ("DELETE", "/consultations/{queue_number}"),
                 ("POST", "/load_patient"),

@@ -1,9 +1,11 @@
+import copy
 import json
 import unittest
 from unittest.mock import patch
 
 from amie.clinical_facts import FACT_CODES
 from amie.engine import AMIEEngine
+from amie.rule_config import load_safety_rules
 from amie.safety import detect_red_flags
 from domain.questionnaires import build_questionnaire
 
@@ -422,6 +424,51 @@ class AMIEEngineTests(unittest.TestCase):
             )
         )
         self.assertEqual(len(llm.calls), 1)
+
+    def test_doctor_selected_safety_fact_stops_the_interview(self):
+        rules = copy.deepcopy(load_safety_rules())
+        rules["safety_fact_codes"] = ["nausea"]
+        llm = FakeLLM(
+            semantic_response={
+                "primary_symptom": "headache",
+                "primary_evidence": "頭痛",
+                "primary_symptom_code": "headache",
+                "symptoms": [{"code": "headache", "evidence": "頭痛"}],
+                "symptom_domains": [{"route": "headache", "evidence": "頭痛"}],
+                "onset": {"value": "unknown", "evidence": ""},
+                "severity": {"value": "unknown", "evidence": ""},
+                "is_new_or_changed": {"value": "unknown", "evidence": ""},
+                "findings": [
+                    {
+                        "code": "nausea",
+                        "status": "present",
+                        "evidence": "很噁心",
+                    }
+                ],
+                "negated_findings": [],
+                "route_candidates": [{"route": "headache", "evidence": "頭痛"}],
+                "symptom_assessments": [],
+                "uncertain_fields": [],
+            }
+        )
+
+        with patch("amie.safety.load_safety_rules", return_value=rules):
+            result = AMIEEngine(llm).run_turn(
+                route="headache",
+                answer="頭痛而且很噁心",
+                current_field="associated",
+                data={**self.base_data, "type": "headache", "reason": "頭痛"},
+                questionnaire=build_questionnaire("headache"),
+                prefilled_fields=self.prefilled,
+            )
+
+        self.assertEqual(result.action, "complete")
+        self.assertEqual(result.triage_level, "urgent")
+        self.assertIsNone(result.next_question)
+        self.assertIn(
+            "clinical_fact:nausea",
+            {flag["code"] for flag in result.red_flags},
+        )
 
     def test_standard_option_uses_json_semantics_without_extractor(self):
         llm = FakeLLM()

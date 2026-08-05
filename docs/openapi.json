@@ -1,0 +1,2802 @@
+{
+  "components": {
+    "schemas": {
+      "AssistantHistoryItem": {
+        "properties": {
+          "content": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "title": "Content",
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "user",
+              "assistant"
+            ],
+            "title": "Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "role",
+          "content"
+        ],
+        "title": "AssistantHistoryItem",
+        "type": "object"
+      },
+      "Body_transcribe_v1_transcribe_post": {
+        "properties": {
+          "audio": {
+            "contentMediaType": "application/octet-stream",
+            "title": "Audio",
+            "type": "string"
+          }
+        },
+        "required": [
+          "audio"
+        ],
+        "title": "Body_transcribe_v1_transcribe_post",
+        "type": "object"
+      },
+      "ChatRequest": {
+        "properties": {
+          "message": {
+            "default": "",
+            "title": "Message",
+            "type": "string"
+          },
+          "pain_location_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Pain Location Ids",
+            "type": "array"
+          },
+          "patient_prefill": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PatientPrefill"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "session_id": {
+            "title": "Session Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session_id"
+        ],
+        "title": "ChatRequest",
+        "type": "object"
+      },
+      "ClinicalCoding": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "display": {
+            "default": "",
+            "title": "Display",
+            "type": "string"
+          },
+          "field": {
+            "title": "Field",
+            "type": "string"
+          },
+          "source": {
+            "default": "fhir",
+            "title": "Source",
+            "type": "string"
+          },
+          "system": {
+            "title": "System",
+            "type": "string"
+          },
+          "text": {
+            "default": "",
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "field",
+          "system",
+          "code"
+        ],
+        "title": "ClinicalCoding",
+        "type": "object"
+      },
+      "ConsultationDeletedResponse": {
+        "properties": {
+          "queue_number": {
+            "title": "Queue Number",
+            "type": "string"
+          },
+          "status": {
+            "const": "deleted",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "queue_number"
+        ],
+        "title": "ConsultationDeletedResponse",
+        "type": "object"
+      },
+      "ConsultationListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ConsultationSummary"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "minimum": 0.0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "total": {
+            "minimum": 0.0,
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "ConsultationListResponse",
+        "type": "object"
+      },
+      "ConsultationSummary": {
+        "properties": {
+          "age": {
+            "title": "Age",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "gender": {
+            "title": "Gender",
+            "type": "string"
+          },
+          "has_structured_note": {
+            "title": "Has Structured Note",
+            "type": "boolean"
+          },
+          "patient_name": {
+            "title": "Patient Name",
+            "type": "string"
+          },
+          "queue_number": {
+            "title": "Queue Number",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "triage_level": {
+            "enum": [
+              "routine",
+              "urgent"
+            ],
+            "title": "Triage Level",
+            "type": "string"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          },
+          "workflow_status": {
+            "title": "Workflow Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "queue_number",
+          "patient_name",
+          "type",
+          "reason",
+          "gender",
+          "age",
+          "triage_level",
+          "workflow_status",
+          "has_structured_note",
+          "created_at"
+        ],
+        "title": "ConsultationSummary",
+        "type": "object"
+      },
+      "DiseaseClueUpdate": {
+        "properties": {
+          "direction": {
+            "enum": [
+              "support",
+              "oppose"
+            ],
+            "title": "Direction",
+            "type": "string"
+          },
+          "fact": {
+            "title": "Fact",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "present",
+              "absent"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "weight": {
+            "minimum": 1.0,
+            "title": "Weight",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "fact",
+          "status",
+          "direction",
+          "weight"
+        ],
+        "title": "DiseaseClueUpdate",
+        "type": "object"
+      },
+      "DiseaseProfileUpdate": {
+        "properties": {
+          "clues": {
+            "items": {
+              "$ref": "#/components/schemas/DiseaseClueUpdate"
+            },
+            "title": "Clues",
+            "type": "array"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "safety_rule_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Safety Rule Codes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "clues",
+          "safety_rule_codes"
+        ],
+        "title": "DiseaseProfileUpdate",
+        "type": "object"
+      },
+      "DiseaseProfileUpdateRequest": {
+        "properties": {
+          "change_note": {
+            "title": "Change Note",
+            "type": "string"
+          },
+          "confirmation": {
+            "title": "Confirmation",
+            "type": "string"
+          },
+          "expected_revision": {
+            "title": "Expected Revision",
+            "type": "string"
+          },
+          "profiles": {
+            "items": {
+              "$ref": "#/components/schemas/DiseaseProfileUpdate"
+            },
+            "title": "Profiles",
+            "type": "array"
+          },
+          "reviewer": {
+            "title": "Reviewer",
+            "type": "string"
+          },
+          "session_id": {
+            "title": "Session Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session_id",
+          "expected_revision",
+          "confirmation",
+          "change_note",
+          "reviewer",
+          "profiles"
+        ],
+        "title": "DiseaseProfileUpdateRequest",
+        "type": "object"
+      },
+      "DoctorChatRequest": {
+        "properties": {
+          "message": {
+            "default": "",
+            "title": "Message",
+            "type": "string"
+          },
+          "mode": {
+            "default": "chat",
+            "title": "Mode",
+            "type": "string"
+          },
+          "session_id": {
+            "title": "Session Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session_id"
+        ],
+        "title": "DoctorChatRequest",
+        "type": "object"
+      },
+      "DoctorChatResponse": {
+        "properties": {
+          "mode": {
+            "enum": [
+              "chat",
+              "structured_note"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "patient_loaded": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Patient Loaded"
+          },
+          "reply": {
+            "title": "Reply",
+            "type": "string"
+          },
+          "session_id": {
+            "title": "Session Id",
+            "type": "string"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/EvidenceSource"
+            },
+            "title": "Sources",
+            "type": "array"
+          }
+        },
+        "required": [
+          "reply",
+          "session_id",
+          "sources",
+          "mode"
+        ],
+        "title": "DoctorChatResponse",
+        "type": "object"
+      },
+      "ErrorResponse": {
+        "description": "FastAPI HTTP and validation error envelope.",
+        "properties": {
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ValidationIssue"
+                },
+                "type": "array"
+              }
+            ],
+            "title": "Detail"
+          }
+        },
+        "required": [
+          "detail"
+        ],
+        "title": "ErrorResponse",
+        "type": "object"
+      },
+      "EvidenceSource": {
+        "properties": {
+          "route": {
+            "default": "",
+            "title": "Route",
+            "type": "string"
+          },
+          "source": {
+            "default": "",
+            "title": "Source",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "url": {
+            "default": "",
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "title": "EvidenceSource",
+        "type": "object"
+      },
+      "FactCatalogItem": {
+        "properties": {
+          "categories": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Categories",
+            "type": "array"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "conditional_safety_rule_count": {
+            "minimum": 0.0,
+            "title": "Conditional Safety Rule Count",
+            "type": "integer"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "is_safety": {
+            "title": "Is Safety",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "code",
+          "description",
+          "is_safety",
+          "conditional_safety_rule_count",
+          "categories"
+        ],
+        "title": "FactCatalogItem",
+        "type": "object"
+      },
+      "FactLabelUpdate": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Description",
+            "type": "string"
+          },
+          "is_safety": {
+            "title": "Is Safety",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "code",
+          "description",
+          "is_safety"
+        ],
+        "title": "FactLabelUpdate",
+        "type": "object"
+      },
+      "FactLabelUpdateRequest": {
+        "properties": {
+          "change_note": {
+            "title": "Change Note",
+            "type": "string"
+          },
+          "confirmation": {
+            "title": "Confirmation",
+            "type": "string"
+          },
+          "expected_revision": {
+            "title": "Expected Revision",
+            "type": "string"
+          },
+          "fact_labels": {
+            "items": {
+              "$ref": "#/components/schemas/FactLabelUpdate"
+            },
+            "title": "Fact Labels",
+            "type": "array"
+          },
+          "session_id": {
+            "title": "Session Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session_id",
+          "expected_revision",
+          "confirmation",
+          "change_note",
+          "fact_labels"
+        ],
+        "title": "FactLabelUpdateRequest",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "HealthResponse": {
+        "properties": {
+          "consultation_database": {
+            "title": "Consultation Database",
+            "type": "string"
+          },
+          "doctor_sessions": {
+            "minimum": 0.0,
+            "title": "Doctor Sessions",
+            "type": "integer"
+          },
+          "interview_engine": {
+            "enum": [
+              "amie",
+              "legacy"
+            ],
+            "title": "Interview Engine",
+            "type": "string"
+          },
+          "llm_model": {
+            "title": "Llm Model",
+            "type": "string"
+          },
+          "llm_provider": {
+            "title": "Llm Provider",
+            "type": "string"
+          },
+          "rag_collections": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Rag Collections",
+            "type": "array"
+          },
+          "rag_enabled": {
+            "title": "Rag Enabled",
+            "type": "boolean"
+          },
+          "rag_index_version": {
+            "title": "Rag Index Version",
+            "type": "string"
+          },
+          "rag_legacy_available": {
+            "title": "Rag Legacy Available",
+            "type": "boolean"
+          },
+          "rag_query_translation": {
+            "$ref": "#/components/schemas/RagQueryTranslationStatus"
+          },
+          "sessions": {
+            "minimum": 0.0,
+            "title": "Sessions",
+            "type": "integer"
+          },
+          "status": {
+            "const": "ok",
+            "title": "Status",
+            "type": "string"
+          },
+          "stored_consultations": {
+            "minimum": 0.0,
+            "title": "Stored Consultations",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "status",
+          "interview_engine",
+          "llm_provider",
+          "llm_model",
+          "sessions",
+          "doctor_sessions",
+          "stored_consultations",
+          "consultation_database",
+          "rag_enabled",
+          "rag_index_version",
+          "rag_collections",
+          "rag_legacy_available",
+          "rag_query_translation"
+        ],
+        "title": "HealthResponse",
+        "type": "object"
+      },
+      "LoadPatientRequest": {
+        "properties": {
+          "queue_number": {
+            "title": "Queue Number",
+            "type": "string"
+          },
+          "session_id": {
+            "title": "Session Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session_id",
+          "queue_number"
+        ],
+        "title": "LoadPatientRequest",
+        "type": "object"
+      },
+      "LoadPatientResponse": {
+        "properties": {
+          "amie_state": {
+            "additionalProperties": true,
+            "title": "Amie State",
+            "type": "object"
+          },
+          "amie_trace": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Amie Trace",
+            "type": "array"
+          },
+          "chief_assessment": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chief Assessment"
+          },
+          "clinical_codings": {
+            "items": {
+              "$ref": "#/components/schemas/ClinicalCoding"
+            },
+            "title": "Clinical Codings",
+            "type": "array"
+          },
+          "disease_assessment": {
+            "additionalProperties": true,
+            "title": "Disease Assessment",
+            "type": "object"
+          },
+          "legacy_differential_hypotheses": {
+            "items": {},
+            "title": "Legacy Differential Hypotheses",
+            "type": "array"
+          },
+          "pain_locations": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Pain Locations",
+            "type": "array"
+          },
+          "patient_data": {
+            "additionalProperties": true,
+            "title": "Patient Data",
+            "type": "object"
+          },
+          "queue_number": {
+            "title": "Queue Number",
+            "type": "string"
+          },
+          "rag_enabled": {
+            "title": "Rag Enabled",
+            "type": "boolean"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "report": {
+            "title": "Report",
+            "type": "string"
+          },
+          "structured_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Structured Note"
+          },
+          "structured_sources": {
+            "items": {
+              "$ref": "#/components/schemas/EvidenceSource"
+            },
+            "title": "Structured Sources",
+            "type": "array"
+          },
+          "summary": {
+            "title": "Summary",
+            "type": "string"
+          },
+          "summary_error": {
+            "title": "Summary Error",
+            "type": "string"
+          },
+          "terminology_reference": {
+            "additionalProperties": true,
+            "title": "Terminology Reference",
+            "type": "object"
+          },
+          "triage_level": {
+            "enum": [
+              "routine",
+              "urgent"
+            ],
+            "title": "Triage Level",
+            "type": "string"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          },
+          "workflow_status": {
+            "title": "Workflow Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "queue_number",
+          "type",
+          "reason",
+          "patient_data",
+          "clinical_codings",
+          "terminology_reference",
+          "summary",
+          "report",
+          "structured_sources",
+          "pain_locations",
+          "amie_state",
+          "disease_assessment",
+          "legacy_differential_hypotheses",
+          "amie_trace",
+          "triage_level",
+          "workflow_status",
+          "summary_error",
+          "rag_enabled"
+        ],
+        "title": "LoadPatientResponse",
+        "type": "object"
+      },
+      "PatientChatResponse": {
+        "properties": {
+          "amie_debug": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amie Debug"
+          },
+          "completed": {
+            "title": "Completed",
+            "type": "boolean"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/ProgressResponse"
+          },
+          "question_input": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Question Input"
+          },
+          "questionnaire": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/QuestionnaireMetadata"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "queue_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Queue Number"
+          },
+          "reply": {
+            "title": "Reply",
+            "type": "string"
+          },
+          "session_id": {
+            "title": "Session Id",
+            "type": "string"
+          },
+          "step": {
+            "title": "Step",
+            "type": "integer"
+          },
+          "triage": {
+            "$ref": "#/components/schemas/TriageResponse"
+          },
+          "user_display": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Display"
+          }
+        },
+        "required": [
+          "reply",
+          "session_id",
+          "completed",
+          "step",
+          "triage",
+          "progress"
+        ],
+        "title": "PatientChatResponse",
+        "type": "object"
+      },
+      "PatientPrefill": {
+        "properties": {
+          "abdomen_hx": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Abdomen Hx"
+          },
+          "allergy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allergy"
+          },
+          "birth_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Birth Date"
+          },
+          "blood_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Blood Type"
+          },
+          "cardio": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cardio"
+          },
+          "chronic": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chronic"
+          },
+          "clinical_codings": {
+            "items": {
+              "$ref": "#/components/schemas/ClinicalCoding"
+            },
+            "title": "Clinical Codings",
+            "type": "array"
+          },
+          "current_meds": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Meds"
+          },
+          "gender": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gender"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "neuro": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Neuro"
+          },
+          "past_meds": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Past Meds"
+          },
+          "smoke": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Smoke"
+          },
+          "source": {
+            "default": "fhir",
+            "title": "Source",
+            "type": "string"
+          },
+          "surgery": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Surgery"
+          }
+        },
+        "title": "PatientPrefill",
+        "type": "object"
+      },
+      "ProgressResponse": {
+        "properties": {
+          "current": {
+            "minimum": 0.0,
+            "title": "Current",
+            "type": "integer"
+          },
+          "percent": {
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Percent",
+            "type": "integer"
+          },
+          "total": {
+            "minimum": 1.0,
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "current",
+          "total",
+          "percent"
+        ],
+        "title": "ProgressResponse",
+        "type": "object"
+      },
+      "QuestionnaireMetadata": {
+        "properties": {
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "route": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Route"
+          },
+          "route_label": {
+            "title": "Route Label",
+            "type": "string"
+          },
+          "section": {
+            "title": "Section",
+            "type": "string"
+          }
+        },
+        "required": [
+          "section",
+          "label",
+          "route_label"
+        ],
+        "title": "QuestionnaireMetadata",
+        "type": "object"
+      },
+      "RagQueryTranslationStatus": {
+        "properties": {
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "model": {
+            "title": "Model",
+            "type": "string"
+          },
+          "provider": {
+            "title": "Provider",
+            "type": "string"
+          },
+          "query_mode": {
+            "title": "Query Mode",
+            "type": "string"
+          }
+        },
+        "required": [
+          "enabled",
+          "provider",
+          "query_mode",
+          "model"
+        ],
+        "title": "RagQueryTranslationStatus",
+        "type": "object"
+      },
+      "RuleAssistantResponse": {
+        "properties": {
+          "reply": {
+            "title": "Reply",
+            "type": "string"
+          },
+          "safety_groups": {
+            "items": {
+              "$ref": "#/components/schemas/SafetyRuleGroup"
+            },
+            "title": "Safety Groups",
+            "type": "array"
+          },
+          "saved": {
+            "const": false,
+            "title": "Saved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reply",
+          "safety_groups",
+          "saved"
+        ],
+        "title": "RuleAssistantResponse",
+        "type": "object"
+      },
+      "RuleAuthorizationResponse": {
+        "properties": {
+          "authorized": {
+            "const": true,
+            "title": "Authorized",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "authorized"
+        ],
+        "title": "RuleAuthorizationResponse",
+        "type": "object"
+      },
+      "RuleCenterResponse": {
+        "properties": {
+          "confirmation_text": {
+            "title": "Confirmation Text",
+            "type": "string"
+          },
+          "disease_confirmation_text": {
+            "title": "Disease Confirmation Text",
+            "type": "string"
+          },
+          "edit_enabled": {
+            "title": "Edit Enabled",
+            "type": "boolean"
+          },
+          "fact_catalog": {
+            "items": {
+              "$ref": "#/components/schemas/FactCatalogItem"
+            },
+            "title": "Fact Catalog",
+            "type": "array"
+          },
+          "fact_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Fact Codes",
+            "type": "array"
+          },
+          "fact_confirmation_text": {
+            "title": "Fact Confirmation Text",
+            "type": "string"
+          },
+          "fact_count": {
+            "minimum": 0.0,
+            "title": "Fact Count",
+            "type": "integer"
+          },
+          "flow": {
+            "items": {
+              "$ref": "#/components/schemas/RuleFlowStep"
+            },
+            "title": "Flow",
+            "type": "array"
+          },
+          "max_clue_weight": {
+            "minimum": 1.0,
+            "title": "Max Clue Weight",
+            "type": "integer"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "string"
+          },
+          "routes": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Routes",
+            "type": "array"
+          },
+          "safety_groups": {
+            "items": {
+              "$ref": "#/components/schemas/SafetyRuleGroup"
+            },
+            "title": "Safety Groups",
+            "type": "array"
+          },
+          "schema_version": {
+            "minimum": 1.0,
+            "title": "Schema Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "schema_version",
+          "revision",
+          "edit_enabled",
+          "confirmation_text",
+          "fact_confirmation_text",
+          "disease_confirmation_text",
+          "max_clue_weight",
+          "flow",
+          "routes",
+          "fact_count",
+          "fact_codes",
+          "fact_catalog",
+          "safety_groups"
+        ],
+        "title": "RuleCenterResponse",
+        "type": "object"
+      },
+      "RuleFlowStep": {
+        "properties": {
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "step": {
+            "minimum": 1.0,
+            "title": "Step",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "step",
+          "name",
+          "description"
+        ],
+        "title": "RuleFlowStep",
+        "type": "object"
+      },
+      "SafetyRuleAssistantRequest": {
+        "properties": {
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/AssistantHistoryItem"
+            },
+            "title": "History",
+            "type": "array"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "safety_groups": {
+            "items": {
+              "$ref": "#/components/schemas/SafetyRuleGroup"
+            },
+            "title": "Safety Groups",
+            "type": "array"
+          },
+          "selected_labels": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Selected Labels",
+            "type": "array"
+          }
+        },
+        "required": [
+          "message",
+          "selected_labels",
+          "safety_groups"
+        ],
+        "title": "SafetyRuleAssistantRequest",
+        "type": "object"
+      },
+      "SafetyRuleGroup": {
+        "properties": {
+          "applicable_routes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Applicable Routes",
+            "type": "array"
+          },
+          "categories": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Categories",
+            "type": "array"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "original_label": {
+            "title": "Original Label",
+            "type": "string"
+          },
+          "possible_conditions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Possible Conditions",
+            "type": "array"
+          },
+          "rules": {
+            "items": {
+              "$ref": "#/components/schemas/SafetyRuleItem"
+            },
+            "title": "Rules",
+            "type": "array"
+          }
+        },
+        "required": [
+          "original_label",
+          "label",
+          "possible_conditions",
+          "rules"
+        ],
+        "title": "SafetyRuleGroup",
+        "type": "object"
+      },
+      "SafetyRuleItem": {
+        "description": "Editable Safety rule shape shared by rule reads and writes.",
+        "properties": {
+          "all_term_groups": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "All Term Groups"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "phrase",
+              "combination",
+              "structured"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "level": {
+            "default": "urgent",
+            "title": "Level",
+            "type": "string"
+          },
+          "route": {
+            "default": "",
+            "title": "Route",
+            "type": "string"
+          },
+          "scope": {
+            "enum": [
+              "universal",
+              "route",
+              "combination",
+              "structured"
+            ],
+            "title": "Scope",
+            "type": "string"
+          },
+          "terms": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Terms"
+          },
+          "when": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "When"
+          }
+        },
+        "required": [
+          "code",
+          "kind",
+          "scope"
+        ],
+        "title": "SafetyRuleItem",
+        "type": "object"
+      },
+      "SafetyRuleUpdateRequest": {
+        "properties": {
+          "change_note": {
+            "title": "Change Note",
+            "type": "string"
+          },
+          "confirmation": {
+            "title": "Confirmation",
+            "type": "string"
+          },
+          "expected_revision": {
+            "title": "Expected Revision",
+            "type": "string"
+          },
+          "safety_groups": {
+            "items": {
+              "$ref": "#/components/schemas/SafetyRuleGroup"
+            },
+            "title": "Safety Groups",
+            "type": "array"
+          },
+          "session_id": {
+            "title": "Session Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session_id",
+          "expected_revision",
+          "confirmation",
+          "change_note",
+          "safety_groups"
+        ],
+        "title": "SafetyRuleUpdateRequest",
+        "type": "object"
+      },
+      "SessionClearedResponse": {
+        "properties": {
+          "cleared": {
+            "title": "Cleared",
+            "type": "string"
+          },
+          "status": {
+            "const": "ok",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "cleared"
+        ],
+        "title": "SessionClearedResponse",
+        "type": "object"
+      },
+      "SnomedConcept": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "display": {
+            "title": "Display",
+            "type": "string"
+          },
+          "system": {
+            "title": "System",
+            "type": "string"
+          }
+        },
+        "required": [
+          "system",
+          "code",
+          "display"
+        ],
+        "title": "SnomedConcept",
+        "type": "object"
+      },
+      "SnomedSearchResponse": {
+        "properties": {
+          "has_more": {
+            "title": "Has More",
+            "type": "boolean"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SnomedConcept"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "maximum": 50.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "mode": {
+            "enum": [
+              "code",
+              "text"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "offset": {
+            "minimum": 0.0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "query": {
+            "title": "Query",
+            "type": "string"
+          },
+          "release_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Release Date"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "total": {
+            "minimum": 0.0,
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "query",
+          "mode",
+          "total",
+          "items",
+          "limit",
+          "offset",
+          "has_more"
+        ],
+        "title": "SnomedSearchResponse",
+        "type": "object"
+      },
+      "StatusResponse": {
+        "properties": {
+          "status": {
+            "const": "ok",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "StatusResponse",
+        "type": "object"
+      },
+      "TranscriptionResponse": {
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "TranscriptionResponse",
+        "type": "object"
+      },
+      "TriageResponse": {
+        "properties": {
+          "level": {
+            "enum": [
+              "routine",
+              "urgent"
+            ],
+            "title": "Level",
+            "type": "string"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "possible_conditions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Possible Conditions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "level",
+          "message"
+        ],
+        "title": "TriageResponse",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "ValidationIssue": {
+        "properties": {
+          "ctx": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ctx"
+          },
+          "input": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Loc",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Msg",
+            "type": "string"
+          },
+          "type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Type"
+          }
+        },
+        "required": [
+          "msg"
+        ],
+        "title": "ValidationIssue",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "Versioned contract for the patient pre-consultation and physician workspace. Use `/v1` routes for new integrations; unversioned routes remain temporarily available as a compatibility layer.",
+    "title": "AI 預問診系統 API",
+    "version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/v1/chat": {
+      "post": {
+        "operationId": "chat_v1_chat_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientChatResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "An internal dependency or model operation failed."
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "A required configured service is unavailable."
+          }
+        },
+        "summary": "Advance or start a patient pre-consultation interview",
+        "tags": [
+          "patient"
+        ]
+      }
+    },
+    "/v1/doctor/chat": {
+      "post": {
+        "operationId": "doctor_chat_v1_doctor_chat_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DoctorChatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoctorChatResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The request cannot be processed in its current state."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "An internal dependency or model operation failed."
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "A required configured service is unavailable."
+          }
+        },
+        "summary": "Ask the physician RAG assistant about the loaded patient",
+        "tags": [
+          "doctor"
+        ]
+      }
+    },
+    "/v1/doctor/consultations": {
+      "get": {
+        "operationId": "list_consultations_v1_doctor_consultations_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "default": "",
+              "maxLength": 100,
+              "title": "Search",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 30,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsultationListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          }
+        },
+        "summary": "List searchable consultation summaries",
+        "tags": [
+          "doctor"
+        ]
+      }
+    },
+    "/v1/doctor/consultations/{queue_number}": {
+      "delete": {
+        "operationId": "delete_consultation_v1_doctor_consultations__queue_number__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "queue_number",
+            "required": true,
+            "schema": {
+              "title": "Queue Number",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsultationDeletedResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The request cannot be processed in its current state."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The requested consultation does not exist."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          }
+        },
+        "summary": "Permanently delete a consultation",
+        "tags": [
+          "doctor"
+        ]
+      }
+    },
+    "/v1/doctor/load_patient": {
+      "post": {
+        "operationId": "load_patient_v1_doctor_load_patient_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadPatientRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadPatientResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The requested consultation does not exist."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          }
+        },
+        "summary": "Load a consultation into a physician session",
+        "tags": [
+          "doctor"
+        ]
+      }
+    },
+    "/v1/doctor/patient/{session_id}": {
+      "delete": {
+        "operationId": "unload_patient_v1_doctor_patient__session_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          }
+        },
+        "summary": "Unload the patient from a physician session",
+        "tags": [
+          "doctor"
+        ]
+      }
+    },
+    "/v1/doctor/rules": {
+      "get": {
+        "operationId": "get_rule_center_v1_doctor_rules_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuleCenterResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Read the governed Safety, fact, and disease rule center",
+        "tags": [
+          "doctor"
+        ]
+      }
+    },
+    "/v1/doctor/rules/assistant": {
+      "post": {
+        "operationId": "post_rule_assistant_v1_doctor_rules_assistant_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-rule-admin-token",
+            "required": false,
+            "schema": {
+              "default": "",
+              "title": "X-Rule-Admin-Token",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SafetyRuleAssistantRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuleAssistantResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The caller is not authorized for this operation."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "A required configured service is unavailable."
+          }
+        },
+        "summary": "Generate a validated, unsaved Safety rule draft",
+        "tags": [
+          "doctor"
+        ]
+      }
+    },
+    "/v1/doctor/rules/authorize": {
+      "post": {
+        "operationId": "post_rule_authorization_v1_doctor_rules_authorize_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-rule-admin-token",
+            "required": false,
+            "schema": {
+              "default": "",
+              "title": "X-Rule-Admin-Token",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuleAuthorizationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The caller is not authorized for this operation."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "A required configured service is unavailable."
+          }
+        },
+        "summary": "Verify a rule administrator token",
+        "tags": [
+          "doctor"
+        ]
+      }
+    },
+    "/v1/doctor/rules/disease-profiles/{route}": {
+      "put": {
+        "operationId": "put_disease_profile_v1_doctor_rules_disease_profiles__route__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "route",
+            "required": true,
+            "schema": {
+              "title": "Route",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-rule-admin-token",
+            "required": false,
+            "schema": {
+              "default": "",
+              "title": "X-Rule-Admin-Token",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiseaseProfileUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuleCenterResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The caller is not authorized for this operation."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The submitted revision conflicts with the current revision."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "A required configured service is unavailable."
+          }
+        },
+        "summary": "Publish clinician-reviewed disease profile changes",
+        "tags": [
+          "doctor"
+        ]
+      }
+    },
+    "/v1/doctor/rules/fact-labels": {
+      "put": {
+        "operationId": "put_fact_labels_v1_doctor_rules_fact_labels_put",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-rule-admin-token",
+            "required": false,
+            "schema": {
+              "default": "",
+              "title": "X-Rule-Admin-Token",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FactLabelUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuleCenterResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The caller is not authorized for this operation."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The submitted revision conflicts with the current revision."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "A required configured service is unavailable."
+          }
+        },
+        "summary": "Publish clinician-reviewed ClinicalFact label changes",
+        "tags": [
+          "doctor"
+        ]
+      }
+    },
+    "/v1/doctor/rules/safety": {
+      "put": {
+        "operationId": "put_safety_rules_v1_doctor_rules_safety_put",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-rule-admin-token",
+            "required": false,
+            "schema": {
+              "default": "",
+              "title": "X-Rule-Admin-Token",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SafetyRuleUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuleCenterResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The caller is not authorized for this operation."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The submitted revision conflicts with the current revision."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "A required configured service is unavailable."
+          }
+        },
+        "summary": "Publish clinician-reviewed Safety rule changes",
+        "tags": [
+          "doctor"
+        ]
+      }
+    },
+    "/v1/doctor/session/{session_id}": {
+      "delete": {
+        "operationId": "doctor_reset_v1_doctor_session__session_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionClearedResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          }
+        },
+        "summary": "Clear a physician conversation session",
+        "tags": [
+          "doctor"
+        ]
+      }
+    },
+    "/v1/doctor/terminology/snomed": {
+      "get": {
+        "operationId": "get_snomed_search_v1_doctor_terminology_snomed_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "required": true,
+            "schema": {
+              "maxLength": 120,
+              "minLength": 2,
+              "title": "Query",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 50,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SnomedSearchResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "A required configured service is unavailable."
+          }
+        },
+        "summary": "Search the configured SNOMED CT terminology index",
+        "tags": [
+          "doctor"
+        ]
+      }
+    },
+    "/v1/health": {
+      "get": {
+        "operationId": "health_v1_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Read service health and dependency status",
+        "tags": [
+          "system"
+        ]
+      }
+    },
+    "/v1/transcribe": {
+      "post": {
+        "operationId": "transcribe_v1_transcribe_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_transcribe_v1_transcribe_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TranscriptionResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The request cannot be processed in its current state."
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The uploaded audio exceeds the accepted size limit."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "An internal dependency or model operation failed."
+          }
+        },
+        "summary": "Transcribe a Traditional Chinese medical audio recording",
+        "tags": [
+          "system"
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "description": "Service health and speech transcription.",
+      "name": "system"
+    },
+    {
+      "description": "Patient-facing pre-consultation workflow.",
+      "name": "patient"
+    },
+    {
+      "description": "Physician consultation, terminology, and governance operations.",
+      "name": "doctor"
+    }
+  ]
+}

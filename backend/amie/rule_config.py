@@ -267,7 +267,14 @@ def validate_safety_rules(document: Any) -> dict[str, Any]:
         "finding_codes",
     )
     _validate_unique(findings, "finding_codes")
-    _validate_clinical_fact_rules(document, set(findings))
+    fact_codes = _validate_clinical_fact_rules(document, set(findings))
+    safety_fact_codes = document.get("safety_fact_codes")
+    if (
+        not isinstance(safety_fact_codes, list)
+        or any(not isinstance(code, str) or code not in fact_codes for code in safety_fact_codes)
+        or len(safety_fact_codes) != len(set(safety_fact_codes))
+    ):
+        raise ValueError("safety_fact_codes 必須是不重複的 ClinicalFact code 陣列")
 
     semantic = document.get("semantic_extraction")
     if not isinstance(semantic, dict):
@@ -290,6 +297,7 @@ def validate_safety_rules(document: Any) -> dict[str, Any]:
             "semantic_extraction.severity_definitions 必須完整定義 mild、moderate、severe、unknown"
         )
     for field, expected_values in (
+        ("onset_definitions", {"sudden", "gradual", "unknown"}),
         (
             "course_definitions",
             {"episodic", "continuous", "recurrent", "unknown"},
@@ -476,6 +484,26 @@ def clinical_fact_codes() -> set[str]:
         *(code for mapping in rules["scalar_mappings"].values() for code in mapping.values()),
         *rules["symptom_mappings"].values(),
     }
+
+
+def clinical_fact_descriptions(
+    document: dict[str, Any] | None = None,
+) -> dict[str, str]:
+    """Resolve the editable description for every stable ClinicalFact code."""
+    rules = document or load_safety_rules()
+    semantic = rules["semantic_extraction"]
+    descriptions = dict(semantic["finding_definitions"])
+    clinical_rules = rules["clinical_fact_rules"]
+    for field, mapping in clinical_rules["scalar_mappings"].items():
+        definitions = semantic[f"{field}_definitions"]
+        for value, code in mapping.items():
+            descriptions[code] = definitions[value]
+    for symptom, code in clinical_rules["symptom_mappings"].items():
+        descriptions.setdefault(
+            code,
+            semantic["symptom_definitions"][symptom]["description"],
+        )
+    return descriptions
 
 
 def disease_profile_rules(route: str) -> dict[str, Any]:

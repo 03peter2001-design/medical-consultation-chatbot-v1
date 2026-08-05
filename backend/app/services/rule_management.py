@@ -13,9 +13,17 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from amie.disease_profiles import load_profile_document
+from amie.clinical_facts import FACT_CODES
+from amie.disease_profiles import (
+    PROFILE_DATA_DIR,
+    configured_safety_rule_codes,
+    configured_safety_rule_routes,
+    load_profile_document,
+    validate_profile_document,
+)
 from amie.rule_config import (
     SAFETY_RULES_PATH,
+    clinical_fact_descriptions,
     load_safety_rules,
     validate_safety_rules,
 )
@@ -25,8 +33,12 @@ from domain.questionnaires import (
 )
 
 AUDIT_DIR = SAFETY_RULES_PATH.parents[2] / "data" / "safety_rule_audit"
+DISEASE_PROFILE_AUDIT_DIR = SAFETY_RULES_PATH.parents[2] / "data" / "disease_profile_audit"
 _UPDATE_LOCK = threading.Lock()
 _CONFIRMATION = "更新安全規則"
+_FACT_CONFIRMATION = "更新標籤設定"
+_DISEASE_CONFIRMATION = "更新疾病票數"
+_MAX_CLUE_WEIGHT = 10
 _CATEGORY_ORDER = {
     "universal": 0,
     "chest": 1,
@@ -51,6 +63,40 @@ def _revision(document: dict[str, Any]) -> str:
         separators=(",", ":"),
     )
     return hashlib.sha256(canonical.encode()).hexdigest()
+
+
+def _profile_source_path(route: str) -> Path:
+    supported_routes = set(load_safety_rules()["supported_routes"])
+    if route not in supported_routes:
+        raise ValueError(f"不支援的疾病表路由：{route}")
+    return PROFILE_DATA_DIR / f"{route}.json"
+
+
+def _read_profile_source(route: str) -> dict[str, Any]:
+    path = _profile_source_path(route)
+    try:
+        document = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        raise ValueError(
+            f"疾病表 JSON 格式錯誤：{error.lineno}:{error.colno}",
+        ) from error
+    return validate_profile_document(document)
+
+
+def _governance_profiles(document: dict[str, Any]) -> list[dict[str, Any]]:
+    return [
+        {
+            "id": profile["id"],
+            "name": profile["name"],
+            "must_not_miss": profile["must_not_miss"],
+            "review_status": profile["review_status"],
+            "reviewer": profile["reviewer"],
+            "reviewed_at": profile["reviewed_at"],
+            "safety_rule_codes": list(profile["safety_rule_codes"]),
+            "clues": deepcopy(profile["clues"]),
+        }
+        for profile in document["profiles"]
+    ]
 
 
 def _rule_groups(document: dict[str, Any]) -> list[dict[str, Any]]:
@@ -114,8 +160,14 @@ def _rule_groups(document: dict[str, Any]) -> list[dict[str, Any]]:
     for rule in document["structured_rules"]:
         add_rule(rule, kind="structured", scope="structured")
     groups = list(grouped.values())
+    rule_routes = configured_safety_rule_routes()
     for group in groups:
         group["categories"].sort(
+            key=lambda item: _CATEGORY_ORDER.get(item, 99),
+        )
+        applicable = [rule_routes[rule["code"]] for rule in group["rules"]]
+        group["applicable_routes"] = sorted(
+            set.intersection(*applicable) if applicable else set(),
             key=lambda item: _CATEGORY_ORDER.get(item, 99),
         )
     return groups
@@ -158,11 +210,44 @@ def authorize_rule_editor(admin_token: str) -> dict[str, bool]:
 
 
 def _fact_catalog(rules: dict[str, Any]) -> list[dict[str, Any]]:
-    categories = {code: set() for code in rules["finding_codes"]}
+    fact_codes = list(rules["finding_codes"])
+    clinical_rules = rules["clinical_fact_rules"]
+    for mapping in clinical_rules["scalar_mappings"].values():
+        for code in mapping.values():
+            if code not in fact_codes:
+                fact_codes.append(code)
+    for code in clinical_rules["symptom_mappings"].values():
+        if code not in fact_codes:
+            fact_codes.append(code)
+
+    categories = {code: set() for code in fact_codes}
+    conditional_safety_counts = {code: 0 for code in fact_codes}
+    scalar_condition_fields = {
+        "severity_in": "severity",
+        "onset_in": "onset",
+        "course_in": "course",
+        "duration_in": "duration",
+    }
+    primary_fact_codes = {
+        "chest": "symptom_chest_pain",
+        "headache": "symptom_headache",
+        "abdomen": "symptom_abdominal_pain",
+    }
     for rule in rules["structured_rules"]:
+        referenced_codes: set[str] = set()
         for key in ("any_findings", "all_findings"):
             for code in rule["when"].get(key, []):
-                categories[code].add("safety")
+                referenced_codes.add(code)
+        for condition_key, field in scalar_condition_fields.items():
+            mapping = clinical_rules["scalar_mappings"][field]
+            for value in rule["when"].get(condition_key, []):
+                if code := mapping.get(value):
+                    referenced_codes.add(code)
+        for route in rule["when"].get("primary_in", []):
+            if code := primary_fact_codes.get(route):
+                referenced_codes.add(code)
+        for code in referenced_codes:
+            conditional_safety_counts[code] += 1
 
     for route in rules["supported_routes"]:
         for question in load_questionnaire_category(route):
@@ -182,14 +267,27 @@ def _fact_catalog(rules: dict[str, Any]) -> list[dict[str, Any]]:
                 if code in categories:
                     categories[code].add(route)
 
-    definitions = rules["semantic_extraction"]["finding_definitions"]
+    definitions = clinical_fact_descriptions(rules)
+    symptom_definitions = rules["semantic_extraction"]["symptom_definitions"]
+    for symptom, code in clinical_rules["symptom_mappings"].items():
+        definition = symptom_definitions[symptom]
+        route = definition.get("route")
+        if route in rules["supported_routes"]:
+            categories[code].add(route)
+
+    direct_safety_codes = set(rules["safety_fact_codes"])
+    for code in direct_safety_codes:
+        categories[code].add("safety")
+
     catalog = []
-    for code in rules["finding_codes"]:
+    for code in fact_codes:
         assigned = categories[code] or {"common"}
         catalog.append(
             {
                 "code": code,
                 "description": definitions[code],
+                "is_safety": code in direct_safety_codes,
+                "conditional_safety_rule_count": conditional_safety_counts[code],
                 "categories": sorted(
                     assigned,
                     key=lambda item: _FACT_CATEGORY_ORDER.get(item, 99),
@@ -199,17 +297,90 @@ def _fact_catalog(rules: dict[str, Any]) -> list[dict[str, Any]]:
     return catalog
 
 
+def _candidate_fact_labels(
+    current: dict[str, Any],
+    labels: Any,
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    catalog = _fact_catalog(current)
+    expected_codes = [item["code"] for item in catalog]
+    if not isinstance(labels, list) or len(labels) != len(expected_codes):
+        raise ValueError("ClinicalFact 標籤不可新增或刪除")
+
+    incoming: dict[str, dict[str, Any]] = {}
+    for index, item in enumerate(labels):
+        path = f"fact_labels[{index}]"
+        if not isinstance(item, dict) or set(item) != {
+            "code",
+            "description",
+            "is_safety",
+        }:
+            raise ValueError(f"{path} 只能包含 code、description 與 is_safety")
+        code = item.get("code")
+        description = item.get("description")
+        is_safety = item.get("is_safety")
+        if not isinstance(code, str) or code not in expected_codes or code in incoming:
+            raise ValueError(f"{path}.code 不正確或重複")
+        if (
+            not isinstance(description, str)
+            or not description.strip()
+            or len(description.strip()) > 300
+        ):
+            raise ValueError(f"{path}.description 必須是 1 至 300 字")
+        if not isinstance(is_safety, bool):
+            raise ValueError(f"{path}.is_safety 必須是布林值")
+        incoming[code] = {
+            "description": description.strip(),
+            "is_safety": is_safety,
+        }
+    if set(incoming) != set(expected_codes):
+        raise ValueError("ClinicalFact 標籤不可新增或刪除")
+
+    previous = {item["code"]: item for item in catalog}
+    changes = [
+        {
+            "code": code,
+            "previous_description": previous[code]["description"],
+            "next_description": incoming[code]["description"],
+            "previous_is_safety": previous[code]["is_safety"],
+            "next_is_safety": incoming[code]["is_safety"],
+        }
+        for code in expected_codes
+        if (
+            previous[code]["description"] != incoming[code]["description"]
+            or previous[code]["is_safety"] != incoming[code]["is_safety"]
+        )
+    ]
+    candidate = deepcopy(current)
+    semantic = candidate["semantic_extraction"]
+    finding_codes = set(candidate["finding_codes"])
+    for code, item in incoming.items():
+        if code in finding_codes:
+            semantic["finding_definitions"][code] = item["description"]
+    for field, mapping in candidate["clinical_fact_rules"]["scalar_mappings"].items():
+        definitions = semantic[f"{field}_definitions"]
+        for value, code in mapping.items():
+            definitions[value] = incoming[code]["description"]
+    for symptom, code in candidate["clinical_fact_rules"]["symptom_mappings"].items():
+        semantic["symptom_definitions"][symptom]["description"] = incoming[code]["description"]
+    candidate["safety_fact_codes"] = [
+        code for code in expected_codes if incoming[code]["is_safety"]
+    ]
+    return validate_safety_rules(candidate), changes
+
+
 def rule_center_payload() -> dict[str, Any]:
     rules = load_safety_rules()
+    fact_catalog = _fact_catalog(rules)
     routes = []
     for route in rules["supported_routes"]:
-        profile = load_profile_document(route)
+        profile = _read_profile_source(route)
         policy = load_questionnaire_policy(route)
         routes.append(
             {
                 "route": route,
                 "policy": policy,
                 "profile_version": profile["profile_version"],
+                "profile_revision": _revision(profile),
                 "profile_count": len(profile["profiles"]),
                 "must_not_miss_count": sum(
                     bool(item["must_not_miss"]) for item in profile["profiles"]
@@ -217,6 +388,8 @@ def rule_center_payload() -> dict[str, Any]:
                 "provisional": any(
                     item["review_status"] == "provisional" for item in profile["profiles"]
                 ),
+                "sources": deepcopy(profile["sources"]),
+                "profiles": _governance_profiles(profile),
             }
         )
     return {
@@ -224,11 +397,14 @@ def rule_center_payload() -> dict[str, Any]:
         "revision": _revision(rules),
         "edit_enabled": bool(os.getenv("SAFETY_RULE_ADMIN_TOKEN", "").strip()),
         "confirmation_text": _CONFIRMATION,
+        "fact_confirmation_text": _FACT_CONFIRMATION,
+        "disease_confirmation_text": _DISEASE_CONFIRMATION,
+        "max_clue_weight": _MAX_CLUE_WEIGHT,
         "flow": [
             {
                 "step": 1,
                 "name": "Safety 優先",
-                "description": "原文與結構化 Safety 規則先執行；命中即 urgent。",
+                "description": "直接 Safety 標籤、原文與組合規則先執行；命中即 urgent。",
             },
             {
                 "step": 2,
@@ -247,9 +423,9 @@ def rule_center_payload() -> dict[str, Any]:
             },
         ],
         "routes": routes,
-        "fact_count": len(rules["finding_codes"]),
-        "fact_codes": list(rules["finding_codes"]),
-        "fact_catalog": _fact_catalog(rules),
+        "fact_count": len(fact_catalog),
+        "fact_codes": [item["code"] for item in fact_catalog],
+        "fact_catalog": fact_catalog,
         "safety_groups": _rule_groups(rules),
     }
 
@@ -365,6 +541,177 @@ def _candidate_document(
         update_rule(rule)
     candidate["urgent_condition_candidates"] = candidates
     return validate_safety_rules(candidate)
+
+
+def _candidate_profile_document(
+    current: dict[str, Any],
+    profiles: Any,
+    *,
+    reviewer: str,
+    reviewed_at: datetime,
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    normalized_reviewer = reviewer.strip()
+    if not 2 <= len(normalized_reviewer) <= 80:
+        raise ValueError("審查醫師姓名必須介於 2 至 80 字")
+    if not isinstance(profiles, list) or not profiles:
+        raise ValueError("profiles 必須是非空陣列")
+
+    current_by_id = {profile["id"]: profile for profile in current["profiles"]}
+    incoming_by_id: dict[str, dict[str, Any]] = {}
+    for index, profile in enumerate(profiles):
+        path = f"profiles[{index}]"
+        if not isinstance(profile, dict) or set(profile) != {
+            "id",
+            "clues",
+            "safety_rule_codes",
+        }:
+            raise ValueError(f"{path} 只能包含 id、clues 與 safety_rule_codes")
+        profile_id = str(profile.get("id") or "").strip()
+        if profile_id not in current_by_id or profile_id in incoming_by_id:
+            raise ValueError(f"{path}.id 不正確或重複")
+        if not isinstance(profile.get("clues"), list):
+            raise ValueError(f"{path}.clues 必須是陣列")
+        safety_codes = profile.get("safety_rule_codes")
+        if (
+            not isinstance(safety_codes, list)
+            or any(not isinstance(code, str) for code in safety_codes)
+            or len(safety_codes) != len(set(safety_codes))
+            or set(safety_codes) - configured_safety_rule_codes()
+        ):
+            raise ValueError(f"{path}.safety_rule_codes 含未知或重複規則")
+        current_profile = current_by_id[profile_id]
+        if current_profile["must_not_miss"] and not safety_codes:
+            raise ValueError(f"{profile_id} 至少需要一條 Safety 觸發規則")
+        if not current_profile["must_not_miss"] and safety_codes:
+            raise ValueError(f"{profile_id} 非不能漏診疾病，不可綁定 Safety 規則")
+        incoming_by_id[profile_id] = profile
+    if set(incoming_by_id) != set(current_by_id):
+        raise ValueError("疾病不可新增、刪除或遺漏")
+
+    candidate = deepcopy(current)
+    changes: list[dict[str, Any]] = []
+    for profile in candidate["profiles"]:
+        incoming = incoming_by_id[profile["id"]]
+        current_clues = {clue["fact"]: clue for clue in profile["clues"]}
+        incoming_clues: dict[str, dict[str, Any]] = {}
+        for clue_index, clue in enumerate(incoming["clues"]):
+            path = f"{profile['id']}.clues[{clue_index}]"
+            if not isinstance(clue, dict) or set(clue) != {
+                "fact",
+                "status",
+                "direction",
+                "weight",
+            }:
+                raise ValueError(f"{path} 欄位不正確")
+            fact = str(clue.get("fact") or "")
+            if fact not in FACT_CODES or fact in incoming_clues:
+                raise ValueError(f"{path}.fact 不在白名單或重複")
+            if clue.get("status") not in {"present", "absent"}:
+                raise ValueError(f"{path}.status 不正確")
+            if clue.get("direction") not in {"support", "oppose"}:
+                raise ValueError(f"{path}.direction 不正確")
+            weight = clue.get("weight")
+            if (
+                not isinstance(weight, int)
+                or isinstance(weight, bool)
+                or not 1 <= weight <= _MAX_CLUE_WEIGHT
+            ):
+                raise ValueError(f"{path}.weight 必須介於 1 至 {_MAX_CLUE_WEIGHT}")
+            incoming_clues[fact] = clue
+        if not incoming_clues:
+            raise ValueError(f"{profile['id']} 至少需要一個疾病標籤")
+
+        profile_changes: list[dict[str, Any]] = []
+        profile_source_ids = sorted(
+            {source_id for clue in profile["clues"] for source_id in clue["source_ids"]}
+        )
+        next_clues = []
+        for fact, incoming_clue in incoming_clues.items():
+            current_clue = current_clues.get(fact)
+            next_clue = {
+                "fact": fact,
+                "status": incoming_clue["status"],
+                "direction": incoming_clue["direction"],
+                "weight": incoming_clue["weight"],
+                "source_ids": (
+                    deepcopy(current_clue["source_ids"]) if current_clue else profile_source_ids
+                ),
+            }
+            next_clues.append(next_clue)
+            if current_clue is None:
+                profile_changes.append(
+                    {
+                        "action": "added",
+                        "profile_id": profile["id"],
+                        "profile_name": profile["name"],
+                        "fact": fact,
+                        "previous": None,
+                        "next": deepcopy(next_clue),
+                    }
+                )
+            elif any(
+                current_clue[key] != next_clue[key] for key in ("status", "direction", "weight")
+            ):
+                profile_changes.append(
+                    {
+                        "action": "updated",
+                        "profile_id": profile["id"],
+                        "profile_name": profile["name"],
+                        "fact": fact,
+                        "previous": deepcopy(current_clue),
+                        "next": deepcopy(next_clue),
+                    }
+                )
+        for fact, current_clue in current_clues.items():
+            if fact not in incoming_clues:
+                profile_changes.append(
+                    {
+                        "action": "removed",
+                        "profile_id": profile["id"],
+                        "profile_name": profile["name"],
+                        "fact": fact,
+                        "previous": deepcopy(current_clue),
+                        "next": None,
+                    }
+                )
+
+        safety_codes_changed = profile["safety_rule_codes"] != incoming["safety_rule_codes"]
+        if profile_changes:
+            profile["clues"] = next_clues
+            changes.extend(profile_changes)
+            for change in profile_changes:
+                previous = change["previous"] or {}
+                next_value = change["next"] or {}
+                change["previous_weight"] = previous.get("weight")
+                change["next_weight"] = next_value.get("weight")
+        if safety_codes_changed:
+            previous_codes = list(profile["safety_rule_codes"])
+            profile["safety_rule_codes"] = list(incoming["safety_rule_codes"])
+            changes.append(
+                {
+                    "action": "safety_triggers_updated",
+                    "profile_id": profile["id"],
+                    "profile_name": profile["name"],
+                    "previous_rule_codes": previous_codes,
+                    "next_rule_codes": list(profile["safety_rule_codes"]),
+                }
+            )
+        if profile_changes or safety_codes_changed:
+            profile["review_status"] = "reviewed"
+            profile["reviewer"] = normalized_reviewer
+            profile["reviewed_at"] = reviewed_at.isoformat(timespec="seconds")
+
+    if not changes:
+        raise ValueError("疾病標籤與票數沒有變更")
+    timestamp_version = reviewed_at.strftime("%Y%m%d.%H%M%S.%f")
+    candidate["profile_version"] = f"{candidate['route']}-governed-{timestamp_version}z"
+    candidate["generation"] = {
+        **candidate["generation"],
+        "method": "clinician-governed-disease-rule-update",
+        "model": "none",
+        "generated_at": reviewed_at.isoformat(timespec="seconds"),
+    }
+    return validate_profile_document(candidate), changes
 
 
 def _model_json(text: str) -> dict[str, Any]:
@@ -507,6 +854,75 @@ def _atomic_write(path: Path, content: str) -> None:
             os.unlink(temporary_name)
 
 
+def update_disease_profile(
+    *,
+    route: str,
+    admin_token: str,
+    expected_revision: str,
+    confirmation: str,
+    change_note: str,
+    reviewer: str,
+    actor_session_id: str,
+    profiles: Any,
+) -> dict[str, Any]:
+    """Publish clinician-reviewed disease labels and weights with rollback."""
+    _require_admin_token(admin_token)
+    if confirmation.strip() != _DISEASE_CONFIRMATION:
+        raise ValueError(f"請輸入「{_DISEASE_CONFIRMATION}」確認")
+    normalized_note = change_note.strip()
+    if len(normalized_note) < 4 or len(normalized_note) > 500:
+        raise ValueError("變更理由必須介於 4 至 500 字")
+
+    with _UPDATE_LOCK:
+        path = _profile_source_path(route)
+        current = _read_profile_source(route)
+        current_revision = _revision(current)
+        if expected_revision != current_revision:
+            raise RuntimeError("疾病表已由其他人更新，請重新載入")
+
+        timestamp = datetime.now(timezone.utc)
+        candidate, changes = _candidate_profile_document(
+            current,
+            profiles,
+            reviewer=reviewer,
+            reviewed_at=timestamp,
+        )
+        next_revision = _revision(candidate)
+        audit = {
+            "updated_at": timestamp.isoformat(timespec="seconds"),
+            "actor_session_id": actor_session_id.strip()[:64],
+            "reviewer": reviewer.strip(),
+            "route": route,
+            "change_note": normalized_note,
+            "previous_revision": current_revision,
+            "next_revision": next_revision,
+            "changes": changes,
+            "previous_document": current,
+        }
+        audit_path = DISEASE_PROFILE_AUDIT_DIR / (
+            f"{timestamp.strftime('%Y%m%dT%H%M%S%fZ')}-{route}-{current_revision[:12]}.json"
+        )
+        _atomic_write(
+            audit_path,
+            json.dumps(audit, ensure_ascii=False, indent=2) + "\n",
+        )
+
+        previous_content = json.dumps(current, ensure_ascii=False, indent=2) + "\n"
+        next_content = json.dumps(candidate, ensure_ascii=False, indent=2) + "\n"
+        try:
+            _atomic_write(path, next_content)
+            load_profile_document.cache_clear()
+            loaded = _read_profile_source(route)
+            if _revision(loaded) != next_revision:
+                raise RuntimeError("疾病表更新後校驗失敗")
+        except Exception:
+            _atomic_write(path, previous_content)
+            load_profile_document.cache_clear()
+            _read_profile_source(route)
+            raise
+    return rule_center_payload()
+
+
 def update_safety_rules(
     *,
     admin_token: str,
@@ -559,6 +975,69 @@ def update_safety_rules(
             loaded = load_safety_rules()
             if _revision(loaded) != next_revision:
                 raise RuntimeError("更新後規則校驗失敗")
+        except Exception:
+            _atomic_write(SAFETY_RULES_PATH, previous_content)
+            load_safety_rules.cache_clear()
+            load_profile_document.cache_clear()
+            load_safety_rules()
+            raise
+    return rule_center_payload()
+
+
+def update_fact_labels(
+    *,
+    admin_token: str,
+    expected_revision: str,
+    confirmation: str,
+    change_note: str,
+    actor_session_id: str,
+    labels: Any,
+) -> dict[str, Any]:
+    _require_admin_token(admin_token)
+    if confirmation.strip() != _FACT_CONFIRMATION:
+        raise ValueError(f"請輸入「{_FACT_CONFIRMATION}」確認")
+    normalized_note = change_note.strip()
+    if len(normalized_note) < 4 or len(normalized_note) > 500:
+        raise ValueError("變更理由必須介於 4 至 500 字")
+
+    with _UPDATE_LOCK:
+        current = load_safety_rules()
+        current_revision = _revision(current)
+        if expected_revision != current_revision:
+            raise RuntimeError("ClinicalFact 標籤已由其他人更新，請重新載入")
+        candidate, changes = _candidate_fact_labels(current, labels)
+        if not changes:
+            raise ValueError("ClinicalFact 標籤內容沒有變更")
+        next_revision = _revision(candidate)
+
+        timestamp = datetime.now(timezone.utc)
+        audit = {
+            "updated_at": timestamp.isoformat(timespec="seconds"),
+            "event_type": "fact_labels_updated",
+            "actor_session_id": actor_session_id.strip()[:64],
+            "change_note": normalized_note,
+            "previous_revision": current_revision,
+            "next_revision": next_revision,
+            "changes": changes,
+            "previous_document": current,
+        }
+        audit_path = AUDIT_DIR / (
+            f"{timestamp.strftime('%Y%m%dT%H%M%S%fZ')}-fact-labels-{current_revision[:12]}.json"
+        )
+        _atomic_write(
+            audit_path,
+            json.dumps(audit, ensure_ascii=False, indent=2) + "\n",
+        )
+
+        previous_content = json.dumps(current, ensure_ascii=False, indent=2) + "\n"
+        next_content = json.dumps(candidate, ensure_ascii=False, indent=2) + "\n"
+        try:
+            _atomic_write(SAFETY_RULES_PATH, next_content)
+            load_safety_rules.cache_clear()
+            load_profile_document.cache_clear()
+            loaded = load_safety_rules()
+            if _revision(loaded) != next_revision:
+                raise RuntimeError("ClinicalFact 標籤更新後校驗失敗")
         except Exception:
             _atomic_write(SAFETY_RULES_PATH, previous_content)
             load_safety_rules.cache_clear()

@@ -49,7 +49,7 @@ for _ in $(seq 1 30); do
   sleep 1
 done
 
-BACKEND_HEALTH_URL="http://127.0.0.1:${SMART_APP_PORT}/api/health"
+BACKEND_HEALTH_URL="http://127.0.0.1:${SMART_APP_PORT}/api/v1/health"
 echo "Checking RAG status at ${BACKEND_HEALTH_URL} ..."
 HEALTH_PAYLOAD=""
 for _ in $(seq 1 30); do

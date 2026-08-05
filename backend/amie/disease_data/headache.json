@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "profile_version": "headache-rag-freeze-2026-07-29",
   "route": "headache",
   "generation": {
@@ -67,14 +67,71 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "unilateral_headache", "status": "present", "direction": "support", "weight": 1, "source_ids": ["migraine-medscape"]},
-        {"fact": "pulsating_headache", "status": "present", "direction": "support", "weight": 1, "source_ids": ["migraine-medscape"]},
-        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["migraine-medscape"]},
-        {"fact": "photophobia", "status": "present", "direction": "support", "weight": 1, "source_ids": ["migraine-medscape"]},
-        {"fact": "phonophobia", "status": "present", "direction": "support", "weight": 1, "source_ids": ["migraine-medscape"]},
-        {"fact": "activity_aggravation", "status": "present", "direction": "support", "weight": 1, "source_ids": ["migraine-medscape"]},
-        {"fact": "migraine_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["migraine-medscape"]}
+        {
+          "fact": "unilateral_headache",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "migraine-medscape"
+          ]
+        },
+        {
+          "fact": "pulsating_headache",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "migraine-medscape"
+          ]
+        },
+        {
+          "fact": "nausea",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "migraine-medscape"
+          ]
+        },
+        {
+          "fact": "photophobia",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "migraine-medscape"
+          ]
+        },
+        {
+          "fact": "phonophobia",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "migraine-medscape"
+          ]
+        },
+        {
+          "fact": "activity_aggravation",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "migraine-medscape"
+          ]
+        },
+        {
+          "fact": "migraine_history",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "migraine-medscape"
+          ]
+        }
       ]
     },
     {
@@ -85,11 +142,44 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "bilateral_headache", "status": "present", "direction": "support", "weight": 1, "source_ids": ["tension-medscape"]},
-        {"fact": "pressure_band_headache", "status": "present", "direction": "support", "weight": 1, "source_ids": ["tension-medscape"]},
-        {"fact": "neck_massage_relief", "status": "present", "direction": "support", "weight": 1, "source_ids": ["tension-medscape"]},
-        {"fact": "nausea", "status": "present", "direction": "oppose", "weight": 1, "source_ids": ["tension-medscape"]}
+        {
+          "fact": "bilateral_headache",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "tension-medscape"
+          ]
+        },
+        {
+          "fact": "pressure_band_headache",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "tension-medscape"
+          ]
+        },
+        {
+          "fact": "neck_massage_relief",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "tension-medscape"
+          ]
+        },
+        {
+          "fact": "nausea",
+          "status": "present",
+          "direction": "oppose",
+          "weight": 1,
+          "source_ids": [
+            "tension-medscape"
+          ]
+        }
       ]
     },
     {
@@ -100,10 +190,35 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [],
       "clues": [
-        {"fact": "occipital_neck_pain", "status": "present", "direction": "support", "weight": 1, "source_ids": ["tension-medscape"]},
-        {"fact": "neck_massage_relief", "status": "present", "direction": "support", "weight": 1, "source_ids": ["tension-medscape"]},
-        {"fact": "pressure_band_headache", "status": "present", "direction": "support", "weight": 1, "source_ids": ["tension-medscape"]}
+        {
+          "fact": "occipital_neck_pain",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "tension-medscape"
+          ]
+        },
+        {
+          "fact": "neck_massage_relief",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "tension-medscape"
+          ]
+        },
+        {
+          "fact": "pressure_band_headache",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "tension-medscape"
+          ]
+        }
       ]
     },
     {
@@ -114,13 +229,66 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "thunderclap_headache",
+        "semantic_severe_headache_visual_change",
+        "semantic_sudden_severe_headache"
+      ],
       "clues": [
-        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["sah-medscape"]},
-        {"fact": "severity_severe", "status": "present", "direction": "support", "weight": 1, "source_ids": ["sah-medscape"]},
-        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["sah-medscape"]},
-        {"fact": "vomiting", "status": "present", "direction": "support", "weight": 1, "source_ids": ["sah-medscape"]},
-        {"fact": "altered_consciousness", "status": "present", "direction": "support", "weight": 1, "source_ids": ["sah-medscape"]},
-        {"fact": "aneurysm_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["sah-medscape"]}
+        {
+          "fact": "onset_sudden",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "sah-medscape"
+          ]
+        },
+        {
+          "fact": "severity_severe",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "sah-medscape"
+          ]
+        },
+        {
+          "fact": "nausea",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "sah-medscape"
+          ]
+        },
+        {
+          "fact": "vomiting",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "sah-medscape"
+          ]
+        },
+        {
+          "fact": "altered_consciousness",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "sah-medscape"
+          ]
+        },
+        {
+          "fact": "aneurysm_history",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "sah-medscape"
+          ]
+        }
       ]
     },
     {
@@ -131,14 +299,76 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "thunderclap_headache",
+        "semantic_severe_headache_visual_change",
+        "semantic_sudden_severe_headache",
+        "semantic_head_trauma_antithrombotic"
+      ],
       "clues": [
-        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["hemorrhagic-stroke-medscape"]},
-        {"fact": "severity_severe", "status": "present", "direction": "support", "weight": 1, "source_ids": ["hemorrhagic-stroke-medscape"]},
-        {"fact": "focal_neurologic_symptom", "status": "present", "direction": "support", "weight": 1, "source_ids": ["hemorrhagic-stroke-medscape"]},
-        {"fact": "speech_difficulty", "status": "present", "direction": "support", "weight": 1, "source_ids": ["hemorrhagic-stroke-medscape"]},
-        {"fact": "altered_consciousness", "status": "present", "direction": "support", "weight": 1, "source_ids": ["hemorrhagic-stroke-medscape"]},
-        {"fact": "anticoagulant_use", "status": "present", "direction": "support", "weight": 1, "source_ids": ["hemorrhagic-stroke-medscape"]},
-        {"fact": "recent_head_trauma", "status": "present", "direction": "support", "weight": 1, "source_ids": ["hemorrhagic-stroke-medscape"]}
+        {
+          "fact": "onset_sudden",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "hemorrhagic-stroke-medscape"
+          ]
+        },
+        {
+          "fact": "severity_severe",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "hemorrhagic-stroke-medscape"
+          ]
+        },
+        {
+          "fact": "focal_neurologic_symptom",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "hemorrhagic-stroke-medscape"
+          ]
+        },
+        {
+          "fact": "speech_difficulty",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "hemorrhagic-stroke-medscape"
+          ]
+        },
+        {
+          "fact": "altered_consciousness",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "hemorrhagic-stroke-medscape"
+          ]
+        },
+        {
+          "fact": "anticoagulant_use",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "hemorrhagic-stroke-medscape"
+          ]
+        },
+        {
+          "fact": "recent_head_trauma",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "hemorrhagic-stroke-medscape"
+          ]
+        }
       ]
     },
     {
@@ -149,11 +379,55 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "acute_monocular_visual_change",
+        "focal_neurologic_deficit",
+        "acute_monocular_visual_change_combination",
+        "semantic_focal_weakness",
+        "semantic_focal_neurologic_symptom",
+        "semantic_facial_droop",
+        "semantic_speech_difficulty",
+        "semantic_vision_loss",
+        "semantic_monocular_visual_change",
+        "semantic_headache_visual_change"
+      ],
       "clues": [
-        {"fact": "focal_neurologic_symptom", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]},
-        {"fact": "speech_difficulty", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]},
-        {"fact": "visual_change_unspecified", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]},
-        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]}
+        {
+          "fact": "focal_neurologic_symptom",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "ischemic-stroke-medscape"
+          ]
+        },
+        {
+          "fact": "speech_difficulty",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "ischemic-stroke-medscape"
+          ]
+        },
+        {
+          "fact": "visual_change_unspecified",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "ischemic-stroke-medscape"
+          ]
+        },
+        {
+          "fact": "onset_sudden",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "ischemic-stroke-medscape"
+          ]
+        }
       ]
     },
     {
@@ -164,12 +438,55 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "semantic_acute_vestibular_syndrome"
+      ],
       "clues": [
-        {"fact": "onset_sudden", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]},
-        {"fact": "visual_change_unspecified", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]},
-        {"fact": "gait_unsteadiness", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]},
-        {"fact": "vertigo", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]},
-        {"fact": "nausea", "status": "present", "direction": "support", "weight": 1, "source_ids": ["ischemic-stroke-medscape"]}
+        {
+          "fact": "onset_sudden",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "ischemic-stroke-medscape"
+          ]
+        },
+        {
+          "fact": "visual_change_unspecified",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "ischemic-stroke-medscape"
+          ]
+        },
+        {
+          "fact": "gait_unsteadiness",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "ischemic-stroke-medscape"
+          ]
+        },
+        {
+          "fact": "vertigo",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "ischemic-stroke-medscape"
+          ]
+        },
+        {
+          "fact": "nausea",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "ischemic-stroke-medscape"
+          ]
+        }
       ]
     },
     {
@@ -180,11 +497,50 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "meningism",
+        "semantic_meningism",
+        "semantic_immunocompromised"
+      ],
       "clues": [
-        {"fact": "fever", "status": "present", "direction": "support", "weight": 1, "source_ids": ["meningitis-medscape", "encephalitis-medscape"]},
-        {"fact": "neck_stiffness", "status": "present", "direction": "support", "weight": 1, "source_ids": ["meningitis-medscape"]},
-        {"fact": "altered_consciousness", "status": "present", "direction": "support", "weight": 1, "source_ids": ["encephalitis-medscape"]},
-        {"fact": "immunocompromised", "status": "present", "direction": "support", "weight": 1, "source_ids": ["meningitis-medscape", "encephalitis-medscape"]}
+        {
+          "fact": "fever",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "meningitis-medscape",
+            "encephalitis-medscape"
+          ]
+        },
+        {
+          "fact": "neck_stiffness",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "meningitis-medscape"
+          ]
+        },
+        {
+          "fact": "altered_consciousness",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "encephalitis-medscape"
+          ]
+        },
+        {
+          "fact": "immunocompromised",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "meningitis-medscape",
+            "encephalitis-medscape"
+          ]
+        }
       ]
     },
     {
@@ -195,12 +551,55 @@
       "review_status": "provisional",
       "reviewer": null,
       "reviewed_at": null,
+      "safety_rule_codes": [
+        "semantic_malignancy_history"
+      ],
       "clues": [
-        {"fact": "onset_gradual", "status": "present", "direction": "support", "weight": 1, "source_ids": ["brain-neoplasm-medscape"]},
-        {"fact": "cough_valsalva_trigger", "status": "present", "direction": "support", "weight": 1, "source_ids": ["brain-neoplasm-medscape"]},
-        {"fact": "visual_change_unspecified", "status": "present", "direction": "support", "weight": 1, "source_ids": ["brain-neoplasm-medscape"]},
-        {"fact": "focal_neurologic_symptom", "status": "present", "direction": "support", "weight": 1, "source_ids": ["brain-neoplasm-medscape"]},
-        {"fact": "cancer_history", "status": "present", "direction": "support", "weight": 1, "source_ids": ["brain-neoplasm-medscape"]}
+        {
+          "fact": "onset_gradual",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "brain-neoplasm-medscape"
+          ]
+        },
+        {
+          "fact": "cough_valsalva_trigger",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "brain-neoplasm-medscape"
+          ]
+        },
+        {
+          "fact": "visual_change_unspecified",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "brain-neoplasm-medscape"
+          ]
+        },
+        {
+          "fact": "focal_neurologic_symptom",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "brain-neoplasm-medscape"
+          ]
+        },
+        {
+          "fact": "cancer_history",
+          "status": "present",
+          "direction": "support",
+          "weight": 1,
+          "source_ids": [
+            "brain-neoplasm-medscape"
+          ]
+        }
       ]
     }
   ]

@@ -53,7 +53,7 @@ class DiseaseProfileValidationTests(unittest.TestCase):
     def test_deployed_profile_is_versioned_and_provisional(self):
         document = load_profile_document()
 
-        self.assertEqual(document["schema_version"], 1)
+        self.assertEqual(document["schema_version"], 2)
         self.assertEqual(document["route"], "chest")
         self.assertGreaterEqual(len(document["profiles"]), 10)
         self.assertTrue(
@@ -97,9 +97,28 @@ class DiseaseProfileValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "未驗證"):
             validate_profile_document(document)
 
+    def test_safety_links_are_required_only_for_must_not_miss_profiles(self):
+        document = copy.deepcopy(load_profile_document())
+        dangerous = next(profile for profile in document["profiles"] if profile["must_not_miss"])
+        dangerous["safety_rule_codes"] = []
+        with self.assertRaisesRegex(ValueError, "至少需要一條 Safety"):
+            validate_profile_document(document)
+
+        document = copy.deepcopy(load_profile_document())
+        routine = next(profile for profile in document["profiles"] if not profile["must_not_miss"])
+        routine["safety_rule_codes"] = ["severe_breathing"]
+        with self.assertRaisesRegex(ValueError, "不可綁定 Safety"):
+            validate_profile_document(document)
+
+        document = copy.deepcopy(load_profile_document())
+        dangerous = next(profile for profile in document["profiles"] if profile["must_not_miss"])
+        dangerous["safety_rule_codes"] = ["abdominal_syncope"]
+        with self.assertRaisesRegex(ValueError, "不適用於 chest"):
+            validate_profile_document(document)
+
     def test_wrong_schema_generation_and_review_metadata_are_rejected(self):
         document = copy.deepcopy(load_profile_document())
-        document["schema_version"] = 2
+        document["schema_version"] = 1
         with self.assertRaisesRegex(ValueError, "schema_version"):
             validate_profile_document(document)
 
@@ -203,7 +222,7 @@ class DiseaseScoringTests(unittest.TestCase):
             result["safety_triggered_conditions"],
             [
                 {
-                    "name": "急性冠心症（含心肌梗塞）",
+                    "name": "急性冠心症",
                     "profile_id": "acute_coronary_syndrome",
                     "coding": [
                         {

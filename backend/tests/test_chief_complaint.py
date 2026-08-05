@@ -1,5 +1,7 @@
+import copy
 import json
 import unittest
+from unittest.mock import patch
 
 from amie.chief_complaint import (
     ChiefComplaintExtractor,
@@ -14,6 +16,7 @@ from amie.clinical_facts import (
     questionnaire_prefills_from_assessment,
 )
 from amie.models import ChiefComplaintAssessment
+from amie.rule_config import load_safety_rules
 from amie.safety import detect_structured_red_flags
 from domain.questionnaires import build_questionnaire
 
@@ -448,6 +451,44 @@ class ChiefComplaintExtractorTests(unittest.TestCase):
 
 
 class StructuredSafetyTests(unittest.TestCase):
+    def test_doctor_selected_safety_fact_triggers_direct_urgent_flag(self):
+        rules = copy.deepcopy(load_safety_rules())
+        rules["safety_fact_codes"] = ["severity_severe"]
+        assessment = ChiefComplaintAssessment.model_validate(
+            headache_payload(findings=[]),
+        )
+
+        with patch("amie.safety.load_safety_rules", return_value=rules):
+            flags = detect_structured_red_flags(assessment, {})
+
+        direct = next(flag for flag in flags if flag["code"] == "clinical_fact:severity_severe")
+        self.assertEqual(direct["level"], "urgent")
+        self.assertEqual(direct["evidence"], "頭痛到感覺快要裂開")
+
+    def test_negated_doctor_selected_safety_fact_does_not_trigger(self):
+        rules = copy.deepcopy(load_safety_rules())
+        rules["safety_fact_codes"] = ["nausea"]
+        assessment = ChiefComplaintAssessment.model_validate(
+            headache_payload(
+                findings=[],
+                negated_findings=[
+                    {
+                        "code": "nausea",
+                        "status": "absent",
+                        "evidence": "沒有噁心",
+                    }
+                ],
+            ),
+        )
+
+        with patch("amie.safety.load_safety_rules", return_value=rules):
+            flags = detect_structured_red_flags(assessment, {})
+
+        self.assertNotIn(
+            "clinical_fact:nausea",
+            {flag["code"] for flag in flags},
+        )
+
     def test_headache_blurred_vision_is_urgent_without_severe_pain(self):
         assessment = ChiefComplaintAssessment.model_validate(
             headache_payload(

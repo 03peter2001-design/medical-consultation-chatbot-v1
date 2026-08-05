@@ -7,7 +7,7 @@ services:
       - ./backend/.env
     environment:
       CONSULTATION_DB_PATH: /app/data/consultations.db
-      FHIR_BASE_URL: http://host.docker.internal:8080/fhir
+      FHIR_BASE_URL: http://hapi:8080/fhir
       HF_HUB_CACHE: /models/hub
       HF_HUB_OFFLINE: "1"
       HF_HUB_DISABLE_TELEMETRY: "1"

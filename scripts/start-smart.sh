@@ -16,6 +16,32 @@ curl --fail --silent --show-error --max-time 10 \
   -H "Accept: application/fhir+json" \
   "${FHIR_BASE_URL}/metadata" >/dev/null
 
+seed_synthetic_patient() {
+  local patient_id="$1"
+  local bundle_path="$2"
+
+  if curl --fail --silent --max-time 10 \
+    -H "Accept: application/fhir+json" \
+    "${FHIR_BASE_URL}/Patient/${patient_id}" >/dev/null; then
+    echo "Synthetic patient already present: ${patient_id}"
+    return
+  fi
+
+  echo "Importing synthetic patient: ${patient_id}"
+  curl --fail --silent --show-error --max-time 60 \
+    -H "Accept: application/fhir+json" \
+    -H "Content-Type: application/fhir+json" \
+    --data-binary "@${bundle_path}" \
+    "${FHIR_BASE_URL}" >/dev/null
+}
+
+seed_synthetic_patient \
+  "syn-chest-001" \
+  "backend/fhir_samples/synthetic_chest_pain_case.json"
+seed_synthetic_patient \
+  "syn-wang-daming-001" \
+  "backend/fhir_samples/synthetic_wang_daming_stent_case.json"
+
 if [[ ! -f backend/.env ]]; then
   echo "Missing backend/.env. Run ./scripts/bootstrap.sh or copy backend/.env.example first." >&2
   exit 1
@@ -38,7 +64,7 @@ SMART_LAUNCHER_PORT="${SMART_LAUNCHER_PORT}" \
 RAG_HF_HUB_CACHE="${RAG_HF_HUB_CACHE}" \
 docker compose \
   -f compose.smart.yml \
-  up -d --build --remove-orphans
+  up -d --build
 
 SMART_DISCOVERY_URL="http://127.0.0.1:${SMART_LAUNCHER_PORT}/v/r4/fhir/.well-known/smart-configuration"
 echo "Waiting for SMART discovery at ${SMART_DISCOVERY_URL} ..."

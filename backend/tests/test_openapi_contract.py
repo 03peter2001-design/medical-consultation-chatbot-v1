@@ -3,7 +3,7 @@ import json
 import unittest
 from pathlib import Path
 
-from fastapi import BackgroundTasks
+from fastapi import BackgroundTasks, HTTPException
 
 from app import runtime
 from app.contracts import (
@@ -40,7 +40,7 @@ EXPECTED_OPERATIONS = {
     ("PUT", "/v1/doctor/rules/fact-labels"),
     ("PUT", "/v1/doctor/rules/disease-profiles/{route}"),
     ("GET", "/v1/doctor/consultations"),
-    ("DELETE", "/v1/doctor/consultations/{queue_number}"),
+    ("DELETE", "/v1/doctor/consultations/{consultation_id}"),
     ("POST", "/v1/doctor/load_patient"),
     ("DELETE", "/v1/doctor/patient/{session_id}"),
     ("POST", "/v1/doctor/chat"),
@@ -75,6 +75,27 @@ class OpenApiContractTests(unittest.TestCase):
                 self.assertTrue(schema.get("$ref"), operation["operationId"])
         self.assertEqual(len(operation_ids), len(set(operation_ids)))
 
+    def test_load_patient_documents_cross_date_registration_ambiguity(self):
+        description = self.schema["paths"]["/v1/doctor/load_patient"]["post"]["responses"]["409"][
+            "description"
+        ]
+        self.assertIn("multiple dates", description)
+        self.assertIn("consultation_date", description)
+        self.assertIn("composite consultation_id", description)
+        self.assertNotIn("revision", description)
+
+    def test_load_patient_rejects_invalid_composite_id_with_422(self):
+        with self.assertRaises(HTTPException) as raised:
+            load_patient(
+                LoadPatientRequest(
+                    session_id="invalid-composite-id",
+                    consultation_id="20260805:001",
+                )
+            )
+
+        self.assertEqual(raised.exception.status_code, 422)
+        self.assertIn("ASCII YYYY-MM-DD", raised.exception.detail)
+
     def test_legacy_aliases_remain_runtime_only(self):
         self.assertNotIn("/health", self.schema["paths"])
         compatibility_routers = [
@@ -87,14 +108,23 @@ class OpenApiContractTests(unittest.TestCase):
     def test_representative_responses_satisfy_the_published_models(self):
         HealthResponse.model_validate(health())
         RuleCenterResponse.model_validate(get_rule_center())
-        ConsultationListResponse.model_validate(
-            list_consultations(search="", limit=1, offset=0),
+        consultation_list = list_consultations(search="", limit=1, offset=0)
+        ConsultationListResponse.model_validate(consultation_list)
+        self.assertTrue(consultation_list["items"])
+        summary = consultation_list["items"][0]
+        self.assertEqual(
+            summary["consultation_id"],
+            f"{summary['consultation_date']}:{summary['registration_number']}",
         )
-        LoadPatientResponse.model_validate(
-            load_patient(
-                LoadPatientRequest(session_id="contract-test", queue_number="00000"),
+        record = load_patient(
+            LoadPatientRequest(
+                session_id="contract-test",
+                consultation_id=summary["consultation_id"],
             )
         )
+        LoadPatientResponse.model_validate(record)
+        self.assertEqual(record["consultation_id"], summary["consultation_id"])
+        self.assertEqual(record["consultation_date"], summary["consultation_date"])
         PatientChatResponse.model_validate(
             asyncio.run(
                 chat(

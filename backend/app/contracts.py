@@ -35,13 +35,20 @@ ERROR_DESCRIPTIONS = {
 }
 
 
-def error_responses(*status_codes: int) -> dict[int | str, dict[str, Any]]:
+def error_responses(
+    *status_codes: int,
+    descriptions: dict[int, str] | None = None,
+) -> dict[int | str, dict[str, Any]]:
     """Build consistent OpenAPI error declarations without changing runtime JSON."""
 
+    descriptions = descriptions or {}
     return {
         status_code: {
             "model": ErrorResponse,
-            "description": ERROR_DESCRIPTIONS[status_code],
+            "description": descriptions.get(
+                status_code,
+                ERROR_DESCRIPTIONS[status_code],
+            ),
         }
         for status_code in status_codes
     }
@@ -119,6 +126,7 @@ class DoctorChatResponse(BaseModel):
     session_id: str
     sources: list[EvidenceSource]
     patient_loaded: str | None = None
+    patient_loaded_consultation_id: str | None = None
     mode: Literal["chat", "structured_note"]
 
 
@@ -132,10 +140,16 @@ class SessionClearedResponse(StatusResponse):
 
 class ConsultationDeletedResponse(BaseModel):
     status: Literal["deleted"]
+    consultation_id: str
+    consultation_date: str
+    registration_number: str
     queue_number: str
 
 
 class ConsultationSummary(BaseModel):
+    consultation_id: str
+    consultation_date: str
+    registration_number: str
     queue_number: str
     patient_name: str
     type: str
@@ -156,6 +170,9 @@ class ConsultationListResponse(BaseModel):
 
 
 class LoadPatientResponse(BaseModel):
+    consultation_id: str
+    consultation_date: str
+    registration_number: str
     queue_number: str
     type: str
     reason: str
@@ -176,6 +193,7 @@ class LoadPatientResponse(BaseModel):
     workflow_status: str
     summary_error: str
     rag_enabled: bool
+    created_at: str
 
 
 class SnomedConcept(BaseModel):

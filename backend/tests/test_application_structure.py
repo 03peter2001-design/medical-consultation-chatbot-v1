@@ -60,7 +60,7 @@ class ApplicationStructureTests(unittest.TestCase):
                 ("PUT", "/rules/fact-labels"),
                 ("PUT", "/rules/disease-profiles/{route}"),
                 ("GET", "/consultations"),
-                ("DELETE", "/consultations/{queue_number}"),
+                ("DELETE", "/consultations/{consultation_id}"),
                 ("POST", "/load_patient"),
                 ("DELETE", "/patient/{session_id}"),
                 ("POST", "/chat"),

@@ -483,21 +483,21 @@ def generate_ai_report(record: dict) -> str | None:
     return (f"{safety_report}\n\n【醫師速覽摘要】\n{normalized}").strip()
 
 
-def process_background_summaries(queue_number: str) -> None:
+def process_background_summaries(consultation_id: str) -> None:
     try:
         status = process_consultation_summaries(
             runtime.consultation_repository,
-            queue_number,
+            consultation_id,
             generate_ai_report,
             generate_structured_note,
             structured_note_expected=runtime.RAG_ENABLED,
         )
-        print(f"[Submit] 背景摘要處理完成：{queue_number} ({status})")
+        print(f"[Submit] 背景摘要處理完成：{consultation_id} ({status})")
     except Exception as error:
         traceback.print_exc()
         runtime.consultation_repository.update_workflow_status(
-            queue_number,
+            consultation_id,
             "summary_failed",
             error=f"背景摘要處理失敗：{type(error).__name__}",
         )
-        print(f"[Submit] 背景摘要處理失敗：{queue_number}: {error}")
+        print(f"[Submit] 背景摘要處理失敗：{consultation_id}: {error}")

@@ -2,9 +2,11 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 
 import {
+  api,
   apiVersionPrefix,
   consultationDetailPath,
   consultationListPath,
+  consultationLookupFields,
   diseaseProfileUpdatePath,
   factLabelUpdatePath,
   formatApiErrorDetail,
@@ -80,9 +82,66 @@ test('builds an encoded consultation list query', () => {
 
 test('encodes a consultation identifier for delete requests', () => {
   assert.equal(
-    consultationDetailPath('急診/001'),
-    '/v1/doctor/consultations/%E6%80%A5%E8%A8%BA%2F001',
+    consultationDetailPath('2026-08-05:001'),
+    '/v1/doctor/consultations/2026-08-05%3A001',
   )
+})
+
+test('keeps a bare consultation number unqualified by date', () => {
+  assert.deepEqual(consultationLookupFields(' 00000 '), {
+    registration_number: '00000',
+  })
+})
+
+test('keeps a date-qualified consultation id unchanged', () => {
+  assert.deepEqual(consultationLookupFields(' 2026-08-04:001 '), {
+    consultation_id: '2026-08-04:001',
+  })
+})
+
+test('loads a doctor record by a bare number without binding it to today', async () => {
+  const originalFetch = globalThis.fetch
+  let captured
+  globalThis.fetch = async (url, options) => {
+    captured = { url, options }
+    return {
+      ok: true,
+      json: async () => ({ consultation_id: '2026-08-04:00000' }),
+    }
+  }
+  try {
+    await api.loadPatient('00000', 'doctor-session')
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+
+  assert.deepEqual(JSON.parse(captured.options.body), {
+    session_id: 'doctor-session',
+    registration_number: '00000',
+  })
+})
+
+test('loads a doctor record by the date-qualified consultation id', async () => {
+  const originalFetch = globalThis.fetch
+  let captured
+  globalThis.fetch = async (url, options) => {
+    captured = { url, options }
+    return {
+      ok: true,
+      json: async () => ({ consultation_id: '2026-08-04:001' }),
+    }
+  }
+  try {
+    await api.loadPatient('2026-08-04:001', 'doctor-session')
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+
+  assert.match(captured.url, /\/v1\/doctor\/load_patient$/)
+  assert.deepEqual(JSON.parse(captured.options.body), {
+    session_id: 'doctor-session',
+    consultation_id: '2026-08-04:001',
+  })
 })
 
 test('uses dedicated doctor rule management endpoints', () => {
@@ -122,4 +181,33 @@ test('formats FastAPI validation errors with their field path', () => {
     'pain_location_ids：未知的疼痛位置：front_unknown',
   )
   assert.equal(formatApiErrorDetail(null, 500), 'HTTP 500')
+})
+
+test('turns a cross-date 409 into an actionable date-qualified lookup message', () => {
+  assert.equal(
+    formatApiErrorDetail(
+      '此掛號編號跨日期重複，請指定日期或 consultation_id',
+      409,
+    ),
+    '此掛號編號在不同日期有多筆病例，請輸入「YYYY-MM-DD:編號」指定日期。',
+  )
+})
+
+test('shows an actionable message when a bare number is ambiguous across dates', async () => {
+  const originalFetch = globalThis.fetch
+  globalThis.fetch = async () => ({
+    ok: false,
+    status: 409,
+    json: async () => ({
+      detail: '此掛號編號跨日期重複，請指定日期或 consultation_id',
+    }),
+  })
+  try {
+    await assert.rejects(
+      api.loadPatient('001', 'doctor-session'),
+      /請輸入「YYYY-MM-DD:編號」指定日期/,
+    )
+  } finally {
+    globalThis.fetch = originalFetch
+  }
 })

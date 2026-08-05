@@ -114,8 +114,20 @@
       },
       "ConsultationDeletedResponse": {
         "properties": {
+          "consultation_date": {
+            "title": "Consultation Date",
+            "type": "string"
+          },
+          "consultation_id": {
+            "title": "Consultation Id",
+            "type": "string"
+          },
           "queue_number": {
             "title": "Queue Number",
+            "type": "string"
+          },
+          "registration_number": {
+            "title": "Registration Number",
             "type": "string"
           },
           "status": {
@@ -126,6 +138,9 @@
         },
         "required": [
           "status",
+          "consultation_id",
+          "consultation_date",
+          "registration_number",
           "queue_number"
         ],
         "title": "ConsultationDeletedResponse",
@@ -172,6 +187,14 @@
             "title": "Age",
             "type": "string"
           },
+          "consultation_date": {
+            "title": "Consultation Date",
+            "type": "string"
+          },
+          "consultation_id": {
+            "title": "Consultation Id",
+            "type": "string"
+          },
           "created_at": {
             "title": "Created At",
             "type": "string"
@@ -196,6 +219,10 @@
             "title": "Reason",
             "type": "string"
           },
+          "registration_number": {
+            "title": "Registration Number",
+            "type": "string"
+          },
           "triage_level": {
             "enum": [
               "routine",
@@ -214,6 +241,9 @@
           }
         },
         "required": [
+          "consultation_id",
+          "consultation_date",
+          "registration_number",
           "queue_number",
           "patient_name",
           "type",
@@ -378,6 +408,17 @@
               }
             ],
             "title": "Patient Loaded"
+          },
+          "patient_loaded_consultation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Patient Loaded Consultation Id"
           },
           "reply": {
             "title": "Reply",
@@ -652,9 +693,49 @@
       },
       "LoadPatientRequest": {
         "properties": {
+          "consultation_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Consultation Date"
+          },
+          "consultation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Consultation Id"
+          },
           "queue_number": {
-            "title": "Queue Number",
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Queue Number"
+          },
+          "registration_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Registration Number"
           },
           "session_id": {
             "title": "Session Id",
@@ -662,8 +743,7 @@
           }
         },
         "required": [
-          "session_id",
-          "queue_number"
+          "session_id"
         ],
         "title": "LoadPatientRequest",
         "type": "object"
@@ -702,6 +782,18 @@
             "title": "Clinical Codings",
             "type": "array"
           },
+          "consultation_date": {
+            "title": "Consultation Date",
+            "type": "string"
+          },
+          "consultation_id": {
+            "title": "Consultation Id",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
           "disease_assessment": {
             "additionalProperties": true,
             "title": "Disease Assessment",
@@ -735,6 +827,10 @@
           },
           "reason": {
             "title": "Reason",
+            "type": "string"
+          },
+          "registration_number": {
+            "title": "Registration Number",
             "type": "string"
           },
           "report": {
@@ -790,6 +886,9 @@
           }
         },
         "required": [
+          "consultation_id",
+          "consultation_date",
+          "registration_number",
           "queue_number",
           "type",
           "reason",
@@ -807,7 +906,8 @@
           "triage_level",
           "workflow_status",
           "summary_error",
-          "rag_enabled"
+          "rag_enabled",
+          "created_at"
         ],
         "title": "LoadPatientResponse",
         "type": "object"
@@ -2003,16 +2103,16 @@
         ]
       }
     },
-    "/v1/doctor/consultations/{queue_number}": {
+    "/v1/doctor/consultations/{consultation_id}": {
       "delete": {
-        "operationId": "delete_consultation_v1_doctor_consultations__queue_number__delete",
+        "operationId": "delete_consultation_v1_doctor_consultations__consultation_id__delete",
         "parameters": [
           {
             "in": "path",
-            "name": "queue_number",
+            "name": "consultation_id",
             "required": true,
             "schema": {
-              "title": "Queue Number",
+              "title": "Consultation Id",
               "type": "string"
             }
           }
@@ -2098,6 +2198,16 @@
               }
             },
             "description": "The requested consultation does not exist."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The supplied registration number matches consultations on multiple dates. Provide consultation_date or the composite consultation_id."
           },
           "422": {
             "content": {

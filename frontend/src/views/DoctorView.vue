@@ -44,7 +44,7 @@ const caseRecords = ref([])
 const caseTotal = ref(0)
 const isLoadingCases = ref(false)
 const caseListError = ref('')
-const deletingQueueNumber = ref('')
+const deletingConsultationId = ref('')
 const mobileWorkspaceTab = ref('cases')
 let caseSearchTimer = null
 let caseRequestVersion = 0
@@ -199,18 +199,18 @@ async function checkHealth() {
   }
 }
 
-async function loadPatient(queueNumberOverride = '') {
-  const queueNumber =
-    typeof queueNumberOverride === 'string' && queueNumberOverride
-      ? queueNumberOverride.trim()
+async function loadPatient(consultationIdOverride = '') {
+  const consultationId =
+    typeof consultationIdOverride === 'string' && consultationIdOverride
+      ? consultationIdOverride.trim()
       : queueInput.value.trim()
-  if (!queueNumber || isLoadingPatient.value) return
+  if (!consultationId || isLoadingPatient.value) return
 
   textInput.value?.blur()
   isLoadingPatient.value = true
   preservePatientTop.value = true
   try {
-    const record = await api.loadPatient(queueNumber, sessionId)
+    const record = await api.loadPatient(consultationId, sessionId)
     loadedPatient.value = record
     mobileWorkspaceTab.value = 'record'
     queueInput.value = ''
@@ -251,20 +251,20 @@ async function loadPatient(queueNumberOverride = '') {
 }
 
 async function deleteConsultation(record) {
-  if (deletingQueueNumber.value) return
+  if (deletingConsultationId.value) return
   const confirmed = window.confirm(
-    `確定要永久刪除 ${record.patient_name}（病例 #${record.queue_number}）嗎？\n\n此操作無法復原。`,
+    `確定要永久刪除 ${record.patient_name}（${record.consultation_date} #${record.queue_number}）嗎？\n\n此操作無法復原。`,
   )
   if (!confirmed) return
 
-  deletingQueueNumber.value = record.queue_number
+  deletingConsultationId.value = record.consultation_id
   try {
-    await api.deleteConsultation(record.queue_number)
+    await api.deleteConsultation(record.consultation_id)
     caseRecords.value = caseRecords.value.filter(
-      (item) => item.queue_number !== record.queue_number,
+      (item) => item.consultation_id !== record.consultation_id,
     )
     caseTotal.value = Math.max(0, caseTotal.value - 1)
-    if (loadedPatient.value?.queue_number === record.queue_number) {
+    if (loadedPatient.value?.consultation_id === record.consultation_id) {
       loadedPatient.value = null
       items.value = []
       input.value = ''
@@ -272,7 +272,7 @@ async function deleteConsultation(record) {
   } catch (error) {
     window.alert(`⚠️ 刪除病例失敗：${error.message}`)
   } finally {
-    deletingQueueNumber.value = ''
+    deletingConsultationId.value = ''
   }
 }
 
@@ -394,7 +394,7 @@ onBeforeUnmount(() => {
         v-model="queueInput"
         type="text"
         maxlength="16"
-        placeholder="輸入問診編號（urgent 3碼／routine 5碼）..."
+        placeholder="輸入掛號編號；跨日重複時請輸入 YYYY-MM-DD:編號..."
         :disabled="isLoadingPatient"
         @keydown.enter.prevent="loadPatient()"
       />
@@ -407,7 +407,8 @@ onBeforeUnmount(() => {
       </button>
       <div v-if="loadedPatient" class="patient-tag">
         <span>
-          👤 病人 {{ loadedPatient.queue_number }}（{{ patientType }}）
+          👤 {{ loadedPatient.consultation_date }} · 病人
+          {{ loadedPatient.queue_number }}（{{ patientType }}）
         </span>
         <button aria-label="取消載入病人" @click="unloadPatient">✕</button>
       </div>
@@ -440,8 +441,8 @@ onBeforeUnmount(() => {
         :total="caseTotal"
         :loading="isLoadingCases"
         :error="caseListError"
-        :deleting-queue-number="deletingQueueNumber"
-        :loaded-queue-number="loadedPatient?.queue_number"
+        :deleting-consultation-id="deletingConsultationId"
+        :loaded-consultation-id="loadedPatient?.consultation_id"
         :patient-loading="isLoadingPatient"
         :has-more="hasMoreCases"
         @refresh="refreshConsultations"

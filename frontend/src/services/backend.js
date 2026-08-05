@@ -70,10 +70,18 @@ export function consultationListPath({
   return apiPath(`/doctor/consultations?${params.toString()}`)
 }
 
-export function consultationDetailPath(queueNumber) {
+export function consultationDetailPath(consultationId) {
   return apiPath(
-    `/doctor/consultations/${encodeURIComponent(queueNumber)}`,
+    `/doctor/consultations/${encodeURIComponent(consultationId)}`,
   )
+}
+
+export function consultationLookupFields(value) {
+  const reference = String(value ?? '').trim()
+  if (/^(?:\d{3}|\d{5})$/.test(reference)) {
+    return { registration_number: reference }
+  }
+  return { consultation_id: reference }
 }
 
 export const ruleCenterPath = apiPath('/doctor/rules')
@@ -111,7 +119,12 @@ async function request(path, options = {}) {
 }
 
 export function formatApiErrorDetail(detail, status) {
-  if (typeof detail === 'string' && detail.trim()) return detail
+  if (typeof detail === 'string' && detail.trim()) {
+    if (status === 409 && detail.includes('跨日期重複')) {
+      return '此掛號編號在不同日期有多筆病例，請輸入「YYYY-MM-DD:編號」指定日期。'
+    }
+    return detail
+  }
   if (Array.isArray(detail)) {
     const messages = detail
       .map((issue) => {
@@ -140,8 +153,8 @@ export const api = {
   health: () => request(apiPath('/health')),
   listConsultations: (options) =>
     request(consultationListPath(options)),
-  deleteConsultation: (queueNumber) =>
-    request(consultationDetailPath(queueNumber), {
+  deleteConsultation: (consultationId) =>
+    request(consultationDetailPath(consultationId), {
       method: 'DELETE',
     }),
   patientChat: (
@@ -167,12 +180,12 @@ export const api = {
       body: formData,
     })
   },
-  loadPatient: (queueNumber, sessionId) =>
+  loadPatient: (consultationId, sessionId) =>
     request(
       apiPath('/doctor/load_patient'),
       jsonOptions('POST', {
         session_id: sessionId,
-        queue_number: queueNumber,
+        ...consultationLookupFields(consultationId),
       }),
     ),
   unloadPatient: (sessionId) =>

@@ -264,34 +264,64 @@ def list_consultations(
 
 
 @router.delete(
-    "/consultations/{queue_number}",
+    "/consultations/{consultation_id}",
     response_model=ConsultationDeletedResponse,
     responses=error_responses(400, 404, 422),
     summary="Permanently delete a consultation",
 )
-def delete_consultation(queue_number: str):
-    normalized = queue_number.strip()[:16]
+def delete_consultation(consultation_id: str):
+    normalized = consultation_id.strip()[:32]
     if not normalized:
-        raise HTTPException(status_code=400, detail="問診編號不可為空")
-    if not runtime.consultation_repository.delete(normalized):
-        raise HTTPException(status_code=404, detail="查無此問診編號")
+        raise HTTPException(status_code=400, detail="consultation_id 不可為空")
+    try:
+        record = runtime.consultation_repository.get(normalized)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    if not record or not runtime.consultation_repository.delete(normalized):
+        raise HTTPException(status_code=404, detail="查無此病例")
 
     for session in runtime.doctor_sessions.values():
         patient = session.get("patient")
-        if patient and patient.get("queue_number") == normalized:
+        if patient and patient.get("consultation_id") == normalized:
             session["patient"] = None
             session["history"] = []
-    return {"status": "deleted", "queue_number": normalized}
+    return {
+        "status": "deleted",
+        "consultation_id": normalized,
+        "consultation_date": record["consultation_date"],
+        "registration_number": record["registration_number"],
+        "queue_number": record["queue_number"],
+    }
 
 
 @router.post(
     "/load_patient",
     response_model=LoadPatientResponse,
-    responses=error_responses(404, 422),
+    responses=error_responses(
+        404,
+        409,
+        422,
+        descriptions={
+            409: (
+                "The supplied registration number matches consultations on multiple "
+                "dates. Provide consultation_date or the composite consultation_id."
+            ),
+        },
+    ),
     summary="Load a consultation into a physician session",
 )
 def load_patient(request: LoadPatientRequest):
-    record = runtime.consultation_repository.get(request.queue_number)
+    try:
+        if request.consultation_id:
+            record = runtime.consultation_repository.get(request.consultation_id)
+        else:
+            record = runtime.consultation_repository.get_by_registration_number(
+                request.registration_number or request.queue_number or "",
+                consultation_date=request.consultation_date,
+            )
+    except ValueError as error:
+        status_code = 409 if "跨日期重複" in str(error) else 422
+        raise HTTPException(status_code=status_code, detail=str(error)) from error
     if not record:
         raise HTTPException(
             status_code=404,
@@ -354,6 +384,9 @@ def load_patient(request: LoadPatientRequest):
     amie_state["differential_hypotheses"] = []
     amie_state["disease_assessment"] = disease_assessment
     return {
+        "consultation_id": record["consultation_id"],
+        "consultation_date": record["consultation_date"],
+        "registration_number": record["registration_number"],
         "queue_number": record["queue_number"],
         "type": record["type"],
         "reason": record["reason"],
@@ -376,6 +409,7 @@ def load_patient(request: LoadPatientRequest):
         "workflow_status": record.get("status", "completed"),
         "summary_error": record.get("summary_error", ""),
         "rag_enabled": runtime.RAG_ENABLED,
+        "created_at": record["created_at"],
     }
 
 
@@ -521,6 +555,7 @@ async def doctor_chat(request: DoctorChatRequest):
         "session_id": request.session_id,
         "sources": sources,
         "patient_loaded": patient["queue_number"] if patient else None,
+        "patient_loaded_consultation_id": (patient["consultation_id"] if patient else None),
         "mode": request.mode,
     }
 

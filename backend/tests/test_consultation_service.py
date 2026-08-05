@@ -13,7 +13,7 @@ class ConsultationServiceTests(unittest.TestCase):
     def test_submission_generation_is_persisted_and_reused(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             repository = ConsultationRepository(Path(temporary_directory) / "consultations.db")
-            queue_number = repository.create(
+            created = repository.create_with_identifiers(
                 {
                     "type": "chest",
                     "summary": "胸痛摘要",
@@ -32,17 +32,17 @@ class ConsultationServiceTests(unittest.TestCase):
 
             first = get_or_create_structured_note(
                 repository,
-                repository.get(queue_number),
+                repository.get(created["consultation_id"]),
                 generator,
             )
             second = get_or_create_structured_note(
                 repository,
-                repository.get(queue_number),
+                repository.get(created["consultation_id"]),
                 generator,
             )
 
             self.assertEqual(first, second)
-            self.assertEqual(calls, [queue_number])
+            self.assertEqual(calls, [created["queue_number"]])
             self.assertEqual(
                 second[0],
                 "已產生並儲存的 AI 總結",
@@ -51,7 +51,7 @@ class ConsultationServiceTests(unittest.TestCase):
     def test_number_exists_before_background_generators_run(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             repository = ConsultationRepository(Path(temporary_directory) / "consultations.db")
-            queue_number = repository.create(
+            created = repository.create_with_identifiers(
                 {
                     "type": "headache",
                     "summary": "問卷資料",
@@ -65,8 +65,8 @@ class ConsultationServiceTests(unittest.TestCase):
 
             def report_generator(record):
                 events.append(("report", record["status"]))
-                self.assertEqual(record["queue_number"], queue_number)
-                self.assertIsNotNone(repository.get(queue_number))
+                self.assertEqual(record["queue_number"], created["queue_number"])
+                self.assertIsNotNone(repository.get(created["consultation_id"]))
                 return "urgent 病人的 AI 預問診摘要"
 
             def structured_generator(record):
@@ -75,13 +75,13 @@ class ConsultationServiceTests(unittest.TestCase):
 
             status = process_consultation_summaries(
                 repository,
-                queue_number,
+                created["consultation_id"],
                 report_generator,
                 structured_generator,
                 structured_note_expected=True,
             )
 
-            saved = repository.get(queue_number)
+            saved = repository.get(created["consultation_id"])
             self.assertEqual(status, "summary_ready")
             self.assertEqual(saved["status"], "summary_ready")
             self.assertEqual(
@@ -103,7 +103,7 @@ class ConsultationServiceTests(unittest.TestCase):
     def test_background_failure_is_persisted_without_losing_number(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             repository = ConsultationRepository(Path(temporary_directory) / "consultations.db")
-            queue_number = repository.create(
+            created = repository.create_with_identifiers(
                 {
                     "type": "chest",
                     "summary": "問卷資料",
@@ -115,17 +115,17 @@ class ConsultationServiceTests(unittest.TestCase):
 
             status = process_consultation_summaries(
                 repository,
-                queue_number,
+                created["consultation_id"],
                 lambda record: (_ for _ in ()).throw(RuntimeError("provider unavailable")),
                 lambda record: (None, []),
                 structured_note_expected=False,
             )
 
-            saved = repository.get(queue_number)
+            saved = repository.get(created["consultation_id"])
             self.assertEqual(status, "summary_failed")
             self.assertEqual(saved["status"], "summary_failed")
             self.assertIn("RuntimeError", saved["summary_error"])
-            self.assertEqual(saved["queue_number"], queue_number)
+            self.assertEqual(saved["queue_number"], created["queue_number"])
 
 
 if __name__ == "__main__":

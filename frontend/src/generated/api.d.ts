@@ -55,7 +55,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/doctor/consultations/{queue_number}": {
+    "/v1/doctor/consultations/{consultation_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -66,7 +66,7 @@ export interface paths {
         put?: never;
         post?: never;
         /** Permanently delete a consultation */
-        delete: operations["delete_consultation_v1_doctor_consultations__queue_number__delete"];
+        delete: operations["delete_consultation_v1_doctor_consultations__consultation_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -334,8 +334,14 @@ export interface components {
         };
         /** ConsultationDeletedResponse */
         ConsultationDeletedResponse: {
+            /** Consultation Date */
+            consultation_date: string;
+            /** Consultation Id */
+            consultation_id: string;
             /** Queue Number */
             queue_number: string;
+            /** Registration Number */
+            registration_number: string;
             /**
              * Status
              * @constant
@@ -357,6 +363,10 @@ export interface components {
         ConsultationSummary: {
             /** Age */
             age: string;
+            /** Consultation Date */
+            consultation_date: string;
+            /** Consultation Id */
+            consultation_id: string;
             /** Created At */
             created_at: string;
             /** Gender */
@@ -369,6 +379,8 @@ export interface components {
             queue_number: string;
             /** Reason */
             reason: string;
+            /** Registration Number */
+            registration_number: string;
             /**
              * Triage Level
              * @enum {string}
@@ -444,6 +456,8 @@ export interface components {
             mode: "chat" | "structured_note";
             /** Patient Loaded */
             patient_loaded?: string | null;
+            /** Patient Loaded Consultation Id */
+            patient_loaded_consultation_id?: string | null;
             /** Reply */
             reply: string;
             /** Session Id */
@@ -555,8 +569,14 @@ export interface components {
         };
         /** LoadPatientRequest */
         LoadPatientRequest: {
+            /** Consultation Date */
+            consultation_date?: string | null;
+            /** Consultation Id */
+            consultation_id?: string | null;
             /** Queue Number */
-            queue_number: string;
+            queue_number?: string | null;
+            /** Registration Number */
+            registration_number?: string | null;
             /** Session Id */
             session_id: string;
         };
@@ -576,6 +596,12 @@ export interface components {
             } | null;
             /** Clinical Codings */
             clinical_codings: components["schemas"]["ClinicalCoding"][];
+            /** Consultation Date */
+            consultation_date: string;
+            /** Consultation Id */
+            consultation_id: string;
+            /** Created At */
+            created_at: string;
             /** Disease Assessment */
             disease_assessment: {
                 [key: string]: unknown;
@@ -596,6 +622,8 @@ export interface components {
             rag_enabled: boolean;
             /** Reason */
             reason: string;
+            /** Registration Number */
+            registration_number: string;
             /** Report */
             report: string;
             /** Structured Note */
@@ -1099,12 +1127,12 @@ export interface operations {
             };
         };
     };
-    delete_consultation_v1_doctor_consultations__queue_number__delete: {
+    delete_consultation_v1_doctor_consultations__consultation_id__delete: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                queue_number: string;
+                consultation_id: string;
             };
             cookie?: never;
         };
@@ -1172,6 +1200,15 @@ export interface operations {
             };
             /** @description The requested consultation does not exist. */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The supplied registration number matches consultations on multiple dates. Provide consultation_date or the composite consultation_id. */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

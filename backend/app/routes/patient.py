@@ -249,7 +249,7 @@ async def _complete_consultation(
 ) -> dict:
     data = session["data"]
     ctype = data["type"]
-    queue_number = consultation_repository.create(
+    created = consultation_repository.create_with_identifiers(
         {
             "session_id": session["session_id"],
             "type": ctype,
@@ -261,9 +261,10 @@ async def _complete_consultation(
             "status": "summary_pending",
         }
     )
+    queue_number = created["queue_number"]
     background_tasks.add_task(
         process_background_summaries,
-        queue_number,
+        created["consultation_id"],
     )
     session["step"] = -1
     session["index"] = -1
@@ -304,7 +305,7 @@ async def _complete_urgent_consultation(
         "此內容為預問診分級提示，不是正式診斷。\n\n"
         "【AI 預問診摘要】\n摘要產生中，請稍候。"
     )
-    queue_number = consultation_repository.create(
+    created = consultation_repository.create_with_identifiers(
         {
             "session_id": session["session_id"],
             "type": data.get("type", "other"),
@@ -316,9 +317,10 @@ async def _complete_urgent_consultation(
             "status": "summary_pending",
         }
     )
+    queue_number = created["queue_number"]
     background_tasks.add_task(
         process_background_summaries,
-        queue_number,
+        created["consultation_id"],
     )
     session["step"] = -1
     session["index"] = -1
@@ -524,7 +526,7 @@ async def _handoff_amie_consultation(
         "此內容為預問診安全提示，不是正式診斷；"
         "請由現場醫療人員進一步確認病人狀況。"
     )
-    queue_number = consultation_repository.create(
+    created = consultation_repository.create_with_identifiers(
         {
             "session_id": session["session_id"],
             "type": route,
@@ -536,6 +538,7 @@ async def _handoff_amie_consultation(
             "status": "manual_handoff",
         }
     )
+    queue_number = created["queue_number"]
     session["step"] = -1
     session["index"] = -1
     labels = flag_labels or "需要進一步確認的情況"

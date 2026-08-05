@@ -1,4 +1,6 @@
+import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 from amie.disease_profiles import attach_safety_conditions, score_diseases
@@ -13,6 +15,7 @@ from app.services.consultation_reporting import (
     _validated_workup_items,
     generate_ai_report,
 )
+from infrastructure.consultation_repository import ConsultationRepository
 
 
 def clinical_fact(code: str, evidence: str) -> dict:
@@ -28,9 +31,104 @@ def clinical_fact(code: str, evidence: str) -> dict:
 class _Repository:
     def __init__(self, record: dict):
         self.record = record
+        self.record.setdefault("consultation_date", "2026-08-05")
+        self.record.setdefault("registration_number", self.record["queue_number"])
+        self.record.setdefault(
+            "consultation_id",
+            f"{self.record['consultation_date']}:{self.record['queue_number']}",
+        )
+        self.record.setdefault("created_at", "2026-08-05T01:00:00+00:00")
 
-    def get(self, queue_number: str) -> dict | None:
-        return self.record if queue_number == self.record["queue_number"] else None
+    def get(self, consultation_id: str) -> dict | None:
+        return self.record if consultation_id == self.record["consultation_id"] else None
+
+    def get_by_registration_number(
+        self,
+        registration_number: str,
+        *,
+        consultation_date: str | None = None,
+    ) -> dict | None:
+        del consultation_date
+        return self.record if registration_number == self.record["registration_number"] else None
+
+
+class DoctorRegistrationLookupTests(unittest.TestCase):
+    def test_bare_registration_load_ignores_hidden_queue_collisions(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            repository = ConsultationRepository(Path(temporary_directory) / "consultations.db")
+            with patch.object(
+                ConsultationRepository,
+                "_queue_number",
+                side_effect=["54321", "10000"],
+            ):
+                first = repository.create_with_identifiers(
+                    {
+                        "type": "other",
+                        "summary": "掛號 10000",
+                        "report": "first",
+                        "data": {"name": "病人 A"},
+                    }
+                )
+                connection = repository._connect()
+                try:
+                    with connection:
+                        connection.execute(
+                            """
+                            UPDATE consultation_number_sequences
+                            SET next_number = 54321
+                            WHERE consultation_date = ? AND triage_level = 'routine'
+                            """,
+                            (first["consultation_date"],),
+                        )
+                finally:
+                    connection.close()
+                repository.create_with_identifiers(
+                    {
+                        "type": "other",
+                        "summary": "掛號 54321",
+                        "report": "second",
+                        "data": {"name": "病人 B"},
+                    }
+                )
+            repository.upsert_fixed(
+                "00000",
+                {
+                    "type": "other",
+                    "summary": "synthetic",
+                    "report": "demo",
+                    "data": {"name": "測試病人"},
+                    "status": "synthetic_test",
+                },
+            )
+
+            with (
+                patch("app.routes.doctor.runtime.consultation_repository", repository),
+                patch("app.routes.doctor.runtime.doctor_sessions", {}),
+                patch("app.routes.doctor.terminology_reference", return_value={}),
+            ):
+                first_response = load_patient(
+                    LoadPatientRequest(
+                        registration_number="10000",
+                        session_id="doctor-first",
+                    )
+                )
+                second_response = load_patient(
+                    LoadPatientRequest(
+                        registration_number="54321",
+                        session_id="doctor-second",
+                    )
+                )
+                demo_response = load_patient(
+                    LoadPatientRequest(
+                        registration_number="00000",
+                        session_id="doctor-demo",
+                    )
+                )
+
+        self.assertEqual(first_response["patient_data"]["name"], "病人 A")
+        self.assertEqual(second_response["patient_data"]["name"], "病人 B")
+        self.assertEqual(demo_response["patient_data"]["name"], "測試病人")
+        self.assertEqual(demo_response["registration_number"], "00000")
 
 
 class DiseaseApiIsolationTests(unittest.TestCase):
@@ -237,7 +335,12 @@ class DiseaseApiIsolationTests(unittest.TestCase):
                     "answer": "壓迫",
                     "decision": {
                         "action": "ask",
+                        "candidate_frontier": [{"id": "secret"}],
                         "disease_votes": [{"id": "secret", "net_votes": 3}],
+                        "funnel_score": {"confirmation_score": 3},
+                        "selection_phase": "confirm",
+                        "selection_tier": "general",
+                        "target_fact_codes": ["chest_pressure"],
                     },
                     "result": {
                         "disease_assessment": {"ranked": [{"id": "secret", "name": "不應洩漏"}]},
@@ -252,7 +355,23 @@ class DiseaseApiIsolationTests(unittest.TestCase):
 
         self.assertNotIn("possible_conditions", payload["triage"])
         self.assertNotIn("disease_votes", payload["amie_debug"]["decision"])
+        self.assertNotIn("candidate_frontier", payload["amie_debug"]["decision"])
+        self.assertNotIn("funnel_score", payload["amie_debug"]["decision"])
+        self.assertNotIn("selection_phase", payload["amie_debug"]["decision"])
+        self.assertNotIn("selection_tier", payload["amie_debug"]["decision"])
+        self.assertNotIn("target_fact_codes", payload["amie_debug"]["decision"])
         self.assertNotIn("disease_assessment", payload["amie_debug"]["result"])
+        self.assertEqual(
+            payload["amie_debug"]["funnel"],
+            {
+                "selection_phase": "confirm",
+                "selection_tier": "general",
+                "candidate_count": 1,
+                "target_fact_codes": ["chest_pressure"],
+                "funnel_score": {"confirmation_score": 3},
+            },
+        )
+        self.assertNotIn("secret", str(payload["amie_debug"]["funnel"]))
 
 
 class DiseaseReportRestrictionTests(unittest.TestCase):

@@ -27,7 +27,7 @@ def get_or_create_structured_note(
     note, sources = generator(record)
     if note:
         repository.save_structured_note(
-            record["queue_number"],
+            record["consultation_id"],
             note,
             sources,
         )
@@ -36,14 +36,14 @@ def get_or_create_structured_note(
 
 def process_consultation_summaries(
     repository: ConsultationRepository,
-    queue_number: str,
+    consultation_id: str,
     report_generator: ReportGenerator,
     structured_note_generator: StructuredNoteGenerator,
     *,
     structured_note_expected: bool,
 ) -> str:
     """Generate both physician summaries after the response was returned."""
-    record = repository.get(queue_number)
+    record = repository.get(consultation_id)
     if not record:
         return "missing"
 
@@ -54,14 +54,14 @@ def process_consultation_summaries(
     try:
         report = report_generator(record)
         if report:
-            repository.save_generated_report(queue_number, report)
+            repository.save_generated_report(consultation_id, report)
             report_created = True
         else:
             errors.append("AI預問診摘要未產生")
     except Exception as error:
         errors.append(f"AI預問診摘要失敗：{type(error).__name__}")
 
-    refreshed = repository.get(queue_number)
+    refreshed = repository.get(consultation_id)
     if refreshed and structured_note_expected:
         try:
             note, _ = get_or_create_structured_note(
@@ -84,7 +84,7 @@ def process_consultation_summaries(
     else:
         status = "summary_failed"
     repository.update_workflow_status(
-        queue_number,
+        consultation_id,
         status,
         error="；".join(errors),
     )

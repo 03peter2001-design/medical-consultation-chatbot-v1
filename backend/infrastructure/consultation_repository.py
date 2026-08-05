@@ -9,16 +9,27 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import secrets
 import sqlite3
-from datetime import datetime, timedelta, timezone
+import time
+from collections.abc import Callable
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-SCHEMA_VERSION = 5
-URGENT_NUMBER_ACTIVE_HOURS = 8
+SCHEMA_VERSION = 6
+DEFAULT_CONSULTATION_TIMEZONE = "Asia/Taipei"
 BACKEND_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_DATABASE_PATH = BACKEND_DIR / "data" / "consultations.db"
+CONSULTATION_ID_PATTERN = re.compile(r"([0-9]{4}-[0-9]{2}-[0-9]{2}):([0-9]{3}|[0-9]{5})")
+CONSULTATION_ID_FORMAT_ERROR = "consultation_id 格式必須為 ASCII YYYY-MM-DD:NNN 或 YYYY-MM-DD:NNNNN"
+CONSULTATION_ID_DATE_ERROR = "consultation_id 日期必須是有效的 calendar date"
+SQLITE_LOCK_TIMEOUT_SECONDS = 10.0
+SQLITE_BUSY_TIMEOUT_MILLISECONDS = int(SQLITE_LOCK_TIMEOUT_SECONDS * 1_000)
+WAL_RETRY_INITIAL_DELAY_SECONDS = 0.005
+WAL_RETRY_MAX_DELAY_SECONDS = 0.1
 
 
 def _utc_now() -> str:
@@ -35,10 +46,25 @@ def _resolve_database_path(value: str | None) -> Path:
 
 
 class ConsultationRepository:
-    """Store and retrieve immutable consultation results by queue number."""
+    """Store consultations by permanent ID and allocate local-day display numbers."""
 
-    def __init__(self, database_path: str | Path):
+    def __init__(
+        self,
+        database_path: str | Path,
+        *,
+        timezone_name: str | None = None,
+        now_provider: Callable[[], datetime] | None = None,
+    ):
         self.database_path = Path(database_path).resolve()
+        self.timezone_name = timezone_name or os.getenv(
+            "CONSULTATION_TIMEZONE",
+            DEFAULT_CONSULTATION_TIMEZONE,
+        )
+        try:
+            self.local_timezone = ZoneInfo(self.timezone_name)
+        except ZoneInfoNotFoundError as error:
+            raise ValueError(f"unknown consultation timezone: {self.timezone_name}") from error
+        self._now_provider = now_provider or (lambda: datetime.now(timezone.utc))
         self.database_path.parent.mkdir(parents=True, exist_ok=True)
         if self.database_path == DEFAULT_DATABASE_PATH:
             try:
@@ -54,19 +80,91 @@ class ConsultationRepository:
     def _connect(self) -> sqlite3.Connection:
         connection = sqlite3.connect(
             self.database_path,
-            timeout=10,
+            timeout=SQLITE_LOCK_TIMEOUT_SECONDS,
         )
         connection.row_factory = sqlite3.Row
         connection.execute("PRAGMA foreign_keys = ON")
-        connection.execute("PRAGMA busy_timeout = 10000")
+        connection.execute(f"PRAGMA busy_timeout = {SQLITE_BUSY_TIMEOUT_MILLISECONDS}")
         connection.execute("PRAGMA synchronous = NORMAL")
         return connection
 
+    @staticmethod
+    def _is_sqlite_lock_error(error: sqlite3.OperationalError) -> bool:
+        """Return whether SQLite identified this operation as lock contention."""
+        error_code = getattr(error, "sqlite_errorcode", None)
+        if error_code is not None:
+            primary_error_code = error_code & 0xFF
+            return primary_error_code in {sqlite3.SQLITE_BUSY, sqlite3.SQLITE_LOCKED}
+        return str(error).casefold() in {
+            "database is locked",
+            "database table is locked",
+        }
+
+    @classmethod
+    def _enable_write_ahead_log(cls, connection: sqlite3.Connection) -> None:
+        """Enable WAL, retrying only bounded SQLite lock-contention failures."""
+        deadline = time.monotonic() + SQLITE_LOCK_TIMEOUT_SECONDS
+        retry_delay = WAL_RETRY_INITIAL_DELAY_SECONDS
+        while True:
+            lock_error = None
+            try:
+                current_mode_row = connection.execute("PRAGMA journal_mode").fetchone()
+                current_mode = str(current_mode_row[0]).casefold()
+                if current_mode == "wal":
+                    return
+
+                selected_mode_row = connection.execute("PRAGMA journal_mode = WAL").fetchone()
+                selected_mode = str(selected_mode_row[0]).casefold()
+                if selected_mode == "wal":
+                    return
+            except sqlite3.OperationalError as error:
+                if not cls._is_sqlite_lock_error(error) or time.monotonic() >= deadline:
+                    raise
+                lock_error = error
+            else:
+                if time.monotonic() >= deadline:
+                    raise RuntimeError(
+                        "SQLite refused to enable WAL mode "
+                        f"(selected journal_mode={selected_mode!r})"
+                    )
+
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                if lock_error is not None:
+                    raise lock_error
+                raise RuntimeError("SQLite refused to enable WAL mode before timeout")
+            time.sleep(min(retry_delay, remaining))
+            retry_delay = min(retry_delay * 2, WAL_RETRY_MAX_DELAY_SECONDS)
+
     def _initialize(self) -> None:
-        with self._connect() as connection:
-            connection.execute("PRAGMA journal_mode = WAL")
-            connection.executescript(
-                """
+        connection = self._connect()
+        try:
+            # ``executescript`` may commit implicitly, so migrations must use
+            # individual statements.  Acquiring the write lock before schema
+            # introspection prevents concurrent processes from both deciding
+            # that the same column needs to be added.
+            self._enable_write_ahead_log(connection)
+            connection.execute("BEGIN IMMEDIATE")
+            try:
+                self._migrate_schema(connection)
+                connection.commit()
+            except BaseException:
+                connection.rollback()
+                raise
+        finally:
+            connection.close()
+
+        # Consultation data can contain protected health information.  Restrict
+        # the local database file to its owner where the platform supports it.
+        try:
+            os.chmod(self.database_path, 0o600)
+        except OSError:
+            pass
+
+    def _migrate_schema(self, connection: sqlite3.Connection) -> None:
+        """Create or upgrade the schema within the caller's write transaction."""
+        connection.execute(
+            """
                 CREATE TABLE IF NOT EXISTS consultations (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     queue_number TEXT NOT NULL UNIQUE
@@ -89,87 +187,130 @@ class ConsultationRepository:
                     triage_level TEXT NOT NULL DEFAULT 'routine'
                         CHECK (triage_level IN ('routine', 'urgent')),
                     workflow_status TEXT NOT NULL DEFAULT 'completed',
+                    consultation_date TEXT NOT NULL,
                     created_at TEXT NOT NULL,
                     updated_at TEXT NOT NULL
-                );
+                )
+            """
+        )
 
-                CREATE INDEX IF NOT EXISTS
-                    idx_consultations_type_created_at
-                    ON consultations (consultation_type, created_at DESC);
-
-                CREATE INDEX IF NOT EXISTS
-                    idx_consultations_status_created_at
-                    ON consultations (workflow_status, created_at DESC);
+        columns = {
+            row["name"] for row in connection.execute("PRAGMA table_info(consultations)").fetchall()
+        }
+        if "patient_name" not in columns:
+            connection.execute("ALTER TABLE consultations ADD COLUMN patient_name TEXT")
+            rows = connection.execute("SELECT id, data_json FROM consultations").fetchall()
+            backfill = []
+            for row in rows:
+                try:
+                    data = json.loads(row["data_json"])
+                except (TypeError, json.JSONDecodeError):
+                    data = {}
+                backfill.append((data.get("name"), row["id"]))
+            connection.executemany(
                 """
+                UPDATE consultations
+                SET patient_name = ?
+                WHERE id = ?
+                """,
+                backfill,
             )
-
-            columns = {
-                row["name"]
-                for row in connection.execute("PRAGMA table_info(consultations)").fetchall()
-            }
-            if "patient_name" not in columns:
-                connection.execute("ALTER TABLE consultations ADD COLUMN patient_name TEXT")
-                rows = connection.execute("SELECT id, data_json FROM consultations").fetchall()
-                backfill = []
-                for row in rows:
-                    try:
-                        data = json.loads(row["data_json"])
-                    except (TypeError, json.JSONDecodeError):
-                        data = {}
-                    backfill.append((data.get("name"), row["id"]))
-                connection.executemany(
-                    """
-                    UPDATE consultations
-                    SET patient_name = ?
-                    WHERE id = ?
-                    """,
-                    backfill,
-                )
-            if "display_number" not in columns:
-                connection.execute("ALTER TABLE consultations ADD COLUMN display_number TEXT")
-                connection.execute(
-                    """
-                    UPDATE consultations
-                    SET display_number = queue_number
-                    WHERE display_number IS NULL
-                    """
-                )
-            if "structured_note" not in columns:
-                connection.execute("ALTER TABLE consultations ADD COLUMN structured_note TEXT")
-            if "structured_sources_json" not in columns:
-                connection.execute(
-                    """
-                    ALTER TABLE consultations
-                    ADD COLUMN structured_sources_json
-                    TEXT NOT NULL DEFAULT '[]'
-                    """
-                )
-            if "structured_note_created_at" not in columns:
-                connection.execute(
-                    """
-                    ALTER TABLE consultations
-                    ADD COLUMN structured_note_created_at TEXT
-                    """
-                )
-            if "summary_error" not in columns:
-                connection.execute("ALTER TABLE consultations ADD COLUMN summary_error TEXT")
-
+        if "display_number" not in columns:
+            connection.execute("ALTER TABLE consultations ADD COLUMN display_number TEXT")
             connection.execute(
                 """
-                CREATE INDEX IF NOT EXISTS
-                    idx_consultations_display_created_at
-                    ON consultations (display_number, created_at DESC)
+                UPDATE consultations
+                SET display_number = queue_number
+                WHERE display_number IS NULL
                 """
             )
+        if "structured_note" not in columns:
+            connection.execute("ALTER TABLE consultations ADD COLUMN structured_note TEXT")
+        if "structured_sources_json" not in columns:
+            connection.execute(
+                """
+                ALTER TABLE consultations
+                ADD COLUMN structured_sources_json
+                TEXT NOT NULL DEFAULT '[]'
+                """
+            )
+        if "structured_note_created_at" not in columns:
+            connection.execute(
+                """
+                ALTER TABLE consultations
+                ADD COLUMN structured_note_created_at TEXT
+                """
+            )
+        if "summary_error" not in columns:
+            connection.execute("ALTER TABLE consultations ADD COLUMN summary_error TEXT")
+        if "consultation_date" not in columns:
+            connection.execute("ALTER TABLE consultations ADD COLUMN consultation_date TEXT")
 
-            connection.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
+        connection.execute(
+            """
+                CREATE TABLE IF NOT EXISTS consultation_number_sequences (
+                    consultation_date TEXT NOT NULL,
+                    triage_level TEXT NOT NULL
+                        CHECK (triage_level IN ('routine', 'urgent')),
+                    next_number INTEGER NOT NULL,
+                    PRIMARY KEY (consultation_date, triage_level)
+                )
+            """
+        )
 
-        # Consultation data can contain protected health information.  Restrict
-        # the local database file to its owner where the platform supports it.
-        try:
-            os.chmod(self.database_path, 0o600)
-        except OSError:
-            pass
+        legacy_rows = connection.execute(
+            """
+            SELECT id, consultation_date, created_at
+            FROM consultations
+            WHERE consultation_date IS NULL OR consultation_date = ''
+            """
+        ).fetchall()
+        for row in legacy_rows:
+            consultation_date = row["consultation_date"] or self._local_date_for_timestamp(
+                row["created_at"]
+            )
+            connection.execute(
+                """
+                UPDATE consultations
+                SET consultation_date = ?
+                WHERE id = ?
+                """,
+                (consultation_date, row["id"]),
+            )
+
+        self._repair_legacy_composite_collisions(connection)
+        self._initialize_number_sequences(connection)
+
+        connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS
+                idx_consultations_type_created_at
+                ON consultations (consultation_type, created_at DESC)
+            """
+        )
+        connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS
+                idx_consultations_status_created_at
+                ON consultations (workflow_status, created_at DESC)
+            """
+        )
+        connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS
+                idx_consultations_display_created_at
+                ON consultations (display_number, created_at DESC)
+            """
+        )
+        connection.execute(
+            """
+            CREATE UNIQUE INDEX IF NOT EXISTS
+                idx_consultations_date_registration
+                ON consultations (consultation_date, display_number)
+            """
+        )
+
+        connection.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
 
     @staticmethod
     def _serialize_data(data: dict[str, Any]) -> str:
@@ -186,47 +327,189 @@ class ConsultationRepository:
         # 00000 is reserved for the built-in synthetic test patient.
         return f"{secrets.randbelow(99_999) + 1:05d}"
 
-    @staticmethod
-    def _urgent_display_number(
-        connection: sqlite3.Connection,
-        now: str,
+    def _local_date_for_timestamp(self, timestamp: str) -> str:
+        try:
+            parsed = datetime.fromisoformat(timestamp)
+        except (TypeError, ValueError):
+            parsed = self._now_provider()
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return parsed.astimezone(self.local_timezone).date().isoformat()
+
+    def _creation_times(self) -> tuple[str, str]:
+        now = self._now_provider()
+        if now.tzinfo is None:
+            now = now.replace(tzinfo=timezone.utc)
+        now_utc = now.astimezone(timezone.utc)
+        return (
+            now_utc.isoformat(timespec="milliseconds"),
+            now_utc.astimezone(self.local_timezone).date().isoformat(),
+        )
+
+    @classmethod
+    def consultation_id(
+        cls,
+        consultation_date: str,
+        registration_number: str,
     ) -> str:
-        """Return an unused three-digit number in the active care window."""
-        cutoff = (
-            datetime.fromisoformat(now) - timedelta(hours=URGENT_NUMBER_ACTIVE_HOURS)
-        ).isoformat(timespec="milliseconds")
-        for _ in range(128):
-            display_number = f"{secrets.randbelow(999) + 1:03d}"
-            exists = connection.execute(
+        """Serialize the permanent composite key used by doctor workflows."""
+        normalized_date, normalized_number = cls._parse_consultation_id(
+            f"{consultation_date}:{registration_number}"
+        )
+        return f"{normalized_date}:{normalized_number}"
+
+    @classmethod
+    def _parse_consultation_id(cls, consultation_id: str) -> tuple[str, str]:
+        if not isinstance(consultation_id, str):
+            raise ValueError(CONSULTATION_ID_FORMAT_ERROR)
+        match = CONSULTATION_ID_PATTERN.fullmatch(consultation_id)
+        if match is None:
+            raise ValueError(CONSULTATION_ID_FORMAT_ERROR)
+        consultation_date, registration_number = match.groups()
+        try:
+            date.fromisoformat(consultation_date)
+        except ValueError as error:
+            raise ValueError(CONSULTATION_ID_DATE_ERROR) from error
+        return consultation_date, registration_number
+
+    def _repair_legacy_composite_collisions(self, connection: sqlite3.Connection) -> None:
+        """Assign deterministic unused numbers when old same-day displays collide."""
+        duplicates = connection.execute(
+            """
+            SELECT consultation_date, display_number
+            FROM consultations
+            GROUP BY consultation_date, display_number
+            HAVING count(*) > 1
+            """
+        ).fetchall()
+        for duplicate in duplicates:
+            rows = connection.execute(
                 """
-                SELECT 1
+                SELECT id, triage_level
                 FROM consultations
-                WHERE display_number = ?
-                  AND triage_level = 'urgent'
-                  AND created_at >= ?
-                LIMIT 1
+                WHERE consultation_date = ? AND display_number = ?
+                ORDER BY created_at, id
                 """,
-                (display_number, cutoff),
-            ).fetchone()
-            if exists is None:
-                return display_number
-        raise RuntimeError("無法產生未使用的緊急問診編號")
+                (duplicate["consultation_date"], duplicate["display_number"]),
+            ).fetchall()
+            for row in rows[1:]:
+                replacement = self._first_unused_display_number(
+                    connection,
+                    duplicate["consultation_date"],
+                    row["triage_level"],
+                )
+                connection.execute(
+                    "UPDATE consultations SET display_number = ? WHERE id = ?",
+                    (replacement, row["id"]),
+                )
+
+    @staticmethod
+    def _first_unused_display_number(
+        connection: sqlite3.Connection,
+        consultation_date: str,
+        triage_level: str,
+    ) -> str:
+        start = 0 if triage_level == "urgent" else 10_000
+        maximum = 999 if triage_level == "urgent" else 99_999
+        rows = connection.execute(
+            """
+            SELECT CAST(display_number AS INTEGER) AS number
+            FROM consultations
+            WHERE consultation_date = ? AND triage_level = ?
+            """,
+            (consultation_date, triage_level),
+        ).fetchall()
+        used = {row["number"] for row in rows}
+        number = next(
+            (candidate for candidate in range(start, maximum + 1) if candidate not in used), None
+        )
+        if number is None:
+            raise RuntimeError(f"{consultation_date} 的{triage_level}問診編號已用完")
+        return f"{number:03d}" if triage_level == "urgent" else f"{number:05d}"
+
+    @staticmethod
+    def _initialize_number_sequences(connection: sqlite3.Connection) -> None:
+        groups = connection.execute(
+            """
+            SELECT
+                consultation_date,
+                triage_level,
+                max(CAST(display_number AS INTEGER)) AS maximum
+            FROM consultations
+            WHERE display_number GLOB '[0-9]*'
+            GROUP BY consultation_date, triage_level
+            """
+        ).fetchall()
+        for group in groups:
+            minimum = 0 if group["triage_level"] == "urgent" else 10_000
+            next_number = max(minimum, int(group["maximum"]) + 1)
+            connection.execute(
+                """
+                INSERT OR IGNORE INTO consultation_number_sequences (
+                    consultation_date,
+                    triage_level,
+                    next_number
+                ) VALUES (?, ?, ?)
+                """,
+                (
+                    group["consultation_date"],
+                    group["triage_level"],
+                    next_number,
+                ),
+            )
+
+    @staticmethod
+    def _allocate_display_number(
+        connection: sqlite3.Connection,
+        consultation_date: str,
+        triage_level: str,
+    ) -> str:
+        row = connection.execute(
+            """
+            SELECT next_number
+            FROM consultation_number_sequences
+            WHERE consultation_date = ? AND triage_level = ?
+            """,
+            (consultation_date, triage_level),
+        ).fetchone()
+        number = row["next_number"] if row else (0 if triage_level == "urgent" else 10_000)
+        maximum = 999 if triage_level == "urgent" else 99_999
+        if number > maximum:
+            raise RuntimeError(f"{consultation_date} 的{triage_level}問診編號已用完")
+        connection.execute(
+            """
+            INSERT INTO consultation_number_sequences (
+                consultation_date,
+                triage_level,
+                next_number
+            ) VALUES (?, ?, ?)
+            ON CONFLICT(consultation_date, triage_level) DO UPDATE SET
+                next_number = excluded.next_number
+            """,
+            (consultation_date, triage_level, number + 1),
+        )
+        return f"{number:03d}" if triage_level == "urgent" else f"{number:05d}"
 
     def create(self, record: dict[str, Any]) -> str:
         """Insert a result and return its patient-facing queue number."""
-        data_json = self._serialize_data(record.get("data", {}))
-        now = _utc_now()
-        triage_level = record.get("triage_level", "routine")
+        return self.create_with_identifiers(record)["queue_number"]
 
+    def create_with_identifiers(self, record: dict[str, Any]) -> dict[str, str]:
+        """Insert a result and return its permanent and patient-facing IDs."""
+        data_json = self._serialize_data(record.get("data", {}))
+        now, consultation_date = self._creation_times()
+        triage_level = record.get("triage_level", "routine")
+        if triage_level not in {"routine", "urgent"}:
+            raise ValueError("triage_level must be routine or urgent")
         for _ in range(64):
             queue_number = self._queue_number()
             try:
                 with self._connect() as connection:
                     connection.execute("BEGIN IMMEDIATE")
-                    display_number = (
-                        self._urgent_display_number(connection, now)
-                        if triage_level == "urgent"
-                        else queue_number
+                    display_number = self._allocate_display_number(
+                        connection,
+                        consultation_date,
+                        triage_level,
                     )
                     connection.execute(
                         """
@@ -242,10 +525,11 @@ class ConsultationRepository:
                             data_json,
                             triage_level,
                             workflow_status,
+                            consultation_date,
                             created_at,
                             updated_at
                         )
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         """,
                         (
                             queue_number,
@@ -259,11 +543,19 @@ class ConsultationRepository:
                             data_json,
                             triage_level,
                             record.get("status", "completed"),
+                            consultation_date,
                             now,
                             now,
                         ),
                     )
-                return display_number
+                return {
+                    "consultation_id": self.consultation_id(
+                        consultation_date,
+                        display_number,
+                    ),
+                    "queue_number": display_number,
+                    "consultation_date": consultation_date,
+                }
             except sqlite3.IntegrityError as error:
                 if "queue_number" not in str(error):
                     raise
@@ -274,12 +566,12 @@ class ConsultationRepository:
         self,
         queue_number: str,
         record: dict[str, Any],
-    ) -> None:
+    ) -> str:
         """Insert or refresh a fixed record, used only for synthetic fixtures."""
         if len(queue_number) != 5 or not queue_number.isdigit():
             raise ValueError("queue_number must contain exactly five digits")
         data_json = self._serialize_data(record.get("data", {}))
-        now = _utc_now()
+        now, consultation_date = self._creation_times()
         with self._connect() as connection:
             connection.execute(
                 """
@@ -295,10 +587,11 @@ class ConsultationRepository:
                     data_json,
                     triage_level,
                     workflow_status,
+                    consultation_date,
                     created_at,
                     updated_at
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(queue_number) DO UPDATE SET
                     display_number = excluded.display_number,
                     session_id = excluded.session_id,
@@ -324,12 +617,23 @@ class ConsultationRepository:
                     data_json,
                     record.get("triage_level", "routine"),
                     record.get("status", "completed"),
+                    consultation_date,
                     now,
                     now,
                 ),
             )
+            row = connection.execute(
+                """
+                SELECT consultation_date, display_number
+                FROM consultations
+                WHERE queue_number = ?
+                """,
+                (queue_number,),
+            ).fetchone()
+        return self.consultation_id(row["consultation_date"], row["display_number"])
 
-    def get(self, queue_number: str) -> dict[str, Any] | None:
+    def get(self, consultation_id: str) -> dict[str, Any] | None:
+        consultation_date, registration_number = self._parse_consultation_id(consultation_id)
         with self._connect() as connection:
             row = connection.execute(
                 """
@@ -348,19 +652,59 @@ class ConsultationRepository:
                     summary_error,
                     triage_level,
                     workflow_status,
+                    consultation_date,
                     created_at,
                     updated_at
                 FROM consultations
-                WHERE display_number = ? OR queue_number = ?
-                ORDER BY id DESC
-                LIMIT 1
+                WHERE consultation_date = ? AND display_number = ?
                 """,
-                (queue_number, queue_number),
+                (consultation_date, registration_number),
             ).fetchone()
 
         if row is None:
             return None
+        return self._record_from_row(row)
+
+    def get_by_registration_number(
+        self,
+        registration_number: str,
+        *,
+        consultation_date: str | None = None,
+    ) -> dict[str, Any] | None:
+        """Resolve a patient-facing registration number by date or global uniqueness."""
+        normalized = registration_number.strip()
+        if consultation_date:
+            return self.get(self.consultation_id(consultation_date, normalized))
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT consultation_date, display_number
+                FROM consultations
+                WHERE display_number = ?
+                ORDER BY created_at DESC, id DESC
+                LIMIT 2
+                """,
+                (normalized,),
+            ).fetchall()
+        if not rows:
+            return None
+        if len(rows) > 1:
+            raise ValueError("此掛號編號跨日期重複，請指定日期或 consultation_id")
+        return self.get(
+            self.consultation_id(
+                rows[0]["consultation_date"],
+                rows[0]["display_number"],
+            )
+        )
+
+    def _record_from_row(self, row: sqlite3.Row) -> dict[str, Any]:
+        consultation_id = self.consultation_id(
+            row["consultation_date"],
+            row["display_number"],
+        )
         return {
+            "consultation_id": consultation_id,
+            "registration_number": row["display_number"],
             "queue_number": row["display_number"],
             "session_id": row["session_id"],
             "type": row["consultation_type"],
@@ -374,6 +718,7 @@ class ConsultationRepository:
             "summary_error": row["summary_error"] or "",
             "triage_level": row["triage_level"],
             "status": row["workflow_status"],
+            "consultation_date": row["consultation_date"],
             "created_at": row["created_at"],
             "updated_at": row["updated_at"],
         }
@@ -397,11 +742,12 @@ class ConsultationRepository:
                 WHERE (
                     display_number LIKE ?
                     OR queue_number LIKE ?
+                    OR consultation_date LIKE ?
                     OR coalesce(patient_name, '') LIKE ?
                     OR reason LIKE ?
                 )
             """
-            where_params = (pattern, pattern, pattern, pattern)
+            where_params = (pattern, pattern, pattern, pattern, pattern)
 
         with self._connect() as connection:
             rows = connection.execute(
@@ -416,6 +762,7 @@ class ConsultationRepository:
                     triage_level,
                     workflow_status,
                     structured_note,
+                    consultation_date,
                     created_at
                 FROM consultations
                 {where_sql}
@@ -441,6 +788,11 @@ class ConsultationRepository:
                 data = {}
             items.append(
                 {
+                    "consultation_id": self.consultation_id(
+                        row["consultation_date"],
+                        row["display_number"],
+                    ),
+                    "registration_number": row["display_number"],
                     "queue_number": row["display_number"],
                     "patient_name": row["patient_name"] or "未提供",
                     "type": row["consultation_type"],
@@ -450,6 +802,7 @@ class ConsultationRepository:
                     "triage_level": row["triage_level"],
                     "workflow_status": row["workflow_status"],
                     "has_structured_note": bool(row["structured_note"]),
+                    "consultation_date": row["consultation_date"],
                     "created_at": row["created_at"],
                 }
             )
@@ -463,7 +816,7 @@ class ConsultationRepository:
 
     def save_structured_note(
         self,
-        queue_number: str,
+        consultation_id: str,
         note: str,
         sources: list[dict[str, Any]] | None = None,
     ) -> bool:
@@ -479,6 +832,7 @@ class ConsultationRepository:
             separators=(",", ":"),
         )
         now = _utc_now()
+        consultation_date, registration_number = self._parse_consultation_id(consultation_id)
         with self._connect() as connection:
             cursor = connection.execute(
                 """
@@ -487,28 +841,22 @@ class ConsultationRepository:
                     structured_sources_json = ?,
                     structured_note_created_at = ?,
                     updated_at = ?
-                WHERE id = (
-                    SELECT id
-                    FROM consultations
-                    WHERE display_number = ? OR queue_number = ?
-                    ORDER BY id DESC
-                    LIMIT 1
-                )
+                WHERE consultation_date = ? AND display_number = ?
                 """,
                 (
                     normalized_note,
                     sources_json,
                     now,
                     now,
-                    queue_number,
-                    queue_number,
+                    consultation_date,
+                    registration_number,
                 ),
             )
         return cursor.rowcount == 1
 
     def save_generated_report(
         self,
-        queue_number: str,
+        consultation_id: str,
         report: str,
     ) -> bool:
         """Persist an AI report generated after the patient got a number."""
@@ -516,32 +864,27 @@ class ConsultationRepository:
         if not normalized_report:
             raise ValueError("generated report must not be empty")
         now = _utc_now()
+        consultation_date, registration_number = self._parse_consultation_id(consultation_id)
         with self._connect() as connection:
             cursor = connection.execute(
                 """
                 UPDATE consultations
                 SET report = ?,
                     updated_at = ?
-                WHERE id = (
-                    SELECT id
-                    FROM consultations
-                    WHERE display_number = ? OR queue_number = ?
-                    ORDER BY id DESC
-                    LIMIT 1
-                )
+                WHERE consultation_date = ? AND display_number = ?
                 """,
                 (
                     normalized_report,
                     now,
-                    queue_number,
-                    queue_number,
+                    consultation_date,
+                    registration_number,
                 ),
             )
         return cursor.rowcount == 1
 
     def update_workflow_status(
         self,
-        queue_number: str,
+        consultation_id: str,
         status: str,
         *,
         error: str = "",
@@ -552,6 +895,7 @@ class ConsultationRepository:
             raise ValueError("workflow status must not be empty")
         normalized_error = error.strip()[:1000] or None
         now = _utc_now()
+        consultation_date, registration_number = self._parse_consultation_id(consultation_id)
         with self._connect() as connection:
             cursor = connection.execute(
                 """
@@ -559,39 +903,28 @@ class ConsultationRepository:
                 SET workflow_status = ?,
                     summary_error = ?,
                     updated_at = ?
-                WHERE id = (
-                    SELECT id
-                    FROM consultations
-                    WHERE display_number = ? OR queue_number = ?
-                    ORDER BY id DESC
-                    LIMIT 1
-                )
+                WHERE consultation_date = ? AND display_number = ?
                 """,
                 (
                     normalized_status,
                     normalized_error,
                     now,
-                    queue_number,
-                    queue_number,
+                    consultation_date,
+                    registration_number,
                 ),
             )
         return cursor.rowcount == 1
 
-    def delete(self, queue_number: str) -> bool:
-        """Permanently delete the newest record matching a display number."""
+    def delete(self, consultation_id: str) -> bool:
+        """Permanently delete exactly one date-qualified consultation."""
+        consultation_date, registration_number = self._parse_consultation_id(consultation_id)
         with self._connect() as connection:
             cursor = connection.execute(
                 """
                 DELETE FROM consultations
-                WHERE id = (
-                    SELECT id
-                    FROM consultations
-                    WHERE display_number = ? OR queue_number = ?
-                    ORDER BY id DESC
-                    LIMIT 1
-                )
+                WHERE consultation_date = ? AND display_number = ?
                 """,
-                (queue_number, queue_number),
+                (consultation_date, registration_number),
             )
         return cursor.rowcount == 1
 

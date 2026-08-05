@@ -2,7 +2,7 @@
 
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, model_validator, validator
 
 from domain.body_pain_regions import validate_pain_location_ids
 
@@ -100,7 +100,10 @@ class DoctorChatRequest(BaseModel):
 
 class LoadPatientRequest(BaseModel):
     session_id: str
-    queue_number: str
+    consultation_id: str | None = None
+    consultation_date: str | None = None
+    registration_number: str | None = None
+    queue_number: str | None = None
 
     @validator("session_id")
     def session_id_not_empty(cls, value):
@@ -108,12 +111,22 @@ class LoadPatientRequest(BaseModel):
             raise ValueError("session_id 不可為空")
         return value.strip()[:64]
 
-    @validator("queue_number")
-    def queue_number_format(cls, value):
-        normalized = value.strip()
-        if not normalized:
-            raise ValueError("問診編號不可為空")
-        return normalized[:16]
+    @validator(
+        "consultation_id",
+        "consultation_date",
+        "registration_number",
+        "queue_number",
+    )
+    def trim_consultation_reference(cls, value):
+        return value.strip()[:32] if value else None
+
+    @model_validator(mode="after")
+    def consultation_reference_present(self):
+        if self.consultation_id:
+            return self
+        if self.registration_number or self.queue_number:
+            return self
+        raise ValueError("請提供 consultation_id 或掛號編號")
 
 
 class SafetyRuleUpdateRequest(BaseModel):

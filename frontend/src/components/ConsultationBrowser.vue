@@ -4,8 +4,8 @@ defineProps({
   total: { type: Number, default: 0 },
   loading: { type: Boolean, default: false },
   error: { type: String, default: '' },
-  deletingQueueNumber: { type: String, default: '' },
-  loadedQueueNumber: { type: String, default: '' },
+  deletingConsultationId: { type: String, default: '' },
+  loadedConsultationId: { type: String, default: '' },
   patientLoading: { type: Boolean, default: false },
   hasMore: { type: Boolean, default: false },
 })
@@ -42,6 +42,8 @@ function formatCaseDate(value) {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return '時間未提供'
   return new Intl.DateTimeFormat('zh-TW', {
+    timeZone: 'Asia/Taipei',
+    year: 'numeric',
     month: '2-digit',
     day: '2-digit',
     hour: '2-digit',
@@ -106,10 +108,10 @@ function formatCaseDate(value) {
 
       <article
         v-for="record in records"
-        :key="record.queue_number"
+        :key="record.consultation_id"
         class="case-card"
         :class="{
-          active: loadedQueueNumber === record.queue_number,
+          active: loadedConsultationId === record.consultation_id,
           urgent: record.triage_level === 'urgent',
         }"
       >
@@ -117,15 +119,20 @@ function formatCaseDate(value) {
           class="case-card-select"
           :disabled="
             patientLoading ||
-            deletingQueueNumber === record.queue_number
+            deletingConsultationId === record.consultation_id
           "
           :aria-current="
-            loadedQueueNumber === record.queue_number ? 'true' : undefined
+            loadedConsultationId === record.consultation_id ? 'true' : undefined
           "
-          @click="emit('select', record.queue_number)"
+          @click="emit('select', record.consultation_id)"
         >
           <span class="case-card-top">
-            <span class="case-number">#{{ record.queue_number }}</span>
+            <span
+              class="case-number"
+              :title="`病例 ID：${record.consultation_id}`"
+            >
+              #{{ record.registration_number || record.queue_number }}
+            </span>
             <span class="triage-badge" :class="record.triage_level">
               {{
                 record.triage_level === 'urgent'
@@ -171,12 +178,12 @@ function formatCaseDate(value) {
           </span>
           <button
             class="case-delete"
-            :disabled="Boolean(deletingQueueNumber)"
+            :disabled="Boolean(deletingConsultationId)"
             :aria-label="`刪除 ${record.patient_name} 的病例`"
             @click="emit('delete', record)"
           >
             {{
-              deletingQueueNumber === record.queue_number
+              deletingConsultationId === record.consultation_id
                 ? '刪除中…'
                 : '刪除'
             }}

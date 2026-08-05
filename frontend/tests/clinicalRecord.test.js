@@ -204,6 +204,59 @@ test('maps safety-triggered conditions separately from disease votes', () => {
   )
 })
 
+test('maps disease funnel audit details for the clinician timeline', () => {
+  const result = buildClinicalRecord({
+    type: 'chest',
+    patient_data: { reason: '走路時胸悶' },
+    amie_trace: [
+      {
+        turn: 1,
+        question: { field: 'reason', prompt: '請描述症狀' },
+        answer: '走路時胸悶',
+        result: { clinical_facts: [], disease_assessment: { top: [] } },
+        decision: {
+          action: 'ask',
+          source: 'deterministic_disease_vote',
+          selected_next_field: 'associated',
+          next_question: '是否有其他不舒服？',
+          selection_phase: 'confirm',
+          selection_tier: 'safety_priority',
+          candidate_frontier: [
+            {
+              id: 'acute_coronary_syndrome',
+              name: '急性冠心症',
+              net_votes: 2,
+              support_votes: 2,
+              coverage: 0.33,
+            },
+          ],
+          target_fact_codes: ['diaphoresis', 'nausea'],
+          funnel_score: {
+            discrimination_score: 0,
+            confirmation_score: 2,
+            refutation_score: 0,
+          },
+        },
+      },
+    ],
+  })
+
+  const event = result.timeline[0]
+  assert.equal(event.selectionPhase, 'confirm')
+  assert.equal(event.selectionTier, 'safety_priority')
+  assert.equal(event.candidateFrontier[0].name, '急性冠心症')
+  assert.equal(event.candidateFrontier[0].netVotes, 2)
+  assert.deepEqual(
+    event.targetFacts.map((item) => item.code),
+    ['diaphoresis', 'nausea'],
+  )
+  assert.deepEqual(event.funnelScore, {
+    discrimination: 0,
+    confirmation: 2,
+    refutation: 0,
+  })
+})
+
 test('shows facts from every selected symptom pipeline', () => {
   const result = buildClinicalRecord({
     type: 'headache',

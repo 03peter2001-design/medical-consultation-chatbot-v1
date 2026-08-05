@@ -135,17 +135,17 @@ npm run api:check
 - urgent 核發三位數編號；routine 完成時核發五位數編號
 - RAG 不參與病患疾病候選、Safety、票數或下一題
 
-每輪會保存題目、回答、ClinicalFact、Safety 結果、投票快照、下一題、選題
-區辨分與簡短稽核理由，並標記為 `deterministic_disease_vote`。這是可供稽核的
-決策摘要，不是模型隱藏思維鏈。
+每輪會保存題目、回答、ClinicalFact、Safety 結果、投票快照、下一題、動態
+疾病領先群、目標標籤、漏斗階段與確定性選題分數，並標記為
+`deterministic_disease_vote`。這是可供稽核的決策摘要，不是模型隱藏思維鏈。
 
 `amie/disease_data/{chest,headache,abdomen}.json` 是一次性 RAG＋離線 LLM
 建表後提交版本控制的凍結產物，包含來源、corpus SHA-256、模型、不能漏診標記
 及整數權重。目前是 `provisional`，不是患病機率或正式診斷。
 
 fact 白名單、舊病例映射與 Safety 規則位於
-`amie/rules/safety_rules.json`；必要欄位、選題策略、停止門檻與輪數上限位於
-`questionnaire_data/*.json`。這裡的 AMIE 是依公開研究方法實作的流程，不是
+`amie/rules/safety_rules.json`；必要欄位、選題策略、領先群票距與數量、停止門檻
+及輪數上限位於 `questionnaire_data/*.json`。這裡的 AMIE 是依公開研究方法實作的流程，不是
 Google 官方 AMIE 模型或服務，也不包含 self-play 訓練。
 
 ## FHIR 病歷預填

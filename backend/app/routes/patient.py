@@ -178,20 +178,35 @@ def _question_payload(
     debug_event = None
     if AMIE_DEBUG_TRACE and session.get("engine") == "amie" and session.get("transcript"):
         event = session["transcript"][-1]
+        decision = event.get("decision") or {}
+        candidate_frontier = decision.get("candidate_frontier") or []
+        funnel = (
+            {
+                "selection_phase": decision.get("selection_phase", ""),
+                "selection_tier": decision.get("selection_tier", ""),
+                "candidate_count": len(candidate_frontier),
+                "target_fact_codes": list(decision.get("target_fact_codes") or []),
+                "funnel_score": dict(decision.get("funnel_score") or {}),
+            }
+            if decision.get("selection_phase")
+            else None
+        )
         blocked = {
+            "candidate_frontier",
             "disease_assessment",
             "disease_votes",
             "differential_hypotheses",
+            "funnel_score",
+            "selection_phase",
+            "selection_tier",
+            "target_fact_codes",
         }
         debug_event = {
             "turn": event.get("turn"),
             "question": event.get("question"),
             "answer": event.get("answer"),
-            "decision": {
-                key: value
-                for key, value in (event.get("decision") or {}).items()
-                if key not in blocked
-            },
+            "decision": {key: value for key, value in decision.items() if key not in blocked},
+            "funnel": funnel,
             "result": {
                 key: value
                 for key, value in (event.get("result") or {}).items()

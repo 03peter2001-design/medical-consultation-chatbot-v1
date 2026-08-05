@@ -36,3 +36,10 @@
 
 JSON 格式、重複欄位、輸入型態與選項設定會在載入時驗證；格式錯誤時後端
 會直接回報檔名與問題欄位，不會靜默略過。
+
+疾病問卷另有 `policy`。目前 schema version 2 保留固定疾病表投票，並以
+`priority_fields`、`required_fields`、一般問題作為選題層級；同層問題再依當輪
+ClinicalFact 建立的疾病漏斗排序。`frontier_vote_margin` 定義領先群與第一名可容許
+的淨票差，`frontier_max_candidates` 限制有支持票時最多追蹤的候選數。無支持票時
+仍會用全部疾病進行廣泛區辨。`coverage_threshold` 與 `max_turns` 只控制完成與轉交，
+不參與漏斗候選篩選。

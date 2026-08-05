@@ -10,6 +10,8 @@ from amie.clinical_facts import (
 from amie.disease_profiles import (
     attach_profile_codings,
     attach_safety_conditions,
+    build_candidate_frontier,
+    funnel_question_score,
     load_profile_document,
     question_utility,
     score_diseases,
@@ -324,12 +326,46 @@ class DiseaseScoringTests(unittest.TestCase):
 
         first = score_diseases(facts)
         second = score_diseases(list(reversed(facts)))
+        first_frontier = build_candidate_frontier(
+            first,
+            vote_margin=2,
+            max_candidates=5,
+        )
+        second_frontier = build_candidate_frontier(
+            second,
+            vote_margin=2,
+            max_candidates=5,
+        )
 
         self.assertEqual(
             [item["id"] for item in first["ranked"]],
             [item["id"] for item in second["ranked"]],
         )
         self.assertEqual(first["top"], second["top"])
+        self.assertEqual(first_frontier, second_frontier)
+
+    def test_new_evidence_can_change_the_frontier_leader_without_locking(self):
+        initial = build_candidate_frontier(
+            score_diseases([fact("chest_pressure"), fact("exertional_trigger")]),
+            vote_margin=2,
+            max_candidates=5,
+        )
+        updated = build_candidate_frontier(
+            score_diseases(
+                [
+                    fact("chest_pressure"),
+                    fact("exertional_trigger"),
+                    fact("burning_pain"),
+                    fact("meal_related"),
+                    fact("acid_regurgitation"),
+                ]
+            ),
+            vote_margin=2,
+            max_candidates=5,
+        )
+
+        self.assertEqual(initial["leader_id"], "acute_coronary_syndrome")
+        self.assertEqual(updated["leader_id"], "gastroesophageal_reflux")
 
     def test_question_utility_uses_only_frozen_profile_votes(self):
         questionnaire = build_questionnaire("chest")
@@ -339,6 +375,78 @@ class DiseaseScoringTests(unittest.TestCase):
 
         self.assertGreater(question_utility(associated, assessment), 0)
         self.assertEqual(question_utility(onset, assessment), 0)
+
+    def test_frontier_starts_broad_with_every_disease_before_support(self):
+        assessment = score_diseases([])
+
+        frontier = build_candidate_frontier(
+            assessment,
+            vote_margin=2,
+            max_candidates=5,
+        )
+
+        self.assertEqual(frontier["phase"], "broad")
+        self.assertIsNone(frontier["leader_id"])
+        self.assertEqual(
+            [item["id"] for item in frontier["candidates"]],
+            [item["id"] for item in assessment["ranked"]],
+        )
+
+    def test_frontier_keeps_supported_diseases_within_two_votes_and_caps_at_five(self):
+        assessment = {
+            "ranked": [
+                {
+                    "id": f"disease_{index}",
+                    "name": f"疾病 {index}",
+                    "net_votes": score,
+                    "support_votes": 1,
+                    "coverage": 0.2,
+                }
+                for index, score in enumerate([5, 4, 3, 3, 3, 3, 2])
+            ]
+        }
+
+        frontier = build_candidate_frontier(
+            assessment,
+            vote_margin=2,
+            max_candidates=5,
+        )
+
+        self.assertEqual(frontier["phase"], "differentiate")
+        self.assertEqual(frontier["leader_id"], "disease_0")
+        self.assertEqual(
+            [item["id"] for item in frontier["candidates"]],
+            ["disease_0", "disease_1", "disease_2", "disease_3", "disease_4"],
+        )
+
+    def test_single_supported_leader_enters_confirmation_and_scores_target_clues(self):
+        assessment = score_diseases(
+            [
+                fact("chest_pressure"),
+                fact("exertional_trigger"),
+                fact("diaphoresis"),
+            ]
+        )
+        frontier = build_candidate_frontier(
+            assessment,
+            vote_margin=2,
+            max_candidates=5,
+        )
+        associated = next(
+            item for item in build_questionnaire("chest") if item["field"] == "associated"
+        )
+        filtered = filter_question_by_known_facts(
+            associated,
+            [fact("diaphoresis")],
+        )
+
+        score = funnel_question_score(filtered, frontier, route="chest")
+
+        self.assertEqual(frontier["phase"], "confirm")
+        self.assertEqual(frontier["leader_id"], "acute_coronary_syndrome")
+        self.assertGreater(score["confirmation_score"], 0)
+        self.assertNotIn("diaphoresis", score["target_fact_codes"])
+        self.assertIn("nausea", score["target_fact_codes"])
 
     def test_must_not_miss_list_remains_visible_without_supporting_votes(self):
         result = score_diseases([])

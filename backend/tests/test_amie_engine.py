@@ -110,7 +110,7 @@ class AMIEEngineTests(unittest.TestCase):
         )
 
         self.assertEqual(result.action, "ask")
-        self.assertEqual(result.next_question["field"], "start_type")
+        self.assertEqual(result.next_question["field"], "associated")
         self.assertEqual(len(result.evidence_timeline), 1)
         self.assertEqual(result.differential_hypotheses, [])
         self.assertEqual(
@@ -119,6 +119,13 @@ class AMIEEngineTests(unittest.TestCase):
         )
         self.assertEqual(result.disease_assessment["top"][0]["net_votes"], 2)
         self.assertEqual(result.decision["scoring_method"], "unit_vote_v1")
+        self.assertEqual(result.decision["selection_phase"], "confirm")
+        self.assertEqual(result.decision["selection_tier"], "safety_priority")
+        self.assertEqual(
+            result.decision["candidate_frontier"][0]["id"],
+            "acute_coronary_syndrome",
+        )
+        self.assertIn("diaphoresis", result.decision["target_fact_codes"])
         self.assertEqual(len(llm.calls), 1)
 
     def test_chief_extraction_is_reused_instead_of_calling_the_llm_twice(self):
@@ -523,13 +530,55 @@ class AMIEEngineTests(unittest.TestCase):
         )
 
         self.assertEqual(result.action, "ask")
-        self.assertEqual(result.next_question["field"], "worst_ever")
+        self.assertEqual(result.next_question["field"], "associated")
+        self.assertEqual(result.decision["selection_phase"], "confirm")
+        self.assertEqual(
+            result.decision["candidate_frontier"][0]["id"],
+            "intracranial_mass",
+        )
         self.assertEqual(result.disease_assessment["method"], "unit_vote_v1")
         self.assertIn(
             "onset_gradual",
             [fact["code"] for fact in result.clinical_facts],
         )
         self.assertEqual(llm.calls, [])
+
+    def test_required_tier_precedes_higher_scoring_optional_questions(self):
+        data = {
+            **self.base_data,
+            "start_type": "逐漸發作",
+            "location": "正中間",
+            "tender": "沒有",
+            "severity": "中等",
+            "quality": "感覺有重物壓迫",
+            "aggravate": "耗費體力的活動",
+            "associated": "以上皆無",
+            "_clinical_facts": [
+                {
+                    "code": "chest_pressure",
+                    "status": "present",
+                    "evidence": "重物壓迫",
+                    "source": "test",
+                    "turn": 1,
+                }
+            ],
+        }
+
+        result = AMIEEngine(FakeLLM()).run_turn(
+            route="chest",
+            answer="以上皆無",
+            current_field="associated",
+            data=data,
+            questionnaire=self.questionnaire,
+            prefilled_fields=self.prefilled,
+        )
+
+        self.assertEqual(result.action, "ask")
+        self.assertEqual(result.decision["selection_tier"], "required")
+        self.assertIn(
+            result.next_question["field"],
+            {"onset", "current_meds", "allergy"},
+        )
 
     def test_chest_severity_option_maps_directly_to_a_clinical_fact(self):
         llm = FakeLLM()
@@ -688,7 +737,7 @@ class AMIEEngineTests(unittest.TestCase):
             route="chest",
             answer="胸口不舒服",
             current_field="reason",
-            data=self.base_data,
+            data={**self.base_data, "reason": "胸口不舒服"},
             questionnaire=self.questionnaire,
             prefilled_fields=self.prefilled,
         )
@@ -716,12 +765,14 @@ class AMIEEngineTests(unittest.TestCase):
             route="chest",
             answer="胸口不舒服",
             current_field="reason",
-            data=self.base_data,
+            data={**self.base_data, "reason": "胸口不舒服"},
             questionnaire=self.questionnaire,
             prefilled_fields=self.prefilled,
         )
 
-        self.assertEqual(result.next_question["field"], "start_type")
+        self.assertEqual(result.next_question["field"], "associated")
+        self.assertEqual(result.decision["selection_phase"], "broad")
+        self.assertGreater(result.decision["funnel_score"]["discrimination_score"], 0)
         self.assertEqual(result.rag_sources, [])
         self.assertEqual(len(llm.calls), 1)
         self.assertIn("主訴資訊抽取器", llm.calls[0]["messages"][0]["content"])

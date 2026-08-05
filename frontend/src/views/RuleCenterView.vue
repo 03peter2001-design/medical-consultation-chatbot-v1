@@ -154,6 +154,14 @@ onMounted(loadRules)
                   <dt>最多輪數</dt>
                   <dd>{{ route.policy.max_turns }}</dd>
                 </div>
+                <div>
+                  <dt>漏斗領先票距</dt>
+                  <dd>第一名 ± {{ route.policy.frontier_vote_margin }} 票</dd>
+                </div>
+                <div>
+                  <dt>最多候選疾病</dt>
+                  <dd>{{ route.policy.frontier_max_candidates }} 項</dd>
+                </div>
               </dl>
             </article>
           </div>

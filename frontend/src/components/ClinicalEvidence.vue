@@ -27,6 +27,26 @@ const visibleDirectionCount = computed(() => {
   ]
   return new Set(keys).size
 })
+
+function selectionPhaseLabel(phase) {
+  return (
+    {
+      broad: '廣泛區辨',
+      differentiate: '候選區辨',
+      confirm: '領先疾病確認',
+    }[phase] || phase || '未記錄'
+  )
+}
+
+function selectionTierLabel(tier) {
+  return (
+    {
+      safety_priority: 'Safety 優先題',
+      required: '必要欄位',
+      general: '一般追問',
+    }[tier] || tier || '未記錄'
+  )
+}
 </script>
 
 <template>
@@ -298,6 +318,33 @@ const visibleDirectionCount = computed(() => {
                 {{ Math.round(item.coverage * 100) }}%
               </span>
             </div>
+            <div v-if="event.selectionPhase" class="trace-funnel">
+              <b>標籤漏斗</b>
+              <span>
+                {{ selectionPhaseLabel(event.selectionPhase) }} ·
+                {{ selectionTierLabel(event.selectionTier) }}
+              </span>
+              <span v-if="event.candidateFrontier.length">
+                候選群：
+                {{
+                  event.candidateFrontier
+                    .map(
+                      (item) =>
+                        `${item.name}（淨票 ${item.netVotes}／支持 ${item.supportVotes}／完整度 ${Math.round(item.coverage * 100)}%）`,
+                    )
+                    .join('、')
+                }}
+              </span>
+              <span v-if="event.targetFacts.length">
+                目標標籤：
+                {{ event.targetFacts.map((item) => item.label).join('、') }}
+              </span>
+              <small>
+                區辨 {{ event.funnelScore.discrimination }} · 確認
+                {{ event.funnelScore.confirmation }} · 反證
+                {{ event.funnelScore.refutation }}
+              </small>
+            </div>
             <p class="trace-decision">
               <b>決定</b>
               <template v-if="event.nextQuestion">
@@ -550,7 +597,8 @@ const visibleDirectionCount = computed(() => {
 }
 
 .trace-clinical-facts,
-.trace-votes {
+.trace-votes,
+.trace-funnel {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
@@ -558,7 +606,8 @@ const visibleDirectionCount = computed(() => {
 }
 
 .trace-clinical-facts b,
-.trace-votes b {
+.trace-votes b,
+.trace-funnel b {
   width: 100%;
   color: #435c72;
   font-size: 11px;
@@ -575,6 +624,18 @@ const visibleDirectionCount = computed(() => {
 
 .trace-clinical-facts small {
   color: #6b7f92;
+}
+
+.trace-funnel span {
+  width: 100%;
+  color: #425d73;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.trace-funnel small {
+  color: #6b7f92;
+  font-size: 10px;
 }
 
 .evidence-table-head {

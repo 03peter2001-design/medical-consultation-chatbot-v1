@@ -101,6 +101,11 @@ def append_amie_trace(
             "needs_retrieval": bool(decision.get("needs_retrieval")),
             "retrieval_query": decision.get("retrieval_query", ""),
             "question_utility": decision.get("question_utility", 0),
+            "selection_phase": decision.get("selection_phase", ""),
+            "selection_tier": decision.get("selection_tier", ""),
+            "candidate_frontier": list(decision.get("candidate_frontier", [])),
+            "target_fact_codes": list(decision.get("target_fact_codes", [])),
+            "funnel_score": dict(decision.get("funnel_score", {})),
             "source": _decision_source(
                 section=current_question.get("section", ""),
                 decision=decision,

@@ -562,3 +562,99 @@ def question_utility(
             if left != right
         )
     return utility
+
+
+def build_candidate_frontier(
+    assessment: dict[str, Any],
+    *,
+    vote_margin: int,
+    max_candidates: int,
+) -> dict[str, Any]:
+    """Build the deterministic disease frontier used only for question selection."""
+    ranked = [item for item in assessment.get("ranked", []) if item.get("id")]
+    supported = [item for item in ranked if int(item.get("support_votes") or 0) > 0]
+    if not supported:
+        candidates = ranked
+        phase = "broad"
+    else:
+        leader_score = int(supported[0].get("net_votes") or 0)
+        candidates = [
+            item
+            for item in supported
+            if int(item.get("net_votes") or 0) >= leader_score - vote_margin
+        ][:max_candidates]
+        phase = "confirm" if len(candidates) == 1 else "differentiate"
+    return {
+        "phase": phase,
+        "leader_id": candidates[0]["id"] if supported and candidates else None,
+        "candidates": [
+            {
+                "id": item["id"],
+                "name": item.get("name", item["id"]),
+                "net_votes": int(item.get("net_votes") or 0),
+                "support_votes": int(item.get("support_votes") or 0),
+                "coverage": float(item.get("coverage") or 0),
+            }
+            for item in candidates
+        ],
+    }
+
+
+def funnel_question_score(
+    question: dict[str, Any],
+    frontier: dict[str, Any],
+    *,
+    route: str = "chest",
+    document: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Score an unresolved question against the current disease frontier."""
+    deployed = document or load_profile_document(route)
+    question_codes = question_fact_codes(question)
+    candidate_ids = [item["id"] for item in frontier.get("candidates", [])]
+    profile_by_id = {profile["id"]: profile for profile in deployed["profiles"]}
+    candidate_profiles = [
+        profile_by_id[profile_id] for profile_id in candidate_ids if profile_id in profile_by_id
+    ]
+
+    effects_by_profile: dict[str, dict[str, int]] = {}
+    target_codes: set[str] = set()
+    for profile in candidate_profiles:
+        effects: dict[str, int] = {}
+        for clue in profile["clues"]:
+            code = clue["fact"]
+            if code not in question_codes:
+                continue
+            target_codes.add(code)
+            direction = 1 if clue["direction"] == "support" else -1
+            effects[code] = effects.get(code, 0) + clue["weight"] * direction
+        effects_by_profile[profile["id"]] = effects
+
+    discrimination_score = 0
+    for code in sorted(target_codes):
+        effects = [
+            effects_by_profile.get(profile["id"], {}).get(code, 0) for profile in candidate_profiles
+        ]
+        discrimination_score += sum(
+            abs(left - right)
+            for index, left in enumerate(effects)
+            for right in effects[index + 1 :]
+        )
+
+    confirmation_score = 0
+    refutation_score = 0
+    leader = profile_by_id.get(str(frontier.get("leader_id") or ""))
+    if leader:
+        for clue in leader["clues"]:
+            if clue["fact"] not in question_codes:
+                continue
+            if clue["direction"] == "support":
+                confirmation_score += clue["weight"]
+            else:
+                refutation_score += clue["weight"]
+
+    return {
+        "discrimination_score": discrimination_score,
+        "confirmation_score": confirmation_score,
+        "refutation_score": refutation_score,
+        "target_fact_codes": sorted(target_codes),
+    }

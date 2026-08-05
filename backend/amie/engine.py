@@ -27,6 +27,8 @@ from .clinical_facts import (
 )
 from .disease_profiles import (
     attach_safety_conditions,
+    build_candidate_frontier,
+    funnel_question_score,
     question_utility,
     score_diseases,
 )
@@ -637,13 +639,8 @@ class AMIEEngine:
             state.get("questionnaire", []),
             clinical_facts,
         )
-        candidate_by_field = {item["field"]: item for item in candidates}
         priority_fields = tuple(policy["priority_fields"])
-        selected = next(
-            (candidate_by_field[field] for field in priority_fields if field in candidate_by_field),
-            None,
-        )
-        utilities = {}
+        utilities: dict[str, int] = {}
         if use_disease_vote and not scoring_error:
             utilities = {
                 item["field"]: question_utility(
@@ -653,14 +650,60 @@ class AMIEEngine:
                 )
                 for item in candidates
             }
-        if use_disease_vote and selected is None:
-            selected = max(
-                candidates,
-                key=lambda item: (
-                    utilities.get(item["field"], 0),
-                    -candidates.index(item),
-                ),
+
+        selected = None
+        selection_phase = ""
+        selection_tier = ""
+        candidate_frontier: list[dict[str, Any]] = []
+        selected_funnel_score: dict[str, Any] = {}
+        if use_disease_vote and not scoring_error:
+            frontier = build_candidate_frontier(
+                assessment,
+                vote_margin=policy["frontier_vote_margin"],
+                max_candidates=policy["frontier_max_candidates"],
             )
+            selection_phase = frontier["phase"]
+            candidate_frontier = frontier["candidates"]
+            priority_candidates = [item for item in candidates if item["field"] in priority_fields]
+            required_fields = set(required_missing)
+            required_candidates = [item for item in candidates if item["field"] in required_fields]
+            if priority_candidates:
+                eligible = priority_candidates
+                selection_tier = "safety_priority"
+            elif required_candidates:
+                eligible = required_candidates
+                selection_tier = "required"
+            else:
+                eligible = candidates
+                selection_tier = "general"
+
+            funnel_scores = {
+                item["field"]: funnel_question_score(
+                    item,
+                    frontier,
+                    route=route,
+                )
+                for item in eligible
+            }
+
+            def selection_key(item: dict[str, Any]) -> tuple[int, int, int, int]:
+                score = funnel_scores[item["field"]]
+                if selection_phase == "confirm":
+                    ordered = (
+                        score["confirmation_score"],
+                        score["refutation_score"],
+                        score["discrimination_score"],
+                    )
+                else:
+                    ordered = (
+                        score["discrimination_score"],
+                        score["confirmation_score"],
+                        score["refutation_score"],
+                    )
+                return (*ordered, -candidates.index(item))
+
+            selected = max(eligible, key=selection_key)
+            selected_funnel_score = funnel_scores[selected["field"]]
         elif not use_disease_vote:
             selected = candidates[0]
 
@@ -688,9 +731,11 @@ class AMIEEngine:
             if coverage_ready and can_complete
             else "最低必要資料已完成，剩餘問題不會改變目前疾病票數。"
             if no_score_changing_question and can_complete
-            else "依安全優先順序選擇下一題。"
-            if selected and selected["field"] in priority_fields
-            else "依目前候選疾病間的投票區辨力選擇下一題。"
+            else "在 Safety 優先題中依目前疾病標籤漏斗選擇下一題。"
+            if selection_tier == "safety_priority"
+            else "在最低必要欄位中依目前疾病標籤漏斗選擇下一題。"
+            if selection_tier == "required"
+            else "依目前疾病標籤漏斗選擇下一題。"
             if use_disease_vote
             else "非胸痛路由依核准問卷固定順序追問。"
         )
@@ -712,6 +757,15 @@ class AMIEEngine:
             "audit_reason": reason,
             "question_utility": utilities.get(next_field, 0) if next_field else 0,
             "scoring_method": assessment.get("method", ""),
+            "selection_phase": selection_phase,
+            "selection_tier": selection_tier,
+            "candidate_frontier": candidate_frontier,
+            "target_fact_codes": selected_funnel_score.get("target_fact_codes", []),
+            "funnel_score": {
+                key: value
+                for key, value in selected_funnel_score.items()
+                if key != "target_fact_codes"
+            },
         }
         timeline = list(state.get("evidence_timeline", []))
         timeline.append(

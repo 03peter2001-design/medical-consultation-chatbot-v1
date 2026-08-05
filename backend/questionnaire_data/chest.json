@@ -2,7 +2,7 @@
   "id": "chest",
   "section": "disease",
   "policy": {
-    "schema_version": 1,
+    "schema_version": 2,
     "selection_strategy": "disease_vote",
     "required_fields": [
       "onset",
@@ -24,7 +24,9 @@
       "location"
     ],
     "coverage_threshold": 0.7,
-    "max_turns": 24
+    "max_turns": 24,
+    "frontier_vote_margin": 2,
+    "frontier_max_candidates": 5
   },
   "questions": [
     {

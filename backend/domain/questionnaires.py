@@ -268,11 +268,13 @@ def load_questionnaire_policy(route: str) -> dict[str, Any]:
         "priority_fields",
         "coverage_threshold",
         "max_turns",
+        "frontier_vote_margin",
+        "frontier_max_candidates",
     }
     if not isinstance(policy, dict) or set(policy) != expected_keys:
         raise ValueError(f"{path.name} 的 policy 格式不正確")
-    if policy["schema_version"] != 1:
-        raise ValueError(f"{path.name} 的 policy.schema_version 必須是 1")
+    if policy["schema_version"] != 2:
+        raise ValueError(f"{path.name} 的 policy.schema_version 必須是 2")
     if policy["selection_strategy"] not in {
         "disease_vote",
         "fixed_order",
@@ -304,6 +306,20 @@ def load_questionnaire_policy(route: str) -> dict[str, Any]:
     max_turns = policy["max_turns"]
     if not isinstance(max_turns, int) or isinstance(max_turns, bool) or not 1 <= max_turns <= 100:
         raise ValueError(f"{path.name} 的 max_turns 必須介於 1 與 100")
+    vote_margin = policy["frontier_vote_margin"]
+    if (
+        not isinstance(vote_margin, int)
+        or isinstance(vote_margin, bool)
+        or not 0 <= vote_margin <= 100
+    ):
+        raise ValueError(f"{path.name} 的 frontier_vote_margin 必須介於 0 與 100")
+    max_candidates = policy["frontier_max_candidates"]
+    if (
+        not isinstance(max_candidates, int)
+        or isinstance(max_candidates, bool)
+        or not 1 <= max_candidates <= 100
+    ):
+        raise ValueError(f"{path.name} 的 frontier_max_candidates 必須介於 1 與 100")
     return deepcopy(policy)
 
 

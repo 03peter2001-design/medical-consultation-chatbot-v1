@@ -1,0 +1,14 @@
+<!--
+  Merge this rule BEFORE the existing ASP.NET Core catch-all rule at the eHIS
+  IIS site level. This is an import fragment, not a complete web.config.
+  Replace ai-api.internal.example with the certificate-valid Ubuntu LAN name.
+-->
+<rules>
+  <rule name="AI API reverse proxy" stopProcessing="true">
+    <match url="^ai-api/(.*)" />
+    <action type="Rewrite"
+            url="https://ai-api.internal.example:8443/{R:1}"
+            appendQueryString="true" />
+  </rule>
+</rules>
+

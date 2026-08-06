@@ -1,0 +1,6 @@
+.env
+backups/*
+!backups/.gitkeep
+secrets/*
+!secrets/README.md
+

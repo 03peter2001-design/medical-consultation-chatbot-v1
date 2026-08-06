@@ -1,0 +1,93 @@
+name: ${COMPOSE_PROJECT_NAME:-medical-consultation}
+
+services:
+  backend:
+    build:
+      context: ../backend
+    image: medical-consultation-backend:local
+    env_file:
+      - .env
+    environment:
+      CONSULTATION_DB_PATH: /var/lib/medical-consultation/consultations.db
+      UCC_JWT_PUBLIC_KEY_PATH: /run/secrets/ucc-jwt-public.pem
+      ENABLE_UNVERSIONED_ALIASES: "false"
+      CORS_ALLOWED_ORIGINS: ""
+    command:
+      - uvicorn
+      - main:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+      - --workers
+      - "1"
+      - --proxy-headers
+      - --forwarded-allow-ips
+      - "*"
+      - --no-access-log
+    expose:
+      - "8000"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - consultation-data:/var/lib/medical-consultation
+      - ./backups:/backups
+      - ./secrets/ucc-jwt-public.pem:/run/secrets/ucc-jwt-public.pem:ro
+      - ${RAG_CHROMA_DB_PATH:-../backend/chroma_db}:/app/chroma_db:ro
+      - ${SNOMED_DATA_PATH:-../backend/terminology/snomed}:/app/terminology/snomed:ro
+      - ${HF_MODEL_CACHE_PATH:-../.rag-cache/huggingface/hub}:/models/hub:ro
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/v1/health', timeout=3)
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - private-api
+      - backend-egress
+
+  gateway:
+    image: nginx:1.27-alpine
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      NGINX_ENVSUBST_FILTER: ^(PATIENT_SERVER_NAME|UCC_SOURCE_CIDR)$
+      PATIENT_SERVER_NAME: ${PATIENT_SERVER_NAME:?set PATIENT_SERVER_NAME}
+      UCC_SOURCE_CIDR: ${UCC_SOURCE_CIDR:?set UCC_SOURCE_CIDR}
+    ports:
+      - ${PATIENT_HTTPS_BIND:-0.0.0.0}:443:443
+      - ${UCC_API_BIND_IP:?set UCC_API_BIND_IP}:8443:8443
+    volumes:
+      - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ../frontend-v2/apps/patient/dist:/usr/share/nginx/html:ro
+      - ./secrets/tls-fullchain.pem:/etc/nginx/tls/fullchain.pem:ro
+      - ./secrets/tls-private-key.pem:/etc/nginx/tls/private-key.pem:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --no-check-certificate -O /dev/null https://127.0.0.1/healthz || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - private-api
+
+networks:
+  private-api:
+    internal: true
+  # Only the backend joins this un-published network, so it can reach the chosen
+  # LLM/FHIR providers without exposing port 8000 on the Ubuntu host.
+  backend-egress:
+    driver: bridge
+
+volumes:
+  consultation-data:

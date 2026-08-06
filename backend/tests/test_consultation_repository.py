@@ -1,3 +1,4 @@
+import gc
 import multiprocessing
 import os
 import sqlite3
@@ -8,7 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from infrastructure.consultation_repository import ConsultationRepository
+from infrastructure.consultation_repository import SCHEMA_VERSION, ConsultationRepository
 
 
 def _run_repository_initialization(
@@ -36,6 +37,8 @@ class ConsultationRepositoryTests(unittest.TestCase):
         self.repository = ConsultationRepository(self.database_path)
 
     def tearDown(self):
+        del self.repository
+        gc.collect()
         self.temp_directory.cleanup()
 
     def test_wal_setup_retries_only_lock_contention_and_has_wal_fast_path(self):
@@ -568,7 +571,10 @@ class ConsultationRepositoryTests(unittest.TestCase):
             record["consultation_id"],
         )
         with sqlite3.connect(legacy_path) as connection:
-            self.assertEqual(connection.execute("PRAGMA user_version").fetchone()[0], 6)
+            self.assertEqual(
+                connection.execute("PRAGMA user_version").fetchone()[0],
+                SCHEMA_VERSION,
+            )
             self.assertEqual(
                 connection.execute(
                     """
@@ -674,7 +680,7 @@ class ConsultationRepositoryTests(unittest.TestCase):
                 self.assertIn("consultation_date", columns)
                 self.assertEqual(
                     connection.execute("PRAGMA user_version").fetchone()[0],
-                    6,
+                    SCHEMA_VERSION,
                 )
                 self.assertEqual(
                     connection.execute("SELECT consultation_date FROM consultations").fetchone()[0],
@@ -776,7 +782,10 @@ class ConsultationRepositoryTests(unittest.TestCase):
         migrated = ConsultationRepository(legacy_path)
         self.assertIsNotNone(migrated.get("2026-08-05:001"))
         with sqlite3.connect(legacy_path) as connection:
-            self.assertEqual(connection.execute("PRAGMA user_version").fetchone()[0], 6)
+            self.assertEqual(
+                connection.execute("PRAGMA user_version").fetchone()[0],
+                SCHEMA_VERSION,
+            )
             self.assertEqual(
                 connection.execute(
                     "SELECT count(DISTINCT display_number) FROM consultations"

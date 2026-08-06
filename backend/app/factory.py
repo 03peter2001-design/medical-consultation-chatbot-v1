@@ -1,9 +1,12 @@
 """FastAPI application factory and router composition."""
 
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routes.doctor import router as doctor_router
+from app.routes.invitations import router as invitation_router
 from app.routes.patient import router as patient_router
 from app.routes.system import router as system_router
 from app.services.seed_data import seed_test_patient
@@ -38,23 +41,37 @@ def create_app() -> FastAPI:
         ),
         openapi_tags=OPENAPI_TAGS,
     )
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+    allowed_origins = [
+        origin.strip()
+        for origin in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
+        if origin.strip()
+    ]
+    if allowed_origins:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=allowed_origins,
+            allow_credentials=True,
+            allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            allow_headers=["Authorization", "Content-Type"],
+        )
     app.include_router(system_router, prefix=API_V1_PREFIX)
     app.include_router(patient_router, prefix=API_V1_PREFIX)
     app.include_router(doctor_router, prefix=API_V1_PREFIX)
+    app.include_router(invitation_router, prefix=API_V1_PREFIX)
 
     # Keep existing clients working during the v1 migration. These aliases are
     # intentionally excluded from OpenAPI so the published contract has one
     # canonical path for every operation.
-    app.include_router(system_router, include_in_schema=False)
-    app.include_router(patient_router, include_in_schema=False)
-    app.include_router(doctor_router, include_in_schema=False)
+    aliases_enabled = os.getenv("ENABLE_UNVERSIONED_ALIASES", "true").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+    if aliases_enabled:
+        app.include_router(system_router, include_in_schema=False)
+        app.include_router(patient_router, include_in_schema=False)
+        app.include_router(doctor_router, include_in_schema=False)
     return app
 
 

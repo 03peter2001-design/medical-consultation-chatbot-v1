@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from threading import RLock
 
 from dotenv import load_dotenv
 
@@ -27,8 +28,17 @@ AMIE_DEBUG_TRACE = os.getenv("AMIE_DEBUG_TRACE", "true").strip().lower() in {
 }
 
 sessions: dict[str, dict] = {}
-SESSION_TTL = 60 * 30
-doctor_sessions: dict[str, dict] = {}
+# Patient interview memory is only a cache.  Its lifetime must not be shorter
+# than the authenticated patient session persisted in SQLite, otherwise an
+# otherwise-valid cookie loses the in-progress interview after 30 minutes.
+SESSION_TTL = 8 * 60 * 60
+# A browser-provided session id is not an authorization boundary.  Physician
+# sessions are therefore namespaced by the verified UCC tenant and clinician.
+# Route code must always construct this key from the authenticated JWT
+# principal; never from identity fields supplied by the client.
+DoctorSessionKey = tuple[str, str, str]
+doctor_sessions: dict[DoctorSessionKey, dict] = {}
+doctor_sessions_lock = RLock()
 DOCTOR_SESSION_TTL = 60 * 60
 DOCTOR_HISTORY_MAX_TURNS = 8
 

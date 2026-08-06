@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-import traceback
-
-from fastapi import APIRouter, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
 from app import runtime
 from app.contracts import (
@@ -12,6 +10,8 @@ from app.contracts import (
     TranscriptionResponse,
     error_responses,
 )
+from app.security import current_patient_session, require_patient_session
+from app.services.security_audit import audit_patient, safe_log
 
 router = APIRouter(tags=["system"])
 
@@ -55,13 +55,19 @@ def health():
     response_model=TranscriptionResponse,
     responses=error_responses(400, 413, 422, 500),
     summary="Transcribe a Traditional Chinese medical audio recording",
+    dependencies=[Depends(require_patient_session)],
 )
 async def transcribe(audio: UploadFile = File(...)):
+    patient_session = current_patient_session()
     if not audio.content_type or "audio" not in audio.content_type:
+        if patient_session is not None:
+            audit_patient("patient.transcribe", "denied", patient_session)
         raise HTTPException(status_code=400, detail="請上傳音訊檔案")
 
     audio_bytes = await audio.read()
     if len(audio_bytes) > 10 * 1024 * 1024:
+        if patient_session is not None:
+            audit_patient("patient.transcribe", "denied", patient_session)
         raise HTTPException(
             status_code=413,
             detail="音訊檔案過大（上限 10MB）",
@@ -75,10 +81,14 @@ async def transcribe(audio: UploadFile = File(...)):
             prompt=WHISPER_PROMPT,
         )
         transcript = str(raw_text or "").strip()
-        print(f"[Transcribe:{runtime.llm_client.provider}] 已完成原文轉錄")
+        if patient_session is not None:
+            audit_patient("patient.transcribe", "success", patient_session)
+        safe_log("patient.transcribe", "success")
         return {"text": transcript}
     except Exception as error:
-        traceback.print_exc()
+        if patient_session is not None:
+            audit_patient("patient.transcribe", "failure", patient_session)
+        safe_log("patient.transcribe", "failure", error=error)
         raise HTTPException(
             status_code=500,
             detail=f"語音辨識失敗：{error}",

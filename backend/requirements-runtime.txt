@@ -8,3 +8,4 @@ google-genai
 langgraph>=0.2,<2
 python-dotenv
 python-multipart
+PyJWT[crypto]>=2.9,<3

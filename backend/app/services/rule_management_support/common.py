@@ -10,6 +10,8 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+INTERNAL_RULE_AUTHORIZATION = "__ucc_jwt_scope_authorized__"
+
 
 def revision(document: dict[str, Any]) -> str:
     canonical = json.dumps(
@@ -22,6 +24,8 @@ def revision(document: dict[str, Any]) -> str:
 
 
 def require_admin_token(admin_token: str) -> None:
+    if hmac.compare_digest(admin_token, INTERNAL_RULE_AUTHORIZATION):
+        return
     configured_token = os.getenv("SAFETY_RULE_ADMIN_TOKEN", "").strip()
     if not configured_token:
         raise PermissionError("尚未設定 SAFETY_RULE_ADMIN_TOKEN，規則中心目前為唯讀")

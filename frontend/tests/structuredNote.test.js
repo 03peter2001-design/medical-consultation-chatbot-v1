@@ -2,7 +2,48 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import test from 'node:test'
 
-import { splitStructuredNote } from '../src/services/structuredNote.js'
+import {
+  formatEmrSummary,
+  splitStructuredNote,
+} from '../src/services/structuredNote.js'
+
+test('formats patient basics before two sentences about other EMR history', () => {
+  const summary = formatEmrSummary(
+    {
+      patient_data: {
+        age: '58',
+        gender: '男',
+        reason: '走路時胸口壓迫',
+        onset: '3小時前',
+      },
+    },
+    '有高血壓病史，目前規則服藥。無已知藥物過敏。第三句不應顯示。',
+  )
+
+  assert.equal(
+    summary,
+    '58歲男性｜症狀：走路時胸口壓迫｜持續時間：3小時前\n有高血壓病史，目前規則服藥。無已知藥物過敏。',
+  )
+})
+
+test('keeps an already formatted EMR summary without duplicating identity', () => {
+  const summary = formatEmrSummary(
+    {
+      patient_data: {
+        age: '58',
+        gender: '男',
+        reason: '走路時胸口壓迫',
+        onset: '3小時前',
+      },
+    },
+    '58歲男性｜症狀：走路時胸口壓迫｜持續時間：3小時前\n有高血壓病史。無已知藥物過敏。',
+  )
+
+  assert.equal(
+    summary,
+    '58歲男性｜症狀：走路時胸口壓迫｜持續時間：3小時前\n有高血壓病史。無已知藥物過敏。',
+  )
+})
 
 test('moves the EMR section out while preserving clinical decisions', () => {
   const sections = splitStructuredNote(`【病歷摘要 EMR】

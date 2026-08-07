@@ -62,6 +62,63 @@ def _validated_history_summary(record: dict, candidate: object) -> str:
     return summary
 
 
+def _two_sentence_emr_summary(record: dict, candidate: object) -> str:
+    """Render demographics first, followed by two sentences about other history."""
+    data = record.get("data") or {}
+    age = str(data.get("age") or "年齡未提供").strip()
+    age_label = age if age.endswith("歲") or age == "年齡未提供" else f"{age}歲"
+    raw_gender = str(data.get("gender") or "").strip()
+    gender = {
+        "男": "男性",
+        "男性": "男性",
+        "女": "女性",
+        "女性": "女性",
+    }.get(raw_gender, raw_gender or "性別未提供")
+    symptom = _single_paragraph(data.get("reason") or record.get("reason") or "未提供")
+    onset = _single_paragraph(
+        data.get("onset")
+        or " ".join(
+            filter(
+                None,
+                [
+                    str(data.get("onset_num") or "").strip(),
+                    str(data.get("onset_unit") or "").strip(),
+                ],
+            )
+        )
+        or "未提供"
+    )
+    identity_line = (
+        f"{age_label}{gender}｜症狀：{symptom.rstrip('。；，, ')}｜"
+        f"持續時間：{onset.rstrip('。；，, ')}"
+    )
+
+    raw_summary = _single_paragraph(candidate)
+    fallback_sentences = [
+        (
+            f"過去病史：{_single_paragraph(data.get('chronic') or '未提供')}；"
+            f"目前用藥：{_single_paragraph(data.get('current_meds') or '未提供')}。"
+        ),
+        f"過敏史：{_single_paragraph(data.get('allergy') or '未提供')}。",
+    ]
+    if not raw_summary or _contains_unapproved_disease_language(
+        raw_summary,
+        source_text=model_patient_summary(record),
+    ):
+        summary_sentences = fallback_sentences
+    else:
+        summary_sentences = []
+        for part in re.findall(r"[^。！？]+[。！？]?", raw_summary):
+            content = _truncate_summary_part(part.rstrip("。！？；，, "), 100)
+            if content:
+                summary_sentences.append(f"{content.rstrip('。！？；，, ')}。")
+            if len(summary_sentences) == 2:
+                break
+        summary_sentences.extend(fallback_sentences[len(summary_sentences) :])
+
+    return f"{identity_line}\n{''.join(summary_sentences[:2])}"
+
+
 def _single_paragraph(text: object) -> str:
     """Collapse model formatting so the physician report stays scan-friendly."""
     return re.sub(r"\s+", " ", str(text or "")).strip()
@@ -327,7 +384,7 @@ def _render_structured_note(
             for item in items
         )
 
-    summary = _validated_history_summary(
+    summary = _two_sentence_emr_summary(
         record,
         payload.get("emr_summary", ""),
     )
@@ -413,7 +470,7 @@ def generate_structured_note(
 
 只回傳 JSON：
 {{
-  "emr_summary": "只重述既有病史的摘要",
+  "emr_summary": "以恰好兩句簡短繁體中文，摘要年齡、性別、主訴與發作時間以外的其他 EMR 病史（如過去病史、用藥、過敏史與重要伴隨資訊）；不要重複基本病況，也不要提出診斷",
   "physical_exam": [
     {{
       "item": "檢查名稱",

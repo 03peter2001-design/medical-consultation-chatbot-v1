@@ -1,3 +1,4 @@
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -39,7 +40,13 @@ class _Repository:
         )
         self.record.setdefault("created_at", "2026-08-05T01:00:00+00:00")
 
-    def get(self, consultation_id: str) -> dict | None:
+    def get(
+        self,
+        consultation_id: str,
+        *,
+        institution_id: str | None = None,
+    ) -> dict | None:
+        del institution_id
         return self.record if consultation_id == self.record["consultation_id"] else None
 
     def get_by_registration_number(
@@ -47,8 +54,9 @@ class _Repository:
         registration_number: str,
         *,
         consultation_date: str | None = None,
+        institution_id: str | None = None,
     ) -> dict | None:
-        del consultation_date
+        del consultation_date, institution_id
         return self.record if registration_number == self.record["registration_number"] else None
 
 
@@ -436,6 +444,35 @@ class DiseaseReportRestrictionTests(unittest.TestCase):
         self.assertNotIn("模型自創檢查", note)
         self.assertNotIn("invented", note)
         self.assertIn("不是患病機率", note)
+
+    def test_emr_summary_places_two_other_history_sentences_after_patient_basics(self):
+        note = _render_structured_note(
+            {
+                "data": {
+                    "age": "58",
+                    "gender": "男",
+                    "reason": "走路時胸口壓迫",
+                    "onset_num": "3",
+                    "onset_unit": "小時前",
+                }
+            },
+            self.assessment,
+            {
+                "emr_summary": "有高血壓病史，目前規則服藥。無已知藥物過敏。第三句不應顯示。",
+                "physical_exam": [],
+                "laboratory": [],
+                "imaging": [],
+            },
+        )
+
+        emr = note.split("【初步鑑別診斷", 1)[0]
+        self.assertIn(
+            "58歲男性｜症狀：走路時胸口壓迫｜持續時間：3 小時前\n",
+            emr,
+        )
+        self.assertIn("有高血壓病史，目前規則服藥。無已知藥物過敏。", emr)
+        self.assertNotIn("第三句", emr)
+        self.assertEqual(len(re.findall(r"[。！？]", emr)), 2)
 
     def test_hallucinated_disease_in_history_summary_is_replaced(self):
         note = _render_structured_note(

@@ -172,6 +172,15 @@ export const api = {
         patient_prefill: patientPrefill,
       }),
     ),
+  patientBack: (sessionId) =>
+    request(
+      apiPath('/chat'),
+      jsonOptions('POST', {
+        message: '',
+        session_id: sessionId,
+        action: 'back',
+      }),
+    ),
   transcribe: (audioBlob) => {
     const formData = new FormData()
     formData.append('audio', audioBlob, 'audio.webm')

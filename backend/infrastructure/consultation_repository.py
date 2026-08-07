@@ -10,16 +10,18 @@ from __future__ import annotations
 import json
 import os
 import re
+import hashlib
 import secrets
 import sqlite3
 import time
 from collections.abc import Callable
-from datetime import date, datetime, timezone
+from contextlib import closing
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-SCHEMA_VERSION = 6
+SCHEMA_VERSION = 9
 DEFAULT_CONSULTATION_TIMEZONE = "Asia/Taipei"
 BACKEND_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_DATABASE_PATH = BACKEND_DIR / "data" / "consultations.db"
@@ -30,6 +32,9 @@ SQLITE_LOCK_TIMEOUT_SECONDS = 10.0
 SQLITE_BUSY_TIMEOUT_MILLISECONDS = int(SQLITE_LOCK_TIMEOUT_SECONDS * 1_000)
 WAL_RETRY_INITIAL_DELAY_SECONDS = 0.005
 WAL_RETRY_MAX_DELAY_SECONDS = 0.1
+MAX_PATIENT_RUNTIME_STATE_BYTES = 512 * 1024
+AUDIT_RETENTION_DAYS = max(1, int(os.getenv("AUDIT_RETENTION_DAYS", "90")))
+AUDIT_MAX_ROWS = max(1_000, int(os.getenv("AUDIT_MAX_ROWS", "100000")))
 
 
 def _utc_now() -> str:
@@ -245,6 +250,9 @@ class ConsultationRepository:
             connection.execute("ALTER TABLE consultations ADD COLUMN summary_error TEXT")
         if "consultation_date" not in columns:
             connection.execute("ALTER TABLE consultations ADD COLUMN consultation_date TEXT")
+        for column in ("invitation_id", "institution_id", "patient_sno", "reg_sno"):
+            if column not in columns:
+                connection.execute(f"ALTER TABLE consultations ADD COLUMN {column} TEXT")
 
         connection.execute(
             """
@@ -307,6 +315,79 @@ class ConsultationRepository:
             CREATE UNIQUE INDEX IF NOT EXISTS
                 idx_consultations_date_registration
                 ON consultations (consultation_date, display_number)
+            """
+        )
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS invitations (
+                invite_id TEXT PRIMARY KEY,
+                token_hash TEXT NOT NULL UNIQUE,
+                institution_id TEXT NOT NULL,
+                patient_sno TEXT NOT NULL,
+                reg_sno TEXT NOT NULL,
+                prefill_json TEXT NOT NULL,
+                status TEXT NOT NULL CHECK (status IN ('active', 'consumed', 'revoked', 'expired')),
+                expires_at TEXT NOT NULL,
+                created_by TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                consumed_at TEXT,
+                consultation_id TEXT
+            )
+            """
+        )
+        connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_invitations_encounter_status
+            ON invitations (institution_id, reg_sno, status)
+            """
+        )
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS patient_sessions (
+                session_id TEXT PRIMARY KEY,
+                session_token_hash TEXT NOT NULL UNIQUE,
+                invite_id TEXT NOT NULL REFERENCES invitations(invite_id),
+                interview_session_id TEXT NOT NULL UNIQUE,
+                expires_at TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                last_seen_at TEXT NOT NULL,
+                revoked_at TEXT,
+                runtime_state_json TEXT,
+                runtime_updated_at TEXT
+            )
+            """
+        )
+        patient_session_columns = {
+            row["name"]
+            for row in connection.execute("PRAGMA table_info(patient_sessions)").fetchall()
+        }
+        if "runtime_state_json" not in patient_session_columns:
+            connection.execute(
+                "ALTER TABLE patient_sessions ADD COLUMN runtime_state_json TEXT"
+            )
+        if "runtime_updated_at" not in patient_session_columns:
+            connection.execute(
+                "ALTER TABLE patient_sessions ADD COLUMN runtime_updated_at TEXT"
+            )
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS audit_events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                actor_type TEXT NOT NULL,
+                actor_id TEXT NOT NULL,
+                action TEXT NOT NULL,
+                resource_type TEXT NOT NULL,
+                resource_id TEXT NOT NULL,
+                institution_id TEXT,
+                outcome TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            )
+            """
+        )
+        connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_audit_events_created_at
+            ON audit_events (created_at)
             """
         )
 
@@ -527,9 +608,13 @@ class ConsultationRepository:
                             workflow_status,
                             consultation_date,
                             created_at,
-                            updated_at
+                            updated_at,
+                            invitation_id,
+                            institution_id,
+                            patient_sno,
+                            reg_sno
                         )
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         """,
                         (
                             queue_number,
@@ -546,8 +631,23 @@ class ConsultationRepository:
                             consultation_date,
                             now,
                             now,
+                            record.get("invitation_id"),
+                            record.get("institution_id"),
+                            record.get("patient_sno"),
+                            record.get("reg_sno"),
                         ),
                     )
+                    invitation_id = record.get("invitation_id")
+                    if invitation_id:
+                        consultation_id = self.consultation_id(consultation_date, display_number)
+                        connection.execute(
+                            """
+                            UPDATE invitations
+                            SET consultation_id = ?
+                            WHERE invite_id = ?
+                            """,
+                            (consultation_id, invitation_id),
+                        )
                 return {
                     "consultation_id": self.consultation_id(
                         consultation_date,
@@ -632,7 +732,12 @@ class ConsultationRepository:
             ).fetchone()
         return self.consultation_id(row["consultation_date"], row["display_number"])
 
-    def get(self, consultation_id: str) -> dict[str, Any] | None:
+    def get(
+        self,
+        consultation_id: str,
+        *,
+        institution_id: str | None = None,
+    ) -> dict[str, Any] | None:
         consultation_date, registration_number = self._parse_consultation_id(consultation_id)
         with self._connect() as connection:
             row = connection.execute(
@@ -654,11 +759,16 @@ class ConsultationRepository:
                     workflow_status,
                     consultation_date,
                     created_at,
-                    updated_at
+                    updated_at,
+                    invitation_id,
+                    institution_id,
+                    patient_sno,
+                    reg_sno
                 FROM consultations
                 WHERE consultation_date = ? AND display_number = ?
+                  AND (? IS NULL OR institution_id = ?)
                 """,
-                (consultation_date, registration_number),
+                (consultation_date, registration_number, institution_id, institution_id),
             ).fetchone()
 
         if row is None:
@@ -670,21 +780,26 @@ class ConsultationRepository:
         registration_number: str,
         *,
         consultation_date: str | None = None,
+        institution_id: str | None = None,
     ) -> dict[str, Any] | None:
         """Resolve a patient-facing registration number by date or global uniqueness."""
         normalized = registration_number.strip()
         if consultation_date:
-            return self.get(self.consultation_id(consultation_date, normalized))
+            return self.get(
+                self.consultation_id(consultation_date, normalized),
+                institution_id=institution_id,
+            )
         with self._connect() as connection:
             rows = connection.execute(
                 """
                 SELECT consultation_date, display_number
                 FROM consultations
                 WHERE display_number = ?
+                  AND (? IS NULL OR institution_id = ?)
                 ORDER BY created_at DESC, id DESC
                 LIMIT 2
                 """,
-                (normalized,),
+                (normalized, institution_id, institution_id),
             ).fetchall()
         if not rows:
             return None
@@ -694,7 +809,8 @@ class ConsultationRepository:
             self.consultation_id(
                 rows[0]["consultation_date"],
                 rows[0]["display_number"],
-            )
+            ),
+            institution_id=institution_id,
         )
 
     def _record_from_row(self, row: sqlite3.Row) -> dict[str, Any]:
@@ -721,6 +837,10 @@ class ConsultationRepository:
             "consultation_date": row["consultation_date"],
             "created_at": row["created_at"],
             "updated_at": row["updated_at"],
+            "invitation_id": row["invitation_id"],
+            "institution_id": row["institution_id"],
+            "patient_sno": row["patient_sno"],
+            "reg_sno": row["reg_sno"],
         }
 
     def list_summaries(
@@ -729,25 +849,29 @@ class ConsultationRepository:
         search: str = "",
         limit: int = 30,
         offset: int = 0,
+        institution_id: str | None = None,
     ) -> dict[str, Any]:
         """Return paginated metadata without exposing reports or full answers."""
         safe_limit = max(1, min(int(limit), 100))
         safe_offset = max(0, int(offset))
         normalized_search = search.strip()[:100]
-        where_sql = ""
-        where_params: tuple[str, ...] = ()
+        clauses: list[str] = []
+        params: list[str] = []
+        if institution_id:
+            clauses.append("institution_id = ?")
+            params.append(institution_id)
         if normalized_search:
             pattern = f"%{normalized_search}%"
-            where_sql = """
-                WHERE (
+            clauses.append("""(
                     display_number LIKE ?
                     OR queue_number LIKE ?
                     OR consultation_date LIKE ?
                     OR coalesce(patient_name, '') LIKE ?
                     OR reason LIKE ?
-                )
-            """
-            where_params = (pattern, pattern, pattern, pattern, pattern)
+                )""")
+            params.extend((pattern, pattern, pattern, pattern, pattern))
+        where_sql = f"WHERE {' AND '.join(clauses)}" if clauses else ""
+        where_params = tuple(params)
 
         with self._connect() as connection:
             rows = connection.execute(
@@ -932,3 +1056,388 @@ class ConsultationRepository:
         with self._connect() as connection:
             row = connection.execute("SELECT count(*) AS total FROM consultations").fetchone()
         return int(row["total"])
+
+    @staticmethod
+    def _token_hash(token: str) -> str:
+        return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+    @staticmethod
+    def _audit(
+        connection: sqlite3.Connection,
+        *,
+        actor_type: str,
+        actor_id: str,
+        action: str,
+        resource_type: str,
+        resource_id: str,
+        institution_id: str | None,
+        outcome: str = "success",
+    ) -> None:
+        connection.execute(
+            """
+            INSERT INTO audit_events (
+                actor_type, actor_id, action, resource_type, resource_id,
+                institution_id, outcome, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                actor_type,
+                actor_id,
+                action,
+                resource_type,
+                resource_id,
+                institution_id,
+                outcome,
+                _utc_now(),
+            ),
+        )
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=AUDIT_RETENTION_DAYS)).isoformat(
+            timespec="milliseconds"
+        )
+        connection.execute("DELETE FROM audit_events WHERE created_at < ?", (cutoff,))
+        connection.execute(
+            """
+            DELETE FROM audit_events
+            WHERE id <= COALESCE(
+                (
+                    SELECT id FROM audit_events
+                    ORDER BY id DESC
+                    LIMIT 1 OFFSET ?
+                ),
+                0
+            )
+            """,
+            (AUDIT_MAX_ROWS,),
+        )
+
+    def record_audit_event(
+        self,
+        *,
+        actor_type: str,
+        actor_id: str,
+        action: str,
+        resource_type: str,
+        resource_id: str,
+        institution_id: str | None,
+        outcome: str,
+    ) -> None:
+        """Persist a bounded security event containing identifiers only.
+
+        Callers must use opaque or pseudonymous identifiers.  Free-form request
+        data is intentionally unsupported by this API and by the table schema.
+        """
+        with closing(self._connect()) as connection, connection:
+            self._audit(
+                connection,
+                actor_type=actor_type[:40],
+                actor_id=actor_id[:200],
+                action=action[:100],
+                resource_type=resource_type[:60],
+                resource_id=resource_id[:200],
+                institution_id=(institution_id[:100] if institution_id else None),
+                outcome=outcome[:40],
+            )
+
+    def create_invitation(
+        self,
+        *,
+        institution_id: str,
+        patient_sno: str,
+        reg_sno: str,
+        prefill: dict[str, Any],
+        actor_sub: str,
+        ttl_seconds: int = 24 * 60 * 60,
+    ) -> dict[str, str]:
+        token = secrets.token_urlsafe(32)
+        invite_id = secrets.token_hex(16)
+        now = datetime.now(timezone.utc)
+        created_at = now.isoformat(timespec="milliseconds")
+        expires_at = (now + timedelta(seconds=ttl_seconds)).isoformat(timespec="milliseconds")
+        with closing(self._connect()) as connection, connection:
+            connection.execute("BEGIN IMMEDIATE")
+            connection.execute(
+                """
+                UPDATE invitations
+                SET status = 'revoked'
+                WHERE institution_id = ? AND reg_sno = ? AND status = 'active'
+                """,
+                (institution_id, reg_sno),
+            )
+            connection.execute(
+                """
+                INSERT INTO invitations (
+                    invite_id, token_hash, institution_id, patient_sno, reg_sno,
+                    prefill_json, status, expires_at, created_by, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, 'active', ?, ?, ?)
+                """,
+                (
+                    invite_id,
+                    self._token_hash(token),
+                    institution_id,
+                    patient_sno,
+                    reg_sno,
+                    self._serialize_data(prefill),
+                    expires_at,
+                    actor_sub,
+                    created_at,
+                ),
+            )
+            self._audit(
+                connection,
+                actor_type="ucc_user",
+                actor_id=actor_sub,
+                action="invitation.create",
+                resource_type="invitation",
+                resource_id=invite_id,
+                institution_id=institution_id,
+            )
+        return {
+            "invite_id": invite_id,
+            "token": token,
+            "expires_at": expires_at,
+            "status": "active",
+        }
+
+    def exchange_invitation(
+        self,
+        token: str,
+        *,
+        session_ttl_seconds: int = 8 * 60 * 60,
+    ) -> dict[str, str] | None:
+        now = datetime.now(timezone.utc)
+        now_text = now.isoformat(timespec="milliseconds")
+        rejected_error: ValueError | None = None
+        result: dict[str, str] | None = None
+        token_fingerprint = f"token:{self._token_hash(token)[:20]}"
+        with closing(self._connect()) as connection, connection:
+            connection.execute("BEGIN IMMEDIATE")
+            invitation = connection.execute(
+                """
+                SELECT * FROM invitations WHERE token_hash = ?
+                """,
+                (self._token_hash(token),),
+            ).fetchone()
+            if invitation is None:
+                self._audit(
+                    connection,
+                    actor_type="anonymous",
+                    actor_id=token_fingerprint,
+                    action="invitation.exchange",
+                    resource_type="invitation",
+                    resource_id=token_fingerprint,
+                    institution_id=None,
+                    outcome="denied",
+                )
+            elif invitation["status"] != "active":
+                self._audit(
+                    connection,
+                    actor_type="anonymous",
+                    actor_id=token_fingerprint,
+                    action="invitation.exchange",
+                    resource_type="invitation",
+                    resource_id=invitation["invite_id"],
+                    institution_id=invitation["institution_id"],
+                    outcome="denied",
+                )
+                rejected_error = ValueError("Invitation has already been used or revoked")
+            elif invitation["expires_at"] <= now_text:
+                connection.execute(
+                    "UPDATE invitations SET status = 'expired' WHERE invite_id = ?",
+                    (invitation["invite_id"],),
+                )
+                self._audit(
+                    connection,
+                    actor_type="anonymous",
+                    actor_id=token_fingerprint,
+                    action="invitation.exchange",
+                    resource_type="invitation",
+                    resource_id=invitation["invite_id"],
+                    institution_id=invitation["institution_id"],
+                    outcome="denied",
+                )
+            else:
+                session_token = secrets.token_urlsafe(48)
+                session_id = secrets.token_hex(16)
+                interview_session_id = f"patient-{secrets.token_hex(16)}"
+                expires_at = (now + timedelta(seconds=session_ttl_seconds)).isoformat(
+                    timespec="milliseconds"
+                )
+                connection.execute(
+                    """
+                    UPDATE invitations
+                    SET status = 'consumed', consumed_at = ?
+                    WHERE invite_id = ? AND status = 'active'
+                    """,
+                    (now_text, invitation["invite_id"]),
+                )
+                connection.execute(
+                    """
+                    INSERT INTO patient_sessions (
+                        session_id, session_token_hash, invite_id, interview_session_id,
+                        expires_at, created_at, last_seen_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        session_id,
+                        self._token_hash(session_token),
+                        invitation["invite_id"],
+                        interview_session_id,
+                        expires_at,
+                        now_text,
+                        now_text,
+                    ),
+                )
+                self._audit(
+                    connection,
+                    actor_type="patient",
+                    actor_id=session_id,
+                    action="invitation.exchange",
+                    resource_type="invitation",
+                    resource_id=invitation["invite_id"],
+                    institution_id=invitation["institution_id"],
+                )
+                result = {"session_token": session_token, "expires_at": expires_at}
+        if rejected_error is not None:
+            raise rejected_error
+        return result
+
+    def get_patient_session(self, session_token: str) -> dict[str, Any] | None:
+        now = _utc_now()
+        with closing(self._connect()) as connection, connection:
+            row = connection.execute(
+                """
+                SELECT
+                    ps.session_id, ps.interview_session_id, ps.expires_at,
+                    i.invite_id, i.institution_id, i.patient_sno, i.reg_sno,
+                    i.prefill_json, i.consultation_id
+                FROM patient_sessions ps
+                JOIN invitations i ON i.invite_id = ps.invite_id
+                WHERE ps.session_token_hash = ?
+                  AND ps.revoked_at IS NULL
+                  AND ps.expires_at > ?
+                """,
+                (self._token_hash(session_token), now),
+            ).fetchone()
+            if row is None:
+                return None
+            connection.execute(
+                "UPDATE patient_sessions SET last_seen_at = ? WHERE session_id = ?",
+                (now, row["session_id"]),
+            )
+        return {
+            "session_id": row["session_id"],
+            "interview_session_id": row["interview_session_id"],
+            "expires_at": row["expires_at"],
+            "invite_id": row["invite_id"],
+            "institution_id": row["institution_id"],
+            "patient_sno": row["patient_sno"],
+            "reg_sno": row["reg_sno"],
+            "prefill": json.loads(row["prefill_json"]),
+            "consultation_id": row["consultation_id"],
+        }
+
+    @staticmethod
+    def _serialize_patient_runtime_state(state: dict[str, Any]) -> str:
+        """Serialize bounded, non-executable patient interview state."""
+        if not isinstance(state, dict):
+            raise ValueError("patient runtime state must be a JSON object")
+        try:
+            serialized = json.dumps(
+                state,
+                ensure_ascii=False,
+                separators=(",", ":"),
+                allow_nan=False,
+            )
+        except (TypeError, ValueError, RecursionError) as error:
+            raise ValueError("patient runtime state must contain only JSON values") from error
+        if len(serialized.encode("utf-8")) > MAX_PATIENT_RUNTIME_STATE_BYTES:
+            raise ValueError("patient runtime state exceeds the storage limit")
+        return serialized
+
+    def save_patient_runtime_state(
+        self,
+        *,
+        patient_session_id: str,
+        interview_session_id: str,
+        institution_id: str,
+        patient_sno: str,
+        state: dict[str, Any],
+    ) -> bool:
+        """Persist one interview only when every patient binding still matches."""
+        if state.get("session_id") != interview_session_id:
+            raise ValueError("patient runtime state belongs to another interview")
+        serialized = self._serialize_patient_runtime_state(state)
+        now = _utc_now()
+        with closing(self._connect()) as connection, connection:
+            cursor = connection.execute(
+                """
+                UPDATE patient_sessions
+                SET runtime_state_json = ?, runtime_updated_at = ?, last_seen_at = ?
+                WHERE session_id = ?
+                  AND interview_session_id = ?
+                  AND revoked_at IS NULL
+                  AND expires_at > ?
+                  AND EXISTS (
+                      SELECT 1
+                      FROM invitations i
+                      WHERE i.invite_id = patient_sessions.invite_id
+                        AND i.institution_id = ?
+                        AND i.patient_sno = ?
+                  )
+                """,
+                (
+                    serialized,
+                    now,
+                    now,
+                    patient_session_id,
+                    interview_session_id,
+                    now,
+                    institution_id,
+                    patient_sno,
+                ),
+            )
+            return cursor.rowcount == 1
+
+    def load_patient_runtime_state(
+        self,
+        *,
+        patient_session_id: str,
+        interview_session_id: str,
+        institution_id: str,
+        patient_sno: str,
+    ) -> dict[str, Any] | None:
+        """Restore bounded JSON state for the exact active patient session."""
+        now = _utc_now()
+        with closing(self._connect()) as connection:
+            row = connection.execute(
+                """
+                SELECT ps.runtime_state_json
+                FROM patient_sessions ps
+                JOIN invitations i ON i.invite_id = ps.invite_id
+                WHERE ps.session_id = ?
+                  AND ps.interview_session_id = ?
+                  AND ps.revoked_at IS NULL
+                  AND ps.expires_at > ?
+                  AND i.institution_id = ?
+                  AND i.patient_sno = ?
+                """,
+                (
+                    patient_session_id,
+                    interview_session_id,
+                    now,
+                    institution_id,
+                    patient_sno,
+                ),
+            ).fetchone()
+        if row is None or not row["runtime_state_json"]:
+            return None
+        raw = row["runtime_state_json"]
+        if len(raw.encode("utf-8")) > MAX_PATIENT_RUNTIME_STATE_BYTES:
+            return None
+        try:
+            state = json.loads(raw)
+        except (TypeError, json.JSONDecodeError, RecursionError):
+            return None
+        if not isinstance(state, dict) or state.get("session_id") != interview_session_id:
+            return None
+        return state

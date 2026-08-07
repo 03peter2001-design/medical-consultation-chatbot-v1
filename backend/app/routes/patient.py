@@ -1,11 +1,12 @@
 """Patient questionnaire and AMIE interview endpoints."""
 
+from copy import deepcopy
 import time
-import traceback
 
 from fastapi import (
     APIRouter,
     BackgroundTasks,
+    Depends,
 )
 
 from amie import (
@@ -25,7 +26,8 @@ from amie.clinical_facts import (
 from amie.disease_profiles import attach_safety_conditions
 from amie.models import ChiefComplaintAssessment
 from app.contracts import PatientChatResponse, error_responses
-from app.models import ChatRequest
+from app.models import ChatRequest, PatientPrefill
+from app.security import current_patient_session, require_patient_session
 from app.runtime import (
     AMIE_DEBUG_TRACE,
     INTERVIEW_ENGINE,
@@ -52,6 +54,7 @@ from app.services.input_validation import (
     store_question_answer,
     validate_question_answer,
 )
+from app.services.security_audit import audit_patient, safe_log
 from app.services.patient_interview import (
     ROUTE_KEYWORDS,
     SUPPORTED_PATIENT_ROUTES,
@@ -98,12 +101,62 @@ from domain.questionnaires import (
 
 router = APIRouter(tags=["patient"])
 
+_HISTORY_LIMIT = 16
+
 
 def _cleanup_sessions():
     now = time.time()
     expired = [sid for sid, s in sessions.items() if now - s.get("ts", 0) > SESSION_TTL]
     for sid in expired:
         del sessions[sid]
+
+
+def _record_question_history(session: dict) -> None:
+    """Save the pre-answer state so the patient can revisit the question."""
+    snapshot = deepcopy(
+        {
+            key: value
+            for key, value in session.items()
+            if key not in {"_history", "_integration", "transcript", "ts"}
+        }
+    )
+    snapshot["_transcript_length"] = len(session.get("transcript", []))
+    history = session.setdefault("_history", [])
+    history.append(snapshot)
+    if len(history) > _HISTORY_LIMIT:
+        del history[:-_HISTORY_LIMIT]
+
+
+def _restore_previous_question(session: dict) -> dict:
+    history = session.get("_history", [])
+    if session.get("index") == -1 or not history:
+        return _question_payload(
+            session,
+            reply="目前沒有可返回的上一題。",
+            completed=session.get("index") == -1,
+        )
+
+    snapshot = history.pop()
+    integration = session.get("_integration")
+    transcript = session.get("transcript", [])[
+        : snapshot.pop("_transcript_length", 0)
+    ]
+    session.clear()
+    session.update(snapshot)
+    session["_history"] = history
+    if session.get("engine") == "amie":
+        session["transcript"] = transcript
+    session["ts"] = time.time()
+    if integration is not None:
+        session["_integration"] = integration
+
+    questionnaire = session.get("questionnaire", CHIEF_QUESTIONNAIRE)
+    index = session.get("index", 0)
+    current = questionnaire[index]
+    return _question_payload(
+        session,
+        reply=f"已回到上一題，您可以重新作答。\n\n{current['prompt']}",
+    )
 
 
 def classify_complaint(text: str) -> str:
@@ -139,8 +192,7 @@ def classify_complaint(text: str) -> str:
             return route
         raise ValueError(f"無效的分流輸出：{route[:20]}")
     except Exception as e:
-        traceback.print_exc()
-        print(f"[Classify] LLM 分流失敗，改用關鍵字判斷: {e}")
+        safe_log("patient.classify", "failure", error=e)
         if matched:
             return matched[0]
         return "other"
@@ -227,6 +279,7 @@ def _question_payload(
         "reply": reply,
         "session_id": session["session_id"],
         "completed": completed,
+        "can_go_back": bool(session.get("_history")) and not completed,
         "user_display": user_display,
         "step": -1 if completed else index,
         "queue_number": queue_number,
@@ -259,6 +312,7 @@ async def _complete_consultation(
             "data": data,
             "triage_level": "routine",
             "status": "summary_pending",
+            **session.get("_integration", {}),
         }
     )
     queue_number = created["queue_number"]
@@ -315,6 +369,7 @@ async def _complete_urgent_consultation(
             "data": data,
             "triage_level": "urgent",
             "status": "summary_pending",
+            **session.get("_integration", {}),
         }
     )
     queue_number = created["queue_number"]
@@ -536,6 +591,7 @@ async def _handoff_amie_consultation(
             "data": data,
             "triage_level": session.get("triage_level", "routine"),
             "status": "manual_handoff",
+            **session.get("_integration", {}),
         }
     )
     queue_number = created["queue_number"]
@@ -599,6 +655,7 @@ async def _chat_amie(
             reply=f"{validation_error}\n\n{current['prompt']}",
         )
 
+    _record_question_history(session)
     field = current["field"]
     user_input, user_display = store_question_answer(
         data,
@@ -620,7 +677,6 @@ async def _chat_amie(
                 background_tasks=background_tasks,
             )
         data["type"] = route
-        print(f"[AMIE] 主訴路由 → {route}")
         if route == "safety_unavailable":
             session["amie_state"] = {
                 "red_flags": [],
@@ -707,7 +763,7 @@ async def _chat_amie(
         result=result,
     )
     if result.model_error:
-        print(f"[AMIE] fallback：{result.model_error}")
+        safe_log("patient.amie", "failure")
 
     if result.triage_level == "urgent":
         return await _complete_urgent_consultation(
@@ -770,17 +826,27 @@ async def _chat_amie(
     )
 
 
-@router.post(
-    "/chat",
-    response_model=PatientChatResponse,
-    responses=error_responses(422, 500, 503),
-    summary="Advance or start a patient pre-consultation interview",
-)
-async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
+async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
     _cleanup_sessions()
 
+    patient_session = current_patient_session()
+    if patient_session is not None:
+        req.session_id = patient_session["interview_session_id"]
+        req.patient_prefill = PatientPrefill(**patient_session["prefill"])
+
+    if req.action == "back" and req.session_id in sessions:
+        return _restore_previous_question(sessions[req.session_id])
+
     if INTERVIEW_ENGINE == "amie":
-        return await _chat_amie(req, background_tasks)
+        response = await _chat_amie(req, background_tasks)
+        if patient_session is not None and req.session_id in sessions:
+            sessions[req.session_id]["_integration"] = {
+                "invitation_id": patient_session["invite_id"],
+                "institution_id": patient_session["institution_id"],
+                "patient_sno": patient_session["patient_sno"],
+                "reg_sno": patient_session["reg_sno"],
+            }
+        return response
 
     if req.session_id not in sessions:
         data, prefilled_fields = _prefilled_patient_data(req)
@@ -793,9 +859,17 @@ async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
             "questionnaire": list(CHIEF_QUESTIONNAIRE),
             "data": data,
             "prefilled_fields": list(prefilled_fields),
+            "_history": [],
             "ts": time.time(),
         }
         sessions[req.session_id] = session
+        if patient_session is not None:
+            session["_integration"] = {
+                "invitation_id": patient_session["invite_id"],
+                "institution_id": patient_session["institution_id"],
+                "patient_sno": patient_session["patient_sno"],
+                "reg_sno": patient_session["reg_sno"],
+            }
         return _question_payload(
             session,
             reply=(
@@ -830,6 +904,7 @@ async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
             session,
             reply=f"{validation_error}\n\n{current['prompt']}",
         )
+    _record_question_history(session)
     field = current["field"]
     user_input, user_display = store_question_answer(
         data,
@@ -852,7 +927,6 @@ async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
                 background_tasks=background_tasks,
             )
         data["type"] = route
-        print(f"[Classify] 主訴路由 → {route}")
         if route == "safety_unavailable":
             session["step"] = -1
             session["index"] = -1
@@ -921,3 +995,55 @@ async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
         ),
         user_display=user_display,
     )
+
+
+def _patient_runtime_binding(patient_session: dict) -> dict[str, str]:
+    return {
+        "patient_session_id": patient_session["session_id"],
+        "interview_session_id": patient_session["interview_session_id"],
+        "institution_id": patient_session["institution_id"],
+        "patient_sno": patient_session["patient_sno"],
+    }
+
+
+@router.post(
+    "/chat",
+    response_model=PatientChatResponse,
+    responses=error_responses(422, 500, 503),
+    summary="Advance or start a patient pre-consultation interview",
+    dependencies=[Depends(require_patient_session)],
+)
+async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
+    """Restore and durably save the cookie-bound patient interview."""
+    patient_session = current_patient_session()
+    if patient_session is None:
+        # Kept for direct unit calls; HTTP requests always install the required
+        # cookie-backed patient session dependency above.
+        return await _chat_impl(req, background_tasks)
+
+    binding = _patient_runtime_binding(patient_session)
+    interview_session_id = binding["interview_session_id"]
+    req.session_id = interview_session_id
+    req.patient_prefill = PatientPrefill(**patient_session["prefill"])
+
+    if interview_session_id not in sessions:
+        restored = consultation_repository.load_patient_runtime_state(**binding)
+        if restored is not None:
+            sessions[interview_session_id] = restored
+
+    try:
+        result = await _chat_impl(req, background_tasks)
+    except Exception as error:
+        audit_patient("patient.chat", "failure", patient_session)
+        safe_log("patient.chat", "failure", error=error)
+        raise
+    else:
+        audit_patient("patient.chat", "success", patient_session)
+        return result
+    finally:
+        state = sessions.get(interview_session_id)
+        if state is not None:
+            consultation_repository.save_patient_runtime_state(
+                **binding,
+                state=state,
+            )

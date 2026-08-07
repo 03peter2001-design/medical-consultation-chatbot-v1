@@ -2,7 +2,7 @@
 
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field, model_validator, validator
+from pydantic import BaseModel, Field, field_validator, model_validator, validator
 
 from domain.body_pain_regions import validate_pain_location_ids
 
@@ -56,9 +56,88 @@ class PatientPrefill(BaseModel):
         return value.strip()[:500] if value else None
 
 
+class InvitationPrefill(BaseModel):
+    """Minimum patient context accepted only from the authenticated UCC server."""
+
+    name: str | None = None
+    gender: str | None = None
+    birth_date: str | None = None
+    blood_type: str | None = None
+    allergies: str | None = None
+    current_medications: str | None = None
+    medical_history: str | None = None
+    surgical_history: str | None = None
+
+    @field_validator(
+        "allergies",
+        "current_medications",
+        "medical_history",
+        "surgical_history",
+        mode="before",
+    )
+    @classmethod
+    def normalize_history_value(cls, value):
+        if value is None or isinstance(value, str):
+            return value
+        if isinstance(value, list):
+            if len(value) > 100:
+                raise ValueError("history list contains too many entries")
+            normalized: list[str] = []
+            for item in value:
+                if not isinstance(item, str):
+                    raise ValueError("history list entries must be strings")
+                item = item.strip()
+                if item:
+                    normalized.append(item)
+            return "; ".join(normalized) or None
+        raise ValueError("history value must be a string or list of strings")
+
+    @validator("*")
+    def trim_invitation_value(cls, value):
+        return value.strip()[:2000] if isinstance(value, str) and value.strip() else None
+
+    def as_patient_prefill(self) -> dict[str, str]:
+        aliases = {
+            "allergies": "allergy",
+            "current_medications": "current_meds",
+            "medical_history": "chronic",
+            "surgical_history": "surgery",
+        }
+        return {
+            aliases.get(key, key): value
+            for key, value in self.model_dump(exclude_none=True).items()
+        }
+
+
+class InvitationCreateRequest(BaseModel):
+    institution_id: str = Field(min_length=1, max_length=100)
+    patient_sno: str = Field(min_length=1, max_length=100)
+    reg_sno: str = Field(min_length=1, max_length=100)
+    prefill: InvitationPrefill = Field(default_factory=InvitationPrefill)
+
+    @field_validator("institution_id", "patient_sno", "reg_sno", mode="before")
+    @classmethod
+    def normalize_reference(cls, value):
+        if isinstance(value, bool) or not isinstance(value, (str, int)):
+            raise ValueError("reference must be a string or integer")
+        normalized = str(value).strip()
+        if not normalized:
+            raise ValueError("reference must not be empty")
+        return normalized
+
+
+class InvitationExchangeRequest(BaseModel):
+    token: str = Field(min_length=32, max_length=512)
+
+    @validator("token")
+    def trim_token(cls, value):
+        return value.strip()
+
+
 class ChatRequest(BaseModel):
     message: str = ""
     session_id: str
+    action: Literal["answer", "back"] = "answer"
     pain_location_ids: list[str] = Field(default_factory=list)
     patient_prefill: PatientPrefill | None = None
 

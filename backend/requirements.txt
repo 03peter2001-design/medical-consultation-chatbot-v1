@@ -9,3 +9,4 @@ pymupdf
 chromadb
 sentence-transformers
 python-multipart
+PyJWT[crypto]>=2.9,<3

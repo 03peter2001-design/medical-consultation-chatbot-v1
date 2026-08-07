@@ -25,6 +25,7 @@ class ErrorResponse(BaseModel):
 
 ERROR_DESCRIPTIONS = {
     400: "The request cannot be processed in its current state.",
+    401: "Authentication is required or has expired.",
     403: "The caller is not authorized for this operation.",
     404: "The requested consultation does not exist.",
     409: "The submitted revision conflicts with the current revision.",
@@ -81,6 +82,26 @@ class TranscriptionResponse(BaseModel):
     text: str
 
 
+class InvitationResponse(BaseModel):
+    invite_id: str
+    public_url: str
+    expires_at: str
+    status: Literal["active"]
+
+
+class InvitationExchangeResponse(BaseModel):
+    status: Literal["ok"]
+    expires_at: str
+
+
+class PatientSessionResponse(BaseModel):
+    status: Literal["active"]
+    expires_at: str
+    interview_session_id: str
+    consultation_id: str | None = None
+    completed: bool = False
+
+
 class ProgressResponse(BaseModel):
     current: int = Field(ge=0)
     total: int = Field(ge=1)
@@ -104,6 +125,7 @@ class PatientChatResponse(BaseModel):
     reply: str
     session_id: str
     completed: bool
+    can_go_back: bool = False
     user_display: str | None = None
     step: int
     queue_number: str | None = None

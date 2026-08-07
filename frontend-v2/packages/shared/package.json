@@ -8,5 +8,8 @@
   },
   "peerDependencies": {
     "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@d-id/client-sdk": "1.2.10"
   }
 }

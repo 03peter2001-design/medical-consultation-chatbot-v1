@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from app.models import ClinicalCoding, SafetyRuleGroup
 
@@ -62,6 +62,13 @@ class RagQueryTranslationStatus(BaseModel):
     model: str
 
 
+class SpeechTranscriptionStatus(BaseModel):
+    provider: Literal["breeze", "llm"]
+    model: str
+    device: str
+    loaded: bool
+
+
 class HealthResponse(BaseModel):
     status: Literal["ok"]
     interview_engine: Literal["amie", "legacy"]
@@ -76,10 +83,34 @@ class HealthResponse(BaseModel):
     rag_collections: list[str]
     rag_legacy_available: bool
     rag_query_translation: RagQueryTranslationStatus
+    speech_transcription: SpeechTranscriptionStatus
 
 
 class TranscriptionResponse(BaseModel):
     text: str
+    provider: Literal["breeze", "llm"]
+    model: str
+    latency_seconds: float = Field(ge=0)
+
+
+class AvatarSpeechRequest(BaseModel):
+    text: str = Field(min_length=1, max_length=1200)
+
+    @field_validator("text")
+    @classmethod
+    def trim_non_empty_text(cls, value: str) -> str:
+        normalized = value.strip()
+        if not normalized:
+            raise ValueError("Avatar speech text must not be blank")
+        return normalized
+
+
+class AvatarStatusResponse(BaseModel):
+    enabled: bool
+    available: bool
+    speech_model: str
+    animation_model: str
+    device: str
 
 
 class InvitationResponse(BaseModel):

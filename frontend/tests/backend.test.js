@@ -4,6 +4,7 @@ import test from 'node:test'
 import {
   api,
   apiVersionPrefix,
+  audioUploadFilename,
   consultationDetailPath,
   consultationListPath,
   consultationLookupFields,
@@ -20,6 +21,12 @@ import {
 
 test('uses the canonical versioned API prefix', () => {
   assert.equal(apiVersionPrefix, '/v1')
+})
+
+test('uses an audio filename that matches the browser recording type', () => {
+  assert.equal(audioUploadFilename('audio/webm;codecs=opus'), 'audio.webm')
+  assert.equal(audioUploadFilename('audio/mp4'), 'audio.m4a')
+  assert.equal(audioUploadFilename('audio/ogg;codecs=opus'), 'audio.ogg')
 })
 
 test('uses the page hostname and default backend port', () => {
@@ -119,6 +126,7 @@ test('loads a doctor record by a bare number without binding it to today', async
     session_id: 'doctor-session',
     registration_number: '00000',
   })
+  assert.equal(captured.options.credentials, 'include')
 })
 
 test('loads a doctor record by the date-qualified consultation id', async () => {

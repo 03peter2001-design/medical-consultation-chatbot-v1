@@ -82,6 +82,16 @@ Groq Key 可由 [Groq Console](https://console.groq.com/keys) 申請。
 | `INTERVIEW_ENGINE=legacy` | A/B 比較或緊急回退至順序式問卷 |
 | `AMIE_MAX_TURNS` | 動態問診輪數上限，預設 24 |
 | `AMIE_DEBUG_TRACE=true` | 測試時顯示去除疾病票數與排名後的決策摘要 |
+| `ASR_PROVIDER=breeze` | 使用本機 `MediaTek-Research/Breeze-ASR-26` 辨識錄音 |
+| `BREEZE_ASR_DEVICE=auto` | 有 CUDA 時使用 GPU/FP16，否則使用 CPU/FP32 |
+| `BREEZE_ASR_RELEASE_GPU_AFTER_TRANSCRIBE=true` | 每次 CUDA 辨識後卸載模型，讓同卡 Avatar 使用顯存 |
+| `BREEZE_ASR_MODEL` | 覆寫 Hugging Face 模型 ID 或本機模型目錄 |
+| `ASR_MAX_AUDIO_SECONDS` | 後端接受的單次錄音上限，預設 120 秒 |
+| `ASR_MIN_AUDIO_RMS` | 靜音／過小音量門檻，預設 0.001，避免將靜音幻覺成病人回答 |
+| `AVATAR_ENABLED=true` | 啟用私有網路上的本地 CosyVoice3 + MuseTalk 服務 |
+| `AVATAR_SERVICE_URL` | Avatar 容器內網 URL；整合部署為 `http://avatar:8090` |
+| `AVATAR_TIMEOUT_SECONDS` | 首次載入與影片生成逾時，整合部署預設 600 秒 |
+| `ALLOW_LOCAL_AUTH_BYPASS=true` | 只在 loopback 開發時略過病患 session 與 UCC Bearer；預設關閉 |
 | `CONSULTATION_DB_PATH` | SQLite 路徑；相對路徑以 `backend/` 為基準 |
 | `SAFETY_RULE_ADMIN_TOKEN` | 啟用規則中心編輯；未設定時維持唯讀 |
 | `FHIR_BASE_URL` | HAPI FHIR terminology server URL |
@@ -92,6 +102,50 @@ Groq Key 可由 [Groq Console](https://console.groq.com/keys) 申請。
 覆寫。模型因 `MAX_TOKENS` 沒有產生正文時，系統會提高上限重試一次。
 
 `.env` 含有祕密，不得提交版本控制。
+
+本機直接以 `http://127.0.0.1:5173` 開發舊版 `frontend/` 時，可在
+`backend/.env` 設定 `ALLOW_LOCAL_AUTH_BYPASS=true`。後端只會對
+`127.0.0.0/8` 或 `::1` 的直接連線略過病患 session 與 UCC Bearer；
+判斷依據是無法由用戶偽造的 TCP peer IP，不是 `Host` header。非 loopback
+來源、integration deployment 與正式環境仍強制完整驗證。本機舊版
+`frontend/` 的開發身分不套用院所篩選，因此可讀取尚未寫入
+`institution_id` 的舊病例；正式 Bearer 身分仍依院所隔離。
+
+### Breeze 語音辨識
+
+語音端點預設改用本機 Breeze-ASR-26，不再將病人錄音傳給
+Gemini 或 Groq。系統需要 `ffmpeg`；Ubuntu/WSL 可先安裝：
+
+```bash
+sudo apt-get install ffmpeg
+```
+
+模型採延遲載入，第一次辨識會從 Hugging Face 下載約 6 GB 權重並
+花較長時間。之後同一後端 process 會重用模型。本專案的 RTX 5060 Ti /
+CUDA 12.8 開發機可安裝與參考專案相同的 wheel：
+
+```bash
+cd backend
+venv/bin/python -m pip install --index-url https://download.pytorch.org/whl/cu128 \
+  torch==2.11.0
+```
+
+`BREEZE_ASR_DEVICE=auto` 會自動選擇 GPU/FP16，否則回退 CPU/FP32；
+部署機已確定有 GPU 時建議設為 `cuda`，未正確傳入 GPU 時會明確失敗，
+避免不小心用 CPU 推論。同一張 16 GB GPU 還要執行 Avatar 時，整合部署會設
+`BREEZE_ASR_RELEASE_GPU_AFTER_TRANSCRIBE=true`，在 inference lock 內完成辨識後
+卸載 pipeline 並清除 CUDA cache；下一段錄音因此需要重新載入模型。CPU 模式不
+受此設定影響。需要回退原有雲端辨識時設為 `ASR_PROVIDER=llm`。
+
+瀏覽器端最長錄音 60 秒，辨識結果只會回填輸入框；病人需先確認或
+修正文字才會送出問診答案。
+
+### 本地語音與 Avatar
+
+整合部署會以 `Fun-CosyVoice3-0.5B-2512` 合成 AI 回覆，再由 MuseTalk 1.5
+依指定醫師圖產生唇形 MP4。模型服務沒有發布 host port；`/v1/avatar/status`
+與 `/v1/avatar/speak` 都沿用病患 session 驗證。完整安裝、聲線替換與 GPU
+調校說明見 [../avatar-service/README.md](../avatar-service/README.md)。
 
 ## 啟動與 API
 

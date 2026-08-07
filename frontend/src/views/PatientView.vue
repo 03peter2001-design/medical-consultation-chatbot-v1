@@ -38,7 +38,13 @@ const sessionId = `pt_${Date.now()}`
 const maxBirthDate = new Date().toISOString().slice(0, 10)
 const smartLaunchDetected = hasSmartLaunchContext()
 
-const avatar = useAvatar()
+const avatar = useAvatar({
+  getStatus: api.avatarStatus,
+  synthesize: api.speakAvatar,
+  initialProvider: import.meta.env.VITE_AVATAR_PROVIDER,
+})
+const avatarClientKey = ref(import.meta.env.VITE_DID_CLIENT_KEY?.trim() || '')
+const avatarAgentId = ref(import.meta.env.VITE_DID_AGENT_ID?.trim() || '')
 const messages = ref([])
 const amieTraces = ref([])
 const queueNumber = ref('')
@@ -54,8 +60,6 @@ const nationalId = ref('A000000000')
 const fhirPatient = ref(null)
 const fhirResourceCount = ref(0)
 const smartContext = ref(null)
-const clientKey = ref('')
-const agentId = ref('')
 const mobileAvatarOpen = ref(false)
 const selectedPainLocationIds = ref([])
 const questionInput = ref(null)
@@ -69,6 +73,7 @@ const triageState = ref({
 })
 const recording = ref(false)
 const voiceProcessing = ref(false)
+const voiceNotice = ref('')
 const chatbox = ref(null)
 const textInput = ref(null)
 const questionnaireControl = ref(null)
@@ -76,6 +81,7 @@ const questionnaireControl = ref(null)
 let mediaRecorder = null
 let mediaStream = null
 let audioChunks = []
+let recordingTimeout = null
 
 const progress = computed(() => progressState.value.percent ?? 0)
 const progressLabel = computed(() =>
@@ -86,6 +92,7 @@ const inputsDisabled = computed(
     !started.value ||
     starting.value ||
     sending.value ||
+    recording.value ||
     voiceProcessing.value ||
     completed.value,
 )
@@ -165,6 +172,7 @@ function setQuestionState(data) {
   triageState.value =
     data.triage ?? triageState.value
   input.value = ''
+  voiceNotice.value = ''
 }
 
 async function initializeBackendSession(patientRecord = null) {
@@ -347,8 +355,8 @@ function handleInputKeydown(event) {
 
 async function connectAvatar() {
   const connected = await avatar.connect({
-    clientKey: clientKey.value,
-    agentId: agentId.value,
+    clientKey: avatarClientKey.value,
+    agentId: avatarAgentId.value,
   })
   if (connected) mobileAvatarOpen.value = false
 }
@@ -356,6 +364,7 @@ async function connectAvatar() {
 async function toggleVoice() {
   if (completed.value || voiceProcessing.value) return
   if (recording.value) {
+    voiceNotice.value = '正在結束錄音…'
     mediaRecorder?.stop()
     return
   }
@@ -369,11 +378,12 @@ async function toggleVoice() {
         noiseSuppression: true,
       },
     })
-    const preferredType = 'audio/webm;codecs=opus'
-    const options =
-      window.MediaRecorder?.isTypeSupported?.(preferredType)
-        ? { mimeType: preferredType }
-        : undefined
+    const preferredType = [
+      'audio/webm;codecs=opus',
+      'audio/mp4',
+      'audio/webm',
+    ].find((type) => window.MediaRecorder?.isTypeSupported?.(type))
+    const options = preferredType ? { mimeType: preferredType } : undefined
     mediaRecorder = new MediaRecorder(mediaStream, options)
     audioChunks = []
     mediaRecorder.ondataavailable = (event) => {
@@ -382,16 +392,26 @@ async function toggleVoice() {
     mediaRecorder.onstop = processRecording
     mediaRecorder.start()
     recording.value = true
+    voiceNotice.value = '錄音中，再按一次麥克風停止（最長 60 秒）。'
+    recordingTimeout = window.setTimeout(() => {
+      if (mediaRecorder?.state === 'recording') mediaRecorder.stop()
+    }, 60_000)
   } catch (error) {
+    voiceNotice.value = ''
+    mediaStream?.getTracks().forEach((track) => track.stop())
+    mediaStream = null
     addMessage('ai', `⚠️ 無法存取麥克風：${error.message}`)
   }
 }
 
 async function processRecording() {
   recording.value = false
+  if (recordingTimeout) window.clearTimeout(recordingTimeout)
+  recordingTimeout = null
   mediaStream?.getTracks().forEach((track) => track.stop())
   mediaStream = null
   voiceProcessing.value = true
+  voiceNotice.value = '正在使用 Breeze ASR 辨識錄音…'
 
   try {
     const audioBlob = new Blob(audioChunks, {
@@ -401,11 +421,22 @@ async function processRecording() {
     const text = transcript.text?.trim()
     if (!text) {
       addMessage('ai', '⚠️ 未偵測到語音內容，請再試一次。')
+      voiceNotice.value = ''
       return
     }
+    input.value = text
+    const latency = Number(transcript.latency_seconds)
+    const latencyLabel = Number.isFinite(latency)
+      ? `，${latency.toFixed(1)} 秒`
+      : ''
+    const providerLabel =
+      transcript.provider === 'breeze' ? 'Breeze ASR' : '語音 ASR'
+    voiceNotice.value = `語音辨識完成（${providerLabel}${latencyLabel}），請確認文字後再送出。`
     voiceProcessing.value = false
-    await submitMessage(text)
+    await nextTick()
+    textInput.value?.focus()
   } catch (error) {
+    voiceNotice.value = ''
     addMessage('ai', `⚠️ 語音辨識失敗（${error.message}），請重試。`)
   } finally {
     voiceProcessing.value = false
@@ -415,7 +446,11 @@ async function processRecording() {
 }
 
 onBeforeUnmount(() => {
-  if (mediaRecorder?.state === 'recording') mediaRecorder.stop()
+  if (recordingTimeout) window.clearTimeout(recordingTimeout)
+  if (mediaRecorder?.state === 'recording') {
+    mediaRecorder.onstop = null
+    mediaRecorder.stop()
+  }
   mediaStream?.getTracks().forEach((track) => track.stop())
 })
 </script>
@@ -456,8 +491,8 @@ onBeforeUnmount(() => {
     </AppHeader>
 
     <AvatarSettings
-      v-model:client-key="clientKey"
-      v-model:agent-id="agentId"
+      v-model:client-key="avatarClientKey"
+      v-model:agent-id="avatarAgentId"
       :avatar="avatar"
       :open="mobileAvatarOpen"
       @close="mobileAvatarOpen = false"
@@ -591,8 +626,15 @@ onBeforeUnmount(() => {
             ➤
           </button>
         </div>
+        <p
+          v-if="!completed && currentInputKind === 'text' && voiceNotice"
+          class="voice-notice"
+          role="status"
+        >
+          {{ voiceNotice }}
+        </p>
         <div
-          v-else-if="!completed"
+          v-if="!completed && currentInputKind !== 'text'"
           class="structured-input-hint"
         >
           {{
@@ -820,6 +862,16 @@ onBeforeUnmount(() => {
   padding: 0 18px;
   border-top: 1px solid var(--border);
   background: var(--surface-1);
+}
+
+.voice-notice {
+  margin: 0;
+  padding: 7px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--blue-soft);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .structured-input-hint {

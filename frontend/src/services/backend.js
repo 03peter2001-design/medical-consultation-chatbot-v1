@@ -110,12 +110,32 @@ export function snomedSearchPath({
 }
 
 async function request(path, options = {}) {
-  const response = await fetch(`${backendUrl}${path}`, options)
+  const response = await fetch(`${backendUrl}${path}`, {
+    ...options,
+    credentials: 'include',
+  })
   const data = await response.json().catch(() => ({}))
   if (!response.ok) {
     throw new Error(formatApiErrorDetail(data.detail, response.status))
   }
   return data
+}
+
+async function requestVideo(path, options = {}) {
+  const response = await fetch(`${backendUrl}${path}`, {
+    ...options,
+    credentials: 'include',
+  })
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}))
+    throw new Error(formatApiErrorDetail(data.detail, response.status))
+  }
+  return {
+    blob: await response.blob(),
+    speechModel: response.headers.get('X-Speech-Model') || '',
+    animationModel: response.headers.get('X-Animation-Model') || '',
+    cacheHit: response.headers.get('X-Avatar-Cache') === 'hit',
+  }
 }
 
 export function formatApiErrorDetail(detail, status) {
@@ -139,6 +159,18 @@ export function formatApiErrorDetail(detail, status) {
     if (messages.length) return messages.join('；')
   }
   return `HTTP ${status}`
+}
+
+export function audioUploadFilename(mimeType = '') {
+  const normalized = mimeType.split(';', 1)[0].toLowerCase()
+  const extension = {
+    'audio/mp4': 'm4a',
+    'audio/mpeg': 'mp3',
+    'audio/ogg': 'ogg',
+    'audio/wav': 'wav',
+    'audio/x-wav': 'wav',
+  }[normalized] || 'webm'
+  return `audio.${extension}`
 }
 
 function jsonOptions(method, body) {
@@ -183,12 +215,22 @@ export const api = {
     ),
   transcribe: (audioBlob) => {
     const formData = new FormData()
-    formData.append('audio', audioBlob, 'audio.webm')
+    formData.append(
+      'audio',
+      audioBlob,
+      audioUploadFilename(audioBlob.type),
+    )
     return request(apiPath('/transcribe'), {
       method: 'POST',
       body: formData,
     })
   },
+  avatarStatus: () => request(apiPath('/avatar/status')),
+  speakAvatar: (text, options = {}) =>
+    requestVideo(
+      apiPath('/avatar/speak'),
+      { ...jsonOptions('POST', { text }), signal: options.signal },
+    ),
   loadPatient: (consultationId, sessionId) =>
     request(
       apiPath('/doctor/load_patient'),

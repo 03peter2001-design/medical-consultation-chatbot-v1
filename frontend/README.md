@@ -9,7 +9,7 @@ SNOMED CT 查詢。根目錄的 `index.html`、`doctor.html` 是重構前的相�
 | 路徑 | 用途 |
 | --- | --- |
 | `src/components/` | 共用 UI 元件 |
-| `src/composables/` | D-ID Avatar 等狀態與操作 |
+| `src/composables/` | 本地／D-ID Avatar provider 狀態與操作 |
 | `src/services/` | 後端 API、FHIR 與連線設定 |
 | `src/views/` | 病患端、醫師端與術語頁面 |
 | `src/generated/` | 由 OpenAPI 產生的型別，不手動編輯 |
@@ -103,14 +103,29 @@ VITE_FHIR_BASE_URL=http://localhost:8080/fhir
 client registration 與稽核。完整 SMART 流程請見
 [../smart-app/README.md](../smart-app/README.md)。
 
-## D-ID 虛擬數位人
+## Avatar providers
 
-病患端的「D-ID 設定」可填入：
+病患端支援兩種可切換的 Avatar，預設為完全本地：
 
-- Client Key：由 [D-ID Studio](https://studio.d-id.com) 取得
-- Agent ID：在 D-ID Studio 建立 Agent 後取得
+- `local`：Fun-CosyVoice3-0.5B-2512 + MuseTalk 1.5，由後端 GPU 服務產生。
+- `did`：保留原本 D-ID Agent SDK；Client Key 與 Agent ID 可在設定面板輸入。
 
-未設定時仍可使用純文字或語音輸入，只是不會顯示虛擬數位人說話效果。
+D-ID browser SDK 以鎖定版本的 `@d-id/client-sdk` npm dependency 隨應用建置，
+並在選用 D-ID 時才從本地 JavaScript chunk 延遲載入；瀏覽器不會再向第三方 CDN
+動態下載 SDK。
+
+可在 `.env` 選擇預設 provider：
+
+```dotenv
+VITE_AVATAR_PROVIDER=local
+VITE_DID_CLIENT_KEY=
+VITE_DID_AGENT_ID=
+```
+
+未啟用時仍可使用純文字或語音輸入。所有 `VITE_*` 值都會在 build-time
+寫入公開的瀏覽器 JavaScript；因此建議在 UI 輸入 D-ID 資料（只存於頁面記憶體）。
+若必須預先設定，只能使用由 [D-ID Studio](https://studio.d-id.com) 建立、限制部署
+網域的瀏覽器／Embed Key，絕不可放伺服器私鑰。
 
 ## OpenAPI 型別
 

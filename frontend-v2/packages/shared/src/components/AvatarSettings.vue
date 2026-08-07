@@ -13,7 +13,9 @@ const videoElement = ref(null)
 
 watchEffect(() => {
   if (videoElement.value) {
-    videoElement.value.srcObject = props.avatar.videoStream.value
+    videoElement.value.srcObject = props.avatar.isDid.value
+      ? props.avatar.videoStream.value
+      : null
   }
 })
 </script>
@@ -36,15 +38,38 @@ watchEffect(() => {
     :inert="!open"
   >
     <div class="avatar-preview">
-      <div v-if="!avatar.videoStream.value" class="avatar-placeholder">
+      <div
+        v-if="avatar.isDid.value && !avatar.videoStream.value"
+        class="avatar-placeholder"
+      >
         <div class="avatar-symbol">👤</div>
-        <div>Avatar 為選用功能<br />未連接也可正常問診</div>
+        <div>D-ID Avatar 為選用功能<br />未連接也可正常問診</div>
       </div>
       <video
+        v-if="avatar.isDid.value"
         ref="videoElement"
         autoplay
         playsinline
         :class="{ visible: avatar.videoStream.value }"
+      />
+      <img
+        v-if="avatar.isLocal.value"
+        class="avatar-image"
+        :class="{ hidden: avatar.videoUrl.value }"
+        :src="avatar.imageUrl.value"
+        alt="本地 AI 醫師 Avatar"
+      />
+      <video
+        v-if="avatar.isLocal.value && avatar.videoUrl.value"
+        :src="avatar.videoUrl.value"
+        autoplay
+        playsinline
+        controls
+        class="visible"
+        @play="avatar.onPlaybackStart"
+        @pause="avatar.onPlaybackEnd"
+        @ended="avatar.onPlaybackEnd"
+        @error="avatar.onPlaybackError"
       />
       <div class="wave-overlay" :class="{ visible: avatar.talking.value }">
         <span /><span /><span /><span /><span />
@@ -59,36 +84,55 @@ watchEffect(() => {
       </button>
     </div>
 
-    <form
-      class="avatar-config"
-      @submit.prevent="emit('connect')"
-    >
-      <div class="config-title">D-ID Avatar（選用）</div>
+    <form class="avatar-config" @submit.prevent="emit('connect')">
+      <div class="config-title">Avatar Provider</div>
       <label>
-        <span>CLIENT KEY</span>
-        <input
-          v-model="clientKey"
-          type="password"
-          placeholder="ck_..."
-          autocomplete="off"
-        />
+        <span>提供者</span>
+        <select
+          :value="avatar.provider.value"
+          :disabled="avatar.isConnecting.value"
+          @change="avatar.setProvider($event.target.value)"
+        >
+          <option value="local">本地（CosyVoice3 + MuseTalk）</option>
+          <option value="did">D-ID 雲端 Avatar</option>
+        </select>
       </label>
-      <label>
-        <span>AGENT ID</span>
-        <input
-          v-model="agentId"
-          type="text"
-          placeholder="v2_agt_..."
-          autocomplete="off"
-        />
-      </label>
+
+      <div v-if="avatar.isLocal.value" class="model-card">
+        <span>語音</span>
+        <strong>{{ avatar.speechModel.value }}</strong>
+        <span>唇形動畫</span>
+        <strong>{{ avatar.animationModel.value }}</strong>
+      </div>
+      <template v-else>
+        <label>
+          <span>CLIENT KEY</span>
+          <input
+            v-model="clientKey"
+            type="password"
+            placeholder="ck_..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </label>
+        <label>
+          <span>AGENT ID</span>
+          <input
+            v-model="agentId"
+            type="text"
+            placeholder="v2_agt_..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </label>
+      </template>
       <button
         v-if="!avatar.isConnected.value"
         class="avatar-primary"
         type="submit"
         :disabled="avatar.isConnecting.value"
       >
-        {{ avatar.isConnecting.value ? '連接中…' : '連接 Avatar' }}
+        {{ avatar.isConnecting.value ? '連線中…' : `啟用 ${avatar.providerLabel.value}` }}
       </button>
       <button
         v-else
@@ -104,20 +148,19 @@ watchEffect(() => {
       >
         {{ avatar.status.value }}
       </div>
-      <hr />
-      <div class="config-title">取得金鑰方式</div>
-      <div class="config-hint">
-        1. 前往
-        <a
-          href="https://studio.d-id.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          studio.d-id.com
+      <div v-if="avatar.isLocal.value" class="config-hint">
+        語音與影片都在院內主機產生，不需要 D-ID 或其他雲端 Avatar 金鑰。
+        第一次使用會下載並載入模型，因此等候時間較長。
+      </div>
+      <div v-else class="config-hint">
+        D-ID 會把要朗讀的文字傳送至其雲端服務。介面輸入的 Client Key 僅保存在
+        此頁記憶體；若以 <code>VITE_DID_CLIENT_KEY</code> 設定，金鑰會被編入公開的
+        JavaScript，任何訪客都能查看。請只使用限制網域的瀏覽器／Embed Key，切勿
+        放入伺服器私鑰。可至
+        <a href="https://studio.d-id.com" target="_blank" rel="noopener noreferrer">
+          D-ID Studio
         </a>
-        <br />
-        2. 建立 Agent → Embed → 複製金鑰<br />
-        3. 填入上方欄位後連接
+        建立 Agent。
       </div>
     </form>
   </aside>
@@ -160,6 +203,18 @@ watchEffect(() => {
   height: 100%;
   object-fit: cover;
   opacity: 0;
+}
+
+.avatar-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.2s ease;
+}
+
+.avatar-image.hidden {
+  display: none;
 }
 
 .avatar-preview video.visible {
@@ -259,13 +314,34 @@ watchEffect(() => {
   letter-spacing: 0.02em;
 }
 
+.model-card {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr);
+  gap: 8px 10px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+  font-size: 12px;
+}
+
+.model-card span {
+  color: var(--muted);
+}
+
+.model-card strong {
+  overflow-wrap: anywhere;
+  color: var(--text);
+}
+
 .avatar-config label {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.avatar-config input {
+.avatar-config input,
+.avatar-config select {
   width: 100%;
   min-height: 44px;
   padding: 9px 11px;

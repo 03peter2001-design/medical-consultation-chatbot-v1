@@ -7,6 +7,8 @@ from threading import RLock
 
 from dotenv import load_dotenv
 
+from infrastructure.asr import SpeechTranscriber
+from infrastructure.avatar import AvatarClient
 from infrastructure.consultation_repository import ConsultationRepository
 from infrastructure.llm import LLMClient
 
@@ -14,6 +16,16 @@ load_dotenv()
 
 llm_client = LLMClient()
 print(f"[LLM] 使用 {llm_client.provider}（{llm_client.model}）")
+asr_service = SpeechTranscriber(llm_client=llm_client)
+print(
+    "[ASR] 使用 "
+    f"{asr_service.status()['provider']}（{asr_service.status()['model']}，延遲載入）"
+)
+avatar_client = AvatarClient()
+print(
+    "[Avatar] "
+    + ("啟用本地 CosyVoice3 + MuseTalk" if avatar_client.enabled else "未啟用")
+)
 
 INTERVIEW_ENGINE = os.getenv("INTERVIEW_ENGINE", "amie").strip().lower()
 if INTERVIEW_ENGINE not in {"amie", "legacy"}:

@@ -1,0 +1,5 @@
+# Local Breeze-ASR inference. PyTorch is supplied by the full development
+# requirements (through sentence-transformers) or installed explicitly in Docker.
+accelerate>=1.14,<2
+numpy>=1.26,<3
+transformers==5.14.1

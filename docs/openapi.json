@@ -25,6 +25,54 @@
         "title": "AssistantHistoryItem",
         "type": "object"
       },
+      "AvatarSpeechRequest": {
+        "properties": {
+          "text": {
+            "maxLength": 1200,
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "AvatarSpeechRequest",
+        "type": "object"
+      },
+      "AvatarStatusResponse": {
+        "properties": {
+          "animation_model": {
+            "title": "Animation Model",
+            "type": "string"
+          },
+          "available": {
+            "title": "Available",
+            "type": "boolean"
+          },
+          "device": {
+            "title": "Device",
+            "type": "string"
+          },
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "speech_model": {
+            "title": "Speech Model",
+            "type": "string"
+          }
+        },
+        "required": [
+          "enabled",
+          "available",
+          "speech_model",
+          "animation_model",
+          "device"
+        ],
+        "title": "AvatarStatusResponse",
+        "type": "object"
+      },
       "Body_transcribe_v1_transcribe_post": {
         "properties": {
           "audio": {
@@ -671,6 +719,9 @@
             "title": "Sessions",
             "type": "integer"
           },
+          "speech_transcription": {
+            "$ref": "#/components/schemas/SpeechTranscriptionStatus"
+          },
           "status": {
             "const": "ok",
             "title": "Status",
@@ -695,7 +746,8 @@
           "rag_index_version",
           "rag_collections",
           "rag_legacy_available",
-          "rag_query_translation"
+          "rag_query_translation",
+          "speech_transcription"
         ],
         "title": "HealthResponse",
         "type": "object"
@@ -1984,6 +2036,38 @@
         "title": "SnomedSearchResponse",
         "type": "object"
       },
+      "SpeechTranscriptionStatus": {
+        "properties": {
+          "device": {
+            "title": "Device",
+            "type": "string"
+          },
+          "loaded": {
+            "title": "Loaded",
+            "type": "boolean"
+          },
+          "model": {
+            "title": "Model",
+            "type": "string"
+          },
+          "provider": {
+            "enum": [
+              "breeze",
+              "llm"
+            ],
+            "title": "Provider",
+            "type": "string"
+          }
+        },
+        "required": [
+          "provider",
+          "model",
+          "device",
+          "loaded"
+        ],
+        "title": "SpeechTranscriptionStatus",
+        "type": "object"
+      },
       "StatusResponse": {
         "properties": {
           "status": {
@@ -2000,13 +2084,33 @@
       },
       "TranscriptionResponse": {
         "properties": {
+          "latency_seconds": {
+            "minimum": 0.0,
+            "title": "Latency Seconds",
+            "type": "number"
+          },
+          "model": {
+            "title": "Model",
+            "type": "string"
+          },
+          "provider": {
+            "enum": [
+              "breeze",
+              "llm"
+            ],
+            "title": "Provider",
+            "type": "string"
+          },
           "text": {
             "title": "Text",
             "type": "string"
           }
         },
         "required": [
-          "text"
+          "text",
+          "provider",
+          "model",
+          "latency_seconds"
         ],
         "title": "TranscriptionResponse",
         "type": "object"
@@ -2154,6 +2258,150 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/v1/avatar/speak": {
+      "post": {
+        "operationId": "avatar_speak_v1_avatar_speak_post",
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "ai_patient_session",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Ai Patient Session"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AvatarSpeechRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "video/mp4": {}
+            },
+            "description": "Locally generated talking-head MP4 video."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Authentication is required or has expired."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "An internal dependency or model operation failed."
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "A required configured service is unavailable."
+          }
+        },
+        "summary": "Render local CosyVoice3 speech as a MuseTalk avatar video",
+        "tags": [
+          "system"
+        ]
+      }
+    },
+    "/v1/avatar/status": {
+      "get": {
+        "operationId": "avatar_status_v1_avatar_status_get",
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "ai_patient_session",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Ai Patient Session"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvatarStatusResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Authentication is required or has expired."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Check the private local avatar service",
+        "tags": [
+          "system"
+        ]
+      }
+    },
     "/v1/chat": {
       "post": {
         "description": "Restore and durably save the cookie-bound patient interview.",
@@ -3376,6 +3624,16 @@
               }
             },
             "description": "An internal dependency or model operation failed."
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "A required configured service is unavailable."
           }
         },
         "summary": "Transcribe a Traditional Chinese medical audio recording",

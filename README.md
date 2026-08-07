@@ -29,7 +29,7 @@ AI 輔助預問診系統。病患可用文字或語音完成胸痛、頭痛或�
 
 ## 快速開始
 
-需求：Git、Bash、Python 3.12+、Node.js 18+；FHIR／SMART 流程另需 Docker 與
+需求：Git、Bash、Python 3.12+、Node.js 18+、ffmpeg；FHIR／SMART 流程另需 Docker 與
 Docker Compose v2。Windows 建議使用 WSL2。
 
 ```bash

@@ -23,3 +23,23 @@ token from the URL fragment only after explicit confirmation and then relies on
 an HttpOnly session cookie. Never place patient identity data in either URL.
 
 See each app's `.env.example` for deploy-time overrides.
+
+## Patient avatar providers
+
+The patient app defaults to the local CosyVoice3 + MuseTalk service and retains
+the optional D-ID Agent SDK flow. Configure the build with:
+
+```dotenv
+VITE_AVATAR_PROVIDER=local # local or did
+VITE_DID_CLIENT_KEY=
+VITE_DID_AGENT_ID=
+```
+
+The pinned `@d-id/client-sdk` npm dependency is emitted as a local lazy-loaded
+JavaScript chunk. The browser does not fetch executable SDK code from a runtime
+CDN.
+
+D-ID credentials can instead be entered in the Avatar drawer and remain only
+in page memory. Every `VITE_*` value is compiled into public browser JavaScript;
+never place a server secret there. If preconfiguration is required, use only a
+D-ID browser/embed key restricted to the deployed origin.

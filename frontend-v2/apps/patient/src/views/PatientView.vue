@@ -35,7 +35,13 @@ const sessionId = `pt_${Date.now()}`
 const maxBirthDate = new Date().toISOString().slice(0, 10)
 const smartLaunchDetected = hasSmartLaunchContext()
 
-const avatar = useAvatar()
+const avatar = useAvatar({
+  getStatus: api.avatarStatus,
+  synthesize: api.speakAvatar,
+  initialProvider: import.meta.env.VITE_AVATAR_PROVIDER,
+})
+const avatarClientKey = ref(import.meta.env.VITE_DID_CLIENT_KEY?.trim() || '')
+const avatarAgentId = ref(import.meta.env.VITE_DID_AGENT_ID?.trim() || '')
 const messages = ref([])
 const amieTraces = ref([])
 const queueNumber = ref('')
@@ -51,8 +57,6 @@ const nationalId = ref('A000000000')
 const fhirPatient = ref(null)
 const fhirResourceCount = ref(0)
 const smartContext = ref(null)
-const clientKey = ref('')
-const agentId = ref('')
 const mobileAvatarOpen = ref(false)
 const selectedPainLocationIds = ref([])
 const questionInput = ref(null)
@@ -344,8 +348,8 @@ function handleInputKeydown(event) {
 
 async function connectAvatar() {
   const connected = await avatar.connect({
-    clientKey: clientKey.value,
-    agentId: agentId.value,
+    clientKey: avatarClientKey.value,
+    agentId: avatarAgentId.value,
   })
   if (connected) mobileAvatarOpen.value = false
 }
@@ -440,8 +444,8 @@ onBeforeUnmount(() => {
     </AppHeader>
 
     <AvatarSettings
-      v-model:client-key="clientKey"
-      v-model:agent-id="agentId"
+      v-model:client-key="avatarClientKey"
+      v-model:agent-id="avatarAgentId"
       :avatar="avatar"
       :open="mobileAvatarOpen"
       @close="mobileAvatarOpen = false"

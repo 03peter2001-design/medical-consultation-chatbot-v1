@@ -53,6 +53,11 @@ def create_app() -> FastAPI:
             allow_credentials=True,
             allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             allow_headers=["Authorization", "Content-Type"],
+            expose_headers=[
+                "X-Speech-Model",
+                "X-Animation-Model",
+                "X-Avatar-Cache",
+            ],
         )
     app.include_router(system_router, prefix=API_V1_PREFIX)
     app.include_router(patient_router, prefix=API_V1_PREFIX)

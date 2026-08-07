@@ -10,3 +10,4 @@ chromadb
 sentence-transformers
 python-multipart
 PyJWT[crypto]>=2.9,<3
+-r requirements-asr.txt

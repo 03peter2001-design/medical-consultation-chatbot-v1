@@ -19,6 +19,7 @@ htmlcov/
 .rag-cache/
 .deploy-staging/
 integration-deployment/staging/
+avatar-service/assets/voice-prompt.wav
 frontend-v2/node_modules/
 frontend-v2/apps/*/dist/
 

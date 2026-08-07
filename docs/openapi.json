@@ -41,6 +41,15 @@
       },
       "ChatRequest": {
         "properties": {
+          "action": {
+            "default": "answer",
+            "enum": [
+              "answer",
+              "back"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
           "message": {
             "default": "",
             "title": "Message",
@@ -691,6 +700,196 @@
         "title": "HealthResponse",
         "type": "object"
       },
+      "InvitationCreateRequest": {
+        "properties": {
+          "institution_id": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Institution Id",
+            "type": "string"
+          },
+          "patient_sno": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Patient Sno",
+            "type": "string"
+          },
+          "prefill": {
+            "$ref": "#/components/schemas/InvitationPrefill"
+          },
+          "reg_sno": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Reg Sno",
+            "type": "string"
+          }
+        },
+        "required": [
+          "institution_id",
+          "patient_sno",
+          "reg_sno"
+        ],
+        "title": "InvitationCreateRequest",
+        "type": "object"
+      },
+      "InvitationExchangeRequest": {
+        "properties": {
+          "token": {
+            "maxLength": 512,
+            "minLength": 32,
+            "title": "Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ],
+        "title": "InvitationExchangeRequest",
+        "type": "object"
+      },
+      "InvitationExchangeResponse": {
+        "properties": {
+          "expires_at": {
+            "title": "Expires At",
+            "type": "string"
+          },
+          "status": {
+            "const": "ok",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "expires_at"
+        ],
+        "title": "InvitationExchangeResponse",
+        "type": "object"
+      },
+      "InvitationPrefill": {
+        "description": "Minimum patient context accepted only from the authenticated UCC server.",
+        "properties": {
+          "allergies": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allergies"
+          },
+          "birth_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Birth Date"
+          },
+          "blood_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Blood Type"
+          },
+          "current_medications": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Medications"
+          },
+          "gender": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gender"
+          },
+          "medical_history": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Medical History"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "surgical_history": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Surgical History"
+          }
+        },
+        "title": "InvitationPrefill",
+        "type": "object"
+      },
+      "InvitationResponse": {
+        "properties": {
+          "expires_at": {
+            "title": "Expires At",
+            "type": "string"
+          },
+          "invite_id": {
+            "title": "Invite Id",
+            "type": "string"
+          },
+          "public_url": {
+            "title": "Public Url",
+            "type": "string"
+          },
+          "status": {
+            "const": "active",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "invite_id",
+          "public_url",
+          "expires_at",
+          "status"
+        ],
+        "title": "InvitationResponse",
+        "type": "object"
+      },
       "LoadPatientRequest": {
         "properties": {
           "consultation_date": {
@@ -925,6 +1124,11 @@
               }
             ],
             "title": "Amie Debug"
+          },
+          "can_go_back": {
+            "default": false,
+            "title": "Can Go Back",
+            "type": "boolean"
           },
           "completed": {
             "title": "Completed",
@@ -1163,6 +1367,46 @@
           }
         },
         "title": "PatientPrefill",
+        "type": "object"
+      },
+      "PatientSessionResponse": {
+        "properties": {
+          "completed": {
+            "default": false,
+            "title": "Completed",
+            "type": "boolean"
+          },
+          "consultation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Consultation Id"
+          },
+          "expires_at": {
+            "title": "Expires At",
+            "type": "string"
+          },
+          "interview_session_id": {
+            "title": "Interview Session Id",
+            "type": "string"
+          },
+          "status": {
+            "const": "active",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "expires_at",
+          "interview_session_id"
+        ],
+        "title": "PatientSessionResponse",
         "type": "object"
       },
       "ProgressResponse": {
@@ -1895,6 +2139,12 @@
         "title": "ValidationIssue",
         "type": "object"
       }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "scheme": "bearer",
+        "type": "http"
+      }
     }
   },
   "info": {
@@ -1906,7 +2156,26 @@
   "paths": {
     "/v1/chat": {
       "post": {
+        "description": "Restore and durably save the cookie-bound patient interview.",
         "operationId": "chat_v1_chat_post",
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "ai_patient_session",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Ai Patient Session"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2030,6 +2299,11 @@
             "description": "A required configured service is unavailable."
           }
         },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "summary": "Ask the physician RAG assistant about the loaded patient",
         "tags": [
           "doctor"
@@ -2097,6 +2371,11 @@
             "description": "Request validation or domain validation failed."
           }
         },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "summary": "List searchable consultation summaries",
         "tags": [
           "doctor"
@@ -2138,6 +2417,16 @@
             },
             "description": "The request cannot be processed in its current state."
           },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The caller is not authorized for this operation."
+          },
           "404": {
             "content": {
               "application/json": {
@@ -2159,6 +2448,11 @@
             "description": "Request validation or domain validation failed."
           }
         },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "summary": "Permanently delete a consultation",
         "tags": [
           "doctor"
@@ -2220,6 +2514,11 @@
             "description": "Request validation or domain validation failed."
           }
         },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "summary": "Load a consultation into a physician session",
         "tags": [
           "doctor"
@@ -2262,6 +2561,11 @@
             "description": "Request validation or domain validation failed."
           }
         },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "summary": "Unload the patient from a physician session",
         "tags": [
           "doctor"
@@ -2283,6 +2587,11 @@
             "description": "Successful Response"
           }
         },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "summary": "Read the governed Safety, fact, and disease rule center",
         "tags": [
           "doctor"
@@ -2292,18 +2601,6 @@
     "/v1/doctor/rules/assistant": {
       "post": {
         "operationId": "post_rule_assistant_v1_doctor_rules_assistant_post",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "x-rule-admin-token",
-            "required": false,
-            "schema": {
-              "default": "",
-              "title": "X-Rule-Admin-Token",
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2356,6 +2653,11 @@
             "description": "A required configured service is unavailable."
           }
         },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "summary": "Generate a validated, unsaved Safety rule draft",
         "tags": [
           "doctor"
@@ -2365,18 +2667,6 @@
     "/v1/doctor/rules/authorize": {
       "post": {
         "operationId": "post_rule_authorization_v1_doctor_rules_authorize_post",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "x-rule-admin-token",
-            "required": false,
-            "schema": {
-              "default": "",
-              "title": "X-Rule-Admin-Token",
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "content": {
@@ -2398,16 +2688,6 @@
             },
             "description": "The caller is not authorized for this operation."
           },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          },
           "503": {
             "content": {
               "application/json": {
@@ -2419,6 +2699,11 @@
             "description": "A required configured service is unavailable."
           }
         },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "summary": "Verify a rule administrator token",
         "tags": [
           "doctor"
@@ -2435,16 +2720,6 @@
             "required": true,
             "schema": {
               "title": "Route",
-              "type": "string"
-            }
-          },
-          {
-            "in": "header",
-            "name": "x-rule-admin-token",
-            "required": false,
-            "schema": {
-              "default": "",
-              "title": "X-Rule-Admin-Token",
               "type": "string"
             }
           }
@@ -2511,6 +2786,11 @@
             "description": "A required configured service is unavailable."
           }
         },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "summary": "Publish clinician-reviewed disease profile changes",
         "tags": [
           "doctor"
@@ -2520,18 +2800,6 @@
     "/v1/doctor/rules/fact-labels": {
       "put": {
         "operationId": "put_fact_labels_v1_doctor_rules_fact_labels_put",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "x-rule-admin-token",
-            "required": false,
-            "schema": {
-              "default": "",
-              "title": "X-Rule-Admin-Token",
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2594,6 +2862,11 @@
             "description": "A required configured service is unavailable."
           }
         },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "summary": "Publish clinician-reviewed ClinicalFact label changes",
         "tags": [
           "doctor"
@@ -2603,18 +2876,6 @@
     "/v1/doctor/rules/safety": {
       "put": {
         "operationId": "put_safety_rules_v1_doctor_rules_safety_put",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "x-rule-admin-token",
-            "required": false,
-            "schema": {
-              "default": "",
-              "title": "X-Rule-Admin-Token",
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2677,6 +2938,11 @@
             "description": "A required configured service is unavailable."
           }
         },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "summary": "Publish clinician-reviewed Safety rule changes",
         "tags": [
           "doctor"
@@ -2719,6 +2985,11 @@
             "description": "Request validation or domain validation failed."
           }
         },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "summary": "Clear a physician conversation session",
         "tags": [
           "doctor"
@@ -2796,6 +3067,11 @@
             "description": "A required configured service is unavailable."
           }
         },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "summary": "Search the configured SNOMED CT terminology index",
         "tags": [
           "doctor"
@@ -2823,9 +3099,223 @@
         ]
       }
     },
+    "/v1/invitations": {
+      "post": {
+        "operationId": "create_invitation_v1_invitations_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvitationCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The caller is not authorized for this operation."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "A required configured service is unavailable."
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Create a single-use patient invitation from UCC",
+        "tags": [
+          "patient"
+        ]
+      }
+    },
+    "/v1/invitations/exchange": {
+      "post": {
+        "operationId": "exchange_invitation_v1_invitations_exchange_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvitationExchangeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationExchangeResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The request cannot be processed in its current state."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The requested consultation does not exist."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The submitted revision conflicts with the current revision."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          }
+        },
+        "summary": "Exchange an invitation token for an HttpOnly patient session",
+        "tags": [
+          "patient"
+        ]
+      }
+    },
+    "/v1/patient/session": {
+      "get": {
+        "operationId": "patient_session_v1_patient_session_get",
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "ai_patient_session",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Ai Patient Session"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientSessionResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Authentication is required or has expired."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Restore the authenticated patient interview session",
+        "tags": [
+          "patient"
+        ]
+      }
+    },
     "/v1/transcribe": {
       "post": {
         "operationId": "transcribe_v1_transcribe_post",
+        "parameters": [
+          {
+            "in": "cookie",
+            "name": "ai_patient_session",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Ai Patient Session"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {

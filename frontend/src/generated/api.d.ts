@@ -13,7 +13,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Advance or start a patient pre-consultation interview */
+        /**
+         * Advance or start a patient pre-consultation interview
+         * @description Restore and durably save the cookie-bound patient interview.
+         */
         post: operations["chat_v1_chat_post"];
         delete?: never;
         options?: never;
@@ -259,6 +262,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/invitations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a single-use patient invitation from UCC */
+        post: operations["create_invitation_v1_invitations_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/invitations/exchange": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Exchange an invitation token for an HttpOnly patient session */
+        post: operations["exchange_invitation_v1_invitations_exchange_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/patient/session": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Restore the authenticated patient interview session */
+        get: operations["patient_session_v1_patient_session_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/transcribe": {
         parameters: {
             query?: never;
@@ -297,6 +351,12 @@ export interface components {
         };
         /** ChatRequest */
         ChatRequest: {
+            /**
+             * Action
+             * @default answer
+             * @enum {string}
+             */
+            action: "answer" | "back";
             /**
              * Message
              * @default
@@ -567,6 +627,67 @@ export interface components {
             /** Stored Consultations */
             stored_consultations: number;
         };
+        /** InvitationCreateRequest */
+        InvitationCreateRequest: {
+            /** Institution Id */
+            institution_id: string;
+            /** Patient Sno */
+            patient_sno: string;
+            prefill?: components["schemas"]["InvitationPrefill"];
+            /** Reg Sno */
+            reg_sno: string;
+        };
+        /** InvitationExchangeRequest */
+        InvitationExchangeRequest: {
+            /** Token */
+            token: string;
+        };
+        /** InvitationExchangeResponse */
+        InvitationExchangeResponse: {
+            /** Expires At */
+            expires_at: string;
+            /**
+             * Status
+             * @constant
+             */
+            status: "ok";
+        };
+        /**
+         * InvitationPrefill
+         * @description Minimum patient context accepted only from the authenticated UCC server.
+         */
+        InvitationPrefill: {
+            /** Allergies */
+            allergies?: string | null;
+            /** Birth Date */
+            birth_date?: string | null;
+            /** Blood Type */
+            blood_type?: string | null;
+            /** Current Medications */
+            current_medications?: string | null;
+            /** Gender */
+            gender?: string | null;
+            /** Medical History */
+            medical_history?: string | null;
+            /** Name */
+            name?: string | null;
+            /** Surgical History */
+            surgical_history?: string | null;
+        };
+        /** InvitationResponse */
+        InvitationResponse: {
+            /** Expires At */
+            expires_at: string;
+            /** Invite Id */
+            invite_id: string;
+            /** Public Url */
+            public_url: string;
+            /**
+             * Status
+             * @constant
+             */
+            status: "active";
+        };
         /** LoadPatientRequest */
         LoadPatientRequest: {
             /** Consultation Date */
@@ -654,6 +775,11 @@ export interface components {
             amie_debug?: {
                 [key: string]: unknown;
             } | null;
+            /**
+             * Can Go Back
+             * @default false
+             */
+            can_go_back: boolean;
             /** Completed */
             completed: boolean;
             progress: components["schemas"]["ProgressResponse"];
@@ -709,6 +835,25 @@ export interface components {
             source: string;
             /** Surgery */
             surgery?: string | null;
+        };
+        /** PatientSessionResponse */
+        PatientSessionResponse: {
+            /**
+             * Completed
+             * @default false
+             */
+            completed: boolean;
+            /** Consultation Id */
+            consultation_id?: string | null;
+            /** Expires At */
+            expires_at: string;
+            /** Interview Session Id */
+            interview_session_id: string;
+            /**
+             * Status
+             * @constant
+             */
+            status: "active";
         };
         /** ProgressResponse */
         ProgressResponse: {
@@ -988,7 +1133,9 @@ export interface operations {
             query?: never;
             header?: never;
             path?: never;
-            cookie?: never;
+            cookie?: {
+                ai_patient_session?: string | null;
+            };
         };
         requestBody: {
             content: {
@@ -1156,6 +1303,15 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
+            /** @description The caller is not authorized for this operation. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
             /** @description The requested consultation does not exist. */
             404: {
                 headers: {
@@ -1281,9 +1437,7 @@ export interface operations {
     post_rule_assistant_v1_doctor_rules_assistant_post: {
         parameters: {
             query?: never;
-            header?: {
-                "x-rule-admin-token"?: string;
-            };
+            header?: never;
             path?: never;
             cookie?: never;
         };
@@ -1334,9 +1488,7 @@ export interface operations {
     post_rule_authorization_v1_doctor_rules_authorize_post: {
         parameters: {
             query?: never;
-            header?: {
-                "x-rule-admin-token"?: string;
-            };
+            header?: never;
             path?: never;
             cookie?: never;
         };
@@ -1360,15 +1512,6 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
             /** @description A required configured service is unavailable. */
             503: {
                 headers: {
@@ -1383,9 +1526,7 @@ export interface operations {
     put_disease_profile_v1_doctor_rules_disease_profiles__route__put: {
         parameters: {
             query?: never;
-            header?: {
-                "x-rule-admin-token"?: string;
-            };
+            header?: never;
             path: {
                 route: string;
             };
@@ -1447,9 +1588,7 @@ export interface operations {
     put_fact_labels_v1_doctor_rules_fact_labels_put: {
         parameters: {
             query?: never;
-            header?: {
-                "x-rule-admin-token"?: string;
-            };
+            header?: never;
             path?: never;
             cookie?: never;
         };
@@ -1509,9 +1648,7 @@ export interface operations {
     put_safety_rules_v1_doctor_rules_safety_put: {
         parameters: {
             query?: never;
-            header?: {
-                "x-rule-admin-token"?: string;
-            };
+            header?: never;
             path?: never;
             cookie?: never;
         };
@@ -1661,12 +1798,165 @@ export interface operations {
             };
         };
     };
-    transcribe_v1_transcribe_post: {
+    create_invitation_v1_invitations_post: {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InvitationCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvitationResponse"];
+                };
+            };
+            /** @description The caller is not authorized for this operation. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Request validation or domain validation failed. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description A required configured service is unavailable. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    exchange_invitation_v1_invitations_exchange_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InvitationExchangeRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvitationExchangeResponse"];
+                };
+            };
+            /** @description The request cannot be processed in its current state. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The requested consultation does not exist. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The submitted revision conflicts with the current revision. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Request validation or domain validation failed. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    patient_session_v1_patient_session_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                ai_patient_session?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PatientSessionResponse"];
+                };
+            };
+            /** @description Authentication is required or has expired. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    transcribe_v1_transcribe_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                ai_patient_session?: string | null;
+            };
         };
         requestBody: {
             content: {

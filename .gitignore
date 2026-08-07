@@ -18,6 +18,7 @@ htmlcov/
 .build-state/
 .rag-cache/
 .deploy-staging/
+integration-deployment/staging/
 frontend-v2/node_modules/
 frontend-v2/apps/*/dist/
 

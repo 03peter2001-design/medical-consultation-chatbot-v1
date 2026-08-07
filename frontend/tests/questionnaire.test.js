@@ -12,6 +12,11 @@ test('single choice replaces the previous selection', () => {
   assert.deepEqual(toggleQuestionOption(['男性'], '女性', spec), ['女性'])
 })
 
+test('selected choice can be cancelled', () => {
+  const spec = { multiple: false, exclusive_options: [] }
+  assert.deepEqual(toggleQuestionOption(['男性'], '男性', spec), [])
+})
+
 test('exclusive choice clears multi-select answers', () => {
   const spec = {
     multiple: true,
@@ -27,7 +32,7 @@ test('exclusive choice clears multi-select answers', () => {
   )
 })
 
-test('choice answer preserves an other free-text answer', () => {
+test('choice other text replaces stale selected options', () => {
   const answer = composeQuestionAnswer(
     { kind: 'choice', multiple: true },
     {
@@ -35,7 +40,7 @@ test('choice answer preserves an other free-text answer', () => {
       otherText: '偶爾抽痛',
     },
   )
-  assert.equal(answer, '鈍痛、其他：偶爾抽痛')
+  assert.equal(answer, '其他：偶爾抽痛')
 })
 
 test('empty choice is not ready', () => {

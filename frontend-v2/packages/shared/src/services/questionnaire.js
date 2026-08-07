@@ -28,10 +28,9 @@ export function composeQuestionAnswer(
 ) {
   if (spec?.kind === 'choice') {
     const other = otherText.trim()
-    if (!spec.multiple && other) return `其他：${other}`
+    if (other) return `其他：${other}`
 
     const answers = [...selectedOptions]
-    if (other) answers.push(`其他：${other}`)
     return answers.join('、')
   }
 

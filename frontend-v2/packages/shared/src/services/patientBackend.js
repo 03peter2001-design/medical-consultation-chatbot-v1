@@ -42,6 +42,15 @@ export const patientApi = {
         pain_location_ids: painLocationIds,
       }),
     ),
+  back: (sessionId) =>
+    request(
+      apiPath('/chat'),
+      jsonOptions({
+        message: '',
+        session_id: sessionId,
+        action: 'back',
+      }),
+    ),
   transcribe: (audioBlob) => {
     const formData = new FormData()
     formData.append('audio', audioBlob, 'audio.webm')
@@ -51,6 +60,7 @@ export const patientApi = {
 
 export const api = {
   patientChat: patientApi.chat,
+  patientBack: patientApi.back,
   transcribe: patientApi.transcribe,
 }
 

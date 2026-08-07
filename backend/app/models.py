@@ -137,6 +137,7 @@ class InvitationExchangeRequest(BaseModel):
 class ChatRequest(BaseModel):
     message: str = ""
     session_id: str
+    action: Literal["answer", "back"] = "answer"
     pain_location_ids: list[str] = Field(default_factory=list)
     patient_prefill: PatientPrefill | None = None
 

@@ -57,6 +57,7 @@ const mobileAvatarOpen = ref(false)
 const selectedPainLocationIds = ref([])
 const questionInput = ref(null)
 const questionnaireInfo = ref(null)
+const canGoBack = ref(false)
 const progressState = ref({ current: 0, total: 1, percent: 0 })
 const triageState = ref({
   level: 'routine',
@@ -155,6 +156,7 @@ function addMessage(role, text) {
 function setQuestionState(data) {
   questionInput.value = data.question_input ?? null
   questionnaireInfo.value = data.questionnaire ?? null
+  canGoBack.value = Boolean(data.can_go_back)
   progressState.value =
     data.progress ?? progressState.value
   triageState.value =
@@ -299,6 +301,35 @@ async function submitMessage(
     addMessage('ai', `⚠️ ${connectionError(error)}`)
   } finally {
     typing.value = false
+    sending.value = false
+    if (!completed.value) focusInput()
+  }
+}
+
+function trimLastAnsweredTurn() {
+  for (let index = messages.value.length - 1; index >= 0; index -= 1) {
+    if (messages.value[index].role === 'user') {
+      messages.value.splice(index)
+      return
+    }
+  }
+}
+
+async function goToPreviousQuestion() {
+  if (!canGoBack.value || inputsDisabled.value) return
+
+  sending.value = true
+  try {
+    const data = await api.patientBack(sessionId)
+    trimLastAnsweredTurn()
+    if (amieTraces.value.length) amieTraces.value.pop()
+    selectedPainLocationIds.value = []
+    completed.value = false
+    queueNumber.value = ''
+    setQuestionState(data)
+  } catch (error) {
+    addMessage('ai', `⚠️ ${connectionError(error)}`)
+  } finally {
     sending.value = false
     if (!completed.value) focusInput()
   }
@@ -484,6 +515,15 @@ onBeforeUnmount(() => {
             :triage-level="triageState.level"
           />
           <AmieTracePanel :traces="amieTraces" />
+          <button
+            v-if="!completed && canGoBack"
+            class="previous-question-button"
+            type="button"
+            :disabled="inputsDisabled"
+            @click="goToPreviousQuestion"
+          >
+            ← 回到上一題
+          </button>
           <PainLocationInput
             v-if="showBodyMap"
             v-model="selectedPainLocationIds"
@@ -730,6 +770,29 @@ onBeforeUnmount(() => {
   flex: 1;
   padding: 24px;
   background: #fbfdff;
+}
+
+.previous-question-button {
+  min-height: 42px;
+  align-self: flex-start;
+  padding: 9px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface-1);
+  color: var(--blue);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.previous-question-button:hover:not(:disabled) {
+  border-color: var(--blue);
+  background: var(--blue-soft);
+}
+
+.previous-question-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
 }
 
 .patient-input-bar {

@@ -125,6 +125,7 @@ class PatientChatResponse(BaseModel):
     reply: str
     session_id: str
     completed: bool
+    can_go_back: bool = False
     user_display: str | None = None
     step: int
     queue_number: str | None = None

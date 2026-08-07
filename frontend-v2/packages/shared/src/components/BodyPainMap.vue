@@ -326,7 +326,9 @@ function handleRegionKeydown(event, region) {
   top: 14px;
   color: var(--muted);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   writing-mode: vertical-rl;
 }
 

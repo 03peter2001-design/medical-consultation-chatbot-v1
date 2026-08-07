@@ -61,11 +61,11 @@ function selectOption(option) {
     option,
     props.spec,
   )
-  if (!props.spec?.multiple) otherText.value = ''
+  otherText.value = ''
 }
 
 function handleOtherInput() {
-  if (!props.spec?.multiple && otherText.value.trim()) {
+  if (otherText.value.trim()) {
     selectedOptions.value = []
   }
 }
@@ -199,7 +199,7 @@ defineExpose({ focus })
           name="question-choice"
           :checked="selectedOptions.includes(option)"
           :disabled="disabled"
-          @change="selectOption(option)"
+          @click.prevent="selectOption(option)"
         />
         <span>{{ option }}</span>
       </label>

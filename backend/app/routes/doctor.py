@@ -39,6 +39,7 @@ from app.prompts.doctor import (
     STRUCTURED_NOTE_SYSTEM_PROMPT,
     build_structured_note_prompt,
 )
+from app.security import UccPrincipal, current_ucc_principal, require_scopes
 from app.services.clinical_summary import (
     clinical_patient_data,
     model_patient_summary,
@@ -55,10 +56,9 @@ from app.services.rule_management import (
     update_fact_labels,
     update_safety_rules,
 )
-from app.services.snomed_search import search_snomed
-from app.security import UccPrincipal, current_ucc_principal, require_scopes
 from app.services.rule_management_support.common import INTERNAL_RULE_AUTHORIZATION
 from app.services.security_audit import audit_ucc, safe_log
+from app.services.snomed_search import search_snomed
 from domain.questionnaires import (
     DISEASE_ROUTES,
     load_questionnaire_policy,
@@ -73,6 +73,14 @@ router = APIRouter(
     tags=["doctor"],
     dependencies=[Depends(require_scopes("consultation:read"))],
 )
+
+
+def _consultation_institution_scope(principal: UccPrincipal) -> str | None:
+    """Keep tenant isolation except for the explicit loopback legacy UI bypass."""
+
+    if principal.claims.get("legacy_frontend_bypass") is True:
+        return None
+    return principal.institution_id
 
 
 @router.get(
@@ -363,7 +371,7 @@ def list_consultations(
 ):
     principal = _doctor_principal()
     options = {"search": search, "limit": limit, "offset": offset}
-    options["institution_id"] = principal.institution_id
+    options["institution_id"] = _consultation_institution_scope(principal)
     try:
         result = runtime.consultation_repository.list_summaries(**options)
     except Exception as error:
@@ -396,7 +404,7 @@ def delete_consultation(consultation_id: str):
     try:
         record = runtime.consultation_repository.get(
             normalized,
-            institution_id=principal.institution_id,
+            institution_id=_consultation_institution_scope(principal),
         )
     except ValueError as error:
         audit_ucc(
@@ -494,7 +502,7 @@ def delete_consultation(consultation_id: str):
 )
 def load_patient(request: LoadPatientRequest):
     principal = _doctor_principal()
-    institution_id = principal.institution_id
+    institution_id = _consultation_institution_scope(principal)
     requested_resource = (
         request.consultation_id
         or request.registration_number

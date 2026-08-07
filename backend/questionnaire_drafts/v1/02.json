@@ -1,0 +1,354 @@
+{
+  "schema_version": 1,
+  "id": "headache_questionnaire",
+  "label": "頭痛",
+  "source_order": 2,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": "headache",
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "recent_infection",
+      "recent_head_injury"
+    ],
+    "priority_fields": [
+      "onset_suddenness",
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_suddenness",
+      "prompt": "是突然就到最痛的程度嗎？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然就到最痛的程度嗎？"
+      ]
+    },
+    {
+      "field": "headache_pattern",
+      "prompt": "頭痛是持續性的還是間歇性一陣一陣的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "頭痛是持續性的還是間歇性一陣一陣的？"
+      ]
+    },
+    {
+      "field": "headache_frequency",
+      "prompt": "你有多常經歷這些頭痛？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你有多常經歷這些頭痛？"
+      ]
+    },
+    {
+      "field": "previous_similar_headache",
+      "prompt": "以前是否有過類似頭痛？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "以前是否有過類似頭痛？"
+      ]
+    },
+    {
+      "field": "aggravating_factors",
+      "prompt": "你有觀察到什麼情況會讓頭痛加重嗎？ 比方說耗費體力的活動 有光線或噪音的環境",
+      "kind": "choice",
+      "options": [
+        "耗費體力的活動",
+        "有光線或噪音的環境"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你有觀察到什麼情況會讓頭痛加重嗎？ 比方說耗費體力的活動 有光線或噪音的環境"
+      ]
+    },
+    {
+      "field": "relieving_factors",
+      "prompt": "你有觀察到什麼情況會讓頭痛緩解嗎？ 比方說休息 用藥 或待在黑暗的空間",
+      "kind": "choice",
+      "options": [
+        "休息",
+        "用藥",
+        "待在黑暗的空間"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你有觀察到什麼情況會讓頭痛緩解嗎？ 比方說休息 用藥 或待在黑暗的空間"
+      ]
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "請幫我觀察是否出現以下症狀並將有出現的症狀念給我聽",
+      "kind": "choice",
+      "options": [
+        "感到噁心或已經嘔吐",
+        "有視力變化，如模糊、複視或視力減退",
+        "有虛弱、麻木、刺痛、說話困難或行走困難",
+        "有發燒"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請幫我觀察是否出現以下症狀並將有出現的症狀念給我聽",
+        "感到噁心或已經嘔吐",
+        "有視力變化，如模糊、複視或視力減退",
+        "有虛弱、麻木、刺痛、說話困難或行走困難",
+        "有發燒"
+      ]
+    },
+    {
+      "field": "neurological_history",
+      "prompt": "是否有偏頭痛、癲癇或其他神經疾病的病史？",
+      "kind": "choice",
+      "options": [
+        "偏頭痛",
+        "癲癇",
+        "其他神經疾病"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有偏頭痛、癲癇或其他神經疾病的病史？"
+      ]
+    },
+    {
+      "field": "recent_infection",
+      "prompt": "最近是否有感染症狀，特別是鼻竇炎？ *",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "最近是否有感染症狀，特別是鼻竇炎？ *"
+      ]
+    },
+    {
+      "field": "recent_head_injury",
+      "prompt": "最近是否有頭部受傷或創傷？ *",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "最近是否有頭部受傷或創傷？ *"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "RAG 內容提示，突發性頭痛、伴隨局灶性神經學缺損（如視力變化、無力、說話困難）可能是警訊症狀，需人工審查。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-1aad73b8067d"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-426bfac7c258",
+      "title": "Brain Neoplasms: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779664-overview",
+      "route": "headache",
+      "chunk_id": "8b43a6610b35f683aaa4_3",
+      "distance": 0.4267,
+      "excerpt": "Usually nonspecific and resembles tension-type headaches In patients with established headache, may manifest as a change in the headache pattern New onset of headaches in middle-aged or older patients is worrisome The location of the headache reliably indicates the side of the head affected, but it does not indicate the precise site of the tumor Headaches are more common with posterior fossa tumors Headache is a more frequent symptom of intracranial tumor in pediatric patients Nausea and/or vomitting (40%) Although often described as characteristic of tumor headaches, the following clincial"
+    },
+    {
+      "id": "rag-b0ccd67e683f",
+      "title": "Tension Headache: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/792384-overview",
+      "route": "headache",
+      "chunk_id": "f48e28c4ace81e12aae6_0",
+      "distance": 0.415,
+      "excerpt": "Overview Practice Essentials The International Headache Society (IHS) began developing a classification system for headaches in 1985. Now in its third edition, this system includes a tension-type headache (TTH) category, further defined as either episodic (frequent and infrequent) or chronic. In infrequent episodic TTH, headache episodes occur less than one day a month, whereas in frequent episodic TTH, headache episodes occur 1 to 14 days a month. In chronic TTH, headaches occur 15 or more days a month. Diagnosis Laboratory work should be unremarkable in cases of tension-type headache."
+    },
+    {
+      "id": "rag-1aad73b8067d",
+      "title": "Brain Neoplasms: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779664-overview",
+      "route": "headache",
+      "chunk_id": "8b43a6610b35f683aaa4_2",
+      "distance": 0.5295,
+      "excerpt": "intraventricular tumor suddenly occludes the third ventricle. Manifestations may be nonspecific and include the following: Headache Altered mental status Ataxia Nausea Vomiting Weakness Gait disturbance CNS neoplasms also may manifest as follows: Focal seizures Fixed visual changes Speech deficits Focal sensory abnormalities Headache associated with intracranial neoplasms have the following characteristics: Often is a late complaint Usually not an isolated finding The worst symptom in only one half of patients Usually nonspecific and resembles tension-type headaches In patients with"
+    },
+    {
+      "id": "rag-88841bd96012",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "route": "headache",
+      "chunk_id": "c073c38d1231a0946898_1",
+      "distance": 0.4158,
+      "excerpt": "alternative diagnoses. Signs of dysfunction of other cranial neruves or other neurologic abnormality exclude the diagnosis of classic trigeminal neuralgia and suggest that pain may be secondary to a structural lesion. The International Association for the Study of Pain (IASP) classifies TN into three categories. Classical TN is described as vascular compression that causes anatomical changes in the trigeminal nerve root. Next, secondary TN is due to an underlying neurologic disease. Third, idiopathic TN, is diagnosed after all studies reveal no etiology or there is no apparent cause. Classic"
+    },
+    {
+      "id": "rag-93f0c880b5e6",
+      "title": "Dialysis Complications of Chronic Renal Failure: Practice Essentials, Electrolyte Abnormalities, Neurologic Complications",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1918879-overview",
+      "route": "headache",
+      "chunk_id": "c1c16e014946f1619dd3_12",
+      "distance": 0.5476,
+      "excerpt": "without headache antecedents and fulfilling the criteria for headache related to hemodialysis on the basis ofthe International Classification of Headache Disorders 2nd edition (ICHD II) classification. Headache that worsens during dialysis sessions with antecedents of primary headaches. Headache with onset during dialysis without headache antecedents but with headache occurring between the sessions more than 50% of the time and therefore not fulfilling the criteria for headache related to hemodialysis based on ICHD II classification. According to the International Headache Society criteria,"
+    },
+    {
+      "id": "rag-b7062dc9d498",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "route": "headache",
+      "chunk_id": "c073c38d1231a0946898_2",
+      "distance": 0.4197,
+      "excerpt": "after all studies reveal no etiology or there is no apparent cause. Classic trigeminal neuralgia includes all cases without established etiology after investigation, as well as those with potential microvascular compression of the fifth cranial nerve. In symptomatic trigeminal neuralgia, the pain syndrome is secondary to tumor, multiple sclerosis, or other structural abnormalities. Diagnosis According to the International Classification of Headache Disorders (ICHD), specific crtieria have been developed to diagnose TN. (ey are as follows: A. At least three attacks of unilateral facial pain"
+    },
+    {
+      "id": "rag-e0b223bbac1e",
+      "title": "Childhood Migraine Variants: Background, Pathophysiology and Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1178141-overview",
+      "route": "headache",
+      "chunk_id": "4b49a7426a9b7780040c_11",
+      "distance": 0.553,
+      "excerpt": "well as Causes and Treatments of Migraine and Related Headaches, Alternative and Complementary Approaches to Migraine and Cluster Headaches, Migraine Headache in Children, and Understanding Migraine and Cluster Headache Medications. Clinical Presentation"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "safety",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.3944,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "ca6239f658cbe2726afac67c0595ff2e708d496b3d6233c8b5e24015a04d31bd",
+    "rag_corpus_hash": "e3386050625d32ef8609d1c06b7d047a262cc676889cf2aab49ddf94f831e691",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:00:50+00:00"
+  }
+}

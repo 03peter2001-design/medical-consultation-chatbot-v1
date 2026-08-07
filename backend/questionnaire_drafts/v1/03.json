@@ -1,0 +1,263 @@
+{
+  "schema_version": 1,
+  "id": "allergies_hives_drug_reactions_stings",
+  "label": "過敏 蕁麻疹 藥物反應 螯傷",
+  "source_order": 3,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "reaction_start_time",
+      "reaction_scope"
+    ],
+    "priority_fields": [
+      "observed_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 6,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "reaction_start_time",
+      "prompt": "反應什麼時候開始的 *",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "反應什麼時候開始的 *"
+      ]
+    },
+    {
+      "field": "reaction_location",
+      "prompt": "反應發生在身體的哪個部位？",
+      "kind": "choice",
+      "options": [
+        "眼睛",
+        "嘴唇",
+        "其他地方"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "反應發生在身體的哪個部位？眼睛 嘴唇還是有其他地方"
+      ]
+    },
+    {
+      "field": "reaction_scope",
+      "prompt": "反應是局部還是全身性？ *",
+      "kind": "choice",
+      "options": [
+        "局部",
+        "全身性"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "反應是局部還是全身性？ *"
+      ]
+    },
+    {
+      "field": "reaction_description",
+      "prompt": "你如何描述這種反應？",
+      "kind": "choice",
+      "options": [
+        "紅",
+        "癢",
+        "腫",
+        "疑似蕁麻疹"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你如何描述這種反應？紅 癢 腫 或是有疑似蕁麻疹"
+      ]
+    },
+    {
+      "field": "reaction_progression",
+      "prompt": "你覺得目前反應有沒有擴散？還是時好時壞的？",
+      "kind": "choice",
+      "options": [
+        "擴散",
+        "時好時壞"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你覺得目前反應有沒有擴散？還是時好時壞的？"
+      ]
+    },
+    {
+      "field": "observed_symptoms",
+      "prompt": "請幫我觀察是否出現以下症狀並將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "感到呼吸困難、喘鳴或呼吸急促",
+        "噁心、嘔吐、腹瀉或腹痛",
+        "感到頭暈、暈眩或心跳加速或不規則",
+        "發燒、發冷或整體不適的感覺",
+        "臉、眼睛、嘴唇、舌頭或喉嚨的腫脹"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請幫我觀察是否出現以下症狀並將以下有出現的症狀描述給我聽",
+        "感到呼吸困難、喘鳴或呼吸急促",
+        "噁心、嘔吐、腹瀉或腹痛",
+        "感到頭暈、暈眩或心跳加速或不規則",
+        "發燒、發冷或整體不適的感覺",
+        "臉、眼睛、嘴唇、舌頭或喉嚨的腫脹"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "RAG 內容提示，呼吸困難、心悸、頭暈、神經學症狀等可能是嚴重過敏反應的警訊症狀，應優先詢問。此問卷已包含這些項目，建議將其設為優先問題。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4234,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-5eeba6a1a2ac",
+      "title": "Latex Allergy: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/756632-overview",
+      "route": "common",
+      "chunk_id": "dd9970b5cca993dde8ee_5",
+      "distance": 0.4654,
+      "excerpt": "Images slideshow, to help identify a variety of allergens and symptoms. For related information, see Medscape's Allergy & Immunology Resource Center. Pathophysiology Latex exposure is associated with 3 clinical syndromes. Irritant dermatitis results from mechanical disruption of the skin due to the rubbing of gloves and accounts for the majority of latex-induced local skin rashes. It is not immune mediated, is not associated with allergic complications, and is not the subject of this article. It may be confused with Type IV hypersensitivity. Any chronic hand dermatitis in HCWs raises the risk"
+    },
+    {
+      "id": "rag-c213cde023e1",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "route": "common",
+      "chunk_id": "533df8c4e1c8cc2bd460_3",
+      "distance": 0.4497,
+      "excerpt": "All observed symptoms and each one s severity Duration of the reaction Treatment provided and clinical response to treatment Most recent reaction Physical examination findings are most useful for the following: Assessing nutritional status, growth parameters, and signs of other allergic disease Helping to rule out other conditions that may mimic food allergy See Clinical Presentation for more detail. Diagnosis Laboratory studies that may be helpful include the following: Specific immunoglobulin E (IgE) antibody testing: Positive results primarily denote sensitization and may not confirm"
+    },
+    {
+      "id": "rag-90c7898b0b12",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "route": "common",
+      "chunk_id": "533df8c4e1c8cc2bd460_14",
+      "distance": 0.4868,
+      "excerpt": "most common clinical manifestations of an allergic reaction to a food or food additive. Symptoms range from acute urticaria (most common) to flushing to angioedema to exacerbations of atopic dermatitis. Food allergy is rarely the cause of chronic urticaria or angioedema. Atopic dermatitis Controversy surrounds the role of food allergy in the pathogenesis of atopic dermatitis. Studies show that among patients with moderate chronic atopic dermatitis, 35-40% have IgE-mediated food allergy. Food-specific IgE-mediated and cellular mechanisms appear responsible for chronic eczematous inflammation."
+    },
+    {
+      "id": "rag-65b16e084fa2",
+      "title": "Trichinosis (Trichinellosis): Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230490-overview",
+      "route": "safety",
+      "chunk_id": "18637b5c7017fc509666_17",
+      "distance": 0.5373,
+      "excerpt": "Those with mild symptoms improve in 2-3 weeks. Symptoms associated with heavy infections may persist for 2-3 months. Factors that may affect morbidity include the quantity of larvae ingested, the species of Trichinella (most notably T spiralis), and the immune status of the host. Patients succumb to exhaustion, pneumonia, pulmonary embolism, encephalitis, or cardiac failure and/or arrhythmia. Death from trichinosis usually occurs in 4-8 weeks but may occur as early as in 2-3 weeks. Race Although Trichinella infections may be related to cultural differences in food cooking and storing methods"
+    },
+    {
+      "id": "rag-7619661f37e2",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "safety",
+      "chunk_id": "53fc3e4f98765d889be9_5",
+      "distance": 0.5987,
+      "excerpt": "management. Also see Ischemic Stroke in Emergency Medicine and Hemorrhagic Stroke. Clinical Presentation History See the list below: Age, comorbidities Head trauma Motor vehicle collision Fall/jump from height Assault Penetrating injury Loss of consciousness Headache Changes in vision Changes in strength or sensation Coordination or balance problems Loss of executive function or cognition Seizure Coagulation disorders or therapy Intoxication; history of substance abuse Previous neurosurgery Physical See the list below: Altered mental status; unresponsiveness; deficits in Glasgow Coma Scale"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "cfa33d7ecc99023d5051687bc62bb278df1290ef2cdc9a50c2a6c4bee96ea04a",
+    "rag_corpus_hash": "99f107c1da6e0c6792820e1001e0dec76233ba6945ce96e175146212e4458dfe",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:01:19+00:00"
+  }
+}

@@ -1,0 +1,330 @@
+{
+  "schema_version": 1,
+  "id": "orthopedics_external_injury",
+  "label": "骨科外",
+  "source_order": 34,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "injury_location",
+      "lower_limb_weight_bearing"
+    ],
+    "priority_fields": [
+      "injury_location",
+      "sensory_symptoms",
+      "visible_deformity",
+      "open_wound_or_bleeding"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "injury_time",
+      "prompt": "什麼時候受傷的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼時候受傷的？"
+      ]
+    },
+    {
+      "field": "injury_type",
+      "prompt": "是挫傷 擦傷 撕裂傷還是切割傷",
+      "kind": "choice",
+      "options": [
+        "挫傷",
+        "擦傷",
+        "撕裂傷",
+        "切割傷"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是挫傷 擦傷 撕裂傷還是切割傷"
+      ]
+    },
+    {
+      "field": "injury_location",
+      "prompt": "是頭頸部、胸部、腹部還是背部受傷了？ *",
+      "kind": "choice",
+      "options": [
+        "頭頸部",
+        "胸部",
+        "腹部",
+        "背部"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是頭頸部、胸部、腹部還是背部受傷了？ *"
+      ]
+    },
+    {
+      "field": "swelling_or_bruising",
+      "prompt": "是否有腫脹或瘀傷？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有腫脹或瘀傷？"
+      ]
+    },
+    {
+      "field": "can_move_injured_part",
+      "prompt": "你能否移動受傷部位？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你能否移動受傷部位？"
+      ]
+    },
+    {
+      "field": "lower_limb_weight_bearing",
+      "prompt": "受傷部位是否在下肢？如果受傷部位在下肢，你能否承重？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "受傷部位是否在下肢？如果受傷部位在下肢，你能否承重？ *"
+      ]
+    },
+    {
+      "field": "sensory_symptoms",
+      "prompt": "是否感到受傷部位附近有麻木、刺痛或無力？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否感到受傷部位附近有麻木、刺痛或無力？"
+      ]
+    },
+    {
+      "field": "visible_deformity",
+      "prompt": "受傷部位是否有可見的變形或異常位置？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "受傷部位是否有可見的變形或異常位置？"
+      ]
+    },
+    {
+      "field": "can_use_injured_part",
+      "prompt": "能否正常使用受傷部位？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "能否正常使用受傷部位？"
+      ]
+    },
+    {
+      "field": "open_wound_or_bleeding",
+      "prompt": "受傷部位是否有開放性傷口或出血？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "受傷部位是否有開放性傷口或出血？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "頭頸部、胸部、腹部或背部的嚴重創傷可能涉及危及生命的內傷，應優先考慮緊急醫療流程（如 ATLS），而非僅依賴此問卷。應立即評估生命體徵與意識水平。",
+      "source_ids": [
+        "rag-3d52d3b64366"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "warning",
+      "note": "受傷部位附近的麻木、刺痛或無力（神經症狀）、可見變形（可能骨折或脫臼）或無法承重，是需要優先處理的警訊症狀，可能表示嚴重的神經血管或骨骼損傷。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-21fd3dc08d07",
+      "title": "Acute Aortic Dissection: Overview, Pathophysiology & Risk Factors, Prehospital Care",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/756835-overview",
+      "route": "chest",
+      "chunk_id": "2a82d535bfa3c4cc396c_36",
+      "distance": 0.4248,
+      "excerpt": "on history, physical examination, and imaging studies. Obtaining a chest radiograph prior to administering thrombolytics is considered prudent. Checking blood pressures in both arms and listening for carotid bruits also can help to diagnose aortic dissection prior to administering thrombolytics. The entire clinical picture must be taken into account. Questions & Answers Overview What is acute aortic dissection (AAD)? What is the Stanford classification of acute aortic dissection (AAD)? What is the DeBakey classification of acute aortic dissection (AAD)? What is the pathophysiology of acute"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "chest",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4063,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-93f437a1bd54",
+      "title": "Constrictive Pericarditis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/157096-overview",
+      "route": "chest",
+      "chunk_id": "b21805015c526ff15397_1",
+      "distance": 0.4816,
+      "excerpt": "and restricted cardiac filling. Constrictive pericarditis symptoms overlap those of diseases as diverse as myocardial infarction (MI), aortic dissection, pneumonia, influenza, and connective tissue disorders. This overlap can confuse the most skilled diagnostician. An increased suspicion of constriction helps move constrictive pericarditis to the top of a lengthy differential diagnosis list and facilitates correct diagnosis and timely therapy. The classic diagnostic conundrum associated with constrictive pericarditis is the difficulty distinguishing this condition from restrictive"
+    },
+    {
+      "id": "rag-9d7a3fa0b6c9",
+      "title": "Disseminated Intravascular Coagulation (DIC): Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/199627-overview",
+      "route": "chest",
+      "chunk_id": "b0cd3d0ff2f63ab91c71_35",
+      "distance": 0.5014,
+      "excerpt": "of conception Hematologic Myeloproliferative syndromes Vascular Rheumatoid arthritisRaynaud disease Cardiovascular Myocardial infarction Inflammatory Ulcerative colitisCrohn diseaseSarcoidosis Localized DIC Aortic aneurysmsGiant hemangioma (Kasabach-Merritt syndrome)Acute renal allograft rejection Bacterial infection (in particular, bloodstream infection [BSI]) is commonly associated with DIC. There is no difference in the incidence of DIC between patients with gram-negative sepsis and those with gram-positive sepsis. Systemic infections with other microorganisms, such as viruses and"
+    },
+    {
+      "id": "rag-3d52d3b64366",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "safety",
+      "chunk_id": "53fc3e4f98765d889be9_33",
+      "distance": 0.4944,
+      "excerpt": "Focal cortical hemorrhage is common as a sequela of head trauma and may be multifocal, as in coup (direct) and contrecoup (indirect) injuries, or diffuse. Focally dense gyri with subjacent edema, particularly those adjacent to the inner calvarial structures (ie, orbit roof-frontal pole, petrous ridge, sphenoid wing-temporal pole) represent contusions (see the images below). Skull fracture - Emergency neuroradiology. Lateral scout image from a CT brain examination shows linear lucency representing a right posterior frontal skull fracture (arrow). Subarachnoid hemorrhage - Emergency"
+    },
+    {
+      "id": "rag-29aa54fcb78d",
+      "title": "Acute Aortic Dissection: Overview, Pathophysiology & Risk Factors, Prehospital Care",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/756835-overview",
+      "route": "chest",
+      "chunk_id": "2a82d535bfa3c4cc396c_37",
+      "distance": 0.5148,
+      "excerpt": "of acute aortic dissection (AAD)? What is the pathophysiology of acute aortic dissection (AAD)? What are risk factors for acute aortic dissection (AAD)? What is the prehospital care for acute aortic dissection (AAD)? How is acute aortic dissection (AAD) in the emergency department (ED)? What is the mortality rate for acute aortic dissection (AAD)? What are the ACR appropriateness criteria for the diagnosis and treatment of acute aortic type A dissection? What are the ACR appropriateness criteria for the diagnosis and treatment of acute aortic type B dissection? What is the definitive treatment"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "6ed8c4d2669350d2f84b1b7bf855da1fff87a8c79c7b7afc76658f06d43f142b",
+    "rag_corpus_hash": "6f8bbb9395b06a4d2fd33e24c5021272e15b19aef734be4842d67e12c46afe24",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:11:22+00:00"
+  }
+}

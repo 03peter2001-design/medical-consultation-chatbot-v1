@@ -1,0 +1,418 @@
+{
+  "schema_version": 1,
+  "id": "body_temperature_related",
+  "label": "體溫相關",
+  "source_order": 44,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "accompanying_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 12,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "main_temperature_problem",
+      "prompt": "您主要的體溫問題是什麼？ 比如發燒、低體溫或突然的體溫波動",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您主要的體溫問題是什麼？ 比如發燒、低體溫或突然的體溫波動"
+      ]
+    },
+    {
+      "field": "symptom_onset",
+      "prompt": "您什麼時候開始出現這些症狀？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您什麼時候開始出現這些症狀？"
+      ]
+    },
+    {
+      "field": "body_temperature_reading",
+      "prompt": "您的體溫是多少度？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您的體溫是多少度？"
+      ]
+    },
+    {
+      "field": "accompanying_symptoms",
+      "prompt": "是否有出現以下症狀？請將以下有出現的症狀或是其他症狀說出來讓我知道",
+      "kind": "choice",
+      "options": [
+        "發冷或寒顫",
+        "出汗",
+        "頭痛",
+        "疲倦或乏力",
+        "肌肉或關節疼痛",
+        "噁心或嘔吐",
+        "皮膚乾燥或潮紅",
+        "意識模糊"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有出現以下症狀？請將以下有出現的症狀或是其他症狀說出來讓我知道",
+        "發冷或寒顫",
+        "出汗",
+        "頭痛",
+        "疲倦或乏力",
+        "肌肉或關節疼痛",
+        "噁心或嘔吐",
+        "皮膚乾燥或潮紅",
+        "意識模糊"
+      ]
+    },
+    {
+      "field": "recent_infections_or_illnesses",
+      "prompt": "最近是否有任何感染或疾病？ 請將以下有出現的感染或疾病或是其他感染或疾病說出來讓我知道",
+      "kind": "choice",
+      "options": [
+        "感冒",
+        "流感",
+        "尿路感染",
+        "支氣管炎",
+        "肺炎",
+        "胃腸炎"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "最近是否有任何感染或疾病？ 請將以下有出現的感染或疾病或是其他感染或疾病說出來讓我知道",
+        "感冒",
+        "流感",
+        "尿路感染",
+        "支氣管炎",
+        "肺炎",
+        "胃腸炎"
+      ]
+    },
+    {
+      "field": "recent_trauma_or_surgery",
+      "prompt": "是否有最近的外傷或手術？ 若有，請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有最近的外傷或手術？ 若有，請讓我知道"
+      ]
+    },
+    {
+      "field": "current_medications_or_supplements",
+      "prompt": "是否有服用任何藥物或補充劑？ 請將以下你有服用的藥物或其他補充劑說出來讓我知道",
+      "kind": "choice",
+      "options": [
+        "抗生素",
+        "止痛藥",
+        "抗病毒藥",
+        "抗抑鬱藥",
+        "抗焦慮藥",
+        "維生素或補充劑"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有服用任何藥物或補充劑？ 請將以下你有服用的藥物或其他補充劑說出來讓我知道",
+        "抗生素",
+        "止痛藥",
+        "抗病毒藥",
+        "抗抑鬱藥",
+        "抗焦慮藥",
+        "維生素或補充劑"
+      ]
+    },
+    {
+      "field": "chronic_diseases_or_health_problems",
+      "prompt": "是否有以下慢性疾病或健康問題？請將以下你有的慢性疾病或是其他健康問題說出來讓我知道",
+      "kind": "choice",
+      "options": [
+        "糖尿病",
+        "心臟病",
+        "腎病",
+        "肝病",
+        "免疫系統疾病"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有以下慢性疾病或健康問題？請將以下你有的慢性疾病或是其他健康問題說出來讓我知道",
+        "糖尿病",
+        "心臟病",
+        "腎病",
+        "肝病",
+        "免疫系統疾病"
+      ]
+    },
+    {
+      "field": "changes_in_daily_activities_or_environment",
+      "prompt": "您的日常活動或環境是否有改變？ 若有，請跟我說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您的日常活動或環境是否有改變？ 若有，請跟我說明"
+      ]
+    },
+    {
+      "field": "excessive_exercise_or_extreme_temperature_exposure",
+      "prompt": "您是否有進行過度運動或暴露在極端溫度下？ 若有，請跟我說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有進行過度運動或暴露在極端溫度下？ 若有，請跟我說明"
+      ]
+    },
+    {
+      "field": "family_or_friends_with_similar_symptoms",
+      "prompt": "您是否有家族成員或朋友也出現類似症狀？若有，請跟我說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有家族成員或朋友也出現類似症狀？若有，請跟我說明"
+      ]
+    },
+    {
+      "field": "other_supplementary_information",
+      "prompt": "是否有其他需要補充的情況或問題？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有其他需要補充的情況或問題？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "應優先詢問伴隨症狀，特別是意識模糊、嚴重頭痛等，這些可能是敗血症或腦膜炎等嚴重疾病的警訊，需要及時評估。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-6a8588ffc76c",
+        "rag-e0bcef352b95"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-efa984181040",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "route": "common",
+      "chunk_id": "a663d18c5f77da4d66fd_7",
+      "distance": 0.4821,
+      "excerpt": "Fever phobia Parents may be overly concerned about possible outcomes of prolonged high temperature, or they may believe that every fever requires antibiotic therapy. These usually unwarranted fears have been shown to vary by race and ethnicity, as well as by the age of the child and parental education level. Temperature elevation may not be the only sign of sepsis in neonates and infants. Other potential signs and symptoms of sepsis unique to infancy should also be assessed. History taking is an important part of clinical decision making. The clinician should ask the patient's parents or"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4752,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-3921568e573d",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "safety",
+      "chunk_id": "bb1164c188b2fc1e1591_3",
+      "distance": 0.4887,
+      "excerpt": "be associated with respiratory failure, shock, or multiorgan system dysfunction. Complications may include pneumonia, hypoxemic respiratory failure/acute respiratory distress syndrome (ARDS), sepsis and septic shock, cardiomyopathy and arrhythmia, acute kidney injury (AKI), and complications of prolonged hospitalization, including secondary bacterial infections, thromboembolism, gastrointestinal (GI) bleeding, and polyneuropathy/myopathy. How is mild coronavirus disease 2019 (COVID-19) managed? Patient counseling Patients with mild coronavirus disease 2019 (COVID-19) should be counseled"
+    },
+    {
+      "id": "rag-1d3d3891f923",
+      "title": "Diagnostic Influenza Tests: Reference Range, Interpretation, Collection and Diagnostic Methods",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2053517-overview",
+      "route": "common",
+      "chunk_id": "9938149389dea7f1fe21_27",
+      "distance": 0.4748,
+      "excerpt": "than rapid antigen tests. Questions & Answers Overview What are diagnostic influenza tests? How are diagnostic influenza tests interpreted? How are diagnostic influenza tests performed? What are the types of diagnostic influenza tests? When are diagnostic influenza tests indicated? What are the sensitivity and specificity of diagnostic influenza tests?"
+    },
+    {
+      "id": "rag-6a8588ffc76c",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "route": "common",
+      "chunk_id": "a663d18c5f77da4d66fd_25",
+      "distance": 0.4763,
+      "excerpt": "level. Toxicity is defined as a clinical syndrome with the following: lethargy with (1) poor perfusion as evidenced by delayed capillary refill or (2) cyanosis or other signs of respiratory distress. Cold hands and feet, limb pain, and pale or mottled skin are considered \"red flag\" manifestations of septicemia. The presence or absence of meningeal signs is documented in older children. Clinicians should bear in mind that in some infants and younger children (perhaps younger than 12-15 months) who develop meningitis, specific meningeal signs, such as the Kernig or Brudzinski sign, may not be"
+    },
+    {
+      "id": "rag-e0bcef352b95",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "common",
+      "chunk_id": "bb1164c188b2fc1e1591_6",
+      "distance": 0.499,
+      "excerpt": "Emergency medical attention should be sought if the patient develops trouble breathing, persistent pain or chest pressure, new confusion, inability to awaken or to stay awake, or bluish lips or face. Who is at risk for severe coronavirus disease 2019 (COVID-19)? Risk factors for severe COVID-19, regardless of age, include the following: Chronic kidney disease COPD Immunocompromised state due to solid organ transplant Obesity (BMI ≥30) Serious heart conditions (eg, heart failure, coronary artery disease, cardiomyopathies) Sickle cell disease Type 2 diabetes mellitus The following are underlying"
+    },
+    {
+      "id": "rag-bc95b80d4049",
+      "title": "Hypertensive Emergencies: Uncontrolled Blood Pressure, Management of Hypertensive Emergencies",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1952052-overview",
+      "route": "common",
+      "chunk_id": "9ba3bdd8c1367b8de718_44",
+      "distance": 0.4995,
+      "excerpt": "emergency? How common are hypertensive emergencies in the US? What is the role of the history and the physical exam in hypertensive emergencies? What are the most common clinical presentations of hypertensive emergencies? What causes hypertensive emergencies in pregnancy? What are the essential elements of evaluating a patient&#39;s hypertension history in hypertensive emergencies? Which symptoms of hypertensive emergencies may indicate end-organ damage? What should be evaluated in the physical exam of hypertensive emergency? Which symptoms are associated with a hypertensive emergency? Which"
+    },
+    {
+      "id": "rag-6fd3c1ec9cee",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "route": "safety",
+      "chunk_id": "60a8e9fb259d62f055c2_82",
+      "distance": 0.5145,
+      "excerpt": "and what do they indicate? How are Interleukin (IL) cardiac markers characterized and what do they indicate?"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "5b61c9e4abbb4b28113b47bdf166fc19da8d2ea1d1ac22c5df73001a9ef56e57",
+    "rag_corpus_hash": "34fa8b193cdfb13b47cc8257b0b510182ecb641d67067796b613a0dc969a683b",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:06:36+00:00"
+  }
+}

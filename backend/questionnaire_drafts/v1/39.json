@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "id": "skin_problem_trauma",
+  "label": "皮膚問題 外傷",
+  "source_order": 39,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 7,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_time",
+      "prompt": "皮膚問題或外傷是什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "皮膚問題或外傷是什麼時候開始的？"
+      ]
+    },
+    {
+      "field": "onset_pattern",
+      "prompt": "是突然發生還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發生",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然發生還是逐漸出現的？"
+      ]
+    },
+    {
+      "field": "location",
+      "prompt": "皮膚問題或外傷位於你身體的頭頸部、軀幹還是四肢",
+      "kind": "choice",
+      "options": [
+        "頭頸部",
+        "軀幹",
+        "四肢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "皮膚問題或外傷位於你身體的頭頸部、軀幹還是四肢"
+      ]
+    },
+    {
+      "field": "skin_appearance",
+      "prompt": "皮膚外觀看起來如何？ 是否有皮疹、傷口、燒傷、腫脹或水泡",
+      "kind": "choice",
+      "options": [
+        "皮疹",
+        "傷口",
+        "燒傷",
+        "腫脹",
+        "水泡"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "皮膚外觀看起來如何？ 是否有皮疹、傷口、燒傷、腫脹或水泡"
+      ]
+    },
+    {
+      "field": "progression",
+      "prompt": "皮膚問題隨著時間有好轉嗎？還是時好時壞",
+      "kind": "choice",
+      "options": [
+        "有好轉",
+        "時好時壞"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "皮膚問題隨著時間有好轉嗎？還是時好時壞"
+      ]
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "你是否有像是發燒、疼痛、搔癢、紅腫、局部發燙或是有分泌物的其他症狀",
+      "kind": "choice",
+      "options": [
+        "發燒",
+        "疼痛",
+        "搔癢",
+        "紅腫",
+        "局部發燙",
+        "有分泌物"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你是否有像是發燒、疼痛、搔癢、紅腫、局部發燙或是有分泌物的其他症狀"
+      ]
+    },
+    {
+      "field": "previous_history",
+      "prompt": "以前是否有過類似的皮膚問題？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "以前是否有過類似的皮膚問題？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "RAG 文獻提示，若外傷涉及頭部，應警惕顱內出血或瀰漫性軸索損傷的可能，特別是伴隨意識混亂或局部神經學缺損時。嚴重創傷應優先尋求緊急醫療協助。",
+      "source_ids": [
+        "rag-2b8e35327f84"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "info",
+      "note": "RAG 文獻提示，發燒、紅腫、局部發燙或分泌物可能表示感染跡象，應優先詢問。",
+      "source_ids": [
+        "rag-96cc16f43b03"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.468,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-e0bcef352b95",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "common",
+      "chunk_id": "bb1164c188b2fc1e1591_6",
+      "distance": 0.5497,
+      "excerpt": "Emergency medical attention should be sought if the patient develops trouble breathing, persistent pain or chest pressure, new confusion, inability to awaken or to stay awake, or bluish lips or face. Who is at risk for severe coronavirus disease 2019 (COVID-19)? Risk factors for severe COVID-19, regardless of age, include the following: Chronic kidney disease COPD Immunocompromised state due to solid organ transplant Obesity (BMI ≥30) Serious heart conditions (eg, heart failure, coronary artery disease, cardiomyopathies) Sickle cell disease Type 2 diabetes mellitus The following are underlying"
+    },
+    {
+      "id": "rag-5eeba6a1a2ac",
+      "title": "Latex Allergy: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/756632-overview",
+      "route": "common",
+      "chunk_id": "dd9970b5cca993dde8ee_5",
+      "distance": 0.5009,
+      "excerpt": "Images slideshow, to help identify a variety of allergens and symptoms. For related information, see Medscape's Allergy & Immunology Resource Center. Pathophysiology Latex exposure is associated with 3 clinical syndromes. Irritant dermatitis results from mechanical disruption of the skin due to the rubbing of gloves and accounts for the majority of latex-induced local skin rashes. It is not immune mediated, is not associated with allergic complications, and is not the subject of this article. It may be confused with Type IV hypersensitivity. Any chronic hand dermatitis in HCWs raises the risk"
+    },
+    {
+      "id": "rag-142c63ce4c3d",
+      "title": "Coccidioidomycosis and Valley Fever: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/215978-overview",
+      "route": "common",
+      "chunk_id": "8dfdf6b59d5a0a8e98f1_37",
+      "distance": 0.5486,
+      "excerpt": "prevalence of positive skin test results ranges from 50-70% in the southwestern United States and increases with age. Several sharp upsurges in the incidence have occurred. The western migration of the 1930s and the influx of military personnel in the 1940s triggered notable increases. In 1978, the first true epidemic occurred after an unprecedented dust storm that originated in the lower end of the San Joaquin Valley, quadrupling the incidence of disease. A coccidioidal epidemic occurred in California in 1991-1994. In 1992, this outbreak produced a peak of approximately 4200 cases, an"
+    },
+    {
+      "id": "rag-2b8e35327f84",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "safety",
+      "chunk_id": "53fc3e4f98765d889be9_34",
+      "distance": 0.5406,
+      "excerpt": "posterior frontal skull fracture (arrow). Subarachnoid hemorrhage - Emergency neuroradiology. Axial CT scan of the brain shows a right frontal cortical gyriform contusion, with a small amount of subarachnoid hemorrhage. Right scalp soft tissue swelling is also present (coup lesion). Diffuse axonal injury (DAI) is caused by shearing of the white matter, often at the gray-white junction. This is thought to be due to the differing tissue density or fixation between two structures in differing response to rotation, acceleration, and deceleration. Detection is often associated with changes in the"
+    },
+    {
+      "id": "rag-96cc16f43b03",
+      "title": "Acute Anemia: Practice Essentials, Etiology, Clinical Presentation",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/780334-overview",
+      "route": "safety",
+      "chunk_id": "b30b031f37648f2fe152_18",
+      "distance": 0.5506,
+      "excerpt": "as clinically indicated. In early hemorrhagic shock, capillary refill time may increase and the skin may feel cool to the touch. With progressive shock, the skin is cold to the touch, and it appears pale and mottled. Flank ecchymosis (Grey-Turner sign) suggests retroperitoneal hemorrhage, whereas umbilical ecchymosis (Cullen sign) suggests intraperitoneal or retroperitoneal bleeding. Both are rare findings in acute states. Patients with jaundice may have liver disease, hemoglobinopathies, or other forms of hemolysis. Purpura and petechiae suggest platelet disorders, and hemarthrosis may be due"
+    },
+    {
+      "id": "rag-6fd3c1ec9cee",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "route": "safety",
+      "chunk_id": "60a8e9fb259d62f055c2_82",
+      "distance": 0.5658,
+      "excerpt": "and what do they indicate? How are Interleukin (IL) cardiac markers characterized and what do they indicate?"
+    },
+    {
+      "id": "rag-04d05153821c",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "route": "safety",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "distance": 0.5712,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "3c3e3c9e74a36f2e94c0d63b85c4325fe4446d66aec462af3df28c927340c7a9",
+    "rag_corpus_hash": "082353ea48a189c8f87698925b66ab7095d9e23899db4572b36303b4078932df",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:03:50+00:00"
+  }
+}

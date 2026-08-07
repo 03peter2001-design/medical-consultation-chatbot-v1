@@ -1,0 +1,331 @@
+{
+  "schema_version": 1,
+  "id": "body_ache",
+  "label": "身體酸痛",
+  "source_order": 6,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "onset_time",
+      "location"
+    ],
+    "priority_fields": [
+      "location"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 8,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_time",
+      "prompt": "身體痠痛什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "身體痠痛什麼時候開始的？"
+      ]
+    },
+    {
+      "field": "onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然發作還是逐漸出現的？"
+      ]
+    },
+    {
+      "field": "location",
+      "prompt": "痠痛的位置在哪裡？",
+      "kind": "choice",
+      "options": [
+        "頭頸部",
+        "胸腹部",
+        "背部",
+        "四肢",
+        "全身性"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "痠痛的位置在哪裡？ 比方說頭頸部 胸腹部 背部 四肢 或是全身性的呢"
+      ]
+    },
+    {
+      "field": "timing",
+      "prompt": "痠痛是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "痠痛是持續性的還是間歇性的？"
+      ]
+    },
+    {
+      "field": "aggravating_factors",
+      "prompt": "什麼活動或情況會讓痠痛加重？",
+      "kind": "choice",
+      "options": [
+        "活動",
+        "休息期間",
+        "某些特定姿勢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼活動或情況會讓痠痛加重？ 比如活動或 休息期間還是有某些特定姿勢"
+      ]
+    },
+    {
+      "field": "relieving_factors",
+      "prompt": "什麼情況會讓痠痛緩解？",
+      "kind": "choice",
+      "options": [
+        "休息",
+        "用藥",
+        "熱敷/冷敷"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼情況會讓痠痛緩解？ 比如休息 用藥 還是熱敷/冷敷"
+      ]
+    },
+    {
+      "field": "related_events",
+      "prompt": "最近有沒有進行哪些活動、受傷或生病，可能與痠痛有關？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "最近有沒有進行哪些活動、受傷或生病，可能與痠痛有關？"
+      ]
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "請幫我觀察是否有其他相關症狀並將有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "發燒或畏寒",
+        "異常疲倦或虛弱",
+        "疼痛處有皮疹、瘀斑、水泡或是其他皮膚異常"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請幫我觀察是否有其他相關症狀並將有出現的症狀描述給我聽",
+        "發燒或畏寒",
+        "異常疲倦或虛弱",
+        "疼痛處有皮疹、瘀斑、水泡或是其他皮膚異常"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "若痠痛位置在胸部，需注意是否為心肌梗塞等心臟急症的非典型表現，特別是伴隨呼吸困難、心悸等症狀時。應優先詢問相關病史。",
+      "source_ids": [
+        "rag-04d05153821c",
+        "rag-b0932cf7b727",
+        "rag-23645f44d446"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "warning",
+      "note": "若痠痛位置在頭頸部，且為突然發作的劇烈疼痛，或伴隨神經學症狀（如複視、運動失調、構音困難），需警覺可能為嚴重疾病（如腦部或血管問題）的警訊。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-4f7104e08ddb"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "chest",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.38,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-04d05153821c",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "route": "chest",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "distance": 0.4896,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the"
+    },
+    {
+      "id": "rag-9b8b5d5bf589",
+      "title": "Retropharyngeal Abscess: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764421-overview",
+      "route": "chest",
+      "chunk_id": "77deb79ba058e8b1d0d2_4",
+      "distance": 0.5111,
+      "excerpt": "of the neck - Obtain a CT scan of the neck with intravenous contrast when the findings on the lateral neck radiograph are equivocal or if the clinical suspicion for RPA is high in patients with negative findings on lateral neck radiograph Chest radiography - A chest radiograph is indicated to look for aspiration pneumonia and mediastinitis Magnetic resonance imaging (MRI) with gadolinium enhancement - This modality can veal thexistence and size of a retropharyngeal abscess, although the imaging study takes/ng than does CT scanning Management of retropharyngeal abscess ED management of RPA"
+    },
+    {
+      "id": "rag-b0932cf7b727",
+      "title": "Acute Pericarditis: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/156951-overview",
+      "route": "chest",
+      "chunk_id": "5ce830abdc459bc019fc_1",
+      "distance": 0.4466,
+      "excerpt": "approximately 3 months after acute pericardial illness. The patient remained symptom free despite continued T-wave inversion. Signs and symptoms Chest pain is the cardinal symptom of pericarditis, usually precordial or retrosternal with referral to the trapezius ridge, neck, left shoulder, or arm. Common associated signs and symptoms include low-grade intermittent fever, dyspnea/tachypnea (a frequent complaint and may be severe, with myocarditis, pericarditis, and cardiac tamponade), cough, and dysphagia. In tuberculous pericarditis, fever, night sweats, and weight loss are commonly noted"
+    },
+    {
+      "id": "rag-23645f44d446",
+      "title": "Multifocal Atrial Tachycardia: Overview of Multifocal Atrial Tachycardia, Pathophysiology of MAT, Etiology of MAT",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155825-overview",
+      "route": "chest",
+      "chunk_id": "64bfd50d23b5cd52a2ce_6",
+      "distance": 0.4557,
+      "excerpt": "to quantify because the underlying disease is the primary determinant of complications. Clinical Presentation Patient history Patients may complain of a variety of symptoms, or more rarely, the disease may be asymptomatic. The most common complaints include the following: Palpitations Shortness of breath Chest pain Lightheadedness Syncopal episode These symptoms may be transient. Physical examination Physical examination findings are typically related to the underlying disease process and are not specific for MAT. The pulse is rapid and irregular, and the first heart sound may be variable. The"
+    },
+    {
+      "id": "rag-b286f98a6a18",
+      "title": "Dirofilariasis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/236698-overview",
+      "route": "chest",
+      "chunk_id": "4df5d7ff6ba081d11eeb_1",
+      "distance": 0.5232,
+      "excerpt": "are asymptomatic. When they do occur, symptoms can include the following : Localized retrosternal chest pain Cough Hemoptysis Wheezing Low-grade fever Chills Malaise D repens Usually, patients notice a single painful subcutaneous lump in the affected area. The areas most commonly affected include the following : Face and eyelids Chest wall Upper arms Thighs Abdominal wall Male genitalia Ophthalmic involvement may be periorbital, subconjunctival, subtenon, or intraocular. See Clinical Presentation for more detail. Diagnosis Studies used in the diagnosis and evaluation of dirofilariasis include"
+    },
+    {
+      "id": "rag-4f7104e08ddb",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "safety",
+      "chunk_id": "53fc3e4f98765d889be9_15",
+      "distance": 0.5074,
+      "excerpt": "encephalitis, headache, mental status change, hydrocephalus, ischemic disease and infarction, suspected pituitary dysfunction, inflammation or infection of the brain or meninges or their complications, demyelination and dysmyelination disorders, vascular malformations, and arterial or venous/dural sinus abnormalities. Patients who have cardiac pacemakers, ferromagnetic intracranial aneurysm clips, and certain ferromagnetic foreign bodies or electronic devices or implants should not undergo MRI. The routine MRI protocol varies considerably based on strength of the unit's field, machine"
+    },
+    {
+      "id": "rag-eb0e477c3d0f",
+      "title": "Hiccups: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/775746-overview",
+      "route": "safety",
+      "chunk_id": "49dd5105c682a70fd578_1",
+      "distance": 0.5361,
+      "excerpt": "drug history Indicators of psychogenic origin Arrhythmia-induced syncope Gastroesophageal reflux Weight loss Insomnia Emotional distress Alcoholism and acute alcohol ingestion A complete and focused physical examination may yield evidence of the following: Head: Foreign body or aberrant hair adjacent to tympanic membrane; glaucoma Mouth: Pharyngitis Neck: Inflammation; mass lesions; goiter; voice abnormalities; stiffness Chest: Tumors; pneumonia; asthma Cardiovascular system: Arrhythmias; myocardial infarction (MI); pericarditis; unequal pulses Abdomen: Gastric atony; organomegaly; subphrenic"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "880952947824871862141dfa6633cd8836d2f806128c259ad816316a8ab43250",
+    "rag_corpus_hash": "055384cac70e6135bacac6923d12de9fcc6439e25ee52da7435aaa2b03a7714c",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:02:20+00:00"
+  }
+}

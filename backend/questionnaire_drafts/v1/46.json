@@ -1,0 +1,361 @@
+{
+  "schema_version": 1,
+  "id": "trauma",
+  "label": "創傷",
+  "source_order": 46,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "injury_time",
+      "injury_location"
+    ],
+    "priority_fields": [
+      "loss_of_consciousness",
+      "active_bleeding",
+      "post_injury_neurological_symptoms",
+      "limb_sensory_motor_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "injury_time",
+      "prompt": "什麼時候受傷的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼時候受傷的？ *"
+      ]
+    },
+    {
+      "field": "injury_mechanism",
+      "prompt": "如何受傷的？ 比如跌倒、車禍、暈眩或是其他身體不適導致的",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "如何受傷的？ 比如跌倒、車禍、暈眩或是其他身體不適導致的"
+      ]
+    },
+    {
+      "field": "loss_of_consciousness",
+      "prompt": "受傷期間或之後你是否失去過意識？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "受傷期間或之後你是否失去過意識？"
+      ]
+    },
+    {
+      "field": "post_injury_neurological_symptoms",
+      "prompt": "受傷後是否出現頭痛、頭暈或噁心想吐？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "受傷後是否出現頭痛、頭暈或噁心想吐？"
+      ]
+    },
+    {
+      "field": "injury_type",
+      "prompt": "你的傷勢是挫傷、擦傷、撕裂傷或是切割傷",
+      "kind": "choice",
+      "options": [
+        "挫傷",
+        "擦傷",
+        "撕裂傷",
+        "切割傷"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你的傷勢是挫傷、擦傷、撕裂傷或是切割傷"
+      ]
+    },
+    {
+      "field": "injury_location",
+      "prompt": "受傷位於你身體的頭頸部、胸部、腹部、背部還是四肢？",
+      "kind": "choice",
+      "options": [
+        "頭頸部",
+        "胸部",
+        "腹部",
+        "背部",
+        "四肢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "受傷位於你身體的頭頸部、胸部、腹部、背部還是四肢？ *"
+      ]
+    },
+    {
+      "field": "limb_symptoms",
+      "prompt": "是否有四肢的疼痛、腫脹或變形？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有四肢的疼痛、腫脹或變形？"
+      ]
+    },
+    {
+      "field": "active_bleeding",
+      "prompt": "是否有部位正在出血？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有部位正在出血？"
+      ]
+    },
+    {
+      "field": "limb_sensory_motor_symptoms",
+      "prompt": "是否四肢感到麻木、刺痛或無力？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否四肢感到麻木、刺痛或無力？"
+      ]
+    },
+    {
+      "field": "anticoagulant_medication",
+      "prompt": "目前是否服用抗血小板藥物或是抗凝血藥？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "目前是否服用抗血小板藥物或是抗凝血藥？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "嚴重創傷，特別是伴隨意識喪失、嚴重出血或神經學症狀，可能需要立即的緊急醫療處置。此問卷不應用於延遲必要的現場急救或緊急就醫流程。",
+      "source_ids": [
+        "rag-7619661f37e2",
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "warning",
+      "note": "創傷後出現頭痛、頭暈、噁心、意識改變、感覺或力氣變化，可能是顱內損傷的警訊，應優先評估。",
+      "source_ids": [
+        "rag-7619661f37e2",
+        "rag-065872a06c3f"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "info",
+      "note": "詢問抗凝血或抗血小板藥物史對於評估出血風險至關重要。",
+      "source_ids": [
+        "rag-7619661f37e2"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-7619661f37e2",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "headache",
+      "chunk_id": "53fc3e4f98765d889be9_5",
+      "distance": 0.4434,
+      "excerpt": "management. Also see Ischemic Stroke in Emergency Medicine and Hemorrhagic Stroke. Clinical Presentation History See the list below: Age, comorbidities Head trauma Motor vehicle collision Fall/jump from height Assault Penetrating injury Loss of consciousness Headache Changes in vision Changes in strength or sensation Coordination or balance problems Loss of executive function or cognition Seizure Coagulation disorders or therapy Intoxication; history of substance abuse Previous neurosurgery Physical See the list below: Altered mental status; unresponsiveness; deficits in Glasgow Coma Scale"
+    },
+    {
+      "id": "rag-065872a06c3f",
+      "title": "Hemorrhagic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916662-overview",
+      "route": "headache",
+      "chunk_id": "fb667a66b0c052e9418e_2",
+      "distance": 0.5156,
+      "excerpt": "Puzzles slideshow to help recognize diagnostic clues in vertigo cases. Signs and symptoms Patients with intracerebral bleeds are more likely than those with ischemic stroke to have headache, altered mental status, seizures, nausea and vomiting, and/or marked hypertension. Even so, none of these findings reliably distinguishes between hemorrhagic and ischemic stroke. Focal neurologic deficits The type of deficit depends on the area of brain involved. If the dominant (usually the left) hemisphere is involved, a syndrome consisting of the following may result: Right hemiparesis Right hemisensory"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "safety",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.3837,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-ae9e3e9c1bce",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "route": "headache",
+      "chunk_id": "c073c38d1231a0946898_3",
+      "distance": 0.4507,
+      "excerpt": "TN. (ey are as follows: A. At least three attacks of unilateral facial pain fulfilling criteria B and C B. Occurring in one or more divisions of the trigeminal nerve, with no radiation beyond the trigeminal distribution C. Pain has at least three of the following four characteristics:J recurring in paroxysmal attacks lasting from a fraction of a second to 2 min severe intensity electric shock-like, shooting, stabbing or sharp in quality precipitated by innocuous stimuli to the affected side of the face D. No clinically evident neurological deficit E. No alternative diagnosis Pathophysiology"
+    },
+    {
+      "id": "rag-774f2e10cd31",
+      "title": "Perilymphatic Fistula: Practice Essentials, History of the Procedure, Problem",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/856806-overview",
+      "route": "headache",
+      "chunk_id": "946610927a231214762d_22",
+      "distance": 0.4603,
+      "excerpt": "83% of their patients with traumatic PLF had complaints of sudden or fluctuating sensorineural loss. Vestibular symptoms occur in most patients. Balance disturbance can be described as true rotational vertigo, lightheadedness, disequilibrium, intolerance to motion, or any combination of these symptoms. Seltzer and McCabe reported such symptoms in 80% of patients with PLF, and Glasscock et al reported 77% incidence of true vertigo or disequilibrium. In obvious cases, membrane rupture is accompanied (or followed within a few minutes) by rapid, severe hearing loss; loud, roaring tinnitus; and"
+    },
+    {
+      "id": "rag-1aad73b8067d",
+      "title": "Brain Neoplasms: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779664-overview",
+      "route": "headache",
+      "chunk_id": "8b43a6610b35f683aaa4_2",
+      "distance": 0.4848,
+      "excerpt": "intraventricular tumor suddenly occludes the third ventricle. Manifestations may be nonspecific and include the following: Headache Altered mental status Ataxia Nausea Vomiting Weakness Gait disturbance CNS neoplasms also may manifest as follows: Focal seizures Fixed visual changes Speech deficits Focal sensory abnormalities Headache associated with intracranial neoplasms have the following characteristics: Often is a late complaint Usually not an isolated finding The worst symptom in only one half of patients Usually nonspecific and resembles tension-type headaches In patients with"
+    },
+    {
+      "id": "rag-88841bd96012",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "route": "headache",
+      "chunk_id": "c073c38d1231a0946898_1",
+      "distance": 0.4652,
+      "excerpt": "alternative diagnoses. Signs of dysfunction of other cranial neruves or other neurologic abnormality exclude the diagnosis of classic trigeminal neuralgia and suggest that pain may be secondary to a structural lesion. The International Association for the Study of Pain (IASP) classifies TN into three categories. Classical TN is described as vascular compression that causes anatomical changes in the trigeminal nerve root. Next, secondary TN is due to an underlying neurologic disease. Third, idiopathic TN, is diagnosed after all studies reveal no etiology or there is no apparent cause. Classic"
+    },
+    {
+      "id": "rag-cb37fcc6db9f",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "route": "headache",
+      "chunk_id": "2b6eb94497953c8a6426_23",
+      "distance": 0.498,
+      "excerpt": "Toxicity Transient Global Amnesia Transient Ischemic Attack Withdrawal Syndromes Other conditions to be considered include the following: Carotid sinus hypersensitivity Fugue states Heat exhaustion Hyperventilation Malingering Migraine narcolepsy/cataplexy Night terrors Panic attacks Paroxysmal vertigo Trauma Psychogenic Nonepileptic Seizures Laboratory Studies Clinical information should guide the specific workup of a patient. Studies have shown a low yield for extensive laboratory tests in the evaluation of a patient presenting with a first-time single seizure. In 1 study, laboratory tests"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "22f37f3271e111cbd1837941d6a2fa9c3f5725923e234f799f4016d3e1011c72",
+    "rag_corpus_hash": "4d3dc21ad6f7ce0be967f08255cd6e4e06cdcdc906fcf9f0e98e16518dde46dc",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:07:33+00:00"
+  }
+}

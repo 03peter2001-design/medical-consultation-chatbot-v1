@@ -1,0 +1,381 @@
+{
+  "schema_version": 1,
+  "id": "fluid_nutrition_changes",
+  "label": "液體/營養改變",
+  "source_order": 19,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "onset_of_changes"
+    ],
+    "priority_fields": [
+      "nutritional_problems",
+      "digestive_symptoms",
+      "other_related_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_of_changes",
+      "prompt": "您從何時開始注意到液體或營養的改變？ *",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您從何時開始注意到液體或營養的改變？ *"
+      ]
+    },
+    {
+      "field": "fluid_changes",
+      "prompt": "您注意到哪些液體改變？ 請將以下有出現的液體改變描述給我聽  也可補充是否有其他液體改變",
+      "kind": "choice",
+      "options": [
+        "尿量減少",
+        "尿量增加",
+        "口乾舌燥",
+        "皮膚乾燥",
+        "水腫"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您注意到哪些液體改變？ 請將以下有出現的液體改變描述給我聽  也可補充是否有其他液體改變",
+        "尿量減少",
+        "尿量增加",
+        "口乾舌燥",
+        "皮膚乾燥",
+        "水腫"
+      ]
+    },
+    {
+      "field": "nutritional_problems",
+      "prompt": "您是否有以下營養問題？ 請將以下有出現的營養問題描述給我聽 也可補充是否有其他營養問題",
+      "kind": "choice",
+      "options": [
+        "食慾不振",
+        "不明原因的體重變化",
+        "食物攝取量減少",
+        "過度飢餓"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有以下營養問題？ 請將以下有出現的營養問題描述給我聽 也可補充是否有其他營養問題",
+        "食慾不振",
+        "不明原因的體重變化",
+        "食物攝取量減少",
+        "過度飢餓"
+      ]
+    },
+    {
+      "field": "digestive_symptoms",
+      "prompt": "您是否有以下消化系統的症狀？ 請將以下有出現的消化系統症狀描述給我聽 也可補充是否有其他症狀",
+      "kind": "choice",
+      "options": [
+        "噁心",
+        "嘔吐",
+        "腹瀉",
+        "便秘",
+        "胃痛"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有以下消化系統的症狀？ 請將以下有出現的消化系統症狀描述給我聽 也可補充是否有其他症狀",
+        "噁心",
+        "嘔吐",
+        "腹瀉",
+        "便秘",
+        "胃痛"
+      ]
+    },
+    {
+      "field": "recent_diet_fluid_changes",
+      "prompt": "您是否最近有飲食或液體攝取習慣的改變？ 若有請進一步描述",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否最近有飲食或液體攝取習慣的改變？ 若有請進一步描述"
+      ]
+    },
+    {
+      "field": "chronic_diseases",
+      "prompt": "您是否有像是糖尿病 心臟病 腎病 肝病 或其他慢性疾病？若有 請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有像是糖尿病 心臟病 腎病 肝病 或其他慢性疾病？若有 請讓我知道"
+      ]
+    },
+    {
+      "field": "recent_medical_surgical_history",
+      "prompt": "您是否有最近的醫療或手術史？ 若有 請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有最近的醫療或手術史？ 若有 請讓我知道"
+      ]
+    },
+    {
+      "field": "contributing_factors",
+      "prompt": "您最近是否有像是過度運動 壓力大 高溫環境暴露或是感染這些導致液體或營養改變的情況？若有 請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您最近是否有像是過度運動 壓力大 高溫環境暴露或是感染這些導致液體或營養改變的情況？若有 請讓我知道"
+      ]
+    },
+    {
+      "field": "medications_or_supplements",
+      "prompt": "您是否有服用任何藥物或補充劑？ 若有 請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有服用任何藥物或補充劑？ 若有 請讓我知道"
+      ]
+    },
+    {
+      "field": "other_related_symptoms",
+      "prompt": "您是否有以下其他相關症狀？ 請將以下有出現的其他相關症狀描述給我聽 也可補充是否有其他症狀",
+      "kind": "choice",
+      "options": [
+        "頭暈",
+        "乏力",
+        "口渴",
+        "頻尿",
+        "視力模糊"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有以下其他相關症狀？ 請將以下有出現的其他相關症狀描述給我聽 也可補充是否有其他症狀",
+        "頭暈",
+        "乏力",
+        "口渴",
+        "頻尿",
+        "視力模糊"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "RAG 文獻指出，不明原因的體重變化、食慾不振、噁心、嘔吐等症狀可能與多種潛在疾病相關，包括腎臟、肝臟或心臟疾病，以及過敏反應。應優先詢問這些症狀以評估嚴重性。",
+      "source_ids": [
+        "rag-75f3cb0db389",
+        "rag-c213cde023e1"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "info",
+      "note": "RAG 文獻建議，在評估液體與營養改變時，應詢問患者的個人或家族心臟病史、藥物史，並進行完整的身體檢查，特別是生命體徵與血糖水平。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.5171,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-822d7f468d50",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "safety",
+      "chunk_id": "53fc3e4f98765d889be9_31",
+      "distance": 0.5717,
+      "excerpt": "is often due to cortical contusion, dilution from a focal collection, or intraventricular hemorrhage due to delayed presentation. Catheter angiography is usually indicated on an emergency basis to identify cerebral aneurysms and to define their anatomy prior to surgical intervention (see the second image below). The prognosis for patients with subarachnoid hemorrhage is variable depending on the extent of injury. Traumatic subarachnoid hemorrhage is common and often associated with other injuries affecting outcome. Subarachnoid hemorrhage - Emergency neuroradiology. Axial CT scan at the level"
+    },
+    {
+      "id": "rag-8f1615091344",
+      "title": "Insulin: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2089224-overview",
+      "route": "common",
+      "chunk_id": "41b085922049bec01938_21",
+      "distance": 0.4606,
+      "excerpt": "conditions are associated with increased insulin secretion? Which conditions are associated with decreased insulin excretion? Which conditions are associated with beta-cell destruction caused by decreased insulin levels? How are samples collected for insulin testing and what methods are used for analysis? What instructions should be given to patients prior to insulin testing? What is the biosynthesis of insulin? What is the function of insulin? What is insulin secretion? When is insulin testing indicated? Which factors can falsely elevate insulin levels? Which factors can falsely decrease"
+    },
+    {
+      "id": "rag-75f3cb0db389",
+      "title": "Serum Sodium: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2099065-overview",
+      "route": "common",
+      "chunk_id": "96e7842a904a63682b79_11",
+      "distance": 0.4944,
+      "excerpt": "affects the amount of sodium excreted in the urine. Indications/applications Indications for testing of serum sodium/serum electrolytes are as follows: Routine evaluation Assessing water balance Assessing acid-base balance Heart failure Renal disease Hepatic disease Signs or symptoms of hypernatremia (anorexia, nausea or vomiting, altered mental status [lethargy, irritability, stupor, coma], musculoskeletal symptoms [twitching, hyperreflexia, ataxia]) Signs or symptoms of hyponatremia (anorexia, nausea or vomiting, altered mental status [difficulty concentrating, confusion, lethargy,"
+    },
+    {
+      "id": "rag-c213cde023e1",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "route": "common",
+      "chunk_id": "533df8c4e1c8cc2bd460_3",
+      "distance": 0.5173,
+      "excerpt": "All observed symptoms and each one s severity Duration of the reaction Treatment provided and clinical response to treatment Most recent reaction Physical examination findings are most useful for the following: Assessing nutritional status, growth parameters, and signs of other allergic disease Helping to rule out other conditions that may mimic food allergy See Clinical Presentation for more detail. Diagnosis Laboratory studies that may be helpful include the following: Specific immunoglobulin E (IgE) antibody testing: Positive results primarily denote sensitization and may not confirm"
+    },
+    {
+      "id": "rag-c0f00e35308c",
+      "title": "CA 125: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087557-overview",
+      "route": "common",
+      "chunk_id": "013e43e6534e2929231d_31",
+      "distance": 0.516,
+      "excerpt": "CA 125 testing in early detection of hereditary syndromes? How are specimens collected for serum CA 125 testing? Which panels include serum CA 125 testing? What is CA 125? When is serum CA 125 testing indicated in ovarian cancer? What are the limitations of CA 125 testing?"
+    },
+    {
+      "id": "rag-18c3b2bb9285",
+      "title": "Pericardial Fluid Analysis: Reference Range, Interpretation, Background",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2123066-overview",
+      "route": "common",
+      "chunk_id": "5cd8a0287a40de3695ff_13",
+      "distance": 0.5283,
+      "excerpt": "results. The use of tumor marker measurement in pericardial fluid may be helpful in cytologically negative pericardial fluid. The interpretation of these tumor marker levels is similar to that in serum. Malignant pericardial effusion is associated with high levels of tumor markers. However, low levels of these markers do not exclude neoplastic involvement of the pericardial membrane. The cut-off of these markers in pericardial fluid is not yet clear at this point. Moreover, different types of cancer can have different tumor markers. Various tumor markers have been tested, such as"
+    },
+    {
+      "id": "rag-9005e3b63c6a",
+      "title": "Serum Protein Electrophoresis: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087113-overview",
+      "route": "common",
+      "chunk_id": "cc23c1f5f70665a63f35_21",
+      "distance": 0.5226,
+      "excerpt": "(SPEP)? Which factors affect the accuracy of serum protein electrophoresis (SPEP) results? How are specimens collected for serum protein electrophoresis (SPEP)? How are proteins classified in serum protein electrophoresis (SPEP)? What is serum protein electrophoresis (SPEP)? When is serum protein electrophoresis (SPEP) indicated?"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "e0f7c5e43c5018908fb1fe8395c9d94c969ecc1515de23feb69bc7acf2a731d1",
+    "rag_corpus_hash": "a7da5f3874cae078866e0351ac447f15401a5adf371aeaacd723bc251c107d68",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:01:01+00:00"
+  }
+}

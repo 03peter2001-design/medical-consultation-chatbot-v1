@@ -1,0 +1,337 @@
+{
+  "schema_version": 1,
+  "id": "obstetric_issues",
+  "label": "產科問題",
+  "source_order": 33,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "extremity_or_facial_swelling"
+    ],
+    "priority_fields": [
+      "obstetric_symptoms",
+      "decreased_fetal_movement",
+      "extremity_or_facial_swelling"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 9,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "gestational_age_weeks",
+      "prompt": "目前懷孕週數？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "目前懷孕週數？"
+      ]
+    },
+    {
+      "field": "estimated_due_date",
+      "prompt": "預產期是什麼時候？",
+      "kind": "date",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "預產期是什麼時候？"
+      ]
+    },
+    {
+      "field": "obstetric_symptoms",
+      "prompt": "你的症狀是什麼？請將有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "產道出血",
+        "下腹疼痛",
+        "宮縮",
+        "見紅"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你的症狀是什麼？請將有出現的症狀描述給我聽",
+        "產道出血",
+        "下腹疼痛",
+        "宮縮",
+        "見紅"
+      ]
+    },
+    {
+      "field": "symptom_onset_time",
+      "prompt": "症狀是什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是什麼時候開始的？"
+      ]
+    },
+    {
+      "field": "symptom_onset_pattern",
+      "prompt": "症狀是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是突然發作還是逐漸出現的？"
+      ]
+    },
+    {
+      "field": "decreased_fetal_movement",
+      "prompt": "你感覺最近胎動是否有減少？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你感覺最近胎動是否有減少？"
+      ]
+    },
+    {
+      "field": "dizziness_or_syncope",
+      "prompt": "是否感到頭暈或昏厥？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否感到頭暈或昏厥？"
+      ]
+    },
+    {
+      "field": "nausea_or_vomiting",
+      "prompt": "是否感到噁心或嘔吐？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否感到噁心或嘔吐？"
+      ]
+    },
+    {
+      "field": "extremity_or_facial_swelling",
+      "prompt": "是否感到手、腳或臉部腫脹？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否感到手、腳或臉部腫脹？ *"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "產道出血、胎動減少、手腳或臉部腫脹等症狀可能表示胎盤早剝、子癇前症等緊急情況，需優先評估。應考慮監測胎心音與出血量。",
+      "source_ids": [
+        "rag-d91559136cb6",
+        "rag-abd4f1c38022"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-1fcb2648de13",
+      "title": "Postpartum Hemorrhage in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/796785-overview",
+      "route": "common",
+      "chunk_id": "8ac41168cce0447f4c13_2",
+      "distance": 0.4685,
+      "excerpt": "the bleeding pattern since delivery? Intervention guides: Is there a history of transfusion or transfusion reaction? What was the reason for transfusion? Past medical history Allergies Predisposing factors and potential etiology: History of PPH Gravity, parity, length of most recent pregnancy, history of multiple gestations Number of fetuses for the most recent pregnancy Pregnancy complications Spontaneous versus manual delivery of the placenta Vaginal delivery versus cesarean delivery, current and past Cesarean delivery Planned in advance, decided on after a failed vaginal delivery attempt,"
+    },
+    {
+      "id": "rag-d91559136cb6",
+      "title": "Emergent Management of Abruptio Placentae: Overview, History, Physical Examination",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795514-overview",
+      "route": "common",
+      "chunk_id": "01cc57b2e059a8047e3c_10",
+      "distance": 0.5294,
+      "excerpt": "Monitoring of amount of vaginal bleeding Monitoring of fetal heart Treatment of hemorrhagic shock, if needed Emergency Department Care Emergency department (ED) care depends on the stage of gestation and the severity of symptoms. The following steps should be performed: Closely observe the patient Administer supplemental oxygen Perform continuous fetal monitoring;(e optimal duration of monitoring after trauma has not been established, but most placental abruptions occur within 6-9 hours of the event Administer IV fluids Perform aggressive fluid resuscitation to maintain adequate perfusion, if"
+    },
+    {
+      "id": "rag-816d9e89516f",
+      "title": "Diagnostics for Coronavirus Disease 2019 (COVID-19) Patients: What is the incubation period for coronavirus disease 2019 (COVID-19)?, What is the range of illness severity of patients with coronavirus",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500119-overview",
+      "route": "safety",
+      "chunk_id": "1a58575bd82cfe94cf09_20",
+      "distance": 0.5268,
+      "excerpt": "thrombotic complications in hospitalized patients are deep venous thrombosis and pulmonary embolism. Others include the following: Microvascular thrombosis of the toes Clotting of catheters Myocardial injury with ST-segment elevation Large vessel strokes Limited data are available to inform clinical management around prophylaxis or treatment of venous thromboembolism in COVID-19 patients. Several national professional associations provide resources for up-to-date information concerning COVID-19-associated hypercoagulability, including management of anticoagulation. This is a rapidly evolving"
+    },
+    {
+      "id": "rag-c06392c5e11d",
+      "title": "Pregnancy Trauma: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/796979-overview",
+      "route": "common",
+      "chunk_id": "f25efa3cdebc1baa6da2_2",
+      "distance": 0.4903,
+      "excerpt": "Bump: Trauma in Pregnancy. Pathophysiology To evaluate the pregnant patient, the various physiologic changes that occur during pregnancy must be understood. Because balance and coordination are most adversely affected during the third trimester, the frequency of accidental injury is greatest during this period. Although the pregnant patient's blood pressure decreases during pregnancy, changes may not be as great as traditionally thought. Systolic blood pressure changes by only 2-4 mm Hg, while diastolic pressure decreases by 5-15 mm Hg in mid-trimester. In addition, the resting heart rate"
+    },
+    {
+      "id": "rag-ae2d9bdf9367",
+      "title": "Tension Headache: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/792384-overview",
+      "route": "common",
+      "chunk_id": "f48e28c4ace81e12aae6_4",
+      "distance": 0.5108,
+      "excerpt": "as pregnant patients. Background The International Headache Society (IHS) began developing a classification system for headaches in 1985. Now in its third edition, this system includes a tension-type headache (TTH) category, further defined as either episodic (frequent and infrequent) or chronic. In infrequent episodic TTH, headache episodes occur less than one day a month, whereas in frequent episodic TTH, headache episodes occur 1 to 14 days a month. In chronic TTH, headaches occur 15 or more days a month. Headache categories also are defined by whether they are associated with pericranial"
+    },
+    {
+      "id": "rag-abd4f1c38022",
+      "title": "Eclampsia: Overview, Etiologic and Risk Factors for Preeclampsia/Eclampsia, Multiorgan System Effects",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/253960-overview",
+      "route": "common",
+      "chunk_id": "26490f2f49968f2cb641_87",
+      "distance": 0.5374,
+      "excerpt": "for Caesarean delivery? What are the anesthesiology concerns for a patient with eclampsia? Which anesthesia should be used for nonemergency cesarean delivery in patients with eclampsia? What are the cautions for the use of spinal anesthesia in patients with eclampsia? What are the postpartum outpatient monitoring protocols for patients with eclampsia? What is the role of aspirin in the prevention of eclampsia? How should hypertension be managed during pregnancy? What is the role of L-arginine and antioxidant vitamins in the prevention of eclampsia? What is the prevalence of transient deficits"
+    },
+    {
+      "id": "rag-2df6f707fdd3",
+      "title": "Postpartum Hemorrhage in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/796785-overview",
+      "route": "common",
+      "chunk_id": "8ac41168cce0447f4c13_8",
+      "distance": 0.5173,
+      "excerpt": "blood cultures if the patient is febrile or the vaginal blood/discharge is malodorous) Secondary survey Focused physical examination; bedside ultrasonography (FAST) Interventions to address specific presentations as appropriate Uterine atony; uterine rupture; trauma; retained placental tissue; uterine inversion; thrombosis Immediate consultation with an OB/GYN is vital. If no OB/GYN is available, a general surgeon should be consulted. Direct contact with the blood bank is essential for assuring timely arrival of any blood products ordered. See Treatment and Medication for more detail."
+    },
+    {
+      "id": "rag-98ee885c1e8b",
+      "title": "Vaccinations/Immunizations During Pregnancy: Practice Essentials, Vaccines Recommended in Pregnancy, Vaccines Recommended for Pregnant Women with Risk Factors or Special Circumstances",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500098-overview",
+      "route": "common",
+      "chunk_id": "d7cb19a837955dfeee38_110",
+      "distance": 0.5466,
+      "excerpt": "medical record alerts and order sets. Summary A summary of recommendations follows: Women of reproductive age should be screened for their immunization status and any indicated immunizations should be administered according to published adult immunization schedules. In general, inactivated immunizations present a low risk for adverse outcomes in pregnant women and their offspring. With the exception of yellow fever and smallpox, live vaccines are relatively contraindicated in pregnancy. All live vaccines should be avoided during pregnancy unless the risk of disease exposure exceeds the"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "991f45f8edda1f30c6c475b859464eef0d6c80c5772ad65b17b4c2662e2ac5b8",
+    "rag_corpus_hash": "28288a70240081d0a1a82e6a84991448e780bccde8b1c92f5c8fed0892130b8e",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:08:09+00:00"
+  }
+}

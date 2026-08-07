@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "id": "ent_problems",
+  "label": "耳鼻喉問題",
+  "source_order": 14,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "symptom_onset_time",
+      "symptom_pattern"
+    ],
+    "priority_fields": [
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 5,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "symptom_onset_time",
+      "prompt": "症狀什麼時候開始的？ *",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀什麼時候開始的？ *"
+      ]
+    },
+    {
+      "field": "symptom_pattern",
+      "prompt": "症狀是持續性的還是間歇性的？ *",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是持續性的還是間歇性的？ *"
+      ]
+    },
+    {
+      "field": "symptom_location",
+      "prompt": "症狀位置在哪裡？ 比方說哪一側或是雙側耳朵 鼻子 或是喉嚨",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀位置在哪裡？ 比方說哪一側或是雙側耳朵 鼻子 或是喉嚨"
+      ]
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "是否有下列症狀？請將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "發燒或畏寒",
+        "聽力改變，如聽力下降、耳鳴或耳朵悶塞感",
+        "頭暈或眩量",
+        "鼻塞、分泌物或流鼻血",
+        "感到鼻竇區域的疼痛或壓力",
+        "喉嚨痛、吞嚥困難或聲音變化",
+        "感到呼吸困難、喘鳴",
+        "感到面部不對稱",
+        "臉部、脖子或喉嚨有腫脹"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有下列症狀？請將以下有出現的症狀描述給我聽",
+        "發燒或畏寒",
+        "聽力改變，如聽力下降、耳鳴或耳朵悶塞感",
+        "頭暈或眩量",
+        "鼻塞、分泌物或流鼻血",
+        "感到鼻竇區域的疼痛或壓力",
+        "喉嚨痛、吞嚥困難或聲音變化",
+        "感到呼吸困難、喘鳴",
+        "感到面部不對稱",
+        "臉部、脖子或喉嚨有腫脹"
+      ]
+    },
+    {
+      "field": "prior_trauma_or_infection",
+      "prompt": "症狀開始前是否發生過外傷或感染",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀開始前是否發生過外傷或感染"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "若患者回報「呼吸困難、喘鳴」或「臉部、脖子或喉嚨有腫脹」，可能表示呼吸道受阻的風險，應優先評估。RAG 文獻提到呼吸窘迫 (respiratory distress) 是兒童咽後膿瘍 (retropharyngeal abscess) 的徵兆之一。",
+      "source_ids": [
+        "rag-e18c55866cf4"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "warning",
+      "note": "若患者回報「吞嚥困難」合併「喉嚨痛」，應考慮扁桃腺周圍膿瘍 (peritonsillar abscess) 的可能性，此為 RAG 文獻中提到的警訊症狀。",
+      "source_ids": [
+        "rag-2d093a7e33f4"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "chest",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4091,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-23645f44d446",
+      "title": "Multifocal Atrial Tachycardia: Overview of Multifocal Atrial Tachycardia, Pathophysiology of MAT, Etiology of MAT",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155825-overview",
+      "route": "chest",
+      "chunk_id": "64bfd50d23b5cd52a2ce_6",
+      "distance": 0.4425,
+      "excerpt": "to quantify because the underlying disease is the primary determinant of complications. Clinical Presentation Patient history Patients may complain of a variety of symptoms, or more rarely, the disease may be asymptomatic. The most common complaints include the following: Palpitations Shortness of breath Chest pain Lightheadedness Syncopal episode These symptoms may be transient. Physical examination Physical examination findings are typically related to the underlying disease process and are not specific for MAT. The pulse is rapid and irregular, and the first heart sound may be variable. The"
+    },
+    {
+      "id": "rag-2d093a7e33f4",
+      "title": "Peritonsillar Abscess in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764188-overview",
+      "route": "chest",
+      "chunk_id": "ea9c50f6a6987b2f173e_2",
+      "distance": 0.4519,
+      "excerpt": "anteriorly. The patient has a \"hot potato sounding\" voice. Signs and symptoms of peritonsillar abscess Symptoms of PTA usually begin 3-5 days before evaluation and may include the following: Fever Malaise Headache Neck pain Throat pain (more severe on the affected side; occasionally referred to thepsilateral ear) Dysphagia Change in voice Otalgia Odynophagia Physical findings may include the following: Mild-to-moderate distress Fever Tachycardia Dehydration Drooling, salivation, or trouble handling oral secretions Trismus Hot potato or muffled voice Rancid or fetid breath Cervical"
+    },
+    {
+      "id": "rag-848b77940d7a",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "chest",
+      "chunk_id": "bb1164c188b2fc1e1591_2",
+      "distance": 0.4736,
+      "excerpt": "Fever or chills Cough Shortness of breath or difficulty breathing Fatigue Muscle or body aches Headache New loss of taste or smell Sore throat Congestion or runny nose Nausea or vomiting Diarrhea Other reported symptoms have included the following: Sputum production Malaise Respiratory distress What are the signs and symptoms of severe or critical coronavirus disease 2019 (COVID-19)? Severe COVID-19 may be associated with dyspnea, hypoxia, or greater than 50% lung involvement on imaging. Critical COVID-19 may be associated with respiratory failure, shock, or multiorgan system dysfunction."
+    },
+    {
+      "id": "rag-a9ea12560d17",
+      "title": "Acute Sinusitis: Practice Essentials, Background, Anatomy",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/232670-overview",
+      "route": "chest",
+      "chunk_id": "2cf2b5608b381af04fa2_2",
+      "distance": 0.4894,
+      "excerpt": "canthus Referred pain to the vertex, temple, or occiput Postnasal discharge A blocked nose Persistent coughing or pharyngeal irritation Facial pain Hyposmia Symptoms of acute bacterial rhinosinusitis include the following: Facial pain or pressure (especially unilateral) Hyposmia/anosmia Nasal congestion Nasal drainage Postnasal drip Fever Cough Fatigue Maxillary dental pain Ear fullness/pressure The diagnosis of acute bacterial sinusitis should be entertained under either of the following circumstances: Presence of symptoms or signs of acute rhinosinusitis 10 days or more beyond the onset of"
+    },
+    {
+      "id": "rag-d7849198fe2a",
+      "title": "Chronic Sinusitis: Practice Essentials, Background, Anatomy",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/232791-overview",
+      "route": "chest",
+      "chunk_id": "2774c8178c5c95a25ee1_2",
+      "distance": 0.4832,
+      "excerpt": "but it may begin suddently as an upper respiratory tract infection or acute sinusitis that fails to resolve. Symptoms of CRS include the following: Nasal obstruction, blockage, congestion, or stuffiness; nasal discharge (any); postnasal drip; sneezing Facial fullness, discomfort, pain, and headache (more with nasal polyposis); stuffy ears Sore throat, fetid breath, dental pain (upper teeth), unpleasant taste, hyposmia or anosmia, anorexia Chronic unproductive cough (primarily in children) Malaise, easy fatigability Visual disturbances Exacerbation of asthma Unexplained fever Diagnosis of"
+    },
+    {
+      "id": "rag-65b16e084fa2",
+      "title": "Trichinosis (Trichinellosis): Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230490-overview",
+      "route": "safety",
+      "chunk_id": "18637b5c7017fc509666_17",
+      "distance": 0.4505,
+      "excerpt": "Those with mild symptoms improve in 2-3 weeks. Symptoms associated with heavy infections may persist for 2-3 months. Factors that may affect morbidity include the quantity of larvae ingested, the species of Trichinella (most notably T spiralis), and the immune status of the host. Patients succumb to exhaustion, pneumonia, pulmonary embolism, encephalitis, or cardiac failure and/or arrhythmia. Death from trichinosis usually occurs in 4-8 weeks but may occur as early as in 2-3 weeks. Race Although Trichinella infections may be related to cultural differences in food cooking and storing methods"
+    },
+    {
+      "id": "rag-e18c55866cf4",
+      "title": "Retropharyngeal Abscess: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764421-overview",
+      "route": "safety",
+      "chunk_id": "77deb79ba058e8b1d0d2_2",
+      "distance": 0.4997,
+      "excerpt": "adenopathy Fever Drooling Stridor Torticollis Trismus Physical signs of RPA in infants and children include the following: Cervical adenopathy Retropharyngeal bulge - Do not palpate in children Fever Stridor Torticollis Neck stiffness Drooling Agitation Neck mass Lethargy Respiratory distress Trismus Change in vocal quality Tonsillar displacement Associated signs, including tonsillitis, peritonsillitis, pharyngitis, and otitis media Workup in retropharyngeal abscess Laboratory studies include the following: Complete blood count (CBC) Blood cultures - Indicated before administration of"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "ca3437755c1764631bced98b6eb91170e8a5392b33463f0c359cff9227bb3eaf",
+    "rag_corpus_hash": "81404e65a952e25fbc0bf5cf12f18995441780d1187b35ec89a3533064c2a38d",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:04:47+00:00"
+  }
+}

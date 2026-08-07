@@ -1,0 +1,415 @@
+{
+  "schema_version": 1,
+  "id": "gunshot_wound",
+  "label": "槍傷",
+  "source_order": 22,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "location_of_wound",
+      "active_bleeding"
+    ],
+    "priority_fields": [
+      "active_bleeding",
+      "bleeding_amount",
+      "signs_of_shock",
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 12,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "time_of_injury",
+      "prompt": "什麼時候發生槍傷的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼時候發生槍傷的？"
+      ]
+    },
+    {
+      "field": "location_of_wound",
+      "prompt": "槍傷的位置在頭 胸 腹 背 四肢 還是其他地方？ *",
+      "kind": "choice",
+      "options": [
+        "頭",
+        "胸",
+        "腹",
+        "背",
+        "四肢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "槍傷的位置在頭 胸 腹 背 四肢 還是其他地方？ *"
+      ]
+    },
+    {
+      "field": "wound_entry_exit",
+      "prompt": "槍傷是否有出入口還是只有入口而已？",
+      "kind": "choice",
+      "options": [
+        "有出入口",
+        "只有入口"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "槍傷是否有出入口還是只有入口而已？"
+      ]
+    },
+    {
+      "field": "active_bleeding",
+      "prompt": "現在是否還在出血？ *",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "現在是否還在出血？ *"
+      ]
+    },
+    {
+      "field": "bleeding_amount",
+      "prompt": "出血量是輕微 中等還是大量呢？",
+      "kind": "choice",
+      "options": [
+        "輕微",
+        "中等",
+        "大量"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "出血量是輕微 中等還是大量呢？"
+      ]
+    },
+    {
+      "field": "pain_near_wound",
+      "prompt": "槍傷附近是否有疼痛？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "槍傷附近是否有疼痛？"
+      ]
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "是否有以下症狀？請將有出現的症狀描述給我聽 也可以補充其他症狀",
+      "kind": "choice",
+      "options": [
+        "意識改變、頭暈或昏厥",
+        "呼吸異常",
+        "心跳與脈搏異常",
+        "劇烈疼痛",
+        "無法移動受傷部位",
+        "皮膚蒼白或冒冷汗"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有以下症狀？請將有出現的症狀描述給我聽 也可以補充其他症狀",
+        "意識改變、頭暈或昏厥",
+        "呼吸異常",
+        "心跳與脈搏異常",
+        "劇烈疼痛",
+        "無法移動受傷部位",
+        "皮膚蒼白或冒冷汗"
+      ]
+    },
+    {
+      "field": "signs_of_infection",
+      "prompt": "槍傷是否有感染的跡象（例如紅腫、發熱、化膿）？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "槍傷是否有感染的跡象（例如紅腫、發熱、化膿）？"
+      ]
+    },
+    {
+      "field": "other_injuries",
+      "prompt": "是否有其他相關傷口或損傷？若有 請描述",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有其他相關傷口或損傷？若有 請描述"
+      ]
+    },
+    {
+      "field": "signs_of_shock",
+      "prompt": "病人是否有出現休克的症狀？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人是否有出現休克的症狀？"
+      ]
+    },
+    {
+      "field": "medical_history",
+      "prompt": "病人是否有其他慢性疾病或服用的藥物？  若有 請描述",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人是否有其他慢性疾病或服用的藥物？  若有 請描述"
+      ]
+    },
+    {
+      "field": "first_aid_received",
+      "prompt": "病人是否有接受過任何緊急處理或急救措施？ 若有 請描述",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人是否有接受過任何緊急處理或急救措施？ 若有 請描述"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "槍傷是嚴重的醫療緊急情況，可能導致快速失血、休克、重要器官損傷甚至死亡。此問卷不應取代或延遲尋求專業緊急醫療救護。應立即啟動創傷緊急應變流程。",
+      "source_ids": [
+        "rag-4aed519f0bbc"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "warning",
+      "note": "應優先評估出血量、休克症狀（如意識改變、皮膚蒼白、冒冷汗）以及呼吸、心跳等生命體徵。胸部或腹部槍傷可能造成內出血或器官損傷，需要高度警覺。",
+      "source_ids": [
+        "rag-483847047375",
+        "rag-4aed519f0bbc"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "chest",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4165,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-483847047375",
+      "title": "Blast Injuries: Practice Essentials, Background, Frequency",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822587-overview",
+      "route": "chest",
+      "chunk_id": "c78be2121e6d4a51472a_9",
+      "distance": 0.5013,
+      "excerpt": "symptoms Abnormal findings on chest auscultation Visible external signs of thoracic trauma If significant abdominal pain is present, consider an immediate abdominal radiographic series (flat and upright films) or abdominal CT to detect pneumoperitoneum from enteric rupture. Intestinal barotrauma is more common with underwater injuries than air blast injuries. Focused abdominal sonography for trauma (FAST) is a potentially useful tool for rapidly screening patients, especially in the setting of multiple seriously injured victims. A positive FAST examination in an unstable patient is an"
+    },
+    {
+      "id": "rag-0f8558e93767",
+      "title": "Third-Degree Atrioventricular Block (Complete Heart Block): Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/162007-overview",
+      "route": "chest",
+      "chunk_id": "5a09f9706b7af26e7aaf_34",
+      "distance": 0.5011,
+      "excerpt": "Discuss signs and symptoms with patients, including lightheadedness, palpitations (skipping, fluttering in the chest), fatigue, chest pressure or pain, shortness of breath, or fainting spells. Occasionally, patients can be asymptomatic. Explain that the diagnosis is made using one or more of the following: electrocardiography (ECG/EKG), Holter monitoring, an event recorder, electrophysiologic study, etc, and that treatment usually includes implantation of pacemaker. Clinical Presentation"
+    },
+    {
+      "id": "rag-848b77940d7a",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "chest",
+      "chunk_id": "bb1164c188b2fc1e1591_2",
+      "distance": 0.5805,
+      "excerpt": "Fever or chills Cough Shortness of breath or difficulty breathing Fatigue Muscle or body aches Headache New loss of taste or smell Sore throat Congestion or runny nose Nausea or vomiting Diarrhea Other reported symptoms have included the following: Sputum production Malaise Respiratory distress What are the signs and symptoms of severe or critical coronavirus disease 2019 (COVID-19)? Severe COVID-19 may be associated with dyspnea, hypoxia, or greater than 50% lung involvement on imaging. Critical COVID-19 may be associated with respiratory failure, shock, or multiorgan system dysfunction."
+    },
+    {
+      "id": "rag-1508e9f4ed4a",
+      "title": "Torsade de Pointes: Overview, Pathophysiology, Etiology of Torsade",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1950863-overview",
+      "route": "chest",
+      "chunk_id": "a6e96ffa12ff589ef997_27",
+      "distance": 0.5131,
+      "excerpt": "(leading palpitations). Pallor and diaphoresis may be noted, especially with a sustained episode. Other physical signs depend on the etiology of torsade. Differential Diagnosis for Torsade The differential diagnosis of torsade de pointes includes the following: Ventricular Tachycardia Atrial Tachycardia Syncope Dialysis Complications of Chronic Renal Failure Antidysrhythmic Toxicity Cough, Cold, and Allergy Preparation Toxicity Ventricular Fibrillation Sudden Cardiac Death Other considerations are the differentiation of acquired long QT syndrome from congenital long QT syndrome. In addition,"
+    },
+    {
+      "id": "rag-4aed519f0bbc",
+      "title": "Myocardial Rupture: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/156455-overview",
+      "route": "chest",
+      "chunk_id": "c5497a37eb254ad4be2e_9",
+      "distance": 0.5948,
+      "excerpt": "the pericardial wound is obliterated) or intrathoracic hemorrhage. Pericardial tamponade is more common with stab wounds, whereas hypovolemic shock is more frequently associated with gunshot wounds. Myocardial abscesses accompanying infective endocarditis may rupture transmurally, resulting in VSD or pericardial tamponade (pyohemopericardium). Such abscesses are observed most commonly in the setting of Staphylococcus aureus endocarditis involving prosthetic valves in the aortic position. Rarely, myocardial necrosis due to acute myocarditis, tuberculosis, or sarcoidosis may result in myocardial"
+    },
+    {
+      "id": "rag-04d05153821c",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "route": "safety",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "distance": 0.5404,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the"
+    },
+    {
+      "id": "rag-6ee4590da383",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "safety",
+      "chunk_id": "53fc3e4f98765d889be9_32",
+      "distance": 0.542,
+      "excerpt": "Subarachnoid hemorrhage - Emergency neuroradiology. Axial CT scan at the level of the mesencephalic cistern shows subarachnoid hemorrhage in the left sylvian fissure (green arrow) and the ambient cistern (red arrow). At least part of the density in the ambient cistern represents the aneurysm itself. Cerebral aneurysm - Emergency neuroradiology. Cerebral angiogram, anteroposterior projection, of a left vertebral artery injection demonstrates an aneurysm of the tip of the basilar artery (arrow). Parenchymal lesions Focal cortical hemorrhage is common as a sequela of head trauma and may be"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "84d711902b17b258a7343441fe2183f5e78220825e6ffc590e010be892fab11b",
+    "rag_corpus_hash": "6b47859208465fcdbf22a363697cc67c4d5e2fd4af46818ab927f9bf1668a403",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:03:17+00:00"
+  }
+}

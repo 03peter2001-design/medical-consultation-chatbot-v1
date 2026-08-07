@@ -1,0 +1,543 @@
+{
+  "schema_version": 1,
+  "review_status": "provisional",
+  "source": {
+    "path": "docs/疾病問卷.txt",
+    "sha256": "a29718d57d24cfa372a57181add88350ead164d88c98adfb15363e5971236176",
+    "numbered_questionnaires_in_source": 52,
+    "basic_lines_preserved": [
+      "患者基本資料",
+      "1. 詢問性別？是男是女？",
+      "2. 詢問年齡"
+    ],
+    "history_lines_preserved": [
+      "謝謝您提供的資訊。為了您的就醫安全，並讓醫師更完整了解您的病史、用藥與手術紀錄，我們最後要再一次與您進行系統性核對。即使剛才問診中已經提過，也請您協助再次回答問題：",
+      "1. 平時是否有抽煙習慣還是過去曾抽但已戒菸呢?",
+      "2. 過去是否有下列心肺疾病並將過去有的心肺疾病描述給我聽",
+      "高血壓",
+      "心絞痛",
+      "心臟衰竭",
+      "心肌梗塞",
+      "心律不整",
+      "主動脈剝離",
+      "肺栓塞",
+      "肺高壓",
+      "心包模積水",
+      "氣喘",
+      "肺癌",
+      "慢性阻塞型肺病",
+      "支氣管擴張",
+      "氣胸",
+      "中風",
+      "3. 過去是否有下列慢性疾病史並將過去有的慢性疾病描述給我聽 如果以下沒有列出或是有得過自體免疫疾病或癌症的話 請說出具體病名",
+      "糖尿病",
+      "慢性腎病",
+      "高血脂",
+      "肝硬化",
+      "自體免疫疾病",
+      "癌症",
+      "其他",
+      "4. 之前是否曾接受過以下藥物治療並將過去有接受過的藥物治療描述給我聽",
+      "抗組織胺",
+      "腎上腺素",
+      "類固醇",
+      "以上皆無",
+      "5. 是否接受過下列手術並將過去有接受過的手術描述給我聽",
+      "心臟支架",
+      "心臟血管繞道手術",
+      "主動脈人工血管置換",
+      "主動脈支架",
+      "心律調節器",
+      "氣胸胸腔鏡手術",
+      "腦部手術",
+      "水腦引流",
+      "頸動脈手術",
+      "腦部放射線治療",
+      "頸椎手術",
+      "其他 (請描述手術名稱)",
+      "6. 目前是否有正在服用的藥物?若有 請告知藥物名稱",
+      "7. 是否有特殊藥物和食物過敏? 若有 請描述對哪些特殊藥物或食物過敏",
+      "您的問診編號為 XXXXX",
+      "請您耐心等候叫號"
+    ]
+  },
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "generated_at": "2026-08-07T09:17:41+00:00"
+  },
+  "complete": true,
+  "missing_orders": [],
+  "questionnaires": [
+    {
+      "order": 1,
+      "id": "chest_pain_questionnaire",
+      "label": "胸痛",
+      "file": "01.json",
+      "question_count": 9,
+      "review_note_count": 2,
+      "live_route_overlap": "chest"
+    },
+    {
+      "order": 2,
+      "id": "headache_questionnaire",
+      "label": "頭痛",
+      "file": "02.json",
+      "question_count": 10,
+      "review_note_count": 1,
+      "live_route_overlap": "headache"
+    },
+    {
+      "order": 3,
+      "id": "allergies_hives_drug_reactions_stings",
+      "label": "過敏 蕁麻疹 藥物反應 螯傷",
+      "file": "03.json",
+      "question_count": 6,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 4,
+      "id": "back_pain",
+      "label": "背痛",
+      "file": "04.json",
+      "question_count": 10,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 5,
+      "id": "bite",
+      "label": "咬傷",
+      "file": "05.json",
+      "question_count": 7,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 6,
+      "id": "body_ache",
+      "label": "身體酸痛",
+      "file": "06.json",
+      "question_count": 8,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 7,
+      "id": "burns",
+      "label": "燒傷",
+      "file": "07.json",
+      "question_count": 9,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 8,
+      "id": "cardiac_arrest",
+      "label": "心臟驟停",
+      "file": "08.json",
+      "question_count": 9,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 9,
+      "id": "cardiovascular_issues",
+      "label": "心血管問題",
+      "file": "09.json",
+      "question_count": 10,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 10,
+      "id": "seizure_epilepsy",
+      "label": "抽搐 癲癇",
+      "file": "10.json",
+      "question_count": 8,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 11,
+      "id": "toothache",
+      "label": "牙痛",
+      "file": "11.json",
+      "question_count": 4,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 12,
+      "id": "diabetes_questionnaire",
+      "label": "糖尿病問題",
+      "file": "12.json",
+      "question_count": 10,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 13,
+      "id": "dizziness",
+      "label": "暈眩",
+      "file": "13.json",
+      "question_count": 10,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 14,
+      "id": "ent_problems",
+      "label": "耳鼻喉問題",
+      "file": "14.json",
+      "question_count": 5,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 15,
+      "id": "eye_problems",
+      "label": "眼睛問題",
+      "file": "15.json",
+      "question_count": 8,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 16,
+      "id": "fall",
+      "label": "跌倒",
+      "file": "16.json",
+      "question_count": 9,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 17,
+      "id": "fever",
+      "label": "發燒",
+      "file": "17.json",
+      "question_count": 7,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 18,
+      "id": "low_back_pain",
+      "label": "腰痛",
+      "file": "18.json",
+      "question_count": 12,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 19,
+      "id": "fluid_nutrition_changes",
+      "label": "液體/營養改變",
+      "file": "19.json",
+      "question_count": 10,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 20,
+      "id": "foreign_body",
+      "label": "異物",
+      "file": "20.json",
+      "question_count": 6,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 21,
+      "id": "genitourinary_system_problems",
+      "label": "泌尿生殖系統問題",
+      "file": "21.json",
+      "question_count": 20,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 22,
+      "id": "gunshot_wound",
+      "label": "槍傷",
+      "file": "22.json",
+      "question_count": 12,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 23,
+      "id": "gynecological_issues",
+      "label": "婦科問題",
+      "file": "23.json",
+      "question_count": 10,
+      "review_note_count": 3,
+      "live_route_overlap": null
+    },
+    {
+      "order": 24,
+      "id": "bleeding",
+      "label": "出血",
+      "file": "24.json",
+      "question_count": 6,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 25,
+      "id": "industrial_machinery_accident",
+      "label": "工業機械事故",
+      "file": "25.json",
+      "question_count": 11,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 26,
+      "id": "infection",
+      "label": "感染",
+      "file": "26.json",
+      "question_count": 19,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 27,
+      "id": "accidental_ingestion",
+      "label": "意外吞食",
+      "file": "27.json",
+      "question_count": 7,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 28,
+      "id": "laceration",
+      "label": "撕裂傷",
+      "file": "28.json",
+      "question_count": 7,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 29,
+      "id": "supplemental_medications",
+      "label": "補充藥物",
+      "file": "29.json",
+      "question_count": 12,
+      "review_note_count": 0,
+      "live_route_overlap": null
+    },
+    {
+      "order": 30,
+      "id": "neck_pain",
+      "label": "頸部疼痛",
+      "file": "30.json",
+      "question_count": 17,
+      "review_note_count": 3,
+      "live_route_overlap": null
+    },
+    {
+      "order": 31,
+      "id": "needlestick_injury",
+      "label": "針刺傷",
+      "file": "31.json",
+      "question_count": 5,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 32,
+      "id": "neurological_issues",
+      "label": "神經系統問題",
+      "file": "32.json",
+      "question_count": 12,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 33,
+      "id": "obstetric_issues",
+      "label": "產科問題",
+      "file": "33.json",
+      "question_count": 9,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 34,
+      "id": "orthopedics_external_injury",
+      "label": "骨科外",
+      "file": "34.json",
+      "question_count": 10,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 35,
+      "id": "intentional_drug_overdose",
+      "label": "蓄意藥物過量",
+      "file": "35.json",
+      "question_count": 8,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 36,
+      "id": "peripheral_vascular_leg_pain",
+      "label": "週邊血管 腿痛",
+      "file": "36.json",
+      "question_count": 17,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 37,
+      "id": "psychosocial_issues",
+      "label": "精神 社會問題",
+      "file": "37.json",
+      "question_count": 11,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 38,
+      "id": "respiratory_issues",
+      "label": "呼吸問題",
+      "file": "38.json",
+      "question_count": 7,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 39,
+      "id": "skin_problem_trauma",
+      "label": "皮膚問題 外傷",
+      "file": "39.json",
+      "question_count": 7,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 40,
+      "id": "stab_wound",
+      "label": "刺傷",
+      "file": "40.json",
+      "question_count": 11,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 41,
+      "id": "stroke",
+      "label": "中風",
+      "file": "41.json",
+      "question_count": 6,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 42,
+      "id": "substance_abuse",
+      "label": "物質濫用",
+      "file": "42.json",
+      "question_count": 12,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 43,
+      "id": "syncope",
+      "label": "昏倒 暈厥",
+      "file": "43.json",
+      "question_count": 10,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 44,
+      "id": "body_temperature_related",
+      "label": "體溫相關",
+      "file": "44.json",
+      "question_count": 12,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 45,
+      "id": "motor_vehicle_accident_injury",
+      "label": "交通事故傷害",
+      "file": "45.json",
+      "question_count": 13,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 46,
+      "id": "trauma",
+      "label": "創傷",
+      "file": "46.json",
+      "question_count": 10,
+      "review_note_count": 3,
+      "live_route_overlap": null
+    },
+    {
+      "order": 47,
+      "id": "loss_of_consciousness",
+      "label": "失去意識",
+      "file": "47.json",
+      "question_count": 8,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 48,
+      "id": "weakness",
+      "label": "無力虛弱",
+      "file": "48.json",
+      "question_count": 5,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    },
+    {
+      "order": 49,
+      "id": "vaginal_bleeding",
+      "label": "陰道出血",
+      "file": "49.json",
+      "question_count": 9,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 50,
+      "id": "assault_and_rape",
+      "label": "攻擊 強暴",
+      "file": "50.json",
+      "question_count": 12,
+      "review_note_count": 2,
+      "live_route_overlap": null
+    },
+    {
+      "order": 51,
+      "id": "abdominal_problems",
+      "label": "腹部問題",
+      "file": "51.json",
+      "question_count": 26,
+      "review_note_count": 1,
+      "live_route_overlap": "abdomen"
+    },
+    {
+      "order": 52,
+      "id": "severe_dehydration",
+      "label": "嚴重脫水",
+      "file": "52.json",
+      "question_count": 8,
+      "review_note_count": 1,
+      "live_route_overlap": null
+    }
+  ]
+}

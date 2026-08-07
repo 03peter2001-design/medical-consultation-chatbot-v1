@@ -1,0 +1,324 @@
+{
+  "schema_version": 1,
+  "id": "vaginal_bleeding",
+  "label": "陰道出血",
+  "source_order": 49,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "bleeding_amount_pads_per_day",
+      "bleeding_related_to_menstrual_cycle",
+      "accompanying_abdominal_or_back_pain",
+      "pregnancy_status",
+      "previous_similar_episodes"
+    ],
+    "priority_fields": [
+      "pregnancy_status",
+      "bleeding_amount_pads_per_day",
+      "accompanying_abdominal_or_back_pain"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 9,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_weakness",
+      "prompt": "什麼時候開始覺得無力",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼時候開始覺得無力"
+      ]
+    },
+    {
+      "field": "bleeding_amount_pads_per_day",
+      "prompt": "出血的量一天大概要用幾片棉墊？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "出血的量一天大概要用幾片棉墊？ *"
+      ]
+    },
+    {
+      "field": "bleeding_related_to_menstrual_cycle",
+      "prompt": "出血跟月經週期是否有關？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "出血跟月經週期是否有關？ *"
+      ]
+    },
+    {
+      "field": "last_menstrual_period",
+      "prompt": "最後一次月經是什麼時候？",
+      "kind": "date",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "最後一次月經是什麼時候？"
+      ]
+    },
+    {
+      "field": "accompanying_abdominal_or_back_pain",
+      "prompt": "出血時是否伴隨有下腹部疼痛或是背痛？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "出血時是否伴隨有下腹部疼痛或是背痛？ *"
+      ]
+    },
+    {
+      "field": "pregnancy_status",
+      "prompt": "目前是否懷孕，或是否有可能懷孕？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "目前是否懷孕，或是否有可能懷孕？ *"
+      ]
+    },
+    {
+      "field": "recent_gynecological_procedures",
+      "prompt": "最近是否有接受過任何婦產科相關侵入性治療或是手術？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "最近是否有接受過任何婦產科相關侵入性治療或是手術？"
+      ]
+    },
+    {
+      "field": "previous_similar_episodes",
+      "prompt": "之前是否有過類似的情形？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "之前是否有過類似的情形？ *"
+      ]
+    },
+    {
+      "field": "uterine_fibroids_diagnosis",
+      "prompt": "是否被診斷過子宮肌瘤過？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否被診斷過子宮肌瘤過？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "info",
+      "note": "RAG 文獻指出，懷孕可能是導致嚴重 COVID-19 的風險因子之一。在評估陰道出血時，應考慮到這一點。",
+      "source_ids": [
+        "rag-0ba08919556c"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "info",
+      "note": "RAG 文獻提到，生育年齡女性的月經過多是先天性第七因子缺乏症的常見初步出血症狀之一。",
+      "source_ids": [
+        "rag-c56fe5f68424"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4754,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-c0f00e35308c",
+      "title": "CA 125: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087557-overview",
+      "route": "common",
+      "chunk_id": "013e43e6534e2929231d_31",
+      "distance": 0.507,
+      "excerpt": "CA 125 testing in early detection of hereditary syndromes? How are specimens collected for serum CA 125 testing? Which panels include serum CA 125 testing? What is CA 125? When is serum CA 125 testing indicated in ovarian cancer? What are the limitations of CA 125 testing?"
+    },
+    {
+      "id": "rag-1c2d5666ef34",
+      "title": "Trigonitis: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/438185-overview",
+      "route": "common",
+      "chunk_id": "7c959a69d50ebc8da140_11",
+      "distance": 0.4893,
+      "excerpt": "understanding of this elusive disease process. Epidemiology The frequency of trigonitis differs in various reports, but the literature consistently shows that trigonitis occurs almost exclusively in women of childbearing age. Nonkeratinizing squamous metaplasia of the bladder neck and trigone can be seen in 50-70% of premenopausal women and is considered a normal variant. In a study by Wiener et al that examined 100 grossly normal bladders at autopsy, 46% of premenopausal and postmenopausal women were to found to have squamous metaplasia; in comparison, only 7% of men were found to have"
+    },
+    {
+      "id": "rag-c56fe5f68424",
+      "title": "Factor VII Assay: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2085270-overview",
+      "route": "common",
+      "chunk_id": "7d25c92390b95ad3bd59_2",
+      "distance": 0.502,
+      "excerpt": "with congenital factor VII deficiency, initial bleeding symptoms included skin bruising (58%), epistaxis (56%), and menorrhagia (47% of reproductive-age females). Moreover, more than 100 bleeds (any severity) were reported to have occurred in 24% of the patients over the previous year. Collection and Panels See the list below: Specimen: Plasma Container: Blue-top vacuum tube Collection method: Routine venipuncture All samples must be sent in a sealed, leak-proof container marked with a biohazard sticker to comply with Occupational Safety and Health Administration (OSHA) safety standards."
+    },
+    {
+      "id": "rag-0ba08919556c",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "common",
+      "chunk_id": "bb1164c188b2fc1e1591_7",
+      "distance": 0.5591,
+      "excerpt": "Sickle cell disease Type 2 diabetes mellitus The following are underlying conditions that may represent an increased risk of severe COVID-19: Asthma (moderate to severe) Cerebrovascular disease Cystic fibrosis Immunocompromised state due to blood or bone marrow transplant, immunodeficiencies, HIV infection, corticosteroid use (or other medications that weaken the immune system) Neurologic conditions (eg, dementia) Liver disease Pregnancy Pulmonary fibrosis Smoking Thalassemia Type 1 diabetes mellitus People who live in a nursing home or long-term care facility are also at a higher risk of"
+    },
+    {
+      "id": "rag-8ee0b17b9e51",
+      "title": "Abnormal (Dysfunctional) Uterine Bleeding in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795587-overview",
+      "route": "common",
+      "chunk_id": "5e63425327f98ba541a6_11",
+      "distance": 0.5075,
+      "excerpt": "suppression leading to abnormal uterine bleeding due to disruption along the hypothalamus-pituitary-ovarian pathway. Bleeding disturbances are common with combination oral contraceptive pills as well as progestin-only methods of birth control. However, the incidence of bleeding decreases significantly with time. Therefore, only counseling and reassurance are required during the early months of use. Contraceptive intrauterine devices (IUDs) can cause variable vaginal bleeding for the first few cycles after placement and intermittent spotting subsequently. The progesterone impregnated IUD"
+    },
+    {
+      "id": "rag-e0bcef352b95",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "common",
+      "chunk_id": "bb1164c188b2fc1e1591_6",
+      "distance": 0.5665,
+      "excerpt": "Emergency medical attention should be sought if the patient develops trouble breathing, persistent pain or chest pressure, new confusion, inability to awaken or to stay awake, or bluish lips or face. Who is at risk for severe coronavirus disease 2019 (COVID-19)? Risk factors for severe COVID-19, regardless of age, include the following: Chronic kidney disease COPD Immunocompromised state due to solid organ transplant Obesity (BMI ≥30) Serious heart conditions (eg, heart failure, coronary artery disease, cardiomyopathies) Sickle cell disease Type 2 diabetes mellitus The following are underlying"
+    },
+    {
+      "id": "rag-65b16e084fa2",
+      "title": "Trichinosis (Trichinellosis): Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230490-overview",
+      "route": "safety",
+      "chunk_id": "18637b5c7017fc509666_17",
+      "distance": 0.5454,
+      "excerpt": "Those with mild symptoms improve in 2-3 weeks. Symptoms associated with heavy infections may persist for 2-3 months. Factors that may affect morbidity include the quantity of larvae ingested, the species of Trichinella (most notably T spiralis), and the immune status of the host. Patients succumb to exhaustion, pneumonia, pulmonary embolism, encephalitis, or cardiac failure and/or arrhythmia. Death from trichinosis usually occurs in 4-8 weeks but may occur as early as in 2-3 weeks. Race Although Trichinella infections may be related to cultural differences in food cooking and storing methods"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "e978bbb5e5857fd0fe20e77d9813ddf4888dc27bef8a6126b492c7d5a494ac7e",
+    "rag_corpus_hash": "c94763b76c39833444c865c8e8895be43f91258a4d85fb5e60111fd8cd08144f",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:09:04+00:00"
+  }
+}

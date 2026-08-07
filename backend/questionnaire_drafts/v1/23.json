@@ -1,0 +1,373 @@
+{
+  "schema_version": 1,
+  "id": "gynecological_issues",
+  "label": "婦科問題",
+  "source_order": 23,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "symptom_description",
+      "associated_symptoms",
+      "pregnancy_status"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "symptom_onset_time",
+      "prompt": "症狀是什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是什麼時候開始的？"
+      ]
+    },
+    {
+      "field": "symptom_onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然發作還是逐漸出現的？"
+      ]
+    },
+    {
+      "field": "symptom_frequency",
+      "prompt": "症狀是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是持續性的還是間歇性的？"
+      ]
+    },
+    {
+      "field": "symptom_location",
+      "prompt": "你在下腹部還是骨盆區感覺到症狀？",
+      "kind": "choice",
+      "options": [
+        "下腹部",
+        "骨盆區"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你在下腹部還是骨盆區感覺到症狀？"
+      ]
+    },
+    {
+      "field": "symptom_description",
+      "prompt": "你如何描述這些症狀？比如疼痛 痙攣 出血 搔癢或是感覺有分泌物",
+      "kind": "choice",
+      "options": [
+        "疼痛",
+        "痙攣",
+        "出血",
+        "搔癢",
+        "感覺有分泌物"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你如何描述這些症狀？比如疼痛 痙攣 出血 搔癢或是感覺有分泌物"
+      ]
+    },
+    {
+      "field": "symptom_triggering_events",
+      "prompt": "症狀開始前是否有像是性行為 外傷 服用新藥 或是激烈運動的事件呢？",
+      "kind": "choice",
+      "options": [
+        "性行為",
+        "外傷",
+        "服用新藥",
+        "激烈運動"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀開始前是否有像是性行為 外傷 服用新藥 或是激烈運動的事件呢？"
+      ]
+    },
+    {
+      "field": "last_menstrual_period",
+      "prompt": "最後一次月經是什麼時候？",
+      "kind": "date",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "最後一次月經是什麼時候？"
+      ]
+    },
+    {
+      "field": "menstrual_regularity",
+      "prompt": "你的月經是否規律？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你的月經是否規律？"
+      ]
+    },
+    {
+      "field": "pregnancy_status",
+      "prompt": "你目前是否懷孕或可能懷孕？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你目前是否懷孕或可能懷孕？"
+      ]
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "是否有以下症狀？請將有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "發燒或畏寒",
+        "感到噁心或嘔吐",
+        "感到排尿困難、頻尿、尿急或尿液顏色或氣味改變",
+        "生殖器區域是否有皮疹、潰瘍、腫脹或其他皮膚變化"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有以下症狀？請將有出現的症狀描述給我聽",
+        "發燒或畏寒",
+        "感到噁心或嘔吐",
+        "感到排尿困難、頻尿、尿急或尿液顏色或氣味改變",
+        "生殖器區域是否有皮疹、潰瘍、腫脹或其他皮膚變化"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "info",
+      "note": "下腹痛、異常分泌物、發燒畏寒等症狀可能與骨盆腔發炎 (PID) 有關，需與闌尾炎、子宮內膜異位症、泌尿道感染等鑑別診斷。",
+      "source_ids": [
+        "rag-a3860ab9b6ce"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "info",
+      "note": "排尿困難、頻尿、尿急等症狀可能與泌尿道感染或膀胱三角區炎 (trigonitis) 有關。",
+      "source_ids": [
+        "rag-9c2f50a40a64"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "info",
+      "note": "生殖器區域的搔癢、皮疹、分泌物可能與念珠菌感染有關，例如外陰陰道念珠菌病 (VVC)。",
+      "source_ids": [
+        "rag-5c35ebfa833e"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-9c2f50a40a64",
+      "title": "Trigonitis: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/438185-overview",
+      "route": "abdomen",
+      "chunk_id": "7c959a69d50ebc8da140_2",
+      "distance": 0.4451,
+      "excerpt": "etiology of trigonitis is unknown, the condition usually occurs in response to an irritative insult to the bladder trigone (eg, from a long-term indwelling catheter) or an infectious process. Patients with squamous metaplastic changes in the bladder may be asymptomatic or may present with irritative voiding symptoms. Diagnosis of trigonitis requires cystoscopy (see Workup). Asymptomatic patients do not require treatment. Several treatment approaches have been tried in patients with symptomatic trigonitis, including medications and surgery. See Treatment. Trigonitis is a benign lesion that does"
+    },
+    {
+      "id": "rag-a3860ab9b6ce",
+      "title": "Pelvic Inflammatory Disease: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/256448-overview",
+      "route": "abdomen",
+      "chunk_id": "aa487a13953bac9fe331_1",
+      "distance": 0.4632,
+      "excerpt": "transmitted disease (STD). Signs and symptoms of pelvic inflammatory disease The diagnosis of acute PID is primarily based on historical and clinical findings. Clinical manifestations of PID vary widely. Many patients exhibit few or no symptoms, whereas others have acute, serious illness. The most common presenting complaint is lower abdominal pain. Many women report an abnormal vaginal discharge. (See Presentation.) Diagnosis of pelvic inflammatory disease The differential diagnosis includes appendicitis, cervicitis, urinary tract infection, endometriosis, ovarian torsion, and adnexal tumors."
+    },
+    {
+      "id": "rag-735b06c34d7b",
+      "title": "Chronic Pelvic Pain in Men: Practice Essentials, Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/437745-overview",
+      "route": "abdomen",
+      "chunk_id": "164cc724f2b9fd145f51_12",
+      "distance": 0.4907,
+      "excerpt": "and the sensitivity of the pelvic nerves that transmit pain. An increase in NGF has been correlated with the development of CPPS symptoms. Each of the above factors has been individually identified as a culprit in the pathogenesis of CPPS; additionally, at least in some cases, they may interact with each other to cause CPPS. For instance, cytokines may adversely affect the suppression of NGF, leading to a flare of CPPS symptoms. Psychological stress and depression have long been associated with CPPS flare-ups. This observation has led some researchers to mistakenly conclude that CPPS is \"all"
+    },
+    {
+      "id": "rag-42d1bdb1efa9",
+      "title": "Perilymphatic Fistula: Practice Essentials, History of the Procedure, Problem",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/856806-overview",
+      "route": "abdomen",
+      "chunk_id": "946610927a231214762d_2",
+      "distance": 0.4993,
+      "excerpt": "nausea, vomiting). Even cursory examination demonstrates marked instability and nystagmus. Unfortunately, many perilymphatic fistulas (PLFs) do not manifest in a straightforward fashion. A combination of otologic symptoms may result, and symptoms may fluctuate in complex ways that are difficult for the patient to explain. Onset of symptoms may be delayed by several days, or the acute phase may be masked by more serious injuries in other areas. Rotational vertigo may be entirely absent, and disequilibrium may be mild, vague, and episodic. Hearing loss, tinnitus, and aural fullness may come and"
+    },
+    {
+      "id": "rag-28637ee75fee",
+      "title": "Acute Hypopituitarism: Overview, Diagnostic Considerations, Hormone Deficiency Symptoms",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767828-overview",
+      "route": "abdomen",
+      "chunk_id": "87996f6a71b53073e20c_3",
+      "distance": 0.4997,
+      "excerpt": "rate. The setting is not uncommon in which an emergency physician is evaluating a patient with complaints of weakness, fatigue, or altered mental status without a clear diagnosis. Subtle, but still abnormal, vital signs, such as slightly reduced blood pressure or heart rate, may be the only initial clues to suggest a pituitary deficiency rather than a relatively benign etiology. Emergency physicians frequently provide care to patients at risk of developing hypopituitarism. Risk factors include, but are not limited to, TBI, cocaine use, subarachnoid hemorrhage, and postpartum hypotension (a"
+    },
+    {
+      "id": "rag-6a50bd9f6c0e",
+      "title": "Chronic Pelvic Pain in Men: Practice Essentials, Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/437745-overview",
+      "route": "abdomen",
+      "chunk_id": "164cc724f2b9fd145f51_7",
+      "distance": 0.5169,
+      "excerpt": "the causes of CPPS remain unknown, the condition’s symptoms seem to arise from the interaction between psychological factors and immune, neurologic, and endocrine system dysfunction. The number of WBCs (pus cells) found in the prostatic fluid under microscopic examination—long considered the hallmark of this disease process—does not correlate with the degree of pain or with other symptoms experienced by patients with CPPS. Histologic signs of inflammation were found in only one third of all patients diagnosed with CPPS who underwent prostatic biopsy, according to Pontari and Ruggieri’s report,"
+    },
+    {
+      "id": "rag-5c35ebfa833e",
+      "title": "Candidiasis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/213853-overview",
+      "route": "abdomen",
+      "chunk_id": "842e401086ba1f652b28_4",
+      "distance": 0.501,
+      "excerpt": "always reveals oral candidiasis. Nonesophageal gastrointestinal candidiasis The following symptoms may be present: Epigastric pain Nausea and vomiting Abdominal pain Fever and chills Abdominal mass (in some cases) Genitourinary tract candidiasis The types of genitourinary tract candidiasis are as follows: Vulvovaginal candidiasis (VVC) - Erythematous vagina and labia; a thick, curdlike discharge; and a normal cervix upon speculum examination Candida balanitis - Penile pruritus and whitish patches on the penis Candida cystitis - Many patients are asymptomatic, but bladder invasion may result in"
+    },
+    {
+      "id": "rag-272ae8a5d4c0",
+      "title": "Abdominal Hernias: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/189563-overview",
+      "route": "abdomen",
+      "chunk_id": "e0d53447e65d71ab82c2_1",
+      "distance": 0.526,
+      "excerpt": "image below. Anatomic locations for various hernias. Signs and symptoms Hernias may be detected on routine physical examination, or patients with hernias may present because of a complication associated with the hernia. Characteristics of asymptomatic hernias are as follows: Swelling or fullness at the hernia site Aching sensation (radiates into the area of the hernia) No true pain or tenderness upon examination Enlarges with increasing intra-abdominal pressure and/or standing Characteristics of incarcerated hernias are as follows: Painful enlargement of a previous hernia or defect Cannot be"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "ebf604458deea28643cb5e915724695358abc206fadf331ddd0beb9be02779cf",
+    "rag_corpus_hash": "31998f079df1f78ff033a26c507f3efc09774927bfd352b984ed30a2bd5f82df",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:10:50+00:00"
+  }
+}

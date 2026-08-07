@@ -1,0 +1,535 @@
+{
+  "schema_version": 1,
+  "id": "neck_pain",
+  "label": "頸部疼痛",
+  "source_order": 30,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "dyspnea",
+      "pain_radiation",
+      "arm_hand_symptoms",
+      "associated_headache",
+      "fever_chills",
+      "neck_stiffness"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 17,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "pain_onset_time",
+      "prompt": "疼痛何時開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛何時開始的？"
+      ]
+    },
+    {
+      "field": "pain_onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然發作還是逐漸出現的？"
+      ]
+    },
+    {
+      "field": "tender_point",
+      "prompt": "有明顯觸痛點嗎？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "有明顯觸痛點嗎？"
+      ]
+    },
+    {
+      "field": "pain_nature",
+      "prompt": "疼痛是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛是持續性的還是間歇性的？"
+      ]
+    },
+    {
+      "field": "pain_radiation",
+      "prompt": "疼痛是否牽連到肩膀 手臂 胸部 背部 或其他部位？",
+      "kind": "choice",
+      "options": [
+        "肩膀",
+        "手臂",
+        "胸部",
+        "背部",
+        "其他部位"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛是否牽連到肩膀 手臂 胸部 背部 或其他部位？"
+      ]
+    },
+    {
+      "field": "pain_aggravating_factors",
+      "prompt": "什麼情況會讓疼痛加重或是誘發疼痛？比如運動 咳嗽 碰觸 或某些姿勢",
+      "kind": "choice",
+      "options": [
+        "運動",
+        "咳嗽",
+        "碰觸",
+        "某些姿勢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼情況會讓疼痛加重或是誘發疼痛？比如運動 咳嗽 碰觸 或某些姿勢"
+      ]
+    },
+    {
+      "field": "pain_relieving_factors",
+      "prompt": "什麼情況會讓疼痛緩解？比如休息 用藥 熱敷 冰敷 按摩呢",
+      "kind": "choice",
+      "options": [
+        "休息",
+        "用藥",
+        "熱敷",
+        "冰敷",
+        "按摩"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼情況會讓疼痛緩解？比如休息 用藥 熱敷 冰敷 按摩呢"
+      ]
+    },
+    {
+      "field": "triggering_event",
+      "prompt": "是否有觸發疼痛的特定事件？比如 受傷 意外 用力咳嗽 嘔吐 還是突然的大動作",
+      "kind": "choice",
+      "options": [
+        "受傷",
+        "意外",
+        "用力咳嗽",
+        "嘔吐",
+        "突然的大動作"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有觸發疼痛的特定事件？比如 受傷 意外 用力咳嗽 嘔吐 還是突然的大動作"
+      ]
+    },
+    {
+      "field": "previous_similar_pain",
+      "prompt": "以前有過類似的頸部疼痛嗎？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "以前有過類似的頸部疼痛嗎？"
+      ]
+    },
+    {
+      "field": "arm_hand_symptoms",
+      "prompt": "是否感到手臂或手有麻木、刺痛、無力或感覺喪失？",
+      "kind": "choice",
+      "options": [
+        "麻木",
+        "刺痛",
+        "無力",
+        "感覺喪失"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否感到手臂或手有麻木、刺痛、無力或感覺喪失？"
+      ]
+    },
+    {
+      "field": "associated_headache",
+      "prompt": "是否有與頸部疼痛相關的頭痛？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有與頸部疼痛相關的頭痛？"
+      ]
+    },
+    {
+      "field": "fever_chills",
+      "prompt": "你是否有發燒或畏寒？",
+      "kind": "choice",
+      "options": [
+        "發燒",
+        "畏寒"
+      ],
+      "multiple": true,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你是否有發燒或畏寒？"
+      ]
+    },
+    {
+      "field": "neck_stiffness",
+      "prompt": "你的頸部是否有僵硬感？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你的頸部是否有僵硬感？"
+      ]
+    },
+    {
+      "field": "dysphagia",
+      "prompt": "你是否感到吞嚥困難？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你是否感到吞嚥困難？"
+      ]
+    },
+    {
+      "field": "dyspnea",
+      "prompt": "你是否有呼吸急促或呼吸困難？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你是否有呼吸急促或呼吸困難？"
+      ]
+    },
+    {
+      "field": "previous_head_spine_injury",
+      "prompt": "你以前有過頭部或脊柱的受傷嗎？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你以前有過頭部或脊柱的受傷嗎？"
+      ]
+    },
+    {
+      "field": "previous_head_spine_surgery",
+      "prompt": "是否有過涉及頭部或脊柱的手術？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有過涉及頭部或脊柱的手術？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "頸部疼痛伴隨呼吸困難、胸痛、嚴重頭痛、或局部神經功能缺損（如手臂無力、麻木）可能是警訊症狀，需優先評估。RAG 文獻提及這些症狀與心肌梗塞或嚴重神經問題有關。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-04d05153821c"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "warning",
+      "note": "頸部僵硬伴隨發燒或畏寒，可能指向感染性疾病（如腦膜炎），應優先處理。RAG 文獻提及萊姆病等感染可能出現此類症狀。",
+      "source_ids": [
+        "rag-17f57cc4a010"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "critical",
+      "note": "若頸部疼痛源於嚴重創傷（如車禍、墜落），可能涉及脊椎或血管損傷，有立即生命危險。應優先啟動創傷緊急流程，而非僅填寫問卷。",
+      "source_ids": [
+        "rag-ee94c060a833"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.3898,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-17f57cc4a010",
+      "title": "Lyme Disease: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/330178-overview",
+      "route": "safety",
+      "chunk_id": "709d501e5392c47ae3b5_33",
+      "distance": 0.5207,
+      "excerpt": "the following: Fatigue Myalgias Arthralgias Headache Fever Chills Neck stiffness Stage 2 disease Stage 2 is also known as early disseminated disease. It generally occurs weeks to months after the bite. Musculoskeletal and neurologic symptoms are the most common; less common symptoms are cardiac and dermatologic. B burgdorferi spreads throughout the body and produces symptoms by direct invasion (eg, erythema migrans), particularly in the early stages of the disease. Because growing B burgdorferi in culture is difficult, confirming that the organism is actually present in a specific organ that"
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.5344,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-e0bcef352b95",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "common",
+      "chunk_id": "bb1164c188b2fc1e1591_6",
+      "distance": 0.5823,
+      "excerpt": "Emergency medical attention should be sought if the patient develops trouble breathing, persistent pain or chest pressure, new confusion, inability to awaken or to stay awake, or bluish lips or face. Who is at risk for severe coronavirus disease 2019 (COVID-19)? Risk factors for severe COVID-19, regardless of age, include the following: Chronic kidney disease COPD Immunocompromised state due to solid organ transplant Obesity (BMI ≥30) Serious heart conditions (eg, heart failure, coronary artery disease, cardiomyopathies) Sickle cell disease Type 2 diabetes mellitus The following are underlying"
+    },
+    {
+      "id": "rag-ae2d9bdf9367",
+      "title": "Tension Headache: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/792384-overview",
+      "route": "common",
+      "chunk_id": "f48e28c4ace81e12aae6_4",
+      "distance": 0.535,
+      "excerpt": "as pregnant patients. Background The International Headache Society (IHS) began developing a classification system for headaches in 1985. Now in its third edition, this system includes a tension-type headache (TTH) category, further defined as either episodic (frequent and infrequent) or chronic. In infrequent episodic TTH, headache episodes occur less than one day a month, whereas in frequent episodic TTH, headache episodes occur 1 to 14 days a month. In chronic TTH, headaches occur 15 or more days a month. Headache categories also are defined by whether they are associated with pericranial"
+    },
+    {
+      "id": "rag-1c2d5666ef34",
+      "title": "Trigonitis: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/438185-overview",
+      "route": "common",
+      "chunk_id": "7c959a69d50ebc8da140_11",
+      "distance": 0.5461,
+      "excerpt": "understanding of this elusive disease process. Epidemiology The frequency of trigonitis differs in various reports, but the literature consistently shows that trigonitis occurs almost exclusively in women of childbearing age. Nonkeratinizing squamous metaplasia of the bladder neck and trigone can be seen in 50-70% of premenopausal women and is considered a normal variant. In a study by Wiener et al that examined 100 grossly normal bladders at autopsy, 46% of premenopausal and postmenopausal women were to found to have squamous metaplasia; in comparison, only 7% of men were found to have"
+    },
+    {
+      "id": "rag-04d05153821c",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "route": "safety",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "distance": 0.5516,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the"
+    },
+    {
+      "id": "rag-ee94c060a833",
+      "title": "Neck Trauma Management: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827223-overview",
+      "route": "safety",
+      "chunk_id": "bbce752c4c2a785b6f5c_1",
+      "distance": 0.5246,
+      "excerpt": "signs or symptoms, and potentially lethal injuries could be easily overlooked or discounted. Neck injury may result in the laceration of major vessels, potentially leading to hemorrhagic shock. Extracranial arterial injuries to the brachiocephalic, common carotid, and vertebral arteries can result in major neurologic deficits. Airway occlusion and exsanguinating hemorrhage pose the most immediate risks to life. From the time when Ambroise Pare successfully treated a neck injury in 1552, debate has continued about the best approach for particular neck wounds. Awareness of the various"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "7857556f7e6ea07e9a15278e0a83bb20e16bd191d34b37eb5273ac631d30fc7b",
+    "rag_corpus_hash": "c11a82b273396f307e0f6ad43d43f30a389258b94a9ebafaa11fe22d6b2f7d4f",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:07:14+00:00"
+  }
+}

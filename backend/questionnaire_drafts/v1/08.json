@@ -1,0 +1,330 @@
+{
+  "schema_version": 1,
+  "id": "cardiac_arrest",
+  "label": "心臟驟停",
+  "source_order": 8,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "onset_time",
+      "loss_of_consciousness",
+      "cpr_or_aed_used",
+      "preceding_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 9,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "family_member_responder_notice",
+      "prompt": "我建議可以請家人或陪同監護人回答下列問題",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "我建議可以請家人或陪同監護人回答下列問題"
+      ]
+    },
+    {
+      "field": "onset_time",
+      "prompt": "什麼時候發生心臟驟停？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼時候發生心臟驟停？"
+      ]
+    },
+    {
+      "field": "preceding_symptoms",
+      "prompt": "心臟驟停前，病人是否有以下症狀？ 請將以下有出現的症狀描述給我聽 若以下皆無可補充其他症狀",
+      "kind": "choice",
+      "options": [
+        "胸痛",
+        "呼吸困難",
+        "頭暈或昏厥",
+        "心跳加速或心跳不規則",
+        "出冷汗",
+        "噁心或嘔吐"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "心臟驟停前，病人是否有以下症狀？ 請將以下有出現的症狀描述給我聽 若以下皆無可補充其他症狀",
+        "胸痛",
+        "呼吸困難",
+        "頭暈或昏厥",
+        "心跳加速或心跳不規則",
+        "出冷汗",
+        "噁心或嘔吐"
+      ]
+    },
+    {
+      "field": "loss_of_consciousness",
+      "prompt": "病人在發生心臟驟停時是否有失去意識？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人在發生心臟驟停時是否有失去意識？"
+      ]
+    },
+    {
+      "field": "cpr_or_aed_used",
+      "prompt": "病人是否有接受過心肺復甦術 (CPR) 或使用過自動體外心臟去顫器 (AED)？ 若有 請務必讓我知道",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人是否有接受過心肺復甦術 (CPR) 或使用過自動體外心臟去顫器 (AED)？  若有 請務必讓我知道"
+      ]
+    },
+    {
+      "field": "cardiac_history",
+      "prompt": "病人是否有心臟病史或其他相關病史？ 若有 請務必讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人是否有心臟病史或其他相關病史？   若有 請務必讓我知道"
+      ]
+    },
+    {
+      "field": "medications",
+      "prompt": "病人是否有服用任何藥物？ 若有 請務必讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人是否有服用任何藥物？  若有 請務必讓我知道"
+      ]
+    },
+    {
+      "field": "chronic_diseases",
+      "prompt": "請將病人有的慢性疾病描述給我聽 比如高血壓 糖尿病 或 高膽固醇 也可補充其他慢性疾病",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請將病人有的慢性疾病描述給我聽 比如高血壓 糖尿病 或 高膽固醇  也可補充其他慢性疾病"
+      ]
+    },
+    {
+      "field": "recent_activity_or_stress",
+      "prompt": "病人是否有近期的身體活動或壓力過大情況？ 若有 請描述給我聽",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人是否有近期的身體活動或壓力過大情況？ 若有 請描述給我聽"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "心臟驟停是極度緊急的醫療狀況。此問卷不應用於即時診斷或取代緊急醫療服務。應立即啟動緊急應變流程（如撥打緊急電話、執行 CPR/AED），而非填寫問卷。問卷僅供事後記錄或非緊急情況下的風險評估參考。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-6fd3c1ec9cee",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "route": "chest",
+      "chunk_id": "60a8e9fb259d62f055c2_82",
+      "distance": 0.4306,
+      "excerpt": "and what do they indicate? How are Interleukin (IL) cardiac markers characterized and what do they indicate?"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "chest",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.3702,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-04d05153821c",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "route": "chest",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "distance": 0.4218,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the"
+    },
+    {
+      "id": "rag-f88b0b8f1f72",
+      "title": "Acute Coronary Syndrome: Practice Essentials, Background, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1910735-overview",
+      "route": "chest",
+      "chunk_id": "29a8db87cd2aa8fb48b6_1",
+      "distance": 0.4447,
+      "excerpt": "for triaging patients with chest pain. ACS = ACS; ASA = aspirin; EKG = ECG; MI = myocardial infarction; Rx = treat; STEMI = ST-elevation myocardial infarction. Courtesy of Wu et al (1999). See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Atherosclerosis is the primary cause of ACS, with most cases occurring from the disruption of a previously nonsevere lesion. Complaints reported by patients with ACS include the following: Palpitations Pain, which is usually described"
+    },
+    {
+      "id": "rag-0f8558e93767",
+      "title": "Third-Degree Atrioventricular Block (Complete Heart Block): Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/162007-overview",
+      "route": "chest",
+      "chunk_id": "5a09f9706b7af26e7aaf_34",
+      "distance": 0.4206,
+      "excerpt": "Discuss signs and symptoms with patients, including lightheadedness, palpitations (skipping, fluttering in the chest), fatigue, chest pressure or pain, shortness of breath, or fainting spells. Occasionally, patients can be asymptomatic. Explain that the diagnosis is made using one or more of the following: electrocardiography (ECG/EKG), Holter monitoring, an event recorder, electrophysiologic study, etc, and that treatment usually includes implantation of pacemaker. Clinical Presentation"
+    },
+    {
+      "id": "rag-23645f44d446",
+      "title": "Multifocal Atrial Tachycardia: Overview of Multifocal Atrial Tachycardia, Pathophysiology of MAT, Etiology of MAT",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155825-overview",
+      "route": "chest",
+      "chunk_id": "64bfd50d23b5cd52a2ce_6",
+      "distance": 0.4253,
+      "excerpt": "to quantify because the underlying disease is the primary determinant of complications. Clinical Presentation Patient history Patients may complain of a variety of symptoms, or more rarely, the disease may be asymptomatic. The most common complaints include the following: Palpitations Shortness of breath Chest pain Lightheadedness Syncopal episode These symptoms may be transient. Physical examination Physical examination findings are typically related to the underlying disease process and are not specific for MAT. The pulse is rapid and irregular, and the first heart sound may be variable. The"
+    },
+    {
+      "id": "rag-7da15205329c",
+      "title": "Cardiac Tests: Practice Essentials, Overview, Exercise Tolerance Test",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811577-overview",
+      "route": "chest",
+      "chunk_id": "b756911235fb6bdef18f_86",
+      "distance": 0.5014,
+      "excerpt": "are the indications for cardiac testing? What are the indications for cardiac testing in women? What determines the selection of cardiac tests?"
+    },
+    {
+      "id": "rag-b0932cf7b727",
+      "title": "Acute Pericarditis: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/156951-overview",
+      "route": "chest",
+      "chunk_id": "5ce830abdc459bc019fc_1",
+      "distance": 0.5052,
+      "excerpt": "approximately 3 months after acute pericardial illness. The patient remained symptom free despite continued T-wave inversion. Signs and symptoms Chest pain is the cardinal symptom of pericarditis, usually precordial or retrosternal with referral to the trapezius ridge, neck, left shoulder, or arm. Common associated signs and symptoms include low-grade intermittent fever, dyspnea/tachypnea (a frequent complaint and may be severe, with myocarditis, pericarditis, and cardiac tamponade), cough, and dysphagia. In tuberculous pericarditis, fever, night sweats, and weight loss are commonly noted"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "ecd2d5f2a02523640c8e96aa1c149e2ec2c82f2e86bf29072a4e75576bd9d5aa",
+    "rag_corpus_hash": "b20d96af4ea30661029e2205000c09a593d5ab6298435dbcea3d70573c681180",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:03:09+00:00"
+  }
+}

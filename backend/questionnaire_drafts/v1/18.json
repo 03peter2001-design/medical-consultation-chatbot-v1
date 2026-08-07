@@ -1,0 +1,411 @@
+{
+  "schema_version": 1,
+  "id": "low_back_pain",
+  "label": "腰痛",
+  "source_order": 18,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 12,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "pain_onset_time",
+      "prompt": "疼痛何時開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛何時開始的？"
+      ]
+    },
+    {
+      "field": "pain_onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然發作還是逐漸出現的？"
+      ]
+    },
+    {
+      "field": "pain_frequency",
+      "prompt": "疼痛是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛是持續性的還是間歇性的？"
+      ]
+    },
+    {
+      "field": "pain_laterality",
+      "prompt": "疼痛是一側還是兩側？",
+      "kind": "choice",
+      "options": [
+        "一側",
+        "兩側"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛是一側還是兩側？"
+      ]
+    },
+    {
+      "field": "has_tender_point",
+      "prompt": "是否有壓痛點？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有壓痛點？"
+      ]
+    },
+    {
+      "field": "pain_radiation",
+      "prompt": "疼痛是否牽連到腹股溝 腹部 或背部",
+      "kind": "choice",
+      "options": [
+        "腹股溝",
+        "腹部",
+        "背部"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛是否牽連到腹股溝 腹部 或背部"
+      ]
+    },
+    {
+      "field": "pain_character",
+      "prompt": "你如何描述這種疼痛？ 像是 尖銳 鈍痛 刺痛或是 痙攣",
+      "kind": "choice",
+      "options": [
+        "尖銳",
+        "鈍痛",
+        "刺痛",
+        "痙攣"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你如何描述這種疼痛？ 像是 尖銳 鈍痛 刺痛或是 痙攣"
+      ]
+    },
+    {
+      "field": "pain_aggravating_factors",
+      "prompt": "什麼情況會讓疼痛加重？ 比如 活動 深呼吸或是 進食的時候",
+      "kind": "choice",
+      "options": [
+        "活動",
+        "深呼吸",
+        "進食"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼情況會讓疼痛加重？ 比如 活動 深呼吸或是 進食的時候"
+      ]
+    },
+    {
+      "field": "pain_relieving_factors",
+      "prompt": "什麼情況會讓疼痛緩解？比如 休息 用藥 或是有某些特定姿勢呢",
+      "kind": "choice",
+      "options": [
+        "休息",
+        "用藥",
+        "特定姿勢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼情況會讓疼痛緩解？比如 休息 用藥 或是有某些特定姿勢呢"
+      ]
+    },
+    {
+      "field": "precipitating_events",
+      "prompt": "疼痛開始前是否有外傷 運動 或是可能的感染？",
+      "kind": "choice",
+      "options": [
+        "外傷",
+        "運動",
+        "可能的感染"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛開始前是否有外傷 運動 或是可能的感染？"
+      ]
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "是否有以下症狀？請將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "排尿困難、血尿、頻尿、尿急或尿液顏色改變",
+        "噁心、嘔吐、腹痛或腹瀉",
+        "發燒或畏寒",
+        "腰部是否有皮疹、紅腫或腫脹",
+        "胸痛、心悸或心跳加速"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有以下症狀？請將以下有出現的症狀描述給我聽",
+        "排尿困難、血尿、頻尿、尿急或尿液顏色改變",
+        "噁心、嘔吐、腹痛或腹瀉",
+        "發燒或畏寒",
+        "腰部是否有皮疹、紅腫或腫脹",
+        "胸痛、心悸或心跳加速"
+      ]
+    },
+    {
+      "field": "past_kidney_history",
+      "prompt": "以前是否有腎結石、泌尿道感染或其他腎臟問題的病史？",
+      "kind": "choice",
+      "options": [
+        "腎結石",
+        "泌尿道感染",
+        "其他腎臟問題"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "以前是否有腎結石、泌尿道感染或其他腎臟問題的病史？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "腰痛伴隨胸痛、心悸或心跳加速可能是心肌梗塞等心臟急症的非典型表現，應優先評估。背痛也可能是主動脈剝離的症狀。",
+      "source_ids": [
+        "rag-8d0c839d378d",
+        "rag-04d05153821c"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.3945,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-04d05153821c",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "route": "safety",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "distance": 0.5241,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the"
+    },
+    {
+      "id": "rag-4f510ce43371",
+      "title": "Valproic Acid Level: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2090462-overview",
+      "route": "common",
+      "chunk_id": "c83dccf4f8f69e7ba68d_6",
+      "distance": 0.5249,
+      "excerpt": "prophylaxis Chronic pain syndromes A valproic acid level measures the amount of valproic acid in the blood: either the total level or free level of the drug. Monitoring of serial valproic acid levels is required to maintain the drug within the narrow recommended therapeutic range. Subtherapeutic levels place the patient at risk of recurrence of the condition for which they are taking valproic acid, and supratherapeutic levels place the patient at risk of adverse and toxic side effects. Indications Dosages of valproic acid must be adjusted carefully based on valproic acid blood levels until a"
+    },
+    {
+      "id": "rag-1d3d3891f923",
+      "title": "Diagnostic Influenza Tests: Reference Range, Interpretation, Collection and Diagnostic Methods",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2053517-overview",
+      "route": "common",
+      "chunk_id": "9938149389dea7f1fe21_27",
+      "distance": 0.5693,
+      "excerpt": "than rapid antigen tests. Questions & Answers Overview What are diagnostic influenza tests? How are diagnostic influenza tests interpreted? How are diagnostic influenza tests performed? What are the types of diagnostic influenza tests? When are diagnostic influenza tests indicated? What are the sensitivity and specificity of diagnostic influenza tests?"
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.5301,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-1c2d5666ef34",
+      "title": "Trigonitis: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/438185-overview",
+      "route": "common",
+      "chunk_id": "7c959a69d50ebc8da140_11",
+      "distance": 0.5409,
+      "excerpt": "understanding of this elusive disease process. Epidemiology The frequency of trigonitis differs in various reports, but the literature consistently shows that trigonitis occurs almost exclusively in women of childbearing age. Nonkeratinizing squamous metaplasia of the bladder neck and trigone can be seen in 50-70% of premenopausal women and is considered a normal variant. In a study by Wiener et al that examined 100 grossly normal bladders at autopsy, 46% of premenopausal and postmenopausal women were to found to have squamous metaplasia; in comparison, only 7% of men were found to have"
+    },
+    {
+      "id": "rag-7e43eb5f6b74",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "route": "safety",
+      "chunk_id": "53b354e14520b0f0479f_8",
+      "distance": 0.5028,
+      "excerpt": "with an identifiable nerve injury, many are not. Even \"microtrauma\" as might occur with an immunization may be responsible. The upper extremities are more likely to be involved than the lower. Entities that have led to RSDS include the following: Head injury Stroke Polio Amyotrophic lateral sclerosis (ALS) Myocardial infarction Polymyalgia rheumatica Operative procedures (eg, carpal tunnel release) Brachial plexopathy Cast/splint immobilization Minor extremity injury Prolonged bedrest A retrospective epidemiologic analysis of CRPS patients compared to patients with other pain disorders found"
+    },
+    {
+      "id": "rag-8d0c839d378d",
+      "title": "Hypertensive Emergencies: Uncontrolled Blood Pressure, Management of Hypertensive Emergencies",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1952052-overview",
+      "route": "safety",
+      "chunk_id": "9ba3bdd8c1367b8de718_6",
+      "distance": 0.5793,
+      "excerpt": "of their last menstrual period. Patients may complain of specific symptoms that suggest end-organ dysfunction may be present. Chest pain may indicate myocardial ischemia or infarction, back pain may denote aortic dissection; and dyspnea may suggest pulmonary edema or congestive heart failure. The presence of neurologic symptoms may include seizures, visual disturbances, and altered level of consciousness and may be indicative of hypertensive encephalopathy. The physical examination should assess whether end-organ dysfunction is present. BP should not only be measured in both the supine"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "ce699d92678d58ec5df023d7e671d2b3f9774c8b796c072151a6eae78f786c06",
+    "rag_corpus_hash": "6211195a954dac3c951927bdfb91187f1027caafbcdc1e2547d4f888a93040dd",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:00:42+00:00"
+  }
+}

@@ -1,0 +1,353 @@
+{
+  "schema_version": 1,
+  "id": "burns",
+  "label": "燒傷",
+  "source_order": 7,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "burn_onset",
+      "burn_cause",
+      "burn_location"
+    ],
+    "priority_fields": [
+      "respiratory_symptoms",
+      "cardiac_symptoms",
+      "burn_cause",
+      "burn_location"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 9,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "burn_onset",
+      "prompt": "燒傷什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "燒傷什麼時候開始的？"
+      ]
+    },
+    {
+      "field": "burn_cause",
+      "prompt": "燒傷是怎麼發生的？",
+      "kind": "choice",
+      "options": [
+        "火災",
+        "熱液體",
+        "化學物質",
+        "電擊造成的"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "燒傷是怎麼發生的？ 火災 熱液體 化學物質 還是電擊造成的呢"
+      ]
+    },
+    {
+      "field": "burn_location",
+      "prompt": "燒傷的位置在哪裡？",
+      "kind": "choice",
+      "options": [
+        "臉部",
+        "頭頸部",
+        "軀幹",
+        "四肢",
+        "生殖器附近"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "燒傷的位置在哪裡？ 比方說臉部 頭頸部 軀幹 四肢 或生殖器附近呢"
+      ]
+    },
+    {
+      "field": "burn_appearance",
+      "prompt": "燒傷部位看起來怎麼樣？",
+      "kind": "choice",
+      "options": [
+        "紅腫",
+        "水泡",
+        "焦黑"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "燒傷部位看起來怎麼樣？ 比方說 紅腫 水泡 或焦黑"
+      ]
+    },
+    {
+      "field": "burn_first_aid_water",
+      "prompt": "燒傷後有沒有沖水３０分鐘以上？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "燒傷後有沒有沖水３０分鐘以上？"
+      ]
+    },
+    {
+      "field": "respiratory_symptoms",
+      "prompt": "你有沒有呼吸困難、咳嗽或聲音嘶啞的情況？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你有沒有呼吸困難、咳嗽或聲音嘶啞的情況？"
+      ]
+    },
+    {
+      "field": "eye_symptoms",
+      "prompt": "眼睛是否受到影響或是出現紅腫？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "眼睛是否受到影響或是出現紅腫？"
+      ]
+    },
+    {
+      "field": "cardiac_symptoms",
+      "prompt": "是否感到胸痛，心悸或是心律不整？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否感到胸痛，心悸或是心律不整？"
+      ]
+    },
+    {
+      "field": "neurological_symptoms",
+      "prompt": "是否感到頭暈，頭痛或是噁心想吐？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否感到頭暈，頭痛或是噁心想吐？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "大面積、電擊、化學燒傷，或伴隨呼吸困難、胸痛、意識改變等症狀，可能為重大創傷，應優先尋求緊急醫療協助，而非僅填寫問卷。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "warning",
+      "note": "臉部、頭頸部、生殖器等特殊部位的燒傷，或出現聲音嘶啞、呼吸困難等，可能涉及呼吸道灼傷，需高度警覺並優先處理。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.446,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-6a8588ffc76c",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "route": "common",
+      "chunk_id": "a663d18c5f77da4d66fd_25",
+      "distance": 0.5259,
+      "excerpt": "level. Toxicity is defined as a clinical syndrome with the following: lethargy with (1) poor perfusion as evidenced by delayed capillary refill or (2) cyanosis or other signs of respiratory distress. Cold hands and feet, limb pain, and pale or mottled skin are considered \"red flag\" manifestations of septicemia. The presence or absence of meningeal signs is documented in older children. Clinicians should bear in mind that in some infants and younger children (perhaps younger than 12-15 months) who develop meningitis, specific meningeal signs, such as the Kernig or Brudzinski sign, may not be"
+    },
+    {
+      "id": "rag-9005e3b63c6a",
+      "title": "Serum Protein Electrophoresis: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087113-overview",
+      "route": "common",
+      "chunk_id": "cc23c1f5f70665a63f35_21",
+      "distance": 0.5549,
+      "excerpt": "(SPEP)? Which factors affect the accuracy of serum protein electrophoresis (SPEP) results? How are specimens collected for serum protein electrophoresis (SPEP)? How are proteins classified in serum protein electrophoresis (SPEP)? What is serum protein electrophoresis (SPEP)? When is serum protein electrophoresis (SPEP) indicated?"
+    },
+    {
+      "id": "rag-440a0100b66f",
+      "title": "Cysticercosis in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/781845-overview",
+      "route": "common",
+      "chunk_id": "8180322f2e2a0415d2af_4",
+      "distance": 0.561,
+      "excerpt": "locations are skin, skeletal muscle, heart, eye, and the central nervous system (CNS). Involvement of the CNS leads to the most important manifestation of the disease, neurocysticercosis (NCC). Symptomatology of neurocysticercosis (NCC) ranges from completely asymptomatic to severe disease and death. Symptoms largely depend on the presence of pericystic inflammation, the absence of which will usually manifest as asymptomatic disease. Lack of perilesional inflammation is seen with both \"active\" healthy parasites, which are able to evade host immunity (an adaptive feat that may be abetted by the"
+    },
+    {
+      "id": "rag-8f1615091344",
+      "title": "Insulin: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2089224-overview",
+      "route": "common",
+      "chunk_id": "41b085922049bec01938_21",
+      "distance": 0.5677,
+      "excerpt": "conditions are associated with increased insulin secretion? Which conditions are associated with decreased insulin excretion? Which conditions are associated with beta-cell destruction caused by decreased insulin levels? How are samples collected for insulin testing and what methods are used for analysis? What instructions should be given to patients prior to insulin testing? What is the biosynthesis of insulin? What is the function of insulin? What is insulin secretion? When is insulin testing indicated? Which factors can falsely elevate insulin levels? Which factors can falsely decrease"
+    },
+    {
+      "id": "rag-5eeba6a1a2ac",
+      "title": "Latex Allergy: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/756632-overview",
+      "route": "common",
+      "chunk_id": "dd9970b5cca993dde8ee_5",
+      "distance": 0.5694,
+      "excerpt": "Images slideshow, to help identify a variety of allergens and symptoms. For related information, see Medscape's Allergy & Immunology Resource Center. Pathophysiology Latex exposure is associated with 3 clinical syndromes. Irritant dermatitis results from mechanical disruption of the skin due to the rubbing of gloves and accounts for the majority of latex-induced local skin rashes. It is not immune mediated, is not associated with allergic complications, and is not the subject of this article. It may be confused with Type IV hypersensitivity. Any chronic hand dermatitis in HCWs raises the risk"
+    },
+    {
+      "id": "rag-c64e61230f91",
+      "title": "Lipid Profile (Triglycerides): Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2074115-overview",
+      "route": "common",
+      "chunk_id": "2c9f77ac2b60838a0f6d_25",
+      "distance": 0.5737,
+      "excerpt": "are critical values on a lipid profile (triglycerides)? How are lipid profile (triglycerides) levels results interpreted? How are specimens collected and prepared for a lipid profile (triglycerides)? Which panels include serum triglyceride? What are triglycerides? What are the USPSTF recommendations for lipid screening? What are the causes of an elevated lipid profile (triglycerides)? What is the association of an elevated lipid profile (triglycerides) with pancreatitis? What are the ACC/AHA guidelines on lipid profile (triglycerides) screening?"
+    },
+    {
+      "id": "rag-57dd049f43a2",
+      "title": "Burn Wound Infections: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/213595-overview",
+      "route": "safety",
+      "chunk_id": "2282c43bb99705270704_10",
+      "distance": 0.491,
+      "excerpt": "manifestations of septic shock, and death. Early surgical debridement and skin grafting, use of topical and systemic antimicrobials, and enhanced infection-control practices have led to the replacement of beta-hemolytic streptococci with S aureus and gram-negative bacteria such as P aeruginosa, Klebsiella pneumoniae, and A baumannii as major pathogens in burn wound infections. In burns older than 7 days, biofilm may be detected in the ulcerated areas of the wounds. As biofilm formation is associated with chronicity of the wound, bacterial colonization is easier to eradicate in the first few"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "f004323894373b62bbbed6ac85764f8e16f966928e3e8cb8aebf94b6910afe20",
+    "rag_corpus_hash": "70df2fecb2fed22d77552bdfaf3a43c8dde13a93fa12b8e643873f3170a5007a",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:02:36+00:00"
+  }
+}

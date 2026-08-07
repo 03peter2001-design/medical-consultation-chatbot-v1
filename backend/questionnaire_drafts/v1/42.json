@@ -1,0 +1,378 @@
+{
+  "schema_version": 1,
+  "id": "substance_abuse",
+  "label": "物質濫用",
+  "source_order": 42,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "suicidal_or_self_harm_thoughts"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 12,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "primary_abused_substance",
+      "prompt": "您主要濫用的物質是什麼？ 請將以下你有濫用的物質或是其他物質描述給我知道",
+      "kind": "choice",
+      "options": [
+        "酒精",
+        "甲基安非他命（如冰毒）",
+        "古柯鹼",
+        "大麻",
+        "鴉片類藥物（如處方止痛藥）",
+        "鎮靜劑或安眠藥"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您主要濫用的物質是什麼？ 請將以下你有濫用的物質或是其他物質描述給我知道",
+        "酒精",
+        "甲基安非他命（如冰毒）",
+        "古柯鹼",
+        "大麻",
+        "鴉片類藥物（如處方止痛藥）",
+        "鎮靜劑或安眠藥"
+      ]
+    },
+    {
+      "field": "substance_abuse_onset",
+      "prompt": "您開始濫用這種物質的時間是多久以前？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您開始濫用這種物質的時間是多久以前？"
+      ]
+    },
+    {
+      "field": "substance_use_frequency",
+      "prompt": "請說明你每天、每周或每月使用這種物質的頻率？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請說明你每天、每周或每月使用這種物質的頻率？"
+      ]
+    },
+    {
+      "field": "reason_for_substance_use",
+      "prompt": "您使用這種物質的主要原因是什麼？ 比如減輕壓力、尋求快感、逃避現實或是社交需求",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您使用這種物質的主要原因是什麼？ 比如減輕壓力、尋求快感、逃避現實或是社交需求"
+      ]
+    },
+    {
+      "field": "withdrawal_attempt_experience",
+      "prompt": "您是否曾經嘗試戒斷這種物質？ 若有請描述戒斷經驗",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否曾經嘗試戒斷這種物質？ 若有請描述戒斷經驗"
+      ]
+    },
+    {
+      "field": "substance_related_symptoms",
+      "prompt": "你是否有以下任何症狀？ 請將以下你有出現的症狀或是其他症狀描述出來讓我知道",
+      "kind": "choice",
+      "options": [
+        "渴望物質",
+        "增加用量以達到相同效果",
+        "出現戒斷症狀（如焦慮、震顫、出汗）",
+        "停止使用後感到不適",
+        "使用物質後無法控制自己的行為",
+        "影響日常生活和工作"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你是否有以下任何症狀？ 請將以下你有出現的症狀或是其他症狀描述出來讓我知道",
+        "渴望物質",
+        "增加用量以達到相同效果",
+        "出現戒斷症狀（如焦慮、震顫、出汗）",
+        "停止使用後感到不適",
+        "使用物質後無法控制自己的行為",
+        "影響日常生活和工作"
+      ]
+    },
+    {
+      "field": "professional_help_history",
+      "prompt": "您是否有尋求過專業幫助？ 若有，請描述尋求過哪些專業幫助",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有尋求過專業幫助？ 若有，請描述尋求過哪些專業幫助"
+      ]
+    },
+    {
+      "field": "other_health_problems",
+      "prompt": "您是否有其他健康問題或慢性疾病？ 若有，請進一步說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有其他健康問題或慢性疾病？ 若有，請進一步說明"
+      ]
+    },
+    {
+      "field": "social_support_status",
+      "prompt": "您是否有家族成員或朋友知道您的狀況並提供支持？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有家族成員或朋友知道您的狀況並提供支持？"
+      ]
+    },
+    {
+      "field": "suicidal_or_self_harm_thoughts",
+      "prompt": "您是否有過自殺或自殘的念頭？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有過自殺或自殘的念頭？"
+      ]
+    },
+    {
+      "field": "major_life_stressors",
+      "prompt": "您的生活中是否有重大的壓力源或變化？ 若有，請進一步說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您的生活中是否有重大的壓力源或變化？ 若有，請進一步說明"
+      ]
+    },
+    {
+      "field": "additional_information",
+      "prompt": "您是否有其他需要補充的情況或問題？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有其他需要補充的情況或問題？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "「您是否有過自殺或自殘的念頭？」為高風險警訊，若答案為肯定，應立即啟動自殺防治或緊急安全協議，而非僅依賴問卷流程。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-0cb75e7777f0",
+      "title": "Cocaine-Related Cardiomyopathy: Overview, Cardiac Effects of Cocaine, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/152535-overview",
+      "route": "common",
+      "chunk_id": "ab9063a525e89c555d29_31",
+      "distance": 0.466,
+      "excerpt": "patient in their report, a 35-year-old woman, underwent endomyocardial biopsy that failed to reveal any necrosis, fibrosis, or inflammatory infiltrate. In autopsies of 40 patients, 31 of whom died cocaine-related deaths and 9 of whom were homicide victims with detectable blood cocaine levels, Virmani et al found that 20% of the patients showed evidence of myocarditis on toxic screening tests. !zelaar, in an autopsy study, reported contraction-based myocardial necrosis similar to that observed in pheochromocytoma. In a case report by Robledo-Carmona, histologic findings of the left ventricular"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4681,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-f588cec249e4",
+      "title": "Alcohol and Substance Abuse Evaluation: Overview, Epidemiology, Clinical Presentation",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/805084-overview",
+      "route": "common",
+      "chunk_id": "e2b6a9f747093816d337_15",
+      "distance": 0.4508,
+      "excerpt": "as cough and cold medicines containing dextromethorphan, can also be abused and lead to significant CNS effects including a dissociative state. This is a special problem among teenagers. Parents should be aware of the potential for abuse of these medications, especially when consumed in large quantities, which should signal concern and the possible need for intervention. Epidemiology Quantitative information on the prevalence of substance abuse is difficult to obtain because of the unwillingness of abusers to accurately disclose consumption. Surveys are taken routinely in high schools and"
+    },
+    {
+      "id": "rag-3e6c8e37283f",
+      "title": "Cannabinoid Poisoning: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/833828-overview",
+      "route": "common",
+      "chunk_id": "22e889f5e2e867343e10_30",
+      "distance": 0.5163,
+      "excerpt": "that figure increased by 610% Adverse reactions Chronic users may experience paranoia, panic disorder, fear, or dysphoria. Transient psychotic episodes may also occur with cannabis use. These psychiatric effects may be less likely to occur with strains that contain higher concentrations of CBD.J Ventricular tachycardia is also reported in association with use of this drug, but is unclear whether the association is causative.J Dependence and withdrawal Nearly 7-10% of regular users become behaviorally and physically dependent on cannabis. Furthermore, early onset of use and daily/weekly use"
+    },
+    {
+      "id": "rag-b27ab1e46282",
+      "title": "Ethanol Level: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2090019-overview",
+      "route": "common",
+      "chunk_id": "e32a2e4341f94927f7a7_15",
+      "distance": 0.4566,
+      "excerpt": "and history of other ingestions (eg, toxic alcohol, salicylates). Because alcohol-intoxicated patients may have other concurrent disease processes, re-assessing these patients frequently and using the serum ethanol level within the complete context of the patient is imperative. Considerations In patients who are clinically intoxicated and have a negative alcohol level, other diagnoses must be considered such as toxic alcohol consumption (methanol, ethylene glycol, or isopropyl alcohol). While an in depth review cannot be covered here, other laboratory testing to consider include a basic"
+    },
+    {
+      "id": "rag-14c6674a9897",
+      "title": "Chlorine Toxicity: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/832336-overview",
+      "route": "common",
+      "chunk_id": "e179e47b305d99059848_4",
+      "distance": 0.4639,
+      "excerpt": "Chronic exposure Manifestations of chronic exposure include the following: Acne (chloracne) Chest pain Cough Sore throat Hemoptysis Findings on physical examination may include the following: Tachypnea Cyanosis (most prevalent during exertion) Tachycardia Wheezing Intercostal retractions Decreased breath sounds Rales (pulmonary edema) Nasal flaring Aphonia, stridor, or laryngeal edema Ulceration or hemorrhage of the respiratory tract Rhinorrhea Lacrimation, salivation, and blepharospasm Chloracne or tooth enamel corrosion (with chronic exposure) Redness, erythema, and chemical burns to the"
+    },
+    {
+      "id": "rag-7583ea3d840d",
+      "title": "Common Drug Interactions with Protease Inhibitors: Overview, Drug Interactions by Drug Category",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2041624-overview",
+      "route": "common",
+      "chunk_id": "b643cdbb999195ba11f0_37",
+      "distance": 0.5426,
+      "excerpt": "similar interaction is expected with other opioids and PIs; oxycodone or opioid dose reduction may be necessary while monitoring for opioid-related adverse effects. Methadone coadministration with boosted PIs may result in lower methadone levels; opioid withdrawal may occur but unlikely; dose adjustment of methadone not usually required but monitor for symptoms of opioid withdrawal. Methadone use with unboosted ATV does not require dose adjustment. Methadone coadministration with unboosted FPV may result in lower methadone levels; monitor and titrate methadone as clinically indicated. Proton"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "903a25dc6803b487f045dbec0d8e6d2a5d1ec8ea1f5d972118d005c489c994d0",
+    "rag_corpus_hash": "9cad52a301f5baedf4279023fcbfb4364c1f3f0bab34a9b1857b53a8765c5388",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:05:45+00:00"
+  }
+}

@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "id": "toothache",
+  "label": "牙痛",
+  "source_order": 11,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "pain_start_time",
+      "previous_similar_pain"
+    ],
+    "priority_fields": [
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 4,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "pain_start_time",
+      "prompt": "牙齒疼痛什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "牙齒疼痛什麼時候開始的？ *"
+      ]
+    },
+    {
+      "field": "pain_radiation",
+      "prompt": "疼痛是否會牽連到其他部位？ 比方說下巴 耳朵或脖子",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛是否會牽連到其他部位？ 比方說下巴 耳朵或脖子"
+      ]
+    },
+    {
+      "field": "previous_similar_pain",
+      "prompt": "你以前有過類似的牙痛嗎？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你以前有過類似的牙痛嗎？ *"
+      ]
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "是否有以下症狀 請將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "牙齦、臉部或脖子腫脹",
+        "發燒或是畏寒",
+        "牙齦有像是膿的分泌物",
+        "張口困難或咀嚼困難",
+        "臉或口腔有麻木或刺痛感",
+        "有心臟病史或是現在感到胸痛或心悸",
+        "最近有呼吸道感染、喉嚨痛或吞嚥困難"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有以下症狀 請將以下有出現的症狀描述給我聽",
+        "牙齦、臉部或脖子腫脹",
+        "發燒或是畏寒",
+        "牙齦有像是膿的分泌物",
+        "張口困難或咀嚼困難",
+        "臉或口腔有麻木或刺痛感",
+        "有心臟病史或是現在感到胸痛或心悸",
+        "最近有呼吸道感染、喉嚨痛或吞嚥困難"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "牙痛伴隨胸痛、心悸、發燒、吞嚥或張口困難等症狀，可能表示感染擴散或其他嚴重問題，需優先評估。例如，深頸部感染（如咽後膿瘍）可能導致呼吸道阻塞，而心臟症狀可能與感染引發的全身性反應或潛在心臟問題有關。",
+      "source_ids": [
+        "rag-e18c55866cf4",
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-e0bcef352b95",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "common",
+      "chunk_id": "bb1164c188b2fc1e1591_6",
+      "distance": 0.5529,
+      "excerpt": "Emergency medical attention should be sought if the patient develops trouble breathing, persistent pain or chest pressure, new confusion, inability to awaken or to stay awake, or bluish lips or face. Who is at risk for severe coronavirus disease 2019 (COVID-19)? Risk factors for severe COVID-19, regardless of age, include the following: Chronic kidney disease COPD Immunocompromised state due to solid organ transplant Obesity (BMI ≥30) Serious heart conditions (eg, heart failure, coronary artery disease, cardiomyopathies) Sickle cell disease Type 2 diabetes mellitus The following are underlying"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.485,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-e18c55866cf4",
+      "title": "Retropharyngeal Abscess: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764421-overview",
+      "route": "safety",
+      "chunk_id": "77deb79ba058e8b1d0d2_2",
+      "distance": 0.582,
+      "excerpt": "adenopathy Fever Drooling Stridor Torticollis Trismus Physical signs of RPA in infants and children include the following: Cervical adenopathy Retropharyngeal bulge - Do not palpate in children Fever Stridor Torticollis Neck stiffness Drooling Agitation Neck mass Lethargy Respiratory distress Trismus Change in vocal quality Tonsillar displacement Associated signs, including tonsillitis, peritonsillitis, pharyngitis, and otitis media Workup in retropharyngeal abscess Laboratory studies include the following: Complete blood count (CBC) Blood cultures - Indicated before administration of"
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.5754,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-0ba08919556c",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "common",
+      "chunk_id": "bb1164c188b2fc1e1591_7",
+      "distance": 0.5937,
+      "excerpt": "Sickle cell disease Type 2 diabetes mellitus The following are underlying conditions that may represent an increased risk of severe COVID-19: Asthma (moderate to severe) Cerebrovascular disease Cystic fibrosis Immunocompromised state due to blood or bone marrow transplant, immunodeficiencies, HIV infection, corticosteroid use (or other medications that weaken the immune system) Neurologic conditions (eg, dementia) Liver disease Pregnancy Pulmonary fibrosis Smoking Thalassemia Type 1 diabetes mellitus People who live in a nursing home or long-term care facility are also at a higher risk of"
+    },
+    {
+      "id": "rag-2c773fe2a2a5",
+      "title": "Labyrinthitis: Background, Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/856215-overview",
+      "route": "safety",
+      "chunk_id": "915bc21ad8118bc73bc3_6",
+      "distance": 0.5745,
+      "excerpt": "into the inner ear (serous labyrinthitis). !byrinthitis is the most common complication of otitis media, accounting for 32% of all intracranial and extracranial complications in one study. Although bacterial labyrinthitis is rare in the postantibiotic era, bacterial meningitis remains a significant cause of hearing loss. Auditory symptoms, vestibular symptoms, or both may be present in as many as 20% of children with meningitis. Meningitis typically affects both ears, whereas otogenic infections typically cause unilateral symptoms. Suppurative labyrinthitis In patients with meningitis,"
+    },
+    {
+      "id": "rag-816d9e89516f",
+      "title": "Diagnostics for Coronavirus Disease 2019 (COVID-19) Patients: What is the incubation period for coronavirus disease 2019 (COVID-19)?, What is the range of illness severity of patients with coronavirus",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500119-overview",
+      "route": "safety",
+      "chunk_id": "1a58575bd82cfe94cf09_20",
+      "distance": 0.5914,
+      "excerpt": "thrombotic complications in hospitalized patients are deep venous thrombosis and pulmonary embolism. Others include the following: Microvascular thrombosis of the toes Clotting of catheters Myocardial injury with ST-segment elevation Large vessel strokes Limited data are available to inform clinical management around prophylaxis or treatment of venous thromboembolism in COVID-19 patients. Several national professional associations provide resources for up-to-date information concerning COVID-19-associated hypercoagulability, including management of anticoagulation. This is a rapidly evolving"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "55d33be1f52cce54b361ab4983d35284d659cd424a9c681a00dddfdc0f4d5c28",
+    "rag_corpus_hash": "579556015cad866b08db8ce39e4b63541c0fb16a24d9360247d039b42d7e807d",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:03:58+00:00"
+  }
+}

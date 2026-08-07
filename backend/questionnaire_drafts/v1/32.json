@@ -1,0 +1,403 @@
+{
+  "schema_version": 1,
+  "id": "neurological_issues",
+  "label": "神經系統問題",
+  "source_order": 32,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "symptom_onset_pattern",
+      "associated_neurological_symptoms",
+      "recent_injury"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 12,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "symptom_onset_time",
+      "prompt": "症狀是什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是什麼時候開始的？"
+      ]
+    },
+    {
+      "field": "symptom_onset_pattern",
+      "prompt": "是突然發生還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發生",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然發生還是逐漸出現的？"
+      ]
+    },
+    {
+      "field": "symptom_progression",
+      "prompt": "症狀隨著時間是否有加重還是時好時壞？",
+      "kind": "choice",
+      "options": [
+        "加重",
+        "時好時壞"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀隨著時間是否有加重還是時好時壞？"
+      ]
+    },
+    {
+      "field": "symptom_location",
+      "prompt": "症狀出現在頭部 上肢 下肢 還是單側身體 什麼部位？",
+      "kind": "choice",
+      "options": [
+        "頭部",
+        "上肢",
+        "下肢",
+        "單側身體"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀出現在頭部 上肢 下肢 還是單側身體 什麼部位？"
+      ]
+    },
+    {
+      "field": "symptom_description",
+      "prompt": "你如何描述這些症狀？比如麻木 刺痛 癱瘓或是無力感",
+      "kind": "choice",
+      "options": [
+        "麻木",
+        "刺痛",
+        "癱瘓",
+        "無力感"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你如何描述這些症狀？比如麻木 刺痛 癱瘓或是無力感"
+      ]
+    },
+    {
+      "field": "symptom_persistence",
+      "prompt": "症狀是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是持續性的還是間歇性的？"
+      ]
+    },
+    {
+      "field": "symptom_triggers",
+      "prompt": "是否有任何因素觸發或加重症狀？比如壓力 體力活動 或姿勢轉換",
+      "kind": "choice",
+      "options": [
+        "壓力",
+        "體力活動",
+        "姿勢轉換"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有任何因素觸發或加重症狀？比如壓力 體力活動 或姿勢轉換"
+      ]
+    },
+    {
+      "field": "symptom_relievers",
+      "prompt": "是否有任何因素緩解症狀？比如休息或止痛藥",
+      "kind": "choice",
+      "options": [
+        "休息",
+        "止痛藥"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有任何因素緩解症狀？比如休息或止痛藥"
+      ]
+    },
+    {
+      "field": "associated_neurological_symptoms",
+      "prompt": "是否有其他伴隨神經問題的症狀？請將以下有伴隨的神經問題症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "頭痛",
+        "頭暈",
+        "視力改變",
+        "說話困難",
+        "吞嚥困難",
+        "身體平衡或協調問題"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有其他伴隨神經問題的症狀？請將以下有伴隨的神經問題症狀描述給我聽",
+        "頭痛",
+        "頭暈",
+        "視力改變",
+        "說話困難",
+        "吞嚥困難",
+        "身體平衡或協調問題"
+      ]
+    },
+    {
+      "field": "previous_similar_symptoms",
+      "prompt": "你以前是否有過類似的症狀？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你以前是否有過類似的症狀？"
+      ]
+    },
+    {
+      "field": "previous_neurological_diagnoses",
+      "prompt": "是否被診斷過偏頭痛或多發性硬化症？",
+      "kind": "choice",
+      "options": [
+        "偏頭痛",
+        "多發性硬化症"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否被診斷過偏頭痛或多發性硬化症？"
+      ]
+    },
+    {
+      "field": "recent_injury",
+      "prompt": "最近是否有過受傷，特別是頭部或頸部？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "最近是否有過受傷，特別是頭部或頸部？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "RAG 文獻指出，突然發生的嚴重頭痛、局部神經功能缺損（如視力改變、說話困難、無力感）、協調或平衡問題可能是中風或顱內病變的警訊症狀，應優先詢問。應考慮將這些問題設為優先欄位。",
+      "source_ids": [
+        "rag-7619661f37e2",
+        "rag-d4cb3cb8cf26",
+        "rag-1aad73b8067d"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "info",
+      "note": "RAG 文獻提及，三叉神經痛或多發性硬化症可能導致臉部疼痛或感覺異常。若症狀集中於臉部，應考慮這些鑑別診斷。",
+      "source_ids": [
+        "rag-88841bd96012",
+        "rag-cd4d398b4553"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-88841bd96012",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "route": "headache",
+      "chunk_id": "c073c38d1231a0946898_1",
+      "distance": 0.3521,
+      "excerpt": "alternative diagnoses. Signs of dysfunction of other cranial neruves or other neurologic abnormality exclude the diagnosis of classic trigeminal neuralgia and suggest that pain may be secondary to a structural lesion. The International Association for the Study of Pain (IASP) classifies TN into three categories. Classical TN is described as vascular compression that causes anatomical changes in the trigeminal nerve root. Next, secondary TN is due to an underlying neurologic disease. Third, idiopathic TN, is diagnosed after all studies reveal no etiology or there is no apparent cause. Classic"
+    },
+    {
+      "id": "rag-7619661f37e2",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "headache",
+      "chunk_id": "53fc3e4f98765d889be9_5",
+      "distance": 0.4505,
+      "excerpt": "management. Also see Ischemic Stroke in Emergency Medicine and Hemorrhagic Stroke. Clinical Presentation History See the list below: Age, comorbidities Head trauma Motor vehicle collision Fall/jump from height Assault Penetrating injury Loss of consciousness Headache Changes in vision Changes in strength or sensation Coordination or balance problems Loss of executive function or cognition Seizure Coagulation disorders or therapy Intoxication; history of substance abuse Previous neurosurgery Physical See the list below: Altered mental status; unresponsiveness; deficits in Glasgow Coma Scale"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "safety",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.3413,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-cd4d398b4553",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "route": "headache",
+      "chunk_id": "c073c38d1231a0946898_5",
+      "distance": 0.3523,
+      "excerpt": "small arteries or veins compressing the facial nerve. In about 85% of cases, no lesion is identified, even after extensive investigations, and the etiology is labeled idiopathic (classic) by default. Aneurysms, tumors, chronic meningeal inflammation, or other lesions may irritate trigeminal nerve roots along the pons, causing symptomatic trigeminal neuralgia. Uncommonly, an area of demyelination from multiple sclerosis may be the precipitant. Lesions of the entry zone of the trigeminal roots within the pons may cause a similar pain syndrome. An area of demyelination is shown in the image"
+    },
+    {
+      "id": "rag-1aad73b8067d",
+      "title": "Brain Neoplasms: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779664-overview",
+      "route": "headache",
+      "chunk_id": "8b43a6610b35f683aaa4_2",
+      "distance": 0.4407,
+      "excerpt": "intraventricular tumor suddenly occludes the third ventricle. Manifestations may be nonspecific and include the following: Headache Altered mental status Ataxia Nausea Vomiting Weakness Gait disturbance CNS neoplasms also may manifest as follows: Focal seizures Fixed visual changes Speech deficits Focal sensory abnormalities Headache associated with intracranial neoplasms have the following characteristics: Often is a late complaint Usually not an isolated finding The worst symptom in only one half of patients Usually nonspecific and resembles tension-type headaches In patients with"
+    },
+    {
+      "id": "rag-c21e2126a175",
+      "title": "Neuroimaging in Neurocysticercosis: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1168784-overview",
+      "route": "headache",
+      "chunk_id": "c3ac65c4ac2f328bf4e4_19",
+      "distance": 0.4523,
+      "excerpt": "correspond to an intermediate stage named transitional form, inasmuch as the cysticercus has entered into a degenerative process. Although these pathologic changes generally are associated with symptoms (eg, seizures, headaches), some patients with these changes remain asymptomatic. The cysts in the transitional phase may be single or multiple. If multiple, and coexisting with other cysts in the vesicular phase and disseminated calcified nodules in the cerebral parenchyma, the most likely diagnosis is NC. However, when only one cyst is seen in the transitional phase, it corresponds to the"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "fa7e0a640336298cd74c28fbb57e635a34d0a190a82451295912d87e58d07a5c",
+    "rag_corpus_hash": "ca7c0f8ae92ed26dd8a0bffe19707570d5e18a25ba2e542b72cb16b087cafccc",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:07:54+00:00"
+  }
+}

@@ -1,0 +1,380 @@
+{
+  "schema_version": 1,
+  "id": "cardiovascular_issues",
+  "label": "心血管問題",
+  "source_order": 9,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "symptom_onset_pattern",
+      "presenting_symptoms",
+      "chest_discomfort_radiation",
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "symptom_onset_time",
+      "prompt": "心血管症狀什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "心血管症狀什麼時候開始的？"
+      ]
+    },
+    {
+      "field": "symptom_onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然發作還是逐漸出現的？"
+      ]
+    },
+    {
+      "field": "presenting_symptoms",
+      "prompt": "你正經歷什麼症狀？",
+      "kind": "choice",
+      "options": [
+        "胸痛",
+        "呼吸困難",
+        "心悸",
+        "軀干或四肢出現水腫"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你正經歷什麼症狀？ 比方說胸痛 呼吸困難 心悸 軀干或四肢出現水腫"
+      ]
+    },
+    {
+      "field": "chest_discomfort_radiation",
+      "prompt": "胸口不適是否牽連到其他部位？",
+      "kind": "choice",
+      "options": [
+        "手臂",
+        "頸部",
+        "下巴",
+        "背部"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "胸口不適是否牽連到其他部位？比方說手臂 頸部 下巴 或是背部"
+      ]
+    },
+    {
+      "field": "pain_discomfort_description",
+      "prompt": "你如何描述這種疼痛或不適？",
+      "kind": "choice",
+      "options": [
+        "尖銳",
+        "鈍痛",
+        "壓迫感",
+        "擠壓感",
+        "灼熱感"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你如何描述這種疼痛或不適？ 比方說 尖銳 鈍痛 壓迫感 擠壓感 或是 灼熱感"
+      ]
+    },
+    {
+      "field": "symptom_timing",
+      "prompt": "症狀是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是持續性的還是間歇性的？"
+      ]
+    },
+    {
+      "field": "symptom_aggravating_factors",
+      "prompt": "什麼情況會讓症狀加重？",
+      "kind": "choice",
+      "options": [
+        "體力活動",
+        "壓力大",
+        "吃飯",
+        "躺下"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼情況會讓症狀加重？比如體力活動 壓力大 吃飯或是躺下的時候"
+      ]
+    },
+    {
+      "field": "symptom_relieving_factors",
+      "prompt": "什麼情況會讓症狀緩解？",
+      "kind": "choice",
+      "options": [
+        "休息",
+        "用藥",
+        "坐姿"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼情況會讓症狀緩解？比如休息 用藥 或是坐姿的時候"
+      ]
+    },
+    {
+      "field": "symptom_preceding_events",
+      "prompt": "在症狀出現之前是否有像是運動或感到情緒壓力的情形",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "在症狀出現之前是否有像是運動或感到情緒壓力的情形"
+      ]
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "請幫我觀察是否有其他相關症狀並將有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "感到呼吸困難",
+        "感到心跳不規則或加快",
+        "昏厥快暈倒或頭暈",
+        "腿、腳踝或腳有腫脹或是水腫",
+        "冒冷汗",
+        "感到噁心或嘔吐",
+        "肚子痛",
+        "背痛"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請幫我觀察是否有其他相關症狀並將有出現的症狀描述給我聽",
+        "感到呼吸困難",
+        "感到心跳不規則或加快",
+        "昏厥快暈倒或頭暈",
+        "腿、腳踝或腳有腫脹或是水腫",
+        "冒冷汗",
+        "感到噁心或嘔吐",
+        "肚子痛",
+        "背痛"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "問卷中包含「昏厥快暈倒」等選項，若為急性症狀，可能表示嚴重的心血管事件（如心肌梗塞、肺栓塞）或神經系統問題。這類情況不適合透過一般問卷處理，應優先啟動緊急醫療應變程序或 Safety Protocol，以進行即時評估與處置。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-c83aa2895d16"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "warning",
+      "note": "問題涵蓋胸痛、呼吸困難、心悸等典型心臟警訊症狀。這些症狀，特別是運動時誘發（exertional onset）或伴隨背痛時，需要高度警覺。應考慮將相關問題設為優先詢問，以利早期識別潛在的急性冠狀動脈症候群（ACS）或其他心臟急症。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-96ecfdf356bc"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-c83aa2895d16",
+      "title": "Pulmonary Embolism (PE): Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/300901-overview",
+      "route": "chest",
+      "chunk_id": "b69f8e098974a1a4019d_3",
+      "distance": 0.2986,
+      "excerpt": "collapse to gradually progressive dyspnea. The diagnosis of pulmonary embolism should be suspected in patients with respiratory symptoms unexplained by an alternative diagnosis. Patients with pulmonary embolism may present with atypical symptoms, such as the following: Seizures Syncope Abdominal pain Fever Productive cough Wheezing Decreasing level of consciousness New onset of atrial fibrillation Hemoptysis Flank pain Delirium (in elderly patients) See Clinical Presentation for more detail. Diagnosis Evidence-based literature supports the practice of using clinical scoring systems to"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "chest",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.3661,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-96ecfdf356bc",
+      "title": "Acute Coronary Syndrome: Practice Essentials, Background, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1910735-overview",
+      "route": "chest",
+      "chunk_id": "29a8db87cd2aa8fb48b6_4",
+      "distance": 0.3774,
+      "excerpt": "ventricular outflow tract Rales on pulmonary examination (suggestive of left ventricular dysfunction or mitral regurgitation) Potential complications include the following: Ischemia: Pulmonary edema Myocardial infarction: Rupture of the papillary muscle, left ventricular free wall, and ventricular septum See Presentation for more detail. Diagnosis Updated idelines for the management of non-ST-segment elevation ACS were released in 2020 by the European Society of Cardiology (ESC). The updates place increased reliance on high-sensitivity cardiac troponin testing (hs-cTn) for diagnosis. The"
+    },
+    {
+      "id": "rag-738a6d6aa05b",
+      "title": "Cor Pulmonale: Overview, Presentation, DDx",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/154062-overview",
+      "route": "safety",
+      "chunk_id": "584778d576ee1e9a5b46_2",
+      "distance": 0.4313,
+      "excerpt": "cor pulmonale. Acute cor pulmonale: pulmonary embolism (more common) and acute respiratory distress syndrome (ARDS). The underlying pathophysiology in a massive pulmonary embolism causing cor pulmonale is the sudden increase in pulmonary resistance. In ARDS, RV overload can occur due to mechanical ventilation and the pathologic features of the syndrome itself. Mechanical ventilation, especially higher tidal volumes, requires a higher transpulmonary pressure. In the case of ARDS, cor pulmonale is associated with an increased possibility of right-to-left shunting through a patent foramen ovale,"
+    },
+    {
+      "id": "rag-ab6e8f213a7f",
+      "title": "Pediatric Acute Respiratory Distress Syndrome: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/803573-overview",
+      "route": "safety",
+      "chunk_id": "909559be848ecc7f0f79_39",
+      "distance": 0.4347,
+      "excerpt": "decreased air entry on the side of the air leak, an increased percussion note on the same side, and tracheal deviation away from the affected side in a tension pneumothorax. Heart sounds may be muffled, and signs of decreased cardiac output may be observed with a tension pneumothorax. Clinicians must also maintain a high index of suspicion for tension pneumothoraces as a cause for acute onset of decreased cardiac output. VILI is an entity receiving attention with the publication of landmark trials suggesting that a kinder, gentler form of mechanical ventilation improves outcomes in ARDS. VILI"
+    },
+    {
+      "id": "rag-54f74d8c3935",
+      "title": "Heart Failure: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/163062-overview",
+      "route": "chest",
+      "chunk_id": "4d6cbe4e1c12469911bd_1",
+      "distance": 0.3967,
+      "excerpt": "Exertional dyspnea and/or dyspnea at rest Orthopnea Acute pulmonary edema Chest pain/pressure and palpitations Tachycardia Fatigue and weakness Nocturia and oliguria Anorexia, weight loss, nausea Exophthalmos and/or visible pulsation of eyes Distention of neck veins Weak, rapid, and thready pulse Rales, wheezing S 3 llop and/or pulsus alternans Increased intensity of P 2%art sound Hepatojugular reflux Ascites, hepatomegaly, and/or anasarca Central or peripheral cyanosis, pallor See2esentation r more detail. Diagnosis Heart failure criteria, classification, and staging The Framingham criteria"
+    },
+    {
+      "id": "rag-7d1faec45ea2",
+      "title": "Cor Pulmonale: Overview, Presentation, DDx",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/154062-overview",
+      "route": "chest",
+      "chunk_id": "584778d576ee1e9a5b46_21",
+      "distance": 0.3711,
+      "excerpt": "artery may be heard in advanced disease, along with a diastolic pulmonary regurgitation murmur. Other findings upon auscultation of the cardiovascular system may be RV third and fourth sounds or the systolic murmur of tricuspid regurgitation. RVH is characterized by a left parasternal or subxiphoid heave. Hepatojugular reflux and pulsatile liver are signs of RV failure with systemic venous congestion. In severe disease, ascites can also be present. Examination of the lower extremities reveals evidence of pitting edema. Edema in cor pulmonale is strongly associated with hypercapnia. DDx"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "338bef36b09f394ab384268a339aba89e622418f922052a5ef0bdf8f8ef2f43c",
+    "rag_corpus_hash": "c56f007070c9c3be0ccce1aecc5b2571c03f52af2d4ad3b1e4b3f3e09fde4666",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:03:29+00:00"
+  }
+}

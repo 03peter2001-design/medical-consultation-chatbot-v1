@@ -1,0 +1,304 @@
+{
+  "schema_version": 1,
+  "id": "loss_of_consciousness",
+  "label": "失去意識",
+  "source_order": 47,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "loss_of_consciousness_onset"
+    ],
+    "priority_fields": [
+      "trauma_or_substance_use",
+      "preceding_symptoms",
+      "post_event_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 8,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "loss_of_consciousness_onset",
+      "prompt": "什麼時候開始失去意識？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請家人或陪同監護人回答以下問題",
+        "什麼時候開始失去意識？ *"
+      ]
+    },
+    {
+      "field": "preceding_symptoms",
+      "prompt": "病人在失去意識前是否有頭暈、乏力、視線模糊、噁心嘔吐、出冷汗、心跳異常或是其他症狀？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人在失去意識前是否有頭暈、乏力、視線模糊、噁心嘔吐、出冷汗、心跳異常或是其他症狀？"
+      ]
+    },
+    {
+      "field": "weakness_or_fatigue",
+      "prompt": "病人有無力虛弱或疲憊的情況？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人有無力虛弱或疲憊的情況？"
+      ]
+    },
+    {
+      "field": "chronic_diseases",
+      "prompt": "病人是否有高血壓、糖尿病、心臟病或其他慢性疾病？若有，請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人是否有高血壓、糖尿病、心臟病或其他慢性疾病？若有，請讓我知道"
+      ]
+    },
+    {
+      "field": "trauma_or_substance_use",
+      "prompt": "病人在失去意識前是否有受到外傷或頭部撞擊？ 病人是否有服用任何藥物或毒品？ 若有，請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人在失去意識前是否有受到外傷或頭部撞擊？ 病人是否有服用任何藥物或毒品？ 若有，請讓我知道"
+      ]
+    },
+    {
+      "field": "precipitating_factors",
+      "prompt": "病人在失去意識前是否精神壓力過大、過度勞累、過度飲酒、暴露在極端溫度或是沒有進食及飲水呢",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人在失去意識前是否精神壓力過大、過度勞累、過度飲酒、暴露在極端溫度或是沒有進食及飲水呢"
+      ]
+    },
+    {
+      "field": "history_of_seizure_or_related_illness",
+      "prompt": "病人是否有癲癇或其他引發失去意識的疾病病史？ 若有，請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人是否有癲癇或其他引發失去意識的疾病病史？ 若有，請讓我知道"
+      ]
+    },
+    {
+      "field": "post_event_symptoms",
+      "prompt": "病人失去意識後是否有任何特殊情況或動作？比如痙攣、嘔吐、小便失禁或其他情況",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人失去意識後是否有任何特殊情況或動作？比如痙攣、嘔吐、小便失禁或其他情況"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "失去意識可能表示有危及生命的狀況，例如心臟驟停、嚴重創傷或中風。應優先啟動緊急醫療流程，而非僅依賴此問卷。此問卷僅為輔助，用於收集清醒後或由旁觀者提供的資訊。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-072a6b49fc74"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "info",
+      "note": "RAG 文獻建議詢問目擊者關於事件的詳細描述，例如事件後是否出現意識混亂。同時，應收集患者的用藥史以及個人或家族心臟病史。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "chest",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.363,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-2ecfc197752f",
+      "title": "Cryptococcosis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/215354-overview",
+      "route": "headache",
+      "chunk_id": "fbd685e392ecebab0f8a_3",
+      "distance": 0.4179,
+      "excerpt": "symptoms are as follows: Headache Confusion Lethargy Obtundation Coma Normal or mildly elevated temperature Nausea and vomiting (with increased intracranial pressure) Fever and stiff neck (with an aggressive inflammatory response; less common) Blurred vision, photophobia, and diplopia Hearing defects, seizures, ataxia, aphasia, and choreoathetoid movements After lung and CNS infection, the next most commonly involved organs in disseminated cryptococcosis include the skin, the prostate, and the medullary cavity of bones. Cutaneous manifestations (10-15% of cases) are as follows: Papules,"
+    },
+    {
+      "id": "rag-ec6bf7bbe174",
+      "title": "Delirium Tremens (DTs): Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/166032-overview",
+      "route": "headache",
+      "chunk_id": "3206c509f2869bb4033e_1",
+      "distance": 0.4045,
+      "excerpt": "blood pressure). Signs and symptoms of delirium tremens Signs and symptoms can include the following: Minor withdrawal: Tremor, anxiety, nausea, vomiting, and insomnia Major withdrawal: Visual hallucinations and auditory hallucinations, whole body tremor, vomiting, diaphoresis, and hypertension Withdrawal seizures Delirium tremens: Agitation, global confusion, disorientation, hallucinations, fever, hypertension, diaphoresis, autonomic hyperactivity (tachycardia and hypertension) and profound global confusion (hallmark of DTs) See History and Physical Examination. Treatments for delirium"
+    },
+    {
+      "id": "rag-072a6b49fc74",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "chest",
+      "chunk_id": "9f7eb5027998a34eb6c2_2",
+      "distance": 0.3798,
+      "excerpt": "with rapid onset and short duration? Was recovery spontaneous, complete, and without sequelae? Was postural tone lost? If the answers are positive, syncope is highly likely; if 1 or more are negative, other forms of loss of consciousness should be considered. Presyncopal symptoms reported may include the following: Prior faintness, dizziness, or light-headedness (70% of cases of true syncope) Prior vertigo, weakness, diaphoresis, epigastric discomfort, nausea, blurred or faded vision, pallor, or paresthesias Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain,"
+    },
+    {
+      "id": "rag-4f7104e08ddb",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "headache",
+      "chunk_id": "53fc3e4f98765d889be9_15",
+      "distance": 0.4248,
+      "excerpt": "encephalitis, headache, mental status change, hydrocephalus, ischemic disease and infarction, suspected pituitary dysfunction, inflammation or infection of the brain or meninges or their complications, demyelination and dysmyelination disorders, vascular malformations, and arterial or venous/dural sinus abnormalities. Patients who have cardiac pacemakers, ferromagnetic intracranial aneurysm clips, and certain ferromagnetic foreign bodies or electronic devices or implants should not undergo MRI. The routine MRI protocol varies considerably based on strength of the unit's field, machine"
+    },
+    {
+      "id": "rag-186e28076df3",
+      "title": "Brief Psychotic Disorder: Practice Essentials, Background, Pathophysiology and Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/294416-overview",
+      "route": "chest",
+      "chunk_id": "bc9172913065a4ae8c05_1",
+      "distance": 0.3628,
+      "excerpt": "of the following symptoms: Delusions Hallucinations Bizarre behavior and posture Disorganized speech Associated symptoms may include the following: Affective symptoms Disorientation Impaired attention Catatonic behavior The following are also commonly observed in brief psychotic disorder: Emotional volatility Outlandish dress or behavior Screaming or muteness Impaired memory for recent events A psychiatric history may be helpful. Symptoms of brief psychotic disorder must be distinguished from culturally sanctioned response patterns that may resemble such symptoms. Cultural and religious"
+    },
+    {
+      "id": "rag-8080adcc7312",
+      "title": "Hyperammonemia: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1174503-overview",
+      "route": "chest",
+      "chunk_id": "cff6d3000cae1bf61f92_1",
+      "distance": 0.3831,
+      "excerpt": "Vomiting Hyperventilation, grunting respiration Seizures Signs and symptoms of late-onset hyperammonemia (later in life) may include the following: Intermittent ataxia Intellectual impairment Failure to thrive Gait abnormality Behavior disturbances Epilepsy Recurrent Reye syndrome Protein avoidance Rarely, episodic headaches and cyclic vomiting See Clinical Presentation for more detail. Diagnosis No specific physical findings are associated with hyperammonemia. Affected infants usually present with the following: Dehydration Lethargy Tachypnea Hypotonia Bulging fontanelle Examination"
+    },
+    {
+      "id": "rag-7ef049929997",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "route": "headache",
+      "chunk_id": "2b6eb94497953c8a6426_13",
+      "distance": 0.4353,
+      "excerpt": "unconscious, family, friends, or prehospital personnel can be questioned). Other history findings may include the following: Recent noncompliance with medications History of central nervous system (CNS) pathology (stroke, neoplasms, recent surgery) History of systemic neoplasms, infections, metabolic disorders, or toxic ingestions Recent trauma or fall Alcohol abuse Recent travel or immigration to the United States Pregnancy Focal symptoms (partial seizure activity) that then progressed to a generalized seizure Physical examination A generalized seizure is recognizable at the bedside when"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "21cc917552db02887ef45996ce5e849b3a1fb031ef8e45212eaf3457e215f6ce",
+    "rag_corpus_hash": "6bb6627a0915faf1585f8c9b8c6487cca7b63e8437b8e0472f280eb82043d486",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:15:22+00:00"
+  }
+}

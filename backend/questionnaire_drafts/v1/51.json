@@ -1,0 +1,918 @@
+{
+  "schema_version": 1,
+  "id": "abdominal_problems",
+  "label": "腹部問題",
+  "source_order": 51,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": "abdomen",
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "pain_description_male",
+      "pain_description_female",
+      "pain_location_male",
+      "pain_location_female",
+      "associated_symptoms_male",
+      "associated_symptoms_female",
+      "medical_history_male",
+      "medical_history_female",
+      "cardiopulmonary_chronic_disease_male",
+      "cardiopulmonary_chronic_disease_female"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 26,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "abdominal_pain_duration_male",
+      "prompt": "請問你肚子痛距離現在的時間幾小時？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "男性",
+        "請問你肚子痛距離現在的時間幾小時？"
+      ]
+    },
+    {
+      "field": "pain_description_male",
+      "prompt": "如何描述這種疼痛的感覺？比如鈍痛  刺痛 陣痛 持續痛 還是由前痛到背後 由肚臍周圍痛轉移到右下腹痛 或是 飢餓時會加劇疼痛呢",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "如何描述這種疼痛的感覺？比如鈍痛  刺痛 陣痛 持續痛 還是由前痛到背後 由肚臍周圍痛轉移到右下腹痛 或是 飢餓時會加劇疼痛呢"
+      ]
+    },
+    {
+      "field": "pain_location_male",
+      "prompt": "你的肚子痛比較偏向哪個位置？（例如：右上腹、左上腹、右下腹、左下腹、肚臍以下，或是整個肚子都在痛？）如果腰部也疼痛，主要是偏左側還是右側呢？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你的肚子痛比較偏向哪個位置？（例如：右上腹、左上腹、右下腹、左下腹、肚臍以下，或是整個肚子都在痛？）如果腰部也疼痛，主要是偏左側還是右側呢？"
+      ]
+    },
+    {
+      "field": "associated_symptoms_male",
+      "prompt": "請問是否有下列合併症狀？請將以下有出現的症狀或是其他症狀描述讓我知道",
+      "kind": "choice",
+      "options": [
+        "腹瀉",
+        "發燒發冷",
+        "噁心",
+        "嘔吐",
+        "便秘",
+        "血便",
+        "冒冷汗",
+        "胃酸逆流",
+        "血尿",
+        "呼吸道症狀"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請問是否有下列合併症狀？請將以下有出現的症狀或是其他症狀描述讓我知道",
+        "腹瀉",
+        "發燒發冷",
+        "噁心",
+        "嘔吐",
+        "便秘",
+        "血便",
+        "冒冷汗",
+        "胃酸逆流",
+        "血尿",
+        "呼吸道症狀"
+      ]
+    },
+    {
+      "field": "household_symptoms_male",
+      "prompt": "是否有家中或是同行的人有相同的症狀？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有家中或是同行的人有相同的症狀？"
+      ]
+    },
+    {
+      "field": "abdominal_surgery_history_male",
+      "prompt": "請問你有接受過下列腹部手術嗎？請將以下有做過的腹部手術描述讓我知道",
+      "kind": "choice",
+      "options": [
+        "闌尾切除",
+        "膽囊切除",
+        "大腸切除手術",
+        "胃切除手術"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請問你有接受過下列腹部手術嗎？請將以下有做過的腹部手術描述讓我知道",
+        "闌尾切除",
+        "膽囊切除",
+        "大腸切除手術",
+        "胃切除手術"
+      ]
+    },
+    {
+      "field": "other_abdominal_surgery_details_male",
+      "prompt": "若你接受過其他腹部手術，手術的術式和原因為何？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "若你接受過其他腹部手術，手術的術式和原因為何？"
+      ]
+    },
+    {
+      "field": "medical_history_male",
+      "prompt": "請問你有過下列病史嗎？請描述你有過的病史讓我知道",
+      "kind": "choice",
+      "options": [
+        "肝膽結石",
+        "腎結石",
+        "盲腸炎",
+        "腸阻塞",
+        "胰臟炎",
+        "腹主動脈瘤",
+        "疝氣症",
+        "糖尿病酮酸中毒"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請問你有過下列病史嗎？請描述你有過的病史讓我知道",
+        "肝膽結石",
+        "腎結石",
+        "盲腸炎",
+        "腸阻塞",
+        "胰臟炎",
+        "腹主動脈瘤",
+        "疝氣症",
+        "糖尿病酮酸中毒"
+      ]
+    },
+    {
+      "field": "cardiopulmonary_chronic_disease_male",
+      "prompt": "除了上述，請問你有其他心肺慢性病嗎？請描述你有過的心肺慢性病讓我知道",
+      "kind": "choice",
+      "options": [
+        "高血壓",
+        "高血脂",
+        "心絞痛",
+        "心臟衰竭",
+        "心肌梗塞",
+        "心律不整",
+        "肺栓塞",
+        "氣喘",
+        "肺癌",
+        "慢性阻塞型肺",
+        "支氣管擴張"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "除了上述，請問你有其他心肺慢性病嗎？請描述你有過的心肺慢性病讓我知道",
+        "高血壓",
+        "高血脂",
+        "心絞痛",
+        "心臟衰竭",
+        "心肌梗塞",
+        "心律不整",
+        "肺栓塞",
+        "氣喘",
+        "肺癌",
+        "慢性阻塞型肺",
+        "支氣管擴張"
+      ]
+    },
+    {
+      "field": "other_chronic_disease_history_male",
+      "prompt": "你還有哪些慢性疾病史？請描述你有過的慢性疾病史讓我知道 比如 糖尿病 慢性腎病 肝硬化等  如果為自體免疫疾病或是癌症請說明自體免疫疾病或是癌症名稱",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你還有哪些慢性疾病史？請描述你有過的慢性疾病史讓我知道 比如 糖尿病 慢性腎病 肝硬化等  如果為自體免疫疾病或是癌症請說明自體免疫疾病或是癌症名稱"
+      ]
+    },
+    {
+      "field": "past_surgery_history_male",
+      "prompt": "過去是否有接受過手術？若有 請描述手術名稱",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "過去是否有接受過手術？若有 請描述手術名稱"
+      ]
+    },
+    {
+      "field": "current_medications_male",
+      "prompt": "請說明正在服用的藥物？ 若有 請描述藥名",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請說明正在服用的藥物？ 若有 請描述藥名"
+      ]
+    },
+    {
+      "field": "allergies_male",
+      "prompt": "是否有特殊藥物或食物過敏？ 若有 請說明藥物或食物過敏狀況",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有特殊藥物或食物過敏？ 若有 請說明藥物或食物過敏狀況"
+      ]
+    },
+    {
+      "field": "abdominal_pain_duration_female",
+      "prompt": "請問你肚子痛距離現在的時間幾小時？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "女性",
+        "請問你肚子痛距離現在的時間幾小時？"
+      ]
+    },
+    {
+      "field": "pain_description_female",
+      "prompt": "如何描述這種疼痛的感覺？比如鈍痛  刺痛 陣痛 持續痛 還是由前痛到背後 由肚臍周圍痛轉移到右下腹痛 或是 飢餓時會加劇疼痛呢",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "如何描述這種疼痛的感覺？比如鈍痛  刺痛 陣痛 持續痛 還是由前痛到背後 由肚臍周圍痛轉移到右下腹痛 或是 飢餓時會加劇疼痛呢"
+      ]
+    },
+    {
+      "field": "pain_location_female",
+      "prompt": "你的肚子痛比較偏向哪個位置？（例如：右上腹、左上腹、右下腹、左下腹、肚臍以下，或是整個肚子都在痛？）如果腰部也疼痛，主要是偏左側還是右側呢？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你的肚子痛比較偏向哪個位置？（例如：右上腹、左上腹、右下腹、左下腹、肚臍以下，或是整個肚子都在痛？）如果腰部也疼痛，主要是偏左側還是右側呢？"
+      ]
+    },
+    {
+      "field": "associated_symptoms_female",
+      "prompt": "請問是否有下列合併症狀？請將以下有出現的症狀或是其他症狀描述讓我知道",
+      "kind": "choice",
+      "options": [
+        "腹瀉",
+        "發燒發冷",
+        "噁心",
+        "嘔吐",
+        "便秘",
+        "血便",
+        "冒冷汗",
+        "胃酸逆流",
+        "血尿",
+        "月經過期",
+        "陰道分泌物增加",
+        "呼吸道症狀"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請問是否有下列合併症狀？請將以下有出現的症狀或是其他症狀描述讓我知道",
+        "腹瀉",
+        "發燒發冷",
+        "噁心",
+        "嘔吐",
+        "便秘",
+        "血便",
+        "冒冷汗",
+        "胃酸逆流",
+        "血尿",
+        "月經過期",
+        "陰道分泌物增加",
+        "呼吸道症狀"
+      ]
+    },
+    {
+      "field": "household_symptoms_female",
+      "prompt": "是否有家中或是同行的人有相同的症狀？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有家中或是同行的人有相同的症狀？"
+      ]
+    },
+    {
+      "field": "abdominal_surgery_history_female",
+      "prompt": "請問你有接受過下列腹部手術嗎？請將以下有做過的腹部手術描述讓我知道",
+      "kind": "choice",
+      "options": [
+        "剖腹生產",
+        "闌尾切除",
+        "子宮切除",
+        "膽囊切除",
+        "大腸切除手術",
+        "胃切除手術"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請問你有接受過下列腹部手術嗎？請將以下有做過的腹部手術描述讓我知道",
+        "剖腹生產",
+        "闌尾切除",
+        "子宮切除",
+        "膽囊切除",
+        "大腸切除手術",
+        "胃切除手術"
+      ]
+    },
+    {
+      "field": "other_abdominal_surgery_details_female",
+      "prompt": "若你接受過其他腹部手術，手術的術式和原因為何？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "若你接受過其他腹部手術，手術的術式和原因為何？"
+      ]
+    },
+    {
+      "field": "medical_history_female",
+      "prompt": "請問你有過下列病史嗎？請描述你有過的病史讓我知道",
+      "kind": "choice",
+      "options": [
+        "肝膽結石",
+        "腎結石",
+        "盲腸炎",
+        "腸阻塞",
+        "胰臟炎",
+        "腹主動脈瘤",
+        "疝氣症",
+        "糖尿病酮酸中毒"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請問你有過下列病史嗎？請描述你有過的病史讓我知道",
+        "肝膽結石",
+        "腎結石",
+        "盲腸炎",
+        "腸阻塞",
+        "胰臟炎",
+        "腹主動脈瘤",
+        "疝氣症",
+        "糖尿病酮酸中毒"
+      ]
+    },
+    {
+      "field": "cardiopulmonary_chronic_disease_female",
+      "prompt": "除了上述，請問你有其他心肺慢性病嗎？請描述你有過的心肺慢性病讓我知道",
+      "kind": "choice",
+      "options": [
+        "高血壓",
+        "高血脂",
+        "心絞痛",
+        "心臟衰竭",
+        "心肌梗塞",
+        "心律不整",
+        "肺栓塞",
+        "氣喘",
+        "肺癌",
+        "慢性阻塞型肺",
+        "支氣管擴張"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "除了上述，請問你有其他心肺慢性病嗎？請描述你有過的心肺慢性病讓我知道",
+        "高血壓",
+        "高血脂",
+        "心絞痛",
+        "心臟衰竭",
+        "心肌梗塞",
+        "心律不整",
+        "肺栓塞",
+        "氣喘",
+        "肺癌",
+        "慢性阻塞型肺",
+        "支氣管擴張"
+      ]
+    },
+    {
+      "field": "other_chronic_disease_history_female",
+      "prompt": "你還有哪些慢性疾病史？請描述你有過的慢性疾病史讓我知道 比如 糖尿病 慢性腎病 肝硬化等  如果為自體免疫疾病或是癌症請說明自體免疫疾病或是癌症名稱",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你還有哪些慢性疾病史？請描述你有過的慢性疾病史讓我知道 比如 糖尿病 慢性腎病 肝硬化等  如果為自體免疫疾病或是癌症請說明自體免疫疾病或是癌症名稱"
+      ]
+    },
+    {
+      "field": "past_surgery_history_female",
+      "prompt": "過去是否有接受過手術？若有 請描述手術名稱",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "過去是否有接受過手術？若有 請描述手術名稱"
+      ]
+    },
+    {
+      "field": "current_medications_female",
+      "prompt": "請說明正在服用的藥物？ 若有 請描述藥名",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請說明正在服用的藥物？ 若有 請描述藥名"
+      ]
+    },
+    {
+      "field": "allergies_female",
+      "prompt": "是否有特殊藥物或食物過敏？ 若有 請說明藥物或食物過敏狀況",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有特殊藥物或食物過敏？ 若有 請說明藥物或食物過敏狀況"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "腹痛的鑑別診斷複雜，部分症狀（如由肚臍周圍痛轉移到右下腹痛）可能指向闌尾炎，而心肌梗塞、腹主動脈瘤等嚴重疾病也可能以腹痛表現。應優先詢問疼痛特徵、位置、相關症狀及心血管病史以評估緊急程度。",
+      "source_ids": [
+        "rag-397b2501c37a",
+        "rag-a2b9fa7a1109",
+        "rag-b0e44eca1650",
+        "rag-04d05153821c"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "safety",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.457,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-397b2501c37a",
+      "title": "Appendicitis: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/773895-overview",
+      "route": "abdomen",
+      "chunk_id": "00af1f764f9122fe1fb3_2",
+      "distance": 0.3716,
+      "excerpt": "of patients Features of the abdominal pain are as follows: Typically begins as periumbilical or epigastric pain, then migrates to the RLQ Patients usually lie down, flex their hips, and draw their knees up to reduce movements and to avoid worsening their pain The duration of symptoms is less than 48 hours in approximately 80% of adults but tends to be longer in elderly persons and in those with perforation. Physical examination findings include the following: Rebound tenderness, pain on percussion, rigidity, and guarding: Most specific finding RLQ tenderness: Present in 96% of patients, but"
+    },
+    {
+      "id": "rag-62595a939aa5",
+      "title": "Appendicitis: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/773895-overview",
+      "route": "abdomen",
+      "chunk_id": "00af1f764f9122fe1fb3_4",
+      "distance": 0.4017,
+      "excerpt": "accessory signs may be present in a minority of patients: Rovsing sign (RLQ pain with palpation of the LLQ): Suggests peritoneal irritation Obturator sign (RLQ pain with internal and external rotation of the flexed right hip): Suggests the inflamed appendix is located deep in the right hemipelvis Psoas sign (RLQ pain with extension of the right hip or with flexion of the right hip against resistance): Suggests that an inflamed appendix is located along the course of the right psoas muscle Dunphy sign (sharp pain in the RLQ elicited by a voluntary cough): Suggests localized peritonitis RLQ pain"
+    },
+    {
+      "id": "rag-a2b9fa7a1109",
+      "title": "Abdominal Pain in Elderly Persons: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/776663-overview",
+      "route": "safety",
+      "chunk_id": "6cd5c8412c6ef4421f61_23",
+      "distance": 0.5277,
+      "excerpt": "(UTI) in Males). Other Myocardial infarction and pneumonia also commonly present as vague abdominal complaints in elderly patients. Etiology Causes of abdominal pain in elderly patients are as follows (see Pathophysiology for more information): Biliary tract disease Appendicitis Diverticulitis Mesenteric ischemia (risk factors includetrial fibrillation, atherosclerotic disease, and low ejection fraction) Abdominal aortic aneurysm Peptic ulcer disease Malignancy Gastroenteritis Bowel obstruction Small bowel obstructionost often is caused by adhesions from previous surgery. In elderly patients,"
+    },
+    {
+      "id": "rag-438e6b26cfd6",
+      "title": "Abdominal Compartment Syndrome: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/829008-overview",
+      "route": "safety",
+      "chunk_id": "616fe025cba996f96981_14",
+      "distance": 0.4598,
+      "excerpt": "Primary ACS Causes of primary (ie, acute) abdominal compartment syndrome include the following: Penetrating trauma Intraperitoneal hemorrhage Pancreatitis External compressing forces, such as debris from a motor vehicle collision or after a large structure explosion Pelvic fracture Rupture of abdominal aortic aneurysm Perforated peptic ulcer In one review and meta-analysis of studies of patients who developed ACS after repair of ruptured abdominal aortic aneurysms, mortality was found to be 47%. Treatment included open decompression in 86 patients; percutaneous drainage in 18 (catheter only in"
+    },
+    {
+      "id": "rag-e3627805e350",
+      "title": "Enteroviruses: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/217146-overview",
+      "route": "safety",
+      "chunk_id": "477abc783fb7d42fe117_2",
+      "distance": 0.5495,
+      "excerpt": "several infectious travel diseases. Signs and symptoms Clinical manifestations of enteroviral infection differ by viral type. Poliovirus syndromes can be abortive; nonparalytic; or paralytic, including spinal polio, bulbar polio, and polioencephalitis. Polio Abortive polio manifestations include fever, headache, sore throat, loss of appetite, vomiting, and abdominal pain; neurologic symptoms typically are not reported Nonparalytic polio symptoms are similar to those of abortive polio but more intense; also, patients report stiffness of the posterior muscles of the neck, trunk, and limbs"
+    },
+    {
+      "id": "rag-b0e44eca1650",
+      "title": "Acute Cholecystitis and Biliary Colic: Overview, Risk Factors, Evaluation of Biliary Colic and Cholecystitis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1950020-overview",
+      "route": "safety",
+      "chunk_id": "6a76a6ecc00736d4727a_41",
+      "distance": 0.4621,
+      "excerpt": "usually present in the prehospital setting with severe abdominal pain. Transport patients with minor symptoms to the hospital with an intravenous (IV) line in place and monitor. However, the diagnosis of cholecystitis is not a prehospital diagnosis. In patients with severe pain (eg, differential diagnosis includes abdominal aortic aneurysm, myocardial infarction) and in patients with hypotension and/or fever who may have cholecystitis or cholangitis, prehospital care should include the following: Prioritizing and immediately assessing airway, breathing, and circulation (ABCs), as with all"
+    },
+    {
+      "id": "rag-04d05153821c",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "route": "safety",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "distance": 0.4693,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "68bd3bee47a5a3642d7fa65494e8236bd1d452969d89a5bdecf48d283ea1102f",
+    "rag_corpus_hash": "554be6765024040e45be51926253241b3b7d5492824d46401ae32038ec22b91a",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:16:48+00:00"
+  }
+}

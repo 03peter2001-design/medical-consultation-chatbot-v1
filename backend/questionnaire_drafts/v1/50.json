@@ -1,0 +1,409 @@
+{
+  "schema_version": 1,
+  "id": "assault_and_rape",
+  "label": "攻擊 強暴",
+  "source_order": 50,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "other_symptoms",
+      "bleeding_details",
+      "injury_location"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 12,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "event_time",
+      "prompt": "事件發生的時間？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "事件發生的時間？"
+      ]
+    },
+    {
+      "field": "event_location",
+      "prompt": "事件發生的地點是在家中 公共場所 工作場所 還是其他地方",
+      "kind": "choice",
+      "options": [
+        "家中",
+        "公共場所",
+        "工作場所",
+        "其他地方"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "事件發生的地點是在家中 公共場所 工作場所 還是其他地方"
+      ]
+    },
+    {
+      "field": "event_nature",
+      "prompt": "事件的性質是身體攻擊 性攻擊 強暴還是其他性質",
+      "kind": "choice",
+      "options": [
+        "身體攻擊",
+        "性攻擊",
+        "強暴",
+        "其他性質"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "事件的性質是身體攻擊 性攻擊 強暴還是其他性質"
+      ]
+    },
+    {
+      "field": "injury_location",
+      "prompt": "病人的傷害部位是在頭部 臉部 胸部 腹部 四肢 生殖器 還是其他地方",
+      "kind": "choice",
+      "options": [
+        "頭部",
+        "臉部",
+        "胸部",
+        "腹部",
+        "四肢",
+        "生殖器",
+        "其他地方"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "病人的傷害部位是在頭部 臉部  胸部 腹部 四肢 生殖器 還是其他地方"
+      ]
+    },
+    {
+      "field": "injury_type",
+      "prompt": "受到的傷害是撞擊傷 切割傷 瘀傷 骨折還是其他傷害類型？",
+      "kind": "choice",
+      "options": [
+        "撞擊傷",
+        "切割傷",
+        "瘀傷",
+        "骨折",
+        "其他傷害類型"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "受到的傷害是撞擊傷  切割傷 瘀傷 骨折還是其他傷害類型？"
+      ]
+    },
+    {
+      "field": "bleeding_details",
+      "prompt": "是否有出血？若有 請說明出血部位與出血量",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有出血？若有 請說明出血部位與出血量"
+      ]
+    },
+    {
+      "field": "other_symptoms",
+      "prompt": "是否有以下其他症狀？ 請將以下有出現的症狀或是其他症狀描述讓我知道",
+      "kind": "choice",
+      "options": [
+        "疼痛",
+        "頭暈或昏厥",
+        "呼吸困難",
+        "無力或麻木",
+        "意識模糊"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有以下其他症狀？ 請將以下有出現的症狀或是其他症狀描述讓我知道",
+        "疼痛",
+        "頭暈或昏厥",
+        "呼吸困難",
+        "無力或麻木",
+        "意識模糊"
+      ]
+    },
+    {
+      "field": "first_aid_measures",
+      "prompt": "事件後是否已經進行了急救措施？若有 請進一步說明所採取的措施",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "事件後是否已經進行了急救措施？若有 請進一步說明所採取的措施"
+      ]
+    },
+    {
+      "field": "psychological_support_needed",
+      "prompt": "是否需要心理支持或諮詢？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否需要心理支持或諮詢？"
+      ]
+    },
+    {
+      "field": "authorities_notified",
+      "prompt": "是否已經報警或通知相關機構？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否已經報警或通知相關機構？"
+      ]
+    },
+    {
+      "field": "medical_history",
+      "prompt": "是否有其他慢性疾病或正在服用的藥物？ 若有 請進一步說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有其他慢性疾病或正在服用的藥物？ 若有 請進一步說明"
+      ]
+    },
+    {
+      "field": "additional_information",
+      "prompt": "是否有其他需要補充的情況或問題？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有其他需要補充的情況或問題？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "若病人有嚴重創傷、意識不清、呼吸困難或大出血等情況，應立即啟動緊急醫療流程，而非僅填寫問卷。此問卷不適用於取代緊急評估。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-483847047375"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "warning",
+      "note": "應優先詢問警訊症狀，如意識模糊、呼吸困難、頭暈或昏厥，這些可能表示有更嚴重的內傷。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-23645f44d446"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "chest",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4965,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-23645f44d446",
+      "title": "Multifocal Atrial Tachycardia: Overview of Multifocal Atrial Tachycardia, Pathophysiology of MAT, Etiology of MAT",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155825-overview",
+      "route": "chest",
+      "chunk_id": "64bfd50d23b5cd52a2ce_6",
+      "distance": 0.5067,
+      "excerpt": "to quantify because the underlying disease is the primary determinant of complications. Clinical Presentation Patient history Patients may complain of a variety of symptoms, or more rarely, the disease may be asymptomatic. The most common complaints include the following: Palpitations Shortness of breath Chest pain Lightheadedness Syncopal episode These symptoms may be transient. Physical examination Physical examination findings are typically related to the underlying disease process and are not specific for MAT. The pulse is rapid and irregular, and the first heart sound may be variable. The"
+    },
+    {
+      "id": "rag-a6765644e0d1",
+      "title": "Conversion Disorder in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/805361-overview",
+      "route": "chest",
+      "chunk_id": "c2fe2cb9045703583e9f_1",
+      "distance": 0.5315,
+      "excerpt": "to be the expression of an underlying psychological conflict or need. Conversion symptoms are presumed to result from some unconscious process. The precipitating psychological conflict or stressor may not be apparent initially, but may become evident in the course of obtaining a patient s history: ideally, it is a psychological issue related symbolically and temporally to symptom onset. nversion symptoms are not considered to be under voluntary control, and, should not be due to any physical disorder or known pathological mechanism (after appropriate medical evaluation). NB:"
+    },
+    {
+      "id": "rag-0cb6aa4294e7",
+      "title": "Rotator Cuff Injury Management in the ED: Practice Essentials, Pathophysiology, Prognosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827841-overview",
+      "route": "chest",
+      "chunk_id": "b99371e17aeaf2183ed7_4",
+      "distance": 0.5516,
+      "excerpt": "symptoms Signs and symptoms of rotator cuff injuries include the following: Pain Weakness Decreased range of motion Clicking Catching Stiffness Crepitus Diagnosis Examination of a patient with suspected rotator cuff injuries includes a systematic approach to the shoulder, cervical spine, and upper extremity involving the following : Inspection: Look for any scars, color, edema, deformities, muscle atrophy, asymmetry. Palpation of the bony and soft-tissue structures: Note any areas of tenderness. Range of motion (active and passive): Note any pain elicited and loss of motion. Strength testing:"
+    },
+    {
+      "id": "rag-6a8588ffc76c",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "route": "chest",
+      "chunk_id": "a663d18c5f77da4d66fd_25",
+      "distance": 0.5325,
+      "excerpt": "level. Toxicity is defined as a clinical syndrome with the following: lethargy with (1) poor perfusion as evidenced by delayed capillary refill or (2) cyanosis or other signs of respiratory distress. Cold hands and feet, limb pain, and pale or mottled skin are considered \"red flag\" manifestations of septicemia. The presence or absence of meningeal signs is documented in older children. Clinicians should bear in mind that in some infants and younger children (perhaps younger than 12-15 months) who develop meningitis, specific meningeal signs, such as the Kernig or Brudzinski sign, may not be"
+    },
+    {
+      "id": "rag-483847047375",
+      "title": "Blast Injuries: Practice Essentials, Background, Frequency",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822587-overview",
+      "route": "chest",
+      "chunk_id": "c78be2121e6d4a51472a_9",
+      "distance": 0.5608,
+      "excerpt": "symptoms Abnormal findings on chest auscultation Visible external signs of thoracic trauma If significant abdominal pain is present, consider an immediate abdominal radiographic series (flat and upright films) or abdominal CT to detect pneumoperitoneum from enteric rupture. Intestinal barotrauma is more common with underwater injuries than air blast injuries. Focused abdominal sonography for trauma (FAST) is a potentially useful tool for rapidly screening patients, especially in the setting of multiple seriously injured victims. A positive FAST examination in an unstable patient is an"
+    },
+    {
+      "id": "rag-755266268db8",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "route": "safety",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "distance": 0.5483,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical"
+    },
+    {
+      "id": "rag-e18c55866cf4",
+      "title": "Retropharyngeal Abscess: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764421-overview",
+      "route": "safety",
+      "chunk_id": "77deb79ba058e8b1d0d2_2",
+      "distance": 0.5736,
+      "excerpt": "adenopathy Fever Drooling Stridor Torticollis Trismus Physical signs of RPA in infants and children include the following: Cervical adenopathy Retropharyngeal bulge - Do not palpate in children Fever Stridor Torticollis Neck stiffness Drooling Agitation Neck mass Lethargy Respiratory distress Trismus Change in vocal quality Tonsillar displacement Associated signs, including tonsillitis, peritonsillitis, pharyngitis, and otitis media Workup in retropharyngeal abscess Laboratory studies include the following: Complete blood count (CBC) Blood cultures - Indicated before administration of"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "994f497033ad0cee96c24d2e2b19b919bd505bea57daa4671180973c2e4cf94a",
+    "rag_corpus_hash": "a3477f980c7abff4c19ab5b05afff1e7865d286a9b92590fc36fed00408c9129",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:09:23+00:00"
+  }
+}

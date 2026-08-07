@@ -1,0 +1,340 @@
+{
+  "schema_version": 1,
+  "id": "fall",
+  "label": "跌倒",
+  "source_order": 16,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "loss_of_consciousness"
+    ],
+    "priority_fields": [
+      "loss_of_consciousness",
+      "post_fall_symptoms",
+      "pre_fall_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 9,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "fall_time",
+      "prompt": "什麼時候跌倒的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼時候跌倒的？"
+      ]
+    },
+    {
+      "field": "fall_mechanism",
+      "prompt": "怎麼跌倒的？因為意外跌倒還是身體不適失去平衡呢",
+      "kind": "choice",
+      "options": [
+        "意外跌倒",
+        "身體不適失去平衡"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "怎麼跌倒的？因為意外跌倒還是身體不適失去平衡呢"
+      ]
+    },
+    {
+      "field": "fall_height",
+      "prompt": "你是從什麼高度跌倒的？比方說在平地上跌倒 一公尺以下高度 一至三公尺 三至六公尺 或是六公尺以上呢",
+      "kind": "choice",
+      "options": [
+        "在平地上跌倒",
+        "一公尺以下高度",
+        "一至三公尺",
+        "三至六公尺",
+        "六公尺以上"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你是從什麼高度跌倒的？比方說在平地上跌倒 一公尺以下高度 一至三公尺 三至六公尺 或是六公尺以上呢"
+      ]
+    },
+    {
+      "field": "loss_of_consciousness",
+      "prompt": "在跌倒前或跌倒後有失去意識嗎？ *",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "在跌倒前或跌倒後有失去意識嗎？ *"
+      ]
+    },
+    {
+      "field": "last_memory_before_fall",
+      "prompt": "跌倒前最後一件有印象的事，距離跌倒時間是否超過三十分鐘以上？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "跌倒前最後一件有印象的事，距離跌倒時間是否超過三十分鐘以上？"
+      ]
+    },
+    {
+      "field": "pre_fall_symptoms",
+      "prompt": "跌倒之前，你是否有像是頭暈 胸痛 心悸 或是四肢無力的症狀？",
+      "kind": "choice",
+      "options": [
+        "頭暈",
+        "胸痛",
+        "心悸",
+        "四肢無力"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "跌倒之前，你是否有像是頭暈 胸痛 心悸 或是四肢無力的症狀？"
+      ]
+    },
+    {
+      "field": "post_fall_symptoms",
+      "prompt": "跌倒之後，你是否有出現以下症狀？ 請將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "撞到頭部、頭痛、混亂或記憶喪失",
+        "感到頭暈或旋轉感",
+        "感到噁心或嘔吐",
+        "感到手腳無力、麻木、刺痛或說話困難",
+        "感到胸痛、心悸或心跳加速"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "跌倒之後，你是否有出現以下症狀？ 請將以下有出現的症狀描述給我聽",
+        "撞到頭部、頭痛、混亂或記憶喪失",
+        "感到頭暈或旋轉感",
+        "感到噁心或嘔吐",
+        "感到手腳無力、麻木、刺痛或說話困難",
+        "感到胸痛、心悸或心跳加速"
+      ]
+    },
+    {
+      "field": "other_injuries",
+      "prompt": "是否合併其他外傷？像是撕裂傷 軀幹疼痛或是肢體變形瘀青",
+      "kind": "choice",
+      "options": [
+        "撕裂傷",
+        "軀幹疼痛",
+        "肢體變形瘀青"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否合併其他外傷？像是撕裂傷 軀幹疼痛或是肢體變形瘀青"
+      ]
+    },
+    {
+      "field": "history_of_falls",
+      "prompt": "以前常常跌倒嗎？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "以前常常跌倒嗎？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "若跌倒涉及嚴重創傷、失去意識或疑似心臟或神經系統症狀，應優先啟動緊急醫療流程（Safety Protocol），而非僅依賴此問卷。",
+      "source_ids": [
+        "rag-7ef049929997",
+        "rag-d4cb3cb8cf26",
+        "rag-7619661f37e2"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "warning",
+      "note": "跌倒前的胸痛、心悸、呼吸困難、嚴重頭痛或局部神經功能缺損（如單側無力、言語困難）為警訊症狀，需優先評估。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-7ef049929997",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "route": "common",
+      "chunk_id": "2b6eb94497953c8a6426_13",
+      "distance": 0.5387,
+      "excerpt": "unconscious, family, friends, or prehospital personnel can be questioned). Other history findings may include the following: Recent noncompliance with medications History of central nervous system (CNS) pathology (stroke, neoplasms, recent surgery) History of systemic neoplasms, infections, metabolic disorders, or toxic ingestions Recent trauma or fall Alcohol abuse Recent travel or immigration to the United States Pregnancy Focal symptoms (partial seizure activity) that then progressed to a generalized seizure Physical examination A generalized seizure is recognizable at the bedside when"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.5783,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-7619661f37e2",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "safety",
+      "chunk_id": "53fc3e4f98765d889be9_5",
+      "distance": 0.5044,
+      "excerpt": "management. Also see Ischemic Stroke in Emergency Medicine and Hemorrhagic Stroke. Clinical Presentation History See the list below: Age, comorbidities Head trauma Motor vehicle collision Fall/jump from height Assault Penetrating injury Loss of consciousness Headache Changes in vision Changes in strength or sensation Coordination or balance problems Loss of executive function or cognition Seizure Coagulation disorders or therapy Intoxication; history of substance abuse Previous neurosurgery Physical See the list below: Altered mental status; unresponsiveness; deficits in Glasgow Coma Scale"
+    },
+    {
+      "id": "rag-d48b8eb958d5",
+      "title": "Postpartum Hemorrhage: Practice Essentials, Problem, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/275038-overview",
+      "route": "common",
+      "chunk_id": "752250ab4ad44f6f9a41_46",
+      "distance": 0.5655,
+      "excerpt": "tachycardia, dizziness Compensated 1000-1500 mL (15-25%) Slight fall (80-100 mm Hg) Weakness, tachycardia, sweating Mild 1500-2000 mL (25-35%) Moderate fall (70-80 mm Hg) Restlessness, pallor, oliguria Moderate 2000-3000 mL (35-50%) Marked fall (50-70 mm Hg) Collapse, air hunger, anuria Severe Two important facts are worth bearing in mind. The first is that caregivers consistently underestimate visible blood loss by as much as 50%. The volume of any clotted blood represents half of the blood volume required to form the clots. The second is that most women giving birth are healthy and"
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.57,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-07980df086cd",
+      "title": "Cardiac Tests: Practice Essentials, Overview, Exercise Tolerance Test",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811577-overview",
+      "route": "safety",
+      "chunk_id": "b756911235fb6bdef18f_70",
+      "distance": 0.5819,
+      "excerpt": "All patients had D-dimer testing; those with positive results were imaged with either a TRO protocol or with CCTA. Of the 60 of 100 discharged with a negative CCTA, 0 adverse events occurred at 90-day follow-up; of the 19 of 100 with a positive CCTA, 17 were determined to be true positives based on catheter angiography. Thirty-six patients underwent a TRO-CCTA protocol due to elevated D-dimer levels: 5 had pulmonary embolism, 3 had pleural effusion of unknown etiology, and 1 each had severe right-sided ventricular dysfunction with pericardial effusion or an incidentally detected bronchial"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "07575a3c2ed969bb8a22a0e19e0aed9a60d48206864a31d67d59a6aa6a271186",
+    "rag_corpus_hash": "3502c7d2b58b4d4acac7c87bf38ff1d069d0f4044b27fc0b38b97b25d5b267d9",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:05:22+00:00"
+  }
+}

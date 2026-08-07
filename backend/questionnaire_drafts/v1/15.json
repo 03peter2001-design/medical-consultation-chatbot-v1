@@ -1,0 +1,336 @@
+{
+  "schema_version": 1,
+  "id": "eye_problems",
+  "label": "眼睛問題",
+  "source_order": 15,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "symptom_onset_time",
+      "symptom_onset_pattern",
+      "symptom_timing"
+    ],
+    "priority_fields": [
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 8,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "symptom_onset_time",
+      "prompt": "症狀什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀什麼時候開始的？ *"
+      ]
+    },
+    {
+      "field": "symptom_onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然發作還是逐漸出現的？ *"
+      ]
+    },
+    {
+      "field": "symptom_timing",
+      "prompt": "症狀是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是持續性的還是間歇性的？ *"
+      ]
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "是否有下列症狀？請將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "眼睛疼痛",
+        "眼睛紅腫",
+        "視力模糊",
+        "複視",
+        "視力減退",
+        "眼睛有分泌物",
+        "對光特別敏感，感到畏光",
+        "頭痛",
+        "噁心或嘔吐",
+        "臉上有皮疹、瘀斑、水泡或是其他皮膚異常"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有下列症狀？請將以下有出現的症狀描述給我聽",
+        "眼睛疼痛",
+        "眼睛紅腫",
+        "視力模糊",
+        "複視",
+        "視力減退",
+        "眼睛有分泌物",
+        "對光特別敏感，感到畏光",
+        "頭痛",
+        "噁心或嘔吐",
+        "臉上有皮疹、瘀斑、水泡或是其他皮膚異常"
+      ]
+    },
+    {
+      "field": "symptom_laterality",
+      "prompt": "症狀是一隻眼還是雙眼？",
+      "kind": "choice",
+      "options": [
+        "一隻眼",
+        "雙眼"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是一隻眼還是雙眼？"
+      ]
+    },
+    {
+      "field": "precipitating_events",
+      "prompt": "症狀開始前是否有經歷過像是外傷 感染 接觸化學品 及配戴隱形眼鏡的事件？",
+      "kind": "choice",
+      "options": [
+        "外傷",
+        "感染",
+        "接觸化學品",
+        "配戴隱形眼鏡"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀開始前是否有經歷過像是外傷 感染 接觸化學品 及配戴隱形眼鏡的事件？"
+      ]
+    },
+    {
+      "field": "past_ocular_history",
+      "prompt": "你以前有沒有眼睛問題或眼科疾病？像是青光眼 白內障或是視網膜病變",
+      "kind": "choice",
+      "options": [
+        "青光眼",
+        "白內障",
+        "視網膜病變"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你以前有沒有眼睛問題或眼科疾病？像是青光眼 白內障或是視網膜病變"
+      ]
+    },
+    {
+      "field": "past_ocular_procedures",
+      "prompt": "你有沒有接受過眼部手術或激光治療？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你有沒有接受過眼部手術或激光治療？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "RAG 文獻指出，複視 (diplopia) 與嚴重頭痛 (severe headache) 可能是需要優先關注的警訊症狀，可能與神經系統問題相關。應考慮優先詢問這些症狀。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4186,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-e0bcef352b95",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "common",
+      "chunk_id": "bb1164c188b2fc1e1591_6",
+      "distance": 0.445,
+      "excerpt": "Emergency medical attention should be sought if the patient develops trouble breathing, persistent pain or chest pressure, new confusion, inability to awaken or to stay awake, or bluish lips or face. Who is at risk for severe coronavirus disease 2019 (COVID-19)? Risk factors for severe COVID-19, regardless of age, include the following: Chronic kidney disease COPD Immunocompromised state due to solid organ transplant Obesity (BMI ≥30) Serious heart conditions (eg, heart failure, coronary artery disease, cardiomyopathies) Sickle cell disease Type 2 diabetes mellitus The following are underlying"
+    },
+    {
+      "id": "rag-0ba08919556c",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "common",
+      "chunk_id": "bb1164c188b2fc1e1591_7",
+      "distance": 0.479,
+      "excerpt": "Sickle cell disease Type 2 diabetes mellitus The following are underlying conditions that may represent an increased risk of severe COVID-19: Asthma (moderate to severe) Cerebrovascular disease Cystic fibrosis Immunocompromised state due to blood or bone marrow transplant, immunodeficiencies, HIV infection, corticosteroid use (or other medications that weaken the immune system) Neurologic conditions (eg, dementia) Liver disease Pregnancy Pulmonary fibrosis Smoking Thalassemia Type 1 diabetes mellitus People who live in a nursing home or long-term care facility are also at a higher risk of"
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.5053,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-1bdd2eeb05c9",
+      "title": "Histoplasmosis: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/299054-overview",
+      "route": "common",
+      "chunk_id": "6e91495982ecfba39d3d_6",
+      "distance": 0.5366,
+      "excerpt": "< 1 month indicate acute disease; symptoms 1-3 months indicate subacute disease; symptoms >3 months indicate chronic disease Acute syndromes: Pneumonia, disseminated disease in immunocompromised persons Chronic syndromes: Cavitary pulmonary lung disease, calcified lymph nodes, mediastinal fibrosis Physical examination: Uncommon findings include erythema nodosum and erythema multiforme CBC count: Thrombocytopenia in disseminated disease Serology: Useful in testing immunocompetent individuals with acute or subacute disease. Antigen testing: Useful in testing infiltrative or chronic disease in"
+    },
+    {
+      "id": "rag-1d3d3891f923",
+      "title": "Diagnostic Influenza Tests: Reference Range, Interpretation, Collection and Diagnostic Methods",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2053517-overview",
+      "route": "common",
+      "chunk_id": "9938149389dea7f1fe21_27",
+      "distance": 0.5733,
+      "excerpt": "than rapid antigen tests. Questions & Answers Overview What are diagnostic influenza tests? How are diagnostic influenza tests interpreted? How are diagnostic influenza tests performed? What are the types of diagnostic influenza tests? When are diagnostic influenza tests indicated? What are the sensitivity and specificity of diagnostic influenza tests?"
+    },
+    {
+      "id": "rag-4a208a837e29",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_21",
+      "distance": 0.5429,
+      "excerpt": "trichomoniasis. Of these, 77% were asymptomatic. Race-related demographics In the National Longitudinal Study of Adolescent Health Study, significant differences in the prevalence of trichomoniasis among adolescents were noted by race: white, 1.2%; Asian, 1.8%; Latino, 2.1%; Native American, 4.1%; and African American, 6.9%. Considerable differences were also observed in the national NHANES 2001-2004 study conducted among women ages 14-49: non-Hispanic whites, 1.2%; Mexican Americans, 1.5%; and non-Hispanic blacks, 13.5%. Evidence suggests that T vaginalis infection likely increases HIV"
+    },
+    {
+      "id": "rag-bc95b80d4049",
+      "title": "Hypertensive Emergencies: Uncontrolled Blood Pressure, Management of Hypertensive Emergencies",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1952052-overview",
+      "route": "common",
+      "chunk_id": "9ba3bdd8c1367b8de718_44",
+      "distance": 0.5894,
+      "excerpt": "emergency? How common are hypertensive emergencies in the US? What is the role of the history and the physical exam in hypertensive emergencies? What are the most common clinical presentations of hypertensive emergencies? What causes hypertensive emergencies in pregnancy? What are the essential elements of evaluating a patient&#39;s hypertension history in hypertensive emergencies? Which symptoms of hypertensive emergencies may indicate end-organ damage? What should be evaluated in the physical exam of hypertensive emergency? Which symptoms are associated with a hypertensive emergency? Which"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "d9632a7718432a90a220ce0045b128e56faa28528473bba27da3b09fab48d528",
+    "rag_corpus_hash": "fa6c0769555fe961b6a801fb3086ef1faf329532f7db0688a206c95d237c2801",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:05:03+00:00"
+  }
+}

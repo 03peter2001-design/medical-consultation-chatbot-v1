@@ -75,6 +75,10 @@ const hasMoreCases = computed(
 const canCreateInvitation = computed(
   () => doctorSession.canCreateInvitation(),
 )
+const hasEncounter = computed(() => doctorSession.hasEncounter())
+const encounterRegSno = computed(
+  () => doctorSession.context?.encounter?.reg_sno ?? doctorSession.context?.encounter?.regSno ?? '',
+)
 
 async function createInvitation() {
   if (!canCreateInvitation.value || creatingInvitation.value) return
@@ -413,10 +417,10 @@ onBeforeUnmount(() => {
       </template>
       <RouterLink class="nav-link" to="/doctor/rules">規則中心</RouterLink>
       <button
-        v-if="canCreateInvitation"
         class="utility-button"
         type="button"
-        :disabled="creatingInvitation"
+        :disabled="creatingInvitation || !canCreateInvitation"
+        :title="canCreateInvitation ? '建立目前就診的患者問診邀請' : '請先從 B.看診作業開啟目前就診'"
         @click="createInvitation"
       >
         {{ creatingInvitation ? '建立中…' : '患者問診連結' }}
@@ -425,6 +429,17 @@ onBeforeUnmount(() => {
         清除對話
       </button>
     </AppHeader>
+
+    <aside
+      class="encounter-context"
+      :class="{ active: hasEncounter }"
+      role="status"
+      aria-live="polite"
+    >
+      <strong>{{ hasEncounter ? `目前就診：${encounterRegSno}` : '醫師後臺模式' }}</strong>
+      <span v-if="hasEncounter">可建立此次就診的患者問診連結。</span>
+      <span v-else>可查看問診紀錄、使用醫師助手與規則中心；請先從 B.看診作業開啟病人，才能建立患者邀請。</span>
+    </aside>
 
     <aside v-if="invitation || invitationError" class="invitation-banner">
       <template v-if="invitation">
@@ -606,6 +621,32 @@ onBeforeUnmount(() => {
 .clear-button:hover {
   border-color: var(--danger);
   color: var(--danger);
+}
+
+.encounter-context {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.encounter-context strong {
+  flex: 0 0 auto;
+  color: var(--text);
+}
+
+.encounter-context.active {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.encounter-context.active strong {
+  color: var(--green);
 }
 
 .invitation-banner {

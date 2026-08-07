@@ -14,6 +14,28 @@ function readRegistrationNumber(locationLike) {
   return new URLSearchParams(locationLike.search || '').get('regSno')?.trim() || ''
 }
 
+const SESSION_EXPIRED_MESSAGE = 'UCC 登入工作階段已失效，請重新登入'
+
+function isJsonContentType(contentType) {
+  return /(?:^|\/)json(?:;|$)|\+json(?:;|$)/i.test(contentType || '')
+}
+
+async function readBootstrapJson(response) {
+  if (response.redirected || response.status === 401 || response.status === 403) {
+    throw new Error(SESSION_EXPIRED_MESSAGE)
+  }
+
+  if (!isJsonContentType(response.headers?.get?.('content-type'))) {
+    throw new Error(SESSION_EXPIRED_MESSAGE)
+  }
+
+  try {
+    return await response.json()
+  } catch {
+    throw new Error(SESSION_EXPIRED_MESSAGE)
+  }
+}
+
 export function createDoctorSession({
   bootstrapUrl = import.meta.env?.VITE_UCC_BOOTSTRAP_URL || '/AiConsult/Bootstrap',
   fetchImpl = (...args) => fetch(...args),
@@ -36,7 +58,7 @@ export function createDoctorSession({
         credentials: 'same-origin',
         headers: { Accept: 'application/json' },
       })
-      const data = await response.json().catch(() => ({}))
+      const data = await readBootstrapJson(response)
       if (!response.ok) {
         throw new Error(data.detail || data.message || `UCC 驗證失敗（HTTP ${response.status}）`)
       }
@@ -89,6 +111,7 @@ export function createDoctorSession({
     const bootstrapRegSno = context?.encounter?.reg_sno ?? context?.encounter?.regSno
     return Boolean(
       context?.csrf_token
+      && context?.capabilities?.can_create_invitation !== false
       && regSno
       && bootstrapRegSno != null
       && String(bootstrapRegSno) === regSno,
@@ -98,6 +121,10 @@ export function createDoctorSession({
   async function createInvitation(regSno = readRegistrationNumber(locationLike)) {
     if (!regSno) throw new Error('缺少目前就診識別碼')
     if (!context?.csrf_token) await refresh()
+    const bootstrapRegSno = context?.encounter?.reg_sno ?? context?.encounter?.regSno
+    if (!canCreateInvitation() || String(bootstrapRegSno) !== String(regSno)) {
+      throw new Error('請先從 B.看診作業開啟目前就診，再建立患者問診邀請')
+    }
     const requestRegSno = /^\d+$/.test(String(regSno)) ? Number(regSno) : regSno
     const response = await fetchImpl('/AiConsult/Invitations', {
       method: 'POST',
@@ -124,6 +151,7 @@ export function createDoctorSession({
     hasScope,
     canCreateInvitation,
     createInvitation,
+    hasEncounter() { return Boolean(context?.encounter) },
     get context() { return context },
   }
 }

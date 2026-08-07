@@ -20,11 +20,14 @@ foreach ($relative in $required) {
 $compose = Get-Content -LiteralPath (Join-Path $deployRoot 'docker-compose.yml') -Raw
 $nginx = Get-Content -LiteralPath (Join-Path $deployRoot 'nginx\default.conf.template') -Raw
 $exampleEnv = Get-Content -LiteralPath (Join-Path $deployRoot '.env.example') -Raw
-foreach ($needle in @('workers', '"1"', 'ENABLE_UNVERSIONED_ALIASES', 'CORS_ALLOWED_ORIGINS', 'internal: true', 'backend-egress')) {
+foreach ($needle in @('workers', '"1"', 'ENABLE_UNVERSIONED_ALIASES', 'CORS_ALLOWED_ORIGINS', 'internal: true', 'backend-egress', 'AVATAR_CSP_CONNECT_SRC_SUFFIX')) {
     if (-not $compose.Contains($needle)) { throw "Compose invariant missing: $needle" }
 }
-foreach ($needle in @('frame-ancestors ''none''', 'client_max_body_size 12m', 'proxy_read_timeout 180s', 'allow ${UCC_SOURCE_CIDR}', '$request_method $uri')) {
+foreach ($needle in @('frame-ancestors ''none''', 'client_max_body_size 12m', 'proxy_read_timeout 180s', 'allow ${UCC_SOURCE_CIDR}', '$request_method $uri', 'connect-src ''self''${AVATAR_CSP_CONNECT_SRC_SUFFIX}', 'script-src ''self''')) {
     if (-not $nginx.Contains($needle)) { throw "Nginx invariant missing: $needle" }
+}
+if ($nginx.Contains('https://esm.sh')) {
+    throw 'Patient CSP must not allow the obsolete remote D-ID SDK origin.'
 }
 foreach ($blockedPublicRoute in @('location ^~ /api/v1/doctor/', 'location = /api/v1/invitations')) {
     if (-not $nginx.Contains($blockedPublicRoute)) { throw "Public route block missing: $blockedPublicRoute" }

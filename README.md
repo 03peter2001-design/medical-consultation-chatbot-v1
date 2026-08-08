@@ -27,6 +27,39 @@ AI 輔助預問診系統。病患可用文字或語音完成胸痛、頭痛或�
                 → 本機 embedding／Chroma 檢索 → LLM 整理來源片段
 ```
 
+## 服務版本
+
+下表是依 `devlog/` 回溯整理的「目前文件基線版本」，並不代表過去已建立
+同名 Git tag 或已完成正式臨床發布。各服務 README 在對應版本下保留按日期
+整理的詳細更新內容；未來發布時再依 SemVer 分別遞增，不強制所有服務
+使用相同版本號。
+
+| 服務／可部署產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
+| --- | --- | --- | --- | --- |
+| Backend API（含 Breeze ASR） | `1.0.0` | 2026-08-07 | AMIE 問診、確定性 Safety／疾病表、SQLite、`/v1` API、UCC／病患授權與 Avatar proxy | [backend/README.md](backend/README.md#服務版本) |
+| 開發版 Vue frontend | `1.0.0` | 2026-08-07 | 病患問診、醫師工作台、FHIR／SMART、規則中心、返回上一題與 Avatar provider | [frontend/README.md](frontend/README.md#服務版本) |
+| 正式部署 Doctor frontend | `2.0.0` | 2026-08-07 | 獨立醫師 bundle、UCC bootstrap、無 encounter 後臺模式與邀請權限提示 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
+| 正式部署 Patient frontend | `2.0.0` | 2026-08-07 | 獨立病患 bundle、一次性邀請交換、HttpOnly session、問卷修正與本機／D-ID Avatar | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
+| Local Avatar service | `1.0.0` | 2026-08-07 | CosyVoice3 語音、MuseTalk 1.5 唇形、GPU 記憶體釋放、快取與靜態 fallback | [avatar-service/README.md](avatar-service/README.md#服務版本) |
+| SMART on FHIR sandbox app | `1.0.0` | 2026-08-05 | SMART OAuth launch、FHIR 預填、同源 API proxy、合成病人 seed 與本機驗證 | [smart-app/README.md](smart-app/README.md#服務版本) |
+| Integration deployment bundle | `1.0.0` | 2026-08-07 | IIS／Nginx 邊界、doctor／patient 分流、SQLite 備份還原、GPU ASR／Avatar 部署 | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
+
+`frontend-v2/packages/shared` 是 doctor／patient 共用程式庫，不是獨立服務；
+`smart-deployment/` 是 SMART sandbox 的 proxy 設定，跟隨 SMART app
+`1.0.0` 基線維護。HAPI FHIR、PostgreSQL、TW Core 與 SNOMED installer 是外部或
+建置元件，使用各自上游版本；目前矩陣與更新說明見
+[FHIR／術語服務](backend/terminology/README.md#外部元件版本矩陣)。
+
+服務 SemVer 與下列版本維持獨立，避免將部署版本誤當成臨床內容核准或
+資料相容保證：
+
+- API contract major（例如 `/v1`）
+- SQLite `user_version`
+- RAG index version
+- Safety／ClinicalFact／疾病表 revision
+- 問卷與來源資料 schema version
+- 模型、FHIR Implementation Guide 與 SNOMED CT 來源版本
+
 ## 快速開始
 
 需求：Git、Bash、Python 3.12+、Node.js 18+、ffmpeg；FHIR／SMART 流程另需 Docker 與

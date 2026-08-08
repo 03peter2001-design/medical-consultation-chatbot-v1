@@ -4,6 +4,41 @@ This directory contains a deployment blueprint only. Nothing here overwrites
 `C:\Deploy\eHIS`, starts IIS, or starts Ubuntu services until an administrator
 explicitly runs the scripts.
 
+## Service version
+
+目前文件基線為 **integration deployment bundle v1.0.0**（截至 2026-08-07）。
+這是依 `devlog/` 回溯整理的部署文件版本，用來標示安全整合藍圖、雙前端與
+GPU／Avatar 部署能力的共同基線；repository 目前沒有與此版本對應的 Git tag，
+也不表示任何院所環境已完成正式上線驗收。
+
+### v1.0.0（截至 2026-08-07）
+
+- **2026-08-06 — 安全邊界與雙前端部署基線**
+  - 後端整合 RS256 JWT、scope、一次性病患邀請、Secure／HttpOnly session、
+    institution／encounter isolation、安全稽核與明確 CORS allowlist；正式環境可
+    停用未版本化 API aliases。
+  - 建立 `frontend-v2` doctor／patient 分離部署：醫師端位於 `/ai-consult/`，
+    由 UCC bootstrap 取得短效記憶體 token；病患端以 fragment invitation token
+    交換 HttpOnly session，且不包含醫師 router 或 API client。
+  - 新增 Ubuntu Docker Compose／Nginx 唯一入口、私有 FastAPI port、UCC 與病患
+    listener／路由隔離、IIS `/ai-api` reverse proxy、doctor CSP 與 PowerShell
+    build／安裝腳本。
+  - 新增 Ubuntu deploy、SQLite online backup／確認式 restore 與靜態設定驗證；
+    文件涵蓋 TLS、憑證、firewall、單 worker、WAL、金鑰權限與驗收程序。
+- **2026-08-07 — GPU、ASR、Avatar 與部署前驗證**
+  - 部署藍圖納入 Breeze-ASR-26、私有 CosyVoice3 + MuseTalk 1.5 Avatar service，
+    以及可切換的 D-ID browser provider；Avatar service 不發布 host port。
+  - backend／Avatar image 與 Compose 加入 CUDA 12.8、NVIDIA GPU reservation、
+    Hugging Face／模型／影片 volumes，以及各階段模型卸載與 VRAM 釋放設定，供
+    單張 16 GB GPU 的循序錄音→辨識→影片流程使用。
+  - Nginx 加入 Avatar 長 timeout、固定醫師圖片路徑與 provider-specific CSP；
+    local mode 維持 self-only，D-ID mode 僅增加必要 HTTPS／WSS endpoints。
+  - Ubuntu deployment script 僅讀取三個 browser build 設定，不 source server
+    secrets 或輸出值；部署前驗證新增 CUDA、ASR／Avatar invariants、敏感資料與
+    ignore 檢查。
+  - loopback auth bypass 仍預設關閉，且只接受直接 TCP peer 為 loopback；正式
+    UCC principal 持續強制 tenant isolation。
+
 ## Architecture
 
 ```text

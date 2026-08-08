@@ -10,6 +10,29 @@
 FastAPI `/v1/avatar/*` 路由使用它。問診流程不依賴 Avatar；服務失效時仍可
 使用文字問診。
 
+## 服務版本
+
+目前文件基線：**v1.0.0（2026-08-07）**。
+
+此版本號是依 `devlog/2026-08-07.md` 回溯整理的 Avatar 服務文件基線，目前沒有
+對應的 Git tag 或獨立 release，也不表示 Avatar、聲線、肖像或任何臨床內容已取得
+臨床核准。後端 `/v1/avatar/*` 的 `/v1` 是 API 契約前綴，與本服務版本無關。
+
+### v1.0.0（2026-08-07）
+
+- 建立私有網路內的本機 Avatar 服務：以 CosyVoice3 合成華語語音，再由 MuseTalk
+  1.5 依指定醫師圖產生 25 fps MP4；問診不依賴 Avatar，失效時仍可使用文字流程。
+- 以內容 hash 快取完成影片，模型權重與影片分別保存於持久 volume；提供模型預下載、
+  狀態檢查及快取重用機制，避免相同文字重複推論。
+- 固定 CosyVoice 與 MuseTalk 上游 source revision；CosyVoice speech-tokenizer 的
+  ONNX 前處理固定走 CPU，語音主模型及唇形生成使用 CUDA／FP16。
+- 支援唇形生成失敗時保留合成語音與靜態圖片的 fallback；後端 gateway 沿用病患
+  session，且不向瀏覽器暴露 Avatar service host。
+- 加入分階段 VRAM 釋放：語音完成後卸載 CosyVoice，影片完成或失敗後卸載
+  MuseTalk 並清除 CUDA cache，以支援與 Breeze ASR 共用單張 16 GB GPU。
+- 模型與媒體只在本機服務及 volumes 間處理，不送往第三方 Avatar provider；真人
+  肖像與聲音在使用前仍須取得明確同意，Avatar 不代表醫師本人遠距看診或診斷。
+
 ## 模型與執行環境
 
 Docker image 固定使用下列官方原始碼 revision，以免上游更新未經驗證就進入

@@ -1,0 +1,162 @@
+{
+  "id": "loss_of_consciousness",
+  "label": "失去意識",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 47,
+    "source_sha256": "21cc917552db02887ef45996ce5e849b3a1fb031ef8e45212eaf3457e215f6ce",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "loss_of_consciousness_onset"
+    ],
+    "priority_fields": [
+      "trauma_or_substance_use",
+      "preceding_symptoms",
+      "post_event_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 8,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "loss_of_consciousness_onset",
+      "prompt": "什麼時候開始失去意識？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "preceding_symptoms",
+      "prompt": "病人在失去意識前是否有頭暈、乏力、視線模糊、噁心嘔吐、出冷汗、心跳異常或是其他症狀？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "weakness_or_fatigue",
+      "prompt": "病人有無力虛弱或疲憊的情況？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "chronic_diseases",
+      "prompt": "病人是否有高血壓、糖尿病、心臟病或其他慢性疾病？若有，請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "trauma_or_substance_use",
+      "prompt": "病人在失去意識前是否有受到外傷或頭部撞擊？ 病人是否有服用任何藥物或毒品？ 若有，請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "precipitating_factors",
+      "prompt": "病人在失去意識前是否精神壓力過大、過度勞累、過度飲酒、暴露在極端溫度或是沒有進食及飲水呢",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "history_of_seizure_or_related_illness",
+      "prompt": "病人是否有癲癇或其他引發失去意識的疾病病史？ 若有，請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "post_event_symptoms",
+      "prompt": "病人失去意識後是否有任何特殊情況或動作？比如痙攣、嘔吐、小便失禁或其他情況",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

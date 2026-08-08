@@ -1,0 +1,169 @@
+{
+  "id": "skin_problem_trauma",
+  "label": "皮膚問題 外傷",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 39,
+    "source_sha256": "3c3e3c9e74a36f2e94c0d63b85c4325fe4446d66aec462af3df28c927340c7a9",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 7,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_time",
+      "prompt": "皮膚問題或外傷是什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "onset_pattern",
+      "prompt": "是突然發生還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發生",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "location",
+      "prompt": "皮膚問題或外傷位於你身體的頭頸部、軀幹還是四肢",
+      "kind": "choice",
+      "options": [
+        "頭頸部",
+        "軀幹",
+        "四肢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "skin_appearance",
+      "prompt": "皮膚外觀看起來如何？ 是否有皮疹、傷口、燒傷、腫脹或水泡",
+      "kind": "choice",
+      "options": [
+        "皮疹",
+        "傷口",
+        "燒傷",
+        "腫脹",
+        "水泡"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "progression",
+      "prompt": "皮膚問題隨著時間有好轉嗎？還是時好時壞",
+      "kind": "choice",
+      "options": [
+        "有好轉",
+        "時好時壞"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "你是否有像是發燒、疼痛、搔癢、紅腫、局部發燙或是有分泌物的其他症狀",
+      "kind": "choice",
+      "options": [
+        "發燒",
+        "疼痛",
+        "搔癢",
+        "紅腫",
+        "局部發燙",
+        "有分泌物"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "previous_history",
+      "prompt": "以前是否有過類似的皮膚問題？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

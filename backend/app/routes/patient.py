@@ -1,7 +1,7 @@
 """Patient questionnaire and AMIE interview endpoints."""
 
-from copy import deepcopy
 import time
+from copy import deepcopy
 
 from fastapi import (
     APIRouter,
@@ -27,7 +27,6 @@ from amie.disease_profiles import attach_safety_conditions
 from amie.models import ChiefComplaintAssessment
 from app.contracts import PatientChatResponse, error_responses
 from app.models import ChatRequest, PatientPrefill
-from app.security import current_patient_session, require_patient_session
 from app.runtime import (
     AMIE_DEBUG_TRACE,
     INTERVIEW_ENGINE,
@@ -37,6 +36,7 @@ from app.runtime import (
     llm_client,
     sessions,
 )
+from app.security import current_patient_session, require_patient_session
 from app.services.amie_audit import (
     append_amie_trace as _append_amie_trace,
 )
@@ -54,7 +54,6 @@ from app.services.input_validation import (
     store_question_answer,
     validate_question_answer,
 )
-from app.services.security_audit import audit_patient, safe_log
 from app.services.patient_interview import (
     ROUTE_KEYWORDS,
     SUPPORTED_PATIENT_ROUTES,
@@ -85,6 +84,7 @@ from app.services.patient_interview import (
 from app.services.patient_interview import (
     urgent_possible_conditions as _urgent_possible_conditions,
 )
+from app.services.security_audit import audit_patient, safe_log
 from domain.questionnaires import (
     CHIEF_QUESTIONNAIRE,
     ROUTE_LABELS,
@@ -93,6 +93,7 @@ from domain.questionnaires import (
     filter_question_by_context,
     next_question_index,
     progress_meta,
+    questionnaire_disposition,
     questionnaire_meta,
 )
 from domain.questionnaires import (
@@ -138,9 +139,7 @@ def _restore_previous_question(session: dict) -> dict:
 
     snapshot = history.pop()
     integration = session.get("_integration")
-    transcript = session.get("transcript", [])[
-        : snapshot.pop("_transcript_length", 0)
-    ]
+    transcript = session.get("transcript", [])[: snapshot.pop("_transcript_length", 0)]
     session.clear()
     session.update(snapshot)
     session["_history"] = history
@@ -185,7 +184,7 @@ def classify_complaint(text: str) -> str:
                 {"role": "user", "content": text},
             ],
             temperature=0,
-            max_tokens=5,
+            max_tokens=32,
         )
         route = result.strip().lower().strip("`'\".。 ")
         if route in {*ROUTE_KEYWORDS, "other"}:
@@ -564,6 +563,66 @@ def _get_amie_engine() -> AMIEEngine:
     return _amie_engine_instance
 
 
+async def _governed_route_entry(
+    session: dict,
+    *,
+    route: str,
+    user_input: str,
+    user_display: str | None,
+    background_tasks: BackgroundTasks,
+) -> dict | None:
+    """Apply urgent/manual-entry governance before any long questionnaire."""
+    disposition = questionnaire_disposition(route)
+    if disposition == "questionnaire":
+        return None
+
+    label = ROUTE_LABELS[route]
+    flag = {
+        "code": f"route_entry_{disposition}_{route}",
+        "label": label,
+        "scope": "route_entry",
+        "route": route,
+        "possible_conditions": [],
+    }
+    if disposition == "urgent":
+        return await _complete_urgent_chief_complaint(
+            session,
+            user_input=user_input,
+            route=route,
+            red_flags=[flag],
+            background_tasks=background_tasks,
+        )
+
+    session["amie_state"] = {
+        "red_flags": [flag],
+        "knowledge_gaps": [f"{label}需由醫療人員即時評估"],
+    }
+    session["turn_count"] = session.get("turn_count", 0) + 1
+    _append_manual_amie_trace(
+        session,
+        current_question=CHIEF_QUESTIONNAIRE[0],
+        answer=user_input,
+        action="handoff",
+        reason=f"{label}屬時效或處置敏感主訴，依路由治理停止自動問卷並轉交。",
+        source="route_disposition",
+        red_flags=[flag],
+    )
+    return await _handoff_amie_consultation(
+        session,
+        reason=f"{label}需要由現場醫療人員即時確認處置與檢查順序",
+        user_display=user_display,
+    )
+
+
+def _governed_entry_route(routes: list[str]) -> str | None:
+    """Prefer urgent over handoff when several evidenced complaints coexist."""
+    for disposition in ("urgent", "handoff"):
+        for route in routes:
+            if questionnaire_disposition(route) == disposition:
+                return route
+    return None
+
+
 async def _handoff_amie_consultation(
     session: dict,
     *,
@@ -711,18 +770,30 @@ async def _chat_amie(
                 answer=user_input,
                 action="handoff",
                 reason=(
-                    f"主訴被分類為 {route or 'unknown'}，不在目前核准的"
-                    "胸痛、頭痛或腹痛問卷範圍，因此轉交醫療人員。"
+                    f"主訴被分類為 {route or 'unknown'}，無法對應已核准的"
+                    "問卷路由，因此轉交醫療人員。"
                 ),
                 source="route_guard",
             )
             return await _handoff_amie_consultation(
                 session,
-                reason="主訴不在目前支援的胸痛、頭痛或腹痛路由",
+                reason="主訴無法對應目前支援的問卷路由",
                 user_display=user_display,
             )
         routes = _complaint_routes(data, route)
         data["types"] = routes
+        governed_route = _governed_entry_route(routes)
+        if governed_route:
+            data["type"] = governed_route
+            governed_response = await _governed_route_entry(
+                session,
+                route=governed_route,
+                user_input=user_input,
+                user_display=user_display,
+                background_tasks=background_tasks,
+            )
+            if governed_response is not None:
+                return governed_response
         questionnaire = build_questionnaire(routes)
         _apply_chief_questionnaire_prefills(data, questionnaire)
         questionnaire = [
@@ -942,14 +1013,26 @@ async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
             return _question_payload(
                 session,
                 reply=(
-                    "了解，您描述的症狀目前不在胸痛／頭痛／腹痛問診"
-                    "範圍內，建議直接由現場護理師或醫師進一步分流。"
+                    "了解，您描述的症狀目前無法對應已核准的問卷路由，"
+                    "建議直接由現場護理師或醫師進一步分流。"
                 ),
                 user_display=user_display,
                 completed=True,
             )
         routes = _complaint_routes(data, route)
         data["types"] = routes
+        governed_route = _governed_entry_route(routes)
+        if governed_route:
+            data["type"] = governed_route
+            governed_response = await _governed_route_entry(
+                session,
+                route=governed_route,
+                user_input=user_input,
+                user_display=user_display,
+                background_tasks=background_tasks,
+            )
+            if governed_response is not None:
+                return governed_response
         questionnaire = build_questionnaire(routes)
         _apply_chief_questionnaire_prefills(data, questionnaire)
         questionnaire = [

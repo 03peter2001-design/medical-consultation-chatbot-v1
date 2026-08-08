@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
-from domain.questionnaires import DISEASE_ROUTES, ROUTE_LABELS
+from domain.questionnaires import (
+    ALL_DISEASE_ROUTES,
+    ALL_ROUTE_LABELS,
+    load_questionnaire_category,
+)
 
 
 def _route_value(
@@ -37,10 +41,12 @@ def _onset_display(data: dict, route: str, *, primary_route: str) -> str:
 def build_summary(data: dict, *, include_identity: bool = True) -> str:
     ctype = data.get("type", "chest")
     routes: list[str] = [
-        str(route) for route in data.get("types", [ctype]) if route in DISEASE_ROUTES
-    ] or [ctype]
-    primary_route = routes[0]
-    default_reason = "、".join(ROUTE_LABELS.get(route) or route for route in routes)
+        str(route) for route in data.get("types", [ctype]) if route in ALL_DISEASE_ROUTES
+    ]
+    primary_route = routes[0] if routes else ""
+    default_reason = (
+        "、".join(ALL_ROUTE_LABELS.get(route) or route for route in routes) or "其他不適"
+    )
     identity_line = (
         f"- 姓名：{data.get('name', '未提供')}\n- 出生日期：{data.get('birth_date', '未提供')}\n"
         if include_identity
@@ -89,7 +95,7 @@ def build_summary(data: dict, *, include_identity: bool = True) -> str:
 - 家人/同行是否有相同症狀：{value("contact_history")}
 - 腹部相關病史：{value("abdomen_hx")}
 - 腹部手術史：{value("surgery")}""")
-        else:
+        elif route == "chest":
             symptom_blocks.append(f"""
 胸痛問卷：
 - 發作時間：{onset}
@@ -103,6 +109,20 @@ def build_summary(data: dict, *, include_identity: bool = True) -> str:
 - 伴隨症狀：{value("associated")}
 - 心肺疾病史：{value("cardio")}
 - 胸痛相關手術史：{value("surgery")}""")
+        else:
+            answers = []
+            for question in load_questionnaire_category(route):
+                answer = _route_value(
+                    data,
+                    route,
+                    question["field"],
+                    primary_route=primary_route,
+                    default="",
+                )
+                if answer:
+                    answers.append(f"- {question['prompt'].rstrip(' *')}：{answer}")
+            content = "\n".join(answers) or "- 尚未填寫（入口已轉交醫療人員）"
+            symptom_blocks.append(f"\n{ALL_ROUTE_LABELS.get(route, route)}問卷：\n{content}")
 
     tail = f"""
 - 抽菸：{data.get("smoke", "未填")}

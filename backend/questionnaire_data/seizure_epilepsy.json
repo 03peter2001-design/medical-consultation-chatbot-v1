@@ -1,0 +1,172 @@
+{
+  "id": "seizure_epilepsy",
+  "label": "抽搐 癲癇",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 10,
+    "source_sha256": "32114868c84d57f0e0b788e26adbf247fe4401f753dae632a3ecabbb264cb927",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "seizure_duration",
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 8,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "seizure_onset_time",
+      "prompt": "癲癇什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "seizure_onset_pattern",
+      "prompt": "是突然發作還是逐漸發作的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸發作"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "seizure_duration",
+      "prompt": "癲癇發作持續了多長時間？ 有到一分鐘 五分鐘 或十分鐘內 還是更久嗎",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "seizure_description",
+      "prompt": "請描述一下癲癇發作的情況 比方說 全身強直陣攣性發作或是局部發作呢",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "postictal_state",
+      "prompt": "癲癇發作後的狀況如何？ 比方說 是否意識混亂 嗜睡 全身虛弱 或 大小便失禁",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "請幫我觀察是否有其他相關症狀並將有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "癲癇發作前或發作後有發燒",
+        "感到頭痛",
+        "感到噁心或嘔吐",
+        "癲癇發作後有局部神經功能缺損，包括手腳無力、虛弱、麻木、說話困難",
+        "癲癇發作期間有受傷",
+        "感到胸痛、心悸或呼吸困難"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "previous_seizure_history",
+      "prompt": "以前有過癲癇發作嗎？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "other_neurological_conditions",
+      "prompt": "除了癲癇外 是否有其他像中風 腦出血 頭部外傷 或腦腫瘤的神經系統疾病",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

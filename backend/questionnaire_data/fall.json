@@ -1,0 +1,210 @@
+{
+  "id": "fall",
+  "label": "跌倒",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 16,
+    "source_sha256": "07575a3c2ed969bb8a22a0e19e0aed9a60d48206864a31d67d59a6aa6a271186",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "loss_of_consciousness"
+    ],
+    "priority_fields": [
+      "loss_of_consciousness",
+      "post_fall_symptoms",
+      "pre_fall_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 9,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "fall_time",
+      "prompt": "什麼時候跌倒的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "fall_mechanism",
+      "prompt": "怎麼跌倒的？因為意外跌倒還是身體不適失去平衡呢",
+      "kind": "choice",
+      "options": [
+        "意外跌倒",
+        "身體不適失去平衡"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "fall_height",
+      "prompt": "你是從什麼高度跌倒的？比方說在平地上跌倒 一公尺以下高度 一至三公尺 三至六公尺 或是六公尺以上呢",
+      "kind": "choice",
+      "options": [
+        "在平地上跌倒",
+        "一公尺以下高度",
+        "一至三公尺",
+        "三至六公尺",
+        "六公尺以上"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "loss_of_consciousness",
+      "prompt": "在跌倒前或跌倒後有失去意識嗎？ *",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "last_memory_before_fall",
+      "prompt": "跌倒前最後一件有印象的事，距離跌倒時間是否超過三十分鐘以上？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pre_fall_symptoms",
+      "prompt": "跌倒之前，你是否有像是頭暈 胸痛 心悸 或是四肢無力的症狀？",
+      "kind": "choice",
+      "options": [
+        "頭暈",
+        "胸痛",
+        "心悸",
+        "四肢無力"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "post_fall_symptoms",
+      "prompt": "跌倒之後，你是否有出現以下症狀？ 請將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "撞到頭部、頭痛、混亂或記憶喪失",
+        "感到頭暈或旋轉感",
+        "感到噁心或嘔吐",
+        "感到手腳無力、麻木、刺痛或說話困難",
+        "感到胸痛、心悸或心跳加速"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "other_injuries",
+      "prompt": "是否合併其他外傷？像是撕裂傷 軀幹疼痛或是肢體變形瘀青",
+      "kind": "choice",
+      "options": [
+        "撕裂傷",
+        "軀幹疼痛",
+        "肢體變形瘀青"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "history_of_falls",
+      "prompt": "以前常常跌倒嗎？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

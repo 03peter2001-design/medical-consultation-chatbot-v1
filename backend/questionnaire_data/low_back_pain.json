@@ -1,0 +1,261 @@
+{
+  "id": "low_back_pain",
+  "label": "腰痛",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 18,
+    "source_sha256": "ce699d92678d58ec5df023d7e671d2b3f9774c8b796c072151a6eae78f786c06",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 12,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "pain_onset_time",
+      "prompt": "疼痛何時開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_frequency",
+      "prompt": "疼痛是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_laterality",
+      "prompt": "疼痛是一側還是兩側？",
+      "kind": "choice",
+      "options": [
+        "一側",
+        "兩側"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "has_tender_point",
+      "prompt": "是否有壓痛點？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_radiation",
+      "prompt": "疼痛是否牽連到腹股溝 腹部 或背部",
+      "kind": "choice",
+      "options": [
+        "腹股溝",
+        "腹部",
+        "背部"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_character",
+      "prompt": "你如何描述這種疼痛？ 像是 尖銳 鈍痛 刺痛或是 痙攣",
+      "kind": "choice",
+      "options": [
+        "尖銳",
+        "鈍痛",
+        "刺痛",
+        "痙攣"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_aggravating_factors",
+      "prompt": "什麼情況會讓疼痛加重？ 比如 活動 深呼吸或是 進食的時候",
+      "kind": "choice",
+      "options": [
+        "活動",
+        "深呼吸",
+        "進食"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_relieving_factors",
+      "prompt": "什麼情況會讓疼痛緩解？比如 休息 用藥 或是有某些特定姿勢呢",
+      "kind": "choice",
+      "options": [
+        "休息",
+        "用藥",
+        "特定姿勢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "precipitating_events",
+      "prompt": "疼痛開始前是否有外傷 運動 或是可能的感染？",
+      "kind": "choice",
+      "options": [
+        "外傷",
+        "運動",
+        "可能的感染"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "是否有以下症狀？請將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "排尿困難、血尿、頻尿、尿急或尿液顏色改變",
+        "噁心、嘔吐、腹痛或腹瀉",
+        "發燒或畏寒",
+        "腰部是否有皮疹、紅腫或腫脹",
+        "胸痛、心悸或心跳加速"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "past_kidney_history",
+      "prompt": "以前是否有腎結石、泌尿道感染或其他腎臟問題的病史？",
+      "kind": "choice",
+      "options": [
+        "腎結石",
+        "泌尿道感染",
+        "其他腎臟問題"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

@@ -1,0 +1,230 @@
+{
+  "id": "dizziness",
+  "label": "暈眩",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 13,
+    "source_sha256": "8d8d2aa836f7ee2ccbb7480eb034d41680b5a7a03e81b29423af78df776bd9e9",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "dizziness_onset_time",
+      "dizziness_onset_pattern",
+      "dizziness_frequency"
+    ],
+    "priority_fields": [
+      "dizziness_associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "dizziness_onset_time",
+      "prompt": "暈眩是從什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "dizziness_onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "dizziness_frequency",
+      "prompt": "頭暈是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "dizziness_sensation_type",
+      "prompt": "頭暈是什麼感覺？",
+      "kind": "choice",
+      "options": [
+        "全身無力",
+        "眩暈",
+        "輕飄飄",
+        "要暈倒",
+        "覺得地板在晃動的感覺"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "dizziness_history_frequency",
+      "prompt": "你常常感到頭暈嗎？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "dizziness_triggers",
+      "prompt": "什麼活動或情況會引發頭暈？",
+      "kind": "choice",
+      "options": [
+        "站起來",
+        "轉動頭部",
+        "某些活動和姿勢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "dizziness_relieved_by_closing_eyes",
+      "prompt": "閉眼是否會讓頭暈緩解？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "dizziness_preceding_events",
+      "prompt": "頭暈開始前是否有頭部外傷 感染或是服用新藥物的情況",
+      "kind": "choice",
+      "options": [
+        "頭部外傷",
+        "感染",
+        "服用新藥物"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "dizziness_associated_symptoms",
+      "prompt": "是否有以下症狀？請將以下有出現的糖尿病相關症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "聽力改變，如聽力下降或耳鳴",
+        "手腳無力、麻木、說話困難或走路困難",
+        "胸痛、心悸、呼吸困難或心跳快速或不規則的感覺",
+        "噁心、嘔吐、解黑便或腹痛",
+        "冒冷汗、臉色蒼白或瀕死感",
+        "頭痛，特別是嚴重或突然發作的",
+        "發燒或是畏寒",
+        "月經量多或持續時間長"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "dizziness_previous_episodes",
+      "prompt": "你以前有沒有類似的頭暈發作？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

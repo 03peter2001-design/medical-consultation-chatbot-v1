@@ -1,0 +1,179 @@
+{
+  "id": "intentional_drug_overdose",
+  "label": "蓄意藥物過量",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 35,
+    "source_sha256": "bae9ddfa73640f26a589002821b41ddd6b0fe6237dce795efac2373cf8536127",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "substance_taken",
+      "amount_of_substance_taken",
+      "time_of_ingestion"
+    ],
+    "priority_fields": [
+      "mental_state",
+      "current_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 8,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "substance_taken",
+      "prompt": "你服用了什麼物質？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "has_container_or_label",
+      "prompt": "你有容器或標籤嗎？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "amount_of_substance_taken",
+      "prompt": "你服用了多少這種物質？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "time_of_ingestion",
+      "prompt": "你是什麼時候服用這種物質的",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "ingestion_intent",
+      "prompt": "這次服用是故意的還是誤食嗎？",
+      "kind": "choice",
+      "options": [
+        "故意的",
+        "誤食"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "triggering_event",
+      "prompt": "是否有導致服用的具體原因或事件？ 比如自傷",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "current_symptoms",
+      "prompt": "你現在有什麼症狀？比如頭暈、呼吸困難心悸、心律不整或胸痛",
+      "kind": "choice",
+      "options": [
+        "頭暈",
+        "呼吸困難",
+        "心悸",
+        "心律不整",
+        "胸痛"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "mental_state",
+      "prompt": "是否感到焦慮、抑鬱或有自殺的想法？",
+      "kind": "choice",
+      "options": [
+        "焦慮",
+        "抑鬱",
+        "有自殺的想法"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

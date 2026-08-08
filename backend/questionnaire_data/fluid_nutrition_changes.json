@@ -1,0 +1,215 @@
+{
+  "id": "fluid_nutrition_changes",
+  "label": "液體/營養改變",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 19,
+    "source_sha256": "e0f7c5e43c5018908fb1fe8395c9d94c969ecc1515de23feb69bc7acf2a731d1",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "onset_of_changes"
+    ],
+    "priority_fields": [
+      "nutritional_problems",
+      "digestive_symptoms",
+      "other_related_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_of_changes",
+      "prompt": "您從何時開始注意到液體或營養的改變？ *",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "fluid_changes",
+      "prompt": "您注意到哪些液體改變？ 請將以下有出現的液體改變描述給我聽  也可補充是否有其他液體改變",
+      "kind": "choice",
+      "options": [
+        "尿量減少",
+        "尿量增加",
+        "口乾舌燥",
+        "皮膚乾燥",
+        "水腫"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "nutritional_problems",
+      "prompt": "您是否有以下營養問題？ 請將以下有出現的營養問題描述給我聽 也可補充是否有其他營養問題",
+      "kind": "choice",
+      "options": [
+        "食慾不振",
+        "不明原因的體重變化",
+        "食物攝取量減少",
+        "過度飢餓"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "digestive_symptoms",
+      "prompt": "您是否有以下消化系統的症狀？ 請將以下有出現的消化系統症狀描述給我聽 也可補充是否有其他症狀",
+      "kind": "choice",
+      "options": [
+        "噁心",
+        "嘔吐",
+        "腹瀉",
+        "便秘",
+        "胃痛"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "recent_diet_fluid_changes",
+      "prompt": "您是否最近有飲食或液體攝取習慣的改變？ 若有請進一步描述",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "chronic_diseases",
+      "prompt": "您是否有像是糖尿病 心臟病 腎病 肝病 或其他慢性疾病？若有 請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "recent_medical_surgical_history",
+      "prompt": "您是否有最近的醫療或手術史？ 若有 請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "contributing_factors",
+      "prompt": "您最近是否有像是過度運動 壓力大 高溫環境暴露或是感染這些導致液體或營養改變的情況？若有 請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "medications_or_supplements",
+      "prompt": "您是否有服用任何藥物或補充劑？ 若有 請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "other_related_symptoms",
+      "prompt": "您是否有以下其他相關症狀？ 請將以下有出現的其他相關症狀描述給我聽 也可補充是否有其他症狀",
+      "kind": "choice",
+      "options": [
+        "頭暈",
+        "乏力",
+        "口渴",
+        "頻尿",
+        "視力模糊"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

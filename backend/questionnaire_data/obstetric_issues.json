@@ -1,0 +1,197 @@
+{
+  "id": "obstetric_issues",
+  "label": "產科問題",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 33,
+    "source_sha256": "991f45f8edda1f30c6c475b859464eef0d6c80c5772ad65b17b4c2662e2ac5b8",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "extremity_or_facial_swelling"
+    ],
+    "priority_fields": [
+      "obstetric_symptoms",
+      "decreased_fetal_movement",
+      "extremity_or_facial_swelling"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 9,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "gestational_age_weeks",
+      "prompt": "目前懷孕週數？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "estimated_due_date",
+      "prompt": "預產期是什麼時候？",
+      "kind": "date",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "obstetric_symptoms",
+      "prompt": "你的症狀是什麼？請將有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "產道出血",
+        "下腹疼痛",
+        "宮縮",
+        "見紅"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_onset_time",
+      "prompt": "症狀是什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_onset_pattern",
+      "prompt": "症狀是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "decreased_fetal_movement",
+      "prompt": "你感覺最近胎動是否有減少？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "dizziness_or_syncope",
+      "prompt": "是否感到頭暈或昏厥？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "nausea_or_vomiting",
+      "prompt": "是否感到噁心或嘔吐？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "extremity_or_facial_swelling",
+      "prompt": "是否感到手、腳或臉部腫脹？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

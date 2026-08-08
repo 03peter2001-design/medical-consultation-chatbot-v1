@@ -1,0 +1,224 @@
+{
+  "id": "back_pain",
+  "label": "背痛",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 4,
+    "source_sha256": "3304b7e9ff7ded868a4210f2ff65209dfdbd5d63c66125a498e3c884e888669f",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_time",
+      "prompt": "背痛什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_location",
+      "prompt": "疼痛的位置在哪裡？",
+      "kind": "choice",
+      "options": [
+        "下背部",
+        "上背部",
+        "中背部"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_radiation",
+      "prompt": "是局部還是牽連到其他部位？",
+      "kind": "choice",
+      "options": [
+        "局部",
+        "牽連到其他部位"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "point_tenderness",
+      "prompt": "有觸痛點嗎？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_timing",
+      "prompt": "疼痛是持續性還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "aggravating_factors",
+      "prompt": "什麼姿勢會讓疼痛加重？",
+      "kind": "choice",
+      "options": [
+        "站姿",
+        "坐姿",
+        "身體活動的時候"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "relieving_factors",
+      "prompt": "什麼情況會讓疼痛緩解？",
+      "kind": "choice",
+      "options": [
+        "休息",
+        "藥物",
+        "按摩"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "previous_episodes",
+      "prompt": "你以前有過類似的背痛嗎？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "請幫我觀察是否出現以下症狀並將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "胸痛",
+        "肚子痛",
+        "感到腿部或腳部麻木、刺痛或無力",
+        "有排尿或排便的困難，如失禁或尿滯留",
+        "小便會疼痛或是血尿",
+        "有發燒或畏寒",
+        "疼痛在夜間會加重或會把你痛醒",
+        "痛點附近皮膚有起水泡"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

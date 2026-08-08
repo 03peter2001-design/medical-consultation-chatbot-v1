@@ -1,0 +1,170 @@
+{
+  "id": "respiratory_issues",
+  "label": "呼吸問題",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 38,
+    "source_sha256": "075a4249fd21fb44e4f7ccd7ce3a088bfb05de6cc8301a421b4a7d62a852dab1",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "chronic_respiratory_disease_history"
+    ],
+    "priority_fields": [
+      "symptoms_list"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 7,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "symptom_onset_time",
+      "prompt": "呼吸道症狀是什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_onset_pattern",
+      "prompt": "是突然發生還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發生",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptoms_list",
+      "prompt": "你有哪些症狀？ 請將以下你有的症狀描述出來讓我知道",
+      "kind": "choice",
+      "options": [
+        "呼吸急促",
+        "咳嗽",
+        "喘",
+        "胸痛",
+        "咳血",
+        "有痰",
+        "發燒",
+        "畏寒",
+        "下肢水腫"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_duration_pattern",
+      "prompt": "症狀是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "previous_similar_episodes",
+      "prompt": "以前是否有過類似的發作？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "chronic_respiratory_disease_history",
+      "prompt": "你有沒有哮喘、慢性阻塞性肺病或是慢性支氣管炎類似的慢性呼吸系統疾病 *",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "cardiovascular_disease_history",
+      "prompt": "你有沒有心臟衰竭或冠心病類似的心血管疾病？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

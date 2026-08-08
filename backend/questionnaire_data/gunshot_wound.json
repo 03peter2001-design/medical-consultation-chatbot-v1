@@ -1,0 +1,256 @@
+{
+  "id": "gunshot_wound",
+  "label": "槍傷",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 22,
+    "source_sha256": "84d711902b17b258a7343441fe2183f5e78220825e6ffc590e010be892fab11b",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "location_of_wound",
+      "active_bleeding"
+    ],
+    "priority_fields": [
+      "active_bleeding",
+      "bleeding_amount",
+      "signs_of_shock",
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 12,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "time_of_injury",
+      "prompt": "什麼時候發生槍傷的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "location_of_wound",
+      "prompt": "槍傷的位置在頭 胸 腹 背 四肢 還是其他地方？ *",
+      "kind": "choice",
+      "options": [
+        "頭",
+        "胸",
+        "腹",
+        "背",
+        "四肢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "wound_entry_exit",
+      "prompt": "槍傷是否有出入口還是只有入口而已？",
+      "kind": "choice",
+      "options": [
+        "有出入口",
+        "只有入口"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "active_bleeding",
+      "prompt": "現在是否還在出血？ *",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "bleeding_amount",
+      "prompt": "出血量是輕微 中等還是大量呢？",
+      "kind": "choice",
+      "options": [
+        "輕微",
+        "中等",
+        "大量"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_near_wound",
+      "prompt": "槍傷附近是否有疼痛？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "是否有以下症狀？請將有出現的症狀描述給我聽 也可以補充其他症狀",
+      "kind": "choice",
+      "options": [
+        "意識改變、頭暈或昏厥",
+        "呼吸異常",
+        "心跳與脈搏異常",
+        "劇烈疼痛",
+        "無法移動受傷部位",
+        "皮膚蒼白或冒冷汗"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "signs_of_infection",
+      "prompt": "槍傷是否有感染的跡象（例如紅腫、發熱、化膿）？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "other_injuries",
+      "prompt": "是否有其他相關傷口或損傷？若有 請描述",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "signs_of_shock",
+      "prompt": "病人是否有出現休克的症狀？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "medical_history",
+      "prompt": "病人是否有其他慢性疾病或服用的藥物？  若有 請描述",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "first_aid_received",
+      "prompt": "病人是否有接受過任何緊急處理或急救措施？ 若有 請描述",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

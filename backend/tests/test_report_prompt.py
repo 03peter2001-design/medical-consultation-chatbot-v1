@@ -36,6 +36,20 @@ class ReportPromptTests(unittest.TestCase):
         self.assertIn("可能疾病與理由會由系統依固定疾病表", prompt)
         self.assertNotIn("姓名", prompt)
 
+    def test_new_route_prompt_uses_the_catalog_label(self):
+        prompt = build_report_prompt(
+            {
+                "type": "fever",
+                "gender": "女",
+                "age": "30",
+                "reason": "發燒",
+                "fever_onset": "2天前",
+            }
+        )
+
+        self.assertIn("發燒主訴", prompt)
+        self.assertNotIn("胸痛主訴", prompt)
+
 
 if __name__ == "__main__":
     unittest.main()

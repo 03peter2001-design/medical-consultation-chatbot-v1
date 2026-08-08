@@ -1,0 +1,132 @@
+{
+  "id": "ent_problems",
+  "label": "耳鼻喉問題",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 14,
+    "source_sha256": "ca3437755c1764631bced98b6eb91170e8a5392b33463f0c359cff9227bb3eaf",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "symptom_onset_time",
+      "symptom_pattern"
+    ],
+    "priority_fields": [
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 5,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "symptom_onset_time",
+      "prompt": "症狀什麼時候開始的？ *",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_pattern",
+      "prompt": "症狀是持續性的還是間歇性的？ *",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_location",
+      "prompt": "症狀位置在哪裡？ 比方說哪一側或是雙側耳朵 鼻子 或是喉嚨",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "是否有下列症狀？請將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "發燒或畏寒",
+        "聽力改變，如聽力下降、耳鳴或耳朵悶塞感",
+        "頭暈或眩量",
+        "鼻塞、分泌物或流鼻血",
+        "感到鼻竇區域的疼痛或壓力",
+        "喉嚨痛、吞嚥困難或聲音變化",
+        "感到呼吸困難、喘鳴",
+        "感到面部不對稱",
+        "臉部、脖子或喉嚨有腫脹"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "prior_trauma_or_infection",
+      "prompt": "症狀開始前是否發生過外傷或感染",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

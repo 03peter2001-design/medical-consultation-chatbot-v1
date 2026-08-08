@@ -1,0 +1,181 @@
+{
+  "id": "vaginal_bleeding",
+  "label": "陰道出血",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 49,
+    "source_sha256": "e978bbb5e5857fd0fe20e77d9813ddf4888dc27bef8a6126b492c7d5a494ac7e",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "bleeding_amount_pads_per_day",
+      "bleeding_related_to_menstrual_cycle",
+      "accompanying_abdominal_or_back_pain",
+      "pregnancy_status",
+      "previous_similar_episodes"
+    ],
+    "priority_fields": [
+      "pregnancy_status",
+      "bleeding_amount_pads_per_day",
+      "accompanying_abdominal_or_back_pain"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 9,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_weakness",
+      "prompt": "什麼時候開始覺得無力",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "bleeding_amount_pads_per_day",
+      "prompt": "出血的量一天大概要用幾片棉墊？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "bleeding_related_to_menstrual_cycle",
+      "prompt": "出血跟月經週期是否有關？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "last_menstrual_period",
+      "prompt": "最後一次月經是什麼時候？",
+      "kind": "date",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "accompanying_abdominal_or_back_pain",
+      "prompt": "出血時是否伴隨有下腹部疼痛或是背痛？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pregnancy_status",
+      "prompt": "目前是否懷孕，或是否有可能懷孕？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "recent_gynecological_procedures",
+      "prompt": "最近是否有接受過任何婦產科相關侵入性治療或是手術？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "previous_similar_episodes",
+      "prompt": "之前是否有過類似的情形？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "uterine_fibroids_diagnosis",
+      "prompt": "是否被診斷過子宮肌瘤過？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

@@ -15,6 +15,7 @@ import ConsultationBrowser from '../components/ConsultationBrowser.vue'
 import PatientRecordCard from '../components/PatientRecordCard.vue'
 import StructuredReport from '../components/StructuredReport.vue'
 import TypingIndicator from '../components/TypingIndicator.vue'
+import { QUESTIONNAIRE_ROUTE_LABELS } from '../data/questionnaireRoutes.js'
 import { api, backendUrl, connectionError } from '../services/backend.js'
 
 const sessionId = `dr_${Date.now()}`
@@ -117,14 +118,7 @@ function focusInput() {
 }
 
 function typeLabel(type) {
-  return (
-    {
-      chest: '胸痛',
-      headache: '頭痛',
-      abdomen: '腹痛',
-      other: '其他',
-    }[type] || type || '未分類'
-  )
+  return QUESTIONNAIRE_ROUTE_LABELS[type] || (type === 'other' ? '其他' : type) || '未分類'
 }
 
 function summaryUnavailableMessage(record) {

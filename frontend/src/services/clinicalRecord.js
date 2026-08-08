@@ -4,11 +4,14 @@ import {
   resolveConditionCoding,
   resolveConditionCodings,
 } from './terminology.js'
+import {
+  QUESTIONNAIRE_FIELD_LABELS,
+  QUESTIONNAIRE_ROUTE_FIELDS,
+  QUESTIONNAIRE_ROUTE_LABELS,
+} from '../data/questionnaireRoutes.js'
 
 const TYPE_LABELS = {
-  chest: '胸痛',
-  headache: '頭痛',
-  abdomen: '腹痛',
+  ...QUESTIONNAIRE_ROUTE_LABELS,
   other: '其他',
 }
 
@@ -171,25 +174,6 @@ export function buildClinicalRecord(record = {}) {
     ? data.types
     : [record.type].filter(Boolean)
   const routeLabels = routes.map((route) => TYPE_LABELS[route] || route)
-  const symptomFields = [
-    'onset',
-    'start_type',
-    'location',
-    'worst_ever',
-    'severity',
-    'quality',
-    'aggravate',
-    'relieve',
-    'associated',
-    'risk_flags',
-    'contact_history',
-    'fixed',
-    'tender',
-    'cardio',
-    'neuro',
-    'abdomen_hx',
-    'surgery',
-  ]
   const chief = record.chief_assessment || {}
   const extraction = chief.extraction || {}
   const amie = record.amie_state || {}
@@ -209,19 +193,21 @@ export function buildClinicalRecord(record = {}) {
     )
   const symptomFacts = routes.flatMap((route, routeIndex) => {
     const prefix = routeIndex === 0 ? '' : `${route}__`
+    const routeFields = QUESTIONNAIRE_ROUTE_FIELDS[route] || []
+    const routeFieldLabels = QUESTIONNAIRE_FIELD_LABELS[route] || {}
     return labeledFacts(
       data,
-      symptomFields.map((field) => `${prefix}${field}`),
+      routeFields.map((field) => `${prefix}${field}`),
       codings,
     ).map((fact) => ({
       ...fact,
-      label:
-        routes.length > 1
-          ? `${TYPE_LABELS[route] || route} · ${
-              FIELD_LABELS[fact.key.replace(prefix, '')] ||
-              fact.key.replace(prefix, '')
-            }`
-          : fact.label,
+      label: routes.length > 1
+        ? `${TYPE_LABELS[route] || route} · ${
+            FIELD_LABELS[fact.key.replace(prefix, '')] ||
+            routeFieldLabels[fact.key.replace(prefix, '')] ||
+            fact.key.replace(prefix, '')
+          }`
+        : FIELD_LABELS[fact.key] || routeFieldLabels[fact.key] || fact.key,
     }))
   })
   const mapAssessment = (item) => {

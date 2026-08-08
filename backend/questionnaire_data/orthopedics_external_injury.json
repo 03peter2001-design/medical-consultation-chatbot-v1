@@ -1,0 +1,204 @@
+{
+  "id": "orthopedics_external_injury",
+  "label": "骨科外",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 34,
+    "source_sha256": "6ed8c4d2669350d2f84b1b7bf855da1fff87a8c79c7b7afc76658f06d43f142b",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "injury_location",
+      "lower_limb_weight_bearing"
+    ],
+    "priority_fields": [
+      "injury_location",
+      "sensory_symptoms",
+      "visible_deformity",
+      "open_wound_or_bleeding"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "injury_time",
+      "prompt": "什麼時候受傷的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "injury_type",
+      "prompt": "是挫傷 擦傷 撕裂傷還是切割傷",
+      "kind": "choice",
+      "options": [
+        "挫傷",
+        "擦傷",
+        "撕裂傷",
+        "切割傷"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "injury_location",
+      "prompt": "是頭頸部、胸部、腹部還是背部受傷了？ *",
+      "kind": "choice",
+      "options": [
+        "頭頸部",
+        "胸部",
+        "腹部",
+        "背部"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "swelling_or_bruising",
+      "prompt": "是否有腫脹或瘀傷？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "can_move_injured_part",
+      "prompt": "你能否移動受傷部位？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "lower_limb_weight_bearing",
+      "prompt": "受傷部位是否在下肢？如果受傷部位在下肢，你能否承重？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "sensory_symptoms",
+      "prompt": "是否感到受傷部位附近有麻木、刺痛或無力？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "visible_deformity",
+      "prompt": "受傷部位是否有可見的變形或異常位置？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "can_use_injured_part",
+      "prompt": "能否正常使用受傷部位？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "open_wound_or_bleeding",
+      "prompt": "受傷部位是否有開放性傷口或出血？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

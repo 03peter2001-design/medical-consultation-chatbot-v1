@@ -1,0 +1,359 @@
+{
+  "id": "neck_pain",
+  "label": "頸部疼痛",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 30,
+    "source_sha256": "7857556f7e6ea07e9a15278e0a83bb20e16bd191d34b37eb5273ac631d30fc7b",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "dyspnea",
+      "pain_radiation",
+      "arm_hand_symptoms",
+      "associated_headache",
+      "fever_chills",
+      "neck_stiffness"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 17,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "pain_onset_time",
+      "prompt": "疼痛何時開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "tender_point",
+      "prompt": "有明顯觸痛點嗎？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_nature",
+      "prompt": "疼痛是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_radiation",
+      "prompt": "疼痛是否牽連到肩膀 手臂 胸部 背部 或其他部位？",
+      "kind": "choice",
+      "options": [
+        "肩膀",
+        "手臂",
+        "胸部",
+        "背部",
+        "其他部位"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_aggravating_factors",
+      "prompt": "什麼情況會讓疼痛加重或是誘發疼痛？比如運動 咳嗽 碰觸 或某些姿勢",
+      "kind": "choice",
+      "options": [
+        "運動",
+        "咳嗽",
+        "碰觸",
+        "某些姿勢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_relieving_factors",
+      "prompt": "什麼情況會讓疼痛緩解？比如休息 用藥 熱敷 冰敷 按摩呢",
+      "kind": "choice",
+      "options": [
+        "休息",
+        "用藥",
+        "熱敷",
+        "冰敷",
+        "按摩"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "triggering_event",
+      "prompt": "是否有觸發疼痛的特定事件？比如 受傷 意外 用力咳嗽 嘔吐 還是突然的大動作",
+      "kind": "choice",
+      "options": [
+        "受傷",
+        "意外",
+        "用力咳嗽",
+        "嘔吐",
+        "突然的大動作"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "previous_similar_pain",
+      "prompt": "以前有過類似的頸部疼痛嗎？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "arm_hand_symptoms",
+      "prompt": "是否感到手臂或手有麻木、刺痛、無力或感覺喪失？",
+      "kind": "choice",
+      "options": [
+        "麻木",
+        "刺痛",
+        "無力",
+        "感覺喪失"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "associated_headache",
+      "prompt": "是否有與頸部疼痛相關的頭痛？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "fever_chills",
+      "prompt": "你是否有發燒或畏寒？",
+      "kind": "choice",
+      "options": [
+        "發燒",
+        "畏寒"
+      ],
+      "multiple": true,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "neck_stiffness",
+      "prompt": "你的頸部是否有僵硬感？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "dysphagia",
+      "prompt": "你是否感到吞嚥困難？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "dyspnea",
+      "prompt": "你是否有呼吸急促或呼吸困難？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "previous_head_spine_injury",
+      "prompt": "你以前有過頭部或脊柱的受傷嗎？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "previous_head_spine_surgery",
+      "prompt": "是否有過涉及頭部或脊柱的手術？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

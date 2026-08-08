@@ -1,7 +1,10 @@
 # Provisional 問卷草稿
 
 此目錄保存由 `docs/疾病問卷.txt` 經本機 RAG 與 Gemini 一次性結構化後的審查
-草稿。它們不是執行期問卷，也不可直接複製到 `questionnaire_data/`。
+草稿。`scripts/promote_questionnaires.py` 只有在完整 clinical signoff manifest
+通過 reviewer、日期、問卷來源與 route catalog hash、逐路由核准與 blocking review-note 驗證後才會
+提升；不可手動複製，以免繞過稽核、帶入 `source_lines` 或覆寫既有三痛 stable
+contract。
 
 產生完整草稿：
 
@@ -18,10 +21,11 @@ venv/bin/python -m scripts.structure_questionnaires
 - `rag_sources`：本機 RAG chunk、距離、截斷 excerpt 與來源資訊
 - `review_notes`：Gemini 依 RAG 產生、尚未人工核實的建議
 
-發布前至少需要醫療、安全、隱私及 UX 審查，並補齊路由、確定性 Safety、
-ClinicalFact、語意選項、報表與前端支援。特別是心臟驟停、槍傷、中風、藥物
-過量、失去意識、性暴力等類別，必須先走核准的緊急／人工流程，不可讓一般
-問卷延誤處置。
+目前 49 份結構化 candidate 可接受 schema、來源與前端 metadata drift 檢查，但
+不會加入主訴分類或病患執行期。既有三痛仍是唯一核准路由，保留完整
+ClinicalFact／疾病投票。心臟驟停、槍傷、中風、藥物過量、失去意識、性暴力等
+候選類別的緊急／人工流程仍屬待簽核政策；在核准前一律由既有 Safety 或 unsupported
+route 的 fail-closed handoff 保護，不執行 candidate 長問卷。
 
 原始檔共有 52 個編號類別；其中胸痛、頭痛、腹部問題與現行三條路由重疊，
 因此是 49 個非重疊的新類別。重疊類別只能合併審查，不可覆寫現行 stable field

@@ -1,0 +1,185 @@
+{
+  "id": "body_ache",
+  "label": "身體酸痛",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 6,
+    "source_sha256": "880952947824871862141dfa6633cd8836d2f806128c259ad816316a8ab43250",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "onset_time",
+      "location"
+    ],
+    "priority_fields": [
+      "location"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 8,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_time",
+      "prompt": "身體痠痛什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "location",
+      "prompt": "痠痛的位置在哪裡？",
+      "kind": "choice",
+      "options": [
+        "頭頸部",
+        "胸腹部",
+        "背部",
+        "四肢",
+        "全身性"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "timing",
+      "prompt": "痠痛是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "aggravating_factors",
+      "prompt": "什麼活動或情況會讓痠痛加重？",
+      "kind": "choice",
+      "options": [
+        "活動",
+        "休息期間",
+        "某些特定姿勢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "relieving_factors",
+      "prompt": "什麼情況會讓痠痛緩解？",
+      "kind": "choice",
+      "options": [
+        "休息",
+        "用藥",
+        "熱敷/冷敷"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "related_events",
+      "prompt": "最近有沒有進行哪些活動、受傷或生病，可能與痠痛有關？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "請幫我觀察是否有其他相關症狀並將有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "發燒或畏寒",
+        "異常疲倦或虛弱",
+        "疼痛處有皮疹、瘀斑、水泡或是其他皮膚異常"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

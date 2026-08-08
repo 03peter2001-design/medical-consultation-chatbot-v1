@@ -1,0 +1,141 @@
+{
+  "id": "stroke",
+  "label": "中風",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 41,
+    "source_sha256": "efe96e8f4be419b46d190aa752a12f4dc5a25c9d3adf7f3294a5aa64c19104be",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "symptom_onset_time",
+      "current_fast_symptoms"
+    ],
+    "priority_fields": [
+      "symptom_onset_time",
+      "current_fast_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 6,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "symptom_onset_time",
+      "prompt": "症狀是什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "current_fast_symptoms",
+      "prompt": "現在是否有嘴角歪斜、說話困難或手腳麻木無力的症狀",
+      "kind": "choice",
+      "options": [
+        "嘴角歪斜",
+        "說話困難",
+        "手腳麻木無力"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "affected_body_parts",
+      "prompt": "受影響的部位是臉、上肢、下肢還是單側身體？",
+      "kind": "choice",
+      "options": [
+        "臉",
+        "上肢",
+        "下肢",
+        "單側身體"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_progression",
+      "prompt": "症狀自開始以來有好轉嗎？ 還是時好時壞",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "previous_similar_symptoms",
+      "prompt": "以前是否有過類似的症狀？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "chest_pain",
+      "prompt": "有沒有胸痛？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

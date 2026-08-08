@@ -1,11 +1,19 @@
 import json
+import tempfile
 import unittest
 from datetime import date
+from pathlib import Path
 
 from domain.questionnaires import (
+    ALL_DISEASE_ROUTES,
+    CANDIDATE_DISEASE_ROUTES,
     CHIEF_QUESTIONNAIRE,
     DISEASE_QUESTIONNAIRES,
+    DISEASE_ROUTES,
     QUESTIONNAIRE_DATA_DIR,
+    ROUTE_DISPOSITIONS,
+    ROUTE_KEYWORDS,
+    ROUTE_LABELS,
     build_questionnaire,
     filter_question_by_context,
     load_questionnaire_category,
@@ -13,19 +21,15 @@ from domain.questionnaires import (
     next_question_index,
     parse_birth_date,
     parse_onset_answer,
+    questionnaire_disposition,
 )
+from scripts.export_questionnaire_frontend import export_payload, selected_targets
+from scripts.promote_questionnaires import DRAFT_DIR, prepare_promotions, validate_signoff_manifest
 
 
 class QuestionnaireDefinitionTests(unittest.TestCase):
     def test_questionnaire_content_is_split_into_category_json_files(self):
-        expected = {
-            "chief",
-            "basic",
-            "history",
-            "chest",
-            "headache",
-            "abdomen",
-        }
+        expected = {"chief", "basic", "history", *ALL_DISEASE_ROUTES}
         actual = {path.stem for path in QUESTIONNAIRE_DATA_DIR.glob("*.json")}
         self.assertEqual(actual, expected)
         for category in expected:
@@ -56,15 +60,37 @@ class QuestionnaireDefinitionTests(unittest.TestCase):
     def test_each_supported_route_has_a_disease_questionnaire(self):
         self.assertEqual(
             set(DISEASE_QUESTIONNAIRES),
-            {"chest", "headache", "abdomen"},
+            set(DISEASE_ROUTES),
         )
+        self.assertEqual(set(DISEASE_ROUTES), {"chest", "headache", "abdomen"})
         for route in DISEASE_QUESTIONNAIRES:
             questionnaire = build_questionnaire(route)
             self.assertTrue(any(item["section"] == "disease" for item in questionnaire))
-            onset = next(item for item in questionnaire if item["field"] == "onset")
-            self.assertEqual(onset["kind"], "duration")
-            self.assertIn("1週前", onset["quick_options"])
-            self.assertIn("個月前", onset["units"])
+            self.assertTrue(ROUTE_LABELS[route])
+            self.assertTrue(ROUTE_KEYWORDS[route])
+            self.assertIn(ROUTE_DISPOSITIONS[route], {"questionnaire", "handoff", "urgent"})
+
+    def test_provisional_routes_remain_validated_candidates_but_not_runtime_routes(self):
+        self.assertEqual(len(CANDIDATE_DISEASE_ROUTES), 49)
+        for route in CANDIDATE_DISEASE_ROUTES:
+            document = json.loads(
+                (QUESTIONNAIRE_DATA_DIR / f"{route}.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(document["review_status"], "source_structured_provisional")
+            self.assertEqual(document["policy"]["selection_strategy"], "fixed_order")
+            self.assertEqual(
+                document["provenance"]["pipeline_version"], "questionnaire-structure-v2"
+            )
+            self.assertNotIn("source_lines", json.dumps(document, ensure_ascii=False))
+            self.assertTrue(load_questionnaire_category(route))
+            self.assertNotIn(route, ROUTE_KEYWORDS)
+            self.assertNotIn(route, ROUTE_LABELS)
+            self.assertNotIn(route, ROUTE_DISPOSITIONS)
+
+        with self.assertRaisesRegex(ValueError, "不支援"):
+            build_questionnaire("fever")
+        with self.assertRaisesRegex(ValueError, "不支援"):
+            questionnaire_disposition("stroke")
 
     def test_route_selection_and_completion_rules_come_from_json_policy(self):
         chest = load_questionnaire_policy("chest")
@@ -215,7 +241,90 @@ class QuestionnaireDefinitionTests(unittest.TestCase):
             filtered = filter_question_by_context(associated, data)
             self.assertIn("月經過期", filtered["options"])
             self.assertIn("陰道出血", filtered["options"])
-            self.assertIn("陰道分泌物增加", filtered["options"])
+        self.assertIn("陰道分泌物增加", filtered["options"])
+
+
+class QuestionnaireGovernanceToolTests(unittest.TestCase):
+    @staticmethod
+    def _draft() -> dict:
+        return {
+            "id": "candidate",
+            "generation": {"source_sha256": "route-sha"},
+            "review_notes": [
+                {
+                    "severity": "warning",
+                    "note": "需由臨床人員確認",
+                    "source_ids": ["source-1"],
+                }
+            ],
+        }
+
+    @staticmethod
+    def _signoff() -> dict:
+        return {
+            "schema_version": 1,
+            "reviewer": {"name": "合成測試審查者", "role": "clinical reviewer"},
+            "reviewed_on": "2026-08-09",
+            "source_sha256": "manifest-sha",
+            "route_catalog_sha256": "catalog-sha",
+            "routes": {
+                "candidate": {
+                    "approved": True,
+                    "source_sha256": "route-sha",
+                    "review_notes": [],
+                }
+            },
+        }
+
+    def test_promotion_refuses_to_run_without_a_signoff_manifest(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            missing = Path(temp_dir) / "clinical_signoff.json"
+            with self.assertRaisesRegex(RuntimeError, "找不到必要檔案"):
+                prepare_promotions(DRAFT_DIR, missing)
+
+    def test_signoff_requires_every_warning_or_critical_note_to_be_resolved(self):
+        signoff = self._signoff()
+        with self.assertRaisesRegex(ValueError, "尚有未處理"):
+            validate_signoff_manifest(
+                signoff,
+                {"candidate": self._draft()},
+                {"source": {"sha256": "manifest-sha"}},
+                "catalog-sha",
+            )
+
+        signoff["routes"]["candidate"]["review_notes"] = [
+            {
+                "note_index": 0,
+                "resolution": "mitigated",
+                "rationale": "合成測試中已加入安全轉交",
+            }
+        ]
+        validated = validate_signoff_manifest(
+            signoff,
+            {"candidate": self._draft()},
+            {"source": {"sha256": "manifest-sha"}},
+            "catalog-sha",
+        )
+        self.assertEqual(
+            validated["routes"]["candidate"]["review_notes"][0]["resolution"],
+            "mitigated",
+        )
+
+    def test_export_defaults_to_development_frontend_and_check_never_writes(self):
+        default_targets = selected_targets(include_frontend_v2=False)
+        production_targets = selected_targets(include_frontend_v2=True)
+        self.assertEqual(len(default_targets), 1)
+        self.assertNotIn("frontend-v2", str(default_targets[0]))
+        self.assertEqual(len(production_targets), 2)
+        self.assertIn("frontend-v2", str(production_targets[1]))
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            target = Path(temp_dir) / "questionnaireRoutes.js"
+            target.write_text("old", encoding="utf-8")
+            self.assertFalse(export_payload("new", (target,), check=True))
+            self.assertEqual(target.read_text(encoding="utf-8"), "old")
+            self.assertTrue(export_payload("new", (target,), check=False))
+            self.assertEqual(target.read_text(encoding="utf-8"), "new")
 
 
 class QuestionnaireParserTests(unittest.TestCase):

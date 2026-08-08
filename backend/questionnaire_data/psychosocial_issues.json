@@ -1,0 +1,227 @@
+{
+  "id": "psychosocial_issues",
+  "label": "精神 社會問題",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 37,
+    "source_sha256": "17a2bf0d41be47499f7ea16c1123bba07b57abc811f7bb0991113a8d67ffbd92",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "suicidal_or_self_harm_thoughts"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 11,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "primary_psychosocial_conditions",
+      "prompt": "您主要面臨的精神或社會狀況是什麼？ 請將以下你有面臨的狀況或是其他問題說出來讓我了解",
+      "kind": "choice",
+      "options": [
+        "焦慮",
+        "抑鬱",
+        "壓力過大",
+        "失眠",
+        "人際關係問題",
+        "家庭問題",
+        "工作壓力"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "problem_duration",
+      "prompt": "這個問題已經持續了多久？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "您是否有以下任何症狀？ 請將以下你有的症狀或是其他症狀說出來讓我知道",
+      "kind": "choice",
+      "options": [
+        "持續的悲傷或空虛感",
+        "對日常活動失去興趣或樂趣",
+        "易怒或煩躁",
+        "感到無助或無價值",
+        "食欲或體重顯著變化",
+        "睡眠問題（失眠或過度睡眠）",
+        "注意力集中困難",
+        "經常疲倦或無精打采",
+        "無明顯原因身體不適（如頭痛、消化問題）"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "suicidal_or_self_harm_thoughts",
+      "prompt": "您是否有自殺或自殘的念頭？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "sought_psychological_counseling",
+      "prompt": "您是否有尋求過心理諮詢或治療？ 若有請描述",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "medication_for_psychosocial_issues",
+      "prompt": "您是否有使用任何藥物來治療精神或社會問題？ 若有請描述使用的藥物",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "support_system",
+      "prompt": "您週遭是否有像家人、朋友、同事、支援小組或其他支持系統？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "major_life_changes_or_stressors",
+      "prompt": "您的生活中是否有重大的變化或壓力源？ 若有請描述讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "chronic_illnesses_or_health_problems",
+      "prompt": "您是否有任何慢性疾病或其他健康問題？ 若有請描述讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "past_mental_health_history",
+      "prompt": "您是否有過去的精神健康問題病史？ 若有請描述讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "additional_information",
+      "prompt": "是否有其他需要補充的情況或問題？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

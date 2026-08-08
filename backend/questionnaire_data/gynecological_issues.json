@@ -1,0 +1,215 @@
+{
+  "id": "gynecological_issues",
+  "label": "婦科問題",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 23,
+    "source_sha256": "ebf604458deea28643cb5e915724695358abc206fadf331ddd0beb9be02779cf",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "symptom_description",
+      "associated_symptoms",
+      "pregnancy_status"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "symptom_onset_time",
+      "prompt": "症狀是什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_frequency",
+      "prompt": "症狀是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_location",
+      "prompt": "你在下腹部還是骨盆區感覺到症狀？",
+      "kind": "choice",
+      "options": [
+        "下腹部",
+        "骨盆區"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_description",
+      "prompt": "你如何描述這些症狀？比如疼痛 痙攣 出血 搔癢或是感覺有分泌物",
+      "kind": "choice",
+      "options": [
+        "疼痛",
+        "痙攣",
+        "出血",
+        "搔癢",
+        "感覺有分泌物"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_triggering_events",
+      "prompt": "症狀開始前是否有像是性行為 外傷 服用新藥 或是激烈運動的事件呢？",
+      "kind": "choice",
+      "options": [
+        "性行為",
+        "外傷",
+        "服用新藥",
+        "激烈運動"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "last_menstrual_period",
+      "prompt": "最後一次月經是什麼時候？",
+      "kind": "date",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "menstrual_regularity",
+      "prompt": "你的月經是否規律？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pregnancy_status",
+      "prompt": "你目前是否懷孕或可能懷孕？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "是否有以下症狀？請將有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "發燒或畏寒",
+        "感到噁心或嘔吐",
+        "感到排尿困難、頻尿、尿急或尿液顏色或氣味改變",
+        "生殖器區域是否有皮疹、潰瘍、腫脹或其他皮膚變化"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

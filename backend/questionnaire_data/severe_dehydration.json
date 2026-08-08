@@ -1,0 +1,178 @@
+{
+  "id": "severe_dehydration",
+  "label": "嚴重脫水",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 52,
+    "source_sha256": "90cb14fb9e27a4cd09f9dcf6f29ad0f02a907feefd658e822c8b7e0966e52da0",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "dehydration_symptom_onset"
+    ],
+    "priority_fields": [
+      "present_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 8,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "dehydration_symptom_onset",
+      "prompt": "什麼時候開始出現脫水症狀？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "present_symptoms",
+      "prompt": "是否出現以下症狀？",
+      "kind": "choice",
+      "options": [
+        "口乾舌燥",
+        "極度口渴",
+        "尿液顏色深黃或橙色",
+        "小便次數減少",
+        "皮膚乾燥或失去彈性",
+        "頭暈或昏厥",
+        "極度疲勞或乏力",
+        "心跳加速"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "recent_conditions",
+      "prompt": "最近是否有以下情況？",
+      "kind": "choice",
+      "options": [
+        "高熱",
+        "過度出汗",
+        "嘔吐",
+        "腹瀉",
+        "使用利尿劑",
+        "過度飲酒",
+        "長時間曝曬在陽光下",
+        "大量運動"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "recent_fluid_intake",
+      "prompt": "最近的飲水量是否減少？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "chronic_illness_and_medications",
+      "prompt": "是否有任何慢性疾病或正在服用的藥物？ 若有 請進一步說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "other_health_problems",
+      "prompt": "是否還有其他健康問題或症狀？比如頭痛 眼窩凹陷 低血壓 快速呼吸 或是其他健康問題",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "recent_lifestyle_changes",
+      "prompt": "是否有最近的飲食或生活習慣改變？若有 請進一步說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "past_medical_treatment",
+      "prompt": "是否有接受過任何醫療或治療過程？若有 請進一步說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

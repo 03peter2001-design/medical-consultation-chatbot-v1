@@ -1,0 +1,262 @@
+{
+  "id": "neurological_issues",
+  "label": "神經系統問題",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 32,
+    "source_sha256": "fa7e0a640336298cd74c28fbb57e635a34d0a190a82451295912d87e58d07a5c",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "symptom_onset_pattern",
+      "associated_neurological_symptoms",
+      "recent_injury"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 12,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "symptom_onset_time",
+      "prompt": "症狀是什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_onset_pattern",
+      "prompt": "是突然發生還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發生",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_progression",
+      "prompt": "症狀隨著時間是否有加重還是時好時壞？",
+      "kind": "choice",
+      "options": [
+        "加重",
+        "時好時壞"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_location",
+      "prompt": "症狀出現在頭部 上肢 下肢 還是單側身體 什麼部位？",
+      "kind": "choice",
+      "options": [
+        "頭部",
+        "上肢",
+        "下肢",
+        "單側身體"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_description",
+      "prompt": "你如何描述這些症狀？比如麻木 刺痛 癱瘓或是無力感",
+      "kind": "choice",
+      "options": [
+        "麻木",
+        "刺痛",
+        "癱瘓",
+        "無力感"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_persistence",
+      "prompt": "症狀是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_triggers",
+      "prompt": "是否有任何因素觸發或加重症狀？比如壓力 體力活動 或姿勢轉換",
+      "kind": "choice",
+      "options": [
+        "壓力",
+        "體力活動",
+        "姿勢轉換"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_relievers",
+      "prompt": "是否有任何因素緩解症狀？比如休息或止痛藥",
+      "kind": "choice",
+      "options": [
+        "休息",
+        "止痛藥"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "associated_neurological_symptoms",
+      "prompt": "是否有其他伴隨神經問題的症狀？請將以下有伴隨的神經問題症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "頭痛",
+        "頭暈",
+        "視力改變",
+        "說話困難",
+        "吞嚥困難",
+        "身體平衡或協調問題"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "previous_similar_symptoms",
+      "prompt": "你以前是否有過類似的症狀？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "previous_neurological_diagnoses",
+      "prompt": "是否被診斷過偏頭痛或多發性硬化症？",
+      "kind": "choice",
+      "options": [
+        "偏頭痛",
+        "多發性硬化症"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "recent_injury",
+      "prompt": "最近是否有過受傷，特別是頭部或頸部？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

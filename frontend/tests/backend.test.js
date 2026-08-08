@@ -8,6 +8,7 @@ import {
   consultationDetailPath,
   consultationListPath,
   consultationLookupFields,
+  credentialsForBackendUrl,
   diseaseProfileUpdatePath,
   factLabelUpdatePath,
   formatApiErrorDetail,
@@ -42,23 +43,88 @@ test('uses the page hostname and default backend port', () => {
 
 test('supports a custom backend port', () => {
   assert.equal(
-    resolveBackendUrl({
-      search: '?backendPort=9000',
-      protocol: 'http:',
-      hostname: 'localhost',
-    }),
+    resolveBackendUrl(
+      {
+        search: '?backendPort=9000',
+        protocol: 'http:',
+        hostname: 'localhost',
+      },
+      '',
+      {
+        developmentMode: true,
+        queryOverrideEnabled: 'true',
+        queryOverrideOrigins: 'http://localhost:9000',
+      },
+    ),
     'http://localhost:9000',
   )
 })
 
-test('supports a complete backend URL override', () => {
+test('supports an explicitly enabled and allowlisted development backend override', () => {
+  assert.equal(
+    resolveBackendUrl(
+      {
+        search: '?backend=https://api.example.test/v1/',
+        protocol: 'https:',
+        hostname: 'app.example.test',
+      },
+      '',
+      {
+        developmentMode: true,
+        queryOverrideEnabled: 'true',
+        queryOverrideOrigins: 'https://api.example.test',
+      },
+    ),
+    'https://api.example.test/v1',
+  )
+})
+
+test('ignores backend query overrides by default', () => {
   assert.equal(
     resolveBackendUrl({
-      search: '?backend=https://api.example.test/v1/',
+      search: '?backend=https://attacker.example/v1&backendPort=9443',
       protocol: 'https:',
       hostname: 'app.example.test',
     }),
-    'https://api.example.test/v1',
+    'https://app.example.test:8000',
+  )
+})
+
+test('ignores backend query overrides outside development even when configured', () => {
+  assert.equal(
+    resolveBackendUrl(
+      {
+        search: '?backend=https://api.example.test/v1/',
+        protocol: 'https:',
+        hostname: 'app.example.test',
+      },
+      '/api',
+      {
+        developmentMode: false,
+        queryOverrideEnabled: 'true',
+        queryOverrideOrigins: 'https://api.example.test',
+      },
+    ),
+    '/api',
+  )
+})
+
+test('ignores an unallowlisted development backend origin', () => {
+  assert.equal(
+    resolveBackendUrl(
+      {
+        search: '?backend=https://attacker.example/v1/',
+        protocol: 'https:',
+        hostname: 'app.example.test',
+      },
+      '/api',
+      {
+        developmentMode: true,
+        queryOverrideEnabled: 'true',
+        queryOverrideOrigins: 'https://api.example.test',
+      },
+    ),
+    '/api',
   )
 })
 
@@ -73,6 +139,23 @@ test('supports a same-origin backend proxy path', () => {
       '/api/',
     ),
     '/api',
+  )
+})
+
+test('sends credentials only to the page origin', () => {
+  const location = {
+    origin: 'https://app.example.test',
+    protocol: 'https:',
+    hostname: 'app.example.test',
+  }
+  assert.equal(credentialsForBackendUrl('/api', location), 'include')
+  assert.equal(
+    credentialsForBackendUrl('https://app.example.test/api', location),
+    'include',
+  )
+  assert.equal(
+    credentialsForBackendUrl('https://api.example.test', location),
+    'omit',
   )
 })
 
@@ -126,7 +209,7 @@ test('loads a doctor record by a bare number without binding it to today', async
     session_id: 'doctor-session',
     registration_number: '00000',
   })
-  assert.equal(captured.options.credentials, 'include')
+  assert.equal(captured.options.credentials, 'omit')
 })
 
 test('loads a doctor record by the date-qualified consultation id', async () => {

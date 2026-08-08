@@ -2,6 +2,47 @@ import { buildFhirClinicalCodings } from './terminology.js'
 
 export const TAIWAN_ID_SYSTEM = 'http://www.moi.gov.tw'
 
+// Deliberately narrow: these are presentation symptoms that may be recorded as
+// a Condition for the current encounter. Disease names and routing shortcuts
+// (for example "ENT") must remain eligible for the longitudinal history.
+const FHIR_CURRENT_SYMPTOM_TERMS = [
+  '胸痛',
+  '胸悶',
+  '胸口痛',
+  'chest pain',
+  'chest tightness',
+  '頭痛',
+  '頭疼',
+  '偏頭痛',
+  'headache',
+  'migraine',
+  '腹痛',
+  '肚子痛',
+  'abdominal pain',
+  '發燒',
+  '發熱',
+  '高燒',
+  'fever',
+  '頭暈',
+  '暈眩',
+  '眩暈',
+  'dizziness',
+  'vertigo',
+  '呼吸困難',
+  '呼吸急促',
+  'shortness of breath',
+  'dyspnea',
+  '出血',
+  '流血',
+  'bleeding',
+  '昏倒',
+  '暈厥',
+  'syncope',
+  '無力',
+  '虛弱',
+  'weakness',
+]
+
 const runtimeLocation =
   typeof window === 'undefined'
     ? { search: '', protocol: 'http:', hostname: '127.0.0.1' }
@@ -12,15 +53,64 @@ function parseBoolean(value, fallback = false) {
   return ['1', 'true', 'yes', 'on'].includes(String(value).toLowerCase())
 }
 
+function allowedOrigins(value) {
+  return new Set(
+    String(value || '')
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .flatMap((item) => {
+        try {
+          return [new URL(item).origin]
+        } catch {
+          return []
+        }
+      }),
+  )
+}
+
+function allowedQueryUrl(requested, allowlist) {
+  if (!requested) return ''
+  const candidate = /^https?:\/\//i.test(requested)
+    ? requested
+    : `http://${requested}`
+  try {
+    const url = new URL(candidate)
+    if (
+      ['http:', 'https:'].includes(url.protocol) &&
+      allowedOrigins(allowlist).has(url.origin)
+    ) {
+      return url.toString().replace(/\/+$/, '')
+    }
+  } catch {
+    // Invalid or untrusted query overrides fall through to configured defaults.
+  }
+  return ''
+}
+
 export function resolveFhirBaseUrl(
   locationLike = runtimeLocation,
   configuredBaseUrl = import.meta.env?.VITE_FHIR_BASE_URL,
+  {
+    developmentMode = import.meta.env?.DEV === true,
+    queryOverrideEnabled = import.meta.env?.VITE_ENABLE_FHIR_QUERY_OVERRIDE,
+    queryOverrideOrigins = import.meta.env?.VITE_FHIR_QUERY_OVERRIDE_ORIGINS,
+  } = {},
 ) {
   const params = new URLSearchParams(locationLike.search || '')
-  const override = params.get('fhir')?.trim()
+  const override =
+    developmentMode && parseBoolean(queryOverrideEnabled)
+      ? allowedQueryUrl(
+          params.get('fhir')?.trim(),
+          queryOverrideOrigins,
+        )
+      : ''
   const requested = override || configuredBaseUrl?.trim()
 
   if (requested) {
+    if (requested.startsWith('/')) {
+      return requested.replace(/\/+$/, '') || '/'
+    }
     const candidate = /^https?:\/\//i.test(requested)
       ? requested
       : `http://${requested}`
@@ -43,12 +133,17 @@ export function isDirectFhirEnabled(
   locationLike = runtimeLocation,
   configuredValue = import.meta.env?.VITE_ENABLE_DIRECT_FHIR,
   developmentMode = import.meta.env?.DEV === true,
+  queryOverrideEnabled = import.meta.env?.VITE_ENABLE_FHIR_QUERY_OVERRIDE,
 ) {
   const allowed = parseBoolean(configuredValue, developmentMode)
   if (!allowed) return false
 
   const params = new URLSearchParams(locationLike.search || '')
-  if (params.has('directFhir')) {
+  if (
+    developmentMode &&
+    parseBoolean(queryOverrideEnabled) &&
+    params.has('directFhir')
+  ) {
     return parseBoolean(params.get('directFhir'))
   }
   return true
@@ -268,13 +363,26 @@ function conditionIsHistorical(resource) {
   const conditionText = conceptText(resource.code)
   const explicitlyCurrentSymptom =
     /本次|此次|current encounter/i.test(categoryText) &&
-    /胸痛|頭痛|腹痛|chest pain|headache|abdominal pain/i.test(
-      conditionText,
+    FHIR_CURRENT_SYMPTOM_TERMS.some((term) =>
+      clinicalTextIncludesTerm(conditionText, term),
     )
 
   // encounter-diagnosis 也可能是過去住院確診的中風等疾病；
   // 只排除明確標示為本次就醫症狀的項目。
   return !explicitlyCurrentSymptom
+}
+
+function clinicalTextIncludesTerm(text, term) {
+  const normalizedText = String(text || '').toLocaleLowerCase()
+  const normalizedTerm = String(term || '').toLocaleLowerCase()
+  if (!normalizedTerm) return false
+  if (!/^[a-z0-9 ]+$/.test(normalizedTerm)) {
+    return normalizedText.includes(normalizedTerm)
+  }
+  const escaped = normalizedTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  return new RegExp(`(^|[^a-z0-9])${escaped}(?=$|[^a-z0-9])`, 'i').test(
+    normalizedText,
+  )
 }
 
 function medicationText(resource) {

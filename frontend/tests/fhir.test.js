@@ -36,17 +36,77 @@ test('resolves the HAPI base URL from the frontend hostname', () => {
   )
 })
 
-test('supports explicit FHIR test mode and URL overrides', () => {
+test('preserves a configured same-origin FHIR proxy path', () => {
+  assert.equal(
+    resolveFhirBaseUrl(
+      {
+        search: '?fhir=https://attacker.example/fhir',
+        protocol: 'https:',
+        hostname: 'app.example.test',
+      },
+      '/fhir-proxy/',
+    ),
+    '/fhir-proxy',
+  )
+})
+
+test('supports an explicitly enabled and allowlisted development FHIR override', () => {
   const location = {
     search: '?directFhir=1&fhir=http://localhost:8181/fhir/',
     protocol: 'http:',
     hostname: 'localhost',
   }
-  assert.equal(isDirectFhirEnabled(location, 'true', false), true)
+  assert.equal(isDirectFhirEnabled(location, 'true', true, 'true'), true)
   assert.equal(isDirectFhirEnabled(location, 'false', false), false)
   assert.equal(
-    resolveFhirBaseUrl(location, ''),
+    resolveFhirBaseUrl(location, '', {
+      developmentMode: true,
+      queryOverrideEnabled: 'true',
+      queryOverrideOrigins: 'http://localhost:8181',
+    }),
     'http://localhost:8181/fhir',
+  )
+})
+
+test('ignores FHIR query overrides by default', () => {
+  const location = {
+    search: '?directFhir=1&fhir=https://attacker.example/fhir',
+    protocol: 'https:',
+    hostname: 'app.example.test',
+  }
+  assert.equal(resolveFhirBaseUrl(location, ''), 'https://app.example.test:8080/fhir')
+  assert.equal(isDirectFhirEnabled(location, 'false', false, 'true'), false)
+})
+
+test('ignores FHIR query overrides outside development even when allowlisted', () => {
+  const location = {
+    search: '?fhir=https://fhir.example.test/r4',
+    protocol: 'https:',
+    hostname: 'app.example.test',
+  }
+  assert.equal(
+    resolveFhirBaseUrl(location, 'https://configured.example/fhir', {
+      developmentMode: false,
+      queryOverrideEnabled: 'true',
+      queryOverrideOrigins: 'https://fhir.example.test',
+    }),
+    'https://configured.example/fhir',
+  )
+})
+
+test('ignores an unallowlisted development FHIR origin', () => {
+  const location = {
+    search: '?fhir=https://attacker.example/r4',
+    protocol: 'https:',
+    hostname: 'app.example.test',
+  }
+  assert.equal(
+    resolveFhirBaseUrl(location, 'https://fhir.example.test/r4', {
+      developmentMode: true,
+      queryOverrideEnabled: 'true',
+      queryOverrideOrigins: 'https://fhir.example.test',
+    }),
+    'https://fhir.example.test/r4',
   )
 })
 
@@ -275,6 +335,28 @@ test('maps FHIR conditions procedures and medications to questionnaire fields', 
   assert.equal(prefill.surgery, 'Coronary artery bypass grafting')
   assert.equal(prefill.current_meds, '阿斯匹靈')
   assert.equal(prefill.past_meds, '抗組織胺')
+})
+
+test('excludes approved current symptoms but preserves current chronic diagnoses', () => {
+  const currentEncounterCondition = (text) => ({
+    resourceType: 'Condition',
+    category: [{ text: '本次就醫確認之症狀' }],
+    code: { text },
+  })
+  const prefill = buildPatientPrefill({
+    patient: {
+      name: [{ text: '合成病史邊界測試病人' }],
+      gender: 'female',
+      birthDate: '1940-01-01',
+    },
+    resources: [
+      currentEncounterCondition('Dementia'),
+      currentEncounterCondition('本次發燒'),
+    ],
+  })
+
+  assert.match(prefill.chronic, /Dementia/)
+  assert.doesNotMatch(prefill.chronic, /本次發燒/)
 })
 
 test('preserves CodeableConcept text with a source FHIR disease coding', () => {

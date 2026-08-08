@@ -107,6 +107,7 @@ def _validate_clinical_fact_rules(
         "evidence",
         "source",
         "turn",
+        "route",
     }:
         raise ValueError("clinical_fact_rules.record_fields 格式不正確")
     statuses = _nonempty_strings(

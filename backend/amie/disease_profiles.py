@@ -9,7 +9,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-from .clinical_facts import FACT_CODES, merge_facts
+from .clinical_facts import FACT_CODES, facts_for_route
 from .rule_config import (
     clinical_fact_rules,
     disease_profile_rules,
@@ -281,6 +281,32 @@ def validate_profile_document(document: Any) -> dict[str, Any]:
     return document
 
 
+def profile_quality_report(document: dict[str, Any]) -> dict[str, Any]:
+    """Report scoring debt a deployed table carries without failing to load.
+
+    Two properties decide whether the funnel can narrow at all: graded weights,
+    so a near-specific finding outvotes an incidental one, and rule-out clues,
+    so denying a symptom can lower a disease instead of only failing to raise
+    it. Neither can be a load-time error while tables generated before the rule
+    are still deployed, so they are surfaced as a measurable gap instead.
+    """
+    flat_weight_profiles = []
+    profiles_without_rule_out = []
+    for profile in document.get("profiles", []):
+        clues = profile.get("clues", [])
+        if len({clue["weight"] for clue in clues}) <= 1:
+            flat_weight_profiles.append(profile["id"])
+        if profile.get("must_not_miss") and not any(clue["status"] == "absent" for clue in clues):
+            profiles_without_rule_out.append(profile["id"])
+    return {
+        "route": document.get("route", ""),
+        "profile_version": document.get("profile_version", ""),
+        "profiles": len(document.get("profiles", [])),
+        "flat_weight_profiles": sorted(flat_weight_profiles),
+        "must_not_miss_without_rule_out": sorted(profiles_without_rule_out),
+    }
+
+
 def read_profile_document(path: Path = PROFILE_PATH) -> dict[str, Any]:
     try:
         document = json.loads(path.read_text(encoding="utf-8"))
@@ -303,12 +329,13 @@ def score_diseases(
 ) -> dict[str, Any]:
     """Apply signed profile votes without calling an LLM or retriever."""
     deployed = document or load_profile_document(route)
-    fact_map = {fact["code"]: fact for fact in merge_facts([], facts)}
+    fact_map = facts_for_route(facts, route)
     ranked: list[dict[str, Any]] = []
     for profile in deployed["profiles"]:
         support_votes = 0
         oppose_votes = 0
         evaluated_weight = 0
+        decisive_weight = 0
         total_weight = sum(clue["weight"] for clue in profile["clues"])
         supporting: list[dict[str, Any]] = []
         opposing: list[dict[str, Any]] = []
@@ -321,6 +348,7 @@ def score_diseases(
             evaluated_weight += clue["weight"]
             if fact["status"] != clue["status"]:
                 continue
+            decisive_weight += clue["weight"]
             evidence = {
                 "fact": clue["fact"],
                 "evidence": fact["evidence"],
@@ -332,7 +360,13 @@ def score_diseases(
             else:
                 oppose_votes += clue["weight"]
                 opposing.append(evidence)
+        # ``coverage`` answers "how much of this profile did we ask about", so a
+        # denial counts. ``decisive_coverage`` answers "how much of it actually
+        # moved the vote", which is the only one completion may rely on: a
+        # patient who denies everything drives coverage to 1.0 while leaving the
+        # ranking untouched.
         coverage = round(evaluated_weight / total_weight, 4) if total_weight else 0.0
+        decisive_coverage = round(decisive_weight / total_weight, 4) if total_weight else 0.0
         ranked.append(
             {
                 "id": profile["id"],
@@ -345,15 +379,20 @@ def score_diseases(
                 "support_votes": support_votes,
                 "oppose_votes": oppose_votes,
                 "coverage": coverage,
+                "decisive_coverage": decisive_coverage,
                 "supporting": supporting,
                 "opposing": opposing,
                 "missing_facts": sorted(set(missing)),
             }
         )
+    # Equal votes are common while the interview is young, and an alphabetical
+    # differential would bury a killer behind a benign look-alike, so
+    # must-not-miss profiles break ties ahead of the rest.
     ranked.sort(
         key=lambda item: (
             -item["net_votes"],
             -item["support_votes"],
+            not item["must_not_miss"],
             -item["coverage"],
             item["id"],
         )

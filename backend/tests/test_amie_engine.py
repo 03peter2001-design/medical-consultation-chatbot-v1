@@ -110,7 +110,10 @@ class AMIEEngineTests(unittest.TestCase):
         )
 
         self.assertEqual(result.action, "ask")
-        self.assertEqual(result.next_question["field"], "associated")
+        # The frontier has collapsed onto ACS, so the funnel must reach for the
+        # question that could refute it (reproducible chest-wall tenderness)
+        # before the ones that would only pile on confirming evidence.
+        self.assertEqual(result.next_question["field"], "tender")
         self.assertEqual(len(result.evidence_timeline), 1)
         self.assertEqual(result.differential_hypotheses, [])
         self.assertEqual(
@@ -125,7 +128,8 @@ class AMIEEngineTests(unittest.TestCase):
             result.decision["candidate_frontier"][0]["id"],
             "acute_coronary_syndrome",
         )
-        self.assertIn("diaphoresis", result.decision["target_fact_codes"])
+        self.assertIn("reproducible_tenderness", result.decision["target_fact_codes"])
+        self.assertEqual(result.decision["funnel_score"]["refutation_score"], 1)
         self.assertEqual(len(llm.calls), 1)
 
     def test_chief_extraction_is_reused_instead_of_calling_the_llm_twice(self):
@@ -404,6 +408,7 @@ class AMIEEngineTests(unittest.TestCase):
                 "uncertain_fields": [],
             }
         )
+
         result = AMIEEngine(llm).run_turn(
             route="headache",
             answer="我投痛到受不了，眼前霧成一片",
@@ -431,6 +436,10 @@ class AMIEEngineTests(unittest.TestCase):
             )
         )
         self.assertEqual(len(llm.calls), 1)
+
+    def test_provisional_fixed_order_route_cannot_enter_the_engine(self):
+        with self.assertRaisesRegex(ValueError, "不支援"):
+            build_questionnaire("fever")
 
     def test_doctor_selected_safety_fact_stops_the_interview(self):
         rules = copy.deepcopy(load_safety_rules())

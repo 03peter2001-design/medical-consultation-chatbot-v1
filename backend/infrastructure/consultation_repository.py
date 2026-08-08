@@ -7,10 +7,10 @@ FastAPI's worker threads and keeps the repository easy to replace later.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
-import hashlib
 import secrets
 import sqlite3
 import time
@@ -362,13 +362,9 @@ class ConsultationRepository:
             for row in connection.execute("PRAGMA table_info(patient_sessions)").fetchall()
         }
         if "runtime_state_json" not in patient_session_columns:
-            connection.execute(
-                "ALTER TABLE patient_sessions ADD COLUMN runtime_state_json TEXT"
-            )
+            connection.execute("ALTER TABLE patient_sessions ADD COLUMN runtime_state_json TEXT")
         if "runtime_updated_at" not in patient_session_columns:
-            connection.execute(
-                "ALTER TABLE patient_sessions ADD COLUMN runtime_updated_at TEXT"
-            )
+            connection.execute("ALTER TABLE patient_sessions ADD COLUMN runtime_updated_at TEXT")
         connection.execute(
             """
             CREATE TABLE IF NOT EXISTS audit_events (

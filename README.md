@@ -36,17 +36,18 @@ AI 輔助預問診系統。病患可用文字或語音完成胸痛、頭痛或�
 
 | 服務／可部署產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
 | --- | --- | --- | --- | --- |
-| Backend API（含 Breeze ASR） | `1.0.0` | 2026-08-07 | AMIE 問診、確定性 Safety／疾病表、SQLite、`/v1` API、UCC／病患授權與 Avatar proxy | [backend/README.md](backend/README.md#服務版本) |
-| 開發版 Vue frontend | `1.0.0` | 2026-08-07 | 病患問診、醫師工作台、FHIR／SMART、規則中心、返回上一題與 Avatar provider | [frontend/README.md](frontend/README.md#服務版本) |
-| 正式部署 Doctor frontend | `2.0.0` | 2026-08-07 | 獨立醫師 bundle、UCC bootstrap、無 encounter 後臺模式與邀請權限提示 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
-| 正式部署 Patient frontend | `2.0.0` | 2026-08-07 | 獨立病患 bundle、一次性邀請交換、HttpOnly session、問卷修正與本機／D-ID Avatar | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
+| Backend API（含 Breeze ASR） | `1.1.0` | 2026-08-09 | 多路由問診安全修正、候選問卷 fail-closed 治理、簽核式 promotion 與前端匯出 drift 檢查 | [backend/README.md](backend/README.md#服務版本) |
+| 開發版 Vue frontend | `1.1.0` | 2026-08-09 | FHIR／Backend query override allowlist、跨來源 credential 隔離與候選問卷歷史資料標示 | [frontend/README.md](frontend/README.md#服務版本) |
+| 正式部署 Doctor frontend | `2.1.0` | 2026-08-09 | 候選問卷路由與欄位標籤可讀化，保留歷史病例顯示能力 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
+| 正式部署 Patient frontend | `2.0.1` | 2026-08-09 | FHIR query override fail-closed 與本次症狀／既往病史分類修正 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | Local Avatar service | `1.0.0` | 2026-08-07 | CosyVoice3 語音、MuseTalk 1.5 唇形、GPU 記憶體釋放、快取與靜態 fallback | [avatar-service/README.md](avatar-service/README.md#服務版本) |
 | SMART on FHIR sandbox app | `1.0.0` | 2026-08-05 | SMART OAuth launch、FHIR 預填、同源 API proxy、合成病人 seed 與本機驗證 | [smart-app/README.md](smart-app/README.md#服務版本) |
 | Integration deployment bundle | `1.0.0` | 2026-08-07 | IIS／Nginx 邊界、doctor／patient 分流、SQLite 備份還原、GPU ASR／Avatar 部署 | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
 
 `frontend-v2/packages/shared` 是 doctor／patient 共用程式庫，不是獨立服務；
 `smart-deployment/` 是 SMART sandbox 的 proxy 設定，跟隨 SMART app
-`1.0.0` 基線維護。HAPI FHIR、PostgreSQL、TW Core 與 SNOMED installer 是外部或
+`1.0.0` 基線維護。Doctor app 與 Patient app 目前分別為 `2.1.0`、`2.0.1`。
+HAPI FHIR、PostgreSQL、TW Core 與 SNOMED installer 是外部或
 建置元件，使用各自上游版本；目前矩陣與更新說明見
 [FHIR／術語服務](backend/terminology/README.md#外部元件版本矩陣)。
 
@@ -142,8 +143,8 @@ npm run dev
 
 ## Code review 待辦（尚未完成）
 
-以下是專案整體 code review 建立的待辦清單。所有項目在符合「完成條件」並留下
-自動化驗證證據前，均維持未勾選。
+以下是專案整體 code review 建立的追蹤清單。未勾選項目仍須符合「完成條件」並
+留下自動化驗證證據；已勾選項目保留原始問題與完成證據，避免之後回歸。
 
 ### Critical
 
@@ -154,17 +155,19 @@ npm run dev
   - **主要檔案／元件**：`backend/amie/rules/safety_rules.json`、`backend/amie/safety.py`、`backend/amie/chief_complaint.py`、`backend/app/routes/patient.py`、Safety 規則治理與黃金測試集。
   - **完成條件**：建立不綁定 chest／headache／abdomen 的通用急症 catalog；補齊吐血／嘔血等明確出血表述及必要同義詞、否定與組合條件；無論最後 route 為何皆先執行通用 Safety；加入「我胸悶。吐血」、單獨危險症狀、同義改寫、否定句及易混淆反例的回歸測試，並經醫療專業人員審核後才能標記完成。
 
-- [ ] **為醫師 API 建立完整的身分驗證、授權與 CORS 邊界**
+- [x] **為醫師 API 建立完整的身分驗證、授權與 CORS 邊界**
   - **問題**：醫師病例查詢、讀取、刪除、聊天與部分規則中心 API 未完整驗證醫師身分與資源權限，後端同時允許任意 CORS origin。
   - **影響**：未授權使用者可能存取或刪除病歷；過度寬鬆的跨網域設定會擴大 PHI 外洩與管理操作被濫用的風險。
   - **主要檔案／元件**：`backend/app/factory.py`、`backend/app/routes/doctor.py`、醫師端 API client 與部署環境設定。
   - **完成條件**：所有醫師路由預設拒絕匿名請求、依角色與資源範圍授權；CORS 僅允許明確清單，且通過未登入、跨角色、跨來源與正常流程整合測試。
+  - **完成證據（2026-08-09 review）**：doctor router 已統一套用 UCC scope dependency，consultation repository 查詢依 institution／encounter 隔離；CORS 只有設定明確 `CORS_ALLOWED_ORIGINS` 時才啟用。完整後端測試中相關 authentication、scope、tenant 與 invitation acceptance tests 通過。
 
-- [ ] **關閉可藉 URL query 更改 backend／FHIR 端點的資料外送通道**
+- [x] **關閉可藉 URL query 更改 backend／FHIR 端點的資料外送通道**
   - **問題**：`?backend=` 與 `?fhir=` 可將瀏覽器的 API 目的地改為任意 HTTP(S) 主機。
   - **影響**：惡意連結可能誘使用者將病歷、身分資料或規則管理 token 傳送至攻擊者端點。
   - **主要檔案／元件**：`frontend/src/services/backend.js`、`frontend/src/services/fhir.js`、`frontend/src/services/smart.js`、SMART／FHIR proxy 設定。
   - **完成條件**：正式環境完全忽略 query override；開發模式若保留此功能，必須明確啟用並限定 allowlist；自動化測試證明 PHI 與授權 header 不會送往任意網域。
+  - **完成證據（2026-08-09）**：production／預設忽略 backend、backendPort、FHIR 與 direct-FHIR query；開發覆寫同時需要 build-time flag 與 exact-origin allowlist，跨 origin backend 一律不帶 cookie。開發版與 `frontend-v2` shared FHIR regression tests 覆蓋惡意 origin、同源 proxy 與 production 關閉行為。
 
 ### High
 

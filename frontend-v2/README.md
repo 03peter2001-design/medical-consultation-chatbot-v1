@@ -13,7 +13,16 @@ versioned services, and this deployment line also evolves independently from
 `frontend/`. API `/v1`, database schemas, disease profiles, and Safety rules keep
 their own versions or revisions.
 
-### Doctor app v2.0.0 (current documentation baseline, 2026-08-07)
+### Doctor app
+
+#### v2.1.0 (2026-08-09)
+
+- Preserved readable route and field labels when rendering candidate or historical
+  questionnaire records, without activating provisional questionnaires at runtime.
+- Verified the doctor production bundle and the shared behavior test suite with
+  Node 22.
+
+#### v2.0.0 (2026-08-07)
 
 - **2026-08-06 — Isolated UCC doctor application**
   - Introduced the separately built doctor app at `/ai-consult/`, exposing only
@@ -33,7 +42,18 @@ their own versions or revisions.
   - Standardized structured EMR summaries into the same two-line display used by
     the development frontend.
 
-### Patient app v2.0.0 (current documentation baseline, 2026-08-07)
+### Patient app
+
+#### v2.0.1 (2026-08-09)
+
+- Made direct-FHIR URL query overrides fail closed unless an explicit development
+  flag and exact-origin allowlist are both configured; production ignores them.
+- Replaced broad routing-keyword symptom detection with a narrow presentation-term
+  matcher and ASCII token boundaries so unrelated diagnoses remain in FHIR history.
+- Verified the patient production bundle and shared FHIR regression tests with
+  Node 22.
+
+#### v2.0.0 (2026-08-07)
 
 - **2026-08-06 — Isolated invitation-based patient application**
   - Introduced the separately built patient app at `/`, without doctor routes or
@@ -82,6 +102,12 @@ token from the URL fragment only after explicit confirmation and then relies on
 an HttpOnly session cookie. Never place patient identity data in either URL.
 
 See each app's `.env.example` for deploy-time overrides.
+
+Production builds ignore `?fhir=` and `?directFhir=` URL overrides. The shared
+FHIR client only accepts them in an explicit development build with
+`VITE_ENABLE_FHIR_QUERY_OVERRIDE=true` and an exact-origin
+`VITE_FHIR_QUERY_OVERRIDE_ORIGINS` allowlist; deployed patient identity data
+must use the configured same-origin proxy or SMART client.
 
 ## Patient avatar providers
 

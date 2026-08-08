@@ -6,6 +6,18 @@ SNOMED CT 查詢。根目錄的 `index.html`、`doctor.html` 是重構前的相�
 
 ## 服務版本
 
+### v1.1.0 (2026-08-09)
+
+- Production 與預設開發設定忽略 `backend`、`backendPort`、`fhir`、`directFhir`
+  query override；開發 override 必須同時啟用 flag 並通過 exact-origin allowlist。
+- Backend request 只在同源時攜帶 credentials；允許的跨來源開發 endpoint 明確使用
+  `omit`，避免 session cookie 或身分識別資料被送往任意主機。
+- FHIR 本次症狀分類改用獨立、窄版詞表與英文 token boundary，不再讓 `ENT` 等短詞
+  誤判 Dementia／developmental／ventricular 等既往病史。
+- 醫師病例畫面可為候選或歷史問卷路由顯示穩定 route／欄位標籤；生成問卷 catalog
+  可由 backend exporter 以 `--check` 驗證同步。
+- 13 項前端測試、OpenAPI 型別 drift 檢查與 Vite production build 均通過（Node 22）。
+
 ### v1.0.0（目前文件基線，2026-08-07）
 
 此版號由 `devlog/` 的既有紀錄回溯建立，沒有對應的 Git tag；它描述
@@ -98,15 +110,26 @@ npm run api:check
 
 ## 後端連線
 
-前端預設使用目前網頁 hostname 與 port `8000` 連接 FastAPI。可用 URL query
-暫時覆寫：
+前端預設使用目前網頁 hostname 與 port `8000` 連接 FastAPI。正式環境與預設設定
+會忽略 URL query 的 backend／FHIR 端點覆寫，避免惡意連結改變病歷資料目的地。
+只有本機開發需要臨時切換端點時，才可同時啟用開關並列出允許 origin：
+
+```dotenv
+VITE_ENABLE_BACKEND_QUERY_OVERRIDE=true
+VITE_BACKEND_QUERY_OVERRIDE_ORIGINS=http://localhost:9000,http://192.168.1.20:9000
+VITE_ENABLE_FHIR_QUERY_OVERRIDE=true
+VITE_FHIR_QUERY_OVERRIDE_ORIGINS=http://localhost:8080
+```
+
+啟用後可使用：
 
 ```text
 http://localhost:5173/?backendPort=9000#/
 http://localhost:5173/?backend=http://192.168.1.20:9000#/
 ```
 
-切換至醫師端時設定會保留。也可由 `.env` 固定設定：
+跨 origin backend 即使在 allowlist 內也不會攜帶 cookie；需要病患 session 的環境
+應使用同源 reverse proxy。固定端點則由 `.env` 設定：
 
 ```bash
 cp .env.example .env

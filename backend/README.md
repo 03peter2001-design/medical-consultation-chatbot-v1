@@ -5,7 +5,7 @@ RAG 查詢服務與 FHIR／SNOMED 整合所在位置。
 
 ## 服務版本
 
-目前文件基線：**v1.0.0（2026-08-07）**。
+目前版本：**v1.1.0（2026-08-09）**。
 
 此版本號是依 `devlog/2026-07-27.md` 至 `devlog/2026-08-07.md` 回溯整理的
 後端服務文件基線，目前沒有對應的 Git tag 或獨立 release；它也不表示其中的
@@ -18,6 +18,22 @@ RAG 查詢服務與 FHIR／SNOMED 整合所在位置。
 - RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
 - Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
   revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v1.1.0 (2026-08-09)
+
+- 將 49 份尚未取得臨床簽核的結構化問卷保留為候選內容；runtime 僅啟用既有
+  胸痛、頭痛、腹痛路由，缺少簽核時 fail closed，不把 provisional 內容送入病人流程。
+- promotion CLI 現在驗證 reviewer、日期、來源與路由 catalog SHA-256、逐路由核准
+  及 review note resolution，並保留稽核來源；frontend exporter 新增原子寫入、
+  `--check`，且只有明示 `--frontend-v2` 才更新正式部署產物。
+- 修正英文短字串路由誤判；多主訴問診改為逐路由計算疾病 assessment、frontier、
+  must-not-miss 與完成條件，避免次要主訴尚未完成時提前結束。
+- live ClinicalFact 成為語意事實的權威來源，避免 legacy 重建產生未限定路由的重複
+  fact；同一 finding 的較新更正會取代舊狀態，衝突仍保留於 audit。
+- 固定順序候選路由不再借用胸痛／頭痛／腹痛疾病表。未簽核的三個既有問卷選項
+  已撤回，相關臨床政策仍記錄於 signoff 文件等待合格人員決定。
+- 驗證包含 334 項 backend tests（332 通過；2 項因外部 eHIS 原始碼未掛載而無法
+  執行）、Ruff、26 個變更 Python 檔格式檢查，以及兩份 frontend export drift 檢查。
 
 ### v1.0.0（2026-08-07）
 
@@ -176,7 +192,7 @@ Groq Key 可由 [Groq Console](https://console.groq.com/keys) 申請。
 | --- | --- |
 | `INTERVIEW_ENGINE=amie` | 啟用 evidence-grounded ClinicalFact 與確定性問診 |
 | `INTERVIEW_ENGINE=legacy` | A/B 比較或緊急回退至順序式問卷 |
-| `AMIE_MAX_TURNS` | 動態問診輪數上限，預設 24 |
+| `AMIE_MAX_TURNS` | 可選的整體動態問診硬上限；未設定時依共用題與每條核准路由 policy 動態計算（最高 100） |
 | `AMIE_DEBUG_TRACE=true` | 測試時顯示去除疾病票數與排名後的決策摘要 |
 | `ASR_PROVIDER=breeze` | 使用本機 `MediaTek-Research/Breeze-ASR-26` 辨識錄音 |
 | `BREEZE_ASR_DEVICE=auto` | 有 CUDA 時使用 GPU/FP16，否則使用 CPU/FP32 |

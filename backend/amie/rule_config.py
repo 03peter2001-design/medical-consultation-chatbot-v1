@@ -460,10 +460,30 @@ def read_safety_rules(path: Path = SAFETY_RULES_PATH) -> dict[str, Any]:
     return validate_safety_rules(document)
 
 
-@lru_cache(maxsize=1)
+def _rule_file_signature(path: Path) -> tuple[int, int, int, int]:
+    """Return identity plus content-change metadata for an atomic JSON file."""
+    try:
+        stat = path.stat()
+    except FileNotFoundError:
+        return (0, 0, 0, 0)
+    return (stat.st_dev, stat.st_ino, stat.st_size, stat.st_mtime_ns)
+
+
+@lru_cache(maxsize=8)
+def _load_safety_rules_version(
+    path: Path,
+    _signature: tuple[int, int, int, int],
+) -> dict[str, Any]:
+    return read_safety_rules(path)
+
+
 def load_safety_rules() -> dict[str, Any]:
-    """Load and cache the deployed safety rule set."""
-    return read_safety_rules()
+    """Load active rules and refresh after another worker publishes atomically."""
+    path = SAFETY_RULES_PATH
+    return _load_safety_rules_version(path, _rule_file_signature(path))
+
+
+load_safety_rules.cache_clear = _load_safety_rules_version.cache_clear  # type: ignore[attr-defined]
 
 
 def supported_routes() -> set[str]:

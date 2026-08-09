@@ -1,10 +1,24 @@
 import copy
+import json
+import multiprocessing
+import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
+from amie import rule_config
 from amie.rule_config import load_safety_rules, validate_safety_rules
 from amie.safety import detect_red_flags
 from domain.questionnaires import build_questionnaire
+
+
+def _observe_rule_refresh(path, start_event, changed_event, result_queue):
+    with patch.object(rule_config, "SAFETY_RULES_PATH", path):
+        load_safety_rules.cache_clear()
+        start_event.wait(timeout=5)
+        result_queue.put(load_safety_rules()["version"])
+        changed_event.wait(timeout=5)
+        result_queue.put(load_safety_rules()["version"])
 
 
 class SafetyRuleConfigTests(unittest.TestCase):
@@ -122,6 +136,48 @@ class SafetyRuleConfigTests(unittest.TestCase):
 
         self.assertTrue(referenced)
         self.assertEqual(referenced - allowed, set())
+
+    def test_each_worker_observes_an_atomic_rule_file_replacement(self):
+        context = multiprocessing.get_context("spawn")
+        current = copy.deepcopy(load_safety_rules())
+        current["version"] = "worker-refresh-before"
+        updated = copy.deepcopy(current)
+        updated["version"] = "worker-refresh-after"
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "safety_rules.json"
+            path.write_text(json.dumps(current, ensure_ascii=False), encoding="utf-8")
+            start_event = context.Event()
+            changed_event = context.Event()
+            result_queue = context.Queue()
+            with patch.object(rule_config, "SAFETY_RULES_PATH", path):
+                load_safety_rules.cache_clear()
+                workers = [
+                    context.Process(
+                        target=_observe_rule_refresh,
+                        args=(path, start_event, changed_event, result_queue),
+                    )
+                    for _ in range(2)
+                ]
+                for worker in workers:
+                    worker.start()
+                start_event.set()
+                self.assertEqual(
+                    sorted(result_queue.get(timeout=5) for _ in workers),
+                    ["worker-refresh-before"] * 2,
+                )
+                replacement = path.with_suffix(".next")
+                replacement.write_text(json.dumps(updated, ensure_ascii=False), encoding="utf-8")
+                replacement.replace(path)
+                changed_event.set()
+                self.assertEqual(
+                    sorted(result_queue.get(timeout=5) for _ in workers),
+                    ["worker-refresh-after"] * 2,
+                )
+                for worker in workers:
+                    worker.join(timeout=5)
+                self.assertEqual([worker.exitcode for worker in workers], [0, 0])
+                load_safety_rules.cache_clear()
 
 
 if __name__ == "__main__":

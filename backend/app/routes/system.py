@@ -97,7 +97,7 @@ async def transcribe(audio: UploadFile = File(...)):
         if patient_session is not None:
             audit_patient("patient.transcribe", "denied", patient_session)
         safe_log("patient.transcribe", "invalid_audio", error=error)
-        raise HTTPException(status_code=422, detail=str(error)) from error
+        raise HTTPException(status_code=422, detail="音訊格式無法辨識") from error
     except ASRUnavailableError as error:
         if patient_session is not None:
             audit_patient("patient.transcribe", "failure", patient_session)
@@ -161,7 +161,7 @@ async def avatar_speak(payload: AvatarSpeechRequest):
         if patient_session is not None:
             audit_patient("patient.avatar.speak", "failure", patient_session)
         safe_log("patient.avatar.speak", "unavailable", error=error)
-        raise HTTPException(status_code=503, detail=str(error)) from error
+        raise HTTPException(status_code=503, detail="Avatar 服務目前無法使用") from error
     except Exception as error:
         if patient_session is not None:
             audit_patient("patient.avatar.speak", "failure", patient_session)

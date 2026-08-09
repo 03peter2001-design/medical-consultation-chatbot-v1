@@ -49,7 +49,7 @@ export interface paths {
         put?: never;
         /**
          * Advance or start a patient pre-consultation interview
-         * @description Restore and durably save the cookie-bound patient interview.
+         * @description Serialize, restore, and durably save one patient interview.
          */
         post: operations["chat_v1_chat_post"];
         delete?: never;
@@ -582,8 +582,12 @@ export interface components {
          * @description FastAPI HTTP and validation error envelope.
          */
         ErrorResponse: {
+            /** Correlation Id */
+            correlation_id: string;
             /** Detail */
             detail: string | components["schemas"]["ValidationIssue"][];
+            /** Error Code */
+            error_code: string;
         };
         /** EvidenceSource */
         EvidenceSource: {

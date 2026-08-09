@@ -1,7 +1,9 @@
 """Patient questionnaire and AMIE interview endpoints."""
 
+import asyncio
 import time
 from copy import deepcopy
+from weakref import WeakValueDictionary
 
 from fastapi import (
     APIRouter,
@@ -45,6 +47,10 @@ from app.services.amie_audit import (
 )
 from app.services.amie_audit import (
     save_amie_state as _save_amie_state,
+)
+from app.services.async_clinical_io import (
+    ClinicalOperationTimeout,
+    run_clinical_io,
 )
 from app.services.clinical_summary import build_summary
 from app.services.consultation_reporting import (
@@ -101,6 +107,7 @@ from domain.questionnaires import (
 )
 
 router = APIRouter(tags=["patient"])
+_patient_chat_locks: WeakValueDictionary[str, asyncio.Lock] = WeakValueDictionary()
 
 _HISTORY_LIMIT = 16
 
@@ -723,10 +730,14 @@ async def _chat_amie(
         pain_location_ids=req.pain_location_ids,
     )
     if field == "reason":
-        route, chief_flags = _assess_chief_complaint(
-            user_input,
-            data,
-        )
+        try:
+            route, chief_flags = await run_clinical_io(
+                _assess_chief_complaint,
+                user_input,
+                data,
+            )
+        except ClinicalOperationTimeout:
+            route, chief_flags = "safety_unavailable", []
         if chief_flags:
             return await _complete_urgent_chief_complaint(
                 session,
@@ -813,16 +824,24 @@ async def _chat_amie(
 
     session["turn_count"] += 1
 
-    result = _get_amie_engine().run_turn(
-        route=current.get("route") or data.get("type", ""),
-        answer=user_input,
-        current_field=field,
-        data=data,
-        questionnaire=questionnaire,
-        prefilled_fields=set(session.get("prefilled_fields", [])),
-        turn_count=session["turn_count"],
-        previous_state=session.get("amie_state"),
-    )
+    try:
+        result = await run_clinical_io(
+            _get_amie_engine().run_turn,
+            route=current.get("route") or data.get("type", ""),
+            answer=user_input,
+            current_field=field,
+            data=data,
+            questionnaire=questionnaire,
+            prefilled_fields=set(session.get("prefilled_fields", [])),
+            turn_count=session["turn_count"],
+            previous_state=session.get("amie_state"),
+        )
+    except ClinicalOperationTimeout:
+        return await _handoff_amie_consultation(
+            session,
+            reason="語意問診處理逾時，無法安全完成本次自動問診",
+            user_display=user_display,
+        )
     session["data"] = result.data
     data = session["data"]
     session["triage_level"] = result.triage_level
@@ -985,10 +1004,14 @@ async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
     )
 
     if field == "reason":
-        route, chief_flags = _assess_chief_complaint(
-            user_input,
-            data,
-        )
+        try:
+            route, chief_flags = await run_clinical_io(
+                _assess_chief_complaint,
+                user_input,
+                data,
+            )
+        except ClinicalOperationTimeout:
+            route, chief_flags = "safety_unavailable", []
         if chief_flags:
             return await _complete_urgent_chief_complaint(
                 session,
@@ -1089,16 +1112,11 @@ def _patient_runtime_binding(patient_session: dict) -> dict[str, str]:
     }
 
 
-@router.post(
-    "/chat",
-    response_model=PatientChatResponse,
-    responses=error_responses(422, 500, 503),
-    summary="Advance or start a patient pre-consultation interview",
-    dependencies=[Depends(require_patient_session)],
-)
-async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
-    """Restore and durably save the cookie-bound patient interview."""
-    patient_session = current_patient_session()
+async def _chat_serialized(
+    req: ChatRequest,
+    background_tasks: BackgroundTasks,
+    patient_session: dict | None,
+):
     if patient_session is None:
         # Kept for direct unit calls; HTTP requests always install the required
         # cookie-backed patient session dependency above.
@@ -1130,3 +1148,21 @@ async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
                 **binding,
                 state=state,
             )
+
+
+@router.post(
+    "/chat",
+    response_model=PatientChatResponse,
+    responses=error_responses(422, 500, 503),
+    summary="Advance or start a patient pre-consultation interview",
+    dependencies=[Depends(require_patient_session)],
+)
+async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
+    """Serialize, restore, and durably save one patient interview."""
+    patient_session = current_patient_session()
+    lock_id = (
+        patient_session["interview_session_id"] if patient_session is not None else req.session_id
+    )
+    lock = _patient_chat_locks.setdefault(lock_id, asyncio.Lock())
+    async with lock:
+        return await _chat_serialized(req, background_tasks, patient_session)

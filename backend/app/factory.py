@@ -5,6 +5,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.errors import install_error_handlers
 from app.routes.doctor import router as doctor_router
 from app.routes.invitations import router as invitation_router
 from app.routes.patient import router as patient_router
@@ -41,6 +42,7 @@ def create_app() -> FastAPI:
         ),
         openapi_tags=OPENAPI_TAGS,
     )
+    install_error_handlers(app)
     allowed_origins = [
         origin.strip()
         for origin in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")

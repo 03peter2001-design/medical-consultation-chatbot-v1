@@ -21,6 +21,8 @@ class ErrorResponse(BaseModel):
     """FastAPI HTTP and validation error envelope."""
 
     detail: str | list[ValidationIssue]
+    error_code: str
+    correlation_id: str
 
 
 ERROR_DESCRIPTIONS = {

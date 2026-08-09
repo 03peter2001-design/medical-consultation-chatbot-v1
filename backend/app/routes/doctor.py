@@ -40,6 +40,10 @@ from app.prompts.doctor import (
     build_structured_note_prompt,
 )
 from app.security import UccPrincipal, current_ucc_principal, require_scopes
+from app.services.async_clinical_io import (
+    ClinicalOperationTimeout,
+    run_clinical_io,
+)
 from app.services.clinical_summary import (
     clinical_patient_data,
     model_patient_summary,
@@ -111,17 +115,18 @@ def get_snomed_search(
     try:
         return search_snomed(query, limit=limit, offset=offset)
     except ValueError as error:
-        raise HTTPException(status_code=422, detail=str(error)) from error
+        raise HTTPException(status_code=422, detail="SNOMED CT 查詢條件不正確") from error
     except RuntimeError as error:
         raise HTTPException(
             status_code=503,
-            detail=f"SNOMED CT 術語服務暫時無法使用：{error}",
+            detail="SNOMED CT 術語服務暫時無法使用",
         ) from error
 
 
 def _rule_permission_error(error: PermissionError) -> HTTPException:
     status = 503 if "尚未設定" in str(error) else 403
-    return HTTPException(status_code=status, detail=str(error))
+    detail = "規則管理尚未設定" if status == 503 else "規則管理授權失敗"
+    return HTTPException(status_code=status, detail=detail)
 
 
 def _audit_rule_write(outcome: str, resource_id: str) -> None:
@@ -169,11 +174,11 @@ def post_rule_assistant(
     except PermissionError as error:
         raise _rule_permission_error(error) from error
     except ValueError as error:
-        raise HTTPException(status_code=422, detail=str(error)) from error
+        raise HTTPException(status_code=422, detail="規則助理草稿未通過驗證") from error
     except Exception as error:
         raise HTTPException(
             status_code=503,
-            detail=f"規則微調助理暫時無法使用：{type(error).__name__}",
+            detail="規則微調助理暫時無法使用",
         ) from error
 
 
@@ -203,10 +208,10 @@ def put_safety_rules(
         raise _rule_permission_error(error) from error
     except RuntimeError as error:
         _audit_rule_write("failure", "safety")
-        raise HTTPException(status_code=409, detail=str(error)) from error
+        raise HTTPException(status_code=409, detail="Safety 規則版本衝突，請重新載入") from error
     except ValueError as error:
         _audit_rule_write("failure", "safety")
-        raise HTTPException(status_code=422, detail=str(error)) from error
+        raise HTTPException(status_code=422, detail="Safety 規則內容未通過驗證") from error
 
 
 @router.put(
@@ -235,10 +240,12 @@ def put_fact_labels(
         raise _rule_permission_error(error) from error
     except RuntimeError as error:
         _audit_rule_write("failure", "fact_labels")
-        raise HTTPException(status_code=409, detail=str(error)) from error
+        raise HTTPException(
+            status_code=409, detail="ClinicalFact 標籤版本衝突，請重新載入"
+        ) from error
     except ValueError as error:
         _audit_rule_write("failure", "fact_labels")
-        raise HTTPException(status_code=422, detail=str(error)) from error
+        raise HTTPException(status_code=422, detail="ClinicalFact 標籤未通過驗證") from error
 
 
 @router.put(
@@ -270,10 +277,10 @@ def put_disease_profile(
         raise _rule_permission_error(error) from error
     except RuntimeError as error:
         _audit_rule_write("failure", f"disease_profile:{route}")
-        raise HTTPException(status_code=409, detail=str(error)) from error
+        raise HTTPException(status_code=409, detail="疾病表版本衝突，請重新載入") from error
     except ValueError as error:
         _audit_rule_write("failure", f"disease_profile:{route}")
-        raise HTTPException(status_code=422, detail=str(error)) from error
+        raise HTTPException(status_code=422, detail="疾病表內容未通過驗證") from error
 
 
 def _doctor_principal() -> UccPrincipal:
@@ -313,9 +320,7 @@ def _doctor_session(
             # like an unavailable id.  This prevents guessing it from overwriting
             # another principal's state while returning no owner information.
             if any(
-                isinstance(candidate, tuple)
-                and len(candidate) == 3
-                and candidate[2] == session_id
+                isinstance(candidate, tuple) and len(candidate) == 3 and candidate[2] == session_id
                 for candidate in runtime.doctor_sessions
             ):
                 audit_ucc(
@@ -414,7 +419,7 @@ def delete_consultation(consultation_id: str):
             resource_type="consultation",
             resource_id=normalized,
         )
-        raise HTTPException(status_code=422, detail=str(error)) from error
+        raise HTTPException(status_code=422, detail="病例識別資料格式不正確") from error
     except Exception as error:
         audit_ucc(
             "doctor.consultation.delete",
@@ -504,10 +509,7 @@ def load_patient(request: LoadPatientRequest):
     principal = _doctor_principal()
     institution_id = _consultation_institution_scope(principal)
     requested_resource = (
-        request.consultation_id
-        or request.registration_number
-        or request.queue_number
-        or "unknown"
+        request.consultation_id or request.registration_number or request.queue_number or "unknown"
     )
     try:
         if request.consultation_id:
@@ -530,8 +532,14 @@ def load_patient(request: LoadPatientRequest):
             resource_type="consultation",
             resource_id=requested_resource,
         )
-        status_code = 409 if "跨日期重複" in str(error) else 422
-        raise HTTPException(status_code=status_code, detail=str(error)) from error
+        duplicate = "跨日期重複" in str(error)
+        status_code = 409 if duplicate else 422
+        detail = (
+            "此掛號編號跨日期重複，請指定看診日期或 consultation_id"
+            if duplicate
+            else "病例識別資料格式不正確"
+        )
+        raise HTTPException(status_code=status_code, detail=detail) from error
     if not record:
         audit_ucc(
             "doctor.consultation.load",
@@ -776,11 +784,25 @@ async def doctor_chat(request: DoctorChatRequest):
         max_tokens = 800
 
     try:
-        reply = runtime.llm_client.generate_text(
+        reply = await run_clinical_io(
+            runtime.llm_client.generate_text,
             messages,
             temperature=0.2,
             max_tokens=max_tokens,
         )
+    except ClinicalOperationTimeout as error:
+        audit_ucc(
+            "doctor.consultation.chat",
+            "failure",
+            principal,
+            resource_type="doctor_session",
+            resource_id=request.session_id,
+        )
+        safe_log("doctor.consultation.chat", "timeout", error=error)
+        raise HTTPException(
+            status_code=503,
+            detail="AI 生成逾時，請稍後重試",
+        ) from error
     except Exception as error:
         audit_ucc(
             "doctor.consultation.chat",
@@ -792,7 +814,7 @@ async def doctor_chat(request: DoctorChatRequest):
         safe_log("doctor.consultation.chat", "failure", error=error)
         raise HTTPException(
             status_code=500,
-            detail=f"AI 生成失敗：{error}",
+            detail="AI 生成失敗，請稍後重試",
         ) from error
 
     session["history"].append({"user": request.message, "assistant": reply})

@@ -103,7 +103,7 @@ class OpenApiContractTests(unittest.TestCase):
             )
 
         self.assertEqual(raised.exception.status_code, 422)
-        self.assertIn("ASCII YYYY-MM-DD", raised.exception.detail)
+        self.assertEqual(raised.exception.detail, "病例識別資料格式不正確")
 
     def test_legacy_aliases_remain_runtime_only(self):
         self.assertNotIn("/health", self.schema["paths"])

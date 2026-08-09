@@ -505,6 +505,10 @@
       "ErrorResponse": {
         "description": "FastAPI HTTP and validation error envelope.",
         "properties": {
+          "correlation_id": {
+            "title": "Correlation Id",
+            "type": "string"
+          },
           "detail": {
             "anyOf": [
               {
@@ -518,10 +522,16 @@
               }
             ],
             "title": "Detail"
+          },
+          "error_code": {
+            "title": "Error Code",
+            "type": "string"
           }
         },
         "required": [
-          "detail"
+          "detail",
+          "error_code",
+          "correlation_id"
         ],
         "title": "ErrorResponse",
         "type": "object"
@@ -2404,7 +2414,7 @@
     },
     "/v1/chat": {
       "post": {
-        "description": "Restore and durably save the cookie-bound patient interview.",
+        "description": "Serialize, restore, and durably save one patient interview.",
         "operationId": "chat_v1_chat_post",
         "parameters": [
           {

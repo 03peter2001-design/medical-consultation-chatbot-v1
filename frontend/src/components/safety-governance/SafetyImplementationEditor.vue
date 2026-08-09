@@ -5,6 +5,8 @@ import {
   SAFETY_CATEGORY_OPTIONS,
   SAFETY_FEATURE_CATEGORY_OPTIONS,
   SAFETY_ROUTE_LABELS,
+  hiddenSafetyFeatures,
+  selectedSafetyFeatures,
 } from '../../composables/safetyRuleGovernance.js'
 
 const props = defineProps({
@@ -35,6 +37,31 @@ const visibleFacts = computed(() => {
     )
   })
 })
+
+const visibleFactCodes = computed(
+  () => new Set(visibleFacts.value.map((fact) => fact.code)),
+)
+
+function selectedFeatures(rule) {
+  return selectedSafetyFeatures(rule)
+}
+
+function hiddenSelectionCount(rule) {
+  return hiddenSafetyFeatures(rule, visibleFactCodes.value).length
+}
+
+function toggleFeature(rule, code, selected) {
+  const values = new Set(selectedFeatures(rule))
+  if (selected) values.add(code)
+  else values.delete(code)
+  rule.featureSelections[rule.featureMode] = [...values]
+}
+
+function clearHiddenSelections(rule) {
+  rule.featureSelections[rule.featureMode] = selectedFeatures(rule).filter(
+    (code) => visibleFactCodes.value.has(code),
+  )
+}
 
 function scopeLabel(rule) {
   if (rule.kind === 'structured') return '結構化條件'
@@ -120,7 +147,10 @@ function factCategoryLabel(category) {
                   <option value="all_findings">所有特徵皆成立</option>
                 </select>
               </label>
-              <span>已選 {{ rule.selectedFeatures.length }} 個特徵</span>
+              <span>
+                所有條件 {{ rule.featureSelections.all_findings.length }} 個 ·
+                任一條件 {{ rule.featureSelections.any_findings.length }} 個
+              </span>
             </div>
 
             <label class="feature-search">
@@ -142,16 +172,27 @@ function factCategoryLabel(category) {
                 {{ category.label }}
               </button>
             </div>
+            <div
+              v-if="hiddenSelectionCount(rule)"
+              class="hidden-selection-notice"
+            >
+              <span>
+                目前篩選隱藏 {{ hiddenSelectionCount(rule) }} 個已選特徵
+              </span>
+              <button type="button" @click="clearHiddenSelections(rule)">
+                清除隱藏選取
+              </button>
+            </div>
             <div class="feature-grid">
               <label
                 v-for="fact in visibleFacts"
                 :key="fact.code"
-                :class="{ selected: rule.selectedFeatures.includes(fact.code) }"
+                :class="{ selected: selectedFeatures(rule).includes(fact.code) }"
               >
                 <input
-                  v-model="rule.selectedFeatures"
                   type="checkbox"
-                  :value="fact.code"
+                  :checked="selectedFeatures(rule).includes(fact.code)"
+                  @change="toggleFeature(rule, fact.code, $event.target.checked)"
                 />
                 <span>
                   <code>{{ fact.code }}</code>
@@ -382,6 +423,27 @@ function factCategoryLabel(category) {
 .feature-grid > label.selected {
   border-color: var(--blue);
   background: var(--blue-soft);
+}
+
+.hidden-selection-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in srgb, var(--warning) 45%, var(--border));
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--warning) 8%, var(--surface-1));
+  color: var(--text);
+  font-size: 12px;
+}
+
+.hidden-selection-notice button {
+  border: 0;
+  background: transparent;
+  color: var(--danger);
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .feature-grid span {

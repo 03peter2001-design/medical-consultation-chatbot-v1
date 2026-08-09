@@ -334,9 +334,10 @@ export const api = {
       method: 'POST',
       headers: { 'X-Rule-Admin-Token': adminToken },
     }),
-  suggestRuleEdits: (payload, adminToken) =>
+  suggestRuleEdits: (payload, adminToken, signal) =>
     request(ruleAssistantPath, {
       ...jsonOptions('POST', payload),
+      signal,
       headers: {
         'Content-Type': 'application/json',
         'X-Rule-Admin-Token': adminToken,

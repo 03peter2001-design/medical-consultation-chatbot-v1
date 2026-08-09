@@ -5,7 +5,7 @@ RAG 查詢服務與 FHIR／SNOMED 整合所在位置。
 
 ## 服務版本
 
-目前版本：**v1.2.0（2026-08-09）**。
+目前版本：**v1.3.0（2026-08-09）**。
 
 此版本號是依 `devlog/2026-07-27.md` 至 `devlog/2026-08-07.md` 回溯整理的
 後端服務文件基線，目前沒有對應的 Git tag 或獨立 release；它也不表示其中的
@@ -18,6 +18,27 @@ RAG 查詢服務與 FHIR／SNOMED 整合所在位置。
 - RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
 - Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
   revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v1.3.0 (2026-08-09)
+
+- 每場問診記錄 `interview_length` 觀測值（各 section 題數、病歷預填題數、漏斗未問
+  題數、預填覆蓋率），寫入 `amie_state` 與 `_amie`。僅保存欄位名與計數，不含任何
+  答案或臨床內容；不改變任何選題、完診或安全決策。
+- 新增 `scripts/measure_interview_length.py`，以合成且決定性的作答比較「提案中的
+  單頁多選批次」與現行逐題流程。批次化本身未實作，因為它會改變 `next_question`
+  契約與病人流程，屬待決策項目。
+- 量測揭露兩項既有行為，已記錄於 `docs/funnel_clinical_signoff.md` 第 5、6 節並以
+  測試鎖定，本版未修改臨床政策：
+  - active 三痛問卷與共用病史有 78 個選項沒有 fact 對應
+    （`chest.cardio` 16／16、`chest.surgery` 12／12、`history.chronic` 7／7 等）。
+    這些選項不會影響疾病投票，但欄位仍可因 required／priority 政策而被詢問。
+  - `smoke`／`chronic`／`past_meds` 不在任何路由的 `required_fields` 且 utility 恆為
+    0；同一份胸痛問卷，合成作答選第一個選項時 18 題完診並問到三者，選最後一個
+    選項時 6 題完診且三者皆未詢問。
+- 驗證：`ruff check .` 通過；`ruff format --check` 對本次變更的 5 個 Python
+  檔案通過；`unittest discover -s tests` 共 356 項，354 項通過。僅 2 項 eHIS
+  static-contract 因未掛載外部 Windows 原始碼而 error，本專案內沒有產品 assertion
+  failure。`pyright` 與 `lint-imports` 未安裝於 venv，本次未執行亦未安裝。
 
 ### v1.2.0 (2026-08-09)
 

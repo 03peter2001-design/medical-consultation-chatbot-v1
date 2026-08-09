@@ -36,7 +36,7 @@ AI 輔助預問診系統。病患可用文字或語音完成胸痛、頭痛或�
 
 | 服務／可部署產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
 | --- | --- | --- | --- | --- |
-| Backend API（含 Breeze ASR） | `1.2.0` | 2026-08-09 | Safety 規則跨 worker 自動刷新、bounded async 臨床工作、穩定錯誤 envelope 與 SQLite 資源關閉 | [backend/README.md](backend/README.md#服務版本) |
+| Backend API（含 Breeze ASR） | `1.3.0` | 2026-08-09 | 問診長度觀測值（section 題數／預填覆蓋率）、批次化提案量測工具，以及未接線選項與一般病史可被略過的欠債基準線 | [backend/README.md](backend/README.md#服務版本) |
 | 開發版 Vue frontend | `1.2.0` | 2026-08-09 | Safety 條件無損 round-trip、hidden selection 提示與過期助理請求取消 | [frontend/README.md](frontend/README.md#服務版本) |
 | 正式部署 Doctor frontend | `2.1.0` | 2026-08-09 | 候選問卷路由與欄位標籤可讀化，保留歷史病例顯示能力 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | 正式部署 Patient frontend | `2.0.1` | 2026-08-09 | FHIR query override fail-closed 與本次症狀／既往病史分類修正 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |

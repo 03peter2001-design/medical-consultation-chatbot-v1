@@ -5,7 +5,7 @@ RAG 查詢服務與 FHIR／SNOMED 整合所在位置。
 
 ## 服務版本
 
-目前版本：**v1.1.0（2026-08-09）**。
+目前版本：**v1.2.0（2026-08-09）**。
 
 此版本號是依 `devlog/2026-07-27.md` 至 `devlog/2026-08-07.md` 回溯整理的
 後端服務文件基線，目前沒有對應的 Git tag 或獨立 release；它也不表示其中的
@@ -18,6 +18,21 @@ RAG 查詢服務與 FHIR／SNOMED 整合所在位置。
 - RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
 - Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
   revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v1.2.0 (2026-08-09)
+
+- Safety rule loader 依原子檔案 signature 自動刷新，讓已啟動的多個 worker 在下一次
+  問診即可讀到 publisher 寫入的新 revision，不再依賴單一 process 的 cache clear。
+- Async 病患與醫師 routes 將同步 chief extraction、AMIE turn 及 LLM generation 移至
+  bounded worker；可用 `CLINICAL_IO_CONCURRENCY` 與 `CLINICAL_IO_TIMEOUT_SECONDS`
+  設定容量及逾時，病患逾時 fail closed 至人工 handoff。
+- API error response 保留既有 `detail` 並加入 `error_code`、`correlation_id` 與 headers；
+  validation 不反射輸入，internal exception 原文不會出現在 response 或 log。
+- Consultation repository 的每個短生命週期 SQLite connection 現在於成功、rollback 與
+  exception 路徑都確實關閉。
+- 完整 backend suite 共 344 項，342 項通過；僅 2 項外部 eHIS static-contract tests
+  因本機未掛載 `D:\\ehis\\eHIS` 而無法執行。Ruff、OpenAPI drift 及相關並行／錯誤／
+  connection regression checks 通過。
 
 ### v1.1.0 (2026-08-09)
 
@@ -193,6 +208,8 @@ Groq Key 可由 [Groq Console](https://console.groq.com/keys) 申請。
 | `INTERVIEW_ENGINE=amie` | 啟用 evidence-grounded ClinicalFact 與確定性問診 |
 | `INTERVIEW_ENGINE=legacy` | A/B 比較或緊急回退至順序式問卷 |
 | `AMIE_MAX_TURNS` | 可選的整體動態問診硬上限；未設定時依共用題與每條核准路由 policy 動態計算（最高 100） |
+| `CLINICAL_IO_CONCURRENCY` | async route 的同步臨床／模型 worker 上限，預設 4、範圍 1–32 |
+| `CLINICAL_IO_TIMEOUT_SECONDS` | 單次同步臨床／模型工作的 route 等待上限，預設 45 秒、範圍 5–180 秒 |
 | `AMIE_DEBUG_TRACE=true` | 測試時顯示去除疾病票數與排名後的決策摘要 |
 | `ASR_PROVIDER=breeze` | 使用本機 `MediaTek-Research/Breeze-ASR-26` 辨識錄音 |
 | `BREEZE_ASR_DEVICE=auto` | 有 CUDA 時使用 GPU/FP16，否則使用 CPU/FP32 |

@@ -6,6 +6,17 @@ SNOMED CT 查詢。根目錄的 `index.html`、`doctor.html` 是重構前的相�
 
 ## 服務版本
 
+### v1.2.0 (2026-08-09)
+
+- Safety structured-rule editor 分別保存 `all_findings` 與 `any_findings`，切換 operator
+  或無修改發布 round-trip 不再遺失另一組條件。
+- 顯示兩組 finding 數量以及目前搜尋／分類 filter 隱藏的已選項目，可明示一次清除，
+  避免看不到仍將發布的條件。
+- Safety draft assistant 使用 AbortController 與 request sequence；切換群組、取消編輯
+  或 component scope dispose 後，過期 response 不會回寫新草稿。
+- 同步更新 API error contract types；13 項 Node tests、OpenAPI type drift 與 Vite
+  production build 通過。Vue mount/browser interaction test 仍列於根 README 待辦。
+
 ### v1.1.0 (2026-08-09)
 
 - Production 與預設開發設定忽略 `backend`、`backendPort`、`fhir`、`directFhir`

@@ -10,7 +10,7 @@ import json
 import unittest
 
 from amie.clinical_facts import fact_conflicts, facts_for_route
-from amie.disease_profiles import score_diseases
+from amie.disease_profiles import question_fact_codes, score_diseases
 from amie.engine import AMIEEngine
 from amie.safety import detect_red_flags
 from domain.questionnaires import (
@@ -19,6 +19,8 @@ from domain.questionnaires import (
     ROUTE_KEYWORDS,
     build_questionnaire,
     clinical_domain,
+    load_questionnaire_category,
+    load_questionnaire_policy,
 )
 
 DISPOSITION_SEVERITY = {"questionnaire": 0, "handoff": 1, "urgent": 2}
@@ -197,6 +199,83 @@ class RouteGovernanceTests(unittest.TestCase):
                 continue
             with self.subTest(route=route):
                 self.assertIn(domain, {"chest", "headache", "abdomen"})
+
+
+class GeneralHistoryRetentionTests(unittest.TestCase):
+    """General history can be dropped purely because of what the patient answered.
+
+    ``smoke``, ``chronic`` and ``past_meds`` are not in any route's
+    ``required_fields`` and produce no clinical fact, so ``question_utility``
+    rates them at zero. They are therefore asked only while the interview happens
+    to still be running: a traversal that satisfies the funnel early completes
+    without ever asking a chest-pain patient whether they smoke.
+
+    This pins the behaviour so it cannot silently spread to more fields. The fix
+    is clinical policy (route ``required_fields``) and is recorded in
+    ``docs/funnel_clinical_signoff.md``.
+    """
+
+    DROPPABLE_HISTORY = {"smoke", "chronic", "past_meds"}
+    KNOWN_OPTIONAL_ZERO_STATIC_UTILITY = {*DROPPABLE_HISTORY, "chronic_detail"}
+
+    def _asked_fields(self, route, option_index):
+        engine = AMIEEngine(StubLLM())
+        questionnaire = build_questionnaire([route])
+        data = {"type": route, "types": [route], "gender": "男性"}
+        current, field, answer = questionnaire[0], "reason", "測試主訴"
+        asked = []
+        for turn in range(1, len(questionnaire) + 6):
+            result = engine.run_turn(
+                route=route,
+                answer=answer,
+                current_field=field,
+                data=data,
+                questionnaire=questionnaire,
+                prefilled_fields={"gender"},
+                turn_count=turn,
+                previous_state=None,
+            )
+            data = result.data
+            if result.action != "ask":
+                return result.action, asked
+            current = result.next_question
+            field = current["field"]
+            options = current.get("options") or []
+            if options:
+                answer = options[option_index]
+            elif current.get("kind") == "duration":
+                answer = (current.get("quick_options") or ["1天"])[0]
+            elif current.get("kind") == "date":
+                answer = "1980-01-01"
+            else:
+                answer = "無"
+            data[field] = answer
+            asked.append(field)
+        return "loop", asked
+
+    def test_answer_choice_alone_decides_whether_smoking_is_ever_asked(self):
+        action_first, asked_first = self._asked_fields("chest", 0)
+        action_last, asked_last = self._asked_fields("chest", -1)
+        self.assertEqual(action_first, "complete")
+        self.assertEqual(action_last, "complete")
+        self.assertTrue(self.DROPPABLE_HISTORY <= set(asked_first))
+        self.assertFalse(
+            self.DROPPABLE_HISTORY & set(asked_last),
+            "此 traversal 原本就不應問到一般病史；行為若改變請一併更新 signoff 文件",
+        )
+
+    def test_only_known_history_fields_are_optional_with_zero_static_utility(self):
+        """Prevent the same silent drop from spreading to another history field."""
+        history = load_questionnaire_category("history")
+        for route in ("chest", "abdomen", "headache"):
+            with self.subTest(route=route):
+                required = set(load_questionnaire_policy(route)["required_fields"])
+                droppable = {
+                    item["field"]
+                    for item in history
+                    if item["field"] not in required and not question_fact_codes(item)
+                }
+                self.assertEqual(droppable, self.KNOWN_OPTIONAL_ZERO_STATIC_UTILITY)
 
 
 if __name__ == "__main__":

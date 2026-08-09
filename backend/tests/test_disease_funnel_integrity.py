@@ -115,6 +115,124 @@ class DiseaseTableReachabilityTests(unittest.TestCase):
                         )
 
 
+class QuestionnaireWiringDebtTests(unittest.TestCase):
+    """An option with no fact mapping cannot influence disease scoring.
+
+    The patient still spends a turn on it and the answer still reaches the
+    clinician as text, but it cannot move the differential or contribute to the
+    question's disease-vote utility. Required and priority policy can still keep
+    the *field* in the interview. General history is droppable because its three
+    optional fields have neither fact mappings nor required status.
+    """
+
+    # Keep the baseline explicit: a total-only ceiling would allow a newly
+    # unwired high-risk option to be hidden by wiring an unrelated old one.
+    KNOWN_UNWIRED_OPTIONS = {
+        "history.smoke": {"有，目前仍在抽", "沒有，從未抽菸", "過去有抽，但已戒菸"},
+        "history.chronic": {
+            "糖尿病",
+            "慢性腎病",
+            "高血脂",
+            "肝硬化",
+            "自體免疫疾病",
+            "癌症",
+            "以上皆無",
+        },
+        "history.past_meds": {"抗組織胺", "腎上腺素", "類固醇", "以上皆無"},
+        "history.current_meds": {"沒有"},
+        "history.allergy": {"沒有"},
+        "chest.location": {"兩側都有"},
+        "chest.fixed": {"痛點會移動"},
+        "chest.quality": {"刺痛", "鈍痛"},
+        "chest.relieve": {"休息", "用藥", "按摩疼痛部位"},
+        "chest.associated": {"肚子痛"},
+        "chest.cardio": {
+            "高血壓",
+            "心絞痛",
+            "心臟衰竭",
+            "心肌梗塞",
+            "心律不整",
+            "主動脈剝離",
+            "肺栓塞",
+            "肺高壓",
+            "心包膜積水",
+            "氣喘",
+            "肺癌",
+            "慢性阻塞型肺病",
+            "支氣管擴張",
+            "氣胸",
+            "中風",
+            "以上皆無",
+        },
+        "chest.surgery": {
+            "心臟支架",
+            "心臟血管繞道手術",
+            "主動脈人工血管置換",
+            "主動脈支架",
+            "心律調節器",
+            "氣胸胸腔鏡手術",
+            "腦部手術",
+            "水腦引流",
+            "頸動脈手術",
+            "腦部放射線治療",
+            "頸椎手術",
+            "未曾手術",
+        },
+        "abdomen.quality": {"鈍痛", "刺痛"},
+        "abdomen.location": {"左上腹"},
+        "abdomen.associated": {"呼吸道症狀"},
+        "abdomen.abdomen_hx": {"盲腸炎", "紫質症", "糖尿病酮酸中毒"},
+        "headache.location": {"前額"},
+        "headache.worst_ever": {"不是，跟以前差不多或較輕"},
+        "headache.quality": {"針刺般的刺痛"},
+        "headache.aggravate": {"彎腰低頭"},
+        "headache.relieve": {"休息", "使用止痛藥"},
+        "headache.neuro": {
+            "中風",
+            "腦出血",
+            "腦膜炎或腦炎",
+            "腦部腫瘤",
+            "癲癇",
+            "顳動脈炎",
+        },
+        "headache.surgery": {
+            "腦部手術",
+            "腦動脈瘤夾閉或栓塞手術",
+            "水腦引流",
+            "頸動脈手術",
+            "腦部放射線治療",
+            "頸椎手術",
+            "未曾手術",
+        },
+    }
+
+    def _unwired(self):
+        unwired = {}
+        for category in sorted({"chief", "history", *DISEASE_TABLE_ROUTES}):
+            for item in load_questionnaire_category(category):
+                mapped = item.get("semantic_options") or {}
+                missing = [o for o in (item.get("options") or []) if o not in mapped]
+                if missing:
+                    unwired[f"{category}.{item['field']}"] = set(missing)
+        return unwired
+
+    def test_unwired_option_debt_does_not_spread(self):
+        actual = self._unwired()
+        unexpected = {
+            field: options - self.KNOWN_UNWIRED_OPTIONS.get(field, set())
+            for field, options in actual.items()
+            if options - self.KNOWN_UNWIRED_OPTIONS.get(field, set())
+        }
+        self.assertFalse(
+            unexpected,
+            f"新增了沒有 fact 對應的選項，將無法影響疾病評分：{unexpected}",
+        )
+
+    def test_every_cardiac_history_option_is_currently_unwired(self):
+        """Pins the largest single gap: prior MI/stent cannot reach the funnel."""
+        self.assertEqual(len(self._unwired().get("chest.cardio", [])), 16)
+
+
 class DiseaseTableQualityTests(unittest.TestCase):
     def test_scoring_debt_does_not_grow(self):
         reports = [load_profile_document(route) for route in DISEASE_TABLE_ROUTES]

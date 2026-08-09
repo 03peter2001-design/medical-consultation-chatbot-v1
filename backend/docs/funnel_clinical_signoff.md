@@ -80,7 +80,61 @@ review note；本文件本身不是簽核證明。
 **需要確認**：中文措辭、Safety 觸發與否定語意是否符合分診現場用語；核准後才可
 重新加入 active questionnaire。
 
-## 5. 已知的殘留限制
+## 5. 未接線的問卷選項（active 路由，78 個可選答案）
+
+已核准的三痛問卷與共用病史有 78 個選項沒有 `semantic_options` 對應。
+病人被問、答案被保存、醫師看得到文字，但這些答案不會產生 fact，因此
+本身無法影響疾病投票，也不會貢獻該題的 disease-vote utility。若欄位已被
+`required_fields` 或 `priority_fields` 列入，仍可因政策而保留在問診中；不能把「無
+fact」直接等同於「不會被問」。其中也包含「沒有」等可能合理保持未知的選項，
+是否應產生否定 fact 須由臨床審查決定。（`basic.gender`／`blood_type` 另 7 項身分
+欄位經由 `condition` 使用，不計入。）
+
+缺口最大的幾處：
+
+| 問卷 | 欄位 | 未接線 | 臨床意義 |
+|---|---|---|---|
+| chest | `cardio` | 16／16 | 心肌梗塞、支架、主動脈剝離、肺栓塞**病史**完全無法進入胸痛鑑別 |
+| chest | `surgery` | 12／12 | 繞道、支架、人工血管置換同上 |
+| headache | `neuro` | 6／9 | 中風、腦出血、腦部腫瘤病史無法進入頭痛鑑別 |
+| headache | `surgery` | 7／7 | 動脈瘤夾閉、腦部放射線治療同上 |
+| history | `chronic` | 7／7 | 糖尿病、肝硬化、癌症等共病對所有路由皆無作用 |
+| history | `smoke` | 3／3 | 吸菸狀態對胸痛無作用 |
+
+**未提出具體對應內容**：新增 fact code 與線索權重屬第 3 節同一類臨床決策，且需
+與疾病表重新產生一併規劃（現行三張疾病表沒有任何風險因子線索，即使問卷接線了
+也無處投票）。此節僅記錄缺口與量測方式。
+
+量測與防止惡化：`tests/test_disease_funnel_integrity.py::QuestionnaireWiringDebtTests`
+鎖定欄位與具體選項的明確 baseline；既有缺口可減少，但不能靠其他欄位的
+修正來抵銷新增的未接線選項。
+
+## 6. 一般病史可能完全不被詢問（待臨床政策決定）
+
+`smoke`、`chronic`、`past_meds` 不在任何路由的 `required_fields`，且因為第 5 節的
+未接線問題，`question_utility` 一律為 0。結果是它們只有在問診「剛好還沒結束」時
+才會被問到。
+
+`chronic_detail` 也不屬於 required，且自由文字題的靜態 `question_utility` 為 0；
+但它只會在 `chronic` 選了自體免疫疾病、癌症或其他時才適用，若實際被問，
+答案仍會經語意抽取產生 fact。因此它是另一個「可能在出現前就早停」的條件式
+欄位，不與上述三個永適用的一般病史欄位混為同一量測。
+
+實測（`scripts/measure_interview_length.py` 與 funnel behaviour 測試，合成答案）：
+
+| 病人答題方式 | 結果 |
+|---|---|
+| 一律選第一個選項 | 18 題完診，抽菸／慢性病／過去用藥**都有問到** |
+| 一律選最後一個選項 | **6 題完診，三者都沒問到** |
+
+同一份胸痛問卷，只因為病人選了不同選項，就決定了系統會不會問吸菸史。
+
+**需要決定**：是否把 `smoke`／`chronic`／`past_meds` 加入三痛路由的
+`required_fields`。這會改變完診條件（§7 高風險），因此未逕行修改。
+行為已由 `tests/test_funnel_behavior.py::GeneralHistoryRetentionTests` 鎖定，
+政策修正後需一併更新該測試。
+
+## 7. 已知的殘留限制
 
 - **跨領域疾病競爭**：下壁心肌梗塞以上腹痛表現時，`abdomen` 疾病表沒有 ACS 這個
   profile，所以不會被列入鑑別。這需要在疾病表內容處理，不是引擎能補的。

@@ -15,6 +15,7 @@ htmlcov/
 .ruff_cache/
 .vulture_whitelist.py
 .DS_Store
+.~lock.*#
 .build-state/
 .rag-cache/
 .deploy-staging/

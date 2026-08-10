@@ -6,6 +6,7 @@ import {
   isQuestionAnswerReady,
   toggleQuestionOption,
 } from '../services/questionnaire.js'
+import { interpretQuestionnaireVoice } from '../services/questionnaireVoice.js'
 
 const props = defineProps({
   spec: { type: Object, default: null },
@@ -97,6 +98,24 @@ function submit() {
   emit('submit', composeQuestionAnswer(props.spec, answerState.value))
 }
 
+function applyVoiceTranscript(transcript) {
+  const result = interpretQuestionnaireVoice(props.spec, transcript, {
+    maxDate: props.maxBirthDate,
+  })
+  if (result.kind === 'choice') {
+    selectedOptions.value = result.selectedOptions ?? []
+    otherText.value = result.otherText ?? ''
+  } else if (result.kind === 'duration') {
+    quickOption.value = result.quickOption ?? ''
+    durationNumber.value = result.durationNumber ?? ''
+    durationUnit.value = result.durationUnit ?? durationUnit.value
+    otherText.value = result.otherText ?? ''
+  } else if (result.kind === 'date') {
+    dateValue.value = result.dateValue ?? ''
+  }
+  return result
+}
+
 function focus() {
   nextTick(() => {
     if (kind.value === 'choice') {
@@ -111,7 +130,7 @@ function focus() {
   })
 }
 
-defineExpose({ focus })
+defineExpose({ applyVoiceTranscript, focus })
 </script>
 
 <template>

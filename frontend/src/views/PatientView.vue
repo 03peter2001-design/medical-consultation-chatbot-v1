@@ -416,6 +416,16 @@ function scheduleAutoSend() {
   }, AUTO_SEND_REVIEW_MS)
 }
 
+function structuredVoiceMessage(result, transcript) {
+  if (result?.status === 'mapped') {
+    return `已辨識「${transcript}」並填入答案，請確認後再送出。`
+  }
+  if (result?.status === 'other') {
+    return `已辨識「${transcript}」並填入其他／補充說明，請確認後再送出。`
+  }
+  return `已辨識「${transcript}」，但無法安全轉成目前題目的答案，請手動作答或重新錄音。`
+}
+
 function stopVoiceActivityDetection() {
   if (voiceActivityTimer) window.clearInterval(voiceActivityTimer)
   voiceActivityTimer = null
@@ -478,7 +488,7 @@ function stopRecording({ autoSubmit = false, reason = 'manual' } = {}) {
 
 async function startVoiceRecording({ autoSubmitOnSilence = false } = {}) {
   if (completed.value || voiceProcessing.value) return
-  if (recording.value || sending.value || currentInputKind.value !== 'text') return
+  if (recording.value || sending.value) return
   if (input.value.trim()) return
 
   try {
@@ -510,7 +520,9 @@ async function startVoiceRecording({ autoSubmitOnSilence = false } = {}) {
     })
     const silenceDetectionReady = autoSubmitOnSilence && activityDetectionReady
     voiceNotice.value = silenceDetectionReady
-      ? `請直接說話；開始說話後停頓 ${AVATAR_SILENCE_MS / 1000} 秒會完成辨識並自動送出。`
+      ? currentInputKind.value === 'text'
+        ? `請直接說話；開始說話後停頓 ${AVATAR_SILENCE_MS / 1000} 秒會完成辨識並自動送出。`
+        : `請直接說話；開始說話後停頓 ${AVATAR_SILENCE_MS / 1000} 秒會完成辨識並填入答案，仍需確認後送出。`
       : activityDetectionReady
         ? '錄音中；音波會跟著收到的聲音變化，再按一次麥克風停止。'
         : '錄音中，再按一次麥克風停止（最長 60 秒）。'
@@ -562,18 +574,25 @@ async function processRecording() {
       await askPatientToRepeat()
       return
     }
-    input.value = text
     const latency = Number(transcript.latency_seconds)
     const latencyLabel = Number.isFinite(latency)
       ? `，${latency.toFixed(1)} 秒`
       : ''
     const providerLabel =
       transcript.provider === 'breeze' ? 'Breeze ASR' : '語音 ASR'
-    voiceNotice.value = `語音辨識完成（${providerLabel}${latencyLabel}），請確認文字後再送出。`
+    if (currentInputKind.value === 'text') {
+      input.value = text
+      voiceNotice.value = `語音辨識完成（${providerLabel}${latencyLabel}），請確認文字後再送出。`
+    } else {
+      const result = questionnaireControl.value?.applyVoiceTranscript(text)
+      voiceNotice.value = structuredVoiceMessage(result, text)
+    }
     voiceProcessing.value = false
     await nextTick()
-    textInput.value?.focus()
-    if (shouldAutoSubmit) scheduleAutoSend()
+    focusInput()
+    if (shouldAutoSubmit && currentInputKind.value === 'text') {
+      scheduleAutoSend()
+    }
   } catch (error) {
     await askPatientToRepeat(error.message)
   } finally {
@@ -598,8 +617,7 @@ watch(
       !talking &&
       avatar.isConnected.value &&
       started.value &&
-      !completed.value &&
-      currentInputKind.value === 'text'
+      !completed.value
     ) {
       window.setTimeout(() => {
         void startVoiceRecording({ autoSubmitOnSilence: true })
@@ -820,10 +838,39 @@ onBeforeUnmount(() => {
         >
           {{
             currentInputKind === 'duration'
-              ? '請在上方選擇快捷時間，或輸入時間長度與單位。'
-              : '請在上方選擇答案；找不到合適選項時可使用「其他／補充說明」。'
+              ? '請在上方選擇快捷時間、輸入時間，或使用語音作答。'
+              : currentInputKind === 'date'
+                ? '請選擇日期，或使用語音說出西元／民國年月日。'
+                : '請在上方選擇答案，或使用語音作答後確認辨識結果。'
           }}
         </div>
+        <div
+          v-if="!completed && currentInputKind !== 'text'"
+          class="structured-voice-bar"
+        >
+          <span>{{ recording ? '正在聆聽您的答案' : '也可以用語音回答這一題' }}</span>
+          <VoiceWaveform
+            v-if="recording"
+            :level="voiceLevel"
+            :received="voiceDetected"
+          />
+          <button
+            class="input-icon"
+            :class="{ recording }"
+            :disabled="inputsDisabled && !recording"
+            :aria-label="recording ? '停止錄音' : '開始語音輸入'"
+            @click="toggleVoice"
+          >
+            {{ microphoneLabel }}
+          </button>
+        </div>
+        <p
+          v-if="!completed && currentInputKind !== 'text' && voiceNotice"
+          class="voice-notice"
+          role="status"
+        >
+          {{ voiceNotice }}
+        </p>
       </section>
     </main>
   </div>
@@ -1066,6 +1113,25 @@ onBeforeUnmount(() => {
   text-align: center;
 }
 
+.structured-voice-bar {
+  display: flex;
+  min-height: 64px;
+  flex: 0 0 64px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 7px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-1);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.structured-voice-bar > span:first-child {
+  margin-right: auto;
+}
+
 .patient-input-bar input {
   min-width: 0;
   height: 50px;
@@ -1150,6 +1216,10 @@ onBeforeUnmount(() => {
     height: 70px;
     flex-basis: 70px;
     padding: 0 10px;
+  }
+
+  .structured-voice-bar {
+    padding: 7px 10px;
   }
 
   .questionnaire-badge {

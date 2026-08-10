@@ -45,7 +45,9 @@ services:
       - consultation-data:/var/lib/medical-consultation
       - ./backups:/backups
       - ./secrets/ucc-jwt-public.pem:/run/secrets/ucc-jwt-public.pem:ro
-      - ${RAG_CHROMA_DB_PATH:-../backend/chroma_db}:/app/chroma_db:ro
+      # Chroma PersistentClient performs SQLite bookkeeping even for retrieval,
+      # so its working index cannot be mounted read-only.
+      - ${RAG_CHROMA_DB_PATH:-../backend/chroma_db}:/app/chroma_db
       - ${SNOMED_DATA_PATH:-../backend/terminology/snomed}:/app/terminology/snomed:ro
       # Breeze-ASR is lazy-loaded and may populate this cache on first use.
       - ${HF_MODEL_CACHE_PATH:-../.rag-cache/huggingface/hub}:/models/hub
@@ -170,6 +172,71 @@ services:
       - edge
       - private-api
 
+  docker-api-proxy:
+    image: ghcr.io/tecnativa/docker-socket-proxy:v0.5.0
+    environment:
+      CONTAINERS: "1"
+      EVENTS: "1"
+      INFO: "1"
+      POST: "0"
+      PING: "1"
+      VERSION: "1"
+    expose:
+      - "2375"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:2375/_ping | grep -q OK"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /run
+      - /var/lib/haproxy
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    networks:
+      - monitoring-api
+
+  monitor:
+    image: amir20/dozzle:v10.6.14
+    depends_on:
+      docker-api-proxy:
+        condition: service_healthy
+    environment:
+      DOZZLE_ENABLE_ACTIONS: "false"
+      DOZZLE_ENABLE_SHELL: "false"
+      DOZZLE_ENABLE_MCP: "false"
+      DOZZLE_NO_ANALYTICS: "true"
+      DOZZLE_FILTER: label=com.docker.compose.project=${COMPOSE_PROJECT_NAME:-medical-consultation}
+      DOZZLE_REMOTE_HOST: tcp://docker-api-proxy:2375|${COMPOSE_PROJECT_NAME:-medical-consultation}
+    ports:
+      # Logs may contain sensitive operational details. Keep the UI on host
+      # loopback and use an SSH tunnel for access from another workstation.
+      - "127.0.0.1:${CONTAINER_MONITOR_PORT:-18080}:8080"
+    volumes:
+      - monitor-data:/data
+    healthcheck:
+      test: ["CMD", "/dozzle", "healthcheck"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    networks:
+      - monitoring
+      - monitoring-api
+
 networks:
   # Only Nginx joins the edge bridge. Host-published ports cannot be activated
   # from a container attached exclusively to an internal Docker network.
@@ -181,8 +248,17 @@ networks:
   # providers without publishing the FastAPI container port on the host.
   backend-egress:
     driver: bridge
+  # Host-loopback operational UI only; it is not connected to clinical
+  # application networks and learns container state via the restricted proxy.
+  monitoring:
+    driver: bridge
+  # Only Dozzle can reach the read-only Docker API proxy. The proxy has no host
+  # port and permits only the API sections required for status and live logs.
+  monitoring-api:
+    internal: true
 
 volumes:
   consultation-data:
   avatar-models:
   avatar-cache:
+  monitor-data:

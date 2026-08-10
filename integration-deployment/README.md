@@ -6,10 +6,35 @@ explicitly runs the scripts.
 
 ## Service version
 
-目前版本為 **integration deployment bundle v1.3.0（2026-08-10）**。
+目前版本為 **integration deployment bundle v1.4.0（2026-08-10）**。
 這是依 `devlog/` 回溯整理的部署文件版本，用來標示安全整合藍圖、雙前端與
 GPU／Avatar 部署能力的共同基線；repository 目前沒有與此版本對應的 Git tag，
 也不表示任何院所環境已完成正式上線驗收。
+
+### v1.4.0 (2026-08-10)
+
+- 新增固定於 `amir20/dozzle:v10.6.14` 的輕量容器監視 UI，可在網頁查看本 Compose
+  project 的 container status、health、CPU／memory 與即時 logs。
+- UI 只發布於 host loopback `127.0.0.1:18080`；遠端管理者必須使用 SSH tunnel。
+  Dozzle 不連接 patient、UCC 或 backend networks，也不由 clinical gateway 對外提供。
+- Dozzle 不直接掛載 Docker socket；固定版 Docker API proxy 是唯一 socket consumer，
+  `POST=0` 並只開放 containers、events、info、ping、version 等監視所需 API sections。
+- Actions、shell、MCP 與 analytics 明確停用；API proxy 不發布 host port且只在 internal
+  network 與 Dozzle 相連。監視 API 仍可能包含敏感 container metadata，因此 UI 不得
+  改綁 LAN 或 public IP。
+- 新增 Dozzle 與 API proxy healthchecks、持久化 UI settings volume，以及 resolved
+  Compose security invariants，鎖定 loopback port、唯讀 API、停用能力與 networks。
+
+### v1.3.1 (2026-08-10)
+
+- 修正 backend 將 Chroma working index 掛成唯讀，導致
+  `PersistentClient` 啟動時因 SQLite bookkeeping 無法寫入而停用 RAG。
+- RAG bind mount 現在保留 host 路徑作為持久化來源，但允許 Chroma 必要的內部寫入；
+  PowerShell static validator 會拒絕再次加入 `:ro` 的設定。
+- 這是部署掛載修正，不變更 RAG corpus、collection 內容、embedding model、醫療規則
+  或病患端問診行為。病患端 Safety 與疾病投票仍不使用 RAG。
+- 驗證包含 Compose config、backend 重新建立、health 的完整 v2 collections，以及實際
+  本機 embedding／Chroma 檢索。
 
 ### v1.3.0 (2026-08-10)
 
@@ -89,6 +114,9 @@ Patient browser -> https://patient.example/ (patient static build)
                 -> /api/v1/* -> Nginx -> FastAPI
 
 Development frontend -> http://127.0.0.1:18000/v1/* -> Nginx -> FastAPI
+
+Operator browser -> http://127.0.0.1:18080 -> Dozzle
+                                  -> internal read-only API proxy -> Docker socket
 
 FastAPI -> one Docker-internal port, one worker, SQLite WAL named volume
 FastAPI -> private avatar service -> local CosyVoice3 -> local MuseTalk 1.5
@@ -187,6 +215,44 @@ Frontend source changes still use Vite hot reload. `backend/.env` does not confi
 the Docker backend; `integration-deployment/.env` is authoritative. The Docker
 `consultation-data` volume is also separate from `backend/data/consultations.db`;
 moving old cases requires an explicit backup/import and is never automatic.
+
+### Local container status and live logs
+
+The Compose stack includes [Dozzle](https://dozzle.dev/) for lightweight container
+status, health, resource metrics, and live-log viewing. Start it with the rest of the
+stack or independently:
+
+```sh
+cd integration-deployment
+docker compose up -d monitor
+docker compose ps monitor docker-api-proxy
+```
+
+On the Docker host, open `http://127.0.0.1:18080`. To view it from an administrator
+workstation, keep the server port on loopback and create an SSH tunnel:
+
+```sh
+ssh -N -L 18080:127.0.0.1:18080 deploy-user@ubuntu-host
+```
+
+Then open `http://127.0.0.1:18080` on the workstation. If that local port is occupied,
+change `CONTAINER_MONITOR_PORT` in the uncommitted deployment `.env` and use the same
+local port in the tunnel.
+
+Dozzle uses a Compose-project display filter and does not persist a separate copy of
+container logs; it streams what the Docker daemon retains. The filter is a UI
+convenience, not an authorization boundary. The named `monitor-data` volume stores UI
+preferences.
+
+Dozzle does not mount `docker.sock` directly. A pinned
+[Docker Socket Proxy](https://github.com/Tecnativa/docker-socket-proxy) exposes only
+the read-only Docker API sections required for container status and logs over an
+internal network; it has no host port. Those APIs can still reveal sensitive
+container metadata, and logs may contain operational or clinical details. Do not
+expose this service through the patient/UCC gateway or bind it to a LAN/public
+interface. Keep actions, shell, and MCP disabled. See the upstream
+[Dozzle security guidance](https://dozzle.dev/guide/authentication) before adding any
+remote access method other than SSH tunneling.
 
 ### Breeze ASR GPU
 

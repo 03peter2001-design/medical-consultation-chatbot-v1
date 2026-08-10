@@ -28,6 +28,25 @@ test('keeps transcribed text editable before avatar voice mode auto-submits', ()
   assert.match(patientView, /void submitMessage\(text\)/)
 })
 
+test('offers voice input for structured questions without auto-submitting them', () => {
+  const questionnaireControl = readFileSync(
+    new URL('../src/components/QuestionnaireControl.vue', import.meta.url),
+    'utf8',
+  )
+  assert.doesNotMatch(
+    patientView,
+    /recording\.value \|\| sending\.value \|\| currentInputKind\.value !== 'text'/,
+  )
+  assert.match(patientView, /class="structured-voice-bar"/)
+  assert.match(patientView, /applyVoiceTranscript\(text\)/)
+  assert.match(
+    patientView,
+    /shouldAutoSubmit && currentInputKind\.value === 'text'/,
+  )
+  assert.match(patientView, /仍需確認後送出/)
+  assert.match(questionnaireControl, /defineExpose\(\{ applyVoiceTranscript, focus \}\)/)
+})
+
 test('supports common Chrome Firefox and Safari recording containers', () => {
   assert.match(patientView, /audio\/webm;codecs=opus/)
   assert.match(patientView, /audio\/mp4/)

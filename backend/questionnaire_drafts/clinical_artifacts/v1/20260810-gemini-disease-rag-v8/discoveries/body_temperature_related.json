@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "body_temperature_related",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "e0f2ca8a51c36a9029af16fa24eae9289b5b93bc7ea690115f4895e92f47c2e8",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "body temperature related hypothermia heatstroke differential diagnosis diseases clinical presentation symptoms history",
+      "body temperature related hypothermia heatstroke red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "0177cc1bbffd93feacf480bd214fcdacf08671c7c383cf06f6db2ffeb5a81799"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "5b0e8f11429cfee20a9058c0d38fbb45463ee4a152c80f0090a03cac2d4dc556",
+    "generated_at": "2026-08-10T04:00:41+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-247a744020c3e621",
+      "chunk_id": "91ca4fdf1eac03a68c7f_42",
+      "title": "Heat Stroke: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/166320-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3338,
+      "excerpt": "of poor prognosis during acute episodes include the following: Initial temperature measurement higher than 41 (106 or a temperature higher than 42 (108 or a temperature persisting above 39 (102 despite aggressive cooling measures Coma duration longer than 2 hours Severe pulmonary edema Delayed or prolonged hypotension Lactic acidosis in patients with classic heat stroke Acute kidney injury and hyperkalemia Aminotransferase levels greater than 1000 IU/L during the first 24 hours Morbidity and mortality from heat stroke are related to the duration of the temperature elevation. When therapy is",
+      "text_sha256": "bb3cc28d2616d12c92f28ef5c7ec44d886dfd0a648236933bd0d92c1b717f854"
+    },
+    {
+      "id": "rag-29d671a6476a22fe",
+      "chunk_id": "553dc2102363f6b18057_9",
+      "title": "Targeted Temperature Management (Therapeutic Hypothermia): Practice Essentials, Overview, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/812407-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3454,
+      "excerpt": "(most commonly bradycardia) associated with hypothermia If life-threatening dysrhythmia arises and persists, or hemodynamic instability or bleeding develops, discontinue active cooling and rewarm the patient During cooling, an ECG Osbourne or camel wave may be present; heart rate less than 40 bpm is common and is not a cause for concern in the absence of other evidence of hemodynamic instability Check skin every 2-6 hours for thermal injury caused by cold blankets Regularly check the patient s temperature with a secondary temperature monitoring device when cooling After TTM, fever should be",
+      "text_sha256": "a671e3f47b325b968d251bcc6f53dc5e0128381cb17bd353eeddf3be29e2781a"
+    },
+    {
+      "id": "rag-b81f505e035d0701",
+      "chunk_id": "553dc2102363f6b18057_80",
+      "title": "Targeted Temperature Management (Therapeutic Hypothermia): Practice Essentials, Overview, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/812407-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3631,
+      "excerpt": "sepsis, coagulopathy, and electrolytes and metabolic disturbances. ld diuresis and hypovolemia may result. However, many large clinical trials and meta-analyses have reported these adverse effects to be infrequent. A trend toward increased incidence of sepsis has been noted. Questions & Answers Overview What is the effect of targeted temperature management (TTM) on out-of-hospital cardiac arrest survival? What is the efficacy of targeted temperature management (TTM)? Which conditions may benefit from treatment with targeted temperature management (TTM)? What are the AHA guidelines for targeted",
+      "text_sha256": "6e4c56623b69d0e7ed6370d2843b76b952e69593f3263cde141b39f75fe814ba"
+    },
+    {
+      "id": "rag-6e729ba613271cb0",
+      "chunk_id": "91ca4fdf1eac03a68c7f_0",
+      "title": "Heat Stroke: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/166320-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3731,
+      "excerpt": "Overview Practice Essentials Heat illness may be viewed as a continuum of illnesses relating to the body's inability to cope with heat. It includes minor illnesses, such as heat edema, heat rash (ie, prickly heat), heat cramps, heat tetany, as well as heat syncope and heat exhaustion. Heat stroke is the most severe heat-related illness and is defined as a body temperature higher than 40 (104 associated with neurologic dysfunction. Two forms of heat stroke exist. Exertional heat stroke (EHS) generally occurs in young individuals who engage in strenuous physical activity for a prolonged period",
+      "text_sha256": "a2282822dd8952a3bd8edb27a63fb12be1a660dc634f1476270bb996ab48e12c"
+    },
+    {
+      "id": "rag-ea5e8e712838454a",
+      "chunk_id": "6902d3b9fb0ee79f0ae6_18",
+      "title": "Chlamydial Pneumonias: Overview, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/297351-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4235,
+      "excerpt": "in less than half of patients. Physical findings that suggest ornithosis include a pulse-temperature dissociation (fever without elevated pulse), somnolence, and splenomegaly. The pulse-temperature dissociation is also seen in Q fever, typhoid fever, and Legionnaires disease. Signs of meningitis or encephalitis, including a focal neurologic deficit and seizures, may develop. In addition, hepatitis, hemolytic anemia, disseminated intravascular coagulation, meningoencephalitis, or reactive arthritis may be observed, as well as cutaneous manifestations, including Horder spots (erythematous,",
+      "text_sha256": "8140ab0a31491143241ea4783e34916ba330732f72299233e5fe87a4b3521c12"
+    },
+    {
+      "id": "rag-a58aa97118b67e82",
+      "chunk_id": "91ca4fdf1eac03a68c7f_3",
+      "title": "Heat Stroke: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/166320-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4946,
+      "excerpt": "exceeding 40 (104 associated with an altered sensorium. /wever, when a patient is allowed to cool down prior to measurement of the temperature (as may occur during transportation in a cool ambulance or evaluation in an emergency department), the measured temperature may be lower than 41 making the temperature criterion relative. Anhidrosis, or lack of sweating, has been cited as a feature of heat stroke, but some patients with heat stroke present with profuse sweating. Because of variable presentations, a high index of suspicion is needed to avoid delays in diagnosis and treatment. Diagnostics",
+      "text_sha256": "1e27e0739dd56c969b8ce468bc7d07f54b7cb445cdd2da76a35de4a4653e8b00"
+    },
+    {
+      "id": "rag-89e996535a376f0c",
+      "chunk_id": "91ca4fdf1eac03a68c7f_12",
+      "title": "Heat Stroke: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/166320-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5058,
+      "excerpt": "because of the risk of malignant hyperthermia. Patients may resume activity when their temperature has stabilized. Long-term monitoring Long-term outpatient therapy may be required when chronic renal failure develops and when irreversible damage to the CNS, lungs, heart, and liver occurs. Prevention Heat stroke is a preventable illness, and education is the single most important tool for its prevention. Recognition of host risk factors and modification of behavior (eg, limiting alcohol and drug intake, avoiding use of medications and drugs that interfere with heat dissipation) and physical",
+      "text_sha256": "3d69229a098207abcf292b4d4e4dad0ab0c7fba1ddf804977f35af4df99c6ea1"
+    },
+    {
+      "id": "rag-1daf91c163154755",
+      "chunk_id": "553dc2102363f6b18057_76",
+      "title": "Targeted Temperature Management (Therapeutic Hypothermia): Practice Essentials, Overview, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/812407-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4622,
+      "excerpt": "(target temperature of 33 can be safely used following intra-arterial reperfusion therapy (IAT) in patients with large pretreatment core infarcts. Phase 2 of this trial will randomize patients with acute ischemic stroke to hypothermia or normothermia. A 2016 pilot study of endovascular hypothermia with cold isotonic saline infusion (4 in 26 patients with acute ischemic stroke demonstrated 100% technical success and no reports of obvious complications associated with the intra-arterial hypothermia. Pediatric cardiac arrest and neonatal hypoxic-ischemic encephalopathy The International Liaison",
+      "text_sha256": "3192df85b06d9efcdd20592e4de6f6b88d62c0eedc1ebcaafb136874802a09e9"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5498,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    }
+  ],
+  "discovery": {
+    "route": "body_temperature_related",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "body_temperature_related__heat_stroke",
+        "name": "Heat Stroke",
+        "rationale": "Heat stroke is explicitly defined as a core body temperature higher than 40°C (104°F) associated with neurologic dysfunction. It is the most severe form of heat-related illness. The questionnaire asks about body temperature, accompanying symptoms like confusion, and exposure to extreme temperatures, which are all relevant to diagnosing heat stroke.",
+        "source_ids": [
+          "rag-6e729ba613271cb0",
+          "rag-a58aa97118b67e82"
+        ]
+      },
+      {
+        "id": "body_temperature_related__heat_exhaustion",
+        "name": "Heat Exhaustion",
+        "rationale": "Heat exhaustion is mentioned as part of the continuum of heat-related illnesses, which are less severe than heat stroke. The questionnaire's inquiry into temperature problems and exposure to extreme heat or excessive exercise could identify patients with this condition.",
+        "source_ids": [
+          "rag-6e729ba613271cb0"
+        ]
+      },
+      {
+        "id": "body_temperature_related__hypothermia",
+        "name": "Hypothermia",
+        "rationale": "The route's catalog keywords include \"hypothermia\" and the questionnaire asks about low body temperature. The provided RAG text discusses therapeutic hypothermia (targeted temperature management), which involves intentionally lowering body temperature, confirming that low body temperature is a clinically significant state.",
+        "source_ids": [
+          "rag-29d671a6476a22fe",
+          "rag-b81f505e035d0701"
+        ]
+      },
+      {
+        "id": "body_temperature_related__sepsis",
+        "name": "Sepsis",
+        "rationale": "The questionnaire asks about recent infections (e.g., UTI, pneumonia) and chronic diseases, which are risk factors for sepsis. One source mentions that a trend toward an increased incidence of sepsis has been noted in the context of targeted temperature management, linking systemic infection to body temperature dysregulation.",
+        "source_ids": [
+          "rag-b81f505e035d0701"
+        ]
+      },
+      {
+        "id": "body_temperature_related__pneumonia",
+        "name": "Pneumonia",
+        "rationale": "The questionnaire specifically asks if the user has had a recent case of pneumonia. One source discusses Chlamydial Pneumonias and mentions associated findings like pulse-temperature dissociation (fever without a correspondingly elevated pulse), linking this specific infection to abnormal temperature responses.",
+        "source_ids": [
+          "rag-ea5e8e712838454a"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "critical",
+        "note": "Heat stroke is a medical emergency. A body temperature higher than 41°C (106°F) or a temperature persisting above 39°C (102°F) despite cooling measures are indicators of poor prognosis. Coma duration longer than 2 hours is also a critical sign.",
+        "source_ids": [
+          "rag-247a744020c3e621"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "In suspected heat stroke, the measured temperature may be lower than expected if the patient has cooled down before measurement (e.g., in a cool ambulance). A high index of suspicion is needed as presentations can vary.",
+        "source_ids": [
+          "rag-a58aa97118b67e82"
+        ]
+      }
+    ]
+  }
+}

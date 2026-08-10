@@ -1,0 +1,1648 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "syncope",
+  "label": "昏倒 暈厥",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "3ce0c6845dddf83808a39130ea068eed66721246cdf0f028f8556c9f7aeef8d5",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"syncope syncope differential diagnosis diseases clinical presentation symptoms history\",\"syncope syncope red flags emergency warning signs urgent referral rule out\",\"Cardiac Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Arrhythmia diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Vasovagal Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Orthostatic Hypotension diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Neurologic Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "b19451099a79c76e2890bd70faa64e6099c02b6e522676183205662dc7cf1b60"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "4b8c423c21f4d33eef3862b57b6c97d9f39831e23e5f738118a188e52c1f6f40",
+    "generated_at": "2026-08-10T04:19:01+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "syncope__cardiac_syncope",
+        "syncope__arrhythmia",
+        "syncope__vasovagal_syncope",
+        "syncope__orthostatic_hypotension"
+      ],
+      "retrieval_queries": [
+        "syncope syncope differential diagnosis diseases clinical presentation symptoms history",
+        "syncope syncope red flags emergency warning signs urgent referral rule out",
+        "Cardiac Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Arrhythmia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Vasovagal Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Orthostatic Hypotension diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2726,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-ff175cd271f88014",
+      "chunk_id": "6abb4726efd0e023f805_11",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "syncope__neurologic_syncope",
+        "syncope__vasovagal_syncope"
+      ],
+      "retrieval_queries": [
+        "syncope syncope differential diagnosis diseases clinical presentation symptoms history",
+        "Neurologic Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Vasovagal Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3818,
+      "excerpt": "with predominantly sensory symptoms, those with a distal symmetric disorder (DADS), those with multifocal sensorimotor neuropathy or sensorimotor mononeuropathy multiplex with prominent conduction block (also known as Lewis-Sumner neuropathy), and those with CIDP with associated CNS demyelination or with other systemic disorders. The following disorders are considered distinct from CIDP because they have specific pathophysiologic features and respond to treatments differently than do patients with CIDP: Demyelinating neuropathies associated with immunoglobulin M (IgM) paraproteins, including",
+      "text_sha256": "9bcc687a6e728f319204b3de3fc10d7168b581aebb57ba68bafb0dddb461ee00"
+    },
+    {
+      "id": "rag-32a4b6428a7f6772",
+      "chunk_id": "9f7eb5027998a34eb6c2_37",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "syncope syncope differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.2987,
+      "excerpt": "risk factors. Morbidity from syncope includes recurrent syncope, which occurs in 20% of patients within 1 year of the initial episode. Lacerations, extremity fractures, head injuries, and motor vehicle accidents can occur secondary to syncope. Syncope in a patient with poor baseline cardiac function portends a poor prognosis, irrespective of etiology. Middlekauff et al studied 491 patients with NYHA functional class III or IV disease and noted that, regardless of the cause, 45% of those with syncope died within 1 year, whereas 12% of those without syncope died during the same interval.",
+      "text_sha256": "f5cc71297a8e0074e5a8d11fbcad52f6c752cceb77094fbf70ee7b862be802bd"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "headache",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "syncope__arrhythmia"
+      ],
+      "retrieval_queries": [
+        "syncope syncope differential diagnosis diseases clinical presentation symptoms history",
+        "Arrhythmia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3996,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-431b67d788c5230a",
+      "chunk_id": "3de735a60d396e6d9c9c_7",
+      "title": "Permanent Pacemaker Insertion: Background, Indications, Contraindications",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1839735-overview",
+      "routes": [
+        "safety",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "syncope__cardiac_syncope",
+        "syncope__arrhythmia"
+      ],
+      "retrieval_queries": [
+        "syncope syncope differential diagnosis diseases clinical presentation symptoms history",
+        "Cardiac Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Arrhythmia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.374,
+      "excerpt": "bpm, but no clear association between the symptoms and bradycardia Unexplained syncope when clinically significant abnormalities of sinus node function are discovered or provoked in electrophysiological (EP) studies Minimally symptomatic patients with chronic heart rate less than 40 bpm while awake Acquired atrioventricular (AV) block Class I indications include the following: Complete third-degree AV block with or without symptoms Symptomatic second degree AV block, Mobitz type I and II Exercise-induced second or third degree AV block in the absence of myocardial infarction Mobitz II with",
+      "text_sha256": "5897d326d8ed0dc8bf039c42c9d77531bc3417efe511a9a0c272da1b2499abb3"
+    },
+    {
+      "id": "rag-c2203527dc54e6e4",
+      "chunk_id": "9f7eb5027998a34eb6c2_14",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "syncope syncope red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4821,
+      "excerpt": "with syncope. Although most causes of syncope are benign, this symptom presages a life-threatening event in a small subset of patients. It is unclear whether hospital inpatient admission of asymptomatic patients after syncope affects outcomes. No current criterion standard exists for diagnosing undifferentiated syncope. Many physicians continue to admit patients because of perceived risk. Reviews of the 2001 American College of Emergency Physician (ACEP) clinical policy suggested that evidence-based criteria may decrease admission rates by nearly half by identifying cardiac causes of syncope.",
+      "text_sha256": "03310d23e7579d094fd662a0f807506d101e5d3f0a83db1c831491b1a8c651ec"
+    },
+    {
+      "id": "rag-96a90437160454ff",
+      "chunk_id": "60a8e9fb259d62f055c2_43",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "syncope syncope red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5586,
+      "excerpt": "(cTn), whether conventional or high sensitivity (hs), exclusively for these purposes. The main clinical outcome of interest after initial emergency department (ED) evaluation of patients with suspected ACS is 30-day MACE. MACE includes MI, death, target lesion revascularization, or death. In 2018, The American College of Emergency Physicians (ACEP) updated its level C recommendations regarding testing strategies for ruling out non-ST-elevation MI (NSTEMI) in lower risk patients to include the use of the HEART score and conventional or high-sensitivity cardiac troponins (hs-cTn) as follows: In",
+      "text_sha256": "4828c8d733507191a7786f8b1f2baf9a4c8185d49b0cb05028c18c2b64ce27ff"
+    },
+    {
+      "id": "rag-58c5f2eb5f52fa45",
+      "chunk_id": "60a8e9fb259d62f055c2_0",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "syncope__cardiac_syncope"
+      ],
+      "retrieval_queries": [
+        "Cardiac Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3674,
+      "excerpt": "Definition and Efficacy Cardiac markers are used for the diagnosis and risk stratification of patients with chest pain and suspected acute coronary syndrome (ACS) and for management and prognosis in patients with acute heart failure, pulmonary embolism, and other disease states. Cardiac markers can be classified into those that signify myocardial necrosis (creatine kinase-MB [CK-MB] action, myoglobin and cardiac troponins), those that indicate myocardial ischemia (ischemia modified albumin), those that suggest myocardial stress (natriuretic peptides), and those markers of inflammation and",
+      "text_sha256": "c564cd463bc767d0045ffeed533c42106a4178019d2d50b9493d2ef7680c7c71"
+    },
+    {
+      "id": "rag-3a72d4c38d9a0bb7",
+      "chunk_id": "9f7eb5027998a34eb6c2_8",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "syncope__cardiac_syncope",
+        "syncope__vasovagal_syncope",
+        "syncope__orthostatic_hypotension"
+      ],
+      "retrieval_queries": [
+        "Cardiac Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Vasovagal Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Orthostatic Hypotension diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3774,
+      "excerpt": "conduction defects are truly diagnostic only when they coincide with symptoms Loop recorders have a higher diagnostic yield than Holter monitor evaluation, with a marginal cost savings Ambulatory monitoring appears to have a higher negative than positive diagnostic yield Other diagnostic tests and procedures include the following: Head-up tilt-table test - Useful for confirming autonomic dysfunction and can generally be safely arranged on an outpatient basis Electroencephalography (EEG) - Can be performed at the discretion of a neurologist if seizure is considered a likely alternative",
+      "text_sha256": "bce92127a34f3c0ce64d226f3f059473b46561d6c8d76961f1c0a09f5b6874fc"
+    },
+    {
+      "id": "rag-2bd559b5496c39e1",
+      "chunk_id": "5039574c392446d9404b_1",
+      "title": "Rheumatic Fever: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/236582-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "syncope__arrhythmia"
+      ],
+      "retrieval_queries": [
+        "Arrhythmia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4446,
+      "excerpt": "Clinical manifestations and time course. Pathophysiology ARF is characterized by nonsuppurative inflammatory lesions of the joints, heart, subcutaneous tissue, and central nervous system. An extensive literature search has shown that, at least in developed countries, rheumatic fever follows pharyngeal infection with rheumatogenic group A streptococci. The risk of developing rheumatic fever after an episode of streptococcal pharyngitis has been estimated at 0.3-3%. Investigations of rheumatic fever occurring in the aboriginal populations of Australia suggest that streptococcal skin infections",
+      "text_sha256": "c1641db1df64dd9ab99a3d6d163294920155159b8d63be6110df9709c0fd41de"
+    },
+    {
+      "id": "rag-c11a2103e40596fa",
+      "chunk_id": "c3ac65c4ac2f328bf4e4_1",
+      "title": "Neuroimaging in Neurocysticercosis: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1168784-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "syncope__neurologic_syncope"
+      ],
+      "retrieval_queries": [
+        "Neurologic Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4073,
+      "excerpt": "is associated with clinical manifestations such as seizures, headache, and focal neurological deficits, and may lead to long-term neurological sequelae such as epilepsy, hydrocephalus, and dementia. The pleomorphism of NC makes its diagnosis impossible on clinical grounds alone. An accurate diagnosis is possible only after suspicion on epidemiologic grounds, proper interpretation of clinical data, and synthesis of findings on neuroimaging studies specific immunologic tests on the cerebrospinal fluid (CSF). Biology Humans are the only known host to harbor the adult cestode parasite, Taenia",
+      "text_sha256": "12c0822d631284eb661059f36827e76af0801c89a1c2136bdfd59a506e9c8297"
+    },
+    {
+      "id": "rag-9c829a59affdd531",
+      "chunk_id": "53fc3e4f98765d889be9_0",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "syncope__neurologic_syncope"
+      ],
+      "retrieval_queries": [
+        "Neurologic Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4381,
+      "excerpt": "Overview Neuroimaging has become a key diagnostic tool in the emergency department. Complaints of weakness, dizziness, headache, and trauma lend themselves to rapid evaluation and diagnosis through the use of computed tomography (CT) and magnetic resonance imaging (MRI). This article focuses on the basic principles and key considerations in ordering and interpreting neuroimaging in the emergency department in conjunction with the radiologist. Trauma is the leading cause of death in patients younger than 45 years. Cranial trauma accounts for a substantial proportion of morbidity and mortality",
+      "text_sha256": "a1ee1d43e475359f345b863f6b0c7aa363195f65220b94c8d77d54974c6411fb"
+    },
+    {
+      "id": "rag-67e70434c6d5aa75",
+      "chunk_id": "8b43a6610b35f683aaa4_7",
+      "title": "Brain Neoplasms: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779664-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "syncope__neurologic_syncope"
+      ],
+      "retrieval_queries": [
+        "Neurologic Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4388,
+      "excerpt": "of an intracranial neoplasm, such as the following: Acute mental status changes New-onset seizures Focal motor or sensory deficits, including gait disturbance Suspicious headache Signs of elevated ICP (eg, papilledema) Generally, CT is the imaging modality of choice for the ED physician. Although some tumors exhibit a characteristic appearance, do not make an unequivocal diagnosis based solely on radiologic findings. Generally, computed tomography (CT) is the imaging modality of choice for the emergency department physician. CT findings are as follows: Most tumors demonstrate enhancement with",
+      "text_sha256": "9a3e8ee183600f7668367814ceeb2833af5c0500fa3c7177ef236d856e6aa4cf"
+    },
+    {
+      "id": "rag-96851f20eb41d937",
+      "chunk_id": "2b6eb94497953c8a6426_9",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "syncope__seizure"
+      ],
+      "retrieval_queries": [
+        "Seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3075,
+      "excerpt": "contribute to seizures in patients with known seizure disorder, but these are diagnoses of exclusion. For patients presenting with new-onset seizure disorder, the list of possible causes is longer and includes the following: Central nervous system (CNS) pathologies (stroke, neoplasm, trauma, hypoxia, vascular abnormality) Metabolic abnormalities (hypoglycemia/hyperglycemia, hyponatremia/hypernatremia, hypercalcemia, hepatic encephalopathy) Toxicologic etiologies (alcohol withdrawal, cocaine, isoniazid, theophylline) Infectious etiologies (meningitis, encephalitis, brain abscess)",
+      "text_sha256": "ce82f5d4c7452266eee090f3dc36beebd5e254400fb703088d5038a3fe468d39"
+    },
+    {
+      "id": "rag-98dfd27812d7a9ca",
+      "chunk_id": "2b6eb94497953c8a6426_30",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "syncope__seizure"
+      ],
+      "retrieval_queries": [
+        "Seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3255,
+      "excerpt": "CT if any of the following are present: new focal deficits, trauma, persistent fever, new character or pattern to the seizures, suspicion of AIDS, infection, or anticoagulation. In general, however, the evidence is inadequate to support or refute the usefulness of emergency CT in persons with chronic seizures. Magnetic Resonance Imaging Magnetic resonance imaging (MRI) may be a better diagnostic test because of higher yield and ability to identify smaller lesions, but its availability in the ED may be a limiting factor. In addition, MRI is time-consuming and may interfere with adequate patient",
+      "text_sha256": "eed6d011163791af4805fbef225ea0cc599ba26cb44b7205c05e20380c8d5521"
+    },
+    {
+      "id": "rag-3621455ec67c20e8",
+      "chunk_id": "f955a6b6ecb0fe7b4201_21",
+      "title": "Absence Seizures: Overview, Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1183858-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "syncope__seizure"
+      ],
+      "retrieval_queries": [
+        "Seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3369,
+      "excerpt": "and resolution. In symptomatic generalized epilepsies, physical and neurologic findings may be abnormal, reflecting the underlying disorder. Physical examination may reveal stigmata of a genetic disease, such as a neurocutaneous disorder (eg, tuberous sclerosis) or an inborn error of metabolism. Neurologic examination may show signs of developmental delay or more specific signs, such as spastic paresis in cerebral palsy. Table 1. Clinical and EEG Findings in Typical and Atypical Absence Seizures* (Open Table in a new window) Type of Clinical Seizure EEG Findings Typical absence Impairment of",
+      "text_sha256": "f9bc30f80518b99b49bb00fc9cd8fe94fb52f4e6a90266d68b151460542235c7"
+    },
+    {
+      "id": "rag-168505cd54e57296",
+      "chunk_id": "c073c38d1231a0946898_2",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "syncope__vasovagal_syncope"
+      ],
+      "retrieval_queries": [
+        "Vasovagal Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5013,
+      "excerpt": "after all studies reveal no etiology or there is no apparent cause. Classic trigeminal neuralgia includes all cases without established etiology after investigation, as well as those with potential microvascular compression of the fifth cranial nerve. In symptomatic trigeminal neuralgia, the pain syndrome is secondary to tumor, multiple sclerosis, or other structural abnormalities. Diagnosis According to the International Classification of Headache Disorders (ICHD), specific crtieria have been developed to diagnose TN. (ey are as follows: A. At least three attacks of unilateral facial pain",
+      "text_sha256": "5273cd18dbfdad1b48e12db8975d5572ba1e419917141194219a5f8335049eb9"
+    },
+    {
+      "id": "rag-8356ec010ed3ff6f",
+      "chunk_id": "87996f6a71b53073e20c_3",
+      "title": "Acute Hypopituitarism: Overview, Diagnostic Considerations, Hormone Deficiency Symptoms",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767828-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "syncope__orthostatic_hypotension"
+      ],
+      "retrieval_queries": [
+        "Orthostatic Hypotension diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3966,
+      "excerpt": "rate. The setting is not uncommon in which an emergency physician is evaluating a patient with complaints of weakness, fatigue, or altered mental status without a clear diagnosis. Subtle, but still abnormal, vital signs, such as slightly reduced blood pressure or heart rate, may be the only initial clues to suggest a pituitary deficiency rather than a relatively benign etiology. Emergency physicians frequently provide care to patients at risk of developing hypopituitarism. Risk factors include, but are not limited to, TBI, cocaine use, subarachnoid hemorrhage, and postpartum hypotension (a",
+      "text_sha256": "66493d5f742848008b29c1bb6e2ef99b7317d22019ad008feed96fe38c63f932"
+    },
+    {
+      "id": "rag-18f04b5069cffd05",
+      "chunk_id": "99c2174bb4c698913cb0_14",
+      "title": "Hypoparathyroidism in Emergency Medicine: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767744-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "syncope__orthostatic_hypotension"
+      ],
+      "retrieval_queries": [
+        "Orthostatic Hypotension diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4248,
+      "excerpt": "sensorineural deafness and renal disease [HDR syndrome (Barakat syndrome)]) Tooth malformation Intellectual disability (with HDR syndrome [Barakat syndrome]) Hypothyroidism Cardiomyopathy Parkinsonian symptoms Ossification of paravertebral ligaments Adhesive capsulitis Clinical Presentation",
+      "text_sha256": "7a98259f836489b375a21128dd2460879c7e5e07c3a5c62f19760448520839f4"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "syncope__cardiac_syncope",
+      "name": "Cardiac Syncope",
+      "retrieval_query": "Cardiac Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-32a4b6428a7f6772"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-431b67d788c5230a",
+        "rag-58c5f2eb5f52fa45",
+        "rag-3a72d4c38d9a0bb7"
+      ]
+    },
+    {
+      "id": "syncope__arrhythmia",
+      "name": "Arrhythmia",
+      "retrieval_query": "Arrhythmia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-431b67d788c5230a"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-5bcac9eab5404341",
+        "rag-431b67d788c5230a",
+        "rag-2bd559b5496c39e1"
+      ]
+    },
+    {
+      "id": "syncope__neurologic_syncope",
+      "name": "Neurologic Syncope",
+      "retrieval_query": "Neurologic Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-f09c5253c7a82445"
+      ],
+      "disease_rag_source_ids": [
+        "rag-ff175cd271f88014",
+        "rag-c11a2103e40596fa",
+        "rag-9c829a59affdd531",
+        "rag-67e70434c6d5aa75"
+      ]
+    },
+    {
+      "id": "syncope__seizure",
+      "name": "Seizure",
+      "retrieval_query": "Seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-f09c5253c7a82445"
+      ],
+      "disease_rag_source_ids": [
+        "rag-96851f20eb41d937",
+        "rag-98dfd27812d7a9ca",
+        "rag-3621455ec67c20e8"
+      ]
+    },
+    {
+      "id": "syncope__vasovagal_syncope",
+      "name": "Vasovagal Syncope",
+      "retrieval_query": "Vasovagal Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-c2203527dc54e6e4"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-ff175cd271f88014",
+        "rag-3a72d4c38d9a0bb7",
+        "rag-168505cd54e57296"
+      ]
+    },
+    {
+      "id": "syncope__orthostatic_hypotension",
+      "name": "Orthostatic Hypotension",
+      "retrieval_query": "Orthostatic Hypotension diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-c2203527dc54e6e4"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-3a72d4c38d9a0bb7",
+        "rag-8356ec010ed3ff6f",
+        "rag-18f04b5069cffd05"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "syncope",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": "chest",
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-ff175cd271f88014",
+        "rag-c11a2103e40596fa",
+        "rag-9c829a59affdd531",
+        "rag-67e70434c6d5aa75",
+        "rag-96851f20eb41d937",
+        "rag-98dfd27812d7a9ca",
+        "rag-3621455ec67c20e8",
+        "rag-3a72d4c38d9a0bb7",
+        "rag-168505cd54e57296",
+        "rag-8356ec010ed3ff6f",
+        "rag-18f04b5069cffd05"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "syncope__cardiac_syncope__chest_pain_present",
+        "description": "Syncope accompanied by chest pain.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "syncope__cardiac_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "syncope__cardiac_syncope__focal_neurologic_symptom",
+        "description": "Syncope accompanied by focal neurologic deficits, such as diplopia, ataxia, or dysarthria.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "syncope__cardiac_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "syncope__cardiac_syncope__recurrent_episodes",
+        "description": "Patient has experienced more than one episode of syncope.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "syncope__cardiac_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-431b67d788c5230a",
+          "rag-58c5f2eb5f52fa45",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "code": "syncope__arrhythmia__chest_pain",
+        "description": "Patient reports chest pain associated with syncope.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "syncope__arrhythmia"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "syncope__arrhythmia__focal_neurologic_deficit",
+        "description": "Patient reports focal neurologic deficits such as speech difficulty or focal weakness/numbness after syncope.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "syncope__arrhythmia"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "syncope__neurologic_syncope__focal_neurologic_deficits",
+        "description": "Focal neurologic deficits, such as one-sided weakness or numbness, or difficulty with speech.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "syncope__neurologic_syncope"
+        ],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-c11a2103e40596fa",
+          "rag-9c829a59affdd531",
+          "rag-67e70434c6d5aa75"
+        ]
+      },
+      {
+        "code": "syncope__neurologic_syncope__post_event_confusion",
+        "description": "Confusion after the fainting event.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "syncope__neurologic_syncope"
+        ],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-c11a2103e40596fa",
+          "rag-9c829a59affdd531",
+          "rag-67e70434c6d5aa75"
+        ]
+      },
+      {
+        "code": "syncope__seizure__post_event_confusion",
+        "description": "Confusion following an episode of altered consciousness.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "syncope__seizure"
+        ],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-98dfd27812d7a9ca",
+          "rag-3621455ec67c20e8"
+        ]
+      },
+      {
+        "code": "syncope__seizure__rapid_recovery",
+        "description": "Rapid return to a normal state of consciousness after an episode of altered consciousness.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "syncope__seizure"
+        ],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-98dfd27812d7a9ca",
+          "rag-3621455ec67c20e8"
+        ]
+      },
+      {
+        "code": "syncope__vasovagal_syncope__situational_trigger",
+        "description": "Syncope is preceded by a specific trigger such as emotional stress, pain, or dehydration.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "syncope__vasovagal_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "code": "syncope__vasovagal_syncope__orthostatic_trigger",
+        "description": "Syncope is preceded by prolonged standing or rapid change to an upright posture.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "syncope__vasovagal_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "code": "syncope__vasovagal_syncope__prodrome_present",
+        "description": "A prodrome of symptoms such as dizziness, nausea, sweating, or visual changes precedes the loss of consciousness.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "syncope__vasovagal_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "code": "syncope__vasovagal_syncope__rapid_recovery",
+        "description": "Rapid recovery of consciousness without a prolonged period of confusion.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "syncope__vasovagal_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "code": "syncope__vasovagal_syncope__post_event_confusion_absent",
+        "description": "Absence of confusion after the syncopal event.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "syncope__vasovagal_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "syncope__orthostatic_hypotension__trigger_standing_up",
+        "description": "昏倒與快速站起來的動作有關。",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "syncope__orthostatic_hypotension"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "episode_frequency",
+        "option": "有過多次發作",
+        "mapping": {
+          "findings": [
+            "syncope__cardiac_syncope__recurrent_episodes"
+          ]
+        },
+        "disease_ids": [
+          "syncope__cardiac_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-431b67d788c5230a",
+          "rag-58c5f2eb5f52fa45",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "field": "preceding_symptoms",
+        "option": "胸痛",
+        "mapping": {
+          "findings": [
+            "syncope__cardiac_syncope__chest_pain_present",
+            "syncope__arrhythmia__chest_pain",
+            "symptom_chest_pain"
+          ]
+        },
+        "disease_ids": [
+          "syncope__cardiac_syncope",
+          "syncope__arrhythmia"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "field": "post_fainting_symptoms",
+        "option": "說話困難",
+        "mapping": {
+          "findings": [
+            "syncope__cardiac_syncope__focal_neurologic_symptom",
+            "syncope__arrhythmia__focal_neurologic_deficit",
+            "syncope__neurologic_syncope__focal_neurologic_deficits",
+            "speech_difficulty"
+          ]
+        },
+        "disease_ids": [
+          "syncope__cardiac_syncope",
+          "syncope__arrhythmia",
+          "syncope__neurologic_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-c11a2103e40596fa",
+          "rag-9c829a59affdd531",
+          "rag-67e70434c6d5aa75",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "field": "post_fainting_symptoms",
+        "option": "手腳無力",
+        "mapping": {
+          "findings": [
+            "syncope__cardiac_syncope__focal_neurologic_symptom",
+            "syncope__arrhythmia__focal_neurologic_deficit",
+            "syncope__neurologic_syncope__focal_neurologic_deficits",
+            "focal_weakness",
+            "focal_neurologic_symptom"
+          ]
+        },
+        "disease_ids": [
+          "syncope__cardiac_syncope",
+          "syncope__arrhythmia",
+          "syncope__neurologic_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-c11a2103e40596fa",
+          "rag-9c829a59affdd531",
+          "rag-67e70434c6d5aa75",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "field": "post_fainting_symptoms",
+        "option": "手腳麻木",
+        "mapping": {
+          "findings": [
+            "syncope__arrhythmia__focal_neurologic_deficit",
+            "syncope__neurologic_syncope__focal_neurologic_deficits",
+            "focal_neurologic_symptom"
+          ]
+        },
+        "disease_ids": [
+          "syncope__arrhythmia",
+          "syncope__neurologic_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-c11a2103e40596fa",
+          "rag-9c829a59affdd531",
+          "rag-67e70434c6d5aa75"
+        ]
+      },
+      {
+        "field": "recovery_state",
+        "option": "混亂一陣子後才恢復",
+        "mapping": {
+          "findings": [
+            "syncope__neurologic_syncope__post_event_confusion",
+            "syncope__seizure__post_event_confusion"
+          ],
+          "negated_findings": [
+            "syncope__vasovagal_syncope__post_event_confusion_absent"
+          ]
+        },
+        "disease_ids": [
+          "syncope__neurologic_syncope",
+          "syncope__seizure",
+          "syncope__vasovagal_syncope"
+        ],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-c11a2103e40596fa",
+          "rag-9c829a59affdd531",
+          "rag-67e70434c6d5aa75",
+          "rag-96851f20eb41d937",
+          "rag-98dfd27812d7a9ca",
+          "rag-3621455ec67c20e8",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "field": "recovery_state",
+        "option": "醒來後很快恢復平常神智狀態",
+        "mapping": {
+          "findings": [
+            "syncope__seizure__rapid_recovery",
+            "syncope__vasovagal_syncope__rapid_recovery",
+            "syncope__vasovagal_syncope__post_event_confusion_absent"
+          ]
+        },
+        "disease_ids": [
+          "syncope__seizure",
+          "syncope__vasovagal_syncope"
+        ],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-98dfd27812d7a9ca",
+          "rag-3621455ec67c20e8",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "field": "preceding_triggers",
+        "option": "快速站起來",
+        "mapping": {
+          "findings": [
+            "syncope__vasovagal_syncope__orthostatic_trigger",
+            "syncope__orthostatic_hypotension__trigger_standing_up"
+          ]
+        },
+        "disease_ids": [
+          "syncope__vasovagal_syncope",
+          "syncope__orthostatic_hypotension"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "field": "preceding_triggers",
+        "option": "情緒壓力",
+        "mapping": {
+          "findings": [
+            "syncope__vasovagal_syncope__situational_trigger"
+          ]
+        },
+        "disease_ids": [
+          "syncope__vasovagal_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "field": "preceding_triggers",
+        "option": "疼痛",
+        "mapping": {
+          "findings": [
+            "syncope__vasovagal_syncope__situational_trigger"
+          ]
+        },
+        "disease_ids": [
+          "syncope__vasovagal_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "field": "preceding_triggers",
+        "option": "脫水",
+        "mapping": {
+          "findings": [
+            "syncope__vasovagal_syncope__situational_trigger"
+          ]
+        },
+        "disease_ids": [
+          "syncope__vasovagal_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "field": "preceding_symptoms",
+        "option": "頭暈",
+        "mapping": {
+          "findings": [
+            "syncope__vasovagal_syncope__prodrome_present",
+            "dizziness_unspecified"
+          ]
+        },
+        "disease_ids": [
+          "syncope__vasovagal_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "field": "preceding_symptoms",
+        "option": "噁心",
+        "mapping": {
+          "findings": [
+            "syncope__vasovagal_syncope__prodrome_present",
+            "nausea"
+          ]
+        },
+        "disease_ids": [
+          "syncope__vasovagal_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "field": "preceding_symptoms",
+        "option": "冒冷汗",
+        "mapping": {
+          "findings": [
+            "syncope__vasovagal_syncope__prodrome_present",
+            "diaphoresis"
+          ]
+        },
+        "disease_ids": [
+          "syncope__vasovagal_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "field": "preceding_symptoms",
+        "option": "出現視力變化",
+        "mapping": {
+          "findings": [
+            "syncope__vasovagal_syncope__prodrome_present",
+            "visual_change_unspecified"
+          ]
+        },
+        "disease_ids": [
+          "syncope__vasovagal_syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "syncope__arrhythmia",
+        "name": "Arrhythmia",
+        "must_not_miss": false,
+        "retrieval_query": "Arrhythmia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "palpitations",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          },
+          {
+            "fact": "symptom_chest_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          },
+          {
+            "fact": "dyspnea",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          },
+          {
+            "fact": "focal_neurologic_symptom",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-431b67d788c5230a"
+        ]
+      },
+      {
+        "id": "syncope__neurologic_syncope",
+        "name": "Neurologic Syncope",
+        "must_not_miss": true,
+        "retrieval_query": "Neurologic Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [
+          "experimental_syncope__neurologic_syncope__focal_deficits"
+        ],
+        "clues": [
+          {
+            "fact": "syncope__neurologic_syncope__focal_neurologic_deficits",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-ff175cd271f88014",
+              "rag-c11a2103e40596fa",
+              "rag-9c829a59affdd531",
+              "rag-67e70434c6d5aa75"
+            ]
+          },
+          {
+            "fact": "syncope__neurologic_syncope__post_event_confusion",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-ff175cd271f88014",
+              "rag-c11a2103e40596fa",
+              "rag-9c829a59affdd531",
+              "rag-67e70434c6d5aa75"
+            ]
+          },
+          {
+            "fact": "palpitations",
+            "status": "absent",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-ff175cd271f88014",
+              "rag-c11a2103e40596fa",
+              "rag-9c829a59affdd531",
+              "rag-67e70434c6d5aa75"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-c11a2103e40596fa",
+          "rag-9c829a59affdd531",
+          "rag-67e70434c6d5aa75"
+        ]
+      },
+      {
+        "id": "syncope__seizure",
+        "name": "Seizure",
+        "must_not_miss": false,
+        "retrieval_query": "Seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "syncope__seizure__post_event_confusion",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-96851f20eb41d937",
+              "rag-98dfd27812d7a9ca",
+              "rag-3621455ec67c20e8"
+            ]
+          },
+          {
+            "fact": "syncope__seizure__rapid_recovery",
+            "status": "present",
+            "direction": "oppose",
+            "weight": 1,
+            "source_ids": [
+              "rag-96851f20eb41d937",
+              "rag-98dfd27812d7a9ca",
+              "rag-3621455ec67c20e8"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-98dfd27812d7a9ca",
+          "rag-3621455ec67c20e8"
+        ]
+      },
+      {
+        "id": "syncope__vasovagal_syncope",
+        "name": "Vasovagal Syncope",
+        "must_not_miss": false,
+        "retrieval_query": "Vasovagal Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "syncope__vasovagal_syncope__situational_trigger",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-ff175cd271f88014",
+              "rag-3a72d4c38d9a0bb7",
+              "rag-168505cd54e57296"
+            ]
+          },
+          {
+            "fact": "syncope__vasovagal_syncope__orthostatic_trigger",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-ff175cd271f88014",
+              "rag-3a72d4c38d9a0bb7",
+              "rag-168505cd54e57296"
+            ]
+          },
+          {
+            "fact": "syncope__vasovagal_syncope__prodrome_present",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-ff175cd271f88014",
+              "rag-3a72d4c38d9a0bb7",
+              "rag-168505cd54e57296"
+            ]
+          },
+          {
+            "fact": "syncope__vasovagal_syncope__post_event_confusion_absent",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          },
+          {
+            "fact": "symptom_chest_pain",
+            "status": "absent",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          },
+          {
+            "fact": "palpitations",
+            "status": "absent",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          },
+          {
+            "fact": "exertional_trigger",
+            "status": "absent",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "id": "syncope__orthostatic_hypotension",
+        "name": "Orthostatic Hypotension",
+        "must_not_miss": false,
+        "retrieval_query": "Orthostatic Hypotension diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "syncope__orthostatic_hypotension__trigger_standing_up",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-3a72d4c38d9a0bb7"
+            ]
+          },
+          {
+            "fact": "dizziness_unspecified",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-8356ec010ed3ff6f",
+          "rag-18f04b5069cffd05"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_syncope__neurologic_syncope__focal_deficits",
+        "label": "Syncope with focal neurologic deficits",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "syncope"
+          ],
+          "any_findings": [
+            "syncope__neurologic_syncope__focal_neurologic_deficits"
+          ]
+        },
+        "possible_conditions": [
+          "Neurologic Syncope"
+        ],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-c11a2103e40596fa",
+          "rag-9c829a59affdd531",
+          "rag-67e70434c6d5aa75"
+        ]
+      },
+      {
+        "code": "experimental_syncope__vasovagal_syncope__experimental_syncope_red_flag_chest_pain_or_dyspnea",
+        "label": "Syncope with chest pain or shortness of breath",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "syncope"
+          ],
+          "any_findings": [
+            "symptom_chest_pain",
+            "dyspnea"
+          ]
+        },
+        "possible_conditions": [
+          "Cardiac Syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_syncope__vasovagal_syncope__experimental_syncope_red_flag_exertional",
+        "label": "Syncope occurring with exertion",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "syncope"
+          ],
+          "any_findings": [
+            "exertional_trigger"
+          ]
+        },
+        "possible_conditions": [
+          "Cardiac Syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_syncope__vasovagal_syncope__experimental_syncope_red_flag_neurologic_deficits",
+        "label": "Syncope with focal neurologic deficits",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "syncope"
+          ],
+          "any_findings": [
+            "focal_weakness",
+            "speech_difficulty",
+            "diplopia"
+          ]
+        },
+        "possible_conditions": [
+          "Neurologic Syncope",
+          "Stroke"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_syncope__vasovagal_syncope__experimental_syncope_red_flag_severe_headache",
+        "label": "Syncope with severe headache",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "syncope"
+          ],
+          "any_findings": [
+            "symptom_headache"
+          ],
+          "severity_in": [
+            "severe"
+          ]
+        },
+        "possible_conditions": [
+          "Subarachnoid Hemorrhage"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Map questionnaire option '快速站起來' to orthostatic hypotension.",
+        "reason": "No disease profile for orthostatic hypotension was discovered or provided in this stage, preventing the creation of associated facts and semantic mappings."
+      },
+      {
+        "requirement": "Map questionnaire options related to vasovagal triggers (e.g., '情緒壓力', '疼痛').",
+        "reason": "No disease profile for vasovagal syncope was discovered or provided in this stage, preventing the creation of associated facts and semantic mappings."
+      },
+      {
+        "requirement": "Create facts and safety rules based on specific vital signs or glucose levels.",
+        "reason": "The provided RAG sources mention the importance of vital signs and glucose measurement but do not contain specific thresholds to create rules. This would require clinical expertise beyond the scope of the provided text."
+      },
+      {
+        "requirement": "Create a fact for family history of cardiac disease.",
+        "reason": "The questionnaire does not ask about family history, only personal history, so a fact for family history cannot be mapped from the available data."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create a fact for exertional onset of syncope.",
+        "reason": "The provided questionnaire does not include a question about whether the syncope was triggered by exertion, so this fact cannot be mapped."
+      },
+      {
+        "requirement": "Create a fact for a family history of cardiac disease.",
+        "reason": "The provided questionnaire does not ask about family medical history, only the patient's personal history."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Determine specific neurologic causes like ataxia or dysarthria.",
+        "reason": "The provided questionnaire does not include specific questions to differentiate between various focal neurologic deficits beyond general weakness, numbness, or speech difficulty."
+      },
+      {
+        "requirement": "Assess for low back pain as a red flag symptom for syncope.",
+        "reason": "The questionnaire is focused on syncope and does not inquire about back pain, which was mentioned as a red flag in the source material."
+      },
+      {
+        "requirement": "Assess for diplopia (double vision) as a red flag symptom for syncope.",
+        "reason": "The questionnaire asks about general 'visual changes' but does not have a specific option for diplopia, which was mentioned as a red flag in the source material."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Determine if a seizure is new-onset or part of a known seizure disorder.",
+        "reason": "The provided questionnaire and RAG sources do not include questions about a personal history of epilepsy or seizure disorders, which is critical for risk stratification."
+      },
+      {
+        "requirement": "Assess for specific seizure triggers like alcohol withdrawal, medication non-compliance, or illicit drug use.",
+        "reason": "The RAG sources mention toxicologic etiologies, but the questionnaire does not ask about these specific high-risk triggers."
+      },
+      {
+        "requirement": "Evaluate for infectious causes of seizure, such as meningitis or encephalitis.",
+        "reason": "The RAG sources list infectious etiologies, but the questionnaire does not screen for associated symptoms like fever or neck stiffness."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Differentiate between syncope and seizure based on witness accounts.",
+        "reason": "The current questionnaire captures witness observations as free text, which cannot be reliably parsed to apply specific diagnostic criteria for seizure (e.g., duration of tonic-clonic movements, post-ictal state details)."
+      },
+      {
+        "requirement": "Assess risk based on personal or family history of cardiac disease.",
+        "reason": "The questionnaire does not currently ask about personal or family history of cardiac conditions, which is a key part of risk stratification for syncope according to the provided sources."
+      },
+      {
+        "requirement": "Incorporate medication history into risk assessment.",
+        "reason": "The questionnaire does not collect information on the patient's current medications, which can be a cause of syncope (e.g., antihypertensives, diuretics)."
+      },
+      {
+        "requirement": "Assess for syncope associated with low back pain.",
+        "reason": "The questionnaire does not inquire about back pain, which is listed as a red flag symptom in the RAG sources, potentially indicating conditions like aortic dissection."
+      },
+      {
+        "requirement": "Determine specific vital sign thresholds (e.g., blood pressure, heart rate) for diagnosing orthostatic hypotension.",
+        "reason": "The provided RAG sources mention abnormal vital signs as clues but do not specify the exact numeric thresholds required for a clinical diagnosis. This level of detail is beyond the scope of the available text and requires clinical guidelines."
+      },
+      {
+        "requirement": "Incorporate specific medication history as a risk factor for orthostatic hypotension.",
+        "reason": "The RAG sources suggest obtaining a medication history but do not list specific drugs or drug classes that are high-risk for causing orthostatic hypotension. This information is not present in the provided context."
+      },
+      {
+        "requirement": "Use tilt-table test results for diagnosis.",
+        "reason": "The RAG sources mention the head-up tilt-table test as a diagnostic tool, but this is a clinical procedure whose results cannot be obtained through a patient questionnaire."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[5], semantic_options[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-431b67d788c5230a",
+          "rag-58c5f2eb5f52fa45",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-c11a2103e40596fa"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[3], safety_proposals[0], profiles[0], profiles[0].clues[0], profiles[0].clues[1], profiles[0].clues[3]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-c11a2103e40596fa",
+          "rag-9c829a59affdd531",
+          "rag-67e70434c6d5aa75"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-3621455ec67c20e8"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[2], semantic_options[0], semantic_options[1], profiles[0], profiles[0].clues[0], profiles[0].clues[2]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-98dfd27812d7a9ca",
+          "rag-3621455ec67c20e8"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The proposed facts for vasovagal syncope triggers and prodrome are based on general clinical knowledge as the provided RAG sources do not explicitly detail these classic features for this specific condition. Clinical review is required to confirm their appropriateness.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The safety proposals are based on the 'Red flag symptoms' listed in the source material. The list of possible conditions is illustrative and not exhaustive. The mapping of questionnaire options to these red flags (e.g., 'chest pain', 'speech difficulty') is direct, but a more comprehensive assessment would be beneficial.",
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "Local compiler mechanically namespaced generated codes and updated all internal references; no clinical values or conditions were changed.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[3], semantic_options[4], semantic_options[5], semantic_options[6]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-8356ec010ed3ff6f"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-8356ec010ed3ff6f",
+          "rag-18f04b5069cffd05"
+        ]
+      }
+    ]
+  }
+}

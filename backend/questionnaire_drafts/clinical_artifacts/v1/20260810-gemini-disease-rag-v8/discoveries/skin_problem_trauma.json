@@ -1,0 +1,327 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "skin_problem_trauma",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "4ef6d968fb2a56d3d42d6f804ba4981afe8b613cb881398ff7676b8df9a2e73c",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "skin problem trauma skin problem differential diagnosis diseases clinical presentation symptoms history",
+      "skin problem trauma skin problem red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "3569402a446deaf5d9f154e460372731dcc542ed8d9774478b562de1f342c0d0"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "f32dd4fe09a49a6db27a76d3fb1c10e5c9a7f9e4dc89338a8381d8531002a707",
+    "generated_at": "2026-08-10T04:19:27+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-549e1254277e6fd4",
+      "chunk_id": "786a96dca8252ca70218_9",
+      "title": "Dermatologic Manifestations of Staphylococcal Scalded Skin Syndrome: Practice Essentials, Epidemiology, Prognosis",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1053325-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "skin problem trauma skin problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4147,
+      "excerpt": "from the hands, perineum, and axillae in a smaller portion of the general population. Common foci of infection in the affected patient include the conjunctivae, periumbilical and perioral regions, nares, and perineum. These sites should be targeted for isolation of S. aureus in affected patients. Histologic findings All forms of scalded skin syndrome are characterized by intraepidermal, subcorneal cleavage with splitting that occurs beneath and within the stratum granulosum. The cleavage space may contain free-floating or partially attached acantholytic cells. The remainder of the epidermis",
+      "text_sha256": "da938547b24635cc355c91e4d955221d443d4335405210b7bfb720135e94be41"
+    },
+    {
+      "id": "rag-9ff95cdd81c3497f",
+      "chunk_id": "0e015057c60c6e6987b9_41",
+      "title": "Decompression Sickness: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769717-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "skin problem trauma skin problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4602,
+      "excerpt": "(1) mild pains that begin to resolve within 10 minutes of onset (niggles); (2) pruritus, or \"skin bends,\" that causes itching or burning sensations of the skin; and (3) cutis marmorata. Cutis marmorata, cutaneous DCS, is a rash that generally is widespread mottling and/or marbling of the skin or a papular or plaquelike violaceous (blue-red) rash. On rare occasions, skin has an orange-peel appearance. Cutis marmorata typically starts as an intense multifocal itching, then hyperemia develops, followed by the already-described purplish rash. In the past, it was thought to be a benign disorder",
+      "text_sha256": "8bde6cb2f94b5ea700c5560d1e09050b7e10177c6398926c76a40ed1ca0dc4fd"
+    },
+    {
+      "id": "rag-438e54d389943bb0",
+      "chunk_id": "786a96dca8252ca70218_26",
+      "title": "Dermatologic Manifestations of Staphylococcal Scalded Skin Syndrome: Practice Essentials, Epidemiology, Prognosis",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1053325-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "skin problem trauma skin problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4616,
+      "excerpt": "following a right groin biopsy, and lupus nephritis associated with chronic immunosuppressant therapy and renal impairment. A single report describes concurrent SSSS and toxic shock syndrome (TSS), an acute life-threatening illness caused by TSS toxin also produced by S. aureus, in a 43-year-old man associated with an abscess from previous dental work. This patient had normal renal function, but the amount of toxin produced from the abscess may have overwhelmed the kidneys' capacity to remove it. Although colonization with a strain of S. aureus capable of producing TSS toxin and ET-A or ET-B",
+      "text_sha256": "870533ab1f968a24715070ae3cea532b3879ddebab5053447e3e21c09e6227b9"
+    },
+    {
+      "id": "rag-ff175cd271f88014",
+      "chunk_id": "6abb4726efd0e023f805_11",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "skin problem trauma skin problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4702,
+      "excerpt": "with predominantly sensory symptoms, those with a distal symmetric disorder (DADS), those with multifocal sensorimotor neuropathy or sensorimotor mononeuropathy multiplex with prominent conduction block (also known as Lewis-Sumner neuropathy), and those with CIDP with associated CNS demyelination or with other systemic disorders. The following disorders are considered distinct from CIDP because they have specific pathophysiologic features and respond to treatments differently than do patients with CIDP: Demyelinating neuropathies associated with immunoglobulin M (IgM) paraproteins, including",
+      "text_sha256": "9bcc687a6e728f319204b3de3fc10d7168b581aebb57ba68bafb0dddb461ee00"
+    },
+    {
+      "id": "rag-6dd953f3efabd74c",
+      "chunk_id": "d18ed7372d526753a769_35",
+      "title": "Smallpox: Background, Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/237229-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "skin problem trauma skin problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4802,
+      "excerpt": "fatal. Complications Morbidity is commonly associated with smallpox. Most patients (65-80%) recovering from infection have cutaneous scarring, which is made worse if secondary bacterial infections develop during the course of smallpox. Other complications of smallpox included dehydration and orchitis. Encephalitis occurs in 1 in 500 cases. Dermatologic complications of smallpox include the following: Formation of furuncles and/or abscesses secondary to bacterial infection Sepsis Pockmarks Ophthalmologic complications of smallpox include the following: Blepharitis Conjunctivitis Corneal",
+      "text_sha256": "47a61c71c231edaceff10d7e197fb4f0a4fdaddb289d6c2f605c39000534e64b"
+    },
+    {
+      "id": "rag-bf0f5a7b31409ddd",
+      "chunk_id": "2282c43bb99705270704_10",
+      "title": "Burn Wound Infections: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/213595-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "skin problem trauma skin problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4882,
+      "excerpt": "manifestations of septic shock, and death. Early surgical debridement and skin grafting, use of topical and systemic antimicrobials, and enhanced infection-control practices have led to the replacement of beta-hemolytic streptococci with S aureus and gram-negative bacteria such as P aeruginosa, Klebsiella pneumoniae, and A baumannii as major pathogens in burn wound infections. In burns older than 7 days, biofilm may be detected in the ulcerated areas of the wounds. As biofilm formation is associated with chronicity of the wound, bacterial colonization is easier to eradicate in the first few",
+      "text_sha256": "54fe74593dc5bed73fc401a107ea096cffe4d64553e2dbb5b71614066b4152e1"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "skin problem trauma skin problem differential diagnosis diseases clinical presentation symptoms history",
+        "skin problem trauma skin problem red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4914,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-df74eb27610615b4",
+      "chunk_id": "709d501e5392c47ae3b5_43",
+      "title": "Lyme Disease: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/330178-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "skin problem trauma skin problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4999,
+      "excerpt": "from 15%. B afzelii often infects the skin only but may persist in that site, causing various cutaneous manifestations including acrodermatitis chronica atrophicans. B garinii has some neurotropism and is the isolate that accounts for most cases of lymphocytic meningoradiculitis (Bannwarth syndrome) and white matter encephalitis, which is rare in North America. However, this organism can also cause all the various cutaneous manifestations of Lyme disease. Other strains, which may be sufficiently different in their genetic structure to be considered separate strains, exist; however, most of",
+      "text_sha256": "c67b8ac91ac92929eb9d12124e822e4da9df6ec6d3515f18d07098684d37a8b0"
+    },
+    {
+      "id": "rag-eab8b5d3ffaaf12a",
+      "chunk_id": "8180322f2e2a0415d2af_4",
+      "title": "Cysticercosis in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/781845-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "skin problem trauma skin problem red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5606,
+      "excerpt": "locations are skin, skeletal muscle, heart, eye, and the central nervous system (CNS). Involvement of the CNS leads to the most important manifestation of the disease, neurocysticercosis (NCC). Symptomatology of neurocysticercosis (NCC) ranges from completely asymptomatic to severe disease and death. Symptoms largely depend on the presence of pericystic inflammation, the absence of which will usually manifest as asymptomatic disease. Lack of perilesional inflammation is seen with both \"active\" healthy parasites, which are able to evade host immunity (an adaptive feat that may be abetted by the",
+      "text_sha256": "e52b7644a37568d16e4d030f708a4d4f19ce327179d09d53a6efab7a73dd1062"
+    },
+    {
+      "id": "rag-ccf9b70030c23227",
+      "chunk_id": "dd9970b5cca993dde8ee_5",
+      "title": "Latex Allergy: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/756632-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "skin problem trauma skin problem red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5801,
+      "excerpt": "Images slideshow, to help identify a variety of allergens and symptoms. For related information, see Medscape's Allergy & Immunology Resource Center. Pathophysiology Latex exposure is associated with 3 clinical syndromes. Irritant dermatitis results from mechanical disruption of the skin due to the rubbing of gloves and accounts for the majority of latex-induced local skin rashes. It is not immune mediated, is not associated with allergic complications, and is not the subject of this article. It may be confused with Type IV hypersensitivity. Any chronic hand dermatitis in HCWs raises the risk",
+      "text_sha256": "5b56241972bfb600425e25d659b0b591393b6d0c28b4e83625200fd97861ebe1"
+    },
+    {
+      "id": "rag-cfcba3d09fdc080f",
+      "chunk_id": "8dfdf6b59d5a0a8e98f1_37",
+      "title": "Coccidioidomycosis and Valley Fever: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/215978-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "skin problem trauma skin problem red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5816,
+      "excerpt": "prevalence of positive skin test results ranges from 50-70% in the southwestern United States and increases with age. Several sharp upsurges in the incidence have occurred. The western migration of the 1930s and the influx of military personnel in the 1940s triggered notable increases. In 1978, the first true epidemic occurred after an unprecedented dust storm that originated in the lower end of the San Joaquin Valley, quadrupling the incidence of disease. A coccidioidal epidemic occurred in California in 1991-1994. In 1992, this outbreak produced a peak of approximately 4200 cases, an",
+      "text_sha256": "58d785e5468158e8f6a842aad2af4e6ad0290798c344bb37243b7f041289b03a"
+    },
+    {
+      "id": "rag-96a90437160454ff",
+      "chunk_id": "60a8e9fb259d62f055c2_43",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "skin problem trauma skin problem red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5456,
+      "excerpt": "(cTn), whether conventional or high sensitivity (hs), exclusively for these purposes. The main clinical outcome of interest after initial emergency department (ED) evaluation of patients with suspected ACS is 30-day MACE. MACE includes MI, death, target lesion revascularization, or death. In 2018, The American College of Emergency Physicians (ACEP) updated its level C recommendations regarding testing strategies for ruling out non-ST-elevation MI (NSTEMI) in lower risk patients to include the use of the HEART score and conventional or high-sensitivity cardiac troponins (hs-cTn) as follows: In",
+      "text_sha256": "4828c8d733507191a7786f8b1f2baf9a4c8185d49b0cb05028c18c2b64ce27ff"
+    }
+  ],
+  "discovery": {
+    "route": "skin_problem_trauma",
+    "evidence_status": "limited",
+    "diseases": [
+      {
+        "id": "skin_problem_trauma__staphylococcal_scalded_skin_syndrome",
+        "name": "Staphylococcal Scalded Skin Syndrome",
+        "rationale": "The questionnaire asks about skin appearance including blisters ('水泡') and wounds ('傷口'), as well as associated symptoms like fever ('發燒'). Staphylococcal Scalded Skin Syndrome (SSSS) is characterized by intraepidermal cleavage which can present as blisters, and can be associated with systemic illness like toxic shock syndrome, which may involve fever.",
+        "source_ids": [
+          "rag-549e1254277e6fd4",
+          "rag-438e54d389943bb0"
+        ]
+      },
+      {
+        "id": "skin_problem_trauma__burn_wound_infection",
+        "name": "Burn Wound Infection",
+        "rationale": "The questionnaire explicitly asks about burns ('燒傷') and wounds ('傷口') as possible skin appearances. It also inquires about associated symptoms like fever ('發燒'), redness ('紅腫'), local heat ('局部發燙'), and discharge ('有分泌物'), which are all signs of infection. Burn wound infections are a significant complication of burns and can lead to sepsis.",
+        "source_ids": [
+          "rag-bf0f5a7b31409ddd"
+        ]
+      },
+      {
+        "id": "skin_problem_trauma__lyme_disease",
+        "name": "Lyme Disease",
+        "rationale": "The questionnaire asks about rashes ('皮疹'). Lyme disease, caused by Borrelia species, can cause various cutaneous manifestations. This aligns with the user's ability to report a rash.",
+        "source_ids": [
+          "rag-df74eb27610615b4"
+        ]
+      },
+      {
+        "id": "skin_problem_trauma__smallpox",
+        "name": "Smallpox",
+        "rationale": "The questionnaire asks about rashes ('皮疹') and fever ('發燒'). Smallpox is a serious infectious disease that presents with a characteristic rash and is associated with morbidity. Cutaneous scarring is a common complication, which relates to the 'wound' ('傷口') option.",
+        "source_ids": [
+          "rag-6dd953f3efabd74c"
+        ]
+      },
+      {
+        "id": "skin_problem_trauma__decompression_sickness",
+        "name": "Decompression Sickness",
+        "rationale": "The questionnaire asks about itching ('搔癢') and rashes ('皮疹'). Cutaneous decompression sickness ('skin bends') can manifest as itching, burning sensations, and a widespread mottled or violaceous rash (cutis marmorata).",
+        "source_ids": [
+          "rag-9ff95cdd81c3497f"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The provided RAG sources cover a wide range of specific conditions (e.g., SSSS, Smallpox, Decompression Sickness) but lack information on more common dermatological issues like eczema, psoriasis, or simple cellulitis. The proposed diseases are based on the available evidence but may not represent the most common causes for the user's symptoms.",
+        "source_ids": [
+          "rag-549e1254277e6fd4",
+          "rag-9ff95cdd81c3497f",
+          "rag-6dd953f3efabd74c"
+        ]
+      }
+    ]
+  }
+}

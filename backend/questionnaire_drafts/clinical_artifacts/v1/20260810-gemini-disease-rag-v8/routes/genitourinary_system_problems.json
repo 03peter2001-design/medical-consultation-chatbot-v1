@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "genitourinary_system_problems",
+  "label": "泌尿生殖系統問題",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "a3bbe26ca0335beccc245f4fa8b597eacc05363acfad72b382a874a2aaf70ae3",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"genitourinary system problems genitourinary differential diagnosis diseases clinical presentation symptoms history\",\"genitourinary system problems genitourinary red flags emergency warning signs urgent referral rule out\"]",
+    "rag_corpus_hash": "3e931d11bd83d0ae39e1fa350c37fb309c09cd5d57a70985a06e17eafa9bd7d4"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "3c6ee57d5c15b34c05c164adcf5237a7d83abbbd72886c6ff138177e8ad058bd",
+    "generated_at": "2026-08-10T04:06:32+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-02b622cf0e22d994",
+      "chunk_id": "40949ab525cdb33ba040_4",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "headache",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "genitourinary system problems genitourinary differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4269,
+      "excerpt": "by hemorrhage from both nares, and by visualization of blood draining in the posterior pharynx. Differential Diagnosis The differential diagnosis includes the following: Barotrauma Disseminated Intravascular Coagulation Endometriosis Foreign Bodies, Nose Hemophilia, Type A Hemophilia, Type B Osler-Weber-Rendu syndrome Rhinitis Plant Poisoning, Glycosides - Coumarin Sinusitis Toxicity, Cocaine Toxicity, Nonsteroidal Anti-inflammatory Agents Toxicity, Rodenticide Toxicity, Salicylate Toxicity, Warfarin and Superwarfarins von Willebrand Disease Diagnostic Considerations Other problems to be",
+      "text_sha256": "7fb71c7de80704fe1be64c3cae7c04a246ddeb7d5647ec8fe71d4107e8974654"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "genitourinary system problems genitourinary differential diagnosis diseases clinical presentation symptoms history",
+        "genitourinary system problems genitourinary red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.428,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-ff175cd271f88014",
+      "chunk_id": "6abb4726efd0e023f805_11",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "genitourinary system problems genitourinary differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3978,
+      "excerpt": "with predominantly sensory symptoms, those with a distal symmetric disorder (DADS), those with multifocal sensorimotor neuropathy or sensorimotor mononeuropathy multiplex with prominent conduction block (also known as Lewis-Sumner neuropathy), and those with CIDP with associated CNS demyelination or with other systemic disorders. The following disorders are considered distinct from CIDP because they have specific pathophysiologic features and respond to treatments differently than do patients with CIDP: Demyelinating neuropathies associated with immunoglobulin M (IgM) paraproteins, including",
+      "text_sha256": "9bcc687a6e728f319204b3de3fc10d7168b581aebb57ba68bafb0dddb461ee00"
+    },
+    {
+      "id": "rag-e3c9afc2e1ee1a79",
+      "chunk_id": "6abb4726efd0e023f805_2",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "genitourinary system problems genitourinary differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4157,
+      "excerpt": "Motor symptoms (usually predominant) In about 16% of patients, a relatively acute or subacute onset of symptoms In children, usually a more precipitous onset of symptoms Symptoms of autonomic system dysfunction (eg, orthostatic dizziness) Pertinent physical findings are limited to the nervous system, except when the condition is associated with other diseases. Such findings may include the following. Signs of cranial nerve (CN) involvement (eg, facial muscle paralysis or diplopia) Gait abnormalities Motor deficits (eg, symmetric weakness of both proximal and distal muscles in upper and lower",
+      "text_sha256": "c0cbd9bdd5eb728eaef83dfda92e9545422ea4f4244844ddd14d78fbc22984b7"
+    },
+    {
+      "id": "rag-cea6a70ba9f3a2f4",
+      "chunk_id": "3c01a8044a044e12d199_5",
+      "title": "Varicella-Zoster Virus (VZV): Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/231927-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "genitourinary system problems genitourinary differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.426,
+      "excerpt": "VZV continues to be associated with CNS disease, with meningitis being the most frequent clinical presentation. CNS VZV disease often presented without accompanying zoster rash. Ramsay-Hunt syndrome This syndrome occurs when the geniculate ganglion is involved. The clinical presentation includes the following: A peripheral facial palsy Pain in the ear and face Vesicles in the external ear canal (not always present) Additional auditory and vestibular symptoms in some cases Keratitis (herpes ophthalmicus) Herpes ophthalmicus is caused by reactivation of VZV infection in the ophthalmic division",
+      "text_sha256": "c9bf97fb70f224e5ae3a21da55dc6b742e689090bafd6241e562e71212313214"
+    },
+    {
+      "id": "rag-f5e1e00c1829f30d",
+      "chunk_id": "9aeedc640c68352d7494_37",
+      "title": "Dysmenorrhea: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/253812-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "genitourinary system problems genitourinary differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4372,
+      "excerpt": "accordingly, diagnosis is difficult. Definitive diagnosis is typically accomplished by means of transvaginal ultrasonography or magnetic resonance imaging (MRI). When the latter is used, the key finding is a thickened junctional zone (JZ line) that is, the border between myometrium and endometrium. One paper showed that adenomyosis should be in the differential diagnosis when a patient is treated for presumptive endometriosis and has chronic persistent pain. Intrauterine contraceptive device IUCDs (IUDs) may cause bladder or uterine perforation. The sooner a patient has a uterine perforation",
+      "text_sha256": "b41e67ad043ef0ecacb7e5671de11422c0854e7a473b5c54d8b9387c9652b649"
+    },
+    {
+      "id": "rag-0224558d008f5bcb",
+      "chunk_id": "2a896961ed57d0483825_3",
+      "title": "Hyperglucagonemia (Glucagonoma Syndrome): Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/121575-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "genitourinary system problems genitourinary differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4393,
+      "excerpt": "normochromic normocytic, although macrocytic anemia has been described in some patients. nous thrombosiss thought to occur in as many as 30% of patients with glucagonoma syndrome.J Diagnosis is aided by the typical skin appearance of patients with NME and by the evaluation of a skin biopsy. Glucagon should be tested by RIA of a fasting plasma sample./rmones that may be elevated in glucagonoma syndrome include insulin, VIP, gastrin, pancreatic polypeptide, 5-HT, calcitonin, adrenocorticotropic hormone, and adrenocorticotropic hormone (ACTH).n glucagonoma syndrome, glucagon levels are well in",
+      "text_sha256": "cbd4db7d89cb5de2b086a92e87a6bbbd6009e502ba2446a90f9c62c7e78c51a8"
+    },
+    {
+      "id": "rag-d28ebb49bb7c15d4",
+      "chunk_id": "0b4e124e43266b2d82b6_21",
+      "title": "Neurological Sequelae of Infectious Endocarditis: Infective Endocarditis and the CNS, Etiology of CNS Sequelae, Epidemiology of CNS Sequelae",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165712-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "genitourinary system problems genitourinary differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4602,
+      "excerpt": "metastatic brain disease, herpes simplex encephalitis, orbital cellulitis, and carotid disease and stroke should also be considered in the differential diagnosis. Diagnosis of CNS Sequelae Cerebrospinal fluid examination In the Massachusetts General Hospital series of 218 patients, 33 had meningeal symptoms (15%). Of patients with CNS involvement from infective endocarditis, one third had completely normal cerebrospinal fluid (CSF), one fourth had a slightly abnormal CSF but an aseptic culture, and one fourth had frankly purulent CSF. Noteworthy as well is that one sixth had hemorrhagic fluid.",
+      "text_sha256": "f98e813835d89c8700502e851754fc84e41fef6ea7d4ce08932f1a8db9173930"
+    },
+    {
+      "id": "rag-1f754e9f85910066",
+      "chunk_id": "2b6eb94497953c8a6426_13",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "genitourinary system problems genitourinary red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.59,
+      "excerpt": "unconscious, family, friends, or prehospital personnel can be questioned). Other history findings may include the following: Recent noncompliance with medications History of central nervous system (CNS) pathology (stroke, neoplasms, recent surgery) History of systemic neoplasms, infections, metabolic disorders, or toxic ingestions Recent trauma or fall Alcohol abuse Recent travel or immigration to the United States Pregnancy Focal symptoms (partial seizure activity) that then progressed to a generalized seizure Physical examination A generalized seizure is recognizable at the bedside when",
+      "text_sha256": "fd4372dfb400601e922c7ab565bfae9da493bc65453502b3422b083a97baa01f"
+    },
+    {
+      "id": "rag-6ae0616b48e3e591",
+      "chunk_id": "7b75cfde54b1a7a1a4c2_4",
+      "title": "Infectious or Allergic Chronic Laryngitis: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/864767-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "genitourinary system problems genitourinary red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5935,
+      "excerpt": "(GI) series, manometry Videostrobe Skin tests can be performed if allergies are suspected, as can 24-hour pH monitoring if gastroesophageal reflux disease (GERD) is in the differential diagnosis. The larynx can be directly examined with a flexible fiberoptic nasopharyngolaryngoscope. Direct laryngoscopy with a rigid laryngoscope (under general anesthesia) may be required for a detailed laryngeal inspection and may help obtain tissue for biopsy, cultures, and smears to identify the presence of organisms. Undertake this examination when noninvasive studies fail. Accomplish a thorough evaluation",
+      "text_sha256": "6ca717ea930887673cf9b00cc458c5eb7a52bc0ebbe3efb9aa11030ad7624aba"
+    },
+    {
+      "id": "rag-96a90437160454ff",
+      "chunk_id": "60a8e9fb259d62f055c2_43",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "genitourinary system problems genitourinary red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5708,
+      "excerpt": "(cTn), whether conventional or high sensitivity (hs), exclusively for these purposes. The main clinical outcome of interest after initial emergency department (ED) evaluation of patients with suspected ACS is 30-day MACE. MACE includes MI, death, target lesion revascularization, or death. In 2018, The American College of Emergency Physicians (ACEP) updated its level C recommendations regarding testing strategies for ruling out non-ST-elevation MI (NSTEMI) in lower risk patients to include the use of the HEART score and conventional or high-sensitivity cardiac troponins (hs-cTn) as follows: In",
+      "text_sha256": "4828c8d733507191a7786f8b1f2baf9a4c8185d49b0cb05028c18c2b64ce27ff"
+    },
+    {
+      "id": "rag-3074fafca96e9376",
+      "chunk_id": "53fc3e4f98765d889be9_15",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "genitourinary system problems genitourinary red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5713,
+      "excerpt": "encephalitis, headache, mental status change, hydrocephalus, ischemic disease and infarction, suspected pituitary dysfunction, inflammation or infection of the brain or meninges or their complications, demyelination and dysmyelination disorders, vascular malformations, and arterial or venous/dural sinus abnormalities. Patients who have cardiac pacemakers, ferromagnetic intracranial aneurysm clips, and certain ferromagnetic foreign bodies or electronic devices or implants should not undergo MRI. The routine MRI protocol varies considerably based on strength of the unit's field, machine",
+      "text_sha256": "efd6bcf781abb9e97e13fb806d50dc265fab9d450d001ad3cde9e6629777e105"
+    }
+  ],
+  "disease_candidates": [],
+  "proposal": {
+    "route": "genitourinary_system_problems",
+    "evidence_status": "insufficient",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": "abdomen",
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-02b622cf0e22d994"
+      ]
+    },
+    "fact_proposals": [],
+    "semantic_options": [],
+    "profile_status": "insufficient_evidence",
+    "profiles": [],
+    "safety_proposals": [],
+    "unsupported_requirements": [],
+    "review_notes": []
+  }
+}

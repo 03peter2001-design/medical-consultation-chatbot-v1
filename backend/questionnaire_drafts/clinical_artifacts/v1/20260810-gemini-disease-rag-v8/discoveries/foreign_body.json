@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "foreign_body",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "60174999691300ace4e572dbbd16b0c7d1150f788b543c7e4aae1959279a2450",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "foreign body foreign body differential diagnosis diseases clinical presentation symptoms history",
+      "foreign body foreign body red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "684a57df9b8d51d60e33fcdab106b5dcda2cf6f693d594f5f20627cf477e446e"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "94dd32bc8a95eb6e190f684de70e33499760e5a46b52dd24bf28b6cdb7d156cc",
+    "generated_at": "2026-08-10T04:06:34+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "foreign body foreign body differential diagnosis diseases clinical presentation symptoms history",
+        "foreign body foreign body red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4492,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-02b622cf0e22d994",
+      "chunk_id": "40949ab525cdb33ba040_4",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "foreign body foreign body differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.427,
+      "excerpt": "by hemorrhage from both nares, and by visualization of blood draining in the posterior pharynx. Differential Diagnosis The differential diagnosis includes the following: Barotrauma Disseminated Intravascular Coagulation Endometriosis Foreign Bodies, Nose Hemophilia, Type A Hemophilia, Type B Osler-Weber-Rendu syndrome Rhinitis Plant Poisoning, Glycosides - Coumarin Sinusitis Toxicity, Cocaine Toxicity, Nonsteroidal Anti-inflammatory Agents Toxicity, Rodenticide Toxicity, Salicylate Toxicity, Warfarin and Superwarfarins von Willebrand Disease Diagnostic Considerations Other problems to be",
+      "text_sha256": "7fb71c7de80704fe1be64c3cae7c04a246ddeb7d5647ec8fe71d4107e8974654"
+    },
+    {
+      "id": "rag-3b76c329a7f1fceb",
+      "chunk_id": "0ce0a437aa65b2c45f03_2",
+      "title": "Hypersensitivity Nephropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/244009-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "foreign body foreign body differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4665,
+      "excerpt": "countries. The signs and symptoms of DI-AIN are variable and often not specific; thus, kidney biopsy is required to make a firm diagnosis. The classic presentation, mostly induced by antibiotics and accompanied by evident hypersensitivity manifestations (skin rash, eosinophilia, fever) has been largely replaced by oligosymptomatic presentations that require a higher index of suspicion. (e incidence of DI-AIN appears to be increasing particularly in the elderly, in whom kidney biopsy is underused and identification of the offending agent may be complicated by polypharmacy. Because rapid drug",
+      "text_sha256": "42b574ea6e1d9bf60bb266ba6eff4c27034f3f7d0a5c8f76f7324dcede2d0958"
+    },
+    {
+      "id": "rag-bcbb563b4c3d5099",
+      "chunk_id": "0ea09dc2a01d498032ed_7",
+      "title": "Mediterranean Spotted Fever (Boutonneuse Fever): Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/221240-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "foreign body foreign body differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4378,
+      "excerpt": "isolated lymphadenopathy is the only symptom. R conorii infection should be considered in patients with isolated lymphadenopathy who live in or have traveled to an endemic area, even when other more specific features are not present. In this setting, care should be taken to examine the area distal to the lymphadenopathy for an inoculation eschar, which, if present, can help support the diagnosis. Although MSF is usually a mild disease, severe complications including neurologic involvement does occur in 6-10% of cases. Neurologic manifestations can result in a delayed diagnosis and appropriate",
+      "text_sha256": "b21bb80283510ba7b468e22993af591f010341c4666b4746bc55a929dd3f86f1"
+    },
+    {
+      "id": "rag-14338292412711ab",
+      "chunk_id": "4ee72a6179ab803af84c_38",
+      "title": "Dermatologic Aspects of Behcet Disease: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1122381-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "foreign body foreign body differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4801,
+      "excerpt": "compared with Beht disease patients in North Africa and Europe. Gastrointestinal manifestations and neurological involvement was found to occur at higher rates in American patients compared with Turkish patients. Higher rates of folliculitis were found in patients of Iraqi/Iranian origin, and ocular complications were found to be at higher incidence in patients of Arabic origin in a study done on 66 Jewish patients. In a Japanese nationwide registry that included 6627 Beht disease patients, a 60/40 female predominance was noted, with a median age of 39 years. Genital ulceration was more common",
+      "text_sha256": "aaef8ad1ccbdded572b8e67b113c516335ca72ba5f23cfa9ebc8cfe5d91a102f"
+    },
+    {
+      "id": "rag-ef71b90b46b532f3",
+      "chunk_id": "4355e284a5bc779d3b63_3",
+      "title": "Trachea Foreign Bodies: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764615-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "foreign body foreign body differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4406,
+      "excerpt": "patients with minimal symptoms. `high index of suspicion is required to make the diagnosis, especially in children and patients who are debilitated. Signs and symptoms of tracheal foreign bodies Choking or coughing is present in 95% of patients presenting with foreign body aspiration. Stridor is commonly present with upper airway or upper tracheal foreign bodies. Patients may present with respiratory distress, pneumonia, pulmonary edema, or wheezing. Workup in tracheal foreign bodies Computed tomography (CT) scanning is rapidly becoming the imaging study of choice in stable patients with",
+      "text_sha256": "4cc6fc66466c12ca13244260c271adef18ca2c536eaf0447d88baef6c8bdcd79"
+    },
+    {
+      "id": "rag-8b9ab8ada128e5ae",
+      "chunk_id": "818eca5072b6ba4dd12a_3",
+      "title": "Focal Segmental Glomerulosclerosis: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/245915-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "foreign body foreign body differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4838,
+      "excerpt": "insufficiency ) However, some patients may be asymptomatic. See Presentation for more detail. Diagnosis Although clinical features are suggestive, a diagnosis of FSGS is established only by histopathology findings. Detailed medical history and pertnent laboratory tests are essential to distnguish between primary (idiopathic) and secondary forms of FSGS. n massively obese patients, FSGS, mostlys a diagnosis of exclusion. Examination of patients with FSGS may include the following findings: Leg edema Ascites Pleural effusion Abdominal pain: Common in children; may be symptom of peritonitis",
+      "text_sha256": "659ed990b335202f9d60a9fd23de1d33221a3d563a8a94db70487c478ba28849"
+    },
+    {
+      "id": "rag-9e7e111975822939",
+      "chunk_id": "744f02be00255f289e80_21",
+      "title": "Diffuse Proliferative Glomerulonephritis: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/239646-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "foreign body foreign body differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4951,
+      "excerpt": "which is a distinct systemic vasculitis syndrome that is characterized by palpable purpura (most commonly distributed over the buttocks and lower extremities), arthralgias, and gastrointestinal signs and symptoms, have DPGN. The prevalence of AAV in Europe is estimated at to be 46 184 per million with annual incidence rates per million estimated at2.1 14.4 for GPA, 2.4 10.1 for MPA and 0.5 3.7 EGPA. Race Lupus nephritis)ffers with ethnicity. Whites (12 33%) are less likely to have lupus nephritis than Blacks (40 69%), Hispanics (36 61%), or Asians (47 53%). dditionally, Black and Hispanic",
+      "text_sha256": "ebd6e146aa3e08a47593e58b8b755fbf3c5b31f27223f9662c8eb700639b78d7"
+    }
+  ],
+  "discovery": {
+    "route": "foreign_body",
+    "evidence_status": "sufficient",
+    "diseases": [],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The route's disposition is 'handoff', which bypasses the differential diagnosis questionnaire. No disease names are proposed for this stage.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-14338292412711ab",
+          "rag-3b76c329a7f1fceb",
+          "rag-8b9ab8ada128e5ae",
+          "rag-9e7e111975822939",
+          "rag-bcbb563b4c3d5099",
+          "rag-ef71b90b46b532f3",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope discovery citations with the complete route RAG evidence pack for: review_notes[0]. These citations remain unverified.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-14338292412711ab",
+          "rag-3b76c329a7f1fceb",
+          "rag-8b9ab8ada128e5ae",
+          "rag-9e7e111975822939",
+          "rag-bcbb563b4c3d5099",
+          "rag-ef71b90b46b532f3",
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ]
+  }
+}

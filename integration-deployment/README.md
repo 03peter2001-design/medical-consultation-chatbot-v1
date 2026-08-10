@@ -6,10 +6,50 @@ explicitly runs the scripts.
 
 ## Service version
 
-目前文件基線為 **integration deployment bundle v1.0.0**（截至 2026-08-07）。
+目前版本為 **integration deployment bundle v1.3.0（2026-08-10）**。
 這是依 `devlog/` 回溯整理的部署文件版本，用來標示安全整合藍圖、雙前端與
 GPU／Avatar 部署能力的共同基線；repository 目前沒有與此版本對應的 Git tag，
 也不表示任何院所環境已完成正式上線驗收。
+
+### v1.3.0 (2026-08-10)
+
+- 16 GB RTX 5060 Ti 預設改為 Breeze ASR 與本機 Avatar 模型 warm-up 後常駐，
+  不再於每次辨識／影片後卸載；容量較小或並行負載較高的 GPU 可用 release
+  flags 回退原有低顯存模式。
+- 配合 backend `/v1/avatar/warmup`，前端啟用 Avatar 時才一次載入所有語音與嘴型
+  模型；第一次較慢，後續 warm-up 與合成直接重用。
+- 實測第一次 warm-up 47.35 秒、第二次 0.005 秒；國語／閩南語連續合成後所有
+  模型仍 loaded，常駐約使用 11.5 GB 顯存並保留約 4.3 GB。
+
+### v1.2.0 (2026-08-10)
+
+- 新增只綁定 host `127.0.0.1:18000` 的 Nginx development API，讓開發版
+  `frontend/` 固定與 Docker backend 溝通；FastAPI container port 仍不直接發布。
+- 開發機可明確設定 `ALLOW_LOCAL_AUTH_BYPASS=true` 與 localhost CORS allowlist；
+  `.env.example` 及正式部署預設仍為 `false`，非本機來源繼續要求 patient session 或
+  UCC Bearer token。
+- Public patient 與 UCC proxy 現在覆寫而非附加用戶傳入的 `X-Forwarded-For`，避免
+  外部請求偽裝 loopback；只有 host-loopback development listener 注入
+  `127.0.0.1`。
+- Gateway 明確加入獨立 edge bridge 以承接 host-published ports；backend 持續只在
+  private／egress networks，FastAPI port 不對 host 發布。
+- Patient／UCC host ports 可分別以 `PATIENT_HTTPS_PORT`／`UCC_API_PORT` 覆寫，正式
+  預設仍為 443／8443；本機已有服務占用時不必破壞既有 listener。
+- Backend 修改後可用 `docker compose up -d --build backend` 重建，開發版 Vite
+  frontend 保持熱更新；Nginx 會透過 Docker DNS 重新解析重建後的 backend IP，
+  Docker volume 成為此流程的病例資料來源。
+- 驗證包含完整 Compose build、Nginx syntax、實際 host port bindings、localhost
+  CORS、開發白名單、Avatar CUDA status，以及 public TLS 偽造 forwarded-IP 仍回 401。
+
+### v1.1.0 (2026-08-10)
+
+- Avatar service 額外發布於 host loopback `127.0.0.1:8090`，讓直接執行的
+  `frontend/` 與 FastAPI backend 可測試既有 GPU Avatar，不必把 backend 打包為
+  Docker image。
+- 8090 不綁定 LAN 或公網介面；正式瀏覽器仍只透過 gateway 與 backend 的
+  `/v1/avatar/*` 路由存取，不直接接觸模型服務。
+- 驗證包含 Compose config、Avatar CUDA／checkpoint health、Docker backend 私有
+  網路連線、host loopback health，以及從本機 backend 取得有效 MP4 的端到端合成。
 
 ### v1.0.0（截至 2026-08-07）
 
@@ -48,12 +88,15 @@ UCC browser -> IIS /ai-consult/ (doctor static build)
 Patient browser -> https://patient.example/ (patient static build)
                 -> /api/v1/* -> Nginx -> FastAPI
 
+Development frontend -> http://127.0.0.1:18000/v1/* -> Nginx -> FastAPI
+
 FastAPI -> one Docker-internal port, one worker, SQLite WAL named volume
 FastAPI -> private avatar service -> local CosyVoice3 -> local MuseTalk 1.5
 ```
 
-FastAPI has no published host port. Patient traffic and UCC traffic both pass
-through Nginx. The UCC listener is bound to the Ubuntu private address and also
+FastAPI has no published host port. Patient, UCC, and local development traffic all
+pass through Nginx. The development listener is published on host loopback only;
+it is not reachable from the LAN. The UCC listener is bound to the Ubuntu private address and also
 uses an Nginx IP allowlist; apply the same allowlist in `ufw` or the cloud
 firewall. The two Nginx listeners may use one certificate only if its SAN covers
 both the public patient name and the private UCC API DNS name.
@@ -62,10 +105,12 @@ The public patient listener returns 404 for `/api/v1/doctor/*` and for the UCC
 invitation-creation endpoint. FastAPI JWT/scope enforcement remains the final
 authorization boundary; the Nginx blocks are defense in depth.
 
-The backend and avatar service join a separate, unpublished Docker bridge. The
+Nginx joins a dedicated edge bridge for host-published ports and the private API
+bridge for upstream access. The backend and avatar service join private networks. The
 backend uses it for the configured LLM/FHIR providers; the avatar service uses
-it to download model weights during setup. Neither service publishes a host
-port. Avatar inference is local after the weights are cached in the
+it to download model weights during setup. FastAPI is not published directly;
+Avatar and the development Nginx API are available only on host loopback. Avatar
+inference is local after the weights are cached in the
 `avatar-models` Docker volume. Restrict outbound DNS/IPs at the host firewall
 when provider endpoints are fixed.
 
@@ -94,14 +139,54 @@ sudo ufw allow from 10.20.30.10 to 10.20.30.40 port 8443 proto tcp
 sudo ufw deny 8443/tcp
 ```
 
-Replace the example addresses with actual fixed addresses. Confirm that port
-8000 is not published by `docker compose ps`. Validate:
+Replace the example addresses with actual fixed addresses. In a formal deployment,
+keep `ALLOW_LOCAL_AUTH_BYPASS=false`. Port 18000 may appear in `docker compose ps`,
+but its host binding must be exactly `127.0.0.1`, never `0.0.0.0` or a LAN address.
+Validate:
 
 ```sh
 curl --fail https://patient.example/healthz
 curl --fail https://ai-api.internal.example:8443/v1/health   # from IIS host only
 docker compose ps
 ```
+
+### Development frontend with the containerized backend
+
+For the development `frontend/`, keep Vite on the host and run every backend service
+through Compose. In the local, uncommitted `integration-deployment/.env`, use:
+
+```dotenv
+CORS_ALLOWED_ORIGINS=http://127.0.0.1:5173,http://localhost:5173
+DEVELOPMENT_API_PORT=18000
+ALLOW_LOCAL_AUTH_BYPASS=true
+# 若主機 443 已被其他服務使用，可在本機改用：
+PATIENT_HTTPS_PORT=10443
+```
+
+Start or refresh the complete backend pipeline, then start Vite:
+
+```sh
+cd integration-deployment
+docker compose up -d --build
+
+cd ../frontend
+npm run dev
+```
+
+The existing frontend default resolves its API to the page hostname on port 18000,
+so `http://localhost:5173` talks to `http://localhost:18000`, which is the loopback
+Nginx listener backed by Docker FastAPI. After a backend source change, rebuild only
+that service; Docker will recreate it while preserving named volumes:
+
+```sh
+cd integration-deployment
+docker compose up -d --build backend
+```
+
+Frontend source changes still use Vite hot reload. `backend/.env` does not configure
+the Docker backend; `integration-deployment/.env` is authoritative. The Docker
+`consultation-data` volume is also separate from `backend/data/consultations.db`;
+moving old cases requires an explicit backup/import and is never automatic.
 
 ### Breeze ASR GPU
 
@@ -118,14 +203,13 @@ docker run --rm --gpus all nvidia/cuda:12.8.1-base-ubuntu22.04 nvidia-smi
 ```
 
 Set `ASR_PROVIDER=breeze` and `BREEZE_ASR_DEVICE=cuda` in `.env`. After the
-first transcription, `GET /v1/health` should report
-`speech_transcription.loaded` as `false` again when
-`BREEZE_ASR_RELEASE_GPU_AFTER_TRANSCRIBE=true`; this is expected because the
-CUDA pipeline is unloaded before the following chat/avatar request. During
-inference it temporarily reports `device: cuda:0`. The mounted
+Avatar warm-up, `GET /v1/health` should report
+`speech_transcription.loaded: true` when
+`BREEZE_ASR_RELEASE_GPU_AFTER_TRANSCRIBE=false`; the CUDA pipeline stays ready
+for following recordings. The mounted
 `HF_MODEL_CACHE_PATH` is writable because Breeze-ASR-26 downloads roughly 6 GB
-of model files on first use. Disabling the release option reduces subsequent
-ASR latency but is unsafe when Avatar shares a 16 GB GPU.
+of model files on first use. The 16 GB RTX 5060 Ti profile is verified for
+resident models; other GPUs must be measured and may need the release option.
 
 The gateway logs method and path only: query strings, Referer headers, request
 bodies, invitation tokens, and clinical content are deliberately omitted.
@@ -148,23 +232,38 @@ docker compose exec avatar python3.10 -c \
 ```
 
 The health output must show `status: ok`, `device: cuda:0`, and
-`models_downloaded: true`. This deployment enables
-`AVATAR_RELEASE_GPU_AFTER_RENDER=true`: after CosyVoice has written the WAV it
-is unloaded before MuseTalk starts, and all remaining Avatar models are
-unloaded after the MP4 completes. This returns VRAM to the lazy-loaded Breeze
-ASR, but every uncached sentence pays model reload latency. A cached sentence
-serves its existing MP4 without loading either model. While an uncached render
-is active, health may temporarily show `speech_loaded` or `animation_loaded` as
-`true`; both return to `false` afterward. Generated MP4 files are capped by
-count and stored in `avatar-cache`; do not treat that volume as a clinical
-record.
+`models_downloaded: true`. Enabling Avatar calls `/v1/avatar/warmup`; with
+`AVATAR_RELEASE_GPU_AFTER_RENDER=false`, health then keeps `speech_loaded` and
+`animation_loaded` true across renders. Generated MP4 files are capped by count
+and stored in `avatar-cache`; do not treat that volume as a clinical record.
 
-The paired Breeze and Avatar release settings prevent the normal sequential
-flow (recording → transcription → response video) from leaving either model
-resident when the other starts. They do not serialize truly simultaneous ASR
-and Avatar requests from different users; on a multi-user installation, lower
-`MUSETALK_BATCH_SIZE` and enforce admission control or dedicate separate GPUs
-after measuring concurrent peak memory.
+Resident models reduce single-user sequential flow latency, but do not serialize
+simultaneous ASR and Avatar requests from different users. On a multi-user
+installation, measure peak memory, lower `MUSETALK_BATCH_SIZE`, enable both
+release flags, enforce admission control, or dedicate separate GPUs.
+
+The Avatar container also binds its API to host loopback only, so the development
+`frontend/` and a backend started directly from `backend/` can use the same GPU
+service without containerizing FastAPI. Keep these values in the local, uncommitted
+`backend/.env`:
+
+```dotenv
+AVATAR_ENABLED=true
+AVATAR_SERVICE_URL=http://127.0.0.1:8090
+AVATAR_TIMEOUT_SECONDS=600
+```
+
+Start only the GPU service when the rest of the development stack runs on the host:
+
+```sh
+cd integration-deployment
+docker compose up -d avatar
+curl --fail http://127.0.0.1:8090/health
+```
+
+The Compose mapping is deliberately fixed to `127.0.0.1`; do not change it to
+`0.0.0.0`, because browsers must continue to reach Avatar through the authenticated
+backend API rather than the unauthenticated model endpoint.
 
 The bundled CosyVoice sample is only a bootstrap voice. Before clinical use,
 mount a short consented reference recording as described in

@@ -12,12 +12,14 @@ import { RouterLink } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import AmieTracePanel from '../components/AmieTracePanel.vue'
 import AvatarSettings from '../components/AvatarSettings.vue'
+import AvatarStage from '../components/AvatarStage.vue'
 import ChatMessage from '../components/ChatMessage.vue'
 import PainLocationInput from '../components/PainLocationInput.vue'
 import QuestionnaireControl from '../components/QuestionnaireControl.vue'
 import QueueCard from '../components/QueueCard.vue'
 import StartConsultationOverlay from '../components/StartConsultationOverlay.vue'
 import TypingIndicator from '../components/TypingIndicator.vue'
+import VoiceWaveform from '../components/VoiceWaveform.vue'
 import { useAvatar } from '../composables/useAvatar.js'
 import { getPainMapPreset } from '../data/bodyPainRegions.js'
 import { api, connectionError } from '../services/backend.js'
@@ -34,12 +36,20 @@ import {
   hasSmartLaunchContext,
   initializeSmartPatient,
 } from '../services/smart.js'
+import {
+  AUTO_SEND_REVIEW_MS,
+  AVATAR_SILENCE_MS,
+  normalizeVoiceLevel,
+  rootMeanSquare,
+  updateVoiceActivity,
+} from '../services/voiceActivity.js'
 const sessionId = `pt_${Date.now()}`
 const maxBirthDate = new Date().toISOString().slice(0, 10)
 const smartLaunchDetected = hasSmartLaunchContext()
 
 const avatar = useAvatar({
   getStatus: api.avatarStatus,
+  warmup: api.avatarWarmup,
   synthesize: api.speakAvatar,
   initialProvider: import.meta.env.VITE_AVATAR_PROVIDER,
 })
@@ -73,7 +83,10 @@ const triageState = ref({
 })
 const recording = ref(false)
 const voiceProcessing = ref(false)
+const autoSendPending = ref(false)
 const voiceNotice = ref('')
+const voiceLevel = ref(0)
+const voiceDetected = ref(false)
 const chatbox = ref(null)
 const textInput = ref(null)
 const questionnaireControl = ref(null)
@@ -82,6 +95,15 @@ let mediaRecorder = null
 let mediaStream = null
 let audioChunks = []
 let recordingTimeout = null
+let voiceActivityTimer = null
+let autoSendTimeout = null
+let audioContext = null
+let audioSource = null
+let analyser = null
+let analyserSamples = null
+let voiceActivityState = { speechStarted: false, lastVoiceAt: 0 }
+let recordingAutoSubmit = false
+let stopOnSilence = false
 
 const progress = computed(() => progressState.value.percent ?? 0)
 const progressLabel = computed(() =>
@@ -164,6 +186,7 @@ function addMessage(role, text) {
 }
 
 function setQuestionState(data) {
+  cancelAutoSend()
   questionInput.value = data.question_input ?? null
   questionnaireInfo.value = data.questionnaire ?? null
   canGoBack.value = Boolean(data.can_go_back)
@@ -302,6 +325,7 @@ async function submitMessage(
   const text = message.trim()
   if (!text || inputsDisabled.value) return
 
+  cancelAutoSend()
   sending.value = true
   typing.value = true
   try {
@@ -358,16 +382,104 @@ async function connectAvatar() {
     clientKey: avatarClientKey.value,
     agentId: avatarAgentId.value,
   })
-  if (connected) mobileAvatarOpen.value = false
+  if (!connected) return
+  mobileAvatarOpen.value = false
+  if (started.value) {
+    const latestAssistant = [...messages.value]
+      .reverse()
+      .find((message) => message.role === 'ai' && message.text)
+    if (latestAssistant) await avatar.speak(latestAssistant.text)
+  }
 }
 
-async function toggleVoice() {
-  if (completed.value || voiceProcessing.value) return
-  if (recording.value) {
-    voiceNotice.value = '正在結束錄音…'
-    mediaRecorder?.stop()
-    return
+function cancelAutoSendForEditing() {
+  if (!autoSendPending.value) return
+  cancelAutoSend()
+  voiceNotice.value = '已暫停自動送出，您可以修改文字後手動送出。'
+}
+
+function cancelAutoSend() {
+  if (autoSendTimeout) window.clearTimeout(autoSendTimeout)
+  autoSendTimeout = null
+  autoSendPending.value = false
+}
+
+function scheduleAutoSend() {
+  cancelAutoSend()
+  autoSendPending.value = true
+  voiceNotice.value = '語音辨識完成，3 秒後自動送出；開始編輯可取消。'
+  autoSendTimeout = window.setTimeout(() => {
+    autoSendTimeout = null
+    autoSendPending.value = false
+    const text = input.value.trim()
+    if (text && !sending.value && !completed.value) void submitMessage(text)
+  }, AUTO_SEND_REVIEW_MS)
+}
+
+function stopVoiceActivityDetection() {
+  if (voiceActivityTimer) window.clearInterval(voiceActivityTimer)
+  voiceActivityTimer = null
+  try {
+    audioSource?.disconnect()
+  } catch {
+    // The stream may already be disconnected during browser teardown.
   }
+  audioSource = null
+  analyser = null
+  analyserSamples = null
+  voiceLevel.value = 0
+  voiceDetected.value = false
+  stopOnSilence = false
+  const context = audioContext
+  audioContext = null
+  if (context && context.state !== 'closed') void context.close()
+}
+
+function startVoiceActivityDetection(stream, { autoStop = false } = {}) {
+  stopVoiceActivityDetection()
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext
+  if (!AudioContextClass) return false
+  audioContext = new AudioContextClass()
+  analyser = audioContext.createAnalyser()
+  analyser.fftSize = 2048
+  analyser.smoothingTimeConstant = 0.15
+  analyserSamples = new Uint8Array(analyser.fftSize)
+  audioSource = audioContext.createMediaStreamSource(stream)
+  audioSource.connect(analyser)
+  voiceActivityState = { speechStarted: false, lastVoiceAt: 0 }
+  stopOnSilence = autoStop
+  voiceActivityTimer = window.setInterval(() => {
+    if (!analyser || !analyserSamples || !recording.value) return
+    analyser.getByteTimeDomainData(analyserSamples)
+    const rms = rootMeanSquare(analyserSamples)
+    voiceLevel.value = normalizeVoiceLevel(rms)
+    voiceActivityState = updateVoiceActivity(voiceActivityState, {
+      rms,
+      now: Date.now(),
+    })
+    voiceDetected.value = voiceActivityState.speechStarted
+    if (stopOnSilence && voiceActivityState.shouldStop) {
+      stopRecording({ autoSubmit: true, reason: 'silence' })
+    }
+  }, 100)
+  return true
+}
+
+function stopRecording({ autoSubmit = false, reason = 'manual' } = {}) {
+  if (mediaRecorder?.state !== 'recording') return
+  recordingAutoSubmit = autoSubmit
+  voiceNotice.value =
+    reason === 'silence'
+      ? `已偵測到 ${AVATAR_SILENCE_MS / 1000} 秒停頓，正在完成錄音…`
+      : '正在結束錄音…'
+  stopVoiceActivityDetection()
+  mediaRecorder.stop()
+}
+
+async function startVoiceRecording({ autoSubmitOnSilence = false } = {}) {
+  if (completed.value || voiceProcessing.value) return
+  if (recording.value || sending.value || currentInputKind.value !== 'text') return
+  if (input.value.trim()) return
 
   try {
     mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -389,12 +501,26 @@ async function toggleVoice() {
     mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) audioChunks.push(event.data)
     }
-    mediaRecorder.onstop = processRecording
+    mediaRecorder.onstop = () => void processRecording()
     mediaRecorder.start()
     recording.value = true
-    voiceNotice.value = '錄音中，再按一次麥克風停止（最長 60 秒）。'
+    recordingAutoSubmit = false
+    const activityDetectionReady = startVoiceActivityDetection(mediaStream, {
+      autoStop: autoSubmitOnSilence,
+    })
+    const silenceDetectionReady = autoSubmitOnSilence && activityDetectionReady
+    voiceNotice.value = silenceDetectionReady
+      ? `請直接說話；開始說話後停頓 ${AVATAR_SILENCE_MS / 1000} 秒會完成辨識並自動送出。`
+      : activityDetectionReady
+        ? '錄音中；音波會跟著收到的聲音變化，再按一次麥克風停止。'
+        : '錄音中，再按一次麥克風停止（最長 60 秒）。'
     recordingTimeout = window.setTimeout(() => {
-      if (mediaRecorder?.state === 'recording') mediaRecorder.stop()
+      if (mediaRecorder?.state === 'recording') {
+        stopRecording({
+          autoSubmit: autoSubmitOnSilence && voiceActivityState.speechStarted,
+          reason: 'timeout',
+        })
+      }
     }, 60_000)
   } catch (error) {
     voiceNotice.value = ''
@@ -404,10 +530,23 @@ async function toggleVoice() {
   }
 }
 
+async function toggleVoice() {
+  if (recording.value) {
+    stopRecording({ autoSubmit: false })
+    return
+  }
+  await startVoiceRecording({
+    autoSubmitOnSilence: avatar.isConnected.value,
+  })
+}
+
 async function processRecording() {
+  const shouldAutoSubmit = recordingAutoSubmit
+  recordingAutoSubmit = false
   recording.value = false
   if (recordingTimeout) window.clearTimeout(recordingTimeout)
   recordingTimeout = null
+  stopVoiceActivityDetection()
   mediaStream?.getTracks().forEach((track) => track.stop())
   mediaStream = null
   voiceProcessing.value = true
@@ -420,8 +559,7 @@ async function processRecording() {
     const transcript = await api.transcribe(audioBlob)
     const text = transcript.text?.trim()
     if (!text) {
-      addMessage('ai', '⚠️ 未偵測到語音內容，請再試一次。')
-      voiceNotice.value = ''
+      await askPatientToRepeat()
       return
     }
     input.value = text
@@ -435,9 +573,9 @@ async function processRecording() {
     voiceProcessing.value = false
     await nextTick()
     textInput.value?.focus()
+    if (shouldAutoSubmit) scheduleAutoSend()
   } catch (error) {
-    voiceNotice.value = ''
-    addMessage('ai', `⚠️ 語音辨識失敗（${error.message}），請重試。`)
+    await askPatientToRepeat(error.message)
   } finally {
     voiceProcessing.value = false
     audioChunks = []
@@ -445,7 +583,43 @@ async function processRecording() {
   }
 }
 
+async function askPatientToRepeat(detail = '') {
+  const prompt = '對不起，我沒有聽清楚，請再講一次。'
+  voiceNotice.value = detail ? `語音辨識失敗：${detail}` : '未辨識到語音內容。'
+  addMessage('ai', prompt)
+  if (avatar.isConnected.value) await avatar.speak(prompt)
+}
+
+watch(
+  () => avatar.talking.value,
+  (talking, wasTalking) => {
+    if (
+      wasTalking &&
+      !talking &&
+      avatar.isConnected.value &&
+      started.value &&
+      !completed.value &&
+      currentInputKind.value === 'text'
+    ) {
+      window.setTimeout(() => {
+        void startVoiceRecording({ autoSubmitOnSilence: true })
+      }, 250)
+    }
+  },
+)
+
+watch(
+  () => avatar.isConnected.value,
+  (connected) => {
+    if (connected) return
+    cancelAutoSend()
+    if (recording.value) stopRecording({ autoSubmit: false })
+  },
+)
+
 onBeforeUnmount(() => {
+  cancelAutoSend()
+  stopVoiceActivityDetection()
   if (recordingTimeout) window.clearTimeout(recordingTimeout)
   if (mediaRecorder?.state === 'recording') {
     mediaRecorder.onstop = null
@@ -534,6 +708,7 @@ onBeforeUnmount(() => {
             以上僅為安全規則提示，不代表診斷；請勿等待線上問診結果。
           </p>
         </div>
+        <AvatarStage :avatar="avatar" />
         <div class="progress-bar" aria-label="問診進度">
           <span
             v-if="questionnaireInfo"
@@ -606,7 +781,13 @@ onBeforeUnmount(() => {
               questionInput?.placeholder || '請輸入您的回覆...'
             "
             :disabled="inputsDisabled"
+            @input="cancelAutoSendForEditing"
             @keydown="handleInputKeydown"
+          />
+          <VoiceWaveform
+            v-if="recording"
+            :level="voiceLevel"
+            :received="voiceDetected"
           />
           <button
             class="input-icon"

@@ -29,9 +29,17 @@ class _Response:
 
 class AvatarClientTests(unittest.TestCase):
     def test_speech_request_trims_and_rejects_blank_text(self):
-        self.assertEqual(AvatarSpeechRequest(text="  您好  ").text, "您好")
+        request = AvatarSpeechRequest(text="  您好  ")
+        self.assertEqual(request.text, "您好")
+        self.assertEqual(request.language, "mandarin")
+        self.assertEqual(
+            AvatarSpeechRequest(text="您好", language="minnan").language,
+            "minnan",
+        )
         with self.assertRaisesRegex(ValueError, "must not be blank"):
             AvatarSpeechRequest(text="  \n ")
+        with self.assertRaises(ValueError):
+            AvatarSpeechRequest(text="您好", language="english")
 
     def test_disabled_client_does_not_call_network(self):
         client = AvatarClient({"AVATAR_ENABLED": "false"})
@@ -58,16 +66,43 @@ class AvatarClientTests(unittest.TestCase):
 
     def test_render_preserves_model_and_cache_headers(self):
         client = AvatarClient({"AVATAR_ENABLED": "true", "AVATAR_MAX_VIDEO_MB": "1"})
+        request_body = {}
+
+        def respond(request, timeout):
+            request_body.update(json.loads(request.data.decode("utf-8")))
+            return _Response(b"video", "video/mp4")
+
         with patch(
             "infrastructure.avatar.urlopen",
-            return_value=_Response(b"video", "video/mp4"),
+            side_effect=respond,
         ):
-            result = client.render("請問哪裡不舒服？")
+            result = client.render("請問哪裡不舒服？", "minnan")
         self.assertEqual(result.content, b"video")
         self.assertEqual(result.content_type, "video/mp4")
         self.assertEqual(result.speech_model, "cosy-test")
         self.assertEqual(result.animation_model, "muse-test")
         self.assertTrue(result.cache_hit)
+        self.assertEqual(request_body["language"], "minnan")
+
+    def test_warmup_requires_all_private_avatar_models(self):
+        client = AvatarClient({"AVATAR_ENABLED": "true"})
+        body = json.dumps(
+            {
+                "status": "ok",
+                "speech_model": "cosy-test",
+                "animation_model": "muse-test",
+                "device": "cuda:0",
+                "speech_loaded": True,
+                "animation_loaded": True,
+            }
+        ).encode()
+        with patch("infrastructure.avatar.urlopen", return_value=_Response(body)) as call:
+            status = client.warmup()
+
+        self.assertTrue(status["available"])
+        self.assertTrue(status["loaded"])
+        self.assertEqual(call.call_args.args[0].method, "POST")
+        self.assertTrue(call.call_args.args[0].full_url.endswith("/v1/warmup"))
 
     def test_render_rejects_non_video_success_response(self):
         client = AvatarClient({"AVATAR_ENABLED": "true"})
@@ -99,20 +134,22 @@ class AvatarClientTests(unittest.TestCase):
                 animation_model="muse-test",
                 cache_hit=True,
             )
+            threadpool = AsyncMock(return_value=video)
             with patch(
                 "app.routes.system.run_in_threadpool",
-                new=AsyncMock(return_value=video),
+                new=threadpool,
             ):
-                response = await avatar_speak(AvatarSpeechRequest(text=" 您好 "))
+                response = await avatar_speak(AvatarSpeechRequest(text=" 您好 ", language="minnan"))
 
-            return response
+            return response, threadpool
 
-        response = asyncio.run(exercise_route())
+        response, threadpool = asyncio.run(exercise_route())
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.headers["content-type"], "video/mp4")
         self.assertEqual(response.headers["cache-control"], "private, no-store")
         self.assertEqual(response.headers["x-avatar-cache"], "hit")
         self.assertEqual(response.body, b"mp4-test")
+        self.assertEqual(threadpool.await_args.args[2], "minnan")
 
 
 if __name__ == "__main__":

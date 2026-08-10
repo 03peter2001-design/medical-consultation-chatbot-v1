@@ -196,6 +196,7 @@ async def require_patient_session(
         "/v1/chat": "patient.chat",
         "/v1/transcribe": "patient.transcribe",
         "/v1/avatar/status": "patient.avatar.status",
+        "/v1/avatar/warmup": "patient.avatar.warmup",
         "/v1/avatar/speak": "patient.avatar.speak",
     }
     action = path_actions.get(request.url.path, "patient.session.authenticate")

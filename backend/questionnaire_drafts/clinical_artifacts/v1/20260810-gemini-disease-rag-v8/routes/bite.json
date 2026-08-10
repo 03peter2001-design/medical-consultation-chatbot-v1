@@ -1,0 +1,1784 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "bite",
+  "label": "咬傷",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "2827666e3e4e868b7ed58f068129a2d72df6bd08b2076cb0c46288e507572564",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"bite bite differential diagnosis diseases clinical presentation symptoms history\",\"bite bite red flags emergency warning signs urgent referral rule out\",\"Lyme disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Tick-borne rickettsial disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Alpha-gal syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Allergic reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Wound infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "8adcbb3bffd5c07edb757850745fd87f6abe86321c98ad7b0587116a3b95c849"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "b69ae2bf718bdb56f5519a7beedd728941482e663c148d1e7efb6b078f9e88a1",
+    "generated_at": "2026-08-10T03:55:17+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-5bb6be615f7d4044",
+      "chunk_id": "5f0c535325053b5addec_8",
+      "title": "Tick-Borne Diseases: Overview, Biology and Life Cycle of Ticks, Guidelines on the Diagnosis and Management of Tickborne Rickettsial Diseases",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/786652-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "bite bite differential diagnosis diseases clinical presentation symptoms history",
+        "bite bite red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4741,
+      "excerpt": "suspected cases of AGS were identified in the United States. Places where the lone star tick is found are most affected. Cases predominantly occur in counties within the southern, midwestern, and mid-Atlantic regions. The primary management of mammalian meat allergy is avoidance of mammalian meat. The allergy can cause symptoms ranging from urticaria to angioedema and anaphylaxis. Delayed anaphylactic shock has also been reported to occur 4-6 hours after consumption of red meat. These symptoms are treated in the usual manner. Oral antihistamines are recommended for patients who remain",
+      "text_sha256": "9a799da850ee0b0204e66a0471a8199aa92fea7b19b1c914e3d4bd413c39103e"
+    },
+    {
+      "id": "rag-da72a4f7e9e54847",
+      "chunk_id": "eade270c103e6d7a9a0d_16",
+      "title": "Human Bites: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/218901-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bite bite differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4502,
+      "excerpt": "toddlers placed in crowded daycare centers are usually superficial and rarely become infected. Patient Education Patients must clearly understand the signs and symptoms of wound infection that signal a need to return for immediate reevaluation. These include, but are not limited to, the following: Fever Odor Drainage Purulence Swelling Cellulitis Warmth Pain Decreased mobility Patients must also clearly understand the importance of early and regular follow-up care for this seemingly minor injury, as well as the rationale for providing antibiotics and the importance of compliance with this",
+      "text_sha256": "53ec82df68ad5453a564627875f31471f4a2da249cfcf3854705e2c86ce5894d"
+    },
+    {
+      "id": "rag-80a1512617e77243",
+      "chunk_id": "533df8c4e1c8cc2bd460_14",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bite bite differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4906,
+      "excerpt": "most common clinical manifestations of an allergic reaction to a food or food additive. Symptoms range from acute urticaria (most common) to flushing to angioedema to exacerbations of atopic dermatitis. Food allergy is rarely the cause of chronic urticaria or angioedema. Atopic dermatitis Controversy surrounds the role of food allergy in the pathogenesis of atopic dermatitis. Studies show that among patients with moderate chronic atopic dermatitis, 35-40% have IgE-mediated food allergy. Food-specific IgE-mediated and cellular mechanisms appear responsible for chronic eczematous inflammation.",
+      "text_sha256": "844a1bbac3426efe4bf1acffd9503ea80bb65946263bb74b9cf52519fd6ce260"
+    },
+    {
+      "id": "rag-7c620a5ccb741927",
+      "chunk_id": "ab7d430962cf4300f40b_23",
+      "title": "Noncandidal Fungal Infections of the Mouth: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1077685-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bite bite differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4928,
+      "excerpt": "E–specific antibody levels may support the diagnosis. The diagnosis of blastomycosis is based on smear or culture results. Biopsy may show Blastomyces species in the tissue, with granulomas. Staining with PAS, methenamine silver nitrate, or Fontana-Masson stain helps in the identification. The organism can be mistaken for H capsulatum, C neoformans, Bipolaris species, or Wangiella dermatitidis. Direct immunostaining is the most useful means of confirmation. DNA probes can yield an answer in 2 hours. Skin test and serology results are, unfortunately, unreliable, although serotesting has",
+      "text_sha256": "ed4cd43b10167c6e49c642073bec069e7af1f715b2a385adcaa174c12aa19c36"
+    },
+    {
+      "id": "rag-dcfb333a49cc8e48",
+      "chunk_id": "e5e866e92c8de8af247a_22",
+      "title": "Viral Meningitis: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1168529-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bite bite differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4074,
+      "excerpt": "areas of endemic disease, and the presence of erythema chronicum migrans at the site of tick bite is pathognomonic. Lyme meningitis has a predilection to cause focal cranial nerve palsies, with the seventh nerve most commonly affected. Clinicians must consider partially-treated bacterial meningitis as a possible etiology for the aseptic nature of their patient's disease; for example, patients with bacterial otitis and sinusitis who have been taking antibiotics may present with meningitis and CSF findings identical to those of viral meningitis. The clinician should also realize that the picture",
+      "text_sha256": "de18028256962200dea5018320074030939acf418e06837c9823040f9e3816b3"
+    },
+    {
+      "id": "rag-b47422e50134c735",
+      "chunk_id": "709d501e5392c47ae3b5_32",
+      "title": "Lyme Disease: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/330178-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bite bite differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.44,
+      "excerpt": "infection progresses to disseminated disease in approximately 50% of untreated patients. Only a few genotypes of B burgdorferi appear to be responsible for the large majority of cases of disseminated disease. Stage 1 disease Stage 1 is also known as primary or early localized infection. It generally occurs within 30 days of the tick bite. Most patients present with a characteristic expanding rash (erythema migrans) at the site of the tick bite 7-14 days after the tick is removed. Nonspecific symptoms may include the following: Fatigue Myalgias Arthralgias Headache Fever Chills Neck stiffness",
+      "text_sha256": "740f74cb1b97010640b0197c650279a916781146ecc04260034b3b92f597aeb4"
+    },
+    {
+      "id": "rag-786d5c82e1d5b2b7",
+      "chunk_id": "533df8c4e1c8cc2bd460_5",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "bite bite red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5324,
+      "excerpt": "of inducing a systemic reaction Patch testing: Appears promising, but additional studies are needed and it is not recommended for routine practice Diet-related diagnostic measures may be helpful, as follows: Diet diary Elimination diet (may be used for diagnostic as well as therapeutic purposes) Food challenge confirmation of food allergy (may be open; single-blind; or double-blind, placebo-controlled) See Workup for more detail. Management There are currently no curative therapies for food allergy. The only proven treatment is strict dietarylimination of the offending food allergen. A",
+      "text_sha256": "eb4efdbe7c771eeb55882e804a15a15fa64a4f10c193f2088ada256c405d92b6"
+    },
+    {
+      "id": "rag-3a01ae2e52d02ccd",
+      "chunk_id": "533df8c4e1c8cc2bd460_4",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "bite bite red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5629,
+      "excerpt": "testing: Positive results primarily denote sensitization and may not confirm clinical allergy; specific laboratory tests for some food hypersensitivities are not available Basophil histamine-release assays: These are limited primarily to research settings Skin testing includes the following approaches: Prick testing: This is the most common screening test for food allergy; negative predictive accuracy exceeds positive predictive accuracy (>90% vs < 50%) Intradermal testing: Generally avoided, because of the risk of inducing a systemic reaction Patch testing: Appears promising, but additional",
+      "text_sha256": "ab9c0cc6990510f768f7977a8202aaa662a2878cc3cf5ccf03771044afcfb5a5"
+    },
+    {
+      "id": "rag-a17a88cf643fd7db",
+      "chunk_id": "f3a0e8ebab5000f04492_9",
+      "title": "Lyme Disease Serology: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2094578-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "bite__lyme_disease"
+      ],
+      "retrieval_queries": [
+        "Lyme disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3601,
+      "excerpt": "risk of B burgdorferi infection who are seeking Lyme testing for symptoms of a more nonspecific nature. Indication/Applications Testing is indicated for clinically suspected cases of Lyme disease; it is not necessary if the patient has a tick bite and erythema migrans. Considerations Diagnosis of Lyme disease is made based on a combination clinical manifestations and available testing. No test is 100% sensitive or specific for Lyme disease. If the test is performed before an adequate antibody response develops, results may be false negative. In this case, repeat testing in 2-4 weeks is",
+      "text_sha256": "7d9f427e83fb51568453997ac93924341f108db8dcdd1e9ee603c71d86fdb87c"
+    },
+    {
+      "id": "rag-eaa95978d634c800",
+      "chunk_id": "f3a0e8ebab5000f04492_0",
+      "title": "Lyme Disease Serology: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2094578-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "bite__lyme_disease"
+      ],
+      "retrieval_queries": [
+        "Lyme disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4039,
+      "excerpt": "Reference Range Because of the significant false positivity associated with test results, even among healthy populations from nonendemic regions, serologic testing for Lyme disease should only be performed if the clinician estimates the chance is at least 20% chance that the patient has active Lyme disease. Normal levels vary depending on the laboratory assay performed, as follows. Borrelia burgdorferi antibody enzyme immunoassay (Lyme index value) : < 0.9 = negative 0.91-1.09 = equivocal >1.1 = positive Western blot : ≥5 different immunoglobulin G (IgG) antibodies reactive = positive ≥2",
+      "text_sha256": "fdfc5c62424835ea8814b4242b2f3229556e2eef384da5492cd0db402b2dd9dc"
+    },
+    {
+      "id": "rag-d002eda8880551d5",
+      "chunk_id": "709d501e5392c47ae3b5_18",
+      "title": "Lyme Disease: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/330178-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "bite__lyme_disease"
+      ],
+      "retrieval_queries": [
+        "Lyme disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4706,
+      "excerpt": "migrans, which currently is referred to simply as erythema migrans (EM). In the 1920s, Garin and Bujadoux described a patient with meningoencephalitis, painful sensory radiculitis, and erythema migrans following a tick bite, which they attributed to a spirochetal infection. By the mid 1930s, neurologic manifestations associated with Ixodes ticks (also known as deer ticks) were recognized and were known as tick-borne meningoencephalitis. In the 1940s, Bannwarth described several cases of chronic lymphocytic meningitis and polyradiculoneuritis, some of which were accompanied by erythematous skin",
+      "text_sha256": "752c65aba9621ee838afdaee427034c99e5d929d3e2762a4f947774b862ea402"
+    },
+    {
+      "id": "rag-7b50f7c5c90c042a",
+      "chunk_id": "5f0c535325053b5addec_25",
+      "title": "Tick-Borne Diseases: Overview, Biology and Life Cycle of Ticks, Guidelines on the Diagnosis and Management of Tickborne Rickettsial Diseases",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/786652-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "bite__tick_borne_rickettsial_disease"
+      ],
+      "retrieval_queries": [
+        "Tick-borne rickettsial disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3216,
+      "excerpt": "persons with darker pigmented skin. Other tickborne diseases Rickettsia parkeri rickettsiosis is typically milder than RMSF, and the first manifestation in nearly all patients is an inoculation eschar. Symptoms of Ehrlichia chaffeensis ehrlichiosis typically include fever, headache, malaise, myalgia, and gastrointestinal symptoms. With E chaffeensis ehrlichiosis, rash is present in approximately one third of patients but is more common among children than among adults. Neurologic manifestations are reported in approximately 20% of patients with E chaffeensis ehrlichiosis. Increased severity of",
+      "text_sha256": "525cb4a97746e215ea538ea56fa6ae2e9e42d811417dd3f5deead4c8ca6f07bc"
+    },
+    {
+      "id": "rag-a2384a4f6eaa9f73",
+      "chunk_id": "5f0c535325053b5addec_5",
+      "title": "Tick-Borne Diseases: Overview, Biology and Life Cycle of Ticks, Guidelines on the Diagnosis and Management of Tickborne Rickettsial Diseases",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/786652-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "bite__tick_borne_rickettsial_disease"
+      ],
+      "retrieval_queries": [
+        "Tick-borne rickettsial disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3867,
+      "excerpt": "Bourbon virus disease Tick paralysis Tick paralysis is a neurotoxidrome that occurs in individuals with an actively attached tick. It is characterized by vague symptoms of malaise followed by worsening neurologic deficits. Findings may include bulbar symptoms such as diplopia, dysphagia, and dysarthria, as well as ataxia, generalized weakness, and areflexia. Treatment involves finding and removing the tick, which typically allows for complete neurological recovery in a matter of days. More than 40 species can cause paralysis in both animals and humans, including Dermacentor variabilis, the",
+      "text_sha256": "717f6e2301d11b72e9e9c310ae6678c886da528361ba9ffd07fa40770564d5eb"
+    },
+    {
+      "id": "rag-184efd557d5f8336",
+      "chunk_id": "05d9542742cd67567eca_2",
+      "title": "Tick Removal: Background, Indications, Technical Considerations",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1413603-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "bite__tick_borne_rickettsial_disease"
+      ],
+      "retrieval_queries": [
+        "Tick-borne rickettsial disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.444,
+      "excerpt": "virus infection Rickettsia parkeri rickettsiosis Southern tick-associated rash illness (STARI) 346D rickettsiosis In Europe, the list is similar, but other diseases should be considered as well, including boutonneuse fever (caused by a less virulent spotted fever rickettsial organism, Rickettsia conorii) and tick-borne encephalitis. No postexposure treatment is available for tick-borne encephalitis, but vaccines are in use for prevention. Animal and human studies have shown that the risk of Lyme disease transmission increases significantly after 24 hours of attachment and is even higher after",
+      "text_sha256": "a8bb7a2bb05792fa6a272de5b9db9a2919f71e3d08d4f93ff5580ef7e1aa253c"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "bite__tick_borne_rickettsial_disease",
+        "bite__alpha_gal_syndrome"
+      ],
+      "retrieval_queries": [
+        "Tick-borne rickettsial disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Alpha-gal syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.447,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "bite__alpha_gal_syndrome",
+        "bite__allergic_reaction"
+      ],
+      "retrieval_queries": [
+        "Alpha-gal syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Allergic reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4707,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-3a72d4c38d9a0bb7",
+      "chunk_id": "9f7eb5027998a34eb6c2_8",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "bite__alpha_gal_syndrome"
+      ],
+      "retrieval_queries": [
+        "Alpha-gal syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4159,
+      "excerpt": "conduction defects are truly diagnostic only when they coincide with symptoms Loop recorders have a higher diagnostic yield than Holter monitor evaluation, with a marginal cost savings Ambulatory monitoring appears to have a higher negative than positive diagnostic yield Other diagnostic tests and procedures include the following: Head-up tilt-table test - Useful for confirming autonomic dysfunction and can generally be safely arranged on an outpatient basis Electroencephalography (EEG) - Can be performed at the discretion of a neurologist if seizure is considered a likely alternative",
+      "text_sha256": "bce92127a34f3c0ce64d226f3f059473b46561d6c8d76961f1c0a09f5b6874fc"
+    },
+    {
+      "id": "rag-5963b1d8873c91ea",
+      "chunk_id": "297d70c96fc165d2a9a3_1",
+      "title": "Ganser Syndrome: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/287390-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "bite__alpha_gal_syndrome"
+      ],
+      "retrieval_queries": [
+        "Alpha-gal syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4623,
+      "excerpt": "had been in previous editions (e.g., was considered a \"dissociative disorder not otherwise specified\" in the DSM-IV). Signs and symptoms The most well-recognized symptom of Ganser syndrome is the so-called symptom of approximate answers. (is is when a patient responds to questions with an incorrect answer, but by the nature of the answer reveals an understanding of the question posed.(is is in direct contrast to answers that are simply nonsensical, perseverative, or otherwise inappropriate. Ganser syndrome has been observed frequently in conjunction with a marked psychosocial or physical",
+      "text_sha256": "a84d0e3ce68bf88e16a81decec2cba400be7122c1c430f234e38054ab60626a0"
+    },
+    {
+      "id": "rag-02b622cf0e22d994",
+      "chunk_id": "40949ab525cdb33ba040_4",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "bite__wound_infection"
+      ],
+      "retrieval_queries": [
+        "Wound infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5091,
+      "excerpt": "by hemorrhage from both nares, and by visualization of blood draining in the posterior pharynx. Differential Diagnosis The differential diagnosis includes the following: Barotrauma Disseminated Intravascular Coagulation Endometriosis Foreign Bodies, Nose Hemophilia, Type A Hemophilia, Type B Osler-Weber-Rendu syndrome Rhinitis Plant Poisoning, Glycosides - Coumarin Sinusitis Toxicity, Cocaine Toxicity, Nonsteroidal Anti-inflammatory Agents Toxicity, Rodenticide Toxicity, Salicylate Toxicity, Warfarin and Superwarfarins von Willebrand Disease Diagnostic Considerations Other problems to be",
+      "text_sha256": "7fb71c7de80704fe1be64c3cae7c04a246ddeb7d5647ec8fe71d4107e8974654"
+    },
+    {
+      "id": "rag-6de2861f53c8ba52",
+      "chunk_id": "42ce68fce3585e84032d_2",
+      "title": "Iritis and Uveitis: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/798323-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "bite__wound_infection"
+      ],
+      "retrieval_queries": [
+        "Wound infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5121,
+      "excerpt": "Photophobia Blurred vision Increased lacrimation Chronic anterior uveitis presents primarily as blurred vision and mild redness. Patients have little pain or photophobia except when having an acute episode. Posterior uveitis presents as follows : Blurred vision and floaters Absence of symptoms of anterior uveitis (ie, pain, redness, and photophobia) The presence of symptoms of posterior uveitis, redness and pain suggests one of the following: Anterior chamber involvement Bacterial endophthalmitis Posterior scleritis Intermediate uveitis presents as follows : Painless floaters and decreased",
+      "text_sha256": "cf6a3cc6ec1bbe0958f29a1f11479acf0397023cc43ebdd06166ea735c44c8ea"
+    },
+    {
+      "id": "rag-399fee887cf27b3c",
+      "chunk_id": "e2c72cc25f09f98c22a0_7",
+      "title": "HIV-Associated Distal Painful Sensorimotor Polyneuropathy: Overview, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1167783-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "bite__wound_infection"
+      ],
+      "retrieval_queries": [
+        "Wound infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5144,
+      "excerpt": "and intestinal function Physical findings include: Panmodal distal sensory loss Mild distal weakness Hyporeflexia or areflexia Symmetric presentation Autonomic signs (often can be elicited by careful evaluation) Differential Diagnosis The differential diagnosis of distal painful sensorimotor polyneuropathy includes: Acute Inflammatory Demyelinating Polyradiculoneuropathy Chronic Inflammatory Demyelinating Polyradiculoneuropathy Diabetic Neuropathy HIV-Associated Multiple Mononeuropathies Nutritional Neuropathy Toxic Neuropathy Uremic Neuropathy Vitamin B-12 Associated Neurological Diseases",
+      "text_sha256": "83abf917a132967008f669a53e696b83f9f4fb6d0777dc452eec71f4922f1bdb"
+    },
+    {
+      "id": "rag-ff175cd271f88014",
+      "chunk_id": "6abb4726efd0e023f805_11",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "bite__wound_infection"
+      ],
+      "retrieval_queries": [
+        "Wound infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5187,
+      "excerpt": "with predominantly sensory symptoms, those with a distal symmetric disorder (DADS), those with multifocal sensorimotor neuropathy or sensorimotor mononeuropathy multiplex with prominent conduction block (also known as Lewis-Sumner neuropathy), and those with CIDP with associated CNS demyelination or with other systemic disorders. The following disorders are considered distinct from CIDP because they have specific pathophysiologic features and respond to treatments differently than do patients with CIDP: Demyelinating neuropathies associated with immunoglobulin M (IgM) paraproteins, including",
+      "text_sha256": "9bcc687a6e728f319204b3de3fc10d7168b581aebb57ba68bafb0dddb461ee00"
+    },
+    {
+      "id": "rag-f535f7d2452b0d38",
+      "chunk_id": "4a333b8daf252bbcafcd_1",
+      "title": "Toxic Shock Syndrome: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/169177-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "bite__allergic_reaction"
+      ],
+      "retrieval_queries": [
+        "Allergic reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5217,
+      "excerpt": "headache, and nonfocal neurologic abnormalities. See the image below. A 46-year-old man presented with nonnecrotizing cellulitis and streptococcal toxic shock syndrome. The patient had diffuse erythroderma, a characteristic feature of the syndrome. The patient improved with antibiotics and intravenous gammaglobulin therapy. Several days later, a characteristic desquamation of the skin occurred over palms and soles. Courtesy of Rob Green, MD. TSS was first described in children in 1978. Subsequent reports identified an association with tampon use by menstruating women. Menstrual TSS is more",
+      "text_sha256": "26ca000008738031089e37f3efef58bcc8269ac23eaf735f7d7686e20f667032"
+    },
+    {
+      "id": "rag-0ec6cf320b130122",
+      "chunk_id": "5744d7d83e6b58390517_6",
+      "title": "Toxic Neuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1175276-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "bite__allergic_reaction"
+      ],
+      "retrieval_queries": [
+        "Allergic reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5261,
+      "excerpt": "problems began for the patient. Quantitative sensory testing in the diagnosis of neuropathy includes the following: Vibration threshold Thermal threshold Portable motor and sensory latency Current perception threshold (CPT) Other studies that help to prove the presence of neuropathy include the following: Intraepidermal nerve fiber density (IENF) Sympathetic skin reflex Electromyography (EMG) Nerve conduction Laboratory studies in patients with neuropathy can include the following: Glucose tolerance Serum, urine, or blood Vitamin B-12 Monoclonal gammopathy of unknown significance Axonal",
+      "text_sha256": "927d569dd989327dbcc124e2827369b74d7cf1d2ce048502730600b532527ed5"
+    },
+    {
+      "id": "rag-d6f31b383b105961",
+      "chunk_id": "fbd685e392ecebab0f8a_3",
+      "title": "Cryptococcosis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/215354-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "bite__allergic_reaction"
+      ],
+      "retrieval_queries": [
+        "Allergic reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5451,
+      "excerpt": "symptoms are as follows: Headache Confusion Lethargy Obtundation Coma Normal or mildly elevated temperature Nausea and vomiting (with increased intracranial pressure) Fever and stiff neck (with an aggressive inflammatory response; less common) Blurred vision, photophobia, and diplopia Hearing defects, seizures, ataxia, aphasia, and choreoathetoid movements After lung and CNS infection, the next most commonly involved organs in disseminated cryptococcosis include the skin, the prostate, and the medullary cavity of bones. Cutaneous manifestations (10-15% of cases) are as follows: Papules,",
+      "text_sha256": "cd6894b891887c2d6b13a8a6f188010eea89832770df19f07b9e69104d12250c"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "bite__lyme_disease",
+      "name": "Lyme disease",
+      "retrieval_query": "Lyme disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-b47422e50134c735",
+        "rag-dcfb333a49cc8e48"
+      ],
+      "disease_rag_source_ids": [
+        "rag-a17a88cf643fd7db",
+        "rag-eaa95978d634c800",
+        "rag-d002eda8880551d5"
+      ]
+    },
+    {
+      "id": "bite__tick_borne_rickettsial_disease",
+      "name": "Tick-borne rickettsial disease",
+      "retrieval_query": "Tick-borne rickettsial disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-5bb6be615f7d4044"
+      ],
+      "disease_rag_source_ids": [
+        "rag-7b50f7c5c90c042a",
+        "rag-a2384a4f6eaa9f73",
+        "rag-184efd557d5f8336",
+        "rag-f09c5253c7a82445"
+      ]
+    },
+    {
+      "id": "bite__alpha_gal_syndrome",
+      "name": "Alpha-gal syndrome",
+      "retrieval_query": "Alpha-gal syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-5bb6be615f7d4044"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-5bcac9eab5404341",
+        "rag-3a72d4c38d9a0bb7",
+        "rag-5963b1d8873c91ea"
+      ]
+    },
+    {
+      "id": "bite__wound_infection",
+      "name": "Wound infection",
+      "retrieval_query": "Wound infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-da72a4f7e9e54847"
+      ],
+      "disease_rag_source_ids": [
+        "rag-02b622cf0e22d994",
+        "rag-6de2861f53c8ba52",
+        "rag-399fee887cf27b3c",
+        "rag-ff175cd271f88014"
+      ]
+    },
+    {
+      "id": "bite__allergic_reaction",
+      "name": "Allergic reaction",
+      "retrieval_query": "Allergic reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-80a1512617e77243",
+        "rag-5bb6be615f7d4044"
+      ],
+      "disease_rag_source_ids": [
+        "rag-5bcac9eab5404341",
+        "rag-f535f7d2452b0d38",
+        "rag-0ec6cf320b130122",
+        "rag-d6f31b383b105961"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "bite",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-a17a88cf643fd7db",
+        "rag-eaa95978d634c800",
+        "rag-d002eda8880551d5",
+        "rag-7b50f7c5c90c042a",
+        "rag-a2384a4f6eaa9f73",
+        "rag-f09c5253c7a82445",
+        "rag-5bcac9eab5404341",
+        "rag-3a72d4c38d9a0bb7",
+        "rag-5963b1d8873c91ea",
+        "rag-02b622cf0e22d994",
+        "rag-6de2861f53c8ba52",
+        "rag-399fee887cf27b3c",
+        "rag-ff175cd271f88014",
+        "rag-f535f7d2452b0d38",
+        "rag-0ec6cf320b130122",
+        "rag-d6f31b383b105961"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "bite__lyme_disease__erythema_migrans",
+        "description": "在被咬傷處出現特徵性的擴散性皮疹（遊走性紅斑）。",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bite__lyme_disease"
+        ],
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "code": "bite__lyme_disease__nonspecific_symptoms",
+        "description": "出現疲勞、肌肉痠痛、關節痛、頭痛、發燒、畏寒或頸部僵硬等非特異性症狀。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bite__lyme_disease"
+        ],
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "code": "bite__lyme_disease__neurologic_symptoms",
+        "description": "出現腦膜腦炎、疼痛性感覺神經根炎或顱神經麻痺等神經系統症狀。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "bite__lyme_disease"
+        ],
+        "source_ids": [
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "code": "bite__tick_borne_rickettsial_disease__fever",
+        "description": "發燒",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bite__tick_borne_rickettsial_disease"
+        ],
+        "source_ids": [
+          "rag-7b50f7c5c90c042a"
+        ]
+      },
+      {
+        "code": "bite__tick_borne_rickettsial_disease__headache",
+        "description": "頭痛",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bite__tick_borne_rickettsial_disease"
+        ],
+        "source_ids": [
+          "rag-7b50f7c5c90c042a"
+        ]
+      },
+      {
+        "code": "bite__tick_borne_rickettsial_disease__gastrointestinal_symptoms",
+        "description": "噁心、嘔吐或腹痛等腸胃道症狀",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bite__tick_borne_rickettsial_disease"
+        ],
+        "source_ids": [
+          "rag-7b50f7c5c90c042a"
+        ]
+      },
+      {
+        "code": "bite__tick_borne_rickettsial_disease__rash",
+        "description": "皮疹",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bite__tick_borne_rickettsial_disease"
+        ],
+        "source_ids": [
+          "rag-7b50f7c5c90c042a"
+        ]
+      },
+      {
+        "code": "bite__tick_borne_rickettsial_disease__neurologic_manifestations",
+        "description": "神經學症狀，如複視、吞嚥困難、構音困難、運動失調、全身無力或反射消失",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "bite__tick_borne_rickettsial_disease"
+        ],
+        "source_ids": [
+          "rag-7b50f7c5c90c042a",
+          "rag-a2384a4f6eaa9f73"
+        ]
+      },
+      {
+        "code": "bite__alpha_gal_syndrome__urticaria",
+        "description": "出現蕁麻疹",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "bite__alpha_gal_syndrome"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-5963b1d8873c91ea"
+        ]
+      },
+      {
+        "code": "bite__alpha_gal_syndrome__angioedema",
+        "description": "血管性水腫 (例如臉部、嘴唇、舌頭腫脹)",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "bite__alpha_gal_syndrome"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-5963b1d8873c91ea"
+        ]
+      },
+      {
+        "code": "bite__wound_infection__fever",
+        "description": "Fever associated with a bite wound.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "bite__wound_infection"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "code": "bite__wound_infection__swelling",
+        "description": "Swelling around a bite wound.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bite__wound_infection"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "code": "bite__wound_infection__cellulitis",
+        "description": "Spreading redness (cellulitis) around a bite wound.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bite__wound_infection"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "code": "bite__wound_infection__pain",
+        "description": "Pain at the site of a bite wound.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bite__wound_infection"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "code": "bite__wound_infection__blister",
+        "description": "Blistering at or near the site of a bite.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "code": "bite__wound_infection__rash_spreading",
+        "description": "A rash that is spreading from the bite area.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "code": "bite__wound_infection__numbness",
+        "description": "Numbness at or near the site of a bite.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "code": "bite__wound_infection__bite_systemic_breathing_difficulty",
+        "description": "Difficulty breathing, shortness of breath, or wheezing after a bite.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "code": "bite__wound_infection__bite_systemic_anaphylaxis_signs",
+        "description": "Signs of a severe allergic reaction such as hives, itching, or swelling of the face, lips, or tongue after a bite.",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "code": "bite__allergic_reaction__urticaria",
+        "description": "出現蕁麻疹或皮疹。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "bite__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-d6f31b383b105961"
+        ]
+      },
+      {
+        "code": "bite__allergic_reaction__angioedema",
+        "description": "臉部、嘴唇、舌頭或身體其他部位腫脹。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "bite__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-d6f31b383b105961"
+        ]
+      },
+      {
+        "code": "bite__allergic_reaction__anaphylaxis",
+        "description": "出現嚴重過敏反應，可能包含呼吸困難、喘鳴或休克。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "bite__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-d6f31b383b105961"
+        ]
+      },
+      {
+        "code": "bite__allergic_reaction__headache",
+        "description": "頭痛。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bite__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-f535f7d2452b0d38",
+          "rag-d6f31b383b105961"
+        ]
+      },
+      {
+        "code": "bite__allergic_reaction__nausea_vomiting",
+        "description": "噁心或嘔吐。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bite__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-d6f31b383b105961"
+        ]
+      },
+      {
+        "code": "bite__allergic_reaction__paresthesia",
+        "description": "感覺異常或麻木。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bite__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "local_symptom_changes",
+        "option": "皮疹擴散",
+        "mapping": {
+          "findings": [
+            "bite__lyme_disease__erythema_migrans",
+            "bite__wound_infection__rash_spreading"
+          ]
+        },
+        "disease_ids": [
+          "bite__lyme_disease"
+        ],
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5",
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "field": "systemic_symptoms",
+        "option": "發燒或發冷畏寒",
+        "mapping": {
+          "findings": [
+            "bite__lyme_disease__nonspecific_symptoms",
+            "bite__tick_borne_rickettsial_disease__fever",
+            "bite__wound_infection__fever"
+          ]
+        },
+        "disease_ids": [
+          "bite__lyme_disease",
+          "bite__tick_borne_rickettsial_disease",
+          "bite__wound_infection"
+        ],
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5",
+          "rag-7b50f7c5c90c042a",
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "field": "systemic_symptoms",
+        "option": "頭痛、頭暈、無力或麻木",
+        "mapping": {
+          "findings": [
+            "bite__lyme_disease__nonspecific_symptoms",
+            "bite__lyme_disease__neurologic_symptoms",
+            "bite__tick_borne_rickettsial_disease__headache",
+            "bite__tick_borne_rickettsial_disease__neurologic_manifestations",
+            "bite__allergic_reaction__headache",
+            "bite__allergic_reaction__paresthesia"
+          ]
+        },
+        "disease_ids": [
+          "bite__lyme_disease",
+          "bite__tick_borne_rickettsial_disease",
+          "bite__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5",
+          "rag-7b50f7c5c90c042a",
+          "rag-a2384a4f6eaa9f73",
+          "rag-f535f7d2452b0d38",
+          "rag-d6f31b383b105961",
+          "rag-5bcac9eab5404341"
+        ]
+      },
+      {
+        "field": "systemic_symptoms",
+        "option": "咬傷處有紅腫、皮疹或是水泡",
+        "mapping": {
+          "findings": [
+            "bite__tick_borne_rickettsial_disease__rash",
+            "bite__wound_infection__cellulitis",
+            "bite__wound_infection__rash_spreading",
+            "bite__wound_infection__blister",
+            "bite__allergic_reaction__urticaria"
+          ]
+        },
+        "disease_ids": [
+          "bite__tick_borne_rickettsial_disease",
+          "bite__wound_infection",
+          "bite__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-7b50f7c5c90c042a",
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-d6f31b383b105961"
+        ]
+      },
+      {
+        "field": "systemic_symptoms",
+        "option": "噁心、嘔吐或腹痛",
+        "mapping": {
+          "findings": [
+            "bite__tick_borne_rickettsial_disease__gastrointestinal_symptoms",
+            "bite__allergic_reaction__nausea_vomiting"
+          ]
+        },
+        "disease_ids": [
+          "bite__tick_borne_rickettsial_disease",
+          "bite__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-7b50f7c5c90c042a",
+          "rag-d6f31b383b105961"
+        ]
+      },
+      {
+        "field": "systemic_symptoms",
+        "option": "出現蕁麻疹、癢、或臉部、嘴唇、舌頭腫脹",
+        "mapping": {
+          "findings": [
+            "bite__alpha_gal_syndrome__urticaria",
+            "bite__alpha_gal_syndrome__angioedema",
+            "bite__wound_infection__bite_systemic_anaphylaxis_signs",
+            "bite__allergic_reaction__urticaria",
+            "bite__allergic_reaction__angioedema"
+          ]
+        },
+        "disease_ids": [
+          "bite__alpha_gal_syndrome",
+          "bite__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-5963b1d8873c91ea",
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-d6f31b383b105961"
+        ]
+      },
+      {
+        "field": "initial_reaction",
+        "option": "腫脹",
+        "mapping": {
+          "findings": [
+            "bite__wound_infection__swelling"
+          ]
+        },
+        "disease_ids": [
+          "bite__wound_infection"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "field": "initial_reaction",
+        "option": "紅腫",
+        "mapping": {
+          "findings": [
+            "bite__wound_infection__cellulitis"
+          ]
+        },
+        "disease_ids": [
+          "bite__wound_infection"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "field": "initial_reaction",
+        "option": "即時疼痛",
+        "mapping": {
+          "findings": [
+            "bite__wound_infection__pain"
+          ]
+        },
+        "disease_ids": [
+          "bite__wound_infection"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "field": "local_symptom_changes",
+        "option": "紅腫加劇",
+        "mapping": {
+          "findings": [
+            "bite__wound_infection__cellulitis"
+          ]
+        },
+        "disease_ids": [
+          "bite__wound_infection"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "field": "local_symptom_changes",
+        "option": "腫脹",
+        "mapping": {
+          "findings": [
+            "bite__wound_infection__swelling"
+          ]
+        },
+        "disease_ids": [
+          "bite__wound_infection"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "field": "local_symptom_changes",
+        "option": "麻木",
+        "mapping": {
+          "findings": [
+            "bite__wound_infection__numbness"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "field": "local_symptom_changes",
+        "option": "水泡",
+        "mapping": {
+          "findings": [
+            "bite__wound_infection__blister"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "field": "systemic_symptoms",
+        "option": "咬傷周圍或身體其他部位有腫脹",
+        "mapping": {
+          "findings": [
+            "bite__wound_infection__swelling",
+            "bite__allergic_reaction__angioedema"
+          ]
+        },
+        "disease_ids": [
+          "bite__wound_infection",
+          "bite__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-d6f31b383b105961"
+        ]
+      },
+      {
+        "field": "systemic_symptoms",
+        "option": "呼吸困難、呼吸急促或喘鳴",
+        "mapping": {
+          "findings": [
+            "bite__wound_infection__bite_systemic_breathing_difficulty",
+            "bite__allergic_reaction__anaphylaxis"
+          ]
+        },
+        "disease_ids": [
+          "bite__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-d6f31b383b105961"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "bite__lyme_disease",
+        "name": "Lyme disease",
+        "must_not_miss": false,
+        "retrieval_query": "Lyme disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "bite__lyme_disease__erythema_migrans",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-a17a88cf643fd7db",
+              "rag-eaa95978d634c800",
+              "rag-d002eda8880551d5"
+            ]
+          },
+          {
+            "fact": "bite__lyme_disease__nonspecific_symptoms",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-a17a88cf643fd7db",
+              "rag-eaa95978d634c800",
+              "rag-d002eda8880551d5"
+            ]
+          },
+          {
+            "fact": "bite__lyme_disease__neurologic_symptoms",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-d002eda8880551d5"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "id": "bite__tick_borne_rickettsial_disease",
+        "name": "Tick-borne rickettsial disease",
+        "must_not_miss": false,
+        "retrieval_query": "Tick-borne rickettsial disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "bite__tick_borne_rickettsial_disease__fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-7b50f7c5c90c042a"
+            ]
+          },
+          {
+            "fact": "bite__tick_borne_rickettsial_disease__headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-7b50f7c5c90c042a"
+            ]
+          },
+          {
+            "fact": "bite__tick_borne_rickettsial_disease__gastrointestinal_symptoms",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-7b50f7c5c90c042a"
+            ]
+          },
+          {
+            "fact": "bite__tick_borne_rickettsial_disease__rash",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-7b50f7c5c90c042a"
+            ]
+          },
+          {
+            "fact": "bite__tick_borne_rickettsial_disease__neurologic_manifestations",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-7b50f7c5c90c042a",
+              "rag-a2384a4f6eaa9f73"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-7b50f7c5c90c042a",
+          "rag-a2384a4f6eaa9f73"
+        ]
+      },
+      {
+        "id": "bite__alpha_gal_syndrome",
+        "name": "Alpha-gal syndrome",
+        "must_not_miss": false,
+        "retrieval_query": "Alpha-gal syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "bite__alpha_gal_syndrome__urticaria",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-5bcac9eab5404341",
+              "rag-3a72d4c38d9a0bb7",
+              "rag-5963b1d8873c91ea"
+            ]
+          },
+          {
+            "fact": "bite__alpha_gal_syndrome__angioedema",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-5bcac9eab5404341",
+              "rag-3a72d4c38d9a0bb7",
+              "rag-5963b1d8873c91ea"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-5963b1d8873c91ea"
+        ]
+      },
+      {
+        "id": "bite__wound_infection",
+        "name": "Wound infection",
+        "must_not_miss": false,
+        "retrieval_query": "Wound infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "bite__wound_infection__fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-02b622cf0e22d994",
+              "rag-6de2861f53c8ba52",
+              "rag-399fee887cf27b3c",
+              "rag-ff175cd271f88014"
+            ]
+          },
+          {
+            "fact": "bite__wound_infection__cellulitis",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-02b622cf0e22d994",
+              "rag-6de2861f53c8ba52",
+              "rag-399fee887cf27b3c",
+              "rag-ff175cd271f88014"
+            ]
+          },
+          {
+            "fact": "bite__wound_infection__swelling",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-02b622cf0e22d994",
+              "rag-6de2861f53c8ba52",
+              "rag-399fee887cf27b3c",
+              "rag-ff175cd271f88014"
+            ]
+          },
+          {
+            "fact": "bite__wound_infection__pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-02b622cf0e22d994",
+              "rag-6de2861f53c8ba52",
+              "rag-399fee887cf27b3c",
+              "rag-ff175cd271f88014"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "id": "bite__allergic_reaction",
+        "name": "Allergic reaction",
+        "must_not_miss": false,
+        "retrieval_query": "Allergic reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "bite__allergic_reaction__urticaria",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-5bcac9eab5404341",
+              "rag-f535f7d2452b0d38",
+              "rag-0ec6cf320b130122",
+              "rag-d6f31b383b105961"
+            ]
+          },
+          {
+            "fact": "bite__allergic_reaction__angioedema",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-5bcac9eab5404341",
+              "rag-f535f7d2452b0d38",
+              "rag-0ec6cf320b130122",
+              "rag-d6f31b383b105961"
+            ]
+          },
+          {
+            "fact": "bite__allergic_reaction__anaphylaxis",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-5bcac9eab5404341",
+              "rag-f535f7d2452b0d38",
+              "rag-0ec6cf320b130122",
+              "rag-d6f31b383b105961"
+            ]
+          },
+          {
+            "fact": "bite__allergic_reaction__headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f535f7d2452b0d38",
+              "rag-d6f31b383b105961"
+            ]
+          },
+          {
+            "fact": "bite__allergic_reaction__nausea_vomiting",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-d6f31b383b105961"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-d6f31b383b105961"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_bite__lyme_disease__neurologic_symptoms",
+        "label": "Neurologic symptoms following a bite",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "bite"
+          ],
+          "any_findings": [
+            "bite__lyme_disease__neurologic_symptoms"
+          ]
+        },
+        "possible_conditions": [
+          "Lyme disease with neurologic involvement (e.g., meningoencephalitis, radiculitis)"
+        ],
+        "source_ids": [
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "code": "experimental_bite__tick_borne_rickettsial_disease__neurologic_deficits",
+        "label": "Neurologic symptoms after a tick bite",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "bite"
+          ],
+          "any_findings": [
+            "bite__tick_borne_rickettsial_disease__neurologic_manifestations"
+          ]
+        },
+        "possible_conditions": [
+          "Tick paralysis",
+          "Ehrlichiosis with neurologic manifestations"
+        ],
+        "source_ids": [
+          "rag-7b50f7c5c90c042a",
+          "rag-a2384a4f6eaa9f73"
+        ]
+      },
+      {
+        "code": "experimental_bite__wound_infection__experimental_bite_anaphylaxis",
+        "label": "Signs of a severe allergic reaction (anaphylaxis) after a bite",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "bite"
+          ],
+          "any_findings": [
+            "bite__wound_infection__bite_systemic_breathing_difficulty",
+            "bite__wound_infection__bite_systemic_anaphylaxis_signs"
+          ]
+        },
+        "possible_conditions": [
+          "Anaphylaxis"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "code": "experimental_bite__allergic_reaction__anaphylaxis_symptoms",
+        "label": "Signs of a severe allergic reaction (anaphylaxis)",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "bite"
+          ],
+          "any_findings": [
+            "bite__allergic_reaction__anaphylaxis",
+            "bite__allergic_reaction__angioedema"
+          ]
+        },
+        "possible_conditions": [
+          "Anaphylaxis"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-d6f31b383b105961"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create a fact for the specific type of tick (lone star tick) associated with Alpha-gal syndrome.",
+        "reason": "The questionnaire does not ask for the specific type of animal or insect beyond a free-text field, making it impossible to create a structured fact for a specific tick species."
+      },
+      {
+        "requirement": "Create a fact related to the patient's diet, specifically red meat consumption, which is a key trigger for Alpha-gal syndrome.",
+        "reason": "The questionnaire does not inquire about dietary habits or triggers related to food consumption."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[3], semantic_options[0], semantic_options[1], semantic_options[2], profiles[0], profiles[0].clues[0], profiles[0].clues[1], profiles[0].clues[2]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-7b50f7c5c90c042a",
+          "rag-a2384a4f6eaa9f73"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The evidence for Alpha-gal syndrome is based on a single source document. The link between a general 'bite' and this specific delayed food allergy is indirect and relies on the bite being from a specific type of tick, which is not explicitly captured in the questionnaire. The profile is proposed but should be considered with caution due to the limited and indirect evidence.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-5963b1d8873c91ea"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-5963b1d8873c91ea"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], fact_proposals[4], semantic_options[0], safety_proposals[0], profiles[0], profiles[0].clues[0], profiles[0].clues[1], profiles[0].clues[2]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-5963b1d8873c91ea"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "Local compiler mechanically namespaced generated codes and updated all internal references; no clinical values or conditions were changed.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], fact_proposals[4], fact_proposals[5], fact_proposals[6], fact_proposals[7], fact_proposals[8], fact_proposals[9], fact_proposals[10]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-6de2861f53c8ba52",
+          "rag-399fee887cf27b3c",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[5], safety_proposals[0], profiles[0], profiles[0].clues[0], profiles[0].clues[1]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-d6f31b383b105961"
+        ]
+      }
+    ]
+  }
+}

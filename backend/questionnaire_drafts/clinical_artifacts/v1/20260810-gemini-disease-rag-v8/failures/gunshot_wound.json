@@ -1,0 +1,7 @@
+{
+  "route": "gunshot_wound",
+  "status": "failed",
+  "error_type": "RuntimeError",
+  "error": "Gemini 在 3 次內未產生有效 artifact：ValueError: fact_proposals[0] 欄位不符合 schema",
+  "failed_at": "2026-08-10T04:07:35+00:00"
+}

@@ -1,0 +1,327 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "dizziness",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "5047b3e9f66211929b5066375ef45d91185e1a0d90666ba3d5a7b5e61cc1a69d",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history",
+      "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "5f33991951749f58dde979a2066c44e3181de30f1fbec7d545154b8290a97e4c"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "bba03c8f329ace4a4a467633ee42f77f26e5215421a339c178191e58500808e4",
+    "generated_at": "2026-08-10T04:00:48+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-e5ea3eafe991e33a",
+      "chunk_id": "fb667a66b0c052e9418e_2",
+      "title": "Hemorrhagic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916662-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history",
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3018,
+      "excerpt": "Puzzles slideshow to help recognize diagnostic clues in vertigo cases. Signs and symptoms Patients with intracerebral bleeds are more likely than those with ischemic stroke to have headache, altered mental status, seizures, nausea and vomiting, and/or marked hypertension. Even so, none of these findings reliably distinguishes between hemorrhagic and ischemic stroke. Focal neurologic deficits The type of deficit depends on the area of brain involved. If the dominant (usually the left) hemisphere is involved, a syndrome consisting of the following may result: Right hemiparesis Right hemisensory",
+      "text_sha256": "d46a05c09019859b4bb142e4b7ab6e3eab8771922c2987f776b61d11724c2bfa"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history",
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3812,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-50ca2f8e23f83778",
+      "chunk_id": "e08f5e1e7bad8a17621b_10",
+      "title": "Central Vertigo: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794789-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history",
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.2439,
+      "excerpt": "by peripheral disease should not necessarily be expected in central vertigo. A study of the rate and predictors of CNS disease in emergency department patients with dizziness, vertigo, or imbalance found that most cases were benign, although a substantial fraction of patients had serious neurologic disease. Of 907 patients experiencing dizziness (mean age, 59 years; 58% women [n=529]), 49 (5%) had a serious neurologic diagnosis, including 37 cerebrovascular events. Dizziness was often caused by benign conditions, such as peripheral vertigo (294 patients [32%]) or orthostatic hypotension (121",
+      "text_sha256": "c2a4c4396cc1716a136476b6086746ea78020ab7f2038af15d59e0d3895dbfad"
+    },
+    {
+      "id": "rag-da206d8bd5416019",
+      "chunk_id": "946610927a231214762d_22",
+      "title": "Perilymphatic Fistula: Practice Essentials, History of the Procedure, Problem",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/856806-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history",
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3393,
+      "excerpt": "83% of their patients with traumatic PLF had complaints of sudden or fluctuating sensorineural loss. Vestibular symptoms occur in most patients. Balance disturbance can be described as true rotational vertigo, lightheadedness, disequilibrium, intolerance to motion, or any combination of these symptoms. Seltzer and McCabe reported such symptoms in 80% of patients with PLF, and Glasscock et al reported 77% incidence of true vertigo or disequilibrium. In obvious cases, membrane rupture is accompanied (or followed within a few minutes) by rapid, severe hearing loss; loud, roaring tinnitus; and",
+      "text_sha256": "a79c30850371ebf43b86678f5bbe5abd48fa69820142c3d688ca414ddc51d83b"
+    },
+    {
+      "id": "rag-d61360e166d7fe23",
+      "chunk_id": "946610927a231214762d_23",
+      "title": "Perilymphatic Fistula: Practice Essentials, History of the Procedure, Problem",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/856806-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3605,
+      "excerpt": "within a few minutes) by rapid, severe hearing loss; loud, roaring tinnitus; and severe rotational vertigo. Vertigo is often incapacitating and accompanied by visceral symptoms (eg, sweating, pallor, nausea, vomiting). Even cursory examination demonstrates marked instability and nystagmus. Audiometric evaluation reveals sensorineural hearing loss. Platform posturography confirms disequilibrium with a vestibular pattern, and platform fistula test results are positive. Vertigo and, to a lesser degree, tinnitus and hearing loss are sometimes exacerbated by straining (the Valsalva maneuver).",
+      "text_sha256": "46b00ddbfe9d4d2091419e5239b63de571df56c6ca17eb375ce8916a22146a6b"
+    },
+    {
+      "id": "rag-ea596981644e0fc2",
+      "chunk_id": "e08f5e1e7bad8a17621b_0",
+      "title": "Central Vertigo: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794789-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3183,
+      "excerpt": "Overview Background Central vertigo is vertigo due to a disease originating from the central nervous system (CNS). In clinical practice, it often includes lesions of cranial nerve VIII as well. Individuals with vertigo experience hallucinations of motion of their surroundings. Central vertigo may be caused by hemorrhagic or ischemic insults to the cerebellum (see the image below), the vestibular nuclei, and their connections within the brain stem. Other causes include CNS tumors, infection, trauma, and multiple sclerosis. CT scan of a patient with an acute spontaneous cerebellar hemorrhage.",
+      "text_sha256": "f51dd67d76b69e8fdc451b94dcacaa1753d7b94a3285bbce8985b162abf13a00"
+    },
+    {
+      "id": "rag-0a562fba6ef89a31",
+      "chunk_id": "689b3d55803f83765ad0_45",
+      "title": "Dysbarism: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769902-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history",
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.327,
+      "excerpt": "descent, when the differences in middle ear pressures on each side are greater, the unbalanced stimulation may cause alternobaric vertigo. This vertigo can persist for several days. Finally, vertigo may be caused by inner ear DCS. In inner ear DCS, vertigo was the major presenting complaint. In contrast to this, in dysbaric barotrauma, vertigo was not found to be the presenting complaint or a significant problem. Instead, those patients complained of tinnitus and hearing loss. For more on inner ear DCS, please see the article on Decompression Sickness. Divers who experience inner ear DCS or",
+      "text_sha256": "e15c9c8dad2f50b5d75589839fdd9374b7162970c0cc98018194db217e17ec48"
+    },
+    {
+      "id": "rag-3f94ff6ad0365222",
+      "chunk_id": "0e015057c60c6e6987b9_55",
+      "title": "Decompression Sickness: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769717-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3837,
+      "excerpt": "causes a combination of nausea, vomiting, vertigo, and nystagmus, in addition to tinnitus and partial deafness. This alternobaric vertigo can be difficult to differentiate from dysbaric eustachian tube dysfunction. A history of eustachian tube problems depicted by past otitis media, past eustachian tube dysfunction, and problems equalizing pressure in the ears during the dive is associated with an increased prevalence of alternobaric vertigo. In inner-ear DCS (IEDCS), vertigo was the major presenting complaint in 77-100%. Hearing loss occurred in 6-40% and a combination of both in 18%.",
+      "text_sha256": "15e59ecb690cab1f944c4044b23d9097eb11ecdefb70a8c6db98e7ea2d14700a"
+    },
+    {
+      "id": "rag-eedb84403963e781",
+      "chunk_id": "edce4b7d7d015e5a6ec6_8",
+      "title": "Benign Positional Vertigo in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/791414-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4583,
+      "excerpt": "who were discharged home from the ED with a diagnosis of isolated dizziness or vertigo and determined that stroke occurs in less than 1 in 500 patients within the first month. rebrovascular risk factors should be considered for individual patients. Clinical Presentation",
+      "text_sha256": "e945511da535bdaa1b2a0f17b6f484206ca91d01a7276b5701d3f1d4e0ab03a3"
+    },
+    {
+      "id": "rag-3074fafca96e9376",
+      "chunk_id": "53fc3e4f98765d889be9_15",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5111,
+      "excerpt": "encephalitis, headache, mental status change, hydrocephalus, ischemic disease and infarction, suspected pituitary dysfunction, inflammation or infection of the brain or meninges or their complications, demyelination and dysmyelination disorders, vascular malformations, and arterial or venous/dural sinus abnormalities. Patients who have cardiac pacemakers, ferromagnetic intracranial aneurysm clips, and certain ferromagnetic foreign bodies or electronic devices or implants should not undergo MRI. The routine MRI protocol varies considerably based on strength of the unit's field, machine",
+      "text_sha256": "efd6bcf781abb9e97e13fb806d50dc265fab9d450d001ad3cde9e6629777e105"
+    },
+    {
+      "id": "rag-bb184b814cb80dda",
+      "chunk_id": "5eb9b00069b052a70566_7",
+      "title": "Postconcussion Syndrome: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/828904-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5309,
+      "excerpt": "vertigo, and nausea; psychological and neurovegetative problems such as anxiety, depression, or sleep disturbance; and cognitive impairment such as memory loss and decreased ability to concentrate. Imaging modalities such as MRI, SPECT, and MEG have been shown to be more sensitive than CT at detecting brain injuries associated with postconcussion syndrome. Patients with the symptom constellation consistent with postconcussion syndrome require thorough physical and neurological examinations. A CT scan should be obtained if significant concern about intracranial hemorrhage exists. See%diatric",
+      "text_sha256": "0d1e29531081c3fa0331975e36371efd9ffe00b7b5c8e347da76bb5d596a723b"
+    }
+  ],
+  "discovery": {
+    "route": "dizziness",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "dizziness__central_vertigo",
+        "name": "Central Vertigo",
+        "rationale": "Central vertigo originates from the central nervous system (CNS) and can be caused by hemorrhagic or ischemic insults to the cerebellum or brain stem, tumors, infection, trauma, or multiple sclerosis. It is a key differential for vertigo. Associated symptoms like focal neurologic deficits, headache, and altered mental status are important to consider.",
+        "source_ids": [
+          "rag-ea596981644e0fc2",
+          "rag-50ca2f8e23f83778"
+        ]
+      },
+      {
+        "id": "dizziness__hemorrhagic_stroke",
+        "name": "Hemorrhagic Stroke",
+        "rationale": "Patients with intracerebral bleeds can present with symptoms that overlap with ischemic stroke, including headache, altered mental status, seizures, nausea, and vomiting. The questionnaire asks about focal neurologic deficits (hand/foot weakness, numbness, difficulty speaking/walking) and severe/sudden headache, which are key symptoms.",
+        "source_ids": [
+          "rag-e5ea3eafe991e33a"
+        ]
+      },
+      {
+        "id": "dizziness__perilymphatic_fistula",
+        "name": "Perilymphatic Fistula",
+        "rationale": "This condition can cause true rotational vertigo, lightheadedness, or disequilibrium, often accompanied by hearing loss and tinnitus. The questionnaire specifically asks about hearing changes and tinnitus. A history of head trauma, which is also queried, can be a cause.",
+        "source_ids": [
+          "rag-da206d8bd5416019",
+          "rag-d61360e166d7fe23"
+        ]
+      },
+      {
+        "id": "dizziness__benign_paroxysmal_positional_vertigo",
+        "name": "Benign Paroxysmal Positional Vertigo",
+        "rationale": "This is a common cause of vertigo. The questionnaire asks about triggers like 'turning the head' and 'certain activities and postures', which are classic for BPPV. While the provided text focuses on its low risk for stroke, it establishes it as a primary diagnosis in the ED for dizziness.",
+        "source_ids": [
+          "rag-eedb84403963e781"
+        ]
+      },
+      {
+        "id": "dizziness__syncope",
+        "name": "Syncope",
+        "rationale": "The questionnaire includes sensations like 'feeling faint' (要暈倒) and associated symptoms such as chest pain, palpitations, and dyspnea. These are identified as red flag symptoms in the context of syncope, making it a relevant differential for a patient presenting with dizziness.",
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "id": "dizziness__post_concussion_syndrome",
+        "name": "Post-concussion syndrome",
+        "rationale": "This syndrome can present with dizziness, vertigo, nausea, anxiety, and cognitive impairment following a head injury. The questionnaire specifically asks about a preceding history of head trauma, making this a relevant potential diagnosis.",
+        "source_ids": [
+          "rag-bb184b814cb80dda"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The initial RAG sources provide a strong basis for differentiating central vs. peripheral causes of vertigo and identifying red flag symptoms associated with serious neurologic or cardiac conditions. The questionnaire effectively screens for many of these, including focal deficits, headache, chest pain, and specific triggers.",
+        "source_ids": [
+          "rag-e5ea3eafe991e33a",
+          "rag-f09c5253c7a82445",
+          "rag-50ca2f8e23f83778"
+        ]
+      }
+    ]
+  }
+}

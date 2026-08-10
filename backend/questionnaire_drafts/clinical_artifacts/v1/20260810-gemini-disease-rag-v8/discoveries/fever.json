@@ -1,0 +1,415 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "fever",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "e4a2a5b6599b6073734ec8ef09c6d42e39ab3284b2635b71e656b69147bea31d",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "fever fever differential diagnosis diseases clinical presentation symptoms history",
+      "fever fever red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "4abc74b6064f41060fc8fdb6aed8177a82bdf6ec12cb771ac57ff062f5e015e4"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "f115901cb3ff3029457ed465ba60818ae34be3b21eaa174ba8d54298dbcf8000",
+    "generated_at": "2026-08-10T04:04:53+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-2bd559b5496c39e1",
+      "chunk_id": "5039574c392446d9404b_1",
+      "title": "Rheumatic Fever: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/236582-overview",
+      "routes": [
+        "headache",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3642,
+      "excerpt": "Clinical manifestations and time course. Pathophysiology ARF is characterized by nonsuppurative inflammatory lesions of the joints, heart, subcutaneous tissue, and central nervous system. An extensive literature search has shown that, at least in developed countries, rheumatic fever follows pharyngeal infection with rheumatogenic group A streptococci. The risk of developing rheumatic fever after an episode of streptococcal pharyngitis has been estimated at 0.3-3%. Investigations of rheumatic fever occurring in the aboriginal populations of Australia suggest that streptococcal skin infections",
+      "text_sha256": "c1641db1df64dd9ab99a3d6d163294920155159b8d63be6110df9709c0fd41de"
+    },
+    {
+      "id": "rag-df30ee352c228b98",
+      "chunk_id": "a663d18c5f77da4d66fd_26",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3162,
+      "excerpt": "specific meningeal signs, such as the Kernig or Brudzinski sign, may not be present. A hemorrhagic rash is classically described as resulting from overwhelming systemic bacterial infection due to meningococcemia but may be due to other (usually serious) infections. The presence of petechiae or purpura in febrile children indicates the need for prompt evaluation and therapy. Clinical observation scales have been developed to aid in the determination of the degree of illness. Clinical observation by house staff and seasoned clinicians has produced inconsistent results over the reliability and",
+      "text_sha256": "b03f8637294b3e707e6947f97f5ce6c6972647fa1b7817bd9b5c591b70b9bcf1"
+    },
+    {
+      "id": "rag-d0da7d31f8cfa17e",
+      "chunk_id": "20e49fc9d5997e5585a9_14",
+      "title": "Dermatologic Manifestations of Viral Hemorrhagic Fevers: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1134475-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.317,
+      "excerpt": "in hemorrhagic fever with different complications, symptoms, and severity, as previously discussed. See the list below : Flaviviruses: Yellow fever, dengue, Kyasanur Forest disease, Alkhumra viruses, Omsk hemorrhagic fever Filoviruses: Ebola and Marburg virus Arenaviruses: Lassa and other Old World arenaviruses and New World arenaviruses Hantaviruses, nairoviruses, and phenuiviruses, formerly included in Bunyaviridae family: Rift Valley fever, Congo-Crimean hemorrhagic fever (CCHF), Huaiyangshan virus (alternatively known as severe fever with thrombocytopenia syndrome virus) and hantaviruses",
+      "text_sha256": "d0881386f77d66691764603051eb47e6e9b40269f3a8f86bcc6294a1e258ae38"
+    },
+    {
+      "id": "rag-bcbb563b4c3d5099",
+      "chunk_id": "0ea09dc2a01d498032ed_7",
+      "title": "Mediterranean Spotted Fever (Boutonneuse Fever): Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/221240-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3404,
+      "excerpt": "isolated lymphadenopathy is the only symptom. R conorii infection should be considered in patients with isolated lymphadenopathy who live in or have traveled to an endemic area, even when other more specific features are not present. In this setting, care should be taken to examine the area distal to the lymphadenopathy for an inoculation eschar, which, if present, can help support the diagnosis. Although MSF is usually a mild disease, severe complications including neurologic involvement does occur in 6-10% of cases. Neurologic manifestations can result in a delayed diagnosis and appropriate",
+      "text_sha256": "b21bb80283510ba7b468e22993af591f010341c4666b4746bc55a929dd3f86f1"
+    },
+    {
+      "id": "rag-656bae93d1d8a0a9",
+      "chunk_id": "20e49fc9d5997e5585a9_2",
+      "title": "Dermatologic Manifestations of Viral Hemorrhagic Fevers: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1134475-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.353,
+      "excerpt": "share certain clinical manifestations, regardless of the virus that causes the disease. However, different viruses can cause a range of various clinical problems in addition to viral hemorrhagic fever. Common clinical manifestations of viral hemorrhagic fever are increased capillary permeability, leukopenia, and thrombocytopenia. Viral hemorrhagic fever is manifested by sudden onset, fever, headache, generalized myalgia, backache, petechiae, conjunctivitis, and severe prostration. Various hemorrhagic symptoms follow, ultimately resulting in focal inflammatory reaction and necrosis with",
+      "text_sha256": "bb6c303ce4c37d6c6bca115c1571a4af246611dca482058f82d922e3dceea682"
+    },
+    {
+      "id": "rag-42c74898c5492779",
+      "chunk_id": "42abd839791f077270e0_1",
+      "title": "Q Fever: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/227156-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3416,
+      "excerpt": "with normal findings. B: Chest radiograph demonstrating Q fever pneumonia. Signs and symptoms Acute Q fever The 3 main clinical presentations of acute Q fever are as follows: A self-limited, influenzalike febrile illness (up to 40°C) (88-100%) of abrupt onset, which often is accompanied by headache (68-98%) (typically retrobulbar), myalgia (47-69%) (arthralgia is uncommon), chills (68-88%), fatigue (97-100%), and sweats (31-98%); the temperature returns to normal within 5-14 days Pneumonia (predominant in North America), usually mild in nature (crackles auscultated in 50% of cases) or as an",
+      "text_sha256": "253857d731a4f3f18f19b81398fc7734bbc2ff78609f496425f2fb5d54a45fc3"
+    },
+    {
+      "id": "rag-9e19ba8249da3cae",
+      "chunk_id": "5039574c392446d9404b_12",
+      "title": "Rheumatic Fever: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/236582-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3612,
+      "excerpt": "cohort. Recurrent episodes, with their predisposition to cause or exacerbate valvular damage, occur until middle age. Clinical Presentation",
+      "text_sha256": "04feabcdda36a0835f39f8bbe128cd667110b89985c6cda346a42b72ac280b30"
+    },
+    {
+      "id": "rag-43ec98734c0d3adb",
+      "chunk_id": "0e1ac052c3a4cacff70c_13",
+      "title": "Scarlet Fever: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1053253-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history",
+        "fever fever red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3798,
+      "excerpt": "complications (eg, peritonsillar abscess, sinusitis, bronchopneumonia, and meningitis) or problems associated with immune-mediated sequelae, rheumatic fever, or glomerulonephritis. Very rare complications, such as septic shock with multisystem organ failure, have been reported. Known complications, such as septicemia, vasculitis, hepatitis, or rheumatic fever, should be considered on a case-by-case basis as determined by the presence of clinical history and examination findings suggestive of those diseases. Localized soft tissue infections may suggest the presence of underlying osteomyelitis,",
+      "text_sha256": "05c8b384f960cb39e2910869f0ad5cc58d34f3c82a442a3cfcf15e88a2c5670c"
+    },
+    {
+      "id": "rag-b377ee7124332213",
+      "chunk_id": "c05a612cd5603c6b2c31_3",
+      "title": "Rheumatic Fever in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/808945-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fever fever red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4323,
+      "excerpt": "The connection with scarlet fever was made in the early 1900s. In 1944, the Jones criteria were formulated to assist disease identification. These criteria, with some modification, remain in use today. The introduction of antibiotics in the late 1940s allowed for the development of treatment and preventive strategies. Dramatic declines in the incidence of rheumatic fever are thought to be largely due to antibiotic treatment of streptococcal infection; however, there are regions where the incidence is significant, especially in sub-Saharan Africa, the Middle East, Central and South Asia, the",
+      "text_sha256": "82a6d31f7f26e80f5b2961c0b4bb1beb9206a62c9685d191de8184bc3ca86a76"
+    },
+    {
+      "id": "rag-727fc2a84c8a4ba4",
+      "chunk_id": "8b3c2070100dab46af68_14",
+      "title": "Fever of Unknown Origin (FUO): Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/217675-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fever fever red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4839,
+      "excerpt": "of unsuccessful diagnosis varies widely because the diagnostic approach to fever is highly dependent upon the tools accessible in a given healthcare setting, including socioeconomic, and other disparities in healthcare. Similarly, local geography and epidemiology factor into diagnostics. How aggressive and prolonged the evaluation must be before declaring failure also is subjective and dependent on the setting. Reflecting this, Fusco et al found only 6 series out of 18 publications from across the globe predefined a minimum diagnostic workup. \"In general, complete blood count, routine",
+      "text_sha256": "d81c7e209024a522da12129d91aaa065b9aad1f03cd606a94e129cd6363a3324"
+    },
+    {
+      "id": "rag-5c3465b61aac62ae",
+      "chunk_id": "8b3c2070100dab46af68_4",
+      "title": "Fever of Unknown Origin (FUO): Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/217675-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fever fever red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4982,
+      "excerpt": "in 23%. In light of considerable advances in diagnostics, this number seems surprisingly high and consistent. A study of 132 patients seen in a university FUO clinic from May 2019 to February 2022 found that 40% of cases remained undiagnosed, but another 31% met criteria for \"functional hyperthermia\", which they defined as fever without a physiologic cause and preceded by and resolves upon removal of a psychological stressor. The authors propose a \"functional hyperthermia\" as an unrecognized cause of FUO, postulated due to sympathetic hyperactivity. Background The syndrome of fever of unknown",
+      "text_sha256": "f3cc83b77d155604252d5ef5c208b131023ccae69da0a92f034a629a549548fb"
+    },
+    {
+      "id": "rag-334df77a69ae8048",
+      "chunk_id": "a663d18c5f77da4d66fd_25",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fever fever red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5031,
+      "excerpt": "level. Toxicity is defined as a clinical syndrome with the following: lethargy with (1) poor perfusion as evidenced by delayed capillary refill or (2) cyanosis or other signs of respiratory distress. Cold hands and feet, limb pain, and pale or mottled skin are considered \"red flag\" manifestations of septicemia. The presence or absence of meningeal signs is documented in older children. Clinicians should bear in mind that in some infants and younger children (perhaps younger than 12-15 months) who develop meningitis, specific meningeal signs, such as the Kernig or Brudzinski sign, may not be",
+      "text_sha256": "9daae7f637800aff088b25d6d63b40d6e8a1a84743e4aa9ddcac9a456004ac3b"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fever fever red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5304,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fever fever red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5451,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    }
+  ],
+  "discovery": {
+    "route": "fever",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "fever__rheumatic_fever",
+        "name": "Rheumatic Fever",
+        "rationale": "The questionnaire asks about joint pain and sore throat, which are key symptoms. Rheumatic fever is a known sequela of streptococcal pharyngitis and can present with fever and joint inflammation.",
+        "source_ids": [
+          "rag-2bd559b5496c39e1",
+          "rag-9e19ba8249da3cae"
+        ]
+      },
+      {
+        "id": "fever__scarlet_fever",
+        "name": "Scarlet Fever",
+        "rationale": "The questionnaire asks about rash and sore throat. Scarlet fever, a complication of streptococcal infection, is characterized by fever, sore throat, and a distinctive rash.",
+        "source_ids": [
+          "rag-43ec98734c0d3adb",
+          "rag-b377ee7124332213"
+        ]
+      },
+      {
+        "id": "fever__viral_hemorrhagic_fever",
+        "name": "Viral Hemorrhagic Fever",
+        "rationale": "The questionnaire covers fever, headache, myalgia, rash, and bleeding spots (petechiae), which are common clinical manifestations of various viral hemorrhagic fevers like Dengue, Ebola, or Lassa fever. Exposure history is also relevant.",
+        "source_ids": [
+          "rag-d0da7d31f8cfa17e",
+          "rag-656bae93d1d8a0a9"
+        ]
+      },
+      {
+        "id": "fever__q_fever",
+        "name": "Q Fever",
+        "rationale": "The questionnaire asks about fever onset, chills, fatigue, headache, and myalgia. Acute Q fever presents as a self-limited, influenza-like febrile illness with these symptoms. Occupational and animal exposure history is a key diagnostic clue.",
+        "source_ids": [
+          "rag-42c74898c5492779"
+        ]
+      },
+      {
+        "id": "fever__mediterranean_spotted_fever",
+        "name": "Mediterranean Spotted Fever",
+        "rationale": "This condition should be considered in patients with fever who have traveled to an endemic area. The questionnaire asks about travel history, rash, and specifically mentions 'eschar' (焦痂), which is a key finding (inoculation eschar).",
+        "source_ids": [
+          "rag-bcbb563b4c3d5099"
+        ]
+      },
+      {
+        "id": "fever__meningitis",
+        "name": "Meningitis",
+        "rationale": "The questionnaire explicitly asks about headache and neck stiffness, which are classic signs of meningitis. Fever is a primary symptom, and a hemorrhagic rash (petechiae) can indicate meningococcemia, a severe form of bacterial meningitis.",
+        "source_ids": [
+          "rag-df30ee352c228b98",
+          "rag-43ec98734c0d3adb"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The questionnaire covers a broad range of symptoms associated with fever, including constitutional, respiratory, gastrointestinal, urinary, neurological, and dermatological signs. This allows for a wide differential diagnosis.",
+        "source_ids": [
+          "rag-2bd559b5496c39e1",
+          "rag-334df77a69ae8048",
+          "rag-42c74898c5492779",
+          "rag-43ec98734c0d3adb",
+          "rag-5c3465b61aac62ae",
+          "rag-62f530bca02a29ef",
+          "rag-656bae93d1d8a0a9",
+          "rag-727fc2a84c8a4ba4",
+          "rag-9e19ba8249da3cae",
+          "rag-b377ee7124332213",
+          "rag-bcbb563b4c3d5099",
+          "rag-d0da7d31f8cfa17e",
+          "rag-df30ee352c228b98",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The concept of 'Fever of Unknown Origin' (FUO) is mentioned in the source material but is a diagnostic category rather than a specific disease. It applies when a fever persists without a diagnosis after a standard workup, which is beyond the scope of this initial triage.",
+        "source_ids": [
+          "rag-727fc2a84c8a4ba4",
+          "rag-5c3465b61aac62ae"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope discovery citations with the complete route RAG evidence pack for: review_notes[0]. These citations remain unverified.",
+        "source_ids": [
+          "rag-2bd559b5496c39e1",
+          "rag-334df77a69ae8048",
+          "rag-42c74898c5492779",
+          "rag-43ec98734c0d3adb",
+          "rag-5c3465b61aac62ae",
+          "rag-62f530bca02a29ef",
+          "rag-656bae93d1d8a0a9",
+          "rag-727fc2a84c8a4ba4",
+          "rag-9e19ba8249da3cae",
+          "rag-b377ee7124332213",
+          "rag-bcbb563b4c3d5099",
+          "rag-d0da7d31f8cfa17e",
+          "rag-df30ee352c228b98",
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ]
+  }
+}

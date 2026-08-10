@@ -1,0 +1,1656 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "neck_pain",
+  "label": "頸部疼痛",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "28e09d521a01801192f4437d39dfca4631d4e142bee86d23fca09381432791dc",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"neck pain neck pain differential diagnosis diseases clinical presentation symptoms history\",\"neck pain neck pain red flags emergency warning signs urgent referral rule out\",\"Neck Trauma diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Cervical Radiculopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Retropharyngeal Abscess diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Cervical Strain diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Spinal Cord Neoplasm diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Lyme Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "069a76fccafb92004da92cba1bd4e082da4c0a14077b2f91c3fdc765dd594456"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "2ed81f4f5525d76c2cdf80e4ca6e570cd117dc68cbb86c1a1217919854cd55c5",
+    "generated_at": "2026-08-10T04:12:35+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-bd0c20de46e8bd2f",
+      "chunk_id": "709d501e5392c47ae3b5_33",
+      "title": "Lyme Disease: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/330178-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history",
+        "neck pain neck pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3976,
+      "excerpt": "the following: Fatigue Myalgias Arthralgias Headache Fever Chills Neck stiffness Stage 2 disease Stage 2 is also known as early disseminated disease. It generally occurs weeks to months after the bite. Musculoskeletal and neurologic symptoms are the most common; less common symptoms are cardiac and dermatologic. B burgdorferi spreads throughout the body and produces symptoms by direct invasion (eg, erythema migrans), particularly in the early stages of the disease. Because growing B burgdorferi in culture is difficult, confirming that the organism is actually present in a specific organ that",
+      "text_sha256": "f34efa7309affa9f0e81949f33769cdcad27720360650caa02ba3e13e2bcd31c"
+    },
+    {
+      "id": "rag-cab28b2a868cee8a",
+      "chunk_id": "77deb79ba058e8b1d0d2_4",
+      "title": "Retropharyngeal Abscess: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764421-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3982,
+      "excerpt": "of the neck - Obtain a CT scan of the neck with intravenous contrast when the findings on the lateral neck radiograph are equivocal or if the clinical suspicion for RPA is high in patients with negative findings on lateral neck radiograph Chest radiography - A chest radiograph is indicated to look for aspiration pneumonia and mediastinitis Magnetic resonance imaging (MRI) with gadolinium enhancement - This modality can veal thexistence and size of a retropharyngeal abscess, although the imaging study takes/ng than does CT scanning Management of retropharyngeal abscess ED management of RPA",
+      "text_sha256": "d699b3c287af3fb90fca17b8bd38e50f7facd34b6d8f371fcbf7a1690f9fd8c1"
+    },
+    {
+      "id": "rag-ea2ab454d0d9c67f",
+      "chunk_id": "1a041e74ccb8dd2fa833_12",
+      "title": "Spinal Cord Neoplasms: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779872-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4029,
+      "excerpt": "younger patients. Pain is the most common early complaint of adult patients with spinal cord neoplasms, followed by the insidious progression of spinal cord dysfunction. Clinical Presentation",
+      "text_sha256": "1d38418d65e3b2c4d4afafb8bfbfadde552e3e08acf7e1114768c6a7333fa4e3"
+    },
+    {
+      "id": "rag-15ce66364be76637",
+      "chunk_id": "74ab9de94000c37ef9b4_6",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4298,
+      "excerpt": "musculoskeletal pain syndromes, and skeletal causes. Nerve root syndromes Classic nerve root syndrome is characterized by radicular pain arising from nerve root impingement due to herniated discs. A similar syndrome can also be produced by inflammation and irritation, which may explain why patients whose presentation is consistent with this diagnosis respond to conservative therapies. Impingement pain tends to be sharp, well localized, and can be associated with paresthesia, whereas irritation pain tends to be dull, poorly localized, and without paresthesia. Impingement is associated with a",
+      "text_sha256": "1cc816f5d16418b5390dd4c89e734cba13cb748771c9292c53729d2bfaf846b6"
+    },
+    {
+      "id": "rag-93469eb32013b428",
+      "chunk_id": "8919cb19dc79345a0a9c_3",
+      "title": "Cervical Strain (Whiplash): Practice Essentials, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822893-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history",
+        "neck pain neck pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4119,
+      "excerpt": "Diagnosis The chief diagnostic challenge in the emergent or urgent setting is to differentiate cervical strain from other causes of neck pain. All posttrauma patients with cervical pain should be \"clinically cleared\" using National Emergency X-Radiography Utilization Study (NEXUS) or the Canadian C-Spine Rule as decision rules to guide the use of cervical spine radiography to rule out cervical fractures, dislocations, or spinal cord injury. Edema of cervical tissues, although not to the point of pitting, is a common finding in patients with cervical strain. The most common presentation is a",
+      "text_sha256": "0e6b82725c065ad99eafccb8396f1a31a7504ddc0900875184dc7f3a303fa8a6"
+    },
+    {
+      "id": "rag-dca02ee6db3ba08a",
+      "chunk_id": "bbce752c4c2a785b6f5c_5",
+      "title": "Neck Trauma Management: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827223-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4322,
+      "excerpt": "of the trachea Thrill Bruit Pulse deficit Signs of jugular vein injurynclude hematoma, external hemorrhage, and hypotension. Signs of spinal cord or brachial plexus injury include the following: Diminished upper arm capacity Quadriplegia Pathologic reflexes Brown-Suard syndrome Priapism and loss of the bulbocavernous reflex Poor rectal tone Urinary retention, fecal incontinence, and paralytic ileus Horner syndrome Neurogenic shock Hypoxia and hypoventilation Signs of cranial nerve injury include the following: Facial nerve (cranial nerve VII): Drooping of the corner of the mouth.",
+      "text_sha256": "7cd670a3040fcb53cfd0c8cb26914a0bde10ad70e8f63fbd224f82c5eed3f121"
+    },
+    {
+      "id": "rag-2f21ba21be782fc8",
+      "chunk_id": "00fa3ded7b1b38e9881f_23",
+      "title": "Penetrating Neck Trauma: Practice Essentials, History of the Procedure, Problem",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/433306-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "neck_pain__neck_trauma"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history",
+        "Neck Trauma diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4173,
+      "excerpt": "acid, pepsin, and even bile. Undiagnosed, this can produce early suppurative infection and an intense necrotizing inflammatory response in the neck, as well as a more devastating outcome if it descends to the mediastinum. An 11-17% increase in the overall mortality rate has been observed after delays of 12 hours in the diagnosis of esophageal injuries. Two reports demonstrate the importance of the setting in which penetrating neck injuries occur, particularly treatment protocols in combat zones. Sarkar et al presented 2 cases from Western Baghdad, nd Ramasamy et al performed a retrospective",
+      "text_sha256": "7268fb4551454dc979f211e7fd3405e7a011a547577e345527eaa3da5a1f6459"
+    },
+    {
+      "id": "rag-ba7cc7e69e94433a",
+      "chunk_id": "bbce752c4c2a785b6f5c_4",
+      "title": "Neck Trauma Management: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827223-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4356,
+      "excerpt": "or swallowing Pain with tongue movement Crepitus: Noteworthy in only one third of cases Signs of esophageal and pharyngeal injury nclude the following: Dysphagia Bloody saliva Sucking neck wound Bloody nasogastric aspirate Pain and tenderness in the neck Resistance of neck with passive motion testing Crepitus Bleeding from the mouth or nasogastric tube Signs of carotid artery injury nclude the following: Decreased level of consciousness Contralateral hemiparesis Hemorrhage Hematoma Dyspnea secondary to compression of the trachea Thrill Bruit Pulse deficit Signs of jugular vein injurynclude",
+      "text_sha256": "87db51f59c823f14cb2ebee57ac6edef8bfc005d3fd8b2b12cf68fd0701f7844"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "neck_pain__cervical_radiculopathy",
+        "neck_pain__retropharyngeal_abscess",
+        "neck_pain__neck_trauma"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain red flags emergency warning signs urgent referral rule out",
+        "Cervical Radiculopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Retropharyngeal Abscess diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Neck Trauma diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3766,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-4af25e33880f4d9d",
+      "chunk_id": "ea9c50f6a6987b2f173e_2",
+      "title": "Peritonsillar Abscess in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764188-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5175,
+      "excerpt": "anteriorly. The patient has a \"hot potato sounding\" voice. Signs and symptoms of peritonsillar abscess Symptoms of PTA usually begin 3-5 days before evaluation and may include the following: Fever Malaise Headache Neck pain Throat pain (more severe on the affected side; occasionally referred to thepsilateral ear) Dysphagia Change in voice Otalgia Odynophagia Physical findings may include the following: Mild-to-moderate distress Fever Tachycardia Dehydration Drooling, salivation, or trouble handling oral secretions Trismus Hot potato or muffled voice Rancid or fetid breath Cervical",
+      "text_sha256": "22f5619d7d54985d76a08e3b1772f696a3380b3efd461e2737f6816a1c7f3022"
+    },
+    {
+      "id": "rag-94a8e6edb9127701",
+      "chunk_id": "53b354e14520b0f0479f_1",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5202,
+      "excerpt": "phantom limb pain during his time as a military surgeon and his experiences with limb amputations. (ysicians throughout the world have described similar syndromes over the centuries and CRPS has held many names, even just within the English language.JCRPS, an entity formally called reflex sympathetic dystrophy (RSD), has readily identifiable signs and symptoms and is treatable if recognized early; however, the syndrome may become disabling if unrecognized. mergency medicine physicians may be the first to see the syndrome and their actions can vastly improve the quality of life and",
+      "text_sha256": "052206cb83a26a39421944480659ffd9843f01b3616c922b01641af1d18910e0"
+    },
+    {
+      "id": "rag-7e38428a85995b57",
+      "chunk_id": "77deb79ba058e8b1d0d2_2",
+      "title": "Retropharyngeal Abscess: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764421-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5685,
+      "excerpt": "adenopathy Fever Drooling Stridor Torticollis Trismus Physical signs of RPA in infants and children include the following: Cervical adenopathy Retropharyngeal bulge - Do not palpate in children Fever Stridor Torticollis Neck stiffness Drooling Agitation Neck mass Lethargy Respiratory distress Trismus Change in vocal quality Tonsillar displacement Associated signs, including tonsillitis, peritonsillitis, pharyngitis, and otitis media Workup in retropharyngeal abscess Laboratory studies include the following: Complete blood count (CBC) Blood cultures - Indicated before administration of",
+      "text_sha256": "65a35dc3647a22ece0f1e9d854dc2c1b381d518d0b3f878f7b7d38b7c08db340"
+    },
+    {
+      "id": "rag-520405111b6d707f",
+      "chunk_id": "e4e50b3c5a1f1d69d42c_1",
+      "title": "Spinal Epidural Abscess: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165840-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__cervical_strain",
+        "neck_pain__spinal_cord_neoplasm"
+      ],
+      "retrieval_queries": [
+        "Cervical Strain diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Spinal Cord Neoplasm diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3975,
+      "excerpt": "back pain without any \"red flag\" symptoms). Half of all cases of spinal epidural abscess are estimated to be misdiagnosed or have a delayed diagnosis. Early identification and timely surgical intervention may result in improved outcomes and preservation of neurological function. An MRI of the lumbar spine (T1-weighted, post-contrast) shows a spinal epidural abscess at the level of L3-L4, with an associated left paraspinal muscle abscess. Pathophysiology Risk factors for epidural spinal abscesses include intravenous drug use and immunosuppression from a variety of sources including HIV/AIDS and",
+      "text_sha256": "48daab59953400fa3b4bccd4ecb6c1fa552c97f7fb814edd94b88cfe1be116c8"
+    },
+    {
+      "id": "rag-b9aa3a2c87d315d1",
+      "chunk_id": "0049aa900b24cc7c1ccf_4",
+      "title": "Urinary Tract Infections in Spinal Cord Injury: Epidemiology and Pathophysiology, Clinical Presentation, Diagnostic Testing",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2040171-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__cervical_strain"
+      ],
+      "retrieval_queries": [
+        "Cervical Strain diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4939,
+      "excerpt": "autonomic dysreflexia to noxious stimuli, such as an overdistended bladder. The sympathetic response below the level of injury is uninhibited, producing severe vasoconstriction and reflexive bradycardia. If the patient is febrile, this may appear as a pulse-temperature dissociation. Please see Urinary Tract Infection (UTI) and Cystitis (Bladder Infection) in Females. Diagnostic Testing Urinary tract infection (UTI) in patients with spinal cord injury (SCI) is challenging to diagnose because all of these individuals have some degree of bacteruria, but not all are actively infected. Treatment",
+      "text_sha256": "134cd5b960e6dcb5be03b8d0220abd9a1cacaa353f8663bffe7019fe9f2c50b6"
+    },
+    {
+      "id": "rag-67d3603f90756c59",
+      "chunk_id": "f313a7914d14df5f9743_35",
+      "title": "Spinal Cord Injuries: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793582-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__cervical_strain"
+      ],
+      "retrieval_queries": [
+        "Cervical Strain diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4849,
+      "excerpt": "central cord syndrome. Anterior cord syndrome involves a lesion causing variable loss of motor function and pain and/or temperature sensation, with preservation of proprioception. Brown-Suard syndrome, which is often associated with a hemisection lesion of the cord, involves a relatively greater ipsilateral loss of proprioception and motor function, with contralateral loss of pain and temperature sensation. Central cord syndrome usually involves a cervical lesion, with greater motor weakness in the upper extremities than in the lower extremities, with sacral sensory sparing. The pattern of",
+      "text_sha256": "9e59188bf71a25246b8504f304135b752a4e7932f7d46dfb53f9192006be03aa"
+    },
+    {
+      "id": "rag-f3faa0ec1e3b4d47",
+      "chunk_id": "aa487a13953bac9fe331_1",
+      "title": "Pelvic Inflammatory Disease: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/256448-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__cervical_strain"
+      ],
+      "retrieval_queries": [
+        "Cervical Strain diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5066,
+      "excerpt": "transmitted disease (STD). Signs and symptoms of pelvic inflammatory disease The diagnosis of acute PID is primarily based on historical and clinical findings. Clinical manifestations of PID vary widely. Many patients exhibit few or no symptoms, whereas others have acute, serious illness. The most common presenting complaint is lower abdominal pain. Many women report an abnormal vaginal discharge. (See Presentation.) Diagnosis of pelvic inflammatory disease The differential diagnosis includes appendicitis, cervicitis, urinary tract infection, endometriosis, ovarian torsion, and adnexal tumors.",
+      "text_sha256": "ab3a505dc39be5b0fb2fff4d31c517a1e310d8de29acce89cde5193b5ac706a4"
+    },
+    {
+      "id": "rag-fc1ce46b92c91469",
+      "chunk_id": "2ebda525e7f8acdfc4af_23",
+      "title": "Spinal Infections: Practice Essentials, Anatomy, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1266702-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__cervical_radiculopathy"
+      ],
+      "retrieval_queries": [
+        "Cervical Radiculopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5089,
+      "excerpt": "its pathogenesis. Several types of immunomodulatory molecules (mainly cytokines secreted from immune cells) mediate the pathogenesis of RA, compluicating the treatment and management of the disease. Epidemiology United States statistics Vertebral osteomyelitis is considered uncommon, with an incidence of 1 case per 100,000-250,000 population per year. However, some reviews have suggested that the incidence of spinal infections is increasing. This increase may be secondary to increased use of vascular devices and other forms of instrumentation and to increasing rates of IV drug abuse. Because",
+      "text_sha256": "5f40520eff628d24815d5427d7ad3c4befffd20c8d736fffdd8f0ca36d980747"
+    },
+    {
+      "id": "rag-09f5bf5fd5fee52e",
+      "chunk_id": "596cdd4cd1ee540afa22_6",
+      "title": "Rheumatoid Factor: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087091-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__cervical_radiculopathy"
+      ],
+      "retrieval_queries": [
+        "Cervical Radiculopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5179,
+      "excerpt": "low-titer RF positivity can occur in the inflammatory disease sarcoidosis, while abnormally high RF levels can exist in the presence of leukemia, multiple myeloma, and other cancers. RF is also observed in 1-5% of healthy individuals. Thus, RF is not considered specific for RA. RF results may also be positive in patients without RA who have the following conditions: Systemic lupus erythematosus Polymyositis Tuberculosis Syphilis Viral hepatitis Infectious mononucleosis Influenza Indications/Applications RA is a chronic, autoimmune, peripheral polyarthropathy of unknown etiogenesis. The",
+      "text_sha256": "2eadd44adccf6efe29f4a66500aab40dd3eff0d527d50cbae803ba97fa4956d7"
+    },
+    {
+      "id": "rag-6ffbd94b7cdda8ce",
+      "chunk_id": "596cdd4cd1ee540afa22_8",
+      "title": "Rheumatoid Factor: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087091-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__cervical_radiculopathy"
+      ],
+      "retrieval_queries": [
+        "Cervical Radiculopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5351,
+      "excerpt": "Against Rheumatism [ACR/EULAR] classification criteria) Anti-RA33 antibody assay Considerations False-negative and false-positive results are common in patients without RA, as well as those with RA; patients without RA have an 8% rate of false results, whereas patients with RA have a 15% rate. RF results may be positive in patients without RA who have the following conditions: Systemic lupus erythematosus Polymyositis Tuberculosis Syphilis Viral hepatitis Infectious mononucleosis Influenza Because of its poor specificity and poor positive predictive value, RF is only one test used to diagnose",
+      "text_sha256": "a87bef94b6fe487d65f3e618e1916e1ff8ba02f4b2e9988cc9c33a7a4a0c858c"
+    },
+    {
+      "id": "rag-7a2c3a6670bcbe21",
+      "chunk_id": "77deb79ba058e8b1d0d2_0",
+      "title": "Retropharyngeal Abscess: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764421-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__retropharyngeal_abscess"
+      ],
+      "retrieval_queries": [
+        "Retropharyngeal Abscess diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3864,
+      "excerpt": "Overview Practice Essentials Retropharyngeal abscess (RPA) produces the symptoms of sore throat, fever, neck stiffness, and stridor. A occurs less commonly today than in the past because of the widespread use of antibiotics for suppurative upper respiratory infections. The incidence of RPA in the United States is rising, however. Once almost exclusively a disease of children, RPAs observed with increasing frequency in adults. It poses a diagnostic challenge for the emergency physician because of its infrequent occurrence and variable presentation. mergency department (ED) management of",
+      "text_sha256": "8c1b52d380b234550efe88ec862872b4a2afb2a7f335bf9b1ed0576c276a9165"
+    },
+    {
+      "id": "rag-7f500c4b89b333be",
+      "chunk_id": "e764f892fa5b9a5516e1_15",
+      "title": "Intracranial Epidural Abscess: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165292-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__retropharyngeal_abscess"
+      ],
+      "retrieval_queries": [
+        "Retropharyngeal Abscess diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4167,
+      "excerpt": "and intervention, and that prognosis largely depends on the neurologic status at the time of diagnosis. Increased clinical awareness can help achieve an earlier diagnosis, and hopefully improve outcomes. Clinical Presentation",
+      "text_sha256": "e93f6fa3e3ad3200d43eedfb7adf8ae9d73b08bc479aa1edb74cac0d87da254e"
+    },
+    {
+      "id": "rag-9a56a8aeed512797",
+      "chunk_id": "77deb79ba058e8b1d0d2_1",
+      "title": "Retropharyngeal Abscess: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764421-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__retropharyngeal_abscess"
+      ],
+      "retrieval_queries": [
+        "Retropharyngeal Abscess diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3834,
+      "excerpt": "occurrence and variable presentation. mergency department (ED) management of retropharyngeal abscess includes attention to the airway, fluid resuscitation if necessary, antibiotic treatment, and preparation for an emergency operation, if indicated. Early recognition and aggressive management of RPA are essential because it still carries significant morbidity and mortality. Signs of retropharyngeal abscess Physical signs of RPA in adults include the following: Posterior pharyngeal edema Nuchal rigidity Cervical adenopathy Fever Drooling Stridor Torticollis Trismus Physical signs of RPA in",
+      "text_sha256": "dd639b96bad6b33372cba769b6e243f62fbc73d472e781c1301078bebcbafbba"
+    },
+    {
+      "id": "rag-5db846a062f8bd3a",
+      "chunk_id": "f313a7914d14df5f9743_34",
+      "title": "Spinal Cord Injuries: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793582-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__spinal_cord_neoplasm"
+      ],
+      "retrieval_queries": [
+        "Spinal Cord Neoplasm diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.382,
+      "excerpt": "syndromes. Spinal cord syndromes may be complete or incomplete. In most clinical scenarios, physicians should use a best-fit model to classify the SCI syndrome. A complete cord syndrome is characterized clinically as complete loss of motor and sensory function below the level of the traumatic lesion. Incomplete cord syndromes have variable neurologic findings with partial loss of sensory and/or motor function below the level of injury; these include the anterior cord syndrome, the Brown-Suard syndrome, and the central cord syndrome. Anterior cord syndrome involves a lesion causing variable",
+      "text_sha256": "d15e70e01f38da3960950d02b456a0bb085fa0e28ff3929429f0d2dab4511e8e"
+    },
+    {
+      "id": "rag-4ce35e1ab62f20c0",
+      "chunk_id": "1a041e74ccb8dd2fa833_9",
+      "title": "Spinal Cord Neoplasms: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779872-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__spinal_cord_neoplasm"
+      ],
+      "retrieval_queries": [
+        "Spinal Cord Neoplasm diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.398,
+      "excerpt": "cause epidural cord compression and dysfunction are the most common causes of oncologic CNS injury. Mortality correlates with the prognosis of the primary cancer. The severity of spinal cord compromise secondary to a tumor spans a wide range. Initially, symptoms may be limited to pain or minor sensory or motor disturbance. As the compression progresses, neurologic abnormalities become more pronounced, advancing to disability. Partial cord compression, such as Brown-Suard syndrome, may evolve. In the advanced stage of compression, complete transverse sensory and motor paralysis with bowel and",
+      "text_sha256": "19c5e55d032f8bb9ebfad3b14a27391d61df26e02f77d8e073d506700bdc6bbf"
+    },
+    {
+      "id": "rag-9c4a4e42ed66a25d",
+      "chunk_id": "1a041e74ccb8dd2fa833_0",
+      "title": "Spinal Cord Neoplasms: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779872-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__spinal_cord_neoplasm"
+      ],
+      "retrieval_queries": [
+        "Spinal Cord Neoplasm diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4027,
+      "excerpt": "Overview Practice Essentials Neoplastic disease that involves the spine and results in spinal cord or cauda equina compression may have devastating neurologic and functional consequences. Metastatic lesions are responsible for about 85% of neoplastic inal cord compression cases, with the other 15% due to primary neoplastic lesions of the spine. The clinical presentation in compression caused by metastatic lesions tends to be indistinguishable from that caused by primary disease. For the emergency physician, however, the cell origin of the tumor is less of a concern than the consequent",
+      "text_sha256": "b17a9071ae1ab4cd3c7ad06b713daf983b47ec5148eb72a7a651b58001e6fb97"
+    },
+    {
+      "id": "rag-a17a88cf643fd7db",
+      "chunk_id": "f3a0e8ebab5000f04492_9",
+      "title": "Lyme Disease Serology: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2094578-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__lyme_disease"
+      ],
+      "retrieval_queries": [
+        "Lyme Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3594,
+      "excerpt": "risk of B burgdorferi infection who are seeking Lyme testing for symptoms of a more nonspecific nature. Indication/Applications Testing is indicated for clinically suspected cases of Lyme disease; it is not necessary if the patient has a tick bite and erythema migrans. Considerations Diagnosis of Lyme disease is made based on a combination clinical manifestations and available testing. No test is 100% sensitive or specific for Lyme disease. If the test is performed before an adequate antibody response develops, results may be false negative. In this case, repeat testing in 2-4 weeks is",
+      "text_sha256": "7d9f427e83fb51568453997ac93924341f108db8dcdd1e9ee603c71d86fdb87c"
+    },
+    {
+      "id": "rag-eaa95978d634c800",
+      "chunk_id": "f3a0e8ebab5000f04492_0",
+      "title": "Lyme Disease Serology: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2094578-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__lyme_disease"
+      ],
+      "retrieval_queries": [
+        "Lyme Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4016,
+      "excerpt": "Reference Range Because of the significant false positivity associated with test results, even among healthy populations from nonendemic regions, serologic testing for Lyme disease should only be performed if the clinician estimates the chance is at least 20% chance that the patient has active Lyme disease. Normal levels vary depending on the laboratory assay performed, as follows. Borrelia burgdorferi antibody enzyme immunoassay (Lyme index value) : < 0.9 = negative 0.91-1.09 = equivocal >1.1 = positive Western blot : ≥5 different immunoglobulin G (IgG) antibodies reactive = positive ≥2",
+      "text_sha256": "fdfc5c62424835ea8814b4242b2f3229556e2eef384da5492cd0db402b2dd9dc"
+    },
+    {
+      "id": "rag-d002eda8880551d5",
+      "chunk_id": "709d501e5392c47ae3b5_18",
+      "title": "Lyme Disease: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/330178-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__lyme_disease"
+      ],
+      "retrieval_queries": [
+        "Lyme Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4652,
+      "excerpt": "migrans, which currently is referred to simply as erythema migrans (EM). In the 1920s, Garin and Bujadoux described a patient with meningoencephalitis, painful sensory radiculitis, and erythema migrans following a tick bite, which they attributed to a spirochetal infection. By the mid 1930s, neurologic manifestations associated with Ixodes ticks (also known as deer ticks) were recognized and were known as tick-borne meningoencephalitis. In the 1940s, Bannwarth described several cases of chronic lymphocytic meningitis and polyradiculoneuritis, some of which were accompanied by erythematous skin",
+      "text_sha256": "752c65aba9621ee838afdaee427034c99e5d929d3e2762a4f947774b862ea402"
+    },
+    {
+      "id": "rag-9f13dbfb790cfc47",
+      "chunk_id": "bbce752c4c2a785b6f5c_1",
+      "title": "Neck Trauma Management: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827223-overview",
+      "routes": [
+        "headache",
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__neck_trauma"
+      ],
+      "retrieval_queries": [
+        "Neck Trauma diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4336,
+      "excerpt": "signs or symptoms, and potentially lethal injuries could be easily overlooked or discounted. Neck injury may result in the laceration of major vessels, potentially leading to hemorrhagic shock. Extracranial arterial injuries to the brachiocephalic, common carotid, and vertebral arteries can result in major neurologic deficits. Airway occlusion and exsanguinating hemorrhage pose the most immediate risks to life. From the time when Ambroise Pare successfully treated a neck injury in 1552, debate has continued about the best approach for particular neck wounds. Awareness of the various",
+      "text_sha256": "fff0d98fd2a9e506d8655fe80d02303b3f6d19f32b5b171f1ee8cc1aa8aaeb61"
+    },
+    {
+      "id": "rag-d0645c9d7392669b",
+      "chunk_id": "53fc3e4f98765d889be9_43",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "neck_pain__neck_trauma"
+      ],
+      "retrieval_queries": [
+        "Neck Trauma diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4521,
+      "excerpt": "is either due to vertebral artery dissection or carotid artery dissection. Risk factors for these injuries include penetrating trauma, C1-3 fractures, chiropractor manipulation, and possibly bruising to the neck from seatbelts. In ischemic stoke, acute (12-48 h) occlusion of one or more large vessels results in focal, wedge-shaped peripheral areas of loss of grey/white matter differentiation involving the cortex and contiguous white matter, or simply as a focal mass effect (see the image below). Anoxia or hypotension results in diffuse loss of gyral/cortical markings and diffuse mass effect.",
+      "text_sha256": "c62afd8be005538ea2aa62a2bd5ed7732142da9922209725430333eb3aa53263"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "neck_pain__cervical_strain",
+      "name": "Cervical Strain",
+      "retrieval_query": "Cervical Strain diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-93469eb32013b428"
+      ],
+      "disease_rag_source_ids": [
+        "rag-520405111b6d707f",
+        "rag-b9aa3a2c87d315d1",
+        "rag-67d3603f90756c59",
+        "rag-f3faa0ec1e3b4d47"
+      ]
+    },
+    {
+      "id": "neck_pain__cervical_radiculopathy",
+      "name": "Cervical Radiculopathy",
+      "retrieval_query": "Cervical Radiculopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-15ce66364be76637"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-fc1ce46b92c91469",
+        "rag-09f5bf5fd5fee52e",
+        "rag-6ffbd94b7cdda8ce"
+      ]
+    },
+    {
+      "id": "neck_pain__retropharyngeal_abscess",
+      "name": "Retropharyngeal Abscess",
+      "retrieval_query": "Retropharyngeal Abscess diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-7e38428a85995b57",
+        "rag-cab28b2a868cee8a"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-7a2c3a6670bcbe21",
+        "rag-7f500c4b89b333be",
+        "rag-9a56a8aeed512797"
+      ]
+    },
+    {
+      "id": "neck_pain__spinal_cord_neoplasm",
+      "name": "Spinal Cord Neoplasm",
+      "retrieval_query": "Spinal Cord Neoplasm diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-ea2ab454d0d9c67f"
+      ],
+      "disease_rag_source_ids": [
+        "rag-520405111b6d707f",
+        "rag-5db846a062f8bd3a",
+        "rag-4ce35e1ab62f20c0",
+        "rag-9c4a4e42ed66a25d"
+      ]
+    },
+    {
+      "id": "neck_pain__lyme_disease",
+      "name": "Lyme Disease",
+      "retrieval_query": "Lyme Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-bd0c20de46e8bd2f"
+      ],
+      "disease_rag_source_ids": [
+        "rag-a17a88cf643fd7db",
+        "rag-eaa95978d634c800",
+        "rag-d002eda8880551d5"
+      ]
+    },
+    {
+      "id": "neck_pain__neck_trauma",
+      "name": "Neck Trauma",
+      "retrieval_query": "Neck Trauma diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-dca02ee6db3ba08a",
+        "rag-ba7cc7e69e94433a",
+        "rag-2f21ba21be782fc8"
+      ],
+      "disease_rag_source_ids": [
+        "rag-2f21ba21be782fc8",
+        "rag-f09c5253c7a82445",
+        "rag-9f13dbfb790cfc47",
+        "rag-d0645c9d7392669b"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "neck_pain",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-520405111b6d707f",
+        "rag-b9aa3a2c87d315d1",
+        "rag-67d3603f90756c59",
+        "rag-f3faa0ec1e3b4d47",
+        "rag-f09c5253c7a82445",
+        "rag-fc1ce46b92c91469",
+        "rag-09f5bf5fd5fee52e",
+        "rag-6ffbd94b7cdda8ce",
+        "rag-7a2c3a6670bcbe21",
+        "rag-9a56a8aeed512797",
+        "rag-5db846a062f8bd3a",
+        "rag-4ce35e1ab62f20c0",
+        "rag-9c4a4e42ed66a25d",
+        "rag-a17a88cf643fd7db",
+        "rag-eaa95978d634c800",
+        "rag-d002eda8880551d5",
+        "rag-9f13dbfb790cfc47",
+        "rag-d0645c9d7392669b"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "neck_pain__cervical_strain__trauma_trigger",
+        "description": "頸部疼痛由外傷事件觸發。",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neck_pain__cervical_strain"
+        ],
+        "source_ids": [
+          "rag-520405111b6d707f",
+          "rag-b9aa3a2c87d315d1",
+          "rag-67d3603f90756c59",
+          "rag-f3faa0ec1e3b4d47"
+        ]
+      },
+      {
+        "code": "neck_pain__cervical_radiculopathy__paresthesia",
+        "description": "Numbness or tingling sensations, often associated with nerve root impingement.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neck_pain__cervical_radiculopathy"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-fc1ce46b92c91469",
+          "rag-09f5bf5fd5fee52e",
+          "rag-6ffbd94b7cdda8ce"
+        ]
+      },
+      {
+        "code": "neck_pain__cervical_radiculopathy__pain_radiates_arm",
+        "description": "Pain that radiates from the neck to the arm.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neck_pain__cervical_radiculopathy"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-fc1ce46b92c91469",
+          "rag-09f5bf5fd5fee52e",
+          "rag-6ffbd94b7cdda8ce"
+        ]
+      },
+      {
+        "code": "neck_pain__cervical_radiculopathy__focal_neurologic_deficits",
+        "description": "Localized neurological symptoms such as weakness or sensory changes.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neck_pain__cervical_radiculopathy"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "neck_pain__retropharyngeal_abscess__sore_throat",
+        "description": "喉嚨痛",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neck_pain__retropharyngeal_abscess"
+        ],
+        "source_ids": [
+          "rag-7a2c3a6670bcbe21"
+        ]
+      },
+      {
+        "code": "neck_pain__spinal_cord_neoplasm__insidious_progression",
+        "description": "症狀為隱匿性地逐漸進展。",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neck_pain__spinal_cord_neoplasm"
+        ],
+        "source_ids": [
+          "rag-520405111b6d707f",
+          "rag-5db846a062f8bd3a",
+          "rag-4ce35e1ab62f20c0",
+          "rag-9c4a4e42ed66a25d"
+        ]
+      },
+      {
+        "code": "neck_pain__spinal_cord_neoplasm__focal_neurologic_deficit",
+        "description": "出現局部神經功能缺損，例如感覺或運動功能障礙。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neck_pain__spinal_cord_neoplasm"
+        ],
+        "source_ids": [
+          "rag-4ce35e1ab62f20c0",
+          "rag-5db846a062f8bd3a"
+        ]
+      },
+      {
+        "code": "neck_pain__lyme_disease__neck_stiffness",
+        "description": "頸部僵硬。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neck_pain__lyme_disease"
+        ],
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "code": "neck_pain__lyme_disease__fever",
+        "description": "發燒。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neck_pain__lyme_disease"
+        ],
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "code": "neck_pain__lyme_disease__chills",
+        "description": "畏寒。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neck_pain__lyme_disease"
+        ],
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "code": "neck_pain__lyme_disease__headache",
+        "description": "頭痛。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neck_pain__lyme_disease"
+        ],
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "code": "neck_pain__neck_trauma__dysphagia",
+        "description": "Difficulty swallowing associated with neck pain.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neck_pain__neck_trauma"
+        ],
+        "source_ids": [
+          "rag-2f21ba21be782fc8",
+          "rag-f09c5253c7a82445",
+          "rag-9f13dbfb790cfc47",
+          "rag-d0645c9d7392669b"
+        ]
+      },
+      {
+        "code": "neck_pain__neck_trauma__dyspnea",
+        "description": "Difficulty breathing associated with neck pain, potentially due to tracheal compression.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neck_pain__neck_trauma"
+        ],
+        "source_ids": [
+          "rag-2f21ba21be782fc8",
+          "rag-f09c5253c7a82445",
+          "rag-9f13dbfb790cfc47",
+          "rag-d0645c9d7392669b"
+        ]
+      },
+      {
+        "code": "neck_pain__neck_trauma__focal_neurologic_deficit",
+        "description": "Focal neurologic deficits, such as one-sided weakness (hemiparesis), associated with neck trauma.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neck_pain__neck_trauma"
+        ],
+        "source_ids": [
+          "rag-2f21ba21be782fc8",
+          "rag-f09c5253c7a82445",
+          "rag-9f13dbfb790cfc47",
+          "rag-d0645c9d7392669b"
+        ]
+      },
+      {
+        "code": "neck_pain__neck_trauma__history_of_injury",
+        "description": "History of a specific injury or accident triggering neck pain.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neck_pain__neck_trauma"
+        ],
+        "source_ids": [
+          "rag-d0645c9d7392669b",
+          "rag-9f13dbfb790cfc47"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "triggering_event",
+        "option": "受傷",
+        "mapping": {
+          "findings": [
+            "neck_pain__cervical_strain__trauma_trigger",
+            "neck_pain__neck_trauma__history_of_injury"
+          ]
+        },
+        "disease_ids": [
+          "neck_pain__cervical_strain",
+          "neck_pain__neck_trauma"
+        ],
+        "source_ids": [
+          "rag-520405111b6d707f",
+          "rag-b9aa3a2c87d315d1",
+          "rag-67d3603f90756c59",
+          "rag-f3faa0ec1e3b4d47",
+          "rag-d0645c9d7392669b"
+        ]
+      },
+      {
+        "field": "triggering_event",
+        "option": "意外",
+        "mapping": {
+          "findings": [
+            "neck_pain__cervical_strain__trauma_trigger",
+            "neck_pain__neck_trauma__history_of_injury"
+          ]
+        },
+        "disease_ids": [
+          "neck_pain__cervical_strain",
+          "neck_pain__neck_trauma"
+        ],
+        "source_ids": [
+          "rag-520405111b6d707f",
+          "rag-b9aa3a2c87d315d1",
+          "rag-67d3603f90756c59",
+          "rag-f3faa0ec1e3b4d47",
+          "rag-d0645c9d7392669b"
+        ]
+      },
+      {
+        "field": "pain_radiation",
+        "option": "手臂",
+        "mapping": {
+          "findings": [
+            "neck_pain__cervical_radiculopathy__pain_radiates_arm"
+          ]
+        },
+        "disease_ids": [
+          "neck_pain__cervical_radiculopathy"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-fc1ce46b92c91469",
+          "rag-09f5bf5fd5fee52e",
+          "rag-6ffbd94b7cdda8ce"
+        ]
+      },
+      {
+        "field": "arm_hand_symptoms",
+        "option": "麻木",
+        "mapping": {
+          "findings": [
+            "neck_pain__cervical_radiculopathy__paresthesia",
+            "neck_pain__spinal_cord_neoplasm__focal_neurologic_deficit"
+          ]
+        },
+        "disease_ids": [
+          "neck_pain__cervical_radiculopathy",
+          "neck_pain__spinal_cord_neoplasm"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-fc1ce46b92c91469",
+          "rag-09f5bf5fd5fee52e",
+          "rag-6ffbd94b7cdda8ce",
+          "rag-4ce35e1ab62f20c0"
+        ]
+      },
+      {
+        "field": "arm_hand_symptoms",
+        "option": "刺痛",
+        "mapping": {
+          "findings": [
+            "neck_pain__cervical_radiculopathy__paresthesia",
+            "neck_pain__spinal_cord_neoplasm__focal_neurologic_deficit"
+          ]
+        },
+        "disease_ids": [
+          "neck_pain__cervical_radiculopathy",
+          "neck_pain__spinal_cord_neoplasm"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-fc1ce46b92c91469",
+          "rag-09f5bf5fd5fee52e",
+          "rag-6ffbd94b7cdda8ce",
+          "rag-4ce35e1ab62f20c0"
+        ]
+      },
+      {
+        "field": "arm_hand_symptoms",
+        "option": "無力",
+        "mapping": {
+          "findings": [
+            "neck_pain__cervical_radiculopathy__focal_neurologic_deficits",
+            "neck_pain__spinal_cord_neoplasm__focal_neurologic_deficit",
+            "neck_pain__neck_trauma__focal_neurologic_deficit"
+          ]
+        },
+        "disease_ids": [
+          "neck_pain__cervical_radiculopathy",
+          "neck_pain__spinal_cord_neoplasm",
+          "neck_pain__neck_trauma"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-4ce35e1ab62f20c0",
+          "rag-2f21ba21be782fc8",
+          "rag-9f13dbfb790cfc47",
+          "rag-d0645c9d7392669b"
+        ]
+      },
+      {
+        "field": "arm_hand_symptoms",
+        "option": "感覺喪失",
+        "mapping": {
+          "findings": [
+            "neck_pain__cervical_radiculopathy__focal_neurologic_deficits",
+            "neck_pain__spinal_cord_neoplasm__focal_neurologic_deficit"
+          ]
+        },
+        "disease_ids": [
+          "neck_pain__cervical_radiculopathy",
+          "neck_pain__spinal_cord_neoplasm"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-4ce35e1ab62f20c0"
+        ]
+      },
+      {
+        "field": "fever_chills",
+        "option": "發燒",
+        "mapping": {
+          "findings": [
+            "fever",
+            "neck_pain__lyme_disease__fever"
+          ]
+        },
+        "disease_ids": [
+          "neck_pain__retropharyngeal_abscess",
+          "neck_pain__lyme_disease"
+        ],
+        "source_ids": [
+          "rag-7a2c3a6670bcbe21",
+          "rag-9a56a8aeed512797",
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "field": "neck_stiffness",
+        "option": "有",
+        "mapping": {
+          "findings": [
+            "neck_stiffness",
+            "neck_pain__lyme_disease__neck_stiffness"
+          ]
+        },
+        "disease_ids": [
+          "neck_pain__retropharyngeal_abscess",
+          "neck_pain__lyme_disease"
+        ],
+        "source_ids": [
+          "rag-7a2c3a6670bcbe21",
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "field": "dysphagia",
+        "option": "有",
+        "mapping": {
+          "findings": [
+            "neck_pain__retropharyngeal_abscess__sore_throat",
+            "neck_pain__neck_trauma__dysphagia"
+          ]
+        },
+        "disease_ids": [
+          "neck_pain__retropharyngeal_abscess",
+          "neck_pain__neck_trauma"
+        ],
+        "source_ids": [
+          "rag-7a2c3a6670bcbe21",
+          "rag-2f21ba21be782fc8",
+          "rag-f09c5253c7a82445",
+          "rag-9f13dbfb790cfc47",
+          "rag-d0645c9d7392669b"
+        ]
+      },
+      {
+        "field": "dyspnea",
+        "option": "有",
+        "mapping": {
+          "findings": [
+            "dyspnea",
+            "neck_pain__neck_trauma__dyspnea"
+          ]
+        },
+        "disease_ids": [
+          "neck_pain__retropharyngeal_abscess",
+          "neck_pain__neck_trauma"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-2f21ba21be782fc8",
+          "rag-9f13dbfb790cfc47",
+          "rag-d0645c9d7392669b"
+        ]
+      },
+      {
+        "field": "pain_onset_pattern",
+        "option": "逐漸出現",
+        "mapping": {
+          "onset": "gradual",
+          "findings": [
+            "neck_pain__spinal_cord_neoplasm__insidious_progression"
+          ]
+        },
+        "disease_ids": [
+          "neck_pain__spinal_cord_neoplasm"
+        ],
+        "source_ids": [
+          "rag-520405111b6d707f",
+          "rag-5db846a062f8bd3a",
+          "rag-4ce35e1ab62f20c0",
+          "rag-9c4a4e42ed66a25d"
+        ]
+      },
+      {
+        "field": "fever_chills",
+        "option": "畏寒",
+        "mapping": {
+          "findings": [
+            "neck_pain__lyme_disease__chills"
+          ]
+        },
+        "disease_ids": [
+          "neck_pain__lyme_disease"
+        ],
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "field": "associated_headache",
+        "option": "有",
+        "mapping": {
+          "findings": [
+            "neck_pain__lyme_disease__headache"
+          ]
+        },
+        "disease_ids": [
+          "neck_pain__lyme_disease"
+        ],
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "neck_pain__cervical_strain",
+        "name": "Cervical Strain",
+        "must_not_miss": false,
+        "retrieval_query": "Cervical Strain diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "neck_pain__cervical_strain__trauma_trigger",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-520405111b6d707f",
+              "rag-b9aa3a2c87d315d1",
+              "rag-67d3603f90756c59",
+              "rag-f3faa0ec1e3b4d47"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-520405111b6d707f",
+          "rag-b9aa3a2c87d315d1",
+          "rag-67d3603f90756c59",
+          "rag-f3faa0ec1e3b4d47"
+        ]
+      },
+      {
+        "id": "neck_pain__cervical_radiculopathy",
+        "name": "Cervical Radiculopathy",
+        "must_not_miss": false,
+        "retrieval_query": "Cervical Radiculopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "neck_pain__cervical_radiculopathy__pain_radiates_arm",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-fc1ce46b92c91469",
+              "rag-09f5bf5fd5fee52e",
+              "rag-6ffbd94b7cdda8ce"
+            ]
+          },
+          {
+            "fact": "neck_pain__cervical_radiculopathy__paresthesia",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-fc1ce46b92c91469",
+              "rag-09f5bf5fd5fee52e",
+              "rag-6ffbd94b7cdda8ce"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-fc1ce46b92c91469",
+          "rag-09f5bf5fd5fee52e",
+          "rag-6ffbd94b7cdda8ce"
+        ]
+      },
+      {
+        "id": "neck_pain__lyme_disease",
+        "name": "Lyme Disease",
+        "must_not_miss": false,
+        "retrieval_query": "Lyme Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "neck_pain__lyme_disease__neck_stiffness",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-a17a88cf643fd7db",
+              "rag-eaa95978d634c800",
+              "rag-d002eda8880551d5"
+            ]
+          },
+          {
+            "fact": "neck_pain__lyme_disease__fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-a17a88cf643fd7db",
+              "rag-eaa95978d634c800",
+              "rag-d002eda8880551d5"
+            ]
+          },
+          {
+            "fact": "neck_pain__lyme_disease__chills",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-a17a88cf643fd7db",
+              "rag-eaa95978d634c800",
+              "rag-d002eda8880551d5"
+            ]
+          },
+          {
+            "fact": "neck_pain__lyme_disease__headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-a17a88cf643fd7db",
+              "rag-eaa95978d634c800",
+              "rag-d002eda8880551d5"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "id": "neck_pain__neck_trauma",
+        "name": "Neck Trauma",
+        "must_not_miss": true,
+        "retrieval_query": "Neck Trauma diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [
+          "experimental_neck_pain__neck_trauma__red_flags"
+        ],
+        "clues": [
+          {
+            "fact": "neck_pain__neck_trauma__history_of_injury",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-d0645c9d7392669b",
+              "rag-9f13dbfb790cfc47"
+            ]
+          },
+          {
+            "fact": "neck_pain__neck_trauma__dyspnea",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-2f21ba21be782fc8",
+              "rag-f09c5253c7a82445",
+              "rag-9f13dbfb790cfc47",
+              "rag-d0645c9d7392669b"
+            ]
+          },
+          {
+            "fact": "neck_pain__neck_trauma__dysphagia",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-2f21ba21be782fc8",
+              "rag-f09c5253c7a82445",
+              "rag-9f13dbfb790cfc47",
+              "rag-d0645c9d7392669b"
+            ]
+          },
+          {
+            "fact": "neck_pain__neck_trauma__focal_neurologic_deficit",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-2f21ba21be782fc8",
+              "rag-f09c5253c7a82445",
+              "rag-9f13dbfb790cfc47",
+              "rag-d0645c9d7392669b"
+            ]
+          },
+          {
+            "fact": "fever",
+            "status": "absent",
+            "direction": "oppose",
+            "weight": 1,
+            "source_ids": [
+              "rag-2f21ba21be782fc8"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-2f21ba21be782fc8",
+          "rag-f09c5253c7a82445",
+          "rag-9f13dbfb790cfc47",
+          "rag-d0645c9d7392669b"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_neck_pain__cervical_radiculopathy__focal_neurologic_deficits",
+        "label": "Neck pain with focal neurologic deficits",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "neck_pain"
+          ],
+          "any_findings": [
+            "neck_pain__cervical_radiculopathy__focal_neurologic_deficits"
+          ]
+        },
+        "possible_conditions": [
+          "Cervical Radiculopathy with significant nerve compression"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_neck_pain__neck_trauma__red_flags",
+        "label": "Potential Neck Trauma",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "neck_pain"
+          ],
+          "any_findings": [
+            "neck_pain__neck_trauma__history_of_injury",
+            "neck_pain__neck_trauma__dyspnea",
+            "neck_pain__neck_trauma__dysphagia",
+            "neck_pain__neck_trauma__focal_neurologic_deficit"
+          ]
+        },
+        "possible_conditions": [
+          "Neck Trauma"
+        ],
+        "source_ids": [
+          "rag-2f21ba21be782fc8",
+          "rag-f09c5253c7a82445",
+          "rag-9f13dbfb790cfc47",
+          "rag-d0645c9d7392669b"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Develop specific safety rules for red flag symptoms associated with neck pain, such as focal neurological deficits, fever, or signs of spinal cord injury.",
+        "reason": "The provided RAG sources for Cervical Strain mention ruling out serious conditions like fractures and spinal cord injury but do not provide specific clinical criteria or red flag definitions to build structured safety rules."
+      },
+      {
+        "requirement": "Create detailed fact codes and profiles for differential diagnoses of neck pain (e.g., meningitis, spinal epidural abscess, cervical radiculopathy).",
+        "reason": "The discovery process only identified 'Cervical Strain'. The RAG sources provided are specific to this condition and do not contain sufficient detail to build profiles for other potential causes of neck pain."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Determine if the user has trismus (lockjaw).",
+        "reason": "The questionnaire does not include a specific question to assess for trismus, which is a potential sign of Retropharyngeal Abscess mentioned in the RAG sources."
+      },
+      {
+        "requirement": "Assess for specific physical exam findings like posterior pharyngeal edema, cervical adenopathy, or a retropharyngeal bulge.",
+        "reason": "These are physical examination findings that cannot be assessed through a patient-facing questionnaire."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create a fact for bowel/bladder dysfunction from the questionnaire.",
+        "reason": "The provided questionnaire does not include questions about bowel or bladder function, which is a key red flag for spinal cord compression."
+      },
+      {
+        "requirement": "Create a fact for cancer history from the questionnaire.",
+        "reason": "The provided questionnaire does not ask about a history of cancer, which is a significant risk factor for metastatic spinal cord lesions."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Inquire about tick bites or exposure to tick-endemic areas, which is crucial for diagnosing Lyme disease.",
+        "reason": "The questionnaire does not currently include questions about tick exposure, travel history, or skin rashes like erythema migrans."
+      },
+      {
+        "requirement": "Differentiate between various stages of Lyme disease (early localized, early disseminated, late disseminated).",
+        "reason": "The provided RAG sources mention different stages, but the questionnaire data is insufficient to make this distinction, which requires a more detailed clinical history and timeline."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The profile for Cervical Strain is based on limited information. The primary diagnostic challenge is differentiating it from other causes. The profile relies on the absence of more severe conditions like fracture or spinal cord injury, which are mentioned as rule-outs in the source text.",
+        "source_ids": [
+          "rag-520405111b6d707f",
+          "rag-b9aa3a2c87d315d1",
+          "rag-67d3603f90756c59",
+          "rag-f3faa0ec1e3b4d47"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-520405111b6d707f",
+          "rag-b9aa3a2c87d315d1",
+          "rag-67d3603f90756c59",
+          "rag-f3faa0ec1e3b4d47"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], semantic_options[0], semantic_options[1], profiles[0], profiles[0].clues[0], profiles[0].clues[1], profiles[0].clues[2], profiles[0].clues[3]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-520405111b6d707f",
+          "rag-b9aa3a2c87d315d1",
+          "rag-67d3603f90756c59",
+          "rag-f3faa0ec1e3b4d47"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The provided RAG sources focus on the general characteristics of radicular pain and list focal neurologic deficits as a red flag in a general context, but lack specific details on the full clinical presentation or diagnostic criteria for Cervical Radiculopathy. Further evidence would be needed to build a more comprehensive profile.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-fc1ce46b92c91469",
+          "rag-09f5bf5fd5fee52e",
+          "rag-6ffbd94b7cdda8ce"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-fc1ce46b92c91469",
+          "rag-09f5bf5fd5fee52e",
+          "rag-6ffbd94b7cdda8ce"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], semantic_options[0], semantic_options[1], semantic_options[2], profiles[0], profiles[0].clues[0], profiles[0].clues[1], profiles[0].clues[2]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-fc1ce46b92c91469",
+          "rag-09f5bf5fd5fee52e",
+          "rag-6ffbd94b7cdda8ce"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The profile for Retropharyngeal Abscess is based on symptoms like fever, neck stiffness, sore throat, and stridor. While this is a critical diagnosis to consider, its presentation can be variable, and it is more common in children, although increasing in adults. The clues are weighted to reflect the seriousness of respiratory symptoms.",
+        "source_ids": [
+          "rag-7a2c3a6670bcbe21"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-7a2c3a6670bcbe21",
+          "rag-9a56a8aeed512797"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The current questionnaire lacks questions to screen for critical red flags associated with spinal cord compression, such as bowel/bladder dysfunction and a history of cancer. These are important for risk stratification.",
+        "source_ids": [
+          "rag-4ce35e1ab62f20c0",
+          "rag-9c4a4e42ed66a25d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-4ce35e1ab62f20c0"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], semantic_options[0], profiles[0], profiles[0].clues[0], profiles[0].clues[3]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-520405111b6d707f",
+          "rag-5db846a062f8bd3a",
+          "rag-4ce35e1ab62f20c0",
+          "rag-9c4a4e42ed66a25d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[3], profiles[0], profiles[0].clues[0], profiles[0].clues[1]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-a17a88cf643fd7db",
+          "rag-eaa95978d634c800",
+          "rag-d002eda8880551d5"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[0], fact_proposals[1], fact_proposals[2], semantic_options[2], semantic_options[3], semantic_options[4], safety_proposals[0], profiles[0], profiles[0].clues[1], profiles[0].clues[2], profiles[0].clues[3]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-2f21ba21be782fc8",
+          "rag-f09c5253c7a82445",
+          "rag-9f13dbfb790cfc47",
+          "rag-d0645c9d7392669b"
+        ]
+      }
+    ]
+  }
+}

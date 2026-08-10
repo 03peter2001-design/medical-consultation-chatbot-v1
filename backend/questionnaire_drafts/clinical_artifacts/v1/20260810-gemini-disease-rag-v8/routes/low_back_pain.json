@@ -1,0 +1,1213 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "low_back_pain",
+  "label": "腰痛",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "4d32d72767de1867fdfedf216efddb0d704feb61d2974a9505286ccd370e8c1d",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"low back pain low back pain differential diagnosis diseases clinical presentation symptoms history\",\"low back pain low back pain red flags emergency warning signs urgent referral rule out\",\"Herniated Disc diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Osteomyelitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Mechanical Back Pain diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Pyelonephritis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Nephrolithiasis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Cauda Equina Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "7f38191a5700741cccb9dea0d58106cdb255c4d20431470b6c06ffb6a97d671b"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "b5c91d5f3b2963eda9f9b16b861de4f07f8a148d84ca666feb4af67158dab765",
+    "generated_at": "2026-08-10T04:10:42+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-87846466cc8091f4",
+      "chunk_id": "74ab9de94000c37ef9b4_1",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3287,
+      "excerpt": "a%rniated nucleus pulposust multiple levels, one of the causes of low back pain. Magnetic resonance image of the lumbar spine. This image demonstrates a herniated nucleus pulposus at multiple levels. See ck Pain: Find the Cause, Watch for the Comeback, a Critical Images slideshow, to help diagnose and manage this common problem. Low back pain reportedly occurs at least once in 85% of adults younger than 50 years, and 15-20% of Americans have at least one episode of back pain per year. Of these patients, only 20% can be given a precise pathoanatomic diagnosis. Low back pain affects men and",
+      "text_sha256": "48e38edd6e096614f0fc76a6decaab812fce77aa920893c37f6206b6f8247188"
+    },
+    {
+      "id": "rag-7f0a0f4a5a402b2f",
+      "chunk_id": "74ab9de94000c37ef9b4_11",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3349,
+      "excerpt": "caudal sac. The classic presentation is bilateral sciatica, with lower extremity bowel or bladder dysfunction present in 90% of patients. Urinary retention is initially observed and followed by overflow incontinence. Perineal or perianal anesthesia is present in 60-80% of patients. Musculoskeletal pain syndromes Musculoskeletal pain syndromes that produce low back pain include myofascial pain syndromes and fibromyalgia. Myofascial pain is characterized by pain and tenderness over localized areas (trigger points), loss of range of motion in the involved muscle groups, and pain radiating in a",
+      "text_sha256": "5e8b0e4bddf178f04369b3d2139c4b28bf31da607287cda7de719fbb83462798"
+    },
+    {
+      "id": "rag-2e06058fcff327f6",
+      "chunk_id": "53b354e14520b0f0479f_3",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4395,
+      "excerpt": "characterized by a continuing (spontaneous and/or evoked) regional pain that is seemingly disproportionate in time or degree to the usual course of any known trauma or other lesion. The pain is regional (not in a specific nerve territory or dermatome) and usually has a distal predominance of abnormal sensory, motor, sudomotor, vasomotor, and/or trophic findings. The syndrome shows variable progression over time. Schwartzman stated that a common mechanism may be injury to central or peripheral neural tissue. Roberts proposed that sympathetic pain results from tonic activity in myelinated",
+      "text_sha256": "dee01c8dbefb642cc24e011d6414c1d6b17e04916638837cb18bf5eedd8e6837"
+    },
+    {
+      "id": "rag-966ae6ad156bee23",
+      "chunk_id": "6cd5c8412c6ef4421f61_8",
+      "title": "Abdominal Pain in Elderly Persons: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/776663-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4677,
+      "excerpt": "Gastroenteritis (Stomach Flu), Constipation dults), and Blood in the Urine. Pathophysiology Abdominal pain may be the presenting symptom in a wide range of diseases in elderly patients. Note that elderly patients with intra-abdominal pathology are more likely to present with symptoms other than abdominal pain, such as fever, fatigue, chest pain, or altered mental status. Biliary tract disease Biliary tract disease includes symptomatic cholelithiasis, choledocholithiasis, calculus and acalculous cholecystitis, and ascending cholangitis. In some studies, biliary tract disease is the most common",
+      "text_sha256": "b750575466259d1cbf9236bb2b18fca5c73c80702e52e82634b417449026bc3a"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "chest",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "low_back_pain__herniated_disc",
+        "low_back_pain__osteomyelitis"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain differential diagnosis diseases clinical presentation symptoms history",
+        "low back pain low back pain red flags emergency warning signs urgent referral rule out",
+        "Herniated Disc diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Osteomyelitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4108,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-a3b9af055380ca54",
+      "chunk_id": "2ec7db6c11d8ff900b3f_21",
+      "title": "Hyperventilation Syndrome: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/807277-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5356,
+      "excerpt": "a 3.5-year average follow-up period, 67% of the patients had made subsequent ED visits for chest pain, and 40% of the patients had been readmitted to rule out myocardial infarction (MI). Clearly, HVS not only causes severe and genuine discomfort for the patient but also accounts for considerable medical expense through the process of excluding more serious disorders. That patients with HVS appear ill tends to prompt further esoteric testing, which is inevitably nondiagnostic. The chronicity of the condition often causes different physicians to repeat these diagnostic investigations.",
+      "text_sha256": "4da5d973557e720fd8db8e0be7c098d7c2373a38817167f52abc6d22ae9ff6f9"
+    },
+    {
+      "id": "rag-683544f4e158c9bb",
+      "chunk_id": "74ab9de94000c37ef9b4_12",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "low_back_pain__mechanical_back_pain"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain red flags emergency warning signs urgent referral rule out",
+        "Mechanical Back Pain diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3664,
+      "excerpt": "loss of range of motion in the involved muscle groups, and pain radiating in a characteristic distribution but restricted to a peripheral nerve. Relief of pain is often reported when the involved muscle group is stretched. Fibromyalgia results in pain and tenderness on palpation of 11 of 18 trigger points, one of which is the low back area, as classified by the American College of Rheumatology. Generalized stiffness, fatigue, and muscle ache are reported. Other skeletal causes Other skeletal causes of low back pain include osteomyelitis, sacroiliitis, and malignancy. Osteomyelitis results from",
+      "text_sha256": "42cc0bb3a0e96ef3be649807a9cd9fcf797c5c41064119372535534265b64293"
+    },
+    {
+      "id": "rag-94a8e6edb9127701",
+      "chunk_id": "53b354e14520b0f0479f_1",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4805,
+      "excerpt": "phantom limb pain during his time as a military surgeon and his experiences with limb amputations. (ysicians throughout the world have described similar syndromes over the centuries and CRPS has held many names, even just within the English language.JCRPS, an entity formally called reflex sympathetic dystrophy (RSD), has readily identifiable signs and symptoms and is treatable if recognized early; however, the syndrome may become disabling if unrecognized. mergency medicine physicians may be the first to see the syndrome and their actions can vastly improve the quality of life and",
+      "text_sha256": "052206cb83a26a39421944480659ffd9843f01b3616c922b01641af1d18910e0"
+    },
+    {
+      "id": "rag-9f3c1d558a704b29",
+      "chunk_id": "74ab9de94000c37ef9b4_7",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.492,
+      "excerpt": "poorly localized, and without paresthesia. Impingement is associated with a positive straight leg raising sign (ie, shooting pain down ipsilateral leg with leg raising), while irritation is not. Neurologic deficits and pain radiation below the knee are rarely seen in irritation alone and are most commonly found with impingement. The cause of impingement syndrome is most commonly herniated discs, but it may also be caused by spinal stenosis, spinal degeneration, or cauda equina syndrome. Herniated discs are produced as spinal discs degenerate. After growing thinner, the nucleus pulposus",
+      "text_sha256": "1ee778cf17828afb20d3c42286044631e057233240c5dd5cc1c457b628664ed0"
+    },
+    {
+      "id": "rag-94cb843c606e3756",
+      "chunk_id": "b756911235fb6bdef18f_20",
+      "title": "Cardiac Tests: Practice Essentials, Overview, Exercise Tolerance Test",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811577-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5794,
+      "excerpt": "who underwent both exercise tolerance testing and coronary angiography by the American College of Cardiology and American Heart Association (ACC/AHA) showed a mean sensitivity of 68% and mean specificity of 77%. Despite the low sensitivity when compared to angiography results, the purpose of stress testing in the context of the emergency department (ED) evaluation of chest pain is not to rule out CAD but to be used as short-term prognostic tool to aid the safe disposition of patients. The 2014 AHA/ACC guidelines for the management of non-ST-elevation myocardial infarction (NSTEMI) and acute",
+      "text_sha256": "f428721fb0a8f0d9327a88c1e1402a229cae37662f00429752d6f3f857313ab5"
+    },
+    {
+      "id": "rag-1a14728db5654797",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5925,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the",
+      "text_sha256": "a012e90799aaae112f8e2f59bf68f6b84cb309ef80df02b30b572ab01eb67b32"
+    },
+    {
+      "id": "rag-15ce66364be76637",
+      "chunk_id": "74ab9de94000c37ef9b4_6",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__mechanical_back_pain"
+      ],
+      "retrieval_queries": [
+        "Mechanical Back Pain diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3539,
+      "excerpt": "musculoskeletal pain syndromes, and skeletal causes. Nerve root syndromes Classic nerve root syndrome is characterized by radicular pain arising from nerve root impingement due to herniated discs. A similar syndrome can also be produced by inflammation and irritation, which may explain why patients whose presentation is consistent with this diagnosis respond to conservative therapies. Impingement pain tends to be sharp, well localized, and can be associated with paresthesia, whereas irritation pain tends to be dull, poorly localized, and without paresthesia. Impingement is associated with a",
+      "text_sha256": "1cc816f5d16418b5390dd4c89e734cba13cb748771c9292c53729d2bfaf846b6"
+    },
+    {
+      "id": "rag-d71a0a73f65f79a2",
+      "chunk_id": "c073c38d1231a0946898_1",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__mechanical_back_pain"
+      ],
+      "retrieval_queries": [
+        "Mechanical Back Pain diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3962,
+      "excerpt": "alternative diagnoses. Signs of dysfunction of other cranial neruves or other neurologic abnormality exclude the diagnosis of classic trigeminal neuralgia and suggest that pain may be secondary to a structural lesion. The International Association for the Study of Pain (IASP) classifies TN into three categories. Classical TN is described as vascular compression that causes anatomical changes in the trigeminal nerve root. Next, secondary TN is due to an underlying neurologic disease. Third, idiopathic TN, is diagnosed after all studies reveal no etiology or there is no apparent cause. Classic",
+      "text_sha256": "ce29c6daab7ff6fd5cd95a131c5c0f906c846e7d275efa50d3ee5c72823e1ba8"
+    },
+    {
+      "id": "rag-520405111b6d707f",
+      "chunk_id": "e4e50b3c5a1f1d69d42c_1",
+      "title": "Spinal Epidural Abscess: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165840-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__mechanical_back_pain"
+      ],
+      "retrieval_queries": [
+        "Mechanical Back Pain diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4102,
+      "excerpt": "back pain without any \"red flag\" symptoms). Half of all cases of spinal epidural abscess are estimated to be misdiagnosed or have a delayed diagnosis. Early identification and timely surgical intervention may result in improved outcomes and preservation of neurological function. An MRI of the lumbar spine (T1-weighted, post-contrast) shows a spinal epidural abscess at the level of L3-L4, with an associated left paraspinal muscle abscess. Pathophysiology Risk factors for epidural spinal abscesses include intravenous drug use and immunosuppression from a variety of sources including HIV/AIDS and",
+      "text_sha256": "48daab59953400fa3b4bccd4ecb6c1fa552c97f7fb814edd94b88cfe1be116c8"
+    },
+    {
+      "id": "rag-6e7e81529db3d565",
+      "chunk_id": "151b955c72ff202aef68_3",
+      "title": "Lumbar (Intervertebral) Disc Disorder Management in the ED: Practice Essentials, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827016-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__herniated_disc"
+      ],
+      "retrieval_queries": [
+        "Herniated Disc diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.571,
+      "excerpt": "not helpful in the diagnosis of lumbar disc disease. For an otherwise healthy individual, unless the patient is immobilized completely by the pain and requires admission or the pain has been present for more than 6 weeks, diagnostic studies are not recommended. Indications for screening laboratory tests such as the following include pain of a nonmechanical nature, atypical pain pattern, persistent symptoms, and age greater than 50 years: Complete blood count with differential Erythrocyte sedimentation rate Alkaline and acid phosphatase levels Serum calcium level Serum protein electrophoresis",
+      "text_sha256": "2915b953f0cfba78370bd72149b935c6c33f9556f525516d0504ac8f5842763b"
+    },
+    {
+      "id": "rag-ccf9b70030c23227",
+      "chunk_id": "dd9970b5cca993dde8ee_5",
+      "title": "Latex Allergy: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/756632-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__herniated_disc",
+        "low_back_pain__osteomyelitis"
+      ],
+      "retrieval_queries": [
+        "Herniated Disc diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Osteomyelitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5477,
+      "excerpt": "Images slideshow, to help identify a variety of allergens and symptoms. For related information, see Medscape's Allergy & Immunology Resource Center. Pathophysiology Latex exposure is associated with 3 clinical syndromes. Irritant dermatitis results from mechanical disruption of the skin due to the rubbing of gloves and accounts for the majority of latex-induced local skin rashes. It is not immune mediated, is not associated with allergic complications, and is not the subject of this article. It may be confused with Type IV hypersensitivity. Any chronic hand dermatitis in HCWs raises the risk",
+      "text_sha256": "5b56241972bfb600425e25d659b0b591393b6d0c28b4e83625200fd97861ebe1"
+    },
+    {
+      "id": "rag-a17a88cf643fd7db",
+      "chunk_id": "f3a0e8ebab5000f04492_9",
+      "title": "Lyme Disease Serology: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2094578-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__herniated_disc"
+      ],
+      "retrieval_queries": [
+        "Herniated Disc diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5908,
+      "excerpt": "risk of B burgdorferi infection who are seeking Lyme testing for symptoms of a more nonspecific nature. Indication/Applications Testing is indicated for clinically suspected cases of Lyme disease; it is not necessary if the patient has a tick bite and erythema migrans. Considerations Diagnosis of Lyme disease is made based on a combination clinical manifestations and available testing. No test is 100% sensitive or specific for Lyme disease. If the test is performed before an adequate antibody response develops, results may be false negative. In this case, repeat testing in 2-4 weeks is",
+      "text_sha256": "7d9f427e83fb51568453997ac93924341f108db8dcdd1e9ee603c71d86fdb87c"
+    },
+    {
+      "id": "rag-6568cf4a82cf47b2",
+      "chunk_id": "59ad3dde46ba49f6df04_11",
+      "title": "Hypersensitivity Pneumonitis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/299174-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__pyelonephritis"
+      ],
+      "retrieval_queries": [
+        "Pyelonephritis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4327,
+      "excerpt": "are also important hallmarks. Features often associated with poorer prognosis include: Predominantly peripheral fibrosis in a patchy pattern with architectural distortion and fibroblast foci similar to UIP Homogeneous linear fibrosis similar to fibrotic NSIP Irregular predominantly peribronchiolar fibrosis Etiology More than 300 etiologies of hypersensitivity pneumonitis (HP) have been reported from a wide range of exposures involving airborne antigens. Table. Selected Etiological Agents for Hypersensitivity Pneumonitis (Open Table in a new window) Disease Source of Exposure Major Antigen",
+      "text_sha256": "d39d6c5316d27d82ff9ae9be9a8169535decca9405b85d525cd01a53bab332d3"
+    },
+    {
+      "id": "rag-db049d5e26ee0544",
+      "chunk_id": "c26e46c7bebfd6402c69_18",
+      "title": "Pyonephrosis: Practice Essentials, Etiology, Prognosis",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/440548-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__pyelonephritis"
+      ],
+      "retrieval_queries": [
+        "Pyelonephritis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4393,
+      "excerpt": "Leukocytosis and bacteriuria may be present; however, they are not specific for pyonephrosis and may be due to other causes (eg, pyelonephritis, uncomplicated urinary tract infections). Pyuria, while often present in pyonephrosis, is nonspecific. Bacteriuria, fever, pain, and leukocytosis can be absent in 30% of patients with pyonephrosis. C-reactive protein (CRP) measurement has been shown to help guide the management of pyonephrosis. In a study of 110 patients with renal colic, CRP levels greater than 28 mg/L indicated the need for emergent drainage, with good reliability. However, in a",
+      "text_sha256": "409d76ecb24a61676951bfb3dfced1fd47396e68a51d7c9fb73bc4224f1983d1"
+    },
+    {
+      "id": "rag-6031535642b3c623",
+      "chunk_id": "59ad3dde46ba49f6df04_7",
+      "title": "Hypersensitivity Pneumonitis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/299174-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__pyelonephritis"
+      ],
+      "retrieval_queries": [
+        "Pyelonephritis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.443,
+      "excerpt": "associated with disease progression. In patients who go on to develop symptoms, hypersensitivity pneumonitis is classified as acute, subacute (intermittent), or chronic progressive. The mechanisms of disease are incompletely understood. Acute hypersensitivity pneumonitis is thought to occur primarily via type III hypersensitivity reaction. Most patients show evidence of specific antibodies in their serum and bronchoalveolar lavage studies may demonstrate high levels of proinflammatory chemokines. This is further supported by the finding of complement and immunoglobulin deposition in vessel",
+      "text_sha256": "40d74fe3ca4591cae556b3eea12ad1ef9461ff75b13ae45b72c6214540963a52"
+    },
+    {
+      "id": "rag-eb037e73dbf72d4e",
+      "chunk_id": "ad1ba37a75d2bf17e98b_17",
+      "title": "Dermatologic Manifestations of Necrotizing Fasciitis: Overview, Types of Necrotizing Fasciitis, Clinical Evaluation",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1054438-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__pyelonephritis"
+      ],
+      "retrieval_queries": [
+        "Pyelonephritis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4762,
+      "excerpt": "diagnosis. Other conditions that should be considered when evaluating a patient with suspected necrotizing fasciitis include the following: Acute Febrile Neutrophilic Dermatosis Acute Hemorrhagic Edema of Infancy Cellulitis Erythema Induratum (Nodular Vasculitis) Postsurgical pyoderma gangrenosum Purpura fulminans",
+      "text_sha256": "8f6a34de4b01d9549f20443cdf0baf583f7f0aef410ca95252d763b121f02b98"
+    },
+    {
+      "id": "rag-d7ddcf49ea63cf78",
+      "chunk_id": "b442ee23c5dd60d5345b_15",
+      "title": "Nematode Infections: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/224011-overview",
+      "routes": [
+        "headache",
+        "abdomen",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__nephrolithiasis"
+      ],
+      "retrieval_queries": [
+        "Nephrolithiasis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4097,
+      "excerpt": "manifestations, including myocarditis, CNS involvement, and pneumonitis. Larvae of Anisakis species may become embedded in the gastric mucosa; endoscopy may reveal erythema, edema, severe erosive gastritis, a tumorlike nodule, or ulcerations. Anisakiasis has been reported to be associated with allergy reactions in some individuals. Patients with ocular dirofilariasis often report discomfort, ocular pain, grittiness, and eye redness. Angiostrongyliasis (rat lungworm disease) has a presentation similar to that of bacterial meningitis. Rarely, neurologic dysfunction or death can occur. Some of",
+      "text_sha256": "70b7ba0da895297ac06284e072dd05e1a291b2dda63bd852372726f3cb071f9a"
+    },
+    {
+      "id": "rag-e77c0af2d11a7cf9",
+      "chunk_id": "79e865600693d8204c49_7",
+      "title": "Vestibular Neuritis: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794489-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__nephrolithiasis"
+      ],
+      "retrieval_queries": [
+        "Nephrolithiasis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4054,
+      "excerpt": "practical during the acute episode because of patient discomfort. Clinical Presentation",
+      "text_sha256": "4c87346fd13a29fa9f651902a6f5db2de450dfdc73ee01c2840efaf31f7507fd"
+    },
+    {
+      "id": "rag-71b773a2c2be4959",
+      "chunk_id": "4544aeb789a7980a8b03_32",
+      "title": "Nephrotic Syndrome: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/244631-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__nephrolithiasis"
+      ],
+      "retrieval_queries": [
+        "Nephrolithiasis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4344,
+      "excerpt": "in association with additional signs and symptoms (eg, Alport syndrome, primary coenzyme Q10 deficiency). Medication can cause nephrotic syndrome. This includes the very infrequent occurrence of minimalchange nephropathy with use of nonsteroidal anti-inflammatory drugs (NSAIDs), and the occurrence of membranous nephropathy withse of gold and penicillamine, which are older drugs used for rheumatic diseases. Focal glomerulosclerosis can occur in association with intravenous bisphosphonates. Lithium and interferon therapy!ve been associated with cal glomerulosclerosis of the collapsing type.",
+      "text_sha256": "7b819fd6dd1ea21f63914d8a40e4a73802d1401e296c1d49a6270bfa3ad6cbbe"
+    },
+    {
+      "id": "rag-b7532b01caaa3794",
+      "chunk_id": "4544aeb789a7980a8b03_35",
+      "title": "Nephrotic Syndrome: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/244631-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__nephrolithiasis"
+      ],
+      "retrieval_queries": [
+        "Nephrolithiasis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4107,
+      "excerpt": "of membranous nephropathy cases were diagnosed before the diagnosis of cancer. Thus, in some patients with membranous nephropathy one should consider the possibility of an undiagnosed cancer. Nephrotic syndrome has been reported following both COVID-19 infection and vaccination, most commonly related to`collapsing form of focal segmental glomerulosclerosis. Epidemiology United States statistics The figure below shows the incidence per million population of important causes of nephrotic syndrome. Diabetic nephropathy with nephrotic syndrome is most common, at an estimated rate of at least 50",
+      "text_sha256": "404201e6a82acb8a5e87642b0873afc98042f094f57bc323ec8b5301ce6b431c"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__cauda_equina_syndrome"
+      ],
+      "retrieval_queries": [
+        "Cauda Equina Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4074,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-f535f7d2452b0d38",
+      "chunk_id": "4a333b8daf252bbcafcd_1",
+      "title": "Toxic Shock Syndrome: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/169177-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__cauda_equina_syndrome"
+      ],
+      "retrieval_queries": [
+        "Cauda Equina Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4692,
+      "excerpt": "headache, and nonfocal neurologic abnormalities. See the image below. A 46-year-old man presented with nonnecrotizing cellulitis and streptococcal toxic shock syndrome. The patient had diffuse erythroderma, a characteristic feature of the syndrome. The patient improved with antibiotics and intravenous gammaglobulin therapy. Several days later, a characteristic desquamation of the skin occurred over palms and soles. Courtesy of Rob Green, MD. TSS was first described in children in 1978. Subsequent reports identified an association with tampon use by menstruating women. Menstrual TSS is more",
+      "text_sha256": "26ca000008738031089e37f3efef58bcc8269ac23eaf735f7d7686e20f667032"
+    },
+    {
+      "id": "rag-150bd762522d7024",
+      "chunk_id": "63feb2d05105b6accd7f_2",
+      "title": "Neuroleptic Malignant Syndrome: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/816018-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__cauda_equina_syndrome"
+      ],
+      "retrieval_queries": [
+        "Cauda Equina Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4865,
+      "excerpt": "gait Psychomotor agitation Delirium progressing to lethargy, stupor, coma Other general examination findings indicative of autonomic dysregulation include the following: Diaphoresis Sialorrhea Tachycardia Tachypnea, respiratory distress (31% of cases) Increased or labile blood pressure Hypoxemia (low pulse oximeter reading) See Presentation for more detail. Diagnosis No laboratory test result is diagnostic for NMS. Laboratory studies are used to assess severity and complications or rule out other diagnostic possibilities. A summary of the laboratory abnormalities that may be found in",
+      "text_sha256": "dc57b0a859626f3c961a77cf26035e03008376688fb7a2327236b84f8873a5e8"
+    },
+    {
+      "id": "rag-2a77934242f0e69d",
+      "chunk_id": "791b392395fdb02a4e02_4",
+      "title": "Leptospirosis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/220563-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__cauda_equina_syndrome"
+      ],
+      "retrieval_queries": [
+        "Cauda Equina Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4912,
+      "excerpt": "Courtesy of the Centers for Disease Control and Prevention (CDC), Rob Weyant. Signs and symptoms Leptospirosis ranges in severity from no symptoms to a mild illness suggesting a viral infection to a multisystemic syndrome with unique features. It is characterized by sudden onset of the following: Fever (38-40°C) Rigors Headache, retro-orbital pain, photophobia Muscle pain localized to the calf and lumbar areas Conjunctival suffusion Dry cough Nausea and vomiting, diarrhea More severe disease manifests as icteric leptospirosis, also known as Weil disease, with the following features: Icterus or",
+      "text_sha256": "f4003fe51828aa03dd3bc9aef69c8fe05e0d2a60538f5383a227ba13923a5d9a"
+    },
+    {
+      "id": "rag-5bae42a81065eb80",
+      "chunk_id": "97643cd7e561a7fa491e_1",
+      "title": "Serum Osmolality: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2099042-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__osteomyelitis"
+      ],
+      "retrieval_queries": [
+        "Osteomyelitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5272,
+      "excerpt": "Various conditions are associated with abnormal serum osmolality. Conditions associated with increased serum osmolality include the following: Marked hyperglycemia, including diabetic ketoacidosis and nonketotic hyperosmolar hyperglycemic coma Diabetes insipidus (central and nephrogenic) Hypernatremia due to dehydration Hypernatremia due to iatrogenic or accidental excessive sodium chloride (NaCl) or sodium bicarbonate (NaHCO3) intake Alcohol ingestion (eg, ethanol, methanol, ethylene glycol, polyethylene glycol) Conditions associated with decreased serum osmolality include the following:",
+      "text_sha256": "61c2149270cfd79745c3be4e1af5e7a7cadce61bc3ca41a091f9fe3acd599648"
+    },
+    {
+      "id": "rag-b4a0ae3f6f58d444",
+      "chunk_id": "07df249484c518a9426f_5",
+      "title": "Osteomyelitis in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/785020-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "low_back_pain__osteomyelitis"
+      ],
+      "retrieval_queries": [
+        "Osteomyelitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.529,
+      "excerpt": "(IV) drug abuse, alcoholism, chronic steroid use, immunosuppression, and chronic joint disease. In addition, the presence of a prosthetic orthopedic device is an independent risk factor, as is any recent orthopedic surgery or open fracture. For the radiologic perspective, see Osteomyelitis, Acute Pyogenic and Osteomyelitis, Chronic. Epidemiology Frequency United States The overall prevalence is 1 case per 5,000 children. Neonatal prevalence is approximately 1 case per 1,000. The annual incidence in patients with sickle cell anemia is approximately 0.36%. The prevalence of osteomyelitis after",
+      "text_sha256": "094b25674376cf64c07053e3894c707f2afa198fa7220530ad4420b8d8b0a65c"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "low_back_pain__mechanical_back_pain",
+      "name": "Mechanical Back Pain",
+      "retrieval_query": "Mechanical Back Pain diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-87846466cc8091f4",
+        "rag-7f0a0f4a5a402b2f"
+      ],
+      "disease_rag_source_ids": [
+        "rag-683544f4e158c9bb",
+        "rag-15ce66364be76637",
+        "rag-d71a0a73f65f79a2",
+        "rag-520405111b6d707f"
+      ]
+    },
+    {
+      "id": "low_back_pain__herniated_disc",
+      "name": "Herniated Disc",
+      "retrieval_query": "Herniated Disc diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-87846466cc8091f4",
+        "rag-9f3c1d558a704b29"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-6e7e81529db3d565",
+        "rag-ccf9b70030c23227",
+        "rag-a17a88cf643fd7db"
+      ]
+    },
+    {
+      "id": "low_back_pain__pyelonephritis",
+      "name": "Pyelonephritis",
+      "retrieval_query": "Pyelonephritis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-966ae6ad156bee23"
+      ],
+      "disease_rag_source_ids": [
+        "rag-6568cf4a82cf47b2",
+        "rag-db049d5e26ee0544",
+        "rag-6031535642b3c623",
+        "rag-eb037e73dbf72d4e"
+      ]
+    },
+    {
+      "id": "low_back_pain__nephrolithiasis",
+      "name": "Nephrolithiasis",
+      "retrieval_query": "Nephrolithiasis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-966ae6ad156bee23"
+      ],
+      "disease_rag_source_ids": [
+        "rag-d7ddcf49ea63cf78",
+        "rag-e77c0af2d11a7cf9",
+        "rag-71b773a2c2be4959",
+        "rag-b7532b01caaa3794"
+      ]
+    },
+    {
+      "id": "low_back_pain__cauda_equina_syndrome",
+      "name": "Cauda Equina Syndrome",
+      "retrieval_query": "Cauda Equina Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-7f0a0f4a5a402b2f",
+        "rag-9f3c1d558a704b29"
+      ],
+      "disease_rag_source_ids": [
+        "rag-5bcac9eab5404341",
+        "rag-f535f7d2452b0d38",
+        "rag-150bd762522d7024",
+        "rag-2a77934242f0e69d"
+      ]
+    },
+    {
+      "id": "low_back_pain__osteomyelitis",
+      "name": "Osteomyelitis",
+      "retrieval_query": "Osteomyelitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-683544f4e158c9bb"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-ccf9b70030c23227",
+        "rag-5bae42a81065eb80",
+        "rag-b4a0ae3f6f58d444"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "low_back_pain",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-683544f4e158c9bb",
+        "rag-15ce66364be76637",
+        "rag-d71a0a73f65f79a2",
+        "rag-520405111b6d707f",
+        "rag-f09c5253c7a82445",
+        "rag-6e7e81529db3d565",
+        "rag-ccf9b70030c23227",
+        "rag-a17a88cf643fd7db",
+        "rag-6568cf4a82cf47b2",
+        "rag-db049d5e26ee0544",
+        "rag-6031535642b3c623",
+        "rag-eb037e73dbf72d4e",
+        "rag-d7ddcf49ea63cf78",
+        "rag-e77c0af2d11a7cf9",
+        "rag-71b773a2c2be4959",
+        "rag-b7532b01caaa3794",
+        "rag-5bcac9eab5404341",
+        "rag-f535f7d2452b0d38",
+        "rag-150bd762522d7024",
+        "rag-2a77934242f0e69d",
+        "rag-5bae42a81065eb80",
+        "rag-b4a0ae3f6f58d444"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "low_back_pain__mechanical_back_pain__pain_with_tenderness",
+        "description": "腰部疼痛伴隨局部壓痛點。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "low_back_pain__mechanical_back_pain"
+        ],
+        "source_ids": [
+          "rag-683544f4e158c9bb"
+        ]
+      },
+      {
+        "code": "low_back_pain__mechanical_back_pain__dull_pain",
+        "description": "腰部疼痛性質為鈍痛。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "low_back_pain__mechanical_back_pain"
+        ],
+        "source_ids": [
+          "rag-15ce66364be76637"
+        ]
+      },
+      {
+        "code": "low_back_pain__mechanical_back_pain__sharp_pain",
+        "description": "腰部疼痛性質為尖銳痛。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "low_back_pain__mechanical_back_pain"
+        ],
+        "source_ids": [
+          "rag-15ce66364be76637"
+        ]
+      },
+      {
+        "code": "low_back_pain__pyelonephritis__fever",
+        "description": "發燒",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "low_back_pain__pyelonephritis"
+        ],
+        "source_ids": [
+          "rag-db049d5e26ee0544"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "has_tender_point",
+        "option": "是",
+        "mapping": {
+          "findings": [
+            "low_back_pain__mechanical_back_pain__pain_with_tenderness"
+          ]
+        },
+        "disease_ids": [
+          "low_back_pain__mechanical_back_pain"
+        ],
+        "source_ids": [
+          "rag-683544f4e158c9bb"
+        ]
+      },
+      {
+        "field": "pain_character",
+        "option": "鈍痛",
+        "mapping": {
+          "findings": [
+            "low_back_pain__mechanical_back_pain__dull_pain"
+          ]
+        },
+        "disease_ids": [
+          "low_back_pain__mechanical_back_pain"
+        ],
+        "source_ids": [
+          "rag-15ce66364be76637"
+        ]
+      },
+      {
+        "field": "pain_character",
+        "option": "尖銳",
+        "mapping": {
+          "findings": [
+            "low_back_pain__mechanical_back_pain__sharp_pain"
+          ]
+        },
+        "disease_ids": [
+          "low_back_pain__mechanical_back_pain"
+        ],
+        "source_ids": [
+          "rag-15ce66364be76637"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "發燒或畏寒",
+        "mapping": {
+          "findings": [
+            "low_back_pain__pyelonephritis__fever",
+            "fever"
+          ]
+        },
+        "disease_ids": [
+          "low_back_pain__pyelonephritis"
+        ],
+        "source_ids": [
+          "rag-db049d5e26ee0544",
+          "rag-f09c5253c7a82445",
+          "rag-ccf9b70030c23227",
+          "rag-5bae42a81065eb80",
+          "rag-b4a0ae3f6f58d444"
+        ]
+      },
+      {
+        "field": "precipitating_events",
+        "option": "可能的感染",
+        "mapping": {
+          "findings": [
+            "recent_infection"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ccf9b70030c23227",
+          "rag-5bae42a81065eb80",
+          "rag-b4a0ae3f6f58d444"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "low_back_pain__mechanical_back_pain",
+        "name": "Mechanical Back Pain",
+        "must_not_miss": false,
+        "retrieval_query": "Mechanical Back Pain diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "low_back_pain__mechanical_back_pain__pain_with_tenderness",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-683544f4e158c9bb"
+            ]
+          },
+          {
+            "fact": "low_back_pain__mechanical_back_pain__dull_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-15ce66364be76637"
+            ]
+          },
+          {
+            "fact": "low_back_pain__mechanical_back_pain__sharp_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-15ce66364be76637"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-683544f4e158c9bb",
+          "rag-15ce66364be76637"
+        ]
+      },
+      {
+        "id": "low_back_pain__pyelonephritis",
+        "name": "Pyelonephritis",
+        "must_not_miss": false,
+        "retrieval_query": "Pyelonephritis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "low_back_pain__pyelonephritis__fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-db049d5e26ee0544"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-db049d5e26ee0544"
+        ]
+      },
+      {
+        "id": "low_back_pain__osteomyelitis",
+        "name": "Osteomyelitis",
+        "must_not_miss": false,
+        "retrieval_query": "Osteomyelitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-ccf9b70030c23227",
+              "rag-5bae42a81065eb80",
+              "rag-b4a0ae3f6f58d444"
+            ]
+          },
+          {
+            "fact": "recent_infection",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-ccf9b70030c23227",
+              "rag-5bae42a81065eb80",
+              "rag-b4a0ae3f6f58d444"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-b4a0ae3f6f58d444"
+        ]
+      }
+    ],
+    "safety_proposals": [],
+    "unsupported_requirements": [
+      {
+        "requirement": "Create safety rules for low back pain red flags (e.g., cauda equina syndrome, spinal epidural abscess).",
+        "reason": "The provided RAG sources mention serious conditions like cauda equina syndrome and spinal epidural abscess but do not contain sufficient, specific details about their red flag symptoms (e.g., saddle anesthesia, bowel/bladder dysfunction, fever with back pain) to formulate precise, evidence-based safety rules."
+      },
+      {
+        "requirement": "Map aggravating and relieving factors for mechanical back pain.",
+        "reason": "The provided RAG sources do not describe specific aggravating or relieving factors (e.g., movement, rest, specific postures) for mechanical back pain."
+      },
+      {
+        "requirement": "Map precipitating events like trauma or exertion to mechanical back pain.",
+        "reason": "The provided RAG sources do not describe common precipitating events for mechanical back pain."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Detailed physical exam findings (e.g., straight leg raise test).",
+        "reason": "Physical exam maneuvers cannot be assessed through a questionnaire."
+      },
+      {
+        "requirement": "Specific diagnostic criteria for herniated disc, including imaging or lab tests.",
+        "reason": "The provided RAG sources do not contain sufficient detail for specific diagnostic criteria and recommend against routine diagnostic studies for uncomplicated cases."
+      },
+      {
+        "requirement": "Differentiating between nerve root impingement and irritation based on symptoms.",
+        "reason": "The distinction is subtle and likely requires a physical examination (e.g., straight leg raise test), which is beyond the scope of a questionnaire."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Develop specific clues for Pyelonephritis such as CVA tenderness, dysuria, urinary frequency, or nausea/vomiting.",
+        "reason": "The provided RAG sources do not contain information about these specific signs and symptoms of Pyelonephritis."
+      },
+      {
+        "requirement": "Create safety rules for Pyelonephritis.",
+        "reason": "The provided RAG sources do not contain information on red flags, emergency criteria, or conditions requiring urgent intervention for Pyelonephritis."
+      },
+      {
+        "requirement": "Develop a clinical profile for Nephrolithiasis.",
+        "reason": "The provided RAG sources for Nephrolithiasis (rag-d7ddcf49ea63cf78, rag-e77c0af2d11a7cf9, rag-71b773a2c2be4959, rag-b7532b01caaa3794) do not contain specific signs, symptoms, or diagnostic features relevant to this condition. The content discusses unrelated topics such as nematode infections, vestibular neuritis, and nephrotic syndrome, which are distinct from nephrolithiasis (kidney stones)."
+      },
+      {
+        "requirement": "Create a must-not-miss profile for Cauda Equina Syndrome.",
+        "reason": "The provided RAG sources mention key symptoms like bilateral sciatica, bowel/bladder dysfunction, and perineal anesthesia, but lack sufficient detail on the full clinical picture, differential diagnosis, or specific rule-out criteria to build a comprehensive and safe clinical profile."
+      },
+      {
+        "requirement": "Create a safety rule for Cauda Equina Syndrome.",
+        "reason": "The questionnaire does not currently ask about key red flag symptoms for Cauda Equina Syndrome, such as bilateral leg weakness/sciatica, saddle anesthesia, or new-onset bowel/bladder incontinence. Without corresponding questions and facts, a structured safety rule cannot be reliably triggered."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create specific symptom-based clues for Osteomyelitis (e.g., pain characteristics, tenderness).",
+        "reason": "The provided RAG sources for Osteomyelitis primarily list risk factors and do not detail the specific clinical presentation or symptoms of low back pain associated with this condition."
+      },
+      {
+        "requirement": "Create safety rules for Osteomyelitis.",
+        "reason": "The provided RAG sources do not contain information on red flags or emergency conditions specifically related to Osteomyelitis that could be translated into safety rules."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "The provided text mentions serious conditions like cauda equina syndrome and spinal epidural abscess as part of the differential diagnosis for back pain. However, the specific red flag symptoms for these conditions are not detailed enough to create safety rules. Future iterations should include evidence detailing these red flags to ensure patient safety.",
+        "source_ids": [
+          "rag-683544f4e158c9bb",
+          "rag-15ce66364be76637",
+          "rag-d71a0a73f65f79a2",
+          "rag-520405111b6d707f"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-683544f4e158c9bb"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, review_notes[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-683544f4e158c9bb",
+          "rag-15ce66364be76637",
+          "rag-d71a0a73f65f79a2",
+          "rag-520405111b6d707f"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The evidence for Herniated Disc is limited and relies on general neurological symptoms mentioned in a source about syncope. The core sources for this disease did not provide strong, specific symptoms suitable for questionnaire-based differentiation. The proposed profile is based on the best available, albeit weak, evidence.",
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The questionnaire includes many symptoms (e.g., urinary, GI) that could point to other causes of back pain (e.g., kidney stones, pyelonephritis), but no corresponding diseases were discovered. The current proposal only addresses the musculoskeletal aspect (Herniated Disc).",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-6e7e81529db3d565",
+          "rag-ccf9b70030c23227",
+          "rag-a17a88cf643fd7db"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-6e7e81529db3d565",
+          "rag-ccf9b70030c23227",
+          "rag-a17a88cf643fd7db"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], profiles[0], profiles[0].clues[0], review_notes[1]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-6e7e81529db3d565",
+          "rag-ccf9b70030c23227",
+          "rag-a17a88cf643fd7db"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The evidence for Pyelonephritis is extremely weak. One source mentions that fever can be absent in 30% of patients with pyonephrosis, a related condition. This is insufficient to build a reliable clinical profile. The proposed profile is based on this single, indirect piece of evidence and should be reviewed with high skepticism.",
+        "source_ids": [
+          "rag-db049d5e26ee0544"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-6568cf4a82cf47b2",
+          "rag-db049d5e26ee0544",
+          "rag-6031535642b3c623",
+          "rag-eb037e73dbf72d4e"
+        ]
+      },
+      {
+        "severity": "critical",
+        "note": "The RAG sources retrieved for 'Nephrolithiasis' are incorrect and irrelevant. They discuss 'Nematode Infections', 'Vestibular Neuritis', and 'Nephrotic Syndrome'. This indicates a severe failure in the evidence retrieval process for this disease. No clinical facts, profiles, or safety rules can be generated based on this evidence.",
+        "source_ids": [
+          "rag-d7ddcf49ea63cf78",
+          "rag-e77c0af2d11a7cf9",
+          "rag-71b773a2c2be4959",
+          "rag-b7532b01caaa3794"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The discovery process correctly identified Cauda Equina Syndrome as a critical differential for low back pain. However, the current questionnaire lacks specific questions to screen for its hallmark red flag symptoms (e.g., saddle anesthesia, new bowel/bladder dysfunction, bilateral sciatica/weakness). This is a significant gap that should be addressed to ensure patient safety.",
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-150bd762522d7024",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-150bd762522d7024",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], review_notes[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-150bd762522d7024",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The profile for Osteomyelitis is based solely on risk factors from a single source (rag-b4a0ae3f6f58d444) as the other sources did not provide specific symptoms or signs. The evidence for this profile is limited and requires further clinical validation and sourcing.",
+        "source_ids": [
+          "rag-b4a0ae3f6f58d444"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-b4a0ae3f6f58d444"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, semantic_options[0], semantic_options[1], profiles[0].clues[0], profiles[0].clues[1]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ccf9b70030c23227",
+          "rag-5bae42a81065eb80",
+          "rag-b4a0ae3f6f58d444"
+        ]
+      }
+    ]
+  }
+}

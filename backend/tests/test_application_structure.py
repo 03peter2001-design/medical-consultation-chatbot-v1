@@ -50,6 +50,7 @@ class ApplicationStructureTests(unittest.TestCase):
                 ("GET", "/health"),
                 ("POST", "/transcribe"),
                 ("GET", "/avatar/status"),
+                ("POST", "/avatar/warmup"),
                 ("POST", "/avatar/speak"),
             },
             "app/routes/patient.py": {("POST", "/chat")},

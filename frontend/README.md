@@ -6,6 +6,49 @@ SNOMED CT 查詢。根目錄的 `index.html`、`doctor.html` 是重構前的相�
 
 ## 服務版本
 
+### v1.6.0 (2026-08-10)
+
+- 本地 Avatar 檢查服務、warm-up 載入 Breeze／CosyVoice／MuseTalk，以及產生語音
+  影片期間，設定抽屜與中央醫師舞台都顯示目前階段、轉動指示與等待說明，避免長時間
+  GPU 載入看似沒有反應；狀態區使用 `aria-live`／`aria-busy` 通知輔助科技。
+- 錄音期間使用既有 Web Audio analyser 的 RMS 音量驅動七段即時波形；高於語音
+  閾值後明確顯示「已收到聲音」。手動錄音與 Avatar 自動錄音都有視覺回饋，但只有
+  Avatar 自動錄音維持說話後靜音 5 秒自動送交辨識的行為。
+- 波形在窄螢幕縮成圖像提示，保留文字輸入、停止錄音與送出按鈕空間；降低動態偏好
+  會停用 spinner 動畫與 waveform transition。
+
+### v1.5.0 (2026-08-10)
+
+- 本機 Avatar 設定新增「醫生說話語言」，可自由切換國語與閩南語；選擇值隨每次
+  合成請求傳入，中央字幕標籤同步顯示目前語言。
+- 啟用本機 Avatar 時先呼叫受保護的 warm-up API，待 Breeze ASR、CosyVoice3 與
+  MuseTalk 全部 loaded 才進入已啟用狀態，後續問答不再重複載入模型。
+- Breeze ASR 回傳空文字或失敗時，保留失敗狀態並由已連線醫生說「對不起，我沒有
+  聽清楚，請再講一次」，播放結束後重新開始語音輸入。
+- Node regression tests、Vite build、OpenAPI drift 與 Chrome 互動驗證涵蓋語言選擇、
+  warm-up、重試提示及桌面／手機版顯示。
+
+### v1.4.0 (2026-08-10)
+
+- 修正 Vite 開發模式找不到 `/avatar/doctor.png` 的問題，改由 frontend build
+  帶入既有醫師圖片；本機 Avatar 啟用後在問診畫面上方顯示置中的醫師舞台，
+  並在旁邊同步顯示目前朗讀字幕。
+- Avatar 播放完畢後，文字題預設開啟語音輸入；實際偵測到使用者開始說話後，
+  連續靜音 5 秒會停止錄音、呼叫 Breeze ASR，並準備自動送出。
+- ASR 結果先回填下方輸入框並保留 3 秒編輯時間；使用者開始輸入即取消自動
+  送出，也可手動停止錄音後自行確認與送出。未啟用 Avatar 時維持既有手動語音流程。
+- Node tests、OpenAPI type drift、Vite production build，以及實際 Chrome 桌面／手機
+  viewport 的 Avatar 圖片、字幕、輸入列與預設錄音流程驗證通過。
+
+### v1.3.0 (2026-08-10)
+
+- 開發版 frontend 的預設 API port 改為 `18000`，固定連到 integration Compose
+  提供的 host-loopback Nginx gateway，避免與仍在 `8000` 的本機 Uvicorn 衝突。
+- Frontend 繼續由 Vite hot reload；backend、病例資料庫、Breeze ASR 與 Avatar
+  統一由 Docker Compose 提供。跨來源 credentials 既有的 fail-closed 行為不變。
+- 更新 backend URL regression tests，並以 Node tests、production build 與 API type
+  drift check 驗證。
+
 ### v1.2.0 (2026-08-09)
 
 - Safety structured-rule editor 分別保存 `all_findings` 與 `any_findings`，切換 operator
@@ -121,7 +164,8 @@ npm run api:check
 
 ## 後端連線
 
-前端預設使用目前網頁 hostname 與 port `8000` 連接 FastAPI。正式環境與預設設定
+前端預設使用目前網頁 hostname 與 port `18000` 連接 integration Compose 的
+loopback Nginx gateway，再由 gateway 連接 Docker FastAPI。正式環境與預設設定
 會忽略 URL query 的 backend／FHIR 端點覆寫，避免惡意連結改變病歷資料目的地。
 只有本機開發需要臨時切換端點時，才可同時啟用開關並列出允許 origin：
 
@@ -147,19 +191,21 @@ cp .env.example .env
 ```
 
 ```dotenv
-VITE_BACKEND_PORT=9000
+VITE_BACKEND_PORT=18000
 # 正式同源 reverse proxy 可改用：
 # VITE_BACKEND_BASE_URL=/api
 ```
 
-若從手機或其他電腦連線，後端需監聽所有介面，並確認防火牆允許該 port：
+啟動完整 Docker backend pipeline：
 
 ```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+cd integration-deployment
+docker compose up -d --build
 ```
 
-發生「無法連線到後端」時，先開啟 `http://後端主機:8000/v1/health` 確認服務
-可達，再檢查 frontend 的 backend URL 設定。
+發生「無法連線到後端」時，先開啟 `http://127.0.0.1:18000/v1/health` 確認
+Docker gateway 可達，再檢查 frontend 的 backend URL 設定。Port 18000 僅綁在
+同一台主機的 loopback，不提供手機或其他電腦直接存取。
 
 ## 病患端與醫師端
 
@@ -214,6 +260,12 @@ VITE_DID_AGENT_ID=
 寫入公開的瀏覽器 JavaScript；因此建議在 UI 輸入 D-ID 資料（只存於頁面記憶體）。
 若必須預先設定，只能使用由 [D-ID Studio](https://studio.d-id.com) 建立、限制部署
 網域的瀏覽器／Embed Key，絕不可放伺服器私鑰。
+
+啟用 Avatar 後，醫師影像與朗讀字幕會顯示在問診畫面上方。每次 Avatar 播放
+完成後會自動開啟麥克風；使用者開始說話後連續停頓 5 秒，錄音會自動交給
+Breeze ASR。辨識文字回填輸入框後有 3 秒可直接編輯，任何編輯都會取消自動
+送出；按下麥克風手動停止的錄音則不會自動送出。Avatar 設定可選國語或閩南語；
+若 ASR 沒有辨識出內容，醫生會以目前語言請使用者再說一次。
 
 ## OpenAPI 型別
 

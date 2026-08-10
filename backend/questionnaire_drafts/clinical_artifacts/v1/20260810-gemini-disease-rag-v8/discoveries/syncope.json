@@ -1,0 +1,255 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "syncope",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "3ce0c6845dddf83808a39130ea068eed66721246cdf0f028f8556c9f7aeef8d5",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "syncope syncope differential diagnosis diseases clinical presentation symptoms history",
+      "syncope syncope red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "30629c1ac73daead59c7a9e1155d01078e63e0e2d8525f10c738b07bf5e9f157"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "c077581996e961cbc2b965e659489a5330c8fdfe93289552995539f88982efad",
+    "generated_at": "2026-08-10T04:17:31+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "syncope syncope differential diagnosis diseases clinical presentation symptoms history",
+        "syncope syncope red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.2726,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-ff175cd271f88014",
+      "chunk_id": "6abb4726efd0e023f805_11",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "syncope syncope differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3818,
+      "excerpt": "with predominantly sensory symptoms, those with a distal symmetric disorder (DADS), those with multifocal sensorimotor neuropathy or sensorimotor mononeuropathy multiplex with prominent conduction block (also known as Lewis-Sumner neuropathy), and those with CIDP with associated CNS demyelination or with other systemic disorders. The following disorders are considered distinct from CIDP because they have specific pathophysiologic features and respond to treatments differently than do patients with CIDP: Demyelinating neuropathies associated with immunoglobulin M (IgM) paraproteins, including",
+      "text_sha256": "9bcc687a6e728f319204b3de3fc10d7168b581aebb57ba68bafb0dddb461ee00"
+    },
+    {
+      "id": "rag-32a4b6428a7f6772",
+      "chunk_id": "9f7eb5027998a34eb6c2_37",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "syncope syncope differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.2987,
+      "excerpt": "risk factors. Morbidity from syncope includes recurrent syncope, which occurs in 20% of patients within 1 year of the initial episode. Lacerations, extremity fractures, head injuries, and motor vehicle accidents can occur secondary to syncope. Syncope in a patient with poor baseline cardiac function portends a poor prognosis, irrespective of etiology. Middlekauff et al studied 491 patients with NYHA functional class III or IV disease and noted that, regardless of the cause, 45% of those with syncope died within 1 year, whereas 12% of those without syncope died during the same interval.",
+      "text_sha256": "f5cc71297a8e0074e5a8d11fbcad52f6c752cceb77094fbf70ee7b862be802bd"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "syncope syncope differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4306,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-431b67d788c5230a",
+      "chunk_id": "3de735a60d396e6d9c9c_7",
+      "title": "Permanent Pacemaker Insertion: Background, Indications, Contraindications",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1839735-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "syncope syncope differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4157,
+      "excerpt": "bpm, but no clear association between the symptoms and bradycardia Unexplained syncope when clinically significant abnormalities of sinus node function are discovered or provoked in electrophysiological (EP) studies Minimally symptomatic patients with chronic heart rate less than 40 bpm while awake Acquired atrioventricular (AV) block Class I indications include the following: Complete third-degree AV block with or without symptoms Symptomatic second degree AV block, Mobitz type I and II Exercise-induced second or third degree AV block in the absence of myocardial infarction Mobitz II with",
+      "text_sha256": "5897d326d8ed0dc8bf039c42c9d77531bc3417efe511a9a0c272da1b2499abb3"
+    },
+    {
+      "id": "rag-c2203527dc54e6e4",
+      "chunk_id": "9f7eb5027998a34eb6c2_14",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "syncope syncope red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4821,
+      "excerpt": "with syncope. Although most causes of syncope are benign, this symptom presages a life-threatening event in a small subset of patients. It is unclear whether hospital inpatient admission of asymptomatic patients after syncope affects outcomes. No current criterion standard exists for diagnosing undifferentiated syncope. Many physicians continue to admit patients because of perceived risk. Reviews of the 2001 American College of Emergency Physician (ACEP) clinical policy suggested that evidence-based criteria may decrease admission rates by nearly half by identifying cardiac causes of syncope.",
+      "text_sha256": "03310d23e7579d094fd662a0f807506d101e5d3f0a83db1c831491b1a8c651ec"
+    },
+    {
+      "id": "rag-96a90437160454ff",
+      "chunk_id": "60a8e9fb259d62f055c2_43",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "syncope syncope red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5586,
+      "excerpt": "(cTn), whether conventional or high sensitivity (hs), exclusively for these purposes. The main clinical outcome of interest after initial emergency department (ED) evaluation of patients with suspected ACS is 30-day MACE. MACE includes MI, death, target lesion revascularization, or death. In 2018, The American College of Emergency Physicians (ACEP) updated its level C recommendations regarding testing strategies for ruling out non-ST-elevation MI (NSTEMI) in lower risk patients to include the use of the HEART score and conventional or high-sensitivity cardiac troponins (hs-cTn) as follows: In",
+      "text_sha256": "4828c8d733507191a7786f8b1f2baf9a4c8185d49b0cb05028c18c2b64ce27ff"
+    }
+  ],
+  "discovery": {
+    "route": "syncope",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "syncope__cardiac_syncope",
+        "name": "Cardiac Syncope",
+        "rationale": "The questionnaire asks about chest pain and the RAG sources mention that syncope in patients with poor cardiac function has a poor prognosis. Red flag symptoms associated with syncope include exertional onset, chest pain, and palpitations, which are indicative of a potential cardiac cause.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-32a4b6428a7f6772"
+        ]
+      },
+      {
+        "id": "syncope__arrhythmia",
+        "name": "Arrhythmia",
+        "rationale": "The questionnaire asks about preceding symptoms like palpitations. The RAG sources list palpitations as a red flag symptom and mention that unexplained syncope with abnormalities in sinus node function or atrioventricular block can be an indication for a pacemaker, suggesting arrhythmia as a key underlying cause.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-431b67d788c5230a"
+        ]
+      },
+      {
+        "id": "syncope__neurologic_syncope",
+        "name": "Neurologic Syncope",
+        "rationale": "The questionnaire asks about post-fainting symptoms like difficulty speaking, weakness, or numbness, and seizure-like movements. The RAG sources identify focal neurologic deficits, severe headache, diplopia, ataxia, or dysarthria as red flag symptoms associated with syncope, pointing towards a neurologic etiology.",
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "id": "syncope__seizure",
+        "name": "Seizure",
+        "rationale": "The questionnaire specifically asks if anyone observed seizure-like movements (trembling, convulsions, eyes rolling back) and about the post-event state (confusion vs. rapid recovery). The RAG sources also highlight post-event confusion as a key piece of information to obtain from witnesses, which is characteristic of a postictal state following a seizure.",
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "id": "syncope__vasovagal_syncope",
+        "name": "Vasovagal Syncope",
+        "rationale": "The questionnaire asks about specific triggers like emotional stress, pain, or dehydration, and preceding symptoms like nausea and sweating. These are classic triggers and prodromal symptoms for vasovagal syncope, which is a common and often benign cause of fainting.",
+        "source_ids": [
+          "rag-c2203527dc54e6e4"
+        ]
+      },
+      {
+        "id": "syncope__orthostatic_hypotension",
+        "name": "Orthostatic Hypotension",
+        "rationale": "The questionnaire specifically asks if fainting was preceded by a trigger like 'quickly standing up' and the position during the event (standing). This is the classic presentation for syncope caused by orthostatic hypotension.",
+        "source_ids": [
+          "rag-c2203527dc54e6e4"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "critical",
+        "note": "The RAG sources emphasize that while most causes of syncope are benign, it can be a sign of a life-threatening event. Red flag symptoms such as exertional onset, chest pain, dyspnea, palpitations, severe headache, or focal neurologic deficits require careful evaluation.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c2203527dc54e6e4"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Morbidity from syncope can include physical injuries such as lacerations, fractures, and head injuries from the fall. The questionnaire appropriately asks about any injuries sustained during the event.",
+        "source_ids": [
+          "rag-32a4b6428a7f6772"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "A detailed account from any witnesses, including whether the patient experienced post-event confusion, is valuable for diagnosis. The patient's medication history and any personal or family history of cardiac disease are also important.",
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ]
+  }
+}

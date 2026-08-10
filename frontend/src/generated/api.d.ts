@@ -38,6 +38,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/avatar/warmup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Preload local ASR, speech, and talking-head models */
+        post: operations["avatar_warmup_v1_avatar_warmup_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/chat": {
         parameters: {
             query?: never;
@@ -380,6 +397,12 @@ export interface components {
         };
         /** AvatarSpeechRequest */
         AvatarSpeechRequest: {
+            /**
+             * Language
+             * @default mandarin
+             * @enum {string}
+             */
+            language: "mandarin" | "minnan";
             /** Text */
             text: string;
         };
@@ -393,6 +416,11 @@ export interface components {
             device: string;
             /** Enabled */
             enabled: boolean;
+            /**
+             * Loaded
+             * @default false
+             */
+            loaded: boolean;
             /** Speech Model */
             speech_model: string;
         };
@@ -1306,6 +1334,64 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    avatar_warmup_v1_avatar_warmup_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                ai_patient_session?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AvatarStatusResponse"];
+                };
+            };
+            /** @description Authentication is required or has expired. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description An internal dependency or model operation failed. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description A required configured service is unavailable. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
         };

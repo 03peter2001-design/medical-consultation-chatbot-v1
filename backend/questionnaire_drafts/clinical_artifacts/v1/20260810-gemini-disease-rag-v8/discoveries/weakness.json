@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "weakness",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "1cff9d48c513944f5062209d4298710851ab428bf4d47f0602a6cbfc5aa5a79a",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "weakness weakness differential diagnosis diseases clinical presentation symptoms history",
+      "weakness weakness red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "15226d4592347c4e2da2e15c5cb99f06b8c081aafb0944669adcee81be0f5536"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "aff550b2d94c57ee9aefec58a889654702f5d9f0ae183a19d0cc425cb7e5d118",
+    "generated_at": "2026-08-10T04:19:25+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-22a1ffa4afb4901f",
+      "chunk_id": "4d6cbe4e1c12469911bd_15",
+      "title": "Heart Failure: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/163062-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3847,
+      "excerpt": "additional disease-staging terminology to characterize the syndrome of heart failure as a continuum, as follows : \"At risk for HF\" for stage A: Applied to asymptomatic patients with risk factors such as diabetes or hypertension but no known cardiac changes \"Pre-HF\" for stage B: Adds cardiac structural changes or elevated natriuretic peptides, still in the absence of symptoms \"Symptomatic HF\" for stage C: Structural disease with current or previous symptoms \"Advanced HF\" for stage D: Characterized by severe debilitating symptoms or repeated hospitalizations even with guideline-directed medical",
+      "text_sha256": "cbc61cde99662b0af29fa6278469a5db4321ca454d18f12587f65aa2d1262f2e"
+    },
+    {
+      "id": "rag-5f400608c51ca1d6",
+      "chunk_id": "fb961f7e1c8b575b2ec5_10",
+      "title": "Hypogammaglobulinemia: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/136471-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4411,
+      "excerpt": "can be associated with a primary immune deficiency, be part of a multi-systemic syndrome, or be secondary to other disorders. Several codes in the International Classification of Diseases, 9th edition (ICD-9) relate to disorders in which hypogammaglobulinemia is a primary feature. These include deficiencies of humoral immunity, which is coded 279.0. The common clinical feature of severe hypogammaglobulinemia is a predisposition toward infections that normally are defended against by antibody responses. These include but are not limited to reptococcus pneumoniae and Haemophilus influenzae",
+      "text_sha256": "0bc67451f0e179a210345fafac160e26d47a57ea1657036389e7d22b7d2c679b"
+    },
+    {
+      "id": "rag-dbda7c0d463e359a",
+      "chunk_id": "4d6cbe4e1c12469911bd_12",
+      "title": "Heart Failure: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/163062-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3867,
+      "excerpt": "congestion). Signs and symptoms of heart failure include tachycardia and manifestations of venous congestion (eg, edema) and low cardiac output (eg, fatigue). Breathlessness is a cardinal symptom of left ventricular (LV) failure that may manifest with progressively increasing severity. Heart failure can be classified according to a variety of factors (see Heart Failure Criteria, Classification, and Staging). The New York Heart Association (NYHA) classification for heart failure comprises four classes, based on the relationship between symptoms and the amount of effort required to provoke them,",
+      "text_sha256": "4bd23cfaccb51e340dbd78e014457ed9a90af1718713d0e2f527eda2a409d4f8"
+    },
+    {
+      "id": "rag-38134c3248cf44bc",
+      "chunk_id": "1c397c2658dff3862c56_10",
+      "title": "Vitamin B6: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2088627-overview",
+      "routes": [
+        "headache",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history",
+        "weakness weakness red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4458,
+      "excerpt": "PLP analysis is indicated for the following: Evaluation of suspected vitamin B6 deficiency Diagnosis of hypophosphatasia Other manifestations of vitamin B6 deficiency may include the following: Scaling of the skin Severe gingivitis Cheilosis Stomatitis Irritability Weakness Dizziness Diarrhea Considerations Manifestations of vitamin B6 toxicity may include tachypnea and/or the following neurologic effects: Sensory neuropathy (eg, burning pains, paresthesias, perioral numbness) Progressive sensory ataxia Impaired proprioception Impaired vibration sense Diminished tendon reflexes",
+      "text_sha256": "e1f94e7106ac2afce3155e9c065f1f80415ffe1f9c2d03ebbdcd05a3e9b491e3"
+    },
+    {
+      "id": "rag-ddf0c10539eaee7b",
+      "chunk_id": "cb1baa74d2a5845bf3e2_2",
+      "title": "Vertebral Artery Dissection: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/761451-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4461,
+      "excerpt": "also have been reported. Many patients present only at the onset of neurologic symptoms. When neurologic dysfunction does occur, patients most commonly report symptoms attributable to lateral medullary dysfunction (ie, Wallenberg syndrome). Patient history may include the following: Ipsilateral facial dysesthesia (pain and numbness) - Most common symptom Dysarthria or hoarseness (cranial nerves [CN] IX and X) Contralateral loss of pain and temperature sensation in the trunk and limbs Ipsilateral loss of taste (nucleus and tractus solitarius) Hiccups Vertigo Nausea and vomiting Diplopia or",
+      "text_sha256": "e7fd6d1894682005c18fb08a99e7bad910e3c3c948701c708eb78c8f15cd13f3"
+    },
+    {
+      "id": "rag-399fee887cf27b3c",
+      "chunk_id": "e2c72cc25f09f98c22a0_7",
+      "title": "HIV-Associated Distal Painful Sensorimotor Polyneuropathy: Overview, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1167783-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.457,
+      "excerpt": "and intestinal function Physical findings include: Panmodal distal sensory loss Mild distal weakness Hyporeflexia or areflexia Symmetric presentation Autonomic signs (often can be elicited by careful evaluation) Differential Diagnosis The differential diagnosis of distal painful sensorimotor polyneuropathy includes: Acute Inflammatory Demyelinating Polyradiculoneuropathy Chronic Inflammatory Demyelinating Polyradiculoneuropathy Diabetic Neuropathy HIV-Associated Multiple Mononeuropathies Nutritional Neuropathy Toxic Neuropathy Uremic Neuropathy Vitamin B-12 Associated Neurological Diseases",
+      "text_sha256": "83abf917a132967008f669a53e696b83f9f4fb6d0777dc452eec71f4922f1bdb"
+    },
+    {
+      "id": "rag-8356ec010ed3ff6f",
+      "chunk_id": "87996f6a71b53073e20c_3",
+      "title": "Acute Hypopituitarism: Overview, Diagnostic Considerations, Hormone Deficiency Symptoms",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767828-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history",
+        "weakness weakness red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4187,
+      "excerpt": "rate. The setting is not uncommon in which an emergency physician is evaluating a patient with complaints of weakness, fatigue, or altered mental status without a clear diagnosis. Subtle, but still abnormal, vital signs, such as slightly reduced blood pressure or heart rate, may be the only initial clues to suggest a pituitary deficiency rather than a relatively benign etiology. Emergency physicians frequently provide care to patients at risk of developing hypopituitarism. Risk factors include, but are not limited to, TBI, cocaine use, subarachnoid hemorrhage, and postpartum hypotension (a",
+      "text_sha256": "66493d5f742848008b29c1bb6e2ef99b7317d22019ad008feed96fe38c63f932"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history",
+        "weakness weakness red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4246,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-09f5bf5fd5fee52e",
+      "chunk_id": "596cdd4cd1ee540afa22_6",
+      "title": "Rheumatoid Factor: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087091-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "weakness weakness red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5709,
+      "excerpt": "low-titer RF positivity can occur in the inflammatory disease sarcoidosis, while abnormally high RF levels can exist in the presence of leukemia, multiple myeloma, and other cancers. RF is also observed in 1-5% of healthy individuals. Thus, RF is not considered specific for RA. RF results may also be positive in patients without RA who have the following conditions: Systemic lupus erythematosus Polymyositis Tuberculosis Syphilis Viral hepatitis Infectious mononucleosis Influenza Indications/Applications RA is a chronic, autoimmune, peripheral polyarthropathy of unknown etiogenesis. The",
+      "text_sha256": "2eadd44adccf6efe29f4a66500aab40dd3eff0d527d50cbae803ba97fa4956d7"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "weakness weakness red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5272,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    }
+  ],
+  "discovery": {
+    "route": "weakness",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "weakness__heart_failure",
+        "name": "Heart Failure",
+        "rationale": "The questionnaire asks about generalized weakness, which can be a symptom of low cardiac output. It also inquires about chest pain, chest tightness, or shortness of breath, which are cardinal symptoms of heart failure. Evidence notes that fatigue (a form of weakness) and breathlessness are key symptoms.",
+        "source_ids": [
+          "rag-dbda7c0d463e359a"
+        ]
+      },
+      {
+        "id": "weakness__stroke",
+        "name": "Stroke",
+        "rationale": "The questionnaire specifically asks about hemiparesis ('half-body weakness'). This is a classic focal neurological deficit. Evidence mentions that patients with vertebral artery dissection, a cause of stroke, may present with neurologic symptoms like dysarthria or contralateral loss of sensation.",
+        "source_ids": [
+          "rag-ddf0c10539eaee7b"
+        ]
+      },
+      {
+        "id": "weakness__peripheral_neuropathy",
+        "name": "Peripheral Neuropathy",
+        "rationale": "The questionnaire asks if limb weakness is accompanied by numbness or tingling. This aligns with symptoms of peripheral neuropathy. Evidence describes distal painful sensorimotor polyneuropathy as presenting with mild distal weakness and sensory loss.",
+        "source_ids": [
+          "rag-399fee887cf27b3c"
+        ]
+      },
+      {
+        "id": "weakness__vitamin_b6_deficiency",
+        "name": "Vitamin B6 Deficiency",
+        "rationale": "The questionnaire asks about generalized weakness and dizziness. Evidence lists weakness and dizziness as potential manifestations of Vitamin B6 deficiency.",
+        "source_ids": [
+          "rag-38134c3248cf44bc"
+        ]
+      },
+      {
+        "id": "weakness__hypopituitarism",
+        "name": "Hypopituitarism",
+        "rationale": "The questionnaire asks about generalized weakness and dizziness. Evidence notes that patients with hypopituitarism may present with complaints of weakness and fatigue, and that subtle signs like slightly reduced blood pressure could be clues.",
+        "source_ids": [
+          "rag-8356ec010ed3ff6f"
+        ]
+      },
+      {
+        "id": "weakness__infection",
+        "name": "Infection",
+        "rationale": "The questionnaire asks about generalized weakness accompanied by systemic symptoms like fever, cough, sputum, rhinorrhea, abdominal pain, vomiting, diarrhea, dysuria, or urinary frequency. These are common signs of various infections. Evidence mentions that hypogammaglobulinemia predisposes individuals to infections.",
+        "source_ids": [
+          "rag-5f400608c51ca1d6"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The questionnaire appropriately distinguishes between generalized weakness, limb weakness, and hemiparesis, which helps differentiate between systemic, neurologic, and cerebrovascular causes. It also screens for infectious symptoms.",
+        "source_ids": [
+          "rag-dbda7c0d463e359a",
+          "rag-ddf0c10539eaee7b",
+          "rag-399fee887cf27b3c"
+        ]
+      }
+    ]
+  }
+}

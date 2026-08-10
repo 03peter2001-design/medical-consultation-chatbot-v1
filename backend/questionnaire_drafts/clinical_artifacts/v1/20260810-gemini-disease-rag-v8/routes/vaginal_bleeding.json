@@ -1,0 +1,1135 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "vaginal_bleeding",
+  "label": "陰道出血",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "17d0c766c8a21810a61aa713a00020f27d7f81f3e30ce952d51abaa6235680b0",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history\",\"vaginal bleeding vaginal bleeding red flags emergency warning signs urgent referral rule out\",\"Uterine Fibroids diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Vaginitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Dysfunctional Uterine Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Ectopic Pregnancy diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Placental Abruption diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Endometrial Cancer diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "64bfe3a2ecd3222bff9b5a202d69fb4d4db72138de12d4204612e02bb9467236"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "72d32ae0cca5a9e5bae07003014fbc1564f5424838aacfe0135acba9b4228d6e",
+    "generated_at": "2026-08-10T04:23:56+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-09fadaa505574fd5",
+      "chunk_id": "5e63425327f98ba541a6_8",
+      "title": "Abnormal (Dysfunctional) Uterine Bleeding in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795587-overview",
+      "routes": [
+        "abdomen",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history",
+        "vaginal bleeding vaginal bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3899,
+      "excerpt": "shing disease, liver disease,)abetes mellitus, and adrenal and other endocrine disorders, can present as abnormal uterine bleeding. Pregnancy and pregnancy-related conditions may be associated with vaginal bleeding. Trauma to the cervix, vulva, or vagina may cause abnormal bleeding. Carcinomas of the vagina, cervix, uterus, and ovaries must always be considered in patients with the appropriate history and physical examination findings. Endometrial cancer is associated with obesity, diabetes mellitus, anovulatory cycles, nulliparity, and age older than 35 years. Other causes of abnormal uterine",
+      "text_sha256": "697483a9ed98b31987dfad4849a9547cec92dc1db55346f0e784c3655ca2efca"
+    },
+    {
+      "id": "rag-02b622cf0e22d994",
+      "chunk_id": "40949ab525cdb33ba040_4",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4072,
+      "excerpt": "by hemorrhage from both nares, and by visualization of blood draining in the posterior pharynx. Differential Diagnosis The differential diagnosis includes the following: Barotrauma Disseminated Intravascular Coagulation Endometriosis Foreign Bodies, Nose Hemophilia, Type A Hemophilia, Type B Osler-Weber-Rendu syndrome Rhinitis Plant Poisoning, Glycosides - Coumarin Sinusitis Toxicity, Cocaine Toxicity, Nonsteroidal Anti-inflammatory Agents Toxicity, Rodenticide Toxicity, Salicylate Toxicity, Warfarin and Superwarfarins von Willebrand Disease Diagnostic Considerations Other problems to be",
+      "text_sha256": "7fb71c7de80704fe1be64c3cae7c04a246ddeb7d5647ec8fe71d4107e8974654"
+    },
+    {
+      "id": "rag-ad2cc7a25af94fb5",
+      "chunk_id": "ee8d4d37fa236396b2a1_2",
+      "title": "Vaginitis: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/257141-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3934,
+      "excerpt": "vaginitis from other infectious and noninfectious causes of symptoms. All women presenting with abnormal vaginal discharge should have a careful pelvic examination. Condition-specific tests (ie, colposcopy and cervical biopsies) are indicated for suspected cervical cancer. Studies that may be performed in cases of suspected vaginitis include saline wet mount, the so-called whiff test, pH testing, culture, nucleic acid amplification testing, and a number of other second-line tests (see Presentation, DDx, and Workup). Treatment of vaginitis varies by cause and is directed at the relevant",
+      "text_sha256": "faf8da5499a7a6159d2a7ca6d44c0fa924dd846bf35495548d866bb54a0eb041"
+    },
+    {
+      "id": "rag-e5f9a4cb929922ca",
+      "chunk_id": "65da82849c2adcb4ac1c_4",
+      "title": "Abruptio Placentae: Practice Essentials, Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/252810-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4786,
+      "excerpt": "BP and heart rate No coagulopathy No fetal distress Class 2 characteristics include the following: No vaginal bleeding to moderate vaginal bleeding Moderate to severe uterine tenderness with possible tetanic contractions Maternal tachycardia with orthostatic changes in BP and heart rate Fetal distress Hypofibrinogenemia (ie, 50-250 mg/dL) Class 3 characteristics include the following: No vaginal bleeding to heavy vaginal bleeding Very painful tetanic uterus Maternal shock Hypofibrinogenemia (ie, < 150 mg/dL) Coagulopathy Fetal death Go tomergent Management of Abruptio Placentae r more",
+      "text_sha256": "59ed68910e6599f0c8f8d89e58d0ab633345357809748fb81d5c9ef976070f88"
+    },
+    {
+      "id": "rag-a5d0b3a279433a00",
+      "chunk_id": "5e63425327f98ba541a6_13",
+      "title": "Abnormal (Dysfunctional) Uterine Bleeding in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795587-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3971,
+      "excerpt": "closure. Niches in cesarean scars are also potential causes of abnormal uterine bleeding. In a prospective study from The Netherlands, investigators found a 64.5% prevalence of niche via gel instillation sonohysterography (GIS)n women 6-12 weeks postcesarean section. They noted that postmenstrual spotting was more prevalent in women with a niche and in those with a residual myometrial thickness of less than 50% of the adjacent myometrium. Epidemiology United States statistics Abnormal uterine bleeding is one of the most often encountered gynecologic problems. An estimated 5% of women aged",
+      "text_sha256": "a95ac6bb3ccecf4695e5952813fc6492cba459bf799136d21885f8a9a164ccdf"
+    },
+    {
+      "id": "rag-3eb6bf860b011987",
+      "chunk_id": "40949ab525cdb33ba040_1",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4889,
+      "excerpt": "bleeding or hemodynamic instability should take precedence over obtaining a lengthy history. Note the duration, severity of the hemorrhage, and the side of initial bleeding. Inquire about previous epistaxis, hypertension, hepatic or other systemic disease, family history, easy bruising, or prolonged bleeding after minor surgical procedures. Recurrent episodes of epistaxis, even if self-limited, should raise suspicion for significant nasal pathology. Use of medications, especially aspirin, nonsteroidal anti-inflammatory drugs (NSAIDs), warfarin, heparin, ticlopidine, and dipyridamole should be",
+      "text_sha256": "5b71384bbeffbf9b26ecd893e4d85cf9105981285d8216825ecb8a4bc2b1f02f"
+    },
+    {
+      "id": "rag-dd19638dc52c97d6",
+      "chunk_id": "e1fe0660ecbe5789652f_1",
+      "title": "Deep Venous Thrombosis (DVT): Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1911303-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.489,
+      "excerpt": "symptom Leg pain - Occurs in 50% of patients but is nonspecific Tenderness - Occurs in 75% of patients Warmth or erythema of the skin over the area of thrombosis Clinical symptoms of PE as the primary manifestation As many as 46% with patients with classic symptoms have negative venograms, and as many as 50% of those with image-documented venous thrombosis lack specific symptoms. No single physical finding or combination of symptoms and signs is sufficiently accurate to establish the diagnosis of DVT, but physical findings in DVT may include the following: Calf pain on dorsiflexion of the foot",
+      "text_sha256": "8fcd60760452dfff5159f9b74ef539e1c93f6f1b818fbf67cee54ddb0d23b0df"
+    },
+    {
+      "id": "rag-be16df4594cf7d67",
+      "chunk_id": "1b88713e27be6bbfd3ac_6",
+      "title": "Abortion Complications: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795001-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history",
+        "vaginal bleeding vaginal bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4792,
+      "excerpt": "is bleeding. Failure to aggressively treat vaginal bleeding, even if it seems minimal: Stabilize the patient with 2 large-bore IVs and with oxygen. Closely monitor vital signs. Failure to diagnose uterine perforation may lead to life-threatening complications: In postabortion patients with abdominal pain beyond the pelvic area, suspect perforation and evaluate with kidney, ureter, and bladder (KUB)/upright radiographs, pelvic ultrasonography, or CT. Consult a gynecologist and, if suspicion is high, insist on laparoscopy. Failure to diagnose ectopic pregnancy: The chance of a missed ectopic",
+      "text_sha256": "944d93f107703f7683b78d2be8f007e44d2cf8ae17588bb795d2f590949108a5"
+    },
+    {
+      "id": "rag-56a8c3f553c2afd3",
+      "chunk_id": "3046d06c862cf3a8d792_28",
+      "title": "Emergent Management of Ectopic Pregnancy: Practice Essentials, Ultrasonography, Other Diagnostic Imaging Modalities",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/796451-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5843,
+      "excerpt": "shock Urinalysis to eliminate urinary tract infection as a cause of pelvic pain Blood type and Rh factor, if transfusion is required or if RhoGAM will be provided for Rh-negative patients with vaginal bleeding Other Tests Dilation and curettage Dilation and curettage (D&C) can be used to rule out ectopic pregnancy by determining the presence of chorionic villi. The obvious drawback to its frequent use is that a certain number of normal intrauterine pregnancies (IUPs) will be aborted. It may be an option in the further workup of PUL when the pregnancy is undesired. Culdocentesis Culdocentesis",
+      "text_sha256": "54b534a6b192e81465f25aa5c3c1ddcd7d3d1d7bcd430c3c5ee67f21e64a44d5"
+    },
+    {
+      "id": "rag-dd071d428feab779",
+      "chunk_id": "5e63425327f98ba541a6_11",
+      "title": "Abnormal (Dysfunctional) Uterine Bleeding in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795587-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5667,
+      "excerpt": "suppression leading to abnormal uterine bleeding due to disruption along the hypothalamus-pituitary-ovarian pathway. Bleeding disturbances are common with combination oral contraceptive pills as well as progestin-only methods of birth control. However, the incidence of bleeding decreases significantly with time. Therefore, only counseling and reassurance are required during the early months of use. Contraceptive intrauterine devices (IUDs) can cause variable vaginal bleeding for the first few cycles after placement and intermittent spotting subsequently. The progesterone impregnated IUD",
+      "text_sha256": "25040d175c4529183ed058a6d14160a5f870d4227d1bab039becaf6f419d249a"
+    },
+    {
+      "id": "rag-97b2b60d547a7302",
+      "chunk_id": "9aeedc640c68352d7494_4",
+      "title": "Dysmenorrhea: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/253812-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5748,
+      "excerpt": "of the vaginal vault Inspection of the cervix Bimanual examination See Presentation for more detail. Diagnosis No tests are specific to the diagnosis of primary dysmenorrhea. The following laboratory studies may be performed to identify or exclude organic causes of secondary dysmenorrhea: Complete blood count with differential Gonococcal and chlamydial cultures, enzyme immunoassay, and DNA probe testing Quantitative human chorionic gonadotropin level Erythrocyte sedimentation rate Urinalysis Stool guaiac If pelvic pathology is suspected, the following imaging studies may be considered:",
+      "text_sha256": "1db89f13bc7f852de1b3e27f6df1c79da2b61fbc332bf0abd32232ee70fc49b2"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "vaginal_bleeding__uterine_fibroids",
+        "vaginal_bleeding__vaginitis",
+        "vaginal_bleeding__dysfunctional_uterine_bleeding"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding red flags emergency warning signs urgent referral rule out",
+        "Uterine Fibroids diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Vaginitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Dysfunctional Uterine Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4154,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-c22cb0530d56e56d",
+      "chunk_id": "3046d06c862cf3a8d792_18",
+      "title": "Emergent Management of Ectopic Pregnancy: Practice Essentials, Ultrasonography, Other Diagnostic Imaging Modalities",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/796451-overview",
+      "routes": [
+        "common",
+        "abdomen",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__ectopic_pregnancy",
+        "vaginal_bleeding__placental_abruption"
+      ],
+      "retrieval_queries": [
+        "Ectopic Pregnancy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Placental Abruption diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2894,
+      "excerpt": "sign is considered diagnostic of IUP by experienced sonographers, it can easily be confused with the pseudogestational sac found in ectopic pregnancy (caused by breakdown of stimulated endometrial lining) and lead to incorrect ruling out of ectopic pregnancy. The pseudogestational sac (seen in 10-20% of ectopic pregnancies ) can be differentiated by its central location in the uterus, oval shape, thin echogenic rim, and lack of double decidual sac sign (see the image below). Pseudogestational sac of ectopic pregnancy can be confused with embryonic demise. Pseudogestational sac is produced when",
+      "text_sha256": "dd9becc2658291456e8ece546dfdb71abbea31498f92c2cd84abe7989b47a0cd"
+    },
+    {
+      "id": "rag-f3faa0ec1e3b4d47",
+      "chunk_id": "aa487a13953bac9fe331_1",
+      "title": "Pelvic Inflammatory Disease: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/256448-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__uterine_fibroids"
+      ],
+      "retrieval_queries": [
+        "Uterine Fibroids diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4967,
+      "excerpt": "transmitted disease (STD). Signs and symptoms of pelvic inflammatory disease The diagnosis of acute PID is primarily based on historical and clinical findings. Clinical manifestations of PID vary widely. Many patients exhibit few or no symptoms, whereas others have acute, serious illness. The most common presenting complaint is lower abdominal pain. Many women report an abnormal vaginal discharge. (See Presentation.) Diagnosis of pelvic inflammatory disease The differential diagnosis includes appendicitis, cervicitis, urinary tract infection, endometriosis, ovarian torsion, and adnexal tumors.",
+      "text_sha256": "ab3a505dc39be5b0fb2fff4d31c517a1e310d8de29acce89cde5193b5ac706a4"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__uterine_fibroids",
+        "vaginal_bleeding__placental_abruption"
+      ],
+      "retrieval_queries": [
+        "Uterine Fibroids diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Placental Abruption diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4418,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-b686faaef81f8adc",
+      "chunk_id": "6a8cb2b5f671e31f0106_1",
+      "title": "Hyperparathyroidism in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/766906-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__uterine_fibroids"
+      ],
+      "retrieval_queries": [
+        "Uterine Fibroids diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5088,
+      "excerpt": "syndromes. PT causes symptoms in multiple organ systems throughout the body via its impact on calcium homeostasis. The most recognizable symptoms are renal and skeletal complications: nephrolithiasis, nephrocalcinosis, osteitis fibrosa cystica, and osteoporosis. PT also manifests more subtly with nonspecific symptoms in other organ systems including: cardiovascular, gastrointestinal, rheumatic, and neuropsychiatric.ntreated PHPT can lead to irreversible changes including skeletal deformations and renal insufficiency. Background The parathyroid glands regulate serum calcium and phosphorus",
+      "text_sha256": "f10890622a5d496dd3faf336eacbfcd4c43d655a717cb5c5d0c8b69397bbe965"
+    },
+    {
+      "id": "rag-9e1829939fd84279",
+      "chunk_id": "6c2805675cedd02aa078_12",
+      "title": "CA 27-29: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087535-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__endometrial_cancer"
+      ],
+      "retrieval_queries": [
+        "Endometrial Cancer diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5121,
+      "excerpt": "making it difficult to detect early stage cancers or those tumors that do not express this antigen. Interestingly, the presence of this tumor marker in early stage breast cancer may predict worse outcomes, but its implication on management of early stage breast cancers remains unclear. On the other hand, high levels of CA 27-29 can indicate metastatic disease, but evidence is insufficient to incorporate these marker levels into the staging system. Furthermore, since both benign and malignant conditions other than breast cancer can cause elevation in marker levels, this assay cannot be reliably",
+      "text_sha256": "c8207d677fd47ad02043e1a8fa90866039663f18d7d580a921232796ea249476"
+    },
+    {
+      "id": "rag-a76f161a6be269a2",
+      "chunk_id": "2d52e0b25b95aa71cedd_7",
+      "title": "Early Pregnancy Loss in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795085-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__endometrial_cancer"
+      ],
+      "retrieval_queries": [
+        "Endometrial Cancer diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5374,
+      "excerpt": "usually have subsided. Ultrasonography reveals a vacant uterus. Diagnosis may be confirmed by observation of the aborted fetus with the complete placenta, although caution is recommended in making this diagnosis without ultrasonography because it can be difficult to determine if the miscarriage is complete. Etiology Causes of first- and second-trimester miscarriage Embryonic abnormalities Embryonic abnormalities account for 80-90% of rst-trimester miscarriages. Note the following: Chromosomal abnormalities are the most common cause of spontaneous miscarriage. More than 90% of cytogenic and",
+      "text_sha256": "e418143c55f0e41d9be572c2d83ec881b8de022dcf3551223c4286e115393f57"
+    },
+    {
+      "id": "rag-1723a5244bd110d4",
+      "chunk_id": "64b7dd16f9ee83bc164c_12",
+      "title": "CA 15-3: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087491-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__endometrial_cancer"
+      ],
+      "retrieval_queries": [
+        "Endometrial Cancer diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5389,
+      "excerpt": "of this tumor marker may predict a worse outcome, but the implication on management of early stage breast cancer remains unclear. This marker has no clinical value in breast cancers that do not produce the CA 15-3 marker. CA 15-3 levels may also be increased in several benign and malignant conditions. This results in low sensitivity, specificity, and positive predictive values, making it difficult to reliably screen, diagnose, or stage breast cancers. The CA 27.29 assay is slightly more sensitive for breast cancer, but its indications and limitations are identical to the CA 15-3 assay. CA 15-3",
+      "text_sha256": "a2e926e4149996e3cf253ec912196eb101d4f2b698d4fd553337d6abab4ad1a0"
+    },
+    {
+      "id": "rag-cad1d6cea568461d",
+      "chunk_id": "013e43e6534e2929231d_22",
+      "title": "CA 125: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087557-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__endometrial_cancer"
+      ],
+      "retrieval_queries": [
+        "Endometrial Cancer diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5431,
+      "excerpt": "tumor marker recommended for clinical use in the diagnosis and management of ovarian cancer. There are 5 main indications in which the determination of CA 125 levels is recommended. Table 1 summarizes the recommendations from different societies in both Europe and the United States. Table 1. Recommendations for CA 125 Testing in Ovarian Cancer by Different Expert Groups (Open Table in a new window) NCCN NIH NACB EGTM ESMO Early detection in hereditary cancer syndromes Yes None Differential diagnosis of pelvic mass Yes None Monitoring response to therapy Yes None Yes Detection of recurrence Yes",
+      "text_sha256": "e55757a67a3049a26503cb9bab9c430e8de2a791d893142d47097184aee9d1e2"
+    },
+    {
+      "id": "rag-ba19abf8eb20d774",
+      "chunk_id": "616fe025cba996f96981_14",
+      "title": "Abdominal Compartment Syndrome: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/829008-overview",
+      "routes": [
+        "abdomen",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__placental_abruption"
+      ],
+      "retrieval_queries": [
+        "Placental Abruption diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4747,
+      "excerpt": "Primary ACS Causes of primary (ie, acute) abdominal compartment syndrome include the following: Penetrating trauma Intraperitoneal hemorrhage Pancreatitis External compressing forces, such as debris from a motor vehicle collision or after a large structure explosion Pelvic fracture Rupture of abdominal aortic aneurysm Perforated peptic ulcer In one review and meta-analysis of studies of patients who developed ACS after repair of ruptured abdominal aortic aneurysms, mortality was found to be 47%. Treatment included open decompression in 86 patients; percutaneous drainage in 18 (catheter only in",
+      "text_sha256": "305bc15285e86551eed752de722d40beb4b7601ef428887f90164cb30d6ffdf7"
+    },
+    {
+      "id": "rag-d89511cfe6fcf5fb",
+      "chunk_id": "01cc57b2e059a8047e3c_2",
+      "title": "Emergent Management of Abruptio Placentae: Overview, History, Physical Examination",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795514-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__placental_abruption"
+      ],
+      "retrieval_queries": [
+        "Placental Abruption diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4672,
+      "excerpt": "intravascular coagulation (DIC) Uterine rupture Renal failure Ischemic necrosis of distal organs (eg, hepatic, adrenal, pituitary) Potential fetal complications include the following: Hypoxia Anemia Growth retardation CNS anomalies Fetal death Also see Abruptio Placentae. History Patients usually present with the following symptoms: Vaginal bleeding - 80% Abdominal or back pain and uterine tenderness - 70% Fetal distress - 60% Abnormal uterine contractions (eg, hypertonic, high frequency) - 35% Idiopathic premature labor - 25% Fetal death - 15% Physical Examination Placental abruption is",
+      "text_sha256": "759b00ec39efeec65da86bb79de241f10a3664fba68adce44627f386fba20599"
+    },
+    {
+      "id": "rag-47d02d2df5d6263a",
+      "chunk_id": "8c0fd3de343713eb7a55_43",
+      "title": "Vaccinia: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/231773-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__vaginitis"
+      ],
+      "retrieval_queries": [
+        "Vaginitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4564,
+      "excerpt": "by those receiving vaccinia vaccine is a constellation of symptoms called acute vaccinia syndrome. This is characterized by fever, headache, myalgias, and fatigue. Research suggests that a person's risk of developing fever following inoculation with vaccinia vaccine may to some extent be predicted by genetic analysis. Mortality due to generalized vaccinia or erythematous rash has not been reported. Differences in human morbidity and mortality associated with newer forms of vaccinia vaccine are not yet established. However, studies evaluating certain later generations of vaccinia vaccine may be",
+      "text_sha256": "be4bc357b5ba43548d85dcccc14cb79ab3e6842932dc17eaf0fd7a09fb6ff49d"
+    },
+    {
+      "id": "rag-df30ee352c228b98",
+      "chunk_id": "a663d18c5f77da4d66fd_26",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__vaginitis"
+      ],
+      "retrieval_queries": [
+        "Vaginitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4753,
+      "excerpt": "specific meningeal signs, such as the Kernig or Brudzinski sign, may not be present. A hemorrhagic rash is classically described as resulting from overwhelming systemic bacterial infection due to meningococcemia but may be due to other (usually serious) infections. The presence of petechiae or purpura in febrile children indicates the need for prompt evaluation and therapy. Clinical observation scales have been developed to aid in the determination of the degree of illness. Clinical observation by house staff and seasoned clinicians has produced inconsistent results over the reliability and",
+      "text_sha256": "b03f8637294b3e707e6947f97f5ce6c6972647fa1b7817bd9b5c591b70b9bcf1"
+    },
+    {
+      "id": "rag-ff175cd271f88014",
+      "chunk_id": "6abb4726efd0e023f805_11",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__vaginitis"
+      ],
+      "retrieval_queries": [
+        "Vaginitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4799,
+      "excerpt": "with predominantly sensory symptoms, those with a distal symmetric disorder (DADS), those with multifocal sensorimotor neuropathy or sensorimotor mononeuropathy multiplex with prominent conduction block (also known as Lewis-Sumner neuropathy), and those with CIDP with associated CNS demyelination or with other systemic disorders. The following disorders are considered distinct from CIDP because they have specific pathophysiologic features and respond to treatments differently than do patients with CIDP: Demyelinating neuropathies associated with immunoglobulin M (IgM) paraproteins, including",
+      "text_sha256": "9bcc687a6e728f319204b3de3fc10d7168b581aebb57ba68bafb0dddb461ee00"
+    },
+    {
+      "id": "rag-2efe99aacc494c85",
+      "chunk_id": "5e63425327f98ba541a6_18",
+      "title": "Abnormal (Dysfunctional) Uterine Bleeding in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795587-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__dysfunctional_uterine_bleeding"
+      ],
+      "retrieval_queries": [
+        "Dysfunctional Uterine Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4237,
+      "excerpt": "destructive surgery. Menorrhagia has several adverse effects, including anemia and iron deficiency, reduced quality of life, and increased healthcare costs. Complications Complications include the following: Anemia (may become severe) Adenocarcinoma of the uterus (if prolonged, unopposed estrogen stimulation) Patient Education Instruct patients to continue prescribed medications, although bleeding may still be occurring during the early part of the cycle. Also, patients should be told to expect menses after cessation of the regimen. Young patients with small amounts of irregular bleeding need",
+      "text_sha256": "00907d9e1de63fbebf1dd301d139a6b16962c2e4223829e8f4355a242f3cf574"
+    },
+    {
+      "id": "rag-375c4c2cba7249a7",
+      "chunk_id": "5e63425327f98ba541a6_5",
+      "title": "Abnormal (Dysfunctional) Uterine Bleeding in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795587-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__dysfunctional_uterine_bleeding"
+      ],
+      "retrieval_queries": [
+        "Dysfunctional Uterine Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4284,
+      "excerpt": "after pregnancy, medications, iatrogenic causes, genital tract pathology, malignancy, and systemic disease have been ruled out by appropriate investigations. Approximately 90% of dysfunctional uterine bleeding cases result from anovulation, and 10% of cases occur with ovulatory cycles. Anovulatory dysfunctional uterine bleeding results from a disturbance of the normal hypothalamic-pituitary-ovarian axis and is particularly common at the extremes of the reproductive years. When ovulation does not occur, no progesterone is produced to stabilize the endometrium; thus, proliferative endometrium",
+      "text_sha256": "49a39682262ddb2cd0b3000c248044ddef03fde6e90f5902adeafbc6b189aa1f"
+    },
+    {
+      "id": "rag-829d7ceea3e1f318",
+      "chunk_id": "b30b031f37648f2fe152_42",
+      "title": "Acute Anemia: Practice Essentials, Etiology, Clinical Presentation",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/780334-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "vaginal_bleeding__dysfunctional_uterine_bleeding"
+      ],
+      "retrieval_queries": [
+        "Dysfunctional Uterine Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5265,
+      "excerpt": "GI bleeds, but it is rarely useful in the acute setting. Tagged RBC studies or angiography may be more useful for the localization of massive ongoing lower GI bleeding. Diagnostic peritoneal lavage (DPL) has been supplanted by ultrasonography and computed tomography (CT) and is rarely indicated. Culdocentesis is rarely indicated but may have a role in some situations. Perform this test for a pregnant patient with acute anemia and hemodynamic instability when pelvic ultrasonography is not available. Bleeding from an ectopic pregnancy appears as nonclotting blood. False-positive results may",
+      "text_sha256": "68e25a1c010900510fe4f0f817c1cd4358619e4395c0976cca418391f5082d3b"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "vaginal_bleeding__ectopic_pregnancy",
+      "name": "Ectopic Pregnancy",
+      "retrieval_query": "Ectopic Pregnancy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-be16df4594cf7d67"
+      ],
+      "disease_rag_source_ids": [
+        "rag-c22cb0530d56e56d"
+      ]
+    },
+    {
+      "id": "vaginal_bleeding__uterine_fibroids",
+      "name": "Uterine Fibroids",
+      "retrieval_query": "Uterine Fibroids diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-09fadaa505574fd5"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-f3faa0ec1e3b4d47",
+        "rag-5bcac9eab5404341",
+        "rag-b686faaef81f8adc"
+      ]
+    },
+    {
+      "id": "vaginal_bleeding__endometrial_cancer",
+      "name": "Endometrial Cancer",
+      "retrieval_query": "Endometrial Cancer diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-09fadaa505574fd5"
+      ],
+      "disease_rag_source_ids": [
+        "rag-9e1829939fd84279",
+        "rag-a76f161a6be269a2",
+        "rag-1723a5244bd110d4",
+        "rag-cad1d6cea568461d"
+      ]
+    },
+    {
+      "id": "vaginal_bleeding__placental_abruption",
+      "name": "Placental Abruption",
+      "retrieval_query": "Placental Abruption diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-e5f9a4cb929922ca"
+      ],
+      "disease_rag_source_ids": [
+        "rag-c22cb0530d56e56d",
+        "rag-5bcac9eab5404341",
+        "rag-ba19abf8eb20d774",
+        "rag-d89511cfe6fcf5fb"
+      ]
+    },
+    {
+      "id": "vaginal_bleeding__vaginitis",
+      "name": "Vaginitis",
+      "retrieval_query": "Vaginitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-ad2cc7a25af94fb5"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-47d02d2df5d6263a",
+        "rag-df30ee352c228b98",
+        "rag-ff175cd271f88014"
+      ]
+    },
+    {
+      "id": "vaginal_bleeding__dysfunctional_uterine_bleeding",
+      "name": "Dysfunctional Uterine Bleeding",
+      "retrieval_query": "Dysfunctional Uterine Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-dd071d428feab779"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-2efe99aacc494c85",
+        "rag-375c4c2cba7249a7",
+        "rag-829d7ceea3e1f318"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "vaginal_bleeding",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": "abdomen",
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-c22cb0530d56e56d",
+        "rag-f09c5253c7a82445",
+        "rag-f3faa0ec1e3b4d47",
+        "rag-5bcac9eab5404341",
+        "rag-b686faaef81f8adc",
+        "rag-9e1829939fd84279",
+        "rag-a76f161a6be269a2",
+        "rag-1723a5244bd110d4",
+        "rag-cad1d6cea568461d",
+        "rag-d89511cfe6fcf5fb",
+        "rag-47d02d2df5d6263a",
+        "rag-df30ee352c228b98",
+        "rag-ff175cd271f88014",
+        "rag-2efe99aacc494c85",
+        "rag-375c4c2cba7249a7",
+        "rag-829d7ceea3e1f318"
+      ]
+    },
+    "fact_proposals": [],
+    "semantic_options": [],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "vaginal_bleeding__uterine_fibroids",
+        "name": "Uterine Fibroids",
+        "must_not_miss": false,
+        "retrieval_query": "Uterine Fibroids diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "vaginal_bleeding",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-f3faa0ec1e3b4d47",
+              "rag-5bcac9eab5404341",
+              "rag-b686faaef81f8adc"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-f3faa0ec1e3b4d47",
+          "rag-5bcac9eab5404341",
+          "rag-b686faaef81f8adc"
+        ]
+      },
+      {
+        "id": "vaginal_bleeding__endometrial_cancer",
+        "name": "Endometrial Cancer",
+        "must_not_miss": false,
+        "retrieval_query": "Endometrial Cancer diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "vaginal_bleeding",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-9e1829939fd84279",
+              "rag-a76f161a6be269a2",
+              "rag-1723a5244bd110d4",
+              "rag-cad1d6cea568461d"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-9e1829939fd84279",
+          "rag-a76f161a6be269a2",
+          "rag-1723a5244bd110d4",
+          "rag-cad1d6cea568461d"
+        ]
+      },
+      {
+        "id": "vaginal_bleeding__vaginitis",
+        "name": "Vaginitis",
+        "must_not_miss": false,
+        "retrieval_query": "Vaginitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "vaginal_discharge",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-47d02d2df5d6263a",
+              "rag-df30ee352c228b98",
+              "rag-ff175cd271f88014"
+            ]
+          },
+          {
+            "fact": "fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-47d02d2df5d6263a",
+              "rag-df30ee352c228b98"
+            ]
+          },
+          {
+            "fact": "symptom_headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-47d02d2df5d6263a"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-47d02d2df5d6263a",
+          "rag-df30ee352c228b98",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "id": "vaginal_bleeding__dysfunctional_uterine_bleeding",
+        "name": "Dysfunctional Uterine Bleeding",
+        "must_not_miss": false,
+        "retrieval_query": "Dysfunctional Uterine Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "vaginal_bleeding",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-375c4c2cba7249a7"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-375c4c2cba7249a7",
+          "rag-2efe99aacc494c85"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_vaginal_bleeding__dysfunctional_uterine_bleeding__syncope_with_bleeding",
+        "label": "陰道出血伴隨昏厥",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "vaginal_bleeding"
+          ],
+          "any_findings": [
+            "syncope"
+          ]
+        },
+        "possible_conditions": [
+          "Severe Anemia",
+          "Hemodynamic Instability"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-829d7ceea3e1f318"
+        ]
+      },
+      {
+        "code": "experimental_vaginal_bleeding__dysfunctional_uterine_bleeding__severe_anemia_symptoms",
+        "label": "陰道出血伴隨嚴重貧血症狀",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "vaginal_bleeding"
+          ],
+          "any_findings": [
+            "dizziness_unspecified",
+            "vertigo",
+            "dyspnea"
+          ]
+        },
+        "possible_conditions": [
+          "Severe Anemia"
+        ],
+        "source_ids": [
+          "rag-2efe99aacc494c85",
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Specific vital sign thresholds (e.g., for shock) associated with vaginal bleeding.",
+        "reason": "The provided RAG sources mention monitoring vital signs but do not specify numeric thresholds for heart rate, blood pressure, etc., that would indicate instability."
+      },
+      {
+        "requirement": "Detailed sonographic findings for ectopic pregnancy (e.g., pseudogestational sac characteristics).",
+        "reason": "The provided RAG sources describe sonographic findings like the pseudogestational sac, but this level of detail is related to diagnostic imaging and is not suitable for inclusion in a patient-facing symptom checker."
+      },
+      {
+        "requirement": "Guidance on quantifying bleeding amount (e.g., what constitutes 'minimal' vs. 'aggressive' bleeding).",
+        "reason": "The provided RAG sources use qualitative terms like 'minimal' and 'aggressive' bleeding but do not offer specific, quantifiable definitions (e.g., number of pads soaked per hour) that can be used in patient-facing logic."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create a safety rule for hemodynamic instability (e.g., syncope, severe dizziness) associated with heavy vaginal bleeding.",
+        "reason": "The provided RAG sources do not contain specific thresholds or guidance linking syncope directly to vaginal bleeding as a red flag for emergency referral in this context. While syncope is a general red flag, the evidence lacks the specificity to create a tailored rule for this route."
+      },
+      {
+        "requirement": "Map questionnaire options for 'bleeding_related_to_menstrual_cycle' and 'accompanying_abdominal_or_back_pain' to specific disease features.",
+        "reason": "These are free-text fields in the questionnaire data, and semantic options can only be created for fields with pre-defined choices. The RAG evidence also does not provide enough detail to create robust mappings from potential free-text answers."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Detailed signs and symptoms of Endometrial Cancer beyond risk factors.",
+        "reason": "The provided RAG sources primarily list risk factors for Endometrial Cancer in the context of abnormal uterine bleeding but do not detail other specific signs or symptoms."
+      },
+      {
+        "requirement": "Specific age ranges for risk factors.",
+        "reason": "The RAG source mentions 'age older than 35 years' but does not provide more granular age-related risk stratification, which is required for precise clinical logic."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Determine specific vital sign thresholds (e.g., for tachycardia, orthostatic changes, shock).",
+        "reason": "The provided RAG sources mention maternal tachycardia, orthostatic changes, and shock but do not give specific numeric thresholds for blood pressure or heart rate."
+      },
+      {
+        "requirement": "Incorporate specific laboratory values (e.g., hypofibrinogenemia levels).",
+        "reason": "The provided RAG sources mention hypofibrinogenemia levels (e.g., <150 mg/dL) which are laboratory findings not obtainable through a patient questionnaire."
+      },
+      {
+        "requirement": "Assess for specific physical exam findings like uterine tetany or coagulopathy.",
+        "reason": "The provided RAG sources describe physical exam findings (tetanic uterus) and clinical states (coagulopathy) that cannot be assessed via a patient-facing questionnaire."
+      },
+      {
+        "requirement": "Assess for fetal status (e.g., fetal distress, fetal death).",
+        "reason": "The provided RAG sources mention fetal distress and death, which are clinical diagnoses that cannot be determined by the patient at home."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create a safety rule for syncope associated with vaginal bleeding.",
+        "reason": "The provided RAG source `rag-f09c5253c7a82445` mentions syncope red flags in a general context but does not specifically link them to vaginitis or provide thresholds for urgent action in the context of vaginal bleeding."
+      },
+      {
+        "requirement": "Create a safety rule for hemorrhagic rash associated with vaginitis.",
+        "reason": "The provided RAG source `rag-df30ee352c228b98` mentions hemorrhagic rash as a sign of serious systemic infection but does not provide enough context to create a specific, safe rule for the vaginitis differential without further clinical evidence."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create specific rules based on the amount of bleeding (e.g., pads per day).",
+        "reason": "The provided RAG sources do not contain specific quantitative thresholds (e.g., number of pads) to define severe bleeding for creating a safety rule."
+      },
+      {
+        "requirement": "Create specific rules for bleeding during pregnancy.",
+        "reason": "While the questionnaire asks about pregnancy, the provided RAG sources for Dysfunctional Uterine Bleeding do not offer sufficient detail to create specific safety rules for bleeding in confirmed or suspected pregnancy (e.g., ectopic pregnancy)."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "The profile for Ectopic Pregnancy is based on the classic triad of vaginal bleeding, abdominal pain, and amenorrhea (represented by 'pregnancy_postpartum'). The safety rule is designed to trigger when these key features are present, reflecting the high-risk nature of this condition as highlighted in the source material. Clinical review is needed to confirm the appropriateness of this logic.",
+        "source_ids": [
+          "rag-c22cb0530d56e56d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-c22cb0530d56e56d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], safety_proposals[0], profiles[0], profiles[0].clues[0], profiles[0].clues[1], profiles[0].clues[2], profiles[0].clues[3], review_notes[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-c22cb0530d56e56d"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The fact 'vaginal_bleeding__uterine_fibroids__history_of_uterine_fibroids' is derived directly from the questionnaire ('uterine_fibroids_diagnosis') as it represents a highly specific and relevant historical data point for the Uterine Fibroids profile. It does not require a separate RAG source for justification in this context.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-f3faa0ec1e3b4d47",
+          "rag-5bcac9eab5404341",
+          "rag-b686faaef81f8adc"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The provided RAG sources for Uterine Fibroids are very general and tangential. For instance, rag-f3faa0ec1e3b4d47 discusses Pelvic Inflammatory Disease, listing adnexal tumors (which can include fibroids) in the differential diagnosis. This provides weak, indirect evidence for symptoms like lower abdominal pain and abnormal discharge. More specific sources on uterine fibroids are needed to improve the quality of the profile.",
+        "source_ids": [
+          "rag-f3faa0ec1e3b4d47"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f3faa0ec1e3b4d47",
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-b686faaef81f8adc"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[2], profiles[0].clues[0], profiles[0].clues[1], review_notes[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-f3faa0ec1e3b4d47",
+          "rag-5bcac9eab5404341",
+          "rag-b686faaef81f8adc"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The profile for Endometrial Cancer is based solely on a list of risk factors from a single source (rag-09fadaa505574fd5). The other provided sources for this disease (rag-9e1829939fd84279, rag-a76f161a6be269a2, rag-1723a5244bd110d4, rag-cad1d6cea568461d) were irrelevant to its clinical presentation and did not support the profile. The evidence base is therefore very narrow and requires significant clinical review and supplementation.",
+        "source_ids": [
+          "rag-9e1829939fd84279",
+          "rag-a76f161a6be269a2",
+          "rag-1723a5244bd110d4",
+          "rag-cad1d6cea568461d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-9e1829939fd84279",
+          "rag-a76f161a6be269a2",
+          "rag-1723a5244bd110d4",
+          "rag-cad1d6cea568461d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], fact_proposals[4], profiles[0], profiles[0].clues[0], profiles[0].clues[1], profiles[0].clues[2], profiles[0].clues[3], profiles[0].clues[4]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-9e1829939fd84279",
+          "rag-a76f161a6be269a2",
+          "rag-1723a5244bd110d4",
+          "rag-cad1d6cea568461d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-d89511cfe6fcf5fb",
+          "rag-c22cb0530d56e56d",
+          "rag-5bcac9eab5404341",
+          "rag-ba19abf8eb20d774"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[2], fact_proposals[3], fact_proposals[4], safety_proposals[0], profiles[0], profiles[0].clues[0], profiles[0].clues[4], profiles[0].clues[5]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-c22cb0530d56e56d",
+          "rag-5bcac9eab5404341",
+          "rag-ba19abf8eb20d774",
+          "rag-d89511cfe6fcf5fb"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The discovered disease 'Vaginitis' is a plausible cause of vaginal bleeding, often accompanied by abnormal discharge. The proposed facts align with systemic symptoms that can be associated with infectious causes of vaginitis.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-47d02d2df5d6263a",
+          "rag-df30ee352c228b98",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-47d02d2df5d6263a",
+          "rag-df30ee352c228b98",
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[4], profiles[0], profiles[0].clues[0], profiles[0].clues[1], review_notes[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-47d02d2df5d6263a",
+          "rag-df30ee352c228b98",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The profile for Dysfunctional Uterine Bleeding is based on it being a diagnosis of exclusion, primarily characterized by abnormal uterine bleeding. The clues are general, reflecting the nature of the condition.",
+        "source_ids": [
+          "rag-375c4c2cba7249a7"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The safety proposals are based on general red flags for anemia and hemodynamic instability (syncope, dyspnea, dizziness) mentioned in the context of bleeding, rather than specific red flags for Dysfunctional Uterine Bleeding itself. This is a conservative approach to capture potentially severe outcomes of significant blood loss from any cause of vaginal bleeding.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-2efe99aacc494c85",
+          "rag-829d7ceea3e1f318"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-375c4c2cba7249a7",
+          "rag-2efe99aacc494c85"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-2efe99aacc494c85",
+          "rag-375c4c2cba7249a7",
+          "rag-829d7ceea3e1f318"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,365 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "peripheral_vascular_leg_pain",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "70412b03e9aeab9252e2c8a0eb82a2f8c549818b5ae8db25498b9f01966b76f4",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history",
+      "peripheral vascular leg pain leg pain peripheral vascular red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "6d1c14b3f2aa08e739aa9d4b386fad5abea456e1c54d3b70789a310bec9fec8b"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "5168d57a6253f17a38572ebe7ac0d195602af88dbbf0b3474573f774ef819705",
+    "generated_at": "2026-08-10T04:09:22+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-94a8e6edb9127701",
+      "chunk_id": "53b354e14520b0f0479f_1",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history",
+        "peripheral vascular leg pain leg pain peripheral vascular red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3841,
+      "excerpt": "phantom limb pain during his time as a military surgeon and his experiences with limb amputations. (ysicians throughout the world have described similar syndromes over the centuries and CRPS has held many names, even just within the English language.JCRPS, an entity formally called reflex sympathetic dystrophy (RSD), has readily identifiable signs and symptoms and is treatable if recognized early; however, the syndrome may become disabling if unrecognized. mergency medicine physicians may be the first to see the syndrome and their actions can vastly improve the quality of life and",
+      "text_sha256": "052206cb83a26a39421944480659ffd9843f01b3616c922b01641af1d18910e0"
+    },
+    {
+      "id": "rag-9deab9f70e8a586b",
+      "chunk_id": "164cc724f2b9fd145f51_5",
+      "title": "Chronic Pelvic Pain in Men: Practice Essentials, Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/437745-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4413,
+      "excerpt": "includes recommendations for the treatment of CPPS (see Guidelines). Etiology Chronic pelvic pain syndrome (CPPS) in the male is actually not a syndrome, in that it is not a discrete, narrowly defined constellation of consistent symptoms and objective findings ultimately traceable to a single, known etiology. Rather, CPPS in the male is a catch-all category of convenience into which physicians arbitrarily group the heterogeneous admixture of cases in male patients that meet the following three criteria: Patients have a variety of long-standing symptoms, a significant number of which relate to",
+      "text_sha256": "236ab1618e0bcf0d4a66548cdc91c1d36e9ee7f4097fc22fe764bd717201e888"
+    },
+    {
+      "id": "rag-835f66b18c883b66",
+      "chunk_id": "8bf15e6896ffc7065ab1_1",
+      "title": "Peripheral Vascular Injury Management in the Emergency Department: Practice Essentials, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/828558-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history",
+        "peripheral vascular leg pain leg pain peripheral vascular red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3872,
+      "excerpt": "hard and soft signs below) of a peripheral vascular injury, a careful history of bleeding, physical examination that includes an ankle-brachial index (ABI) or brachial-brachial index (BBI), and CT arteriography (depending on an ABI < 0.9) should determine the diagnosis of arterial injury. Hard and soft signs The presence of \"hard\" signs of vascular injury has a 92-95% sensitivity for injuries requiring intervention. The vast majority of patients exhibiting the following \"hard\" signs require intervention, with a positive predictive value greater than 95% : Bruit or thrill: These are present in",
+      "text_sha256": "e2a9f681649a008ff1eafe4306d7f4bc4c84e06cc4de8bbf67b973dc4f887227"
+    },
+    {
+      "id": "rag-ec954f001c548195",
+      "chunk_id": "164cc724f2b9fd145f51_0",
+      "title": "Chronic Pelvic Pain in Men: Practice Essentials, Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/437745-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4414,
+      "excerpt": "Overview Practice Essentials The term chronic pelvic pain syndrome (CPPS) is used to designate unexplained chronic pelvic pain in men. This pain is associated with irritative voiding symptoms and/or pain in the groin, genitalia, or perineum in the absence of pyuria and bacteriuria (no pus cells or bacteria seen on microscopic analysis of the urine). However, excess white blood cells (WBCs) or bacteria seen on Gram stain and culture of expressed prostatic secretions (EPS) may be found. (See Workup.) CPPS has also been termed prostatodynia; however, the use of this term is not encouraged in",
+      "text_sha256": "139258e959b0253ecf9a660a1f7c6902ed68a17d152841a0fa429e03f8b76fd1"
+    },
+    {
+      "id": "rag-c59525897414abb0",
+      "chunk_id": "8bf15e6896ffc7065ab1_2",
+      "title": "Peripheral Vascular Injury Management in the Emergency Department: Practice Essentials, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/828558-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3914,
+      "excerpt": "predictive value greater than 95% : Bruit or thrill: These are present in only 45% of patients with an arteriovenous fistula Active or pulsatile hemorrhage Pulsatile or expanding hematoma Signs of limb ischemia and elevated compartment pressure including the 5 \"P's: pallor, paresthesias, pulse deficit, paralysis, and pain on passive extension of the compartment. Pain on passive extension is the earliest and most sensitive physical finding. Diminished or absent pulses: This is not a sensitive prognostic finding, as up to 25% of patients with major vascular injuries requiring repair have normal",
+      "text_sha256": "943f9c3c277b0d0582389e37dd444fd6a01ce25e940299470cb6974905f4c959"
+    },
+    {
+      "id": "rag-2e06058fcff327f6",
+      "chunk_id": "53b354e14520b0f0479f_3",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4431,
+      "excerpt": "characterized by a continuing (spontaneous and/or evoked) regional pain that is seemingly disproportionate in time or degree to the usual course of any known trauma or other lesion. The pain is regional (not in a specific nerve territory or dermatome) and usually has a distal predominance of abnormal sensory, motor, sudomotor, vasomotor, and/or trophic findings. The syndrome shows variable progression over time. Schwartzman stated that a common mechanism may be injury to central or peripheral neural tissue. Roberts proposed that sympathetic pain results from tonic activity in myelinated",
+      "text_sha256": "dee01c8dbefb642cc24e011d6414c1d6b17e04916638837cb18bf5eedd8e6837"
+    },
+    {
+      "id": "rag-7f0a0f4a5a402b2f",
+      "chunk_id": "74ab9de94000c37ef9b4_11",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4616,
+      "excerpt": "caudal sac. The classic presentation is bilateral sciatica, with lower extremity bowel or bladder dysfunction present in 90% of patients. Urinary retention is initially observed and followed by overflow incontinence. Perineal or perianal anesthesia is present in 60-80% of patients. Musculoskeletal pain syndromes Musculoskeletal pain syndromes that produce low back pain include myofascial pain syndromes and fibromyalgia. Myofascial pain is characterized by pain and tenderness over localized areas (trigger points), loss of range of motion in the involved muscle groups, and pain radiating in a",
+      "text_sha256": "5e8b0e4bddf178f04369b3d2139c4b28bf31da607287cda7de719fbb83462798"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history",
+        "peripheral vascular leg pain leg pain peripheral vascular red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4222,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-cdf3e304df9694d7",
+      "chunk_id": "8bf15e6896ffc7065ab1_3",
+      "title": "Peripheral Vascular Injury Management in the Emergency Department: Practice Essentials, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/828558-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4321,
+      "excerpt": "up to 25% of patients with major vascular injuries requiring repair have normal pulses distal to the injury. The following \"soft\" signs are much less useful in predicting or excluding major vascular injuries that require intervention. The positive predictive value of \"soft\" signs indicating abnormal findings on an arteriogram is only 35%. The vast majority of these lesions do not require emergent repair. Hypotension or shock Neurologic deficit due to primary nerve injury occurs immediately after injury. In contrast, ischemic neuropathy is delayed in onset, developing within minutes to hours",
+      "text_sha256": "4f8430635db8b399edab8e71b37571a2bd80360ba5b3aeb05f73c103455e2b11"
+    },
+    {
+      "id": "rag-1a14728db5654797",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5493,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the",
+      "text_sha256": "a012e90799aaae112f8e2f59bf68f6b84cb309ef80df02b30b572ab01eb67b32"
+    },
+    {
+      "id": "rag-b364bf74b088d6d7",
+      "chunk_id": "ad7813cfe26a12fee4af_8",
+      "title": "Infective Endocarditis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/216650-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.55,
+      "excerpt": "distal pads of the digits Janeway lesions: Nontender maculae on the palms and soles Roth spots: Retinal hemorrhages with small, clear centers (rare) Signs of neurologic disease include the following : Embolic stroke with focal neurologic deficits (the most common neurologic sign) Intracerebral hemorrhage Multiple microabscesses Other signs of IE include the following: Splenomegaly Stiff neck Delirium Paralysis, hemiparesis, aphasia Conjunctival hemorrhage Pallor Gallops Rales Cardiac arrhythmia Pericardial rub Pleural friction rub Low-grade fever (absent in 3-15% of patients) Anorexia Weight",
+      "text_sha256": "05226ba9cb8f5124f0b5fd68c91573da0cbdbb47e252e4b4a789c85b317296e1"
+    }
+  ],
+  "discovery": {
+    "route": "peripheral_vascular_leg_pain",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "peripheral_vascular_leg_pain__peripheral_arterial_disease",
+        "name": "Peripheral Arterial Disease",
+        "rationale": "The questionnaire asks about leg pain aggravated by walking and relieved by rest, a classic symptom of claudication. It also inquires about skin color changes (pallor), temperature changes (coldness), and non-healing ulcers, which are signs of limb ischemia associated with peripheral vascular conditions. The RAG sources describe signs of limb ischemia including pallor and diminished or absent pulses as key indicators of vascular injury.",
+        "source_ids": [
+          "rag-c59525897414abb0",
+          "rag-835f66b18c883b66"
+        ]
+      },
+      {
+        "id": "peripheral_vascular_leg_pain__deep_vein_thrombosis",
+        "name": "Deep Vein Thrombosis",
+        "rationale": "The questionnaire specifically asks about leg swelling (unilateral or bilateral), pain, and skin changes like redness or warmth (發紅, 發燙). These are hallmark symptoms of DVT. The questionnaire also includes DVT as a pre-existing condition, indicating its relevance to the differential.",
+        "source_ids": [
+          "rag-1a14728db5654797",
+          "rag-2e06058fcff327f6",
+          "rag-7f0a0f4a5a402b2f",
+          "rag-835f66b18c883b66",
+          "rag-94a8e6edb9127701",
+          "rag-9deab9f70e8a586b",
+          "rag-b364bf74b088d6d7",
+          "rag-c59525897414abb0",
+          "rag-cdf3e304df9694d7",
+          "rag-ec954f001c548195",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "id": "peripheral_vascular_leg_pain__cellulitis",
+        "name": "Cellulitis",
+        "rationale": "The questionnaire assesses for symptoms characteristic of a skin and soft tissue infection, such as localized swelling, redness (發紅), warmth (發燙), and the presence of fever or chills. These are key signs of cellulitis, which can cause significant leg pain.",
+        "source_ids": [
+          "rag-1a14728db5654797",
+          "rag-2e06058fcff327f6",
+          "rag-7f0a0f4a5a402b2f",
+          "rag-835f66b18c883b66",
+          "rag-94a8e6edb9127701",
+          "rag-9deab9f70e8a586b",
+          "rag-b364bf74b088d6d7",
+          "rag-c59525897414abb0",
+          "rag-cdf3e304df9694d7",
+          "rag-ec954f001c548195",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "id": "peripheral_vascular_leg_pain__lumbar_radiculopathy",
+        "name": "Lumbar Radiculopathy",
+        "rationale": "The questionnaire asks about pain character (stabbing, throbbing) and aggravating factors like specific positions or movements (bending over, certain postures), which can be indicative of a nerve root issue originating from the spine. One RAG source mentions bilateral sciatica as a presentation of cauda equina syndrome, a severe form of radiculopathy, highlighting the relevance of nerve-related leg pain.",
+        "source_ids": [
+          "rag-7f0a0f4a5a402b2f"
+        ]
+      },
+      {
+        "id": "peripheral_vascular_leg_pain__complex_regional_pain_syndrome",
+        "name": "Complex Regional Pain Syndrome",
+        "rationale": "The questionnaire covers a range of sensory, vasomotor, and skin changes including severe pain (stabbing, throbbing), swelling, and changes in skin color and temperature. The RAG sources describe Complex Regional Pain Syndrome (CRPS) as a condition characterized by regional pain disproportionate to an initial injury, with abnormal sensory, vasomotor, and trophic findings, which aligns with the symptoms being investigated.",
+        "source_ids": [
+          "rag-94a8e6edb9127701",
+          "rag-2e06058fcff327f6"
+        ]
+      },
+      {
+        "id": "peripheral_vascular_leg_pain__acute_limb_ischemia",
+        "name": "Acute Limb Ischemia",
+        "rationale": "The questionnaire asks about sudden onset pain, skin color changes (pallor, cyanosis), and temperature changes (coldness). The RAG sources explicitly list the \"5 P's\" of limb ischemia: pallor, paresthesias, pulse deficit, paralysis, and pain. These are critical signs of an acute vascular emergency that the questionnaire is designed to screen for.",
+        "source_ids": [
+          "rag-c59525897414abb0"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "critical",
+        "note": "The questionnaire screens for symptoms of acute limb ischemia (sudden onset, pallor, coldness) and potential pulmonary embolism secondary to DVT (chest pain). The RAG sources highlight that signs of limb ischemia and active hemorrhage are critical findings requiring intervention. A positive screen for these symptoms should be considered a medical emergency.",
+        "source_ids": [
+          "rag-c59525897414abb0",
+          "rag-835f66b18c883b66"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The questionnaire asks about chest pain. In the context of leg pain and swelling, this could indicate a pulmonary embolism, a life-threatening complication of DVT. The RAG sources also list chest pain as a red flag symptom in other contexts like syncope and myocardial infarction, underscoring its importance.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-1a14728db5654797"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope discovery citations with the complete route RAG evidence pack for: diseases[1], diseases[2]. These citations remain unverified.",
+        "source_ids": [
+          "rag-1a14728db5654797",
+          "rag-2e06058fcff327f6",
+          "rag-7f0a0f4a5a402b2f",
+          "rag-835f66b18c883b66",
+          "rag-94a8e6edb9127701",
+          "rag-9deab9f70e8a586b",
+          "rag-b364bf74b088d6d7",
+          "rag-c59525897414abb0",
+          "rag-cdf3e304df9694d7",
+          "rag-ec954f001c548195",
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,1513 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "back_pain",
+  "label": "背痛",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "1d8a2e9c602da6c04bb9f96674508ed1cccc36c056948b1b39bf65360d04e981",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"back pain back pain differential diagnosis diseases clinical presentation symptoms history\",\"back pain back pain red flags emergency warning signs urgent referral rule out\",\"Herniated Disc diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Myofascial Pain Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Mechanical Back Pain diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Cauda Equina Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Urinary Tract Infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Herpes Zoster diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "a367451b1c1bd8b009d921d0996871ca85136a2d2b49cd8a8f91e87db64a0a0f"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "5749d32da8a74f96bc7d8a3d7dc8014ecae8378de18dad4fe2f5c05314237cf7",
+    "generated_at": "2026-08-10T03:57:38+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-87846466cc8091f4",
+      "chunk_id": "74ab9de94000c37ef9b4_1",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "back pain back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3169,
+      "excerpt": "a%rniated nucleus pulposust multiple levels, one of the causes of low back pain. Magnetic resonance image of the lumbar spine. This image demonstrates a herniated nucleus pulposus at multiple levels. See ck Pain: Find the Cause, Watch for the Comeback, a Critical Images slideshow, to help diagnose and manage this common problem. Low back pain reportedly occurs at least once in 85% of adults younger than 50 years, and 15-20% of Americans have at least one episode of back pain per year. Of these patients, only 20% can be given a precise pathoanatomic diagnosis. Low back pain affects men and",
+      "text_sha256": "48e38edd6e096614f0fc76a6decaab812fce77aa920893c37f6206b6f8247188"
+    },
+    {
+      "id": "rag-7f0a0f4a5a402b2f",
+      "chunk_id": "74ab9de94000c37ef9b4_11",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "back pain back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3257,
+      "excerpt": "caudal sac. The classic presentation is bilateral sciatica, with lower extremity bowel or bladder dysfunction present in 90% of patients. Urinary retention is initially observed and followed by overflow incontinence. Perineal or perianal anesthesia is present in 60-80% of patients. Musculoskeletal pain syndromes Musculoskeletal pain syndromes that produce low back pain include myofascial pain syndromes and fibromyalgia. Myofascial pain is characterized by pain and tenderness over localized areas (trigger points), loss of range of motion in the involved muscle groups, and pain radiating in a",
+      "text_sha256": "5e8b0e4bddf178f04369b3d2139c4b28bf31da607287cda7de719fbb83462798"
+    },
+    {
+      "id": "rag-2e06058fcff327f6",
+      "chunk_id": "53b354e14520b0f0479f_3",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "back pain back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4368,
+      "excerpt": "characterized by a continuing (spontaneous and/or evoked) regional pain that is seemingly disproportionate in time or degree to the usual course of any known trauma or other lesion. The pain is regional (not in a specific nerve territory or dermatome) and usually has a distal predominance of abnormal sensory, motor, sudomotor, vasomotor, and/or trophic findings. The syndrome shows variable progression over time. Schwartzman stated that a common mechanism may be injury to central or peripheral neural tissue. Roberts proposed that sympathetic pain results from tonic activity in myelinated",
+      "text_sha256": "dee01c8dbefb642cc24e011d6414c1d6b17e04916638837cb18bf5eedd8e6837"
+    },
+    {
+      "id": "rag-966ae6ad156bee23",
+      "chunk_id": "6cd5c8412c6ef4421f61_8",
+      "title": "Abdominal Pain in Elderly Persons: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/776663-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "back pain back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4709,
+      "excerpt": "Gastroenteritis (Stomach Flu), Constipation dults), and Blood in the Urine. Pathophysiology Abdominal pain may be the presenting symptom in a wide range of diseases in elderly patients. Note that elderly patients with intra-abdominal pathology are more likely to present with symptoms other than abdominal pain, such as fever, fatigue, chest pain, or altered mental status. Biliary tract disease Biliary tract disease includes symptomatic cholelithiasis, choledocholithiasis, calculus and acalculous cholecystitis, and ascending cholangitis. In some studies, biliary tract disease is the most common",
+      "text_sha256": "b750575466259d1cbf9236bb2b18fca5c73c80702e52e82634b417449026bc3a"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "common",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "back_pain__herniated_nucleus_pulposus",
+        "back_pain__myofascial_pain_syndrome"
+      ],
+      "retrieval_queries": [
+        "back pain back pain differential diagnosis diseases clinical presentation symptoms history",
+        "back pain back pain red flags emergency warning signs urgent referral rule out",
+        "Herniated Disc diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Myofascial Pain Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4078,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-7a2c3a6670bcbe21",
+      "chunk_id": "77deb79ba058e8b1d0d2_0",
+      "title": "Retropharyngeal Abscess: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764421-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "back pain back pain differential diagnosis diseases clinical presentation symptoms history",
+        "back pain back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5575,
+      "excerpt": "Overview Practice Essentials Retropharyngeal abscess (RPA) produces the symptoms of sore throat, fever, neck stiffness, and stridor. A occurs less commonly today than in the past because of the widespread use of antibiotics for suppurative upper respiratory infections. The incidence of RPA in the United States is rising, however. Once almost exclusively a disease of children, RPAs observed with increasing frequency in adults. It poses a diagnostic challenge for the emergency physician because of its infrequent occurrence and variable presentation. mergency department (ED) management of",
+      "text_sha256": "8c1b52d380b234550efe88ec862872b4a2afb2a7f335bf9b1ed0576c276a9165"
+    },
+    {
+      "id": "rag-c45f111ad36ff7c4",
+      "chunk_id": "6bf3610cae447cfa658b_1",
+      "title": "Hypophosphatemia in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767955-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "back pain back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5963,
+      "excerpt": "is the most common symptom suggesting hypophosphatemia and may involve any muscular system to any extent. Other symptoms include the following: Diplopia Dysarthria Dysphagia Symptoms of respiratory insufficiency or myocardial depression may indicate hypophosphatemia. Neurologic symptoms may range from simple paresthesias to profound alterations in mental status. See Presentation for more detail. Diagnosis 9pophosphatemia Laboratory studies Hypophosphatemia is defined as mild (2-2.5 mg/dL), moderate (1-2 mg/dL), or severe (< 1 mg/dL).bnormalities in serum magnesium, calcium, and potassium",
+      "text_sha256": "091eb6dafa0e57aab855c5c76e928572ad6ff8466d6a7a63513e46ed6f4bee8e"
+    },
+    {
+      "id": "rag-2dcf5e11b2eac290",
+      "chunk_id": "53b354e14520b0f0479f_8",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "back pain back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5297,
+      "excerpt": "with an identifiable nerve injury, many are not. Even \"microtrauma\" as might occur with an immunization may be responsible. The upper extremities are more likely to be involved than the lower. Entities that have led to RSDS include the following: Head injury Stroke Polio Amyotrophic lateral sclerosis (ALS) Myocardial infarction Polymyalgia rheumatica Operative procedures (eg, carpal tunnel release) Brachial plexopathy Cast/splint immobilization Minor extremity injury Prolonged bedrest A retrospective epidemiologic analysis of CRPS patients compared to patients with other pain disorders found",
+      "text_sha256": "dff131061a4f6ee0e0fae46403a4db768ffbf78d3bd8472e31967eb2865e7b0c"
+    },
+    {
+      "id": "rag-94cb843c606e3756",
+      "chunk_id": "b756911235fb6bdef18f_20",
+      "title": "Cardiac Tests: Practice Essentials, Overview, Exercise Tolerance Test",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811577-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "back pain back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5999,
+      "excerpt": "who underwent both exercise tolerance testing and coronary angiography by the American College of Cardiology and American Heart Association (ACC/AHA) showed a mean sensitivity of 68% and mean specificity of 77%. Despite the low sensitivity when compared to angiography results, the purpose of stress testing in the context of the emergency department (ED) evaluation of chest pain is not to rule out CAD but to be used as short-term prognostic tool to aid the safe disposition of patients. The 2014 AHA/ACC guidelines for the management of non-ST-elevation myocardial infarction (NSTEMI) and acute",
+      "text_sha256": "f428721fb0a8f0d9327a88c1e1402a229cae37662f00429752d6f3f857313ab5"
+    },
+    {
+      "id": "rag-15ce66364be76637",
+      "chunk_id": "74ab9de94000c37ef9b4_6",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "back_pain__mechanical_back_pain"
+      ],
+      "retrieval_queries": [
+        "Mechanical Back Pain diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3539,
+      "excerpt": "musculoskeletal pain syndromes, and skeletal causes. Nerve root syndromes Classic nerve root syndrome is characterized by radicular pain arising from nerve root impingement due to herniated discs. A similar syndrome can also be produced by inflammation and irritation, which may explain why patients whose presentation is consistent with this diagnosis respond to conservative therapies. Impingement pain tends to be sharp, well localized, and can be associated with paresthesia, whereas irritation pain tends to be dull, poorly localized, and without paresthesia. Impingement is associated with a",
+      "text_sha256": "1cc816f5d16418b5390dd4c89e734cba13cb748771c9292c53729d2bfaf846b6"
+    },
+    {
+      "id": "rag-683544f4e158c9bb",
+      "chunk_id": "74ab9de94000c37ef9b4_12",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "back_pain__mechanical_back_pain"
+      ],
+      "retrieval_queries": [
+        "Mechanical Back Pain diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3664,
+      "excerpt": "loss of range of motion in the involved muscle groups, and pain radiating in a characteristic distribution but restricted to a peripheral nerve. Relief of pain is often reported when the involved muscle group is stretched. Fibromyalgia results in pain and tenderness on palpation of 11 of 18 trigger points, one of which is the low back area, as classified by the American College of Rheumatology. Generalized stiffness, fatigue, and muscle ache are reported. Other skeletal causes Other skeletal causes of low back pain include osteomyelitis, sacroiliitis, and malignancy. Osteomyelitis results from",
+      "text_sha256": "42cc0bb3a0e96ef3be649807a9cd9fcf797c5c41064119372535534265b64293"
+    },
+    {
+      "id": "rag-d71a0a73f65f79a2",
+      "chunk_id": "c073c38d1231a0946898_1",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "back_pain__mechanical_back_pain"
+      ],
+      "retrieval_queries": [
+        "Mechanical Back Pain diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3962,
+      "excerpt": "alternative diagnoses. Signs of dysfunction of other cranial neruves or other neurologic abnormality exclude the diagnosis of classic trigeminal neuralgia and suggest that pain may be secondary to a structural lesion. The International Association for the Study of Pain (IASP) classifies TN into three categories. Classical TN is described as vascular compression that causes anatomical changes in the trigeminal nerve root. Next, secondary TN is due to an underlying neurologic disease. Third, idiopathic TN, is diagnosed after all studies reveal no etiology or there is no apparent cause. Classic",
+      "text_sha256": "ce29c6daab7ff6fd5cd95a131c5c0f906c846e7d275efa50d3ee5c72823e1ba8"
+    },
+    {
+      "id": "rag-520405111b6d707f",
+      "chunk_id": "e4e50b3c5a1f1d69d42c_1",
+      "title": "Spinal Epidural Abscess: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165840-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "back_pain__mechanical_back_pain"
+      ],
+      "retrieval_queries": [
+        "Mechanical Back Pain diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4102,
+      "excerpt": "back pain without any \"red flag\" symptoms). Half of all cases of spinal epidural abscess are estimated to be misdiagnosed or have a delayed diagnosis. Early identification and timely surgical intervention may result in improved outcomes and preservation of neurological function. An MRI of the lumbar spine (T1-weighted, post-contrast) shows a spinal epidural abscess at the level of L3-L4, with an associated left paraspinal muscle abscess. Pathophysiology Risk factors for epidural spinal abscesses include intravenous drug use and immunosuppression from a variety of sources including HIV/AIDS and",
+      "text_sha256": "48daab59953400fa3b4bccd4ecb6c1fa552c97f7fb814edd94b88cfe1be116c8"
+    },
+    {
+      "id": "rag-6e7e81529db3d565",
+      "chunk_id": "151b955c72ff202aef68_3",
+      "title": "Lumbar (Intervertebral) Disc Disorder Management in the ED: Practice Essentials, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827016-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "back_pain__herniated_nucleus_pulposus"
+      ],
+      "retrieval_queries": [
+        "Herniated Disc diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.571,
+      "excerpt": "not helpful in the diagnosis of lumbar disc disease. For an otherwise healthy individual, unless the patient is immobilized completely by the pain and requires admission or the pain has been present for more than 6 weeks, diagnostic studies are not recommended. Indications for screening laboratory tests such as the following include pain of a nonmechanical nature, atypical pain pattern, persistent symptoms, and age greater than 50 years: Complete blood count with differential Erythrocyte sedimentation rate Alkaline and acid phosphatase levels Serum calcium level Serum protein electrophoresis",
+      "text_sha256": "2915b953f0cfba78370bd72149b935c6c33f9556f525516d0504ac8f5842763b"
+    },
+    {
+      "id": "rag-ccf9b70030c23227",
+      "chunk_id": "dd9970b5cca993dde8ee_5",
+      "title": "Latex Allergy: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/756632-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "back_pain__herniated_nucleus_pulposus"
+      ],
+      "retrieval_queries": [
+        "Herniated Disc diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.579,
+      "excerpt": "Images slideshow, to help identify a variety of allergens and symptoms. For related information, see Medscape's Allergy & Immunology Resource Center. Pathophysiology Latex exposure is associated with 3 clinical syndromes. Irritant dermatitis results from mechanical disruption of the skin due to the rubbing of gloves and accounts for the majority of latex-induced local skin rashes. It is not immune mediated, is not associated with allergic complications, and is not the subject of this article. It may be confused with Type IV hypersensitivity. Any chronic hand dermatitis in HCWs raises the risk",
+      "text_sha256": "5b56241972bfb600425e25d659b0b591393b6d0c28b4e83625200fd97861ebe1"
+    },
+    {
+      "id": "rag-a17a88cf643fd7db",
+      "chunk_id": "f3a0e8ebab5000f04492_9",
+      "title": "Lyme Disease Serology: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2094578-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "back_pain__herniated_nucleus_pulposus"
+      ],
+      "retrieval_queries": [
+        "Herniated Disc diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5908,
+      "excerpt": "risk of B burgdorferi infection who are seeking Lyme testing for symptoms of a more nonspecific nature. Indication/Applications Testing is indicated for clinically suspected cases of Lyme disease; it is not necessary if the patient has a tick bite and erythema migrans. Considerations Diagnosis of Lyme disease is made based on a combination clinical manifestations and available testing. No test is 100% sensitive or specific for Lyme disease. If the test is performed before an adequate antibody response develops, results may be false negative. In this case, repeat testing in 2-4 weeks is",
+      "text_sha256": "7d9f427e83fb51568453997ac93924341f108db8dcdd1e9ee603c71d86fdb87c"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "back_pain__cauda_equina_syndrome"
+      ],
+      "retrieval_queries": [
+        "Cauda Equina Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4074,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-f535f7d2452b0d38",
+      "chunk_id": "4a333b8daf252bbcafcd_1",
+      "title": "Toxic Shock Syndrome: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/169177-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "back_pain__cauda_equina_syndrome"
+      ],
+      "retrieval_queries": [
+        "Cauda Equina Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4692,
+      "excerpt": "headache, and nonfocal neurologic abnormalities. See the image below. A 46-year-old man presented with nonnecrotizing cellulitis and streptococcal toxic shock syndrome. The patient had diffuse erythroderma, a characteristic feature of the syndrome. The patient improved with antibiotics and intravenous gammaglobulin therapy. Several days later, a characteristic desquamation of the skin occurred over palms and soles. Courtesy of Rob Green, MD. TSS was first described in children in 1978. Subsequent reports identified an association with tampon use by menstruating women. Menstrual TSS is more",
+      "text_sha256": "26ca000008738031089e37f3efef58bcc8269ac23eaf735f7d7686e20f667032"
+    },
+    {
+      "id": "rag-150bd762522d7024",
+      "chunk_id": "63feb2d05105b6accd7f_2",
+      "title": "Neuroleptic Malignant Syndrome: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/816018-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "back_pain__cauda_equina_syndrome"
+      ],
+      "retrieval_queries": [
+        "Cauda Equina Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4865,
+      "excerpt": "gait Psychomotor agitation Delirium progressing to lethargy, stupor, coma Other general examination findings indicative of autonomic dysregulation include the following: Diaphoresis Sialorrhea Tachycardia Tachypnea, respiratory distress (31% of cases) Increased or labile blood pressure Hypoxemia (low pulse oximeter reading) See Presentation for more detail. Diagnosis No laboratory test result is diagnostic for NMS. Laboratory studies are used to assess severity and complications or rule out other diagnostic possibilities. A summary of the laboratory abnormalities that may be found in",
+      "text_sha256": "dc57b0a859626f3c961a77cf26035e03008376688fb7a2327236b84f8873a5e8"
+    },
+    {
+      "id": "rag-2a77934242f0e69d",
+      "chunk_id": "791b392395fdb02a4e02_4",
+      "title": "Leptospirosis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/220563-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "back_pain__cauda_equina_syndrome"
+      ],
+      "retrieval_queries": [
+        "Cauda Equina Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4912,
+      "excerpt": "Courtesy of the Centers for Disease Control and Prevention (CDC), Rob Weyant. Signs and symptoms Leptospirosis ranges in severity from no symptoms to a mild illness suggesting a viral infection to a multisystemic syndrome with unique features. It is characterized by sudden onset of the following: Fever (38-40°C) Rigors Headache, retro-orbital pain, photophobia Muscle pain localized to the calf and lumbar areas Conjunctival suffusion Dry cough Nausea and vomiting, diarrhea More severe disease manifests as icteric leptospirosis, also known as Weil disease, with the following features: Icterus or",
+      "text_sha256": "f4003fe51828aa03dd3bc9aef69c8fe05e0d2a60538f5383a227ba13923a5d9a"
+    },
+    {
+      "id": "rag-9569f87b2d38b7d4",
+      "chunk_id": "53b354e14520b0f0479f_7",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "back_pain__myofascial_pain_syndrome"
+      ],
+      "retrieval_queries": [
+        "Myofascial Pain Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3925,
+      "excerpt": "This complex syndrome has been further classified into two subtypes:J Type I: No evidence of peripheral nerve injury (formerly reflex sympathetic dystrophy)J Type II: Peripheral nerve injury present (formerly causalgia )J Epidemiology Frequency CRPS occurs in approximately 1 15% of peripheral nerve injury cases. Schwartzman states that CRPS usually occurs secondary to fractures, sprains, and trivial soft tissue injury. The incidence after fractures and contusions ranges from 10% to 30%. While some cases are associated with an identifiable nerve injury, many are not. Even \"microtrauma\" as might",
+      "text_sha256": "f92854d983ca7db67bc2172e7aa263a6e48ca5fce7aa1fad47b16359cb9a44c5"
+    },
+    {
+      "id": "rag-94a8e6edb9127701",
+      "chunk_id": "53b354e14520b0f0479f_1",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "back_pain__myofascial_pain_syndrome"
+      ],
+      "retrieval_queries": [
+        "Myofascial Pain Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.39,
+      "excerpt": "phantom limb pain during his time as a military surgeon and his experiences with limb amputations. (ysicians throughout the world have described similar syndromes over the centuries and CRPS has held many names, even just within the English language.JCRPS, an entity formally called reflex sympathetic dystrophy (RSD), has readily identifiable signs and symptoms and is treatable if recognized early; however, the syndrome may become disabling if unrecognized. mergency medicine physicians may be the first to see the syndrome and their actions can vastly improve the quality of life and",
+      "text_sha256": "052206cb83a26a39421944480659ffd9843f01b3616c922b01641af1d18910e0"
+    },
+    {
+      "id": "rag-a98c193a5096c09a",
+      "chunk_id": "c073c38d1231a0946898_6",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "back_pain__myofascial_pain_syndrome"
+      ],
+      "retrieval_queries": [
+        "Myofascial Pain Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4123,
+      "excerpt": "cause a similar pain syndrome. An area of demyelination is shown in the image below. Microscopic demonstration of demyelination in primary trigeminal neuralgia. A tortuous axon is surrounded by abnormally discontinuous myelin. Electron microscope, 3, 300 X. Infrequently, adjacent dental fillings composed of dissimilar metals may trigger attacks, and an atypical case has been reported following tongue piercing. A case report of trigeminal neuralgia in a patient with spontaneous intracranial hypotension has been reported; both conditions resolved following surgical treatment of a cervical root",
+      "text_sha256": "361eb31dd471923c53f7d7419fdf018f7c6365861f0a9a92180becd42e307e41"
+    },
+    {
+      "id": "rag-d65b78cc091f2d5e",
+      "chunk_id": "525d2d2f1773793663e6_33",
+      "title": "Emergency Care of Urticaria: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1956597-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "back_pain__urinary_tract_infection"
+      ],
+      "retrieval_queries": [
+        "Urinary Tract Infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3995,
+      "excerpt": "Skin for evidence of bacterial or fungal infection Differential Diagnosis The differential diagnosis includes the following: Allergic Contact Dermatitis Atopic Dermatitis Drug Eruptions Erythema Multiforme Henoch-Schonlein Purpura (Anaphylactoid Purpura) Insect Bites Mastocytosis Pityriasis Rosea Scabies Urticarial Vasculitis Sweet syndrome Other problems to consider include the following: Neurodermatitis Eczema Urticaria pigmentosa Potential diagnostic pitfalls include the following: Missing the diagnosis of life-threatening laryngeal angioedema in a patient presenting with the primary",
+      "text_sha256": "89f2bc61d13f795e3e8ca97a61c4c166adc2f1337d62517645da7c2e6e3eed6e"
+    },
+    {
+      "id": "rag-614fc25c4637195b",
+      "chunk_id": "4d07a571dd8fc318526e_1",
+      "title": "Urinary Tract Infection (UTI) and Cystitis (Bladder Infection) in Females: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/233101-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "back_pain__urinary_tract_infection"
+      ],
+      "retrieval_queries": [
+        "Urinary Tract Infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4403,
+      "excerpt": "the urine. Formulation of a successful diagnostic and treatment plan is based on determining the location of the UTI; underlying physical impairments of the patient, such as diabetes; complicating factors such as nephrolithiasis; prostatic abnormalities; and the presence of resistant organisms. Plain radiograph in a 63-year-old patient with poorly controlled type 2 diabetes mellitus shows emphysematous cystitis. Terminology of UTIs The use of valid terminology is essential to making the correct diagnosis and formulating an appropriate treatment plan. Asymptomatic bacteriuria describes an",
+      "text_sha256": "57f43b5d605732d909b238b00e5f5e627a40b2167b37d3d56b2589e1107d43cd"
+    },
+    {
+      "id": "rag-3697ea6f89d68fd5",
+      "chunk_id": "5f385aa936e8b9c4d48d_4",
+      "title": "Hemolytic Uremic Syndrome in Emergency Medicine: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779218-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "back_pain__urinary_tract_infection"
+      ],
+      "retrieval_queries": [
+        "Urinary Tract Infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4412,
+      "excerpt": "seizures, or altered mental status) Diarrhea may improve as the other HUS signs and symptoms beginJ Atypical HUS does not typically begin with a gastrointestinal illness. Patients with pneumococcal HUS may have had`recent respiratory illness. Clinical manifestations of atypical HUS are similar to those of typical HUS, although neurologic involvement is more common. See Presentation. HUS is primarily a clinical diagnosis coupled with consistent laboratory findings, including the following: Microangiopathic hemolytic anemia, with a hemoglobin level that is typically less than 8 g/dLJ",
+      "text_sha256": "8794e56e32229d991eb34ce0ebf51c81b6fdd260c654a355f24fd9e8a874c4d9"
+    },
+    {
+      "id": "rag-a2cc9fd5cd7ca515",
+      "chunk_id": "bae259a0e986883337ec_10",
+      "title": "Urinary Tract Infections (UTI) in Diabetes Mellitus: Overview, Renal Emphysema, Emphysematous Cystitis",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2040207-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "back_pain__urinary_tract_infection"
+      ],
+      "retrieval_queries": [
+        "Urinary Tract Infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4431,
+      "excerpt": "and vomiting, and abdominal pain. The most common symptoms of ephysematous cystitis are frequency, urgency,abdominal pain, and dysuria. Gross hematuria and pneumaturia are occasionally observed. Leukocytosis and pyuria are observed in most patients. along with, azotemia and hyperglycemia are present. Abdominal imaging may reveal gas outlining the renal pelvis and in the ureters; air in the bladder wall or lumen. Renal ultrasonography may detect diffuse thickening of the bladder wall and echogenicity. CT scans may documentgas in the bladder wall with extension into the lumen. Blebs of the",
+      "text_sha256": "fd14ce95e9dba22365671747d38de2d02311328b321f1a37b5ef8898898174ed"
+    },
+    {
+      "id": "rag-ee35bf1b0c9ada56",
+      "chunk_id": "096741c48a02ca808898_12",
+      "title": "Herpes Zoster Oticus: Overview, Pathophysiology, Clinical Manifestations",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1952189-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "back_pain__shingles"
+      ],
+      "retrieval_queries": [
+        "Herpes Zoster diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4654,
+      "excerpt": "(BUN) Creatinine Blood cell counts Electrolytes Consider screening for anti-VZV antibodies (IgM and IgA) in at-risk immunocompromised patients. PCR testing is the most sensitive laboratory test to diagnosis Herpes Zoster >95%, and is more rapid to obtain when compared with culture techniques.J Imaging Studies If diagnosis of Ramsay Hunt syndrome is not established by physical examination alone, consider a head CT scan to investigate other etiologies of facial paralysis. Treatment of Herpes Zoster Oticus For many years, therapy for herpes zoster (HZ) oticus had been generally supportive,",
+      "text_sha256": "8fe3256d8b902c6f0578a2ddf17a67da30f4594b632525d5872645e0f3845370"
+    },
+    {
+      "id": "rag-3e95076854700800",
+      "chunk_id": "2fdd3c0009784aa8ecff_26",
+      "title": "Early Symptomatic HIV Infection: Overview, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/211873-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "back_pain__shingles"
+      ],
+      "retrieval_queries": [
+        "Herpes Zoster diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4852,
+      "excerpt": "genital lesions are most common, but perianal and periungual lesions are also observed. Herpetic lesions resemble a cluster of vesicles on an erythematous base. Reactivation of herpes zoster (shingles) is characterized by lesions due to varicella-zoster virus (VZV) that may extend over several dermatomes. Widespread cutaneous dissemination may occur, but visceral involvement has not been reported. Thrombocytopenia may occur acute HIV infection. As in other forms of thrombocytopenia, bleeding is rare unless the platelet count falls to below 10,000 cells/µL. In those cases, bleeding gums,",
+      "text_sha256": "a3236822c9462fdaf249d96cf9dd8b0acaf85180af4b67477032bf2207610933"
+    },
+    {
+      "id": "rag-c6e385de1e525358",
+      "chunk_id": "096741c48a02ca808898_6",
+      "title": "Herpes Zoster Oticus: Overview, Pathophysiology, Clinical Manifestations",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1952189-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "back_pain__shingles"
+      ],
+      "retrieval_queries": [
+        "Herpes Zoster diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4972,
+      "excerpt": "may recall a distant history, perhaps in childhood, of chickenpox (varicella). A minority of patients (< 10%) give a history of previous herpes zoster viral infection. Physical examination Physical examination shows a vesicular exanthem, usually of the external auditory canal, concha, and pinna. The rash also may appear on postauricular skin, lateral nasal wall, soft palate, and anterolateral tongue. Vertigo and sensorineural hearing loss may be noted, and paralysis of the facial nerve, mimicking Bell palsy, may be present. Complete loss of the ability to wrinkle the ipsilateral brow",
+      "text_sha256": "cab73adfb53ddd60b48137115d835c80f5aeb2c153264540bcf2e10b5b820f0a"
+    },
+    {
+      "id": "rag-bf832a8eae210f99",
+      "chunk_id": "eb5b0b28cb447b33821a_14",
+      "title": "B Virus (Macacine Herpesvirus 1, Herpes B): Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/235360-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "back_pain__shingles"
+      ],
+      "retrieval_queries": [
+        "Herpes Zoster diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4718,
+      "excerpt": "symptoms progress centrally to produce global CNS pathology, including meningitis and encephalitis, cranial nerve palsies, and brain stem impairment. Systemic symptoms with fevers, rigors, conjunctivitis, sinusitis, and myalgias occur and may be the only manifestation in some cases. At least one case in which disease occurred years after exposure has been reported, suggesting that herpes B virus might be able to become latent and reactivate in humans. Self-limited aseptic meningitis has been reported, but almost all cases produce substantial morbidity and mortality. Epidemiology Frequency",
+      "text_sha256": "f9b05da53808cded12a24516d2edf9e542d8f52f67cbfb2201391aea241ee932"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "back_pain__mechanical_back_pain",
+      "name": "Mechanical Back Pain",
+      "retrieval_query": "Mechanical Back Pain diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-87846466cc8091f4"
+      ],
+      "disease_rag_source_ids": [
+        "rag-15ce66364be76637",
+        "rag-683544f4e158c9bb",
+        "rag-d71a0a73f65f79a2",
+        "rag-520405111b6d707f"
+      ]
+    },
+    {
+      "id": "back_pain__herniated_nucleus_pulposus",
+      "name": "Herniated Disc",
+      "retrieval_query": "Herniated Disc diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-87846466cc8091f4"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-6e7e81529db3d565",
+        "rag-ccf9b70030c23227",
+        "rag-a17a88cf643fd7db"
+      ]
+    },
+    {
+      "id": "back_pain__cauda_equina_syndrome",
+      "name": "Cauda Equina Syndrome",
+      "retrieval_query": "Cauda Equina Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-7f0a0f4a5a402b2f"
+      ],
+      "disease_rag_source_ids": [
+        "rag-5bcac9eab5404341",
+        "rag-f535f7d2452b0d38",
+        "rag-150bd762522d7024",
+        "rag-2a77934242f0e69d"
+      ]
+    },
+    {
+      "id": "back_pain__myofascial_pain_syndrome",
+      "name": "Myofascial Pain Syndrome",
+      "retrieval_query": "Myofascial Pain Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-7f0a0f4a5a402b2f"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-9569f87b2d38b7d4",
+        "rag-94a8e6edb9127701",
+        "rag-a98c193a5096c09a"
+      ]
+    },
+    {
+      "id": "back_pain__urinary_tract_infection",
+      "name": "Urinary Tract Infection",
+      "retrieval_query": "Urinary Tract Infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-966ae6ad156bee23"
+      ],
+      "disease_rag_source_ids": [
+        "rag-d65b78cc091f2d5e",
+        "rag-614fc25c4637195b",
+        "rag-3697ea6f89d68fd5",
+        "rag-a2cc9fd5cd7ca515"
+      ]
+    },
+    {
+      "id": "back_pain__shingles",
+      "name": "Herpes Zoster",
+      "retrieval_query": "Herpes Zoster diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-2dcf5e11b2eac290",
+        "rag-2e06058fcff327f6",
+        "rag-7a2c3a6670bcbe21",
+        "rag-7f0a0f4a5a402b2f",
+        "rag-87846466cc8091f4",
+        "rag-94cb843c606e3756",
+        "rag-966ae6ad156bee23",
+        "rag-c45f111ad36ff7c4",
+        "rag-f09c5253c7a82445"
+      ],
+      "disease_rag_source_ids": [
+        "rag-ee35bf1b0c9ada56",
+        "rag-3e95076854700800",
+        "rag-c6e385de1e525358",
+        "rag-bf832a8eae210f99"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "back_pain",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-15ce66364be76637",
+        "rag-683544f4e158c9bb",
+        "rag-d71a0a73f65f79a2",
+        "rag-520405111b6d707f",
+        "rag-f09c5253c7a82445",
+        "rag-6e7e81529db3d565",
+        "rag-ccf9b70030c23227",
+        "rag-a17a88cf643fd7db",
+        "rag-5bcac9eab5404341",
+        "rag-f535f7d2452b0d38",
+        "rag-150bd762522d7024",
+        "rag-2a77934242f0e69d",
+        "rag-9569f87b2d38b7d4",
+        "rag-94a8e6edb9127701",
+        "rag-a98c193a5096c09a",
+        "rag-a2cc9fd5cd7ca515",
+        "rag-ee35bf1b0c9ada56",
+        "rag-3e95076854700800",
+        "rag-c6e385de1e525358",
+        "rag-bf832a8eae210f99"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "back_pain__mechanical_back_pain__localized_pain",
+        "description": "背痛是局部的。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "back_pain__mechanical_back_pain"
+        ],
+        "source_ids": [
+          "rag-15ce66364be76637"
+        ]
+      },
+      {
+        "code": "back_pain__mechanical_back_pain__radiating_pain_peripheral_nerve",
+        "description": "疼痛沿周邊神經分佈放射。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "back_pain__mechanical_back_pain"
+        ],
+        "source_ids": [
+          "rag-683544f4e158c9bb"
+        ]
+      },
+      {
+        "code": "back_pain__mechanical_back_pain__point_tenderness",
+        "description": "背部有觸痛點。",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "back_pain__mechanical_back_pain"
+        ],
+        "source_ids": [
+          "rag-683544f4e158c9bb"
+        ]
+      },
+      {
+        "code": "back_pain__mechanical_back_pain__fever_chills",
+        "description": "有發燒或畏寒。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "back_pain__mechanical_back_pain"
+        ],
+        "source_ids": [
+          "rag-683544f4e158c9bb"
+        ]
+      },
+      {
+        "code": "back_pain__herniated_nucleus_pulposus__low_back_pain",
+        "description": "Pain located in the lower back.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "back_pain__herniated_nucleus_pulposus"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-6e7e81529db3d565",
+          "rag-ccf9b70030c23227",
+          "rag-a17a88cf643fd7db"
+        ]
+      },
+      {
+        "code": "back_pain__herniated_nucleus_pulposus__focal_neurologic_deficits",
+        "description": "Localized neurological symptoms, such as weakness or sensory changes in a specific area.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "back_pain__herniated_nucleus_pulposus"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "back_pain__cauda_equina_syndrome__bowel_or_bladder_dysfunction",
+        "description": "Bowel or bladder dysfunction, such as urinary retention followed by overflow incontinence.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "back_pain__cauda_equina_syndrome"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-150bd762522d7024",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "code": "back_pain__cauda_equina_syndrome__lower_extremity_weakness",
+        "description": "Weakness in the lower extremities.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "back_pain__cauda_equina_syndrome"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-150bd762522d7024",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "code": "back_pain__myofascial_pain_syndrome__localized_pain_and_tenderness",
+        "description": "Pain and tenderness are localized to specific areas (trigger points).",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "back_pain__myofascial_pain_syndrome"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-9569f87b2d38b7d4",
+          "rag-94a8e6edb9127701",
+          "rag-a98c193a5096c09a"
+        ]
+      },
+      {
+        "code": "back_pain__myofascial_pain_syndrome__radiating_pain",
+        "description": "Pain radiates from the localized area.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "back_pain__myofascial_pain_syndrome"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-9569f87b2d38b7d4",
+          "rag-94a8e6edb9127701",
+          "rag-a98c193a5096c09a"
+        ]
+      },
+      {
+        "code": "back_pain__urinary_tract_infection__abdominal_pain",
+        "description": "腹部疼痛",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "back_pain__urinary_tract_infection"
+        ],
+        "source_ids": [
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      },
+      {
+        "code": "back_pain__urinary_tract_infection__dysuria",
+        "description": "排尿時疼痛",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "back_pain__urinary_tract_infection"
+        ],
+        "source_ids": [
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      },
+      {
+        "code": "back_pain__urinary_tract_infection__hematuria",
+        "description": "血尿",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "back_pain__urinary_tract_infection"
+        ],
+        "source_ids": [
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      },
+      {
+        "code": "back_pain__urinary_tract_infection__fever_chills",
+        "description": "發燒或畏寒",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "back_pain__urinary_tract_infection"
+        ],
+        "source_ids": [
+          "rag-d65b78cc091f2d5e",
+          "rag-614fc25c4637195b",
+          "rag-3697ea6f89d68fd5",
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      },
+      {
+        "code": "back_pain__shingles__vesicular_rash",
+        "description": "A rash with vesicles (small fluid-filled blisters) is present.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "back_pain__shingles"
+        ],
+        "source_ids": [
+          "rag-c6e385de1e525358",
+          "rag-3e95076854700800"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "pain_radiation",
+        "option": "局部",
+        "mapping": {
+          "findings": [
+            "back_pain__mechanical_back_pain__localized_pain",
+            "back_pain__myofascial_pain_syndrome__localized_pain_and_tenderness"
+          ]
+        },
+        "disease_ids": [
+          "back_pain__mechanical_back_pain",
+          "back_pain__myofascial_pain_syndrome"
+        ],
+        "source_ids": [
+          "rag-15ce66364be76637",
+          "rag-f09c5253c7a82445",
+          "rag-9569f87b2d38b7d4",
+          "rag-94a8e6edb9127701",
+          "rag-a98c193a5096c09a"
+        ]
+      },
+      {
+        "field": "pain_radiation",
+        "option": "牽連到其他部位",
+        "mapping": {
+          "findings": [
+            "back_pain__mechanical_back_pain__radiating_pain_peripheral_nerve",
+            "back_pain__myofascial_pain_syndrome__radiating_pain"
+          ]
+        },
+        "disease_ids": [
+          "back_pain__mechanical_back_pain",
+          "back_pain__myofascial_pain_syndrome"
+        ],
+        "source_ids": [
+          "rag-683544f4e158c9bb",
+          "rag-f09c5253c7a82445",
+          "rag-9569f87b2d38b7d4",
+          "rag-94a8e6edb9127701",
+          "rag-a98c193a5096c09a"
+        ]
+      },
+      {
+        "field": "point_tenderness",
+        "option": "有",
+        "mapping": {
+          "findings": [
+            "back_pain__mechanical_back_pain__point_tenderness",
+            "back_pain__myofascial_pain_syndrome__localized_pain_and_tenderness"
+          ]
+        },
+        "disease_ids": [
+          "back_pain__mechanical_back_pain",
+          "back_pain__myofascial_pain_syndrome"
+        ],
+        "source_ids": [
+          "rag-683544f4e158c9bb",
+          "rag-f09c5253c7a82445",
+          "rag-9569f87b2d38b7d4",
+          "rag-94a8e6edb9127701",
+          "rag-a98c193a5096c09a"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "有發燒或畏寒",
+        "mapping": {
+          "findings": [
+            "back_pain__mechanical_back_pain__fever_chills",
+            "back_pain__urinary_tract_infection__fever_chills"
+          ]
+        },
+        "disease_ids": [
+          "back_pain__mechanical_back_pain",
+          "back_pain__urinary_tract_infection"
+        ],
+        "source_ids": [
+          "rag-683544f4e158c9bb",
+          "rag-d65b78cc091f2d5e",
+          "rag-614fc25c4637195b",
+          "rag-3697ea6f89d68fd5",
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      },
+      {
+        "field": "pain_location",
+        "option": "下背部",
+        "mapping": {
+          "findings": [
+            "back_pain__herniated_nucleus_pulposus__low_back_pain"
+          ]
+        },
+        "disease_ids": [
+          "back_pain__herniated_nucleus_pulposus"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-6e7e81529db3d565",
+          "rag-ccf9b70030c23227",
+          "rag-a17a88cf643fd7db"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "感到腿部或腳部麻木、刺痛或無力",
+        "mapping": {
+          "findings": [
+            "back_pain__herniated_nucleus_pulposus__focal_neurologic_deficits",
+            "back_pain__cauda_equina_syndrome__lower_extremity_weakness"
+          ]
+        },
+        "disease_ids": [
+          "back_pain__herniated_nucleus_pulposus",
+          "back_pain__cauda_equina_syndrome"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-150bd762522d7024",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "有排尿或排便的困難，如失禁或尿滯留",
+        "mapping": {
+          "findings": [
+            "back_pain__cauda_equina_syndrome__bowel_or_bladder_dysfunction"
+          ]
+        },
+        "disease_ids": [
+          "back_pain__cauda_equina_syndrome"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-150bd762522d7024",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "肚子痛",
+        "mapping": {
+          "findings": [
+            "back_pain__urinary_tract_infection__abdominal_pain"
+          ]
+        },
+        "disease_ids": [
+          "back_pain__urinary_tract_infection"
+        ],
+        "source_ids": [
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "小便會疼痛或是血尿",
+        "mapping": {
+          "findings": [
+            "back_pain__urinary_tract_infection__dysuria",
+            "back_pain__urinary_tract_infection__hematuria"
+          ]
+        },
+        "disease_ids": [
+          "back_pain__urinary_tract_infection"
+        ],
+        "source_ids": [
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "痛點附近皮膚有起水泡",
+        "mapping": {
+          "findings": [
+            "back_pain__shingles__vesicular_rash"
+          ]
+        },
+        "disease_ids": [
+          "back_pain__shingles"
+        ],
+        "source_ids": [
+          "rag-c6e385de1e525358",
+          "rag-3e95076854700800"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "back_pain__mechanical_back_pain",
+        "name": "Mechanical Back Pain",
+        "must_not_miss": false,
+        "retrieval_query": "Mechanical Back Pain diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "back_pain__mechanical_back_pain__localized_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-15ce66364be76637"
+            ]
+          },
+          {
+            "fact": "back_pain__mechanical_back_pain__point_tenderness",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-683544f4e158c9bb"
+            ]
+          },
+          {
+            "fact": "back_pain__mechanical_back_pain__fever_chills",
+            "status": "absent",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-683544f4e158c9bb"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-15ce66364be76637",
+          "rag-683544f4e158c9bb"
+        ]
+      },
+      {
+        "id": "back_pain__herniated_nucleus_pulposus",
+        "name": "Herniated Disc",
+        "must_not_miss": false,
+        "retrieval_query": "Herniated Disc diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "back_pain__herniated_nucleus_pulposus__low_back_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-6e7e81529db3d565",
+              "rag-ccf9b70030c23227",
+              "rag-a17a88cf643fd7db"
+            ]
+          },
+          {
+            "fact": "back_pain__herniated_nucleus_pulposus__focal_neurologic_deficits",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-6e7e81529db3d565",
+          "rag-ccf9b70030c23227",
+          "rag-a17a88cf643fd7db"
+        ]
+      },
+      {
+        "id": "back_pain__myofascial_pain_syndrome",
+        "name": "Myofascial Pain Syndrome",
+        "must_not_miss": false,
+        "retrieval_query": "Myofascial Pain Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "back_pain__myofascial_pain_syndrome__localized_pain_and_tenderness",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-9569f87b2d38b7d4",
+              "rag-94a8e6edb9127701",
+              "rag-a98c193a5096c09a"
+            ]
+          },
+          {
+            "fact": "back_pain__myofascial_pain_syndrome__radiating_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-9569f87b2d38b7d4",
+              "rag-94a8e6edb9127701",
+              "rag-a98c193a5096c09a"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-9569f87b2d38b7d4",
+          "rag-94a8e6edb9127701",
+          "rag-a98c193a5096c09a"
+        ]
+      },
+      {
+        "id": "back_pain__urinary_tract_infection",
+        "name": "Urinary Tract Infection",
+        "must_not_miss": false,
+        "retrieval_query": "Urinary Tract Infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "back_pain__urinary_tract_infection__dysuria",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-a2cc9fd5cd7ca515"
+            ]
+          },
+          {
+            "fact": "back_pain__urinary_tract_infection__hematuria",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-a2cc9fd5cd7ca515"
+            ]
+          },
+          {
+            "fact": "back_pain__urinary_tract_infection__abdominal_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-a2cc9fd5cd7ca515"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      },
+      {
+        "id": "back_pain__shingles",
+        "name": "Herpes Zoster",
+        "must_not_miss": false,
+        "retrieval_query": "Herpes Zoster diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "back_pain__shingles__vesicular_rash",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-c6e385de1e525358",
+              "rag-3e95076854700800"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-c6e385de1e525358",
+          "rag-3e95076854700800"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_back_pain__herniated_nucleus_pulposus__focal_neurologic_deficits",
+        "label": "Back pain with focal neurologic deficits",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "back_pain"
+          ],
+          "any_findings": [
+            "back_pain__herniated_nucleus_pulposus__focal_neurologic_deficits"
+          ]
+        },
+        "possible_conditions": [
+          "Herniated Disc with nerve compression"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Create safety rules for red flag symptoms associated with back pain (e.g., cauda equina syndrome, spinal epidural abscess, malignancy).",
+        "reason": "The provided RAG sources mention other causes of back pain like osteomyelitis and malignancy but do not provide sufficient detail on their specific signs and symptoms to create robust, evidence-based safety rules."
+      },
+      {
+        "requirement": "Map aggravating and relieving factors (e.g., movement, rest) to specific conditions.",
+        "reason": "The provided RAG sources do not contain specific information linking aggravating factors like standing or sitting, or relieving factors like rest or massage, to Mechanical Back Pain."
+      },
+      {
+        "requirement": "Differentiate between different types of radiating pain (e.g., radicular vs. non-radicular).",
+        "reason": "While the sources mention radicular pain and pain radiating in a peripheral nerve distribution, the questionnaire does not provide enough detail to make this distinction, and the evidence is insufficient to map it reliably."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Detailed diagnostic criteria for Herniated Disc, including specific radiation patterns (e.g., sciatica), specific motor/sensory deficits, and reflex changes.",
+        "reason": "The provided RAG sources mention 'focal neurologic deficits' generally but do not provide the specific details needed to create more granular facts or logic."
+      },
+      {
+        "requirement": "Specific red flag symptoms for cauda equina syndrome (e.g., saddle anesthesia, bowel/bladder dysfunction) which is a critical differential for low back pain.",
+        "reason": "The provided RAG sources do not contain information on specific red flags for back pain emergencies like cauda equina syndrome."
+      },
+      {
+        "requirement": "Guidance on the duration of symptoms (e.g., >6 weeks) as an indication for imaging or further workup.",
+        "reason": "While one source mentions pain present for more than 6 weeks as a consideration for diagnostic studies, this is insufficient to build robust, executable logic without more clinical context."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Detailed diagnostic criteria for Myofascial Pain Syndrome, including specific trigger point characteristics and associated phenomena like loss of range of motion.",
+        "reason": "The provided RAG sources offer a high-level description but lack the detailed clinical criteria needed for a comprehensive diagnostic profile."
+      },
+      {
+        "requirement": "Specific red flag symptoms associated with back pain that would rule out Myofascial Pain Syndrome and suggest a more urgent condition (e.g., cauda equina syndrome, infection, fracture).",
+        "reason": "The provided RAG sources do not contain specific red flag information within the context of Myofascial Pain Syndrome retrieval."
+      },
+      {
+        "requirement": "Create a fact for fever/chills related to UTI.",
+        "reason": "The provided RAG sources for Urinary Tract Infection do not explicitly mention fever or chills as symptoms."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "The evidence for Mechanical Back Pain is general. The profile is based on common features like localized pain and tenderness. The sources briefly mention more serious conditions (osteomyelitis, malignancy) but lack the detail needed to build profiles or safety rules for them. The current proposal cannot effectively rule out serious underlying pathology.",
+        "source_ids": [
+          "rag-683544f4e158c9bb"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-683544f4e158c9bb"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-15ce66364be76637",
+          "rag-683544f4e158c9bb",
+          "rag-d71a0a73f65f79a2",
+          "rag-520405111b6d707f"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The evidence for Herniated Disc is based on very general statements. The term 'focal neurologic deficits' is mentioned as a red flag in a source about syncope, not specifically in the context of a primary back pain presentation, which limits its direct applicability and requires clinical interpretation.",
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], semantic_options[0], profiles[0], profiles[0].clues[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-6e7e81529db3d565",
+          "rag-ccf9b70030c23227",
+          "rag-a17a88cf643fd7db"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-150bd762522d7024",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], semantic_options[0], semantic_options[1], safety_proposals[0], profiles[0], profiles[0].clues[0], profiles[0].clues[1], profiles[0].clues[2]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-150bd762522d7024",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], semantic_options[0], semantic_options[1], semantic_options[2], profiles[0], profiles[0].clues[0], profiles[0].clues[1]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-9569f87b2d38b7d4",
+          "rag-94a8e6edb9127701",
+          "rag-a98c193a5096c09a"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The link between back pain and Urinary Tract Infection is indirect in the provided sources. The sources primarily mention abdominal pain. The profile relies on the assumption that abdominal/flank pain associated with a UTI could be reported as back pain by a user. This connection should be clinically validated.",
+        "source_ids": [
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[3], semantic_options[2]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-d65b78cc091f2d5e",
+          "rag-614fc25c4637195b",
+          "rag-3697ea6f89d68fd5",
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-3e95076854700800"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-ee35bf1b0c9ada56",
+          "rag-3e95076854700800",
+          "rag-c6e385de1e525358",
+          "rag-bf832a8eae210f99"
+        ]
+      }
+    ]
+  }
+}

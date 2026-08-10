@@ -1,0 +1,333 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "orthopedics_external_injury",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "7293db20f4721fec3822fb8e04ca16ce24825424410a0eab8c9fcc2e8f308414",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "orthopedics external injury orthopedic injury differential diagnosis diseases clinical presentation symptoms history",
+      "orthopedics external injury orthopedic injury red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "0ad50c256e72a210994f6b17c509a1b8f11b3e080608f25cbfa9a66b2b366a69"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "7f21ece4a575d7294836151a9adcabc56983502d2f2d099974ded2ec04668d27",
+    "generated_at": "2026-08-10T04:14:37+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-0cc7559d296f3f96",
+      "chunk_id": "abc2f0cdfd5e5d758428_2",
+      "title": "Arthritis as a Manifestation of Systemic Disease: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/334845-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "orthopedics external injury orthopedic injury differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3768,
+      "excerpt": "pain, or limited range of motion have a primary disorder of the joint, such as rheumatoid arthritis or osteoarthritis. Less commonly, joint pains may be the chief complaint in a patient with a systemic disorder that is affecting the joints, muscles, or both. A vigilant physician must be aware of these conditions, some common and some not so common, to make an appropriate diagnosis and early referral and appropriate treatment. For patient education resources, see the Arthritis Health Center. Pathophysiology Systemic illnesses can cause musculoskeletal manifestations through a variety of",
+      "text_sha256": "c769c3e5a7c0c3463441f4fb002b18711aecb698f621cfc9b76becdbeed41e93"
+    },
+    {
+      "id": "rag-211c186339738690",
+      "chunk_id": "7a20432fef1a3b435a10_2",
+      "title": "Femoral Shaft Fractures in Emergency Medicine: Practice Essentials, Prognosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/824856-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "orthopedics external injury orthopedic injury differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3896,
+      "excerpt": "type III (open). Associated injuries are common. Diagnosis History usually is obvious in cases of femoral diaphyseal fractures. Typically, patients describe a significant force applied to the extremity. Significant pain and deformity are reported as well. uses include trauma, lytic lesions, cancer metastasis,!get disease, bone cysts, and teoporosis. In a patient with a large, expanding hematoma, measure serial hematocrits and obtain type and crossmatch in case a blood transfusion becomes necessary. For patients who require open reduction and internal fixation (ORIF), obtain preoperative tests,",
+      "text_sha256": "403bb362bf3b57beac7ce738bb385658174570070f938ec62dcf68fb57c4e16b"
+    },
+    {
+      "id": "rag-a6735a4c2e06dd14",
+      "chunk_id": "8bf15e6896ffc7065ab1_9",
+      "title": "Peripheral Vascular Injury Management in the Emergency Department: Practice Essentials, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/828558-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "orthopedics external injury orthopedic injury differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3921,
+      "excerpt": "without \"hard\" and \"soft\" signs should be observed for possible progression of injury either in the hospital or on an outpatient basis. Major venous injuries of the lower extremities are typically repaired because this improves wound healing and decreases the incidence of mpartment syndrome, nous thrombosis, and chronic edema. Delayed diagnosis and treatment may result in thrombosis, embolization, or rupture with exsanguinating hemorrhage. Risk factors for amputation include elevated compartment pressure, arterial transection, concomitant open fractures, and the combination of injuries above",
+      "text_sha256": "a79af8c784ac5cc7fa8075674cf38f062549878f1d8292b2af045026d507290c"
+    },
+    {
+      "id": "rag-b9aa3a2c87d315d1",
+      "chunk_id": "0049aa900b24cc7c1ccf_4",
+      "title": "Urinary Tract Infections in Spinal Cord Injury: Epidemiology and Pathophysiology, Clinical Presentation, Diagnostic Testing",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2040171-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "orthopedics external injury orthopedic injury differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4129,
+      "excerpt": "autonomic dysreflexia to noxious stimuli, such as an overdistended bladder. The sympathetic response below the level of injury is uninhibited, producing severe vasoconstriction and reflexive bradycardia. If the patient is febrile, this may appear as a pulse-temperature dissociation. Please see Urinary Tract Infection (UTI) and Cystitis (Bladder Infection) in Females. Diagnostic Testing Urinary tract infection (UTI) in patients with spinal cord injury (SCI) is challenging to diagnose because all of these individuals have some degree of bacteruria, but not all are actively infected. Treatment",
+      "text_sha256": "134cd5b960e6dcb5be03b8d0220abd9a1cacaa353f8663bffe7019fe9f2c50b6"
+    },
+    {
+      "id": "rag-f257a77b183aa995",
+      "chunk_id": "93b63b3f013ca7f2fc93_20",
+      "title": "Sternoclavicular Joint Injury in Emergency Medicine: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/828642-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "orthopedics external injury orthopedic injury differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3922,
+      "excerpt": "causing clavicular displacement may present with similar signs and symptoms . Clinical Presentation",
+      "text_sha256": "d9cab73d3b255ca5aefe1b742985169aea7b4b8468ebe90b82b371b8e03b4a0c"
+    },
+    {
+      "id": "rag-d353a4932ca7f2bb",
+      "chunk_id": "be353e430656d56e4a36_28",
+      "title": "Turf Toe: Practice Essentials, Anatomy, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1236962-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "orthopedics external injury orthopedic injury differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4267,
+      "excerpt": "At final follow-up, all patients had a negative Lachman test. None of the patients developed major complications or required revision surgery. At present, the incidence of persistent symptoms and late-onset sequelae requires further understanding. In the literature, the incidence of persistent symptoms has been as high as 50% after 5 years. Although acutely based injuries to the plantar plate and surrounding structures are better defined today, less information is available regarding the management of chronic or late diagnosed injuries. Above all, turf toe clearly represents a significant",
+      "text_sha256": "a1879159ea5a3e83c897e7ee52b496d76be22fcdca5ed61ec5a23ea89aa87b0f"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "orthopedics external injury orthopedic injury differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4051,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-b661c3145169fc37",
+      "chunk_id": "11996c158911670ee976_4",
+      "title": "Diaphragmatic Injury Management in the Emergency Department: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822999-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "orthopedics external injury orthopedic injury differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4343,
+      "excerpt": "trauma diaphragmatic injury, chest radiographs were diagnostic in only 18 of 29 patients and CT scan in 26 of 29. In the stable trauma patient, contrast-enhanced abdominothoracic CT with reconstruction was found to lead to early diagnosis. Meticulous attention to management of the ABCs, as with all patients, is the cornerstone for prehospital management of diaphragmatic injuries. The diagnosis is rarelyade in the field, and no specific prehospital treatment is required. Treat the associated injuries and ensure adequate airway control and ventilation if signs of respiratory distress are",
+      "text_sha256": "8b83dada0787d132885d0315662ba1312ee602e4b5c8dac75661725f2e24c891"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "orthopedics external injury orthopedic injury red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4823,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-f2c4486c92955728",
+      "chunk_id": "2cf2b5608b381af04fa2_44",
+      "title": "Acute Sinusitis: Practice Essentials, Background, Anatomy",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/232670-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "orthopedics external injury orthopedic injury red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5993,
+      "excerpt": "in ciliary dysmotility and sinus obstruction. In individuals with recurrent or persistent sinusitis, suspect other predisposing conditions such as cystic fibrosis, ciliary dyskinesia, allergic inflammation, immunodeficiency, or an anatomic problem. These predisposing factors are also cited by the 2005 practice parameter for diagnosis and management of sinusitis issued by the American Academy of Allergy, Asthma and Immunology (AAAAI), as are cocaine addiction and nasal polyps and other causes of ostiomeatal obstruction. Acute viral rhinosinusitis The vast majority of rhinosinusitis episodes are",
+      "text_sha256": "6227875356ec66085f92f571836c2799cdc6518e499b313309df3b33ebb730f0"
+    },
+    {
+      "id": "rag-886d20366831faf8",
+      "chunk_id": "60a8e9fb259d62f055c2_34",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "orthopedics external injury orthopedic injury red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5255,
+      "excerpt": "muscle injury, but not if they have both. Therefore, in the combined setting of acute MI and skeletal muscle injury (rhabdomyolysis, heavy exercise, polymyositis), the fall in sensitivity is significant. Note that the diagnosis of acute MI must not be based on an elevated relative index alone, because the relative index may be elevated in clinical settings when either the total CK or the CK-MB is within normal limits. The relative index is only clinically useful when both the total CK and the CK-MB levels are increased. CK-MB isoforms The CK-MB isoenzyme exists as two isoforms: CK-MB1 and",
+      "text_sha256": "3aaf7e942e17cae9e7853f0a1ae6eaaeaadbe675ef7b3f174afcfca41ac5a398"
+    },
+    {
+      "id": "rag-3074fafca96e9376",
+      "chunk_id": "53fc3e4f98765d889be9_15",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "orthopedics external injury orthopedic injury red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5604,
+      "excerpt": "encephalitis, headache, mental status change, hydrocephalus, ischemic disease and infarction, suspected pituitary dysfunction, inflammation or infection of the brain or meninges or their complications, demyelination and dysmyelination disorders, vascular malformations, and arterial or venous/dural sinus abnormalities. Patients who have cardiac pacemakers, ferromagnetic intracranial aneurysm clips, and certain ferromagnetic foreign bodies or electronic devices or implants should not undergo MRI. The routine MRI protocol varies considerably based on strength of the unit's field, machine",
+      "text_sha256": "efd6bcf781abb9e97e13fb806d50dc265fab9d450d001ad3cde9e6629777e105"
+    }
+  ],
+  "discovery": {
+    "route": "orthopedics_external_injury",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "orthopedics_external_injury__fracture",
+        "name": "Fracture",
+        "rationale": "The questionnaire asks about key signs of a fracture, such as visible deformity, inability to bear weight on a lower limb, and inability to move the injured part. The provided evidence mentions that femoral shaft fractures typically present with a history of significant force, pain, and deformity.",
+        "source_ids": [
+          "rag-211c186339738690"
+        ]
+      },
+      {
+        "id": "orthopedics_external_injury__joint_dislocation",
+        "name": "Joint Dislocation",
+        "rationale": "The questionnaire assesses for visible deformity or abnormal position of an injured part, which are hallmark signs of a joint dislocation. The evidence mentions that injuries causing clavicular displacement can present with similar signs and symptoms, supporting the inclusion of dislocation as a differential.",
+        "source_ids": [
+          "rag-f257a77b183aa995"
+        ]
+      },
+      {
+        "id": "orthopedics_external_injury__sprain_and_strain",
+        "name": "Sprain and Strain",
+        "rationale": "The questionnaire covers common symptoms of sprains and strains, such as swelling, bruising, pain, and limited ability to move or use the injured part. The evidence discusses 'turf toe' as an example of an acute injury to ligaments and surrounding structures, which is a type of sprain.",
+        "source_ids": [
+          "rag-d353a4932ca7f2bb"
+        ]
+      },
+      {
+        "id": "orthopedics_external_injury__peripheral_nerve_injury",
+        "name": "Peripheral Nerve Injury",
+        "rationale": "The questionnaire specifically asks about sensory symptoms like numbness, tingling, or weakness near the injured area. This aligns with evidence describing sensory polyneuropathy with symptoms of pain and paresthesia, which can be associated with extremity conditions.",
+        "source_ids": [
+          "rag-5bcac9eab5404341"
+        ]
+      },
+      {
+        "id": "orthopedics_external_injury__peripheral_vascular_injury",
+        "name": "Peripheral Vascular Injury",
+        "rationale": "The questionnaire asks about open wounds and bleeding, which are critical signs of potential vascular injury. The evidence highlights that delayed diagnosis of vascular injuries can lead to thrombosis or hemorrhage and that they are often associated with open fractures.",
+        "source_ids": [
+          "rag-a6735a4c2e06dd14"
+        ]
+      },
+      {
+        "id": "orthopedics_external_injury__contusion",
+        "name": "Contusion",
+        "rationale": "The questionnaire explicitly lists '挫傷' (contusion) as an injury type and asks about swelling or bruising, which are the primary signs of a contusion. This represents a common, less severe diagnosis within the scope of orthopedic trauma.",
+        "source_ids": [
+          "rag-211c186339738690"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The questionnaire covers a broad range of orthopedic injuries, from simple contusions to complex fractures with neurovascular compromise. The proposed diseases reflect this spectrum. The initial RAG sources are general and require careful interpretation to support specific diagnoses.",
+        "source_ids": [
+          "rag-211c186339738690",
+          "rag-a6735a4c2e06dd14",
+          "rag-5bcac9eab5404341",
+          "rag-f257a77b183aa995"
+        ]
+      }
+    ]
+  }
+}

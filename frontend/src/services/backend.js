@@ -96,7 +96,7 @@ export function resolveBackendUrl(
     )
     if (override) return override
   }
-  const backendPort = import.meta.env?.VITE_BACKEND_PORT || '8000'
+  const backendPort = import.meta.env?.VITE_BACKEND_PORT || '18000'
   return `${protocol}//${hostname}:${backendPort}`
 }
 
@@ -297,10 +297,18 @@ export const api = {
     })
   },
   avatarStatus: () => request(apiPath('/avatar/status')),
+  avatarWarmup: () =>
+    request(apiPath('/avatar/warmup'), jsonOptions('POST', {})),
   speakAvatar: (text, options = {}) =>
     requestVideo(
       apiPath('/avatar/speak'),
-      { ...jsonOptions('POST', { text }), signal: options.signal },
+      {
+        ...jsonOptions('POST', {
+          text,
+          language: options.language || 'mandarin',
+        }),
+        signal: options.signal,
+      },
     ),
   loadPatient: (consultationId, sessionId) =>
     request(

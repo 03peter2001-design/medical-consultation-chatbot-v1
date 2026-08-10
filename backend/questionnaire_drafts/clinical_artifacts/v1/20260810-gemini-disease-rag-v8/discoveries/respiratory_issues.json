@@ -1,0 +1,379 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "respiratory_issues",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "aa06992a3b17041909d93314d1bc451191d942bcf08d6cfcf90c37f7ac0b9b57",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history",
+      "respiratory issues respiratory red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "556440fd3f27edbac1c7b0a7fb8a5670c7213974f403511261ec3e3374a6492c"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "41560be3f63a4423dd371c59ff54a090f67a8e81889c856416925bbe9519eeaa",
+    "generated_at": "2026-08-10T04:11:05+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-4676baa2471b307c",
+      "chunk_id": "584778d576ee1e9a5b46_12",
+      "title": "Cor Pulmonale: Overview, Presentation, DDx",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/154062-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3329,
+      "excerpt": "value or is simply reflecting the severity of underlying COPD or other pulmonary disease is not clear. Prognosis in the acute setting due to massive pulmonary embolism or acute respiratory distress syndrome (ARDS) has not previously been shown to be dependent on the presence or absence of cor pulmonale. However, a prospective, multicenter cohort study by Volschan et al indicated that in cases of pulmonary embolism, cor pulmonale may be a predictor of inhospital mortality. The authors collected demographic, comorbidity, and clinical manifestation data on 582 patients admitted to emergency or",
+      "text_sha256": "34c9d988269abde577bf7d8f1753bfd1f5165296962ad130cdf7b467cbff9593"
+    },
+    {
+      "id": "rag-80fefcca3c7acdde",
+      "chunk_id": "a66788319d4a38c7db99_4",
+      "title": "Restrictive Lung Disease: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/301760-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3316,
+      "excerpt": "new window) Causes Examples Diagnosis PFT Findings Pleural Trapped lung, pleural scarring, large pleural effusions, chronic empyema, asbestosis Radiography, CT scanning, pleural manometry, pleural biopsy Low RVa, low TLC, low FVC Alveolar Edema, hemorrhage Radiography, CT scanning, physical examination Increased DLCOb in hemorrhage (Intrapulmonary hemoglobin absorbs the carbon monoxide, thus increasing the DLCO reading.) Interstitial Interstitial lung disease including IPFc, NSIPd, COPe Radiography, CT scanning, physical examination, echo often shows pulmonary hypertension Low RV, low FVC, low",
+      "text_sha256": "bc6e4b9a2d2ac2a823df19f99a501a5b1b5f124201323dfd9a84d41d8bceb502"
+    },
+    {
+      "id": "rag-0d827bb2ab2da782",
+      "chunk_id": "3ae6c0644827738d804b_17",
+      "title": "Acute Glomerulonephritis Management in the ED: Practice Essentials, Emergency Department Care",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/777272-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.47,
+      "excerpt": "tract complaints (from sinusitis to pulmonary hemorrhage). There may be cavitating lung lesions seen on chest radiographs. Wegener granulomatosis most commonly occurs in patients in their sixth to seventh decade, with equal distribution among men and women. Any patient suspected of Wegener granulomatosis should have blood antineutrophil cytoplasmic antibody (ANCA) levels measured. Glomerulonephritis from Wegener granulomatosis may be rapidly progressive, so prompt diagnosis is critical.",
+      "text_sha256": "dccc2f5e88f69b4d63803ee3f81f6bfa98a037ec3fce9f119ad1c2158c8dc12e"
+    },
+    {
+      "id": "rag-3697ea6f89d68fd5",
+      "chunk_id": "5f385aa936e8b9c4d48d_4",
+      "title": "Hemolytic Uremic Syndrome in Emergency Medicine: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779218-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4808,
+      "excerpt": "seizures, or altered mental status) Diarrhea may improve as the other HUS signs and symptoms beginJ Atypical HUS does not typically begin with a gastrointestinal illness. Patients with pneumococcal HUS may have had`recent respiratory illness. Clinical manifestations of atypical HUS are similar to those of typical HUS, although neurologic involvement is more common. See Presentation. HUS is primarily a clinical diagnosis coupled with consistent laboratory findings, including the following: Microangiopathic hemolytic anemia, with a hemoglobin level that is typically less than 8 g/dLJ",
+      "text_sha256": "8794e56e32229d991eb34ce0ebf51c81b6fdd260c654a355f24fd9e8a874c4d9"
+    },
+    {
+      "id": "rag-f235f1f098699f8b",
+      "chunk_id": "e2db83523988003421e1_20",
+      "title": "Hospital-Acquired Pneumonia (Nosocomial Pneumonia) and Ventilator-Associated Pneumonia: Overview, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/234753-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3358,
+      "excerpt": "diseases with pulmonary manifestations Alveolar hemorrhage Pulmonary contusion Bronchiolitis obliterans-organizing pneumonia (BOOP) Hypersensitivity pneumonitis. Interstitial lung disease Bronchogenic carcinomas ARDS usually is readily diagnosable based on the appearance of small lung volumes due to microatelectatic changes on the chest radiograph and the progressive and severe hypoxemia. Little or no fever accompanies ARDS, unless it is due to acute pancreatitis. Electrocardiography (ECG) and ventilation-perfusion scans help to exclude pneumonia mimics. ECGs, cardiac enzymes, and Swan-Ganz",
+      "text_sha256": "d364783f8a3fef2886fe8a8e46db2e58bd0c9813318c4ce82ea0832016cbc79d"
+    },
+    {
+      "id": "rag-959c78934f94cdc4",
+      "chunk_id": "159c85afc492cf2ae51c_1",
+      "title": "Roseola Infantum in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/803804-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5035,
+      "excerpt": "day febrile illness (characteristically >39.5 ) associated with respiratory or gastrointestinal symptomatology. In one prospective cohort, 93% of newly acquired infections were symptomatic, with fever, fussiness, diarrhea, and rash as the most distinguishing features. Newly recognized clinical manifestations of HHV-6 infection include hepatitis, encephalitis, myocarditis, hemophagocytic syndrome, and an adult mononucleosislike illness. The virus persists and may reactivate, primarily in immunocompromised hosts. Reactivation manifestations may present as fever, rash, pneumonia, hepatitis, bone",
+      "text_sha256": "f0f7563ce05ba78dfce1021fb63cea8ceaa73ea122c7ac84954fd0d680539f6c"
+    },
+    {
+      "id": "rag-c1aba8069b83b118",
+      "chunk_id": "a66788319d4a38c7db99_5",
+      "title": "Restrictive Lung Disease: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/301760-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3382,
+      "excerpt": "examination, echo often shows pulmonary hypertension Low RV, low FVC, low TLC, decreased DLCO, poor lung compliance Neuromuscular Myasthenia gravis, ALSf, myopathy Physical examination, EMGsg, serology Low RV, low TLC, low NIFh, low MMVi Thoracic/extrathoracic Obesity, kyphoscoliosis, ascites Physical examination Low ERVj and FRC in obesity, low VCk, TLC, FRCl in kyphoscoliosis aResidual volume.bDiffusion capacity of the lungs for carbon monoxide.cIdiopathic pulmonary fibrosis.dNonspecific interstitial pneumonitis.eCryptogenic organizing pneumonia.fAmyotrophic lateral",
+      "text_sha256": "bc87b106968f1af12140cb5b25d8e8a0711b60fa36fc945dcc529d212aa0cf17"
+    },
+    {
+      "id": "rag-91c82dd640b2e47a",
+      "chunk_id": "c784b6fe3addb75c14e5_18",
+      "title": "Dermatologic Manifestations of Stevens-Johnson Syndrome and Toxic Epidermal Necrolysis: Overview, Patient History and Physical Examination, Complications",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1124127-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5056,
+      "excerpt": "lung disease Respiratory tract obstruction Bronchiectasis Bronchitis Urogenital/gynecological Chronic lesions of urogenital tract are less common than at other mucosal sites, with the most common complication being adhesions. Complications of the urogenital tract can also cause painful micturition. Gastrointestinal and hepatic Acutely, patients may develop a profuse, protein-rich diarrhea. Gastrointestinal chronic sequelae are rare. Gastrointestinal and hepatic complications can include the following: Esophageal strictures Chronic intestinal ulcers Vanishing bile duct syndrome (VBDS) Renal In",
+      "text_sha256": "c85659314259b974310f6d8f415804f1023076098da5b644b9c62fb37e59a6a9"
+    },
+    {
+      "id": "rag-af74e2604f4e1e79",
+      "chunk_id": "28cc3005c1cb1fa7c3b3_29",
+      "title": "Aspiration Pneumonitis and Pneumonia: Overview of Aspiration Pneumonia, Predisposing Conditions for Aspiration Pneumonia, Pathophysiology of Aspiration Pneumonia",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/296198-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4933,
+      "excerpt": "or laryngotracheobronchitis, epiglottitis, asthma, reactive airway disease, respiratory distress syndrome, and foreign bodies should be considered. In addition, assess for the following conditions: Acute respiratory distress syndrome Tuberculosis Bronchitis Chronic obstructive pulmonary disease and emphysema Adult epiglottitis Pneumonia, empyema and abscess Pneumonia, Immunocompromised Mycoplasma pneumonia Viral pneumonia Septic shock Arterial Blood Gas and Mixed Venous Gas Analysis Arterial blood gas (ABG) analysis is used to assess oxygenation and pH status. ABG analysis adds information",
+      "text_sha256": "6d755656e2ccb07c55e0b08302e0b4ba9a15ecf204204f533e59d7af4d6c8c97"
+    },
+    {
+      "id": "rag-07cb9ae2ab3f3d6b",
+      "chunk_id": "487d941aacdb250a9357_3",
+      "title": "Altitude Illness - Pulmonary Syndromes: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/773065-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4855,
+      "excerpt": "requires at least 2 of the following signs : Rales or wheezing in at least one lung field Central cyanosis or arterial oxygen desaturation relative to altitude Tachycardia Tachypnea Fever and orthopnea are commonly present in HAPE; pink/frothy sputum is a late finding in severe HAPE. Also see History. Complications Secondary pulmonary infections may occur. Note that a productive cough while recovering from HAPE is common. Use Gram stain or culture to evaluate for cases requiring antibiotic therapy. Diagnostics See Imaging Studies. Although unnecessary for diagnosis, pulse oximetry is very",
+      "text_sha256": "8a6bc51bc247faad1b370864842c6ee96bb11a8e1b956062c1e15ab4198a3c1b"
+    },
+    {
+      "id": "rag-c8bffa8ba5fa844d",
+      "chunk_id": "1904346231affe6d7124_29",
+      "title": "Acute Respiratory Distress Syndrome (ARDS): Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/165139-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4967,
+      "excerpt": "the Lung Disease and Respiratory Health Center, the Procedures Center, and the Infections Center, as well as Acute Respiratory Distress Syndrome, Bronchoscopy, and Severe Acute Respiratory Syndrome (SARS). Clinical Presentation",
+      "text_sha256": "784d500847357fee6450f2a94acf30ca5475a3ab3c73f4c19e8197d2cd96371c"
+    },
+    {
+      "id": "rag-54c620c34c430032",
+      "chunk_id": "4aa59918f57deb0a99db_4",
+      "title": "Nitrogen Dioxide Toxicity: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/302133-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5027,
+      "excerpt": "underlying pulmonary diseases (eg, COPD or asthma) and, in extreme cases, death. Suspect methemoglobinemia in patients exposed to NO2 who exhibit cyanosis or dyspnea. The initial absence of significant symptoms does not exclude a subsequent development of serious disease. Common signs and symptoms are as follows: New or worsening cough and/or wheezing (most common) Eye, nose or throat irritation Light-headedness or headache Dyspnea (shortness of breath) Chest tightness Choking Chest pain Diaphoresis (sweating) In addition, the following signs and symptoms may appear acutely or persist for days",
+      "text_sha256": "13c27e93056ad301293c2c8ae165d9c3b1607d92be4f7467d9695b0b91cba199"
+    },
+    {
+      "id": "rag-dd801af1d0f8db17",
+      "chunk_id": "29a8db87cd2aa8fb48b6_4",
+      "title": "Acute Coronary Syndrome: Practice Essentials, Background, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1910735-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5201,
+      "excerpt": "ventricular outflow tract Rales on pulmonary examination (suggestive of left ventricular dysfunction or mitral regurgitation) Potential complications include the following: Ischemia: Pulmonary edema Myocardial infarction: Rupture of the papillary muscle, left ventricular free wall, and ventricular septum See Presentation for more detail. Diagnosis Updated idelines for the management of non-ST-segment elevation ACS were released in 2020 by the European Society of Cardiology (ESC). The updates place increased reliance on high-sensitivity cardiac troponin testing (hs-cTn) for diagnosis. The",
+      "text_sha256": "b681d247e9b4777322ca3db696ad70b733b65e498a8b8ff1455d1b402019c068"
+    },
+    {
+      "id": "rag-c4cb2d1c46bbd567",
+      "chunk_id": "909559be848ecc7f0f79_39",
+      "title": "Pediatric Acute Respiratory Distress Syndrome: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/803573-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5266,
+      "excerpt": "decreased air entry on the side of the air leak, an increased percussion note on the same side, and tracheal deviation away from the affected side in a tension pneumothorax. Heart sounds may be muffled, and signs of decreased cardiac output may be observed with a tension pneumothorax. Clinicians must also maintain a high index of suspicion for tension pneumothoraces as a cause for acute onset of decreased cardiac output. VILI is an entity receiving attention with the publication of landmark trials suggesting that a kinder, gentler form of mechanical ventilation improves outcomes in ARDS. VILI",
+      "text_sha256": "775944431bc98641284c72fad9ef51f1fb22f4c79ee69a98423de6a6fd139ce4"
+    }
+  ],
+  "discovery": {
+    "route": "respiratory_issues",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "respiratory_issues__pneumonia",
+        "name": "Pneumonia",
+        "rationale": "The questionnaire includes symptoms like cough, fever, chills, and sputum production, which are common in pneumonia. Pneumonia is a key differential for respiratory complaints and can be associated with aspiration or be hospital-acquired. It can also be a complication of other conditions like roseola or present in patients with pneumococcal HUS.",
+        "source_ids": [
+          "rag-af74e2604f4e1e79",
+          "rag-f235f1f098699f8b",
+          "rag-959c78934f94cdc4",
+          "rag-3697ea6f89d68fd5"
+        ]
+      },
+      {
+        "id": "respiratory_issues__acute_respiratory_distress_syndrome",
+        "name": "Acute Respiratory Distress Syndrome",
+        "rationale": "The questionnaire asks about sudden onset of respiratory symptoms, including shortness of breath. ARDS is characterized by progressive and severe hypoxemia and can be a differential for conditions presenting with respiratory distress. It is mentioned as a potential cause of cor pulmonale and as a mimic of hospital-acquired pneumonia.",
+        "source_ids": [
+          "rag-c8bffa8ba5fa844d",
+          "rag-4676baa2471b307c",
+          "rag-f235f1f098699f8b",
+          "rag-c4cb2d1c46bbd567"
+        ]
+      },
+      {
+        "id": "respiratory_issues__chronic_obstructive_pulmonary_disease",
+        "name": "Chronic Obstructive Pulmonary Disease",
+        "rationale": "The questionnaire specifically asks about a history of chronic respiratory diseases like COPD. Symptoms like shortness of breath, cough, and wheezing can represent an acute exacerbation of underlying COPD. The presence of COPD is also noted as a risk factor in other conditions.",
+        "source_ids": [
+          "rag-af74e2604f4e1e79",
+          "rag-4676baa2471b307c",
+          "rag-54c620c34c430032"
+        ]
+      },
+      {
+        "id": "respiratory_issues__asthma",
+        "name": "Asthma",
+        "rationale": "The questionnaire asks about a history of asthma and symptoms like wheezing ('喘') and shortness of breath, which are characteristic of an asthma exacerbation. Asthma is listed as a differential diagnosis for aspiration pneumonitis and as a condition that can be worsened by certain exposures.",
+        "source_ids": [
+          "rag-af74e2604f4e1e79",
+          "rag-54c620c34c430032"
+        ]
+      },
+      {
+        "id": "respiratory_issues__pulmonary_embolism",
+        "name": "Pulmonary Embolism",
+        "rationale": "The questionnaire asks about sudden onset of symptoms, which can include shortness of breath and chest pain. Massive pulmonary embolism is mentioned as a cause of acute cor pulmonale and can be a life-threatening cause of respiratory distress.",
+        "source_ids": [
+          "rag-4676baa2471b307c"
+        ]
+      },
+      {
+        "id": "respiratory_issues__heart_failure",
+        "name": "Heart Failure",
+        "rationale": "The questionnaire asks about a history of cardiovascular disease, including heart failure, and symptoms like shortness of breath and lower limb edema. Pulmonary edema due to left ventricular dysfunction is a potential complication of acute coronary syndrome and can present with respiratory symptoms like rales.",
+        "source_ids": [
+          "rag-dd801af1d0f8db17"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The questionnaire covers a broad range of respiratory symptoms. The differential diagnosis should consider acute vs. chronic conditions, as well as both pulmonary and cardiac etiologies, based on the user's history.",
+        "source_ids": [
+          "rag-af74e2604f4e1e79",
+          "rag-dd801af1d0f8db17"
+        ]
+      }
+    ]
+  }
+}

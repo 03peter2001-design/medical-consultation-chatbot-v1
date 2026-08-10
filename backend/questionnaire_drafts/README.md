@@ -30,3 +30,45 @@ route 的 fail-closed handoff 保護，不執行 candidate 長問卷。
 原始檔共有 52 個編號類別；其中胸痛、頭痛、腹部問題與現行三條路由重疊，
 因此是 49 個非重疊的新類別。重疊類別只能合併審查，不可覆寫現行 stable field
 與 Safety contract。
+
+## 疾病名稱導向的 AMIE clinical-artifact 草稿
+
+`clinical_artifacts/v1/<run-id>/` 是另一條隔離 pipeline，不是上述 questionnaire-only
+promotion 的輸入。它先以初始 route RAG 讓 Gemini 提出標準英文疾病名稱，再把每個
+疾病名稱逐一用於第二階段 RAG query；最後每個疾病各自呼叫 Gemini，建立 proposed
+ClinicalFact、exact-choice `semantic_options` overlay、疾病 profile 與 Safety 候選。
+
+```bash
+cd backend
+venv/bin/python -m scripts.build_amie_route_drafts \
+  --run-id 20260810-gemini-disease-rag-v8
+```
+
+可用重複 `--only <route>`、`--limit` 與 `--max-attempts 1..5` 分批續跑；互不重疊的
+shard 必須加 `--no-manifest`，完成後再由單一 reducer 執行：
+
+```bash
+venv/bin/python -m scripts.build_amie_route_drafts \
+  --run-id 20260810-gemini-disease-rag-v8 --reduce-only
+```
+
+每個 run 具有以下不可混淆的邊界：
+
+- `discoveries/<route>.json`：第一階段疾病名稱、初始 RAG chunks、query 與 hashes。
+- `routes/<route>.json`：第二階段疾病名 query、逐 chunk scope、facts、semantics、
+  profiles、Safety candidates 與 review notes。
+- `failures/<route>.json`：失敗嘗試；route 後續成功時仍保留研究稽核紀錄。
+- `manifest.json`：49-route 完整性、artifact hashes、全域 code collision 檢查、總數與
+  blocking summary。`complete` 只表示 49 份生成檔齊全，不代表臨床可用。
+
+正式 v8 run 雖為 49/49 complete，仍固定標示 `runtime_eligible=false`、
+`clinical_review_ready=false`、`citation_review_status=unverified`。它含 163 個疾病名稱
+候選、118 個 profiles 與 82 個 Safety candidates，但仍有 45 個 profile 缺口、16 條
+無 Safety 路徑、6 條 evidence insufficient 與 8 個 critical review notes。v1–v7 是
+schema／prompt pilot 與失敗實驗；其結論記錄於 devlog，原始生成目錄不納入版本控制。
+
+這些 JSON 故意與 active loaders 不相容，且 `lifecycle.executable=false`。不得手動複製
+到 `questionnaire_data/`、`amie/disease_data/` 或 `amie/rules/safety_rules.json`；現有
+`promote_questionnaires.py` 只審 questionnaire 結構，沒有能力核准這批 clinical
+artifacts。未來若要上線，必須另建逐 route、跨 semantic／profile／Safety 的 composite
+clinical signoff、gold cases 與 all-or-nothing publisher。

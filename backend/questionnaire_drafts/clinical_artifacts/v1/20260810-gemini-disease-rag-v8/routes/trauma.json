@@ -1,0 +1,348 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "trauma",
+  "label": "創傷",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "b7f0352ae59f023bda3a8de937dfae86cf0fadb2903cd2195e5497c09b7dc844",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"trauma trauma differential diagnosis diseases clinical presentation symptoms history\",\"trauma trauma red flags emergency warning signs urgent referral rule out\"]",
+    "rag_corpus_hash": "632b4f462b611d2fc363e6d776adfab438517e42a3cc0c72a2b2ee181240a7a3"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "f9c249344751ccfd3aba67bae1f7af6c8398149244986f402910bd89933e14d7",
+    "generated_at": "2026-08-10T04:19:17+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-479db8a8d0c16e39",
+      "chunk_id": "53fc3e4f98765d889be9_33",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "trauma trauma differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4191,
+      "excerpt": "Focal cortical hemorrhage is common as a sequela of head trauma and may be multifocal, as in coup (direct) and contrecoup (indirect) injuries, or diffuse. Focally dense gyri with subjacent edema, particularly those adjacent to the inner calvarial structures (ie, orbit roof-frontal pole, petrous ridge, sphenoid wing-temporal pole) represent contusions (see the images below). Skull fracture - Emergency neuroradiology. Lateral scout image from a CT brain examination shows linear lucency representing a right posterior frontal skull fracture (arrow). Subarachnoid hemorrhage - Emergency",
+      "text_sha256": "be38b6773c68f17117f1128b4e653ac330eddb7c5bfc63fdbe7a0391dc958e09"
+    },
+    {
+      "id": "rag-d0645c9d7392669b",
+      "chunk_id": "53fc3e4f98765d889be9_43",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "trauma trauma differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4295,
+      "excerpt": "is either due to vertebral artery dissection or carotid artery dissection. Risk factors for these injuries include penetrating trauma, C1-3 fractures, chiropractor manipulation, and possibly bruising to the neck from seatbelts. In ischemic stoke, acute (12-48 h) occlusion of one or more large vessels results in focal, wedge-shaped peripheral areas of loss of grey/white matter differentiation involving the cortex and contiguous white matter, or simply as a focal mass effect (see the image below). Anoxia or hypotension results in diffuse loss of gyral/cortical markings and diffuse mass effect.",
+      "text_sha256": "c62afd8be005538ea2aa62a2bd5ed7732142da9922209725430333eb3aa53263"
+    },
+    {
+      "id": "rag-9569f87b2d38b7d4",
+      "chunk_id": "53b354e14520b0f0479f_7",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "trauma trauma differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4574,
+      "excerpt": "This complex syndrome has been further classified into two subtypes:J Type I: No evidence of peripheral nerve injury (formerly reflex sympathetic dystrophy)J Type II: Peripheral nerve injury present (formerly causalgia )J Epidemiology Frequency CRPS occurs in approximately 1 15% of peripheral nerve injury cases. Schwartzman states that CRPS usually occurs secondary to fractures, sprains, and trivial soft tissue injury. The incidence after fractures and contusions ranges from 10% to 30%. While some cases are associated with an identifiable nerve injury, many are not. Even \"microtrauma\" as might",
+      "text_sha256": "f92854d983ca7db67bc2172e7aa263a6e48ca5fce7aa1fad47b16359cb9a44c5"
+    },
+    {
+      "id": "rag-d71a0a73f65f79a2",
+      "chunk_id": "c073c38d1231a0946898_1",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "trauma trauma differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4584,
+      "excerpt": "alternative diagnoses. Signs of dysfunction of other cranial neruves or other neurologic abnormality exclude the diagnosis of classic trigeminal neuralgia and suggest that pain may be secondary to a structural lesion. The International Association for the Study of Pain (IASP) classifies TN into three categories. Classical TN is described as vascular compression that causes anatomical changes in the trigeminal nerve root. Next, secondary TN is due to an underlying neurologic disease. Third, idiopathic TN, is diagnosed after all studies reveal no etiology or there is no apparent cause. Classic",
+      "text_sha256": "ce29c6daab7ff6fd5cd95a131c5c0f906c846e7d275efa50d3ee5c72823e1ba8"
+    },
+    {
+      "id": "rag-0d8f017eda52e6bd",
+      "chunk_id": "cd383ba748c90a04ca49_4",
+      "title": "Hemorrhagic Shock Management in the ED: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827930-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "trauma trauma differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4583,
+      "excerpt": "settings. (e fourth edition of the guideline on management of major bleeding and coagulopathy following trauma by the pan-European Multidisciplinary Task Force for Advanced Bleeding Care in Trauma provides treatment guidelines, ncluding the following: Early imaging (ultrasonography or contrast-enhanced CT) should be used for detection of free fluid in patients with suspected torso trauma. CT assessment should be provided for hemodynamically stable patients. Low initial Hb should be considered an indicator for severe bleeding associated with coagulopathy. Repeated Hb measurements should be used",
+      "text_sha256": "41780d1fda7e4fe4fd21b139f74fe080af257354c6e8af42e3f89f953059b78d"
+    },
+    {
+      "id": "rag-9f13dbfb790cfc47",
+      "chunk_id": "bbce752c4c2a785b6f5c_1",
+      "title": "Neck Trauma Management: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827223-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "trauma trauma differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.478,
+      "excerpt": "signs or symptoms, and potentially lethal injuries could be easily overlooked or discounted. Neck injury may result in the laceration of major vessels, potentially leading to hemorrhagic shock. Extracranial arterial injuries to the brachiocephalic, common carotid, and vertebral arteries can result in major neurologic deficits. Airway occlusion and exsanguinating hemorrhage pose the most immediate risks to life. From the time when Ambroise Pare successfully treated a neck injury in 1552, debate has continued about the best approach for particular neck wounds. Awareness of the various",
+      "text_sha256": "fff0d98fd2a9e506d8655fe80d02303b3f6d19f32b5b171f1ee8cc1aa8aaeb61"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "trauma trauma red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5004,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-bbdb09e14c847d95",
+      "chunk_id": "c05a612cd5603c6b2c31_17",
+      "title": "Rheumatic Fever in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/808945-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "trauma trauma red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5971,
+      "excerpt": "in children younger than 5 years with no significant difference in the frequency and severity of clinical signs. Yee lists rheumatic pericarditis and myocarditis as cardiac emergencies in the first year of life. Over the past two decades, new attention has been focused on the racial and ethnic disparities that result in a higher disease burden among indigenous peoples, especially in Australia and New Zealand. Whether those rates are related to genetic predisposition, socioeconomic factors, or a combination remains an area of active investigation. Prognosis Sequelae are limited to the heart and",
+      "text_sha256": "a7221918bf1e6d11a3210ef1663bde6e409a051e7a51b9fad674d3522d765017"
+    },
+    {
+      "id": "rag-96a90437160454ff",
+      "chunk_id": "60a8e9fb259d62f055c2_43",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "trauma trauma red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5634,
+      "excerpt": "(cTn), whether conventional or high sensitivity (hs), exclusively for these purposes. The main clinical outcome of interest after initial emergency department (ED) evaluation of patients with suspected ACS is 30-day MACE. MACE includes MI, death, target lesion revascularization, or death. In 2018, The American College of Emergency Physicians (ACEP) updated its level C recommendations regarding testing strategies for ruling out non-ST-elevation MI (NSTEMI) in lower risk patients to include the use of the HEART score and conventional or high-sensitivity cardiac troponins (hs-cTn) as follows: In",
+      "text_sha256": "4828c8d733507191a7786f8b1f2baf9a4c8185d49b0cb05028c18c2b64ce27ff"
+    }
+  ],
+  "disease_candidates": [],
+  "proposal": {
+    "route": "trauma",
+    "evidence_status": "sufficient",
+    "route_review": {
+      "recommended_disposition": "handoff",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-9f13dbfb790cfc47",
+        "rag-0d8f017eda52e6bd",
+        "rag-479db8a8d0c16e39"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "trauma__head_injury",
+        "description": "受傷位於頭頸部。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-479db8a8d0c16e39",
+          "rag-9f13dbfb790cfc47"
+        ]
+      },
+      {
+        "code": "trauma__chest_injury",
+        "description": "受傷位於胸部。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-0d8f017eda52e6bd"
+        ]
+      },
+      {
+        "code": "trauma__abdominal_injury",
+        "description": "受傷位於腹部。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-0d8f017eda52e6bd"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "injury_location",
+        "option": "頭頸部",
+        "mapping": {
+          "findings": [
+            "trauma__head_injury"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-479db8a8d0c16e39",
+          "rag-9f13dbfb790cfc47"
+        ]
+      },
+      {
+        "field": "injury_location",
+        "option": "胸部",
+        "mapping": {
+          "findings": [
+            "trauma__chest_injury"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-0d8f017eda52e6bd"
+        ]
+      },
+      {
+        "field": "injury_location",
+        "option": "腹部",
+        "mapping": {
+          "findings": [
+            "trauma__abdominal_injury"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-0d8f017eda52e6bd"
+        ]
+      }
+    ],
+    "profile_status": "not_applicable",
+    "profiles": [],
+    "safety_proposals": [],
+    "unsupported_requirements": [
+      {
+        "requirement": "Determine specific injury types (e.g., fracture, dissection, specific organ damage) based on symptoms.",
+        "reason": "The provided RAG sources and questionnaire data are insufficient for diagnosing specific internal injuries, which requires physical examination and imaging (e.g., CT scan, ultrasonography) as mentioned in the sources."
+      },
+      {
+        "requirement": "Assess hemodynamic stability (e.g., blood pressure, heart rate).",
+        "reason": "The model cannot assess vital signs, which are critical in trauma evaluation for conditions like hemorrhagic shock."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-479db8a8d0c16e39",
+          "rag-d0645c9d7392669b",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2",
+          "rag-0d8f017eda52e6bd",
+          "rag-9f13dbfb790cfc47",
+          "rag-f09c5253c7a82445",
+          "rag-bbdb09e14c847d95",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[0], fact_proposals[6]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-479db8a8d0c16e39",
+          "rag-d0645c9d7392669b",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2",
+          "rag-0d8f017eda52e6bd",
+          "rag-9f13dbfb790cfc47",
+          "rag-f09c5253c7a82445",
+          "rag-bbdb09e14c847d95",
+          "rag-96a90437160454ff"
+        ]
+      }
+    ]
+  }
+}

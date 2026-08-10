@@ -1,0 +1,486 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "infection",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "a434bdac95c418798556a999b99c5c2850c7b06dc3e836df0952c58ce1870af6",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "infection infection differential diagnosis diseases clinical presentation symptoms history",
+      "infection infection red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "ba191320ebf171cc91813c8bdb5690b17ffb3f5a5bd32395f8de551233120bc6"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "9a82ed30dd88ad96f8873971d4005e45c01634c70ea53dbd6606194f241f11a0",
+    "generated_at": "2026-08-10T04:07:42+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-0eb5cee16eb76ecc",
+      "chunk_id": "474c09092d7d10dddd44_7",
+      "title": "Haemophilus Influenzae Infections: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/218271-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "infection infection differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4344,
+      "excerpt": "History of selected CNS disease, particularly those with CSF shunts, hydrocephalus, space-occupying lesions, history of trauma, post-neurosurgery Papilledema Selected focal neurologic deficits, but not cranial nerve palsy of VI or VII Delayed diagnostic lumbar puncture In adults with suspected bacterial meningitis, CT scanning is recommended before lumbar puncture in patients with the following : Immunocompromise History of CNS disease Newly onset seizure Papilledema Altered consciousness Focal neurologic deficit Delayed diagnostic lumbar puncture Chest radiography: For suspected pulmonary",
+      "text_sha256": "0125ac2391db7890124228eabfd351c440e40f9fba7615ad57aaf2f07a6ff390"
+    },
+    {
+      "id": "rag-1d3f048a40e712fd",
+      "chunk_id": "fb961f7e1c8b575b2ec5_2",
+      "title": "Hypogammaglobulinemia: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/136471-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "infection infection differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4187,
+      "excerpt": "A detailed clinical history should emphasize the following: Reason for lab draw that defined the abnormality Symptoms (especially infections) Age of onset Family history Site of infections Type of microorganisms Recurrent infections Gastrointestinal symptoms Musculoskeletal symptoms Autoimmune and collagen vascular diseases Physical findings will vary by etiology, but primary hypogammaglobulinemia (associated with a primary immune deficiency) may include the following: Growth retardation Abnormalities of lymphoid tissue and organs (eg, a paucity of tonsillar tissue, adenoids, and peripheral",
+      "text_sha256": "ab891bcda27d7a883d0b123b5247a35b050b1a6eafe7573b51d1970df8792d59"
+    },
+    {
+      "id": "rag-02b622cf0e22d994",
+      "chunk_id": "40949ab525cdb33ba040_4",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "infection infection differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.433,
+      "excerpt": "by hemorrhage from both nares, and by visualization of blood draining in the posterior pharynx. Differential Diagnosis The differential diagnosis includes the following: Barotrauma Disseminated Intravascular Coagulation Endometriosis Foreign Bodies, Nose Hemophilia, Type A Hemophilia, Type B Osler-Weber-Rendu syndrome Rhinitis Plant Poisoning, Glycosides - Coumarin Sinusitis Toxicity, Cocaine Toxicity, Nonsteroidal Anti-inflammatory Agents Toxicity, Rodenticide Toxicity, Salicylate Toxicity, Warfarin and Superwarfarins von Willebrand Disease Diagnostic Considerations Other problems to be",
+      "text_sha256": "7fb71c7de80704fe1be64c3cae7c04a246ddeb7d5647ec8fe71d4107e8974654"
+    },
+    {
+      "id": "rag-799901ce3701b33c",
+      "chunk_id": "7fbbf733f4472021e799_4",
+      "title": "Glomerulonephritis Associated with Nonstreptococcal Infection: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/240229-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "infection infection differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4322,
+      "excerpt": "infection has been detected in 30% 50% of patients with idiopathic membranous nephropathy, IgA nephropathy, FSGS, antineutrophil cytoplasmic antibody (ANCA) positive vasculitis, and membranoproliferative GN (MPGN). Occult HBV infection has been described in selected cases of idiopathic membranous nephropathy and IgA nephropathy. There is anecdotal evidence that antiviral therapy has been effective in cases of occult HCV- or HBV-associated GN initially diagnosed idiopathic glomerular disease. The incidence of glomerulonephritis in malaria is estimated to be around 18% nd in schistosomaisis,",
+      "text_sha256": "bcae02225b52e9493eaa5879a189384228613b5684d8c2cdc7fc3810d1b0094e"
+    },
+    {
+      "id": "rag-4cc355121404eb13",
+      "chunk_id": "709d501e5392c47ae3b5_20",
+      "title": "Lyme Disease: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/330178-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "infection infection differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4377,
+      "excerpt": "list of clinical manifestations. The recognition that the patients in the United States had erythema migrans and the initial antibiotic responsiveness of the cutaneous manifestations that had been described in the 1950s in the European literature was confirmed. This led to the recognition that Lyme arthritis was one manifestation of the same tick-borne condition known in Europe. After Willy Burgdorfer, MD, discovered a borrelial organism in Ixodes ticks, it was recovered from patients with clinical Lyme disease, confirming Borrelia as the causative agent. This led to the development of",
+      "text_sha256": "10d5fad5bf7b692ff16fa1f0e46e1d26713b60a22ba12a73fd9bf19ae786e87d"
+    },
+    {
+      "id": "rag-d65b78cc091f2d5e",
+      "chunk_id": "525d2d2f1773793663e6_33",
+      "title": "Emergency Care of Urticaria: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1956597-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "infection infection differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4479,
+      "excerpt": "Skin for evidence of bacterial or fungal infection Differential Diagnosis The differential diagnosis includes the following: Allergic Contact Dermatitis Atopic Dermatitis Drug Eruptions Erythema Multiforme Henoch-Schonlein Purpura (Anaphylactoid Purpura) Insect Bites Mastocytosis Pityriasis Rosea Scabies Urticarial Vasculitis Sweet syndrome Other problems to consider include the following: Neurodermatitis Eczema Urticaria pigmentosa Potential diagnostic pitfalls include the following: Missing the diagnosis of life-threatening laryngeal angioedema in a patient presenting with the primary",
+      "text_sha256": "89f2bc61d13f795e3e8ca97a61c4c166adc2f1337d62517645da7c2e6e3eed6e"
+    },
+    {
+      "id": "rag-47d02d2df5d6263a",
+      "chunk_id": "8c0fd3de343713eb7a55_43",
+      "title": "Vaccinia: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/231773-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "infection infection differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4386,
+      "excerpt": "by those receiving vaccinia vaccine is a constellation of symptoms called acute vaccinia syndrome. This is characterized by fever, headache, myalgias, and fatigue. Research suggests that a person's risk of developing fever following inoculation with vaccinia vaccine may to some extent be predicted by genetic analysis. Mortality due to generalized vaccinia or erythematous rash has not been reported. Differences in human morbidity and mortality associated with newer forms of vaccinia vaccine are not yet established. However, studies evaluating certain later generations of vaccinia vaccine may be",
+      "text_sha256": "be4bc357b5ba43548d85dcccc14cb79ab3e6842932dc17eaf0fd7a09fb6ff49d"
+    },
+    {
+      "id": "rag-15e9ebd1ee67027c",
+      "chunk_id": "7fbbf733f4472021e799_0",
+      "title": "Glomerulonephritis Associated with Nonstreptococcal Infection: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/240229-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "infection infection differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.457,
+      "excerpt": "Overview Practice Essentials Postinfectious glomerulonephritis (PIGN) may occur in association with bacterial, viral, fungal, protozoal, and helminthic infections. The classic association of glomerulonephritis (GN) with infection is poststreptococcal GN, usually developing after streptococcal pharyngitis (see Poststreptococcal Glomerulonephritis). However, in recent decades the spectrum of postinfectious GN has changed. The incidence of poststreptococcal GN, particularly in its epidemic form, has progressively declined in industrialized countries with early use of effective antibiotics.",
+      "text_sha256": "fcfc6a3f5ca37609aa083ca91c267a71d3a8bad884c5112e870b42bf2299a907"
+    },
+    {
+      "id": "rag-2e7b1376de0a8649",
+      "chunk_id": "b6a3a12bdcac42c05c54_25",
+      "title": "Fungal Pneumonia: Overview, Risk Factors, Epidemiology of Fungal Pneumonia",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/300341-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "infection infection red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5374,
+      "excerpt": "sites in individuals who are immunocompromised Meningoencephalitis in patients with AIDS and cryptococcosis In individuals who are neutropenic or immunocompromised, persistent fever (even before pulmonary findings) may be an early sign of infection, especially if the fever is unresponsive to broad-spectrum antibiotics. Hypersensitivity or allergic reactions include allergic bronchial asthma (Aspergillus species, Candida species), allergic bronchopulmonary mycoses (Aspergillus species, Candida species), bronchocentric granulomatosis (necrotizing granulomatous replacement and eosinophilic",
+      "text_sha256": "baa88b193cce61d75d909f30c77c0a2bdd6f5e6a3d162357c6454cf597d524df"
+    },
+    {
+      "id": "rag-b377ee7124332213",
+      "chunk_id": "c05a612cd5603c6b2c31_3",
+      "title": "Rheumatic Fever in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/808945-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "infection infection red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5355,
+      "excerpt": "The connection with scarlet fever was made in the early 1900s. In 1944, the Jones criteria were formulated to assist disease identification. These criteria, with some modification, remain in use today. The introduction of antibiotics in the late 1940s allowed for the development of treatment and preventive strategies. Dramatic declines in the incidence of rheumatic fever are thought to be largely due to antibiotic treatment of streptococcal infection; however, there are regions where the incidence is significant, especially in sub-Saharan Africa, the Middle East, Central and South Asia, the",
+      "text_sha256": "82a6d31f7f26e80f5b2961c0b4bb1beb9206a62c9685d191de8184bc3ca86a76"
+    },
+    {
+      "id": "rag-820ef750b3f13319",
+      "chunk_id": "9938149389dea7f1fe21_11",
+      "title": "Diagnostic Influenza Tests: Reference Range, Interpretation, Collection and Diagnostic Methods",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2053517-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "infection infection red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5469,
+      "excerpt": "amplification reaction (NEAR) A & B NPS & NS direct or in VTM 15 min Waived AcculaTM Flu A/B Test(Mesa Biotech, Inc) AcculaTM Dock Multiplex RT-PCR with colorimetric analysis A & B NS 30 min Waived Solana® Influenza A+B Assay (Quidel Corp) Solana® Isothermal reverse transcriptase helicase-dependent amplification A & B NPS, NS in VTM 45 min Moderate Lyra Influenza A+B (Quidel Corp) ABI 7500 Fast and QuantStudioTMReal-Time PCR Systems Multiplex real-time RT-PCR A & B NS & NPS in VTM 1.25 hr Moderate Panther Fusion Flu A/B/RSV (Hologic, Inc) Panther Fusion System Multiplex real-time RT-PCR A & B",
+      "text_sha256": "f6481b7146db89ffef9494948aa689aeb95bfdedbad9e694801a9af4f72042c7"
+    },
+    {
+      "id": "rag-96c84e74a4039803",
+      "chunk_id": "8b3c2070100dab46af68_23",
+      "title": "Fever of Unknown Origin (FUO): Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/217675-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "infection infection red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5555,
+      "excerpt": "FUO are as follows: Subacute bacterial endocarditis (SBE) Tooth abscess Chronic sinusitis/mastoiditis Chronic prostatitis Discitis Vascular graft infections Whipple disease Multicentric Castleman disease (MCD) Cholecystitis Lymphogranuloma venereum (LGV) Geographic and travel-related considerations for FUO are listed below. Tickborne infections, as follows: Babesiosis, Ehrlichiosis (southeast and central United States) Anaplasmosis (northeast and north-central United States) Tickborne relapsing fever (rodent-infested cabins) Regional infections, as follows: Histoplasmosis (Midwest United",
+      "text_sha256": "159f1ed55e621647f621eee03f15242e035a7ded2650b9d4d3c9f519beda55f0"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "infection infection red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5804,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "infection infection red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5838,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    },
+    {
+      "id": "rag-a68e48c8ccbe6609",
+      "chunk_id": "9b7d68f2a901a2f77004_26",
+      "title": "Bacterial Gastroenteritis: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/176400-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "infection infection red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.587,
+      "excerpt": "enterocolitica - Appendicitis, bowel perforation, intussusception, peritonitis, toxic megacolon, cholangitis, bacteremia, and Reiter syndrome Enteric fever S typhi causes enteric fever. This syndrome has an insidious onset of malaise, fever, abdominal pain, and bradycardia. Diarrhea and rash (rose spots) appear after 1 week of symptoms. Bacteria may have disseminated at that time, and treatment is required to prevent systemic complications such as hepatitis, myocarditis, cholecystitis, and gastrointestinal bleeding. HUS Damage to the vascular endothelial cells by verotoxin causes HUS.",
+      "text_sha256": "de5b6b3a674ccac56134b5329cac88c2bd442b00e9c32059abf06cccd8d2f4e0"
+    }
+  ],
+  "discovery": {
+    "route": "infection",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "infection__cellulitis",
+        "name": "Cellulitis",
+        "rationale": "The questionnaire asks about localized symptoms such as pain, swelling, redness, and skin lesions (局部紅腫), which are hallmark signs of cellulitis, a common bacterial skin infection.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-0eb5cee16eb76ecc",
+          "rag-15e9ebd1ee67027c",
+          "rag-1d3f048a40e712fd",
+          "rag-2e7b1376de0a8649",
+          "rag-47d02d2df5d6263a",
+          "rag-4cc355121404eb13",
+          "rag-62f530bca02a29ef",
+          "rag-799901ce3701b33c",
+          "rag-820ef750b3f13319",
+          "rag-96c84e74a4039803",
+          "rag-a68e48c8ccbe6609",
+          "rag-b377ee7124332213",
+          "rag-d65b78cc091f2d5e",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "id": "infection__pneumonia",
+        "name": "Pneumonia",
+        "rationale": "The questionnaire specifically screens for respiratory symptoms like cough, difficulty breathing, and chest pain, which are common presentations of pneumonia. Fever and chills are also queried, which are systemic signs associated with this infection.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-0eb5cee16eb76ecc",
+          "rag-15e9ebd1ee67027c",
+          "rag-1d3f048a40e712fd",
+          "rag-2e7b1376de0a8649",
+          "rag-47d02d2df5d6263a",
+          "rag-4cc355121404eb13",
+          "rag-62f530bca02a29ef",
+          "rag-799901ce3701b33c",
+          "rag-820ef750b3f13319",
+          "rag-96c84e74a4039803",
+          "rag-a68e48c8ccbe6609",
+          "rag-b377ee7124332213",
+          "rag-d65b78cc091f2d5e",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "id": "infection__gastroenteritis",
+        "name": "Gastroenteritis",
+        "rationale": "The questionnaire includes a section on gastrointestinal symptoms, asking about nausea, vomiting, diarrhea, and abdominal pain. These are the primary symptoms of gastroenteritis, which can be caused by various infectious agents.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-0eb5cee16eb76ecc",
+          "rag-15e9ebd1ee67027c",
+          "rag-1d3f048a40e712fd",
+          "rag-2e7b1376de0a8649",
+          "rag-47d02d2df5d6263a",
+          "rag-4cc355121404eb13",
+          "rag-62f530bca02a29ef",
+          "rag-799901ce3701b33c",
+          "rag-820ef750b3f13319",
+          "rag-96c84e74a4039803",
+          "rag-a68e48c8ccbe6609",
+          "rag-b377ee7124332213",
+          "rag-d65b78cc091f2d5e",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "id": "infection__urinary_tract_infection",
+        "name": "Urinary Tract Infection",
+        "rationale": "The questionnaire directly asks about urinary symptoms, including painful or difficult urination, blood in the urine, or changes in urine color. These are classic signs of a urinary tract infection.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-0eb5cee16eb76ecc",
+          "rag-15e9ebd1ee67027c",
+          "rag-1d3f048a40e712fd",
+          "rag-2e7b1376de0a8649",
+          "rag-47d02d2df5d6263a",
+          "rag-4cc355121404eb13",
+          "rag-62f530bca02a29ef",
+          "rag-799901ce3701b33c",
+          "rag-820ef750b3f13319",
+          "rag-96c84e74a4039803",
+          "rag-a68e48c8ccbe6609",
+          "rag-b377ee7124332213",
+          "rag-d65b78cc091f2d5e",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "id": "infection__meningitis",
+        "name": "Meningitis",
+        "rationale": "The questionnaire asks about headache, fever, and whether the onset was sudden. While non-specific, these can be key symptoms of meningitis, a serious infection of the central nervous system.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-0eb5cee16eb76ecc",
+          "rag-15e9ebd1ee67027c",
+          "rag-1d3f048a40e712fd",
+          "rag-2e7b1376de0a8649",
+          "rag-47d02d2df5d6263a",
+          "rag-4cc355121404eb13",
+          "rag-62f530bca02a29ef",
+          "rag-799901ce3701b33c",
+          "rag-820ef750b3f13319",
+          "rag-96c84e74a4039803",
+          "rag-a68e48c8ccbe6609",
+          "rag-b377ee7124332213",
+          "rag-d65b78cc091f2d5e",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "id": "infection__poststreptococcal_glomerulonephritis",
+        "name": "Poststreptococcal Glomerulonephritis",
+        "rationale": "The questionnaire asks about urinary symptoms, including changes in urine color or blood in the urine. One of the provided sources explicitly mentions poststreptococcal glomerulonephritis as a classic infection-associated condition that can follow infections like pharyngitis.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-0eb5cee16eb76ecc",
+          "rag-15e9ebd1ee67027c",
+          "rag-1d3f048a40e712fd",
+          "rag-2e7b1376de0a8649",
+          "rag-47d02d2df5d6263a",
+          "rag-4cc355121404eb13",
+          "rag-62f530bca02a29ef",
+          "rag-799901ce3701b33c",
+          "rag-820ef750b3f13319",
+          "rag-96c84e74a4039803",
+          "rag-a68e48c8ccbe6609",
+          "rag-b377ee7124332213",
+          "rag-d65b78cc091f2d5e",
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope discovery citations with the complete route RAG evidence pack for: diseases[0], diseases[1], diseases[2], diseases[3], diseases[4], diseases[5]. These citations remain unverified.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-0eb5cee16eb76ecc",
+          "rag-15e9ebd1ee67027c",
+          "rag-1d3f048a40e712fd",
+          "rag-2e7b1376de0a8649",
+          "rag-47d02d2df5d6263a",
+          "rag-4cc355121404eb13",
+          "rag-62f530bca02a29ef",
+          "rag-799901ce3701b33c",
+          "rag-820ef750b3f13319",
+          "rag-96c84e74a4039803",
+          "rag-a68e48c8ccbe6609",
+          "rag-b377ee7124332213",
+          "rag-d65b78cc091f2d5e",
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ]
+  }
+}

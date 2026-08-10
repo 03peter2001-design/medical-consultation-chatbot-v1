@@ -36,13 +36,13 @@ AI 輔助預問診系統。病患可用文字或語音完成胸痛、頭痛或�
 
 | 服務／可部署產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
 | --- | --- | --- | --- | --- |
-| Backend API（含 Breeze ASR） | `1.3.0` | 2026-08-09 | 問診長度觀測值（section 題數／預填覆蓋率）、批次化提案量測工具，以及未接線選項與一般病史可被略過的欠債基準線 | [backend/README.md](backend/README.md#服務版本) |
-| 開發版 Vue frontend | `1.2.0` | 2026-08-09 | Safety 條件無損 round-trip、hidden selection 提示與過期助理請求取消 | [frontend/README.md](frontend/README.md#服務版本) |
+| Backend API（含 Breeze ASR） | `1.6.0` | 2026-08-10 | 疾病名稱導向 Gemini＋RAG 產生 49 路徑的隔離 provisional AMIE 草稿 | [backend/README.md](backend/README.md#服務版本) |
+| 開發版 Vue frontend | `1.6.0` | 2026-08-10 | Avatar 模型載入進度，以及麥克風收音即時波形與確認狀態 | [frontend/README.md](frontend/README.md#服務版本) |
 | 正式部署 Doctor frontend | `2.1.0` | 2026-08-09 | 候選問卷路由與欄位標籤可讀化，保留歷史病例顯示能力 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | 正式部署 Patient frontend | `2.0.1` | 2026-08-09 | FHIR query override fail-closed 與本次症狀／既往病史分類修正 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
-| Local Avatar service | `1.0.0` | 2026-08-07 | CosyVoice3 語音、MuseTalk 1.5 唇形、GPU 記憶體釋放、快取與靜態 fallback | [avatar-service/README.md](avatar-service/README.md#服務版本) |
+| Local Avatar service | `1.1.1` | 2026-08-10 | 修正閩南語控制詞，並保留全模型 warm-up 常駐與嘴部羽化融合 | [avatar-service/README.md](avatar-service/README.md#服務版本) |
 | SMART on FHIR sandbox app | `1.0.0` | 2026-08-05 | SMART OAuth launch、FHIR 預填、同源 API proxy、合成病人 seed 與本機驗證 | [smart-app/README.md](smart-app/README.md#服務版本) |
-| Integration deployment bundle | `1.0.0` | 2026-08-07 | IIS／Nginx 邊界、doctor／patient 分流、SQLite 備份還原、GPU ASR／Avatar 部署 | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
+| Integration deployment bundle | `1.3.0` | 2026-08-10 | 16 GB GPU 預設 warm-up 並常駐 Breeze、CosyVoice 與 MuseTalk | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
 
 `frontend-v2/packages/shared` 是 doctor／patient 共用程式庫，不是獨立服務；
 `smart-deployment/` 是 SMART sandbox 的 proxy 設定，跟隨 SMART app

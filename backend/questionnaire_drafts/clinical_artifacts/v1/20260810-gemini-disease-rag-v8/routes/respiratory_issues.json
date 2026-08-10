@@ -1,0 +1,1620 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "respiratory_issues",
+  "label": "呼吸問題",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "aa06992a3b17041909d93314d1bc451191d942bcf08d6cfcf90c37f7ac0b9b57",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history\",\"Chronic Obstructive Pulmonary Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"respiratory issues respiratory red flags emergency warning signs urgent referral rule out\",\"Acute Respiratory Distress Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Pneumonia diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Asthma diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Pulmonary Embolism diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Heart Failure diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "ab708adf9bf8fab1c8bc0dea015e241b219468252bb16107f5aa32110886b42c"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "f0f613b83f3c91f689b4d1af31f0649a5490054fccac1c3380759b3f6785ffe4",
+    "generated_at": "2026-08-10T04:13:06+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-4676baa2471b307c",
+      "chunk_id": "584778d576ee1e9a5b46_12",
+      "title": "Cor Pulmonale: Overview, Presentation, DDx",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/154062-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "respiratory_issues__chronic_obstructive_pulmonary_disease"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history",
+        "Chronic Obstructive Pulmonary Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3329,
+      "excerpt": "value or is simply reflecting the severity of underlying COPD or other pulmonary disease is not clear. Prognosis in the acute setting due to massive pulmonary embolism or acute respiratory distress syndrome (ARDS) has not previously been shown to be dependent on the presence or absence of cor pulmonale. However, a prospective, multicenter cohort study by Volschan et al indicated that in cases of pulmonary embolism, cor pulmonale may be a predictor of inhospital mortality. The authors collected demographic, comorbidity, and clinical manifestation data on 582 patients admitted to emergency or",
+      "text_sha256": "34c9d988269abde577bf7d8f1753bfd1f5165296962ad130cdf7b467cbff9593"
+    },
+    {
+      "id": "rag-80fefcca3c7acdde",
+      "chunk_id": "a66788319d4a38c7db99_4",
+      "title": "Restrictive Lung Disease: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/301760-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3316,
+      "excerpt": "new window) Causes Examples Diagnosis PFT Findings Pleural Trapped lung, pleural scarring, large pleural effusions, chronic empyema, asbestosis Radiography, CT scanning, pleural manometry, pleural biopsy Low RVa, low TLC, low FVC Alveolar Edema, hemorrhage Radiography, CT scanning, physical examination Increased DLCOb in hemorrhage (Intrapulmonary hemoglobin absorbs the carbon monoxide, thus increasing the DLCO reading.) Interstitial Interstitial lung disease including IPFc, NSIPd, COPe Radiography, CT scanning, physical examination, echo often shows pulmonary hypertension Low RV, low FVC, low",
+      "text_sha256": "bc6e4b9a2d2ac2a823df19f99a501a5b1b5f124201323dfd9a84d41d8bceb502"
+    },
+    {
+      "id": "rag-0d827bb2ab2da782",
+      "chunk_id": "3ae6c0644827738d804b_17",
+      "title": "Acute Glomerulonephritis Management in the ED: Practice Essentials, Emergency Department Care",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/777272-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.47,
+      "excerpt": "tract complaints (from sinusitis to pulmonary hemorrhage). There may be cavitating lung lesions seen on chest radiographs. Wegener granulomatosis most commonly occurs in patients in their sixth to seventh decade, with equal distribution among men and women. Any patient suspected of Wegener granulomatosis should have blood antineutrophil cytoplasmic antibody (ANCA) levels measured. Glomerulonephritis from Wegener granulomatosis may be rapidly progressive, so prompt diagnosis is critical.",
+      "text_sha256": "dccc2f5e88f69b4d63803ee3f81f6bfa98a037ec3fce9f119ad1c2158c8dc12e"
+    },
+    {
+      "id": "rag-3697ea6f89d68fd5",
+      "chunk_id": "5f385aa936e8b9c4d48d_4",
+      "title": "Hemolytic Uremic Syndrome in Emergency Medicine: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779218-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4808,
+      "excerpt": "seizures, or altered mental status) Diarrhea may improve as the other HUS signs and symptoms beginJ Atypical HUS does not typically begin with a gastrointestinal illness. Patients with pneumococcal HUS may have had`recent respiratory illness. Clinical manifestations of atypical HUS are similar to those of typical HUS, although neurologic involvement is more common. See Presentation. HUS is primarily a clinical diagnosis coupled with consistent laboratory findings, including the following: Microangiopathic hemolytic anemia, with a hemoglobin level that is typically less than 8 g/dLJ",
+      "text_sha256": "8794e56e32229d991eb34ce0ebf51c81b6fdd260c654a355f24fd9e8a874c4d9"
+    },
+    {
+      "id": "rag-f235f1f098699f8b",
+      "chunk_id": "e2db83523988003421e1_20",
+      "title": "Hospital-Acquired Pneumonia (Nosocomial Pneumonia) and Ventilator-Associated Pneumonia: Overview, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/234753-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3358,
+      "excerpt": "diseases with pulmonary manifestations Alveolar hemorrhage Pulmonary contusion Bronchiolitis obliterans-organizing pneumonia (BOOP) Hypersensitivity pneumonitis. Interstitial lung disease Bronchogenic carcinomas ARDS usually is readily diagnosable based on the appearance of small lung volumes due to microatelectatic changes on the chest radiograph and the progressive and severe hypoxemia. Little or no fever accompanies ARDS, unless it is due to acute pancreatitis. Electrocardiography (ECG) and ventilation-perfusion scans help to exclude pneumonia mimics. ECGs, cardiac enzymes, and Swan-Ganz",
+      "text_sha256": "d364783f8a3fef2886fe8a8e46db2e58bd0c9813318c4ce82ea0832016cbc79d"
+    },
+    {
+      "id": "rag-959c78934f94cdc4",
+      "chunk_id": "159c85afc492cf2ae51c_1",
+      "title": "Roseola Infantum in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/803804-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5035,
+      "excerpt": "day febrile illness (characteristically >39.5 ) associated with respiratory or gastrointestinal symptomatology. In one prospective cohort, 93% of newly acquired infections were symptomatic, with fever, fussiness, diarrhea, and rash as the most distinguishing features. Newly recognized clinical manifestations of HHV-6 infection include hepatitis, encephalitis, myocarditis, hemophagocytic syndrome, and an adult mononucleosislike illness. The virus persists and may reactivate, primarily in immunocompromised hosts. Reactivation manifestations may present as fever, rash, pneumonia, hepatitis, bone",
+      "text_sha256": "f0f7563ce05ba78dfce1021fb63cea8ceaa73ea122c7ac84954fd0d680539f6c"
+    },
+    {
+      "id": "rag-c1aba8069b83b118",
+      "chunk_id": "a66788319d4a38c7db99_5",
+      "title": "Restrictive Lung Disease: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/301760-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3382,
+      "excerpt": "examination, echo often shows pulmonary hypertension Low RV, low FVC, low TLC, decreased DLCO, poor lung compliance Neuromuscular Myasthenia gravis, ALSf, myopathy Physical examination, EMGsg, serology Low RV, low TLC, low NIFh, low MMVi Thoracic/extrathoracic Obesity, kyphoscoliosis, ascites Physical examination Low ERVj and FRC in obesity, low VCk, TLC, FRCl in kyphoscoliosis aResidual volume.bDiffusion capacity of the lungs for carbon monoxide.cIdiopathic pulmonary fibrosis.dNonspecific interstitial pneumonitis.eCryptogenic organizing pneumonia.fAmyotrophic lateral",
+      "text_sha256": "bc87b106968f1af12140cb5b25d8e8a0711b60fa36fc945dcc529d212aa0cf17"
+    },
+    {
+      "id": "rag-91c82dd640b2e47a",
+      "chunk_id": "c784b6fe3addb75c14e5_18",
+      "title": "Dermatologic Manifestations of Stevens-Johnson Syndrome and Toxic Epidermal Necrolysis: Overview, Patient History and Physical Examination, Complications",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1124127-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5056,
+      "excerpt": "lung disease Respiratory tract obstruction Bronchiectasis Bronchitis Urogenital/gynecological Chronic lesions of urogenital tract are less common than at other mucosal sites, with the most common complication being adhesions. Complications of the urogenital tract can also cause painful micturition. Gastrointestinal and hepatic Acutely, patients may develop a profuse, protein-rich diarrhea. Gastrointestinal chronic sequelae are rare. Gastrointestinal and hepatic complications can include the following: Esophageal strictures Chronic intestinal ulcers Vanishing bile duct syndrome (VBDS) Renal In",
+      "text_sha256": "c85659314259b974310f6d8f415804f1023076098da5b644b9c62fb37e59a6a9"
+    },
+    {
+      "id": "rag-af74e2604f4e1e79",
+      "chunk_id": "28cc3005c1cb1fa7c3b3_29",
+      "title": "Aspiration Pneumonitis and Pneumonia: Overview of Aspiration Pneumonia, Predisposing Conditions for Aspiration Pneumonia, Pathophysiology of Aspiration Pneumonia",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/296198-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4933,
+      "excerpt": "or laryngotracheobronchitis, epiglottitis, asthma, reactive airway disease, respiratory distress syndrome, and foreign bodies should be considered. In addition, assess for the following conditions: Acute respiratory distress syndrome Tuberculosis Bronchitis Chronic obstructive pulmonary disease and emphysema Adult epiglottitis Pneumonia, empyema and abscess Pneumonia, Immunocompromised Mycoplasma pneumonia Viral pneumonia Septic shock Arterial Blood Gas and Mixed Venous Gas Analysis Arterial blood gas (ABG) analysis is used to assess oxygenation and pH status. ABG analysis adds information",
+      "text_sha256": "6d755656e2ccb07c55e0b08302e0b4ba9a15ecf204204f533e59d7af4d6c8c97"
+    },
+    {
+      "id": "rag-07cb9ae2ab3f3d6b",
+      "chunk_id": "487d941aacdb250a9357_3",
+      "title": "Altitude Illness - Pulmonary Syndromes: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/773065-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4855,
+      "excerpt": "requires at least 2 of the following signs : Rales or wheezing in at least one lung field Central cyanosis or arterial oxygen desaturation relative to altitude Tachycardia Tachypnea Fever and orthopnea are commonly present in HAPE; pink/frothy sputum is a late finding in severe HAPE. Also see History. Complications Secondary pulmonary infections may occur. Note that a productive cough while recovering from HAPE is common. Use Gram stain or culture to evaluate for cases requiring antibiotic therapy. Diagnostics See Imaging Studies. Although unnecessary for diagnosis, pulse oximetry is very",
+      "text_sha256": "8a6bc51bc247faad1b370864842c6ee96bb11a8e1b956062c1e15ab4198a3c1b"
+    },
+    {
+      "id": "rag-c8bffa8ba5fa844d",
+      "chunk_id": "1904346231affe6d7124_29",
+      "title": "Acute Respiratory Distress Syndrome (ARDS): Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/165139-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "respiratory_issues__acute_respiratory_distress_syndrome"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory red flags emergency warning signs urgent referral rule out",
+        "Acute Respiratory Distress Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4276,
+      "excerpt": "the Lung Disease and Respiratory Health Center, the Procedures Center, and the Infections Center, as well as Acute Respiratory Distress Syndrome, Bronchoscopy, and Severe Acute Respiratory Syndrome (SARS). Clinical Presentation",
+      "text_sha256": "784d500847357fee6450f2a94acf30ca5475a3ab3c73f4c19e8197d2cd96371c"
+    },
+    {
+      "id": "rag-54c620c34c430032",
+      "chunk_id": "4aa59918f57deb0a99db_4",
+      "title": "Nitrogen Dioxide Toxicity: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/302133-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5027,
+      "excerpt": "underlying pulmonary diseases (eg, COPD or asthma) and, in extreme cases, death. Suspect methemoglobinemia in patients exposed to NO2 who exhibit cyanosis or dyspnea. The initial absence of significant symptoms does not exclude a subsequent development of serious disease. Common signs and symptoms are as follows: New or worsening cough and/or wheezing (most common) Eye, nose or throat irritation Light-headedness or headache Dyspnea (shortness of breath) Chest tightness Choking Chest pain Diaphoresis (sweating) In addition, the following signs and symptoms may appear acutely or persist for days",
+      "text_sha256": "13c27e93056ad301293c2c8ae165d9c3b1607d92be4f7467d9695b0b91cba199"
+    },
+    {
+      "id": "rag-dd801af1d0f8db17",
+      "chunk_id": "29a8db87cd2aa8fb48b6_4",
+      "title": "Acute Coronary Syndrome: Practice Essentials, Background, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1910735-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5201,
+      "excerpt": "ventricular outflow tract Rales on pulmonary examination (suggestive of left ventricular dysfunction or mitral regurgitation) Potential complications include the following: Ischemia: Pulmonary edema Myocardial infarction: Rupture of the papillary muscle, left ventricular free wall, and ventricular septum See Presentation for more detail. Diagnosis Updated idelines for the management of non-ST-segment elevation ACS were released in 2020 by the European Society of Cardiology (ESC). The updates place increased reliance on high-sensitivity cardiac troponin testing (hs-cTn) for diagnosis. The",
+      "text_sha256": "b681d247e9b4777322ca3db696ad70b733b65e498a8b8ff1455d1b402019c068"
+    },
+    {
+      "id": "rag-c4cb2d1c46bbd567",
+      "chunk_id": "909559be848ecc7f0f79_39",
+      "title": "Pediatric Acute Respiratory Distress Syndrome: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/803573-overview",
+      "routes": [
+        "safety",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "respiratory_issues__acute_respiratory_distress_syndrome"
+      ],
+      "retrieval_queries": [
+        "respiratory issues respiratory red flags emergency warning signs urgent referral rule out",
+        "Acute Respiratory Distress Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4407,
+      "excerpt": "decreased air entry on the side of the air leak, an increased percussion note on the same side, and tracheal deviation away from the affected side in a tension pneumothorax. Heart sounds may be muffled, and signs of decreased cardiac output may be observed with a tension pneumothorax. Clinicians must also maintain a high index of suspicion for tension pneumothoraces as a cause for acute onset of decreased cardiac output. VILI is an entity receiving attention with the publication of landmark trials suggesting that a kinder, gentler form of mechanical ventilation improves outcomes in ARDS. VILI",
+      "text_sha256": "775944431bc98641284c72fad9ef51f1fb22f4c79ee69a98423de6a6fd139ce4"
+    },
+    {
+      "id": "rag-352aeb5c6249e1ca",
+      "chunk_id": "a91349e70c98ad75a93d_1",
+      "title": "Viral Pneumonia: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/300455-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "respiratory_issues__pneumonia"
+      ],
+      "retrieval_queries": [
+        "Pneumonia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4203,
+      "excerpt": "pneumonia. Signs and symptoms The common constitutional symptoms of viral pneumonia are as follows: Fever Chills Nonproductive cough Rhinitis Myalgias Headaches Fatigue During physical examination, the patient may also display the following: Tachypnea and/or dyspnea Tachycardia or bradycardia Wheezing Rhonchi Rales Sternal or intercostal retractions Dullness to percussion Decreased breath sounds Pleurisy Pleural friction rub Cyanosis Rash Acute respiratory distress Influenza pneumonia The influenza viruses are the most common viral cause of pneumonia. Primary influenza pneumonia manifests with",
+      "text_sha256": "169a99290fde61144f3e8b8629bc9780e414d9d877665dd6ef3316a4dfaea774"
+    },
+    {
+      "id": "rag-5d225945d41d0570",
+      "chunk_id": "6902d3b9fb0ee79f0ae6_21",
+      "title": "Chlamydial Pneumonias: Overview, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/297351-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "respiratory_issues__pneumonia"
+      ],
+      "retrieval_queries": [
+        "Pneumonia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.439,
+      "excerpt": "Alternate Diagnoses The differential diagnoses of chlamydial pneumonias include the following conditions: Influenza Legionnaires Disease Mycoplasmal Infections Bacterial Pneumonia Fungal Pneumonia Viral Pneumonia Psittacosis (Parrot Fever) Q Fever Tuberculosis (TB) Tularemia Other disorders to consider include the following: C trachomatis infant pneumonia Respiratory syncytial virus infection Bordetella pertussis infection Infection with other respiratory viruses Tests in Chlamydial Pneumonias Laboratory studies for diagnosis of chlamydial pneumonias vary with the causative organism. C",
+      "text_sha256": "ca52797761e283877285ffb4e1270973006a6e41273954ed8a0813fc348638bc"
+    },
+    {
+      "id": "rag-5d5e40fead2c6877",
+      "chunk_id": "6902d3b9fb0ee79f0ae6_29",
+      "title": "Chlamydial Pneumonias: Overview, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/297351-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "respiratory_issues__pneumonia"
+      ],
+      "retrieval_queries": [
+        "Pneumonia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4444,
+      "excerpt": "linked to a confirmed case or that has a single antibody titer of 32 or greater by MIF or CF after the onset of symptoms. Above definitions were originally developed for epidemiologic purposes and should not be used as the sole criteria for establishing clinical diagnoses. A CF test can cross-react with C pneumoniae and C trachomatis. MIF and PCR assays can be used to distinguish C psittaci infection from other chlamydial infections. PCR methods for the detection of C psittaci are not standardized and currently under investigation. The following laboratories offer diagnostic testing for C",
+      "text_sha256": "cc21a78ade85827742448ddb7d5b83478a571f2f2b114e3dd068947854704094"
+    },
+    {
+      "id": "rag-67d5443f6430c072",
+      "chunk_id": "e2db83523988003421e1_21",
+      "title": "Hospital-Acquired Pneumonia (Nosocomial Pneumonia) and Ventilator-Associated Pneumonia: Overview, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/234753-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "respiratory_issues__pneumonia"
+      ],
+      "retrieval_queries": [
+        "Pneumonia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4625,
+      "excerpt": "scans help to exclude pneumonia mimics. ECGs, cardiac enzymes, and Swan-Ganz readings may rule out left ventricular failure caused by exacerbation of heart failure or new myocardial infarction. Diagnostic Concerns Below is a summary of the recommendations of the recent IDSA/ATF guidelines for the management of hospital-acquired pneumonia (HAP) and ventilator-associated pneumonia (VAP). General approach: Noninvasive sampling with semiquantitative culture can be performed much more rapidly, with fewer resources and fewer complications compared to invasive sampling techniques. For patients with",
+      "text_sha256": "16fa124e98395c3c084a53cd291a5e5d33dbb29588b845e58325d2dcb7de44c5"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "respiratory_issues__acute_respiratory_distress_syndrome",
+        "respiratory_issues__chronic_obstructive_pulmonary_disease",
+        "respiratory_issues__asthma"
+      ],
+      "retrieval_queries": [
+        "Acute Respiratory Distress Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Chronic Obstructive Pulmonary Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Asthma diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4229,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-a394352415d0560a",
+      "chunk_id": "0e015057c60c6e6987b9_47",
+      "title": "Decompression Sickness: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769717-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "respiratory_issues__acute_respiratory_distress_syndrome"
+      ],
+      "retrieval_queries": [
+        "Acute Respiratory Distress Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4915,
+      "excerpt": "that there are no concomitant spinal or central neurologic symptoms or signs (see the next section on type II DCS for details). Type II decompression sickness The following characterizes type II DCS: (1) pulmonary symptoms, (2) hypovolemic shock, or (3) nervous system involvement. Pain occurs in only about 30% of cases. Because of the anatomic complexity of the central and peripheral nervous systems, signs and symptoms are variable and diverse. Symptom onset is usually immediate but may occur up to 36 hours later. Nervous system The spinal cord is the most common site affected by type II DCS;",
+      "text_sha256": "a748e780fa2a573050defcbbf2fab5726aca55f2026cd743ec1d608d37da88d8"
+    },
+    {
+      "id": "rag-c120d79bf44780a2",
+      "chunk_id": "584778d576ee1e9a5b46_35",
+      "title": "Cor Pulmonale: Overview, Presentation, DDx",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/154062-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "respiratory_issues__chronic_obstructive_pulmonary_disease"
+      ],
+      "retrieval_queries": [
+        "Chronic Obstructive Pulmonary Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.43,
+      "excerpt": "function testing may be indicated to determine underlying obstructive or interstitial lung disease. 2-D and Doppler echocardiography Two-dimensional (2-D) echocardiography usually demonstrates signs of chronic right ventricular (RV) pressure overload. As this overload progresses, increased thickness of the RV wall with paradoxical motion of the interventricular septum during systole occurs. At an advanced stage, RV dilatation occurs, and the septum shows abnormal diastolic flattening. In extreme cases, the septum may actually bulge into the left ventricular (LV) cavity during diastole,",
+      "text_sha256": "e2426b0017b2da9763b4c0310c8b42824f73f4a823433ded818e55b540ab5fce"
+    },
+    {
+      "id": "rag-e451697e87dd4852",
+      "chunk_id": "b69f8e098974a1a4019d_3",
+      "title": "Pulmonary Embolism (PE): Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/300901-overview",
+      "routes": [
+        "safety",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "respiratory_issues__chronic_obstructive_pulmonary_disease",
+        "respiratory_issues__pulmonary_embolism"
+      ],
+      "retrieval_queries": [
+        "Chronic Obstructive Pulmonary Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Pulmonary Embolism diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2738,
+      "excerpt": "collapse to gradually progressive dyspnea. The diagnosis of pulmonary embolism should be suspected in patients with respiratory symptoms unexplained by an alternative diagnosis. Patients with pulmonary embolism may present with atypical symptoms, such as the following: Seizures Syncope Abdominal pain Fever Productive cough Wheezing Decreasing level of consciousness New onset of atrial fibrillation Hemoptysis Flank pain Delirium (in elderly patients) See Clinical Presentation for more detail. Diagnosis Evidence-based literature supports the practice of using clinical scoring systems to",
+      "text_sha256": "32b027a145e9d1bc8d7bdf2e9b6e00802289671ef8de5374c05bf2eb2eafe99a"
+    },
+    {
+      "id": "rag-73c4ee905b1272a8",
+      "chunk_id": "2774c8178c5c95a25ee1_3",
+      "title": "Chronic Sinusitis: Practice Essentials, Background, Anatomy",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/232791-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "respiratory_issues__asthma"
+      ],
+      "retrieval_queries": [
+        "Asthma diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4589,
+      "excerpt": "Visual disturbances Exacerbation of asthma Unexplained fever Diagnosis of chronic sinusitis Serious underlying conditions, such as tumors and immunodeficiency states, should always be considered in the workup of chronic sinusitis. Radiologic examination is the cornerstone in the diagnostic workup of chronic sinusitis. Nasal endoscopy usually is recommended before obtaining imaging, because is shows the condition of the nasal mucosa and evaluates for purulent drainage. Imaging studies Plain radiographic views provide limited information regarding anterior ethmoid anatomy; computed tomography",
+      "text_sha256": "e72773f309e6f0ab8225afcbc73c7ad438749411f05f42e63f573e05686b35a0"
+    },
+    {
+      "id": "rag-9545dfbf60a6154b",
+      "chunk_id": "2cf2b5608b381af04fa2_4",
+      "title": "Acute Sinusitis: Practice Essentials, Background, Anatomy",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/232670-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "respiratory_issues__asthma"
+      ],
+      "retrieval_queries": [
+        "Asthma diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4664,
+      "excerpt": "Facial erythema Diagnosis Acute sinusitis is a clinical diagnosis. However, the evaluation might include the following laboratory tests : Nasal cytology Nasal-sinus biopsy Tests for immunodeficiency, cystic fibrosis, or ciliary dysfunction Nasal cytology examinations may be useful to elucidate the following entities: Allergic rhinitis Eosinophilia Nasal polyposis Aspirin sensitivity Tests for immunodeficiency are indicated if history findings indicate recurrent infection; they include the following: Immunoglobulin studies HIV serology Cultures are not routinely obtained in the evaluation of",
+      "text_sha256": "b615c23e11471f2ef01b007649cd88170dd62242c1fac30bb79a738b837cb6ab"
+    },
+    {
+      "id": "rag-3a72d4c38d9a0bb7",
+      "chunk_id": "9f7eb5027998a34eb6c2_8",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "respiratory_issues__asthma"
+      ],
+      "retrieval_queries": [
+        "Asthma diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4794,
+      "excerpt": "conduction defects are truly diagnostic only when they coincide with symptoms Loop recorders have a higher diagnostic yield than Holter monitor evaluation, with a marginal cost savings Ambulatory monitoring appears to have a higher negative than positive diagnostic yield Other diagnostic tests and procedures include the following: Head-up tilt-table test - Useful for confirming autonomic dysfunction and can generally be safely arranged on an outpatient basis Electroencephalography (EEG) - Can be performed at the discretion of a neurologist if seizure is considered a likely alternative",
+      "text_sha256": "bce92127a34f3c0ce64d226f3f059473b46561d6c8d76961f1c0a09f5b6874fc"
+    },
+    {
+      "id": "rag-5dde9f8fb228c3bd",
+      "chunk_id": "60a8e9fb259d62f055c2_64",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "respiratory_issues__heart_failure"
+      ],
+      "retrieval_queries": [
+        "Heart Failure diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3435,
+      "excerpt": "of heart failure. Data from guidelines and studies Based on level A evidence from guidelines for the management of heart failure by the American College of Cardiology, American Heart Association, and the Heart Failure Society of America (ACC/AHA/HFSA), early measurement of BNP levels is recommended to support medical decision making in the diagnosis of acute heart failure, especially if there is clinical uncertainty, and to assess disease severity in chronic heart failure. Although the authors noted that serial BNP or NT-proBNP measurements have not been shown to improve meaningful outcomes",
+      "text_sha256": "2dc6aa83c156983195ae8d9d0d928f9d2d7443978984473f16b8f1d6e4d13119"
+    },
+    {
+      "id": "rag-dbda7c0d463e359a",
+      "chunk_id": "4d6cbe4e1c12469911bd_12",
+      "title": "Heart Failure: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/163062-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "respiratory_issues__heart_failure"
+      ],
+      "retrieval_queries": [
+        "Heart Failure diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3071,
+      "excerpt": "congestion). Signs and symptoms of heart failure include tachycardia and manifestations of venous congestion (eg, edema) and low cardiac output (eg, fatigue). Breathlessness is a cardinal symptom of left ventricular (LV) failure that may manifest with progressively increasing severity. Heart failure can be classified according to a variety of factors (see Heart Failure Criteria, Classification, and Staging). The New York Heart Association (NYHA) classification for heart failure comprises four classes, based on the relationship between symptoms and the amount of effort required to provoke them,",
+      "text_sha256": "4bd23cfaccb51e340dbd78e014457ed9a90af1718713d0e2f527eda2a409d4f8"
+    },
+    {
+      "id": "rag-22a1ffa4afb4901f",
+      "chunk_id": "4d6cbe4e1c12469911bd_15",
+      "title": "Heart Failure: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/163062-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "respiratory_issues__heart_failure"
+      ],
+      "retrieval_queries": [
+        "Heart Failure diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3398,
+      "excerpt": "additional disease-staging terminology to characterize the syndrome of heart failure as a continuum, as follows : \"At risk for HF\" for stage A: Applied to asymptomatic patients with risk factors such as diabetes or hypertension but no known cardiac changes \"Pre-HF\" for stage B: Adds cardiac structural changes or elevated natriuretic peptides, still in the absence of symptoms \"Symptomatic HF\" for stage C: Structural disease with current or previous symptoms \"Advanced HF\" for stage D: Characterized by severe debilitating symptoms or repeated hospitalizations even with guideline-directed medical",
+      "text_sha256": "cbc61cde99662b0af29fa6278469a5db4321ca454d18f12587f65aa2d1262f2e"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "respiratory_issues__pneumonia",
+      "name": "Pneumonia",
+      "retrieval_query": "Pneumonia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-af74e2604f4e1e79",
+        "rag-f235f1f098699f8b",
+        "rag-959c78934f94cdc4",
+        "rag-3697ea6f89d68fd5"
+      ],
+      "disease_rag_source_ids": [
+        "rag-352aeb5c6249e1ca",
+        "rag-5d225945d41d0570",
+        "rag-5d5e40fead2c6877",
+        "rag-67d5443f6430c072"
+      ]
+    },
+    {
+      "id": "respiratory_issues__acute_respiratory_distress_syndrome",
+      "name": "Acute Respiratory Distress Syndrome",
+      "retrieval_query": "Acute Respiratory Distress Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-c8bffa8ba5fa844d",
+        "rag-4676baa2471b307c",
+        "rag-f235f1f098699f8b",
+        "rag-c4cb2d1c46bbd567"
+      ],
+      "disease_rag_source_ids": [
+        "rag-c8bffa8ba5fa844d",
+        "rag-c4cb2d1c46bbd567",
+        "rag-f09c5253c7a82445",
+        "rag-a394352415d0560a"
+      ]
+    },
+    {
+      "id": "respiratory_issues__chronic_obstructive_pulmonary_disease",
+      "name": "Chronic Obstructive Pulmonary Disease",
+      "retrieval_query": "Chronic Obstructive Pulmonary Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-af74e2604f4e1e79",
+        "rag-4676baa2471b307c",
+        "rag-54c620c34c430032"
+      ],
+      "disease_rag_source_ids": [
+        "rag-4676baa2471b307c",
+        "rag-f09c5253c7a82445",
+        "rag-c120d79bf44780a2",
+        "rag-e451697e87dd4852"
+      ]
+    },
+    {
+      "id": "respiratory_issues__asthma",
+      "name": "Asthma",
+      "retrieval_query": "Asthma diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-af74e2604f4e1e79",
+        "rag-54c620c34c430032"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-73c4ee905b1272a8",
+        "rag-9545dfbf60a6154b",
+        "rag-3a72d4c38d9a0bb7"
+      ]
+    },
+    {
+      "id": "respiratory_issues__pulmonary_embolism",
+      "name": "Pulmonary Embolism",
+      "retrieval_query": "Pulmonary Embolism diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-4676baa2471b307c"
+      ],
+      "disease_rag_source_ids": [
+        "rag-e451697e87dd4852"
+      ]
+    },
+    {
+      "id": "respiratory_issues__heart_failure",
+      "name": "Heart Failure",
+      "retrieval_query": "Heart Failure diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-dd801af1d0f8db17"
+      ],
+      "disease_rag_source_ids": [
+        "rag-5dde9f8fb228c3bd",
+        "rag-dbda7c0d463e359a",
+        "rag-22a1ffa4afb4901f"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "respiratory_issues",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": "chest",
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-352aeb5c6249e1ca",
+        "rag-5d225945d41d0570",
+        "rag-c8bffa8ba5fa844d",
+        "rag-c4cb2d1c46bbd567",
+        "rag-f09c5253c7a82445",
+        "rag-a394352415d0560a",
+        "rag-4676baa2471b307c",
+        "rag-c120d79bf44780a2",
+        "rag-e451697e87dd4852",
+        "rag-73c4ee905b1272a8",
+        "rag-9545dfbf60a6154b",
+        "rag-3a72d4c38d9a0bb7",
+        "rag-dbda7c0d463e359a"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "respiratory_issues__pneumonia__fever",
+        "description": "發燒",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__pneumonia"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "code": "respiratory_issues__pneumonia__chills",
+        "description": "畏寒",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__pneumonia"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "code": "respiratory_issues__pneumonia__cough",
+        "description": "咳嗽",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__pneumonia"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "code": "respiratory_issues__pneumonia__dyspnea",
+        "description": "呼吸急促或呼吸困難",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__pneumonia"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "code": "respiratory_issues__pneumonia__pleurisy",
+        "description": "胸膜炎 (肋膜痛)",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__pneumonia"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "code": "respiratory_issues__acute_respiratory_distress_syndrome__acute_onset",
+        "description": "Acute onset of symptoms.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "respiratory_issues__acute_respiratory_distress_syndrome"
+        ],
+        "source_ids": [
+          "rag-c4cb2d1c46bbd567"
+        ]
+      },
+      {
+        "code": "respiratory_issues__chronic_obstructive_pulmonary_disease__dyspnea",
+        "description": "呼吸困難或呼吸急促。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__chronic_obstructive_pulmonary_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "respiratory_issues__chronic_obstructive_pulmonary_disease__cough",
+        "description": "咳嗽，可能伴有痰。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__chronic_obstructive_pulmonary_disease"
+        ],
+        "source_ids": [
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "code": "respiratory_issues__chronic_obstructive_pulmonary_disease__wheezing",
+        "description": "呼吸時有喘鳴聲。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__chronic_obstructive_pulmonary_disease"
+        ],
+        "source_ids": [
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "code": "respiratory_issues__chronic_obstructive_pulmonary_disease__chest_pain",
+        "description": "胸部疼痛。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__chronic_obstructive_pulmonary_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "respiratory_issues__chronic_obstructive_pulmonary_disease__hemoptysis",
+        "description": "咳血。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__chronic_obstructive_pulmonary_disease"
+        ],
+        "source_ids": [
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "code": "respiratory_issues__chronic_obstructive_pulmonary_disease__fever",
+        "description": "發燒。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__chronic_obstructive_pulmonary_disease"
+        ],
+        "source_ids": [
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "code": "respiratory_issues__chronic_obstructive_pulmonary_disease__history_of_copd",
+        "description": "有慢性阻塞性肺病 (COPD) 的病史。",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__chronic_obstructive_pulmonary_disease"
+        ],
+        "source_ids": [
+          "rag-4676baa2471b307c"
+        ]
+      },
+      {
+        "code": "respiratory_issues__asthma__wheezing",
+        "description": "喘鳴或喘。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__asthma"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-73c4ee905b1272a8",
+          "rag-9545dfbf60a6154b",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "code": "respiratory_issues__asthma__history_of_asthma",
+        "description": "有哮喘病史。",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__asthma"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-73c4ee905b1272a8",
+          "rag-9545dfbf60a6154b",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "code": "respiratory_issues__pulmonary_embolism__hemoptysis",
+        "description": "咳出血液。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "respiratory_issues__pulmonary_embolism"
+        ],
+        "source_ids": [
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "code": "respiratory_issues__pulmonary_embolism__fever",
+        "description": "患者明確表示發燒。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__pulmonary_embolism"
+        ],
+        "source_ids": [
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "code": "respiratory_issues__pulmonary_embolism__productive_cough",
+        "description": "咳嗽並伴隨痰液。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__pulmonary_embolism"
+        ],
+        "source_ids": [
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "code": "respiratory_issues__heart_failure__dyspnea",
+        "description": "呼吸困難是左心室衰竭的主要症狀。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__heart_failure"
+        ],
+        "source_ids": [
+          "rag-dbda7c0d463e359a"
+        ]
+      },
+      {
+        "code": "respiratory_issues__heart_failure__edema",
+        "description": "水腫是靜脈鬱血的表現，可能與心臟衰竭有關。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__heart_failure"
+        ],
+        "source_ids": [
+          "rag-dbda7c0d463e359a"
+        ]
+      },
+      {
+        "code": "respiratory_issues__heart_failure__history",
+        "description": "有心臟衰竭或冠心病類似的心血管疾病史。",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "respiratory_issues__heart_failure"
+        ],
+        "source_ids": [
+          "rag-22a1ffa4afb4901f"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "symptoms_list",
+        "option": "呼吸急促",
+        "mapping": {
+          "findings": [
+            "respiratory_issues__pneumonia__dyspnea",
+            "dyspnea",
+            "respiratory_issues__chronic_obstructive_pulmonary_disease__dyspnea",
+            "respiratory_issues__heart_failure__dyspnea"
+          ]
+        },
+        "disease_ids": [
+          "respiratory_issues__pneumonia",
+          "respiratory_issues__chronic_obstructive_pulmonary_disease",
+          "respiratory_issues__heart_failure"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca",
+          "rag-c8bffa8ba5fa844d",
+          "rag-c4cb2d1c46bbd567",
+          "rag-f09c5253c7a82445",
+          "rag-a394352415d0560a",
+          "rag-dbda7c0d463e359a"
+        ]
+      },
+      {
+        "field": "symptoms_list",
+        "option": "咳嗽",
+        "mapping": {
+          "findings": [
+            "respiratory_issues__pneumonia__cough",
+            "respiratory_issues__chronic_obstructive_pulmonary_disease__cough"
+          ]
+        },
+        "disease_ids": [
+          "respiratory_issues__pneumonia",
+          "respiratory_issues__chronic_obstructive_pulmonary_disease"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca",
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "field": "symptoms_list",
+        "option": "胸痛",
+        "mapping": {
+          "findings": [
+            "respiratory_issues__pneumonia__pleurisy",
+            "symptom_chest_pain",
+            "respiratory_issues__chronic_obstructive_pulmonary_disease__chest_pain"
+          ]
+        },
+        "disease_ids": [
+          "respiratory_issues__pneumonia",
+          "respiratory_issues__chronic_obstructive_pulmonary_disease"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca",
+          "rag-c8bffa8ba5fa844d",
+          "rag-c4cb2d1c46bbd567",
+          "rag-f09c5253c7a82445",
+          "rag-a394352415d0560a"
+        ]
+      },
+      {
+        "field": "symptoms_list",
+        "option": "發燒",
+        "mapping": {
+          "findings": [
+            "respiratory_issues__pneumonia__fever",
+            "fever",
+            "respiratory_issues__chronic_obstructive_pulmonary_disease__fever",
+            "respiratory_issues__pulmonary_embolism__fever"
+          ]
+        },
+        "disease_ids": [
+          "respiratory_issues__pneumonia",
+          "respiratory_issues__chronic_obstructive_pulmonary_disease",
+          "respiratory_issues__pulmonary_embolism"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca",
+          "rag-c8bffa8ba5fa844d",
+          "rag-c4cb2d1c46bbd567",
+          "rag-f09c5253c7a82445",
+          "rag-a394352415d0560a",
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "field": "symptoms_list",
+        "option": "畏寒",
+        "mapping": {
+          "findings": [
+            "respiratory_issues__pneumonia__chills"
+          ]
+        },
+        "disease_ids": [
+          "respiratory_issues__pneumonia"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "field": "symptom_onset_pattern",
+        "option": "突然發生",
+        "mapping": {
+          "onset": "sudden",
+          "findings": [
+            "respiratory_issues__acute_respiratory_distress_syndrome__acute_onset"
+          ]
+        },
+        "disease_ids": [
+          "respiratory_issues__acute_respiratory_distress_syndrome",
+          "respiratory_issues__pulmonary_embolism"
+        ],
+        "source_ids": [
+          "rag-c4cb2d1c46bbd567",
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "field": "symptoms_list",
+        "option": "喘",
+        "mapping": {
+          "findings": [
+            "respiratory_issues__chronic_obstructive_pulmonary_disease__wheezing",
+            "respiratory_issues__asthma__wheezing"
+          ]
+        },
+        "disease_ids": [
+          "respiratory_issues__chronic_obstructive_pulmonary_disease",
+          "respiratory_issues__asthma"
+        ],
+        "source_ids": [
+          "rag-e451697e87dd4852",
+          "rag-f09c5253c7a82445",
+          "rag-73c4ee905b1272a8",
+          "rag-9545dfbf60a6154b",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "field": "symptoms_list",
+        "option": "咳血",
+        "mapping": {
+          "findings": [
+            "respiratory_issues__chronic_obstructive_pulmonary_disease__hemoptysis",
+            "respiratory_issues__pulmonary_embolism__hemoptysis"
+          ]
+        },
+        "disease_ids": [
+          "respiratory_issues__chronic_obstructive_pulmonary_disease",
+          "respiratory_issues__pulmonary_embolism"
+        ],
+        "source_ids": [
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "field": "chronic_respiratory_disease_history",
+        "option": "是",
+        "mapping": {
+          "findings": [
+            "respiratory_issues__chronic_obstructive_pulmonary_disease__history_of_copd",
+            "respiratory_issues__asthma__history_of_asthma"
+          ]
+        },
+        "disease_ids": [
+          "respiratory_issues__chronic_obstructive_pulmonary_disease",
+          "respiratory_issues__asthma"
+        ],
+        "source_ids": [
+          "rag-4676baa2471b307c",
+          "rag-f09c5253c7a82445",
+          "rag-73c4ee905b1272a8",
+          "rag-9545dfbf60a6154b",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "field": "symptom_onset_pattern",
+        "option": "逐漸出現",
+        "mapping": {
+          "onset": "gradual"
+        },
+        "disease_ids": [
+          "respiratory_issues__pulmonary_embolism"
+        ],
+        "source_ids": [
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "field": "symptoms_list",
+        "option": "有痰",
+        "mapping": {
+          "findings": [
+            "respiratory_issues__pulmonary_embolism__productive_cough"
+          ]
+        },
+        "disease_ids": [
+          "respiratory_issues__pulmonary_embolism"
+        ],
+        "source_ids": [
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "field": "symptoms_list",
+        "option": "下肢水腫",
+        "mapping": {
+          "findings": [
+            "respiratory_issues__heart_failure__edema"
+          ]
+        },
+        "disease_ids": [
+          "respiratory_issues__heart_failure"
+        ],
+        "source_ids": [
+          "rag-dbda7c0d463e359a"
+        ]
+      },
+      {
+        "field": "cardiovascular_disease_history",
+        "option": "是",
+        "mapping": {
+          "findings": [
+            "respiratory_issues__heart_failure__history"
+          ]
+        },
+        "disease_ids": [
+          "respiratory_issues__heart_failure"
+        ],
+        "source_ids": [
+          "rag-22a1ffa4afb4901f"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "respiratory_issues__pneumonia",
+        "name": "Pneumonia",
+        "must_not_miss": false,
+        "retrieval_query": "Pneumonia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "respiratory_issues__pneumonia__cough",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-352aeb5c6249e1ca"
+            ]
+          },
+          {
+            "fact": "respiratory_issues__pneumonia__fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-352aeb5c6249e1ca"
+            ]
+          },
+          {
+            "fact": "respiratory_issues__pneumonia__dyspnea",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-352aeb5c6249e1ca"
+            ]
+          },
+          {
+            "fact": "respiratory_issues__pneumonia__chills",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-352aeb5c6249e1ca"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca",
+          "rag-5d225945d41d0570",
+          "rag-5d5e40fead2c6877",
+          "rag-67d5443f6430c072"
+        ]
+      },
+      {
+        "id": "respiratory_issues__chronic_obstructive_pulmonary_disease",
+        "name": "Chronic Obstructive Pulmonary Disease",
+        "must_not_miss": false,
+        "retrieval_query": "Chronic Obstructive Pulmonary Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "respiratory_issues__chronic_obstructive_pulmonary_disease__history_of_copd",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-4676baa2471b307c"
+            ]
+          },
+          {
+            "fact": "respiratory_issues__chronic_obstructive_pulmonary_disease__dyspnea",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          },
+          {
+            "fact": "respiratory_issues__chronic_obstructive_pulmonary_disease__cough",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-e451697e87dd4852"
+            ]
+          },
+          {
+            "fact": "respiratory_issues__chronic_obstructive_pulmonary_disease__wheezing",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-e451697e87dd4852"
+            ]
+          },
+          {
+            "fact": "respiratory_issues__chronic_obstructive_pulmonary_disease__chest_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-4676baa2471b307c",
+          "rag-f09c5253c7a82445",
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "id": "respiratory_issues__asthma",
+        "name": "Asthma",
+        "must_not_miss": false,
+        "retrieval_query": "Asthma diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "respiratory_issues__asthma__history_of_asthma",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-73c4ee905b1272a8",
+              "rag-9545dfbf60a6154b",
+              "rag-3a72d4c38d9a0bb7"
+            ]
+          },
+          {
+            "fact": "respiratory_issues__asthma__wheezing",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-73c4ee905b1272a8",
+              "rag-9545dfbf60a6154b",
+              "rag-3a72d4c38d9a0bb7"
+            ]
+          },
+          {
+            "fact": "dyspnea",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          },
+          {
+            "fact": "cough_sputum",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-73c4ee905b1272a8",
+              "rag-9545dfbf60a6154b",
+              "rag-3a72d4c38d9a0bb7"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-73c4ee905b1272a8",
+          "rag-9545dfbf60a6154b",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "id": "respiratory_issues__heart_failure",
+        "name": "Heart Failure",
+        "must_not_miss": false,
+        "retrieval_query": "Heart Failure diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "respiratory_issues__heart_failure__dyspnea",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-dbda7c0d463e359a"
+            ]
+          },
+          {
+            "fact": "respiratory_issues__heart_failure__edema",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-dbda7c0d463e359a"
+            ]
+          },
+          {
+            "fact": "respiratory_issues__heart_failure__history",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-22a1ffa4afb4901f"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-dbda7c0d463e359a",
+          "rag-22a1ffa4afb4901f"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_respiratory_issues__pulmonary_embolism__hemoptysis",
+        "label": "Coughing up blood with respiratory symptoms",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "respiratory_issues"
+          ],
+          "any_findings": [
+            "respiratory_issues__pulmonary_embolism__hemoptysis"
+          ]
+        },
+        "possible_conditions": [
+          "Pulmonary Embolism"
+        ],
+        "source_ids": [
+          "rag-e451697e87dd4852"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Create safety rules for severe pneumonia or respiratory distress.",
+        "reason": "The provided RAG sources describe symptoms of pneumonia but do not contain specific thresholds or red flag criteria (e.g., respiratory rate, oxygen saturation, level of consciousness) needed to define an urgent safety rule."
+      },
+      {
+        "requirement": "Differentiate between typical and atypical pneumonia.",
+        "reason": "The provided RAG sources list symptoms common to viral pneumonia but do not offer sufficient detail to reliably distinguish between different subtypes (e.g., bacterial vs. viral, typical vs. atypical) based on the available questionnaire options."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Specific vital sign thresholds (e.g., for hypoxemia) or physical exam findings (e.g., decreased air entry, tracheal deviation, muffled heart sounds) for ARDS.",
+        "reason": "The model cannot interpret or recommend specific numeric thresholds or physical examination maneuvers. These require clinical assessment."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create safety rules for red flag symptoms associated with COPD.",
+        "reason": "The provided RAG sources mention red flag symptoms like exertional onset, chest pain, and dyspnea in the context of syncope, but do not provide specific thresholds or combinations that would constitute an emergency rule for COPD itself, nor do they offer guidance on when to escalate care based on these symptoms in a respiratory context."
+      },
+      {
+        "requirement": "Differentiate between acute exacerbation of COPD and other conditions.",
+        "reason": "The provided text does not contain sufficient detail to create specific rules or profiles to reliably differentiate an acute COPD exacerbation from other conditions like pulmonary embolism or pneumonia based on the available questionnaire data."
+      },
+      {
+        "requirement": "Detailed diagnostic criteria for Asthma, including physical exam findings (e.g., auscultation), spirometry results, or specific triggers.",
+        "reason": "The provided RAG sources mention Asthma in differential diagnoses or as a comorbidity but do not contain detailed diagnostic criteria or specific clinical findings beyond general symptoms like wheezing and dyspnea."
+      },
+      {
+        "requirement": "Specific red flag symptoms for an acute asthma exacerbation that would warrant immediate emergency care.",
+        "reason": "The RAG sources list general red flags for syncope or sinusitis but do not provide specific emergency signs for an asthma attack (e.g., inability to speak in full sentences, cyanosis, accessory muscle use)."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Identify risk factors for Pulmonary Embolism such as recent surgery, immobility, or cancer history.",
+        "reason": "The provided questionnaire and RAG sources do not contain sufficient information to create structured facts or questions about specific risk factors for PE."
+      },
+      {
+        "requirement": "Incorporate physical exam findings like tachycardia or signs of DVT.",
+        "reason": "The system is designed for offline review of patient-reported symptoms and does not support physical exam findings."
+      },
+      {
+        "requirement": "Use clinical scoring systems for PE.",
+        "reason": "The provided RAG source mentions clinical scoring systems but does not provide enough detail to implement one. This would require complex logic and data points not available in the current questionnaire."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Detailed physical exam findings for heart failure (e.g., rales, specific edema characteristics).",
+        "reason": "The system cannot process physical examination findings, which are critical for diagnosing conditions like heart failure. The provided RAG source mentions 'Rales on pulmonary examination' which is beyond the scope of a symptom checker."
+      },
+      {
+        "requirement": "Biomarker and lab test results (e.g., BNP, NT-proBNP, cardiac troponins).",
+        "reason": "The system does not support the integration or interpretation of laboratory results. The provided RAG sources mention BNP, NT-proBNP, and high-sensitivity cardiac troponin testing, which are key for diagnosis but cannot be handled."
+      },
+      {
+        "requirement": "Specific classification of heart failure (e.g., NYHA classes, ACC/AHA stages).",
+        "reason": "The system cannot perform complex clinical staging which requires detailed clinical assessment beyond patient-reported symptoms. The RAG sources describe these classification systems, but their application is not feasible."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The profile for Pneumonia is based on common constitutional and respiratory symptoms described in the source material. The questionnaire options map well to these general symptoms.",
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-c8bffa8ba5fa844d",
+          "rag-c4cb2d1c46bbd567",
+          "rag-f09c5253c7a82445",
+          "rag-a394352415d0560a"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[1], fact_proposals[3], semantic_options[1], semantic_options[2], semantic_options[3], safety_proposals[0], profiles[0], profiles[0].clues[2], profiles[0].clues[3]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-c8bffa8ba5fa844d",
+          "rag-c4cb2d1c46bbd567",
+          "rag-f09c5253c7a82445",
+          "rag-a394352415d0560a"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The profile for COPD is based on symptoms that are also common in other respiratory and cardiac conditions. The strongest clue is a pre-existing history of COPD. The evidence is limited for creating a highly specific profile without more detailed clinical information.",
+        "source_ids": [
+          "rag-4676baa2471b307c",
+          "rag-f09c5253c7a82445",
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-4676baa2471b307c",
+          "rag-f09c5253c7a82445",
+          "rag-c120d79bf44780a2",
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-73c4ee905b1272a8"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[2], semantic_options[0], semantic_options[1], profiles[0], profiles[0].clues[0], profiles[0].clues[1], profiles[0].clues[3]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-73c4ee905b1272a8",
+          "rag-9545dfbf60a6154b",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The presentation of Pulmonary Embolism can be highly variable, from 'gradually progressive dyspnea' to sudden collapse. The profile reflects this but clinical judgment is paramount as symptoms can be non-specific.",
+        "source_ids": [
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The RAG source mentions that PE should be suspected in patients with respiratory symptoms unexplained by an alternative diagnosis. The 'absent recent_infection' clue is a weak proxy for this concept and should be interpreted with caution.",
+        "source_ids": [
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-e451697e87dd4852"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-dbda7c0d463e359a"
+        ]
+      }
+    ]
+  }
+}

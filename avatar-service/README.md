@@ -2,7 +2,7 @@
 
 這個容器把問診系統的 AI 回覆轉成一段 MP4：
 
-1. `FunAudioLLM/Fun-CosyVoice3-0.5B-2512` 在本機合成華語語音。
+1. `FunAudioLLM/Fun-CosyVoice3-0.5B-2512` 在本機合成國語或臺灣閩南語語音。
 2. `TMElyralab/MuseTalk 1.5` 依 `pic/dr training pc.png` 產生 25 fps 唇形。
 3. 結果保存於 `avatar-cache` volume；相同文字會直接讀取快取。
 
@@ -12,11 +12,30 @@ FastAPI `/v1/avatar/*` 路由使用它。問診流程不依賴 Avatar；服務�
 
 ## 服務版本
 
-目前文件基線：**v1.0.0（2026-08-07）**。
+目前文件基線：**v1.1.1（2026-08-10）**。
 
 此版本號是依 `devlog/2026-08-07.md` 回溯整理的 Avatar 服務文件基線，目前沒有
 對應的 Git tag 或獨立 release，也不表示 Avatar、聲線、肖像或任何臨床內容已取得
 臨床核准。後端 `/v1/avatar/*` 的 `/v1` 是 API 契約前綴，與本服務版本無關。
+
+### v1.1.1（2026-08-10）
+
+- 修正閩南語選項仍合成國語的問題：預設 instruction 改用目前固定版 CosyVoice3
+  原始碼內建且受訓的精確控制詞 `请用闽南话表达`，不再使用模型可能忽略的自訂
+  繁體長句。instruction 已包含在 cache key，升級後不會沿用先前錯誤的國語影片。
+- 此控制只改變語音的方言發音，不把醫療文字交給額外翻譯模型，也不改寫畫面字幕
+  或問診內容；因此不新增病患資料對外傳輸，也避免翻譯改變臨床語意。
+
+### v1.1.0（2026-08-10）
+
+- 合成請求新增 `mandarin`／`minnan` 語言選擇，分別套用台灣國語與臺灣閩南語
+  CosyVoice3 instruction；語言與 instruction 都納入 cache key，避免跨語言誤用影片。
+- 新增 `/v1/warmup`，一次載入 CosyVoice3、MuseTalk、VAE 與嘴型音訊 encoder；
+  預設合成後保留模型，避免每句回覆重新載入。
+- 移除原本把下半張臉矩形直接貼回原圖的融合方式，改為只覆蓋嘴部／下半臉中央、
+  四周 alpha 歸零的橢圓羽化遮罩，保留頭髮、臉頰邊界、下巴外緣、頸部與衣領原圖。
+- 在 RTX 5060 Ti 16 GB 上與 Breeze ASR 同時 warm-up 後，兩次連續合成仍維持所有
+  模型 loaded；國語與閩南語影片皆成功輸出，且抽幀不再出現矩形水平接縫。
 
 ### v1.0.0（2026-08-07）
 
@@ -87,12 +106,10 @@ services:
 - `MUSETALK_BATCH_SIZE=8` 可依顯示卡記憶體調整；OOM 時先降為 `4` 或 `2`。
 - `AVATAR_REQUIRE_CUDA=true` 避免正式環境意外以極慢的 CPU 跑 MuseTalk。
 - `AVATAR_STATIC_FALLBACK=true` 只在唇形階段出錯時保留 CosyVoice 語音與靜態圖。
-- `AVATAR_RELEASE_GPU_AFTER_RENDER=true` 會在語音完成後先卸載 CosyVoice，影片
-  完成或失敗後再卸載 MuseTalk 並清除 CUDA cache。這會增加下一個未命中快取
-  請求的模型重載延遲，但相同文字的 MP4 快取命中不載入模型。
+- `AVATAR_RELEASE_GPU_AFTER_RENDER=false` 讓 warm-up 後的 CosyVoice 與 MuseTalk
+  常駐，避免每段回覆重新載入；容量不足的 GPU 可設為 `true` 回退分階段釋放。
 
-目前的 Breeze ASR、CosyVoice3 與 MuseTalk 共用同一張 GPU。16 GB 部署預設啟用
-上述分階段釋放策略；health 的 `speech_loaded` 與 `animation_loaded` 在請求期間
-可能短暫為 `true`，完成後會回到 `false`。若仍 OOM，優先降低 MuseTalk batch，
-再考慮把 ASR 或 Avatar 指定到不同 GPU。只有在 Avatar 獨占顯卡、且可接受模型
-長時間佔用顯存時，才建議把此開關設為 `false` 來換取較低的重載延遲。
+目前的 Breeze ASR、CosyVoice3 與 MuseTalk 共用同一張 GPU。本專案在 16 GB
+RTX 5060 Ti 實測全部常駐約使用 11.5 GB，尚餘約 4.3 GB；不同驅動、batch、模型
+revision 或並行流量都可能提高峰值。若 OOM，先把兩個 release 設定改回 `true`，
+再降低 MuseTalk batch，或把 ASR／Avatar 指定到不同 GPU。

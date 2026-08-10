@@ -1,0 +1,1516 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "neurological_issues",
+  "label": "神經系統問題",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "74a7d7da0d61832310c5f65cf69ea47b52bbb72340099859ca774e99b16eed94",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"neurological issues neurological differential diagnosis diseases clinical presentation symptoms history\",\"neurological issues neurological red flags emergency warning signs urgent referral rule out\",\"Brain Neoplasm diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Neurocysticercosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Chronic Inflammatory Demyelinating Polyradiculoneuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Transient Ischemic Attack diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Polyneuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "eab851c72fa8a5a1b89a6c6de4a37cbc0e4976860e976ce608cd9b882717b0f0"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "e2f95edb89ae1e9a024196f2f4739ba0cc4cb96f8cb6b34b4ec92f12a03d8315",
+    "generated_at": "2026-08-10T04:14:29+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-a33926a5c3b5389c",
+      "chunk_id": "cf1647722f4ac0a9af3e_2",
+      "title": "Neurocysticercosis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1168656-overview",
+      "routes": [
+        "headache",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "neurological issues neurological differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3399,
+      "excerpt": "Dysarthria Extraocular movement palsy or paresis Hemiparesis or hemiplegia, which may be related to stroke, or Todd paralysis Hemisensory loss Movement disorders Hyper/hyporeflexia Gait disturbances Meningeal signs See Clinical Presentation for more detail. Diagnosis Neurocysticercosis is commonly diagnosed with the routine use of diagnostic methods such as computed tomography (CT) and magnetic resonance imaging (MRI) of the brain. Imaging studies CT findings vary as follows, depending on the stage of evolution of the infestation: Vesicular stage (viable larva): Hypodense, nonenhancing lesions",
+      "text_sha256": "942f8095511a4ff5beb25bd45839b5e4c8a4f8f853b81462683da63ef6b873fb"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "neurological_issues__brain_neoplasm",
+        "neurological_issues__neurocysticercosis",
+        "neurological_issues__chronic_inflammatory_demyelinating_polyradiculoneuropathy"
+      ],
+      "retrieval_queries": [
+        "neurological issues neurological differential diagnosis diseases clinical presentation symptoms history",
+        "neurological issues neurological red flags emergency warning signs urgent referral rule out",
+        "Brain Neoplasm diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Neurocysticercosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Chronic Inflammatory Demyelinating Polyradiculoneuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3695,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-c11a2103e40596fa",
+      "chunk_id": "c3ac65c4ac2f328bf4e4_1",
+      "title": "Neuroimaging in Neurocysticercosis: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1168784-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "neurological_issues__stroke",
+        "neurological_issues__neurocysticercosis"
+      ],
+      "retrieval_queries": [
+        "neurological issues neurological differential diagnosis diseases clinical presentation symptoms history",
+        "neurological issues neurological red flags emergency warning signs urgent referral rule out",
+        "Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Neurocysticercosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3042,
+      "excerpt": "is associated with clinical manifestations such as seizures, headache, and focal neurological deficits, and may lead to long-term neurological sequelae such as epilepsy, hydrocephalus, and dementia. The pleomorphism of NC makes its diagnosis impossible on clinical grounds alone. An accurate diagnosis is possible only after suspicion on epidemiologic grounds, proper interpretation of clinical data, and synthesis of findings on neuroimaging studies specific immunologic tests on the cerebrospinal fluid (CSF). Biology Humans are the only known host to harbor the adult cestode parasite, Taenia",
+      "text_sha256": "12c0822d631284eb661059f36827e76af0801c89a1c2136bdfd59a506e9c8297"
+    },
+    {
+      "id": "rag-67e70434c6d5aa75",
+      "chunk_id": "8b43a6610b35f683aaa4_7",
+      "title": "Brain Neoplasms: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779664-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "neurological_issues__brain_neoplasm"
+      ],
+      "retrieval_queries": [
+        "neurological issues neurological differential diagnosis diseases clinical presentation symptoms history",
+        "neurological issues neurological red flags emergency warning signs urgent referral rule out",
+        "Brain Neoplasm diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2958,
+      "excerpt": "of an intracranial neoplasm, such as the following: Acute mental status changes New-onset seizures Focal motor or sensory deficits, including gait disturbance Suspicious headache Signs of elevated ICP (eg, papilledema) Generally, CT is the imaging modality of choice for the ED physician. Although some tumors exhibit a characteristic appearance, do not make an unequivocal diagnosis based solely on radiologic findings. Generally, computed tomography (CT) is the imaging modality of choice for the emergency department physician. CT findings are as follows: Most tumors demonstrate enhancement with",
+      "text_sha256": "9a3e8ee183600f7668367814ceeb2833af5c0500fa3c7177ef236d856e6aa4cf"
+    },
+    {
+      "id": "rag-9c829a59affdd531",
+      "chunk_id": "53fc3e4f98765d889be9_0",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "neurological_issues__transient_ischemic_attack"
+      ],
+      "retrieval_queries": [
+        "neurological issues neurological differential diagnosis diseases clinical presentation symptoms history",
+        "Transient Ischemic Attack diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4,
+      "excerpt": "Overview Neuroimaging has become a key diagnostic tool in the emergency department. Complaints of weakness, dizziness, headache, and trauma lend themselves to rapid evaluation and diagnosis through the use of computed tomography (CT) and magnetic resonance imaging (MRI). This article focuses on the basic principles and key considerations in ordering and interpreting neuroimaging in the emergency department in conjunction with the radiologist. Trauma is the leading cause of death in patients younger than 45 years. Cranial trauma accounts for a substantial proportion of morbidity and mortality",
+      "text_sha256": "a1ee1d43e475359f345b863f6b0c7aa363195f65220b94c8d77d54974c6411fb"
+    },
+    {
+      "id": "rag-ff175cd271f88014",
+      "chunk_id": "6abb4726efd0e023f805_11",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "neurological_issues__chronic_inflammatory_demyelinating_polyradiculoneuropathy",
+        "neurological_issues__polyneuropathy"
+      ],
+      "retrieval_queries": [
+        "neurological issues neurological differential diagnosis diseases clinical presentation symptoms history",
+        "Chronic Inflammatory Demyelinating Polyradiculoneuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Polyneuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2701,
+      "excerpt": "with predominantly sensory symptoms, those with a distal symmetric disorder (DADS), those with multifocal sensorimotor neuropathy or sensorimotor mononeuropathy multiplex with prominent conduction block (also known as Lewis-Sumner neuropathy), and those with CIDP with associated CNS demyelination or with other systemic disorders. The following disorders are considered distinct from CIDP because they have specific pathophysiologic features and respond to treatments differently than do patients with CIDP: Demyelinating neuropathies associated with immunoglobulin M (IgM) paraproteins, including",
+      "text_sha256": "9bcc687a6e728f319204b3de3fc10d7168b581aebb57ba68bafb0dddb461ee00"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "neurological_issues__neurocysticercosis",
+        "neurological_issues__polyneuropathy"
+      ],
+      "retrieval_queries": [
+        "neurological issues neurological differential diagnosis diseases clinical presentation symptoms history",
+        "Neurocysticercosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Polyneuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4038,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-3074fafca96e9376",
+      "chunk_id": "53fc3e4f98765d889be9_15",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "neurological issues neurological red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4639,
+      "excerpt": "encephalitis, headache, mental status change, hydrocephalus, ischemic disease and infarction, suspected pituitary dysfunction, inflammation or infection of the brain or meninges or their complications, demyelination and dysmyelination disorders, vascular malformations, and arterial or venous/dural sinus abnormalities. Patients who have cardiac pacemakers, ferromagnetic intracranial aneurysm clips, and certain ferromagnetic foreign bodies or electronic devices or implants should not undergo MRI. The routine MRI protocol varies considerably based on strength of the unit's field, machine",
+      "text_sha256": "efd6bcf781abb9e97e13fb806d50dc265fab9d450d001ad3cde9e6629777e105"
+    },
+    {
+      "id": "rag-20d3a8148523d014",
+      "chunk_id": "53fc3e4f98765d889be9_45",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "neurological issues neurological red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4719,
+      "excerpt": "on noncontrast CT studies obtained hyperacutely (< 6-12 h from ictus). One exception is the dense middle cerebral artery (MCA) sign, which represents acute clot within the horizontal portion of the middle cerebral artery (see the image below). Patients with resolved neurologic deficits (ie, transient ischemic attacks) rarely demonstrate acute pathology on CT examinations without having sustained acute trauma. MRI with DWI techniques allows earlier identification and diagnosis in less than 30 minutes from initial insult with changes up to 2 weeks. MCA stroke - Emergency neuroradiology. Axial CT",
+      "text_sha256": "33359906e09b9b72b352d84170e0405590fc8b30481fa17c94af8ff2ab25da4a"
+    },
+    {
+      "id": "rag-ffc04298df227587",
+      "chunk_id": "536871af6462d18d854b_2",
+      "title": "Ischemic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916852-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "neurological_issues__stroke"
+      ],
+      "retrieval_queries": [
+        "Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3772,
+      "excerpt": "neurologic deficit or any alteration in level of consciousness. Common stroke signs and symptoms include the following: Abrupt onset of hemiparesis, monoparesis, or (rarely) quadriparesis Hemisensory deficits Monocular or binocular visual loss Visual field deficits Diplopia Dysarthria Facial droop Ataxia Vertigo (rarely in isolation) Nystagmus Aphasia Sudden decrease in level of consciousness Although such symptoms can occur alone, they are more likely to occur in combination. No historical feature distinguishes ischemic from hemorrhagic stroke, although nausea, vomiting, headache, and sudden",
+      "text_sha256": "08c3fc70520a54c0cfbb79c8c6a6cb6799bd65cec892fd371b3de9cf705a3f55"
+    },
+    {
+      "id": "rag-e5ea3eafe991e33a",
+      "chunk_id": "fb667a66b0c052e9418e_2",
+      "title": "Hemorrhagic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916662-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "neurological_issues__stroke"
+      ],
+      "retrieval_queries": [
+        "Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3963,
+      "excerpt": "Puzzles slideshow to help recognize diagnostic clues in vertigo cases. Signs and symptoms Patients with intracerebral bleeds are more likely than those with ischemic stroke to have headache, altered mental status, seizures, nausea and vomiting, and/or marked hypertension. Even so, none of these findings reliably distinguishes between hemorrhagic and ischemic stroke. Focal neurologic deficits The type of deficit depends on the area of brain involved. If the dominant (usually the left) hemisphere is involved, a syndrome consisting of the following may result: Right hemiparesis Right hemisensory",
+      "text_sha256": "d46a05c09019859b4bb142e4b7ab6e3eab8771922c2987f776b61d11724c2bfa"
+    },
+    {
+      "id": "rag-ae1f46fdf3eef001",
+      "chunk_id": "53fc3e4f98765d889be9_4",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "neurological_issues__stroke"
+      ],
+      "retrieval_queries": [
+        "Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4223,
+      "excerpt": "disability. An estimated 80-85% of strokes are ischemic (either thrombosis or embolism), whereas 15-20% of strokes are hemorrhagic. Stroke syndromes can present along a wide spectrum of disease from transient ischemic attacks with complete resolution of symptoms to large intracranial hemorrhages with uncal or tonsillar herniation. Rapid evaluation and neuroimaging is standard of care for all patients with suspected strokes and guides the decision to administer thrombolytics, intra-arterial intervention, or medical management. Also see Ischemic Stroke in Emergency Medicine and Hemorrhagic",
+      "text_sha256": "a180011f6fbf0d9ab6f47dfed467deb49bf88d1928675e433dfef69024406d94"
+    },
+    {
+      "id": "rag-3f7b9613be1f17a2",
+      "chunk_id": "8b43a6610b35f683aaa4_6",
+      "title": "Brain Neoplasms: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779664-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "neurological_issues__brain_neoplasm"
+      ],
+      "retrieval_queries": [
+        "Brain Neoplasm diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3707,
+      "excerpt": "may occur with frontal lobe tumors Brainstem and cerebellar tumors induce cranial nerve palsies, ataxia, incoordination, nystagmus, pyramidal signs, and sensory deficits on one or both sides of the body See Presentation for more detail. Diagnosis With clinical suspicion of cancer, obtain routine laboratory studies on admission, including the following: Complete blood cell count (CBC) Coagulation studies Electrolyte levels Comprehensive metabolic panel Obtain neuroimaging studies in patients with symptoms suggestive of an intracranial neoplasm, such as the following: Acute mental status changes",
+      "text_sha256": "2d7318a6dd0cdec977f7c83cdfeb10e3d41b61dd4ff4900abbf9aec8a0961a7a"
+    },
+    {
+      "id": "rag-909e336518bde6c5",
+      "chunk_id": "53fc3e4f98765d889be9_34",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "neurological_issues__brain_neoplasm"
+      ],
+      "retrieval_queries": [
+        "Brain Neoplasm diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4472,
+      "excerpt": "posterior frontal skull fracture (arrow). Subarachnoid hemorrhage - Emergency neuroradiology. Axial CT scan of the brain shows a right frontal cortical gyriform contusion, with a small amount of subarachnoid hemorrhage. Right scalp soft tissue swelling is also present (coup lesion). Diffuse axonal injury (DAI) is caused by shearing of the white matter, often at the gray-white junction. This is thought to be due to the differing tissue density or fixation between two structures in differing response to rotation, acceleration, and deceleration. Detection is often associated with changes in the",
+      "text_sha256": "343c0ba5cc70ad94d28659a33f78d9c7388861f46fbbab71a8484776461c9c9b"
+    },
+    {
+      "id": "rag-3a72d4c38d9a0bb7",
+      "chunk_id": "9f7eb5027998a34eb6c2_8",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "neurological_issues__neurocysticercosis"
+      ],
+      "retrieval_queries": [
+        "Neurocysticercosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4189,
+      "excerpt": "conduction defects are truly diagnostic only when they coincide with symptoms Loop recorders have a higher diagnostic yield than Holter monitor evaluation, with a marginal cost savings Ambulatory monitoring appears to have a higher negative than positive diagnostic yield Other diagnostic tests and procedures include the following: Head-up tilt-table test - Useful for confirming autonomic dysfunction and can generally be safely arranged on an outpatient basis Electroencephalography (EEG) - Can be performed at the discretion of a neurologist if seizure is considered a likely alternative",
+      "text_sha256": "bce92127a34f3c0ce64d226f3f059473b46561d6c8d76961f1c0a09f5b6874fc"
+    },
+    {
+      "id": "rag-61dcef30d62b7d07",
+      "chunk_id": "6abb4726efd0e023f805_5",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "neurological_issues__chronic_inflammatory_demyelinating_polyradiculoneuropathy"
+      ],
+      "retrieval_queries": [
+        "Chronic Inflammatory Demyelinating Polyradiculoneuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3118,
+      "excerpt": "(see the image below): This is considered when the diagnosis is not completely clear, when other causes cannot be excluded, or when profound axonal involvement is observed on EMG; biopsy was once commonly recommended for most patients before immunosuppressive therapy, but current guidelines no longer recommend it Electron micrograph of the peripheral nerve of a patient with chronic inflammatory demyelinating polyradiculoneuropathy. Note \"onion bulb\" formation in the myelin sheath of the nerve fibers due to continuous demyelination and remyelination. Courtesy of A. Sima, MD, Department of",
+      "text_sha256": "7abe989ca7a4d7f7d864bfd0f3da566306193ec4612a970cb0c8b325d2c99034"
+    },
+    {
+      "id": "rag-80aa6ad45ea04af3",
+      "chunk_id": "0b4e124e43266b2d82b6_20",
+      "title": "Neurological Sequelae of Infectious Endocarditis: Infective Endocarditis and the CNS, Etiology of CNS Sequelae, Epidemiology of CNS Sequelae",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165712-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "neurological_issues__chronic_inflammatory_demyelinating_polyradiculoneuropathy"
+      ],
+      "retrieval_queries": [
+        "Chronic Inflammatory Demyelinating Polyradiculoneuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5172,
+      "excerpt": "focal neurologic signs. Presumably, the transient nature (resolution) results from the disintegration and dislodgement of small emboli. Other conditions to consider in the differential diagnosis include the following: Aphasia Cardioembolic Stroke Cerebellar Hemorrhage Cerebral Aneurysms Cerebral Venous Thrombosis Complex Partial Seizures Lacunar Syndromes Primary CNS Lymphoma Spinal Epidural Abscess Subarachnoid Hemorrhage Depression, psychosis, aseptic meningitis, cavernous sinus syndromes, dissection syndromes, metastatic brain disease, herpes simplex encephalitis, orbital cellulitis, and",
+      "text_sha256": "fb338b461b87e6f7a7bd0014be98b96fa4d2fb470d5b90a9bff0775f0b6c9841"
+    },
+    {
+      "id": "rag-e3c9afc2e1ee1a79",
+      "chunk_id": "6abb4726efd0e023f805_2",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "neurological_issues__polyneuropathy"
+      ],
+      "retrieval_queries": [
+        "Polyneuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4319,
+      "excerpt": "Motor symptoms (usually predominant) In about 16% of patients, a relatively acute or subacute onset of symptoms In children, usually a more precipitous onset of symptoms Symptoms of autonomic system dysfunction (eg, orthostatic dizziness) Pertinent physical findings are limited to the nervous system, except when the condition is associated with other diseases. Such findings may include the following. Signs of cranial nerve (CN) involvement (eg, facial muscle paralysis or diplopia) Gait abnormalities Motor deficits (eg, symmetric weakness of both proximal and distal muscles in upper and lower",
+      "text_sha256": "c0cbd9bdd5eb728eaef83dfda92e9545422ea4f4244844ddd14d78fbc22984b7"
+    },
+    {
+      "id": "rag-399fee887cf27b3c",
+      "chunk_id": "e2c72cc25f09f98c22a0_7",
+      "title": "HIV-Associated Distal Painful Sensorimotor Polyneuropathy: Overview, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1167783-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "neurological_issues__polyneuropathy"
+      ],
+      "retrieval_queries": [
+        "Polyneuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4767,
+      "excerpt": "and intestinal function Physical findings include: Panmodal distal sensory loss Mild distal weakness Hyporeflexia or areflexia Symmetric presentation Autonomic signs (often can be elicited by careful evaluation) Differential Diagnosis The differential diagnosis of distal painful sensorimotor polyneuropathy includes: Acute Inflammatory Demyelinating Polyradiculoneuropathy Chronic Inflammatory Demyelinating Polyradiculoneuropathy Diabetic Neuropathy HIV-Associated Multiple Mononeuropathies Nutritional Neuropathy Toxic Neuropathy Uremic Neuropathy Vitamin B-12 Associated Neurological Diseases",
+      "text_sha256": "83abf917a132967008f669a53e696b83f9f4fb6d0777dc452eec71f4922f1bdb"
+    },
+    {
+      "id": "rag-e003707b0f22499a",
+      "chunk_id": "34f74c815c14d4939e42_4",
+      "title": "Transient Ischemic Attack: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1910519-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "neurological_issues__transient_ischemic_attack"
+      ],
+      "retrieval_queries": [
+        "Transient Ischemic Attack diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4291,
+      "excerpt": "focus in particular on the neurovascular distribution suggested by the patient s symptoms. Subsets of the neurologic examination include the following: Cranial nerve testing Determination of somatic motor strength Somatic sensory testing Speech and language testing Assessment of the cerebellar system (be sure to watch the patient walk) See Presentation for more detail. Diagnosis It is important to rule out other causes, such as metabolic or drug-induced etiologies, which can present with symptoms similar to that of TIA. The following tests are considered on an emergency basis: A fingerstick",
+      "text_sha256": "d5ae037326f32e91c6c522dbc9e842c488b897f40d10d2a7f677b4ea2560ae18"
+    },
+    {
+      "id": "rag-66ff86508dba735e",
+      "chunk_id": "34f74c815c14d4939e42_13",
+      "title": "Transient Ischemic Attack: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1910519-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "neurological_issues__transient_ischemic_attack"
+      ],
+      "retrieval_queries": [
+        "Transient Ischemic Attack diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4494,
+      "excerpt": "location, and intensity of symptoms. Reviewing the patient s medical record is extremely important for identifying deficits from previous strokes, seizures, or cardiac events. The primary care physician can be a reliable resource for insights into previous episodes and workup. A neurologic examination is the foundation of the TIA evaluation and should focus in particular on the neurovascular distribution suggested by the patient s symptoms. (See Presentation.) Initial assessment is aimed at excluding emergency conditions that can mimic a TIA, which include the following: Hypoglycemia Seizure",
+      "text_sha256": "660353dda570c61beab6054cba550854bbbd1898e284c3140a57763bc63e63c9"
+    },
+    {
+      "id": "rag-fe2c619db19b8f8d",
+      "chunk_id": "c2fe2cb9045703583e9f_2",
+      "title": "Conversion Disorder in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/805361-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "neurological_issues__transient_ischemic_attack"
+      ],
+      "retrieval_queries": [
+        "Transient Ischemic Attack diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4783,
+      "excerpt": "or known pathological mechanism (after appropriate medical evaluation). NB: nscious/intentional production of physical symptoms is classified as ctitious disorder malingering. Though classified with somatic symptom/somatoform disorders in DSM-III through DSM-5-TR, conversion disorder is classified as a dissociative disorder in ICD-10, keeping its long association with hysteria (Dissociative Disorders in DSM). Clinical descriptions of conversion disorder date to almost 4000 years ago; the Egyptians attributed symptoms to a \"wandering uterus.\" In the 19th century, Paul Briquet described the",
+      "text_sha256": "9f1b3dd395445f75b03a1fb0a8b21191733659ec47e9bfe7f1eecbd0f3fb1fea"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "neurological_issues__stroke",
+      "name": "Stroke",
+      "retrieval_query": "Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-a33926a5c3b5389c",
+        "rag-20d3a8148523d014"
+      ],
+      "disease_rag_source_ids": [
+        "rag-c11a2103e40596fa",
+        "rag-ffc04298df227587",
+        "rag-e5ea3eafe991e33a",
+        "rag-ae1f46fdf3eef001"
+      ]
+    },
+    {
+      "id": "neurological_issues__brain_neoplasm",
+      "name": "Brain Neoplasm",
+      "retrieval_query": "Brain Neoplasm diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-67e70434c6d5aa75"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-67e70434c6d5aa75",
+        "rag-3f7b9613be1f17a2",
+        "rag-909e336518bde6c5"
+      ]
+    },
+    {
+      "id": "neurological_issues__neurocysticercosis",
+      "name": "Neurocysticercosis",
+      "retrieval_query": "Neurocysticercosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-a33926a5c3b5389c",
+        "rag-c11a2103e40596fa"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-c11a2103e40596fa",
+        "rag-5bcac9eab5404341",
+        "rag-3a72d4c38d9a0bb7"
+      ]
+    },
+    {
+      "id": "neurological_issues__chronic_inflammatory_demyelinating_polyradiculoneuropathy",
+      "name": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy",
+      "retrieval_query": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-ff175cd271f88014"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-ff175cd271f88014",
+        "rag-61dcef30d62b7d07",
+        "rag-80aa6ad45ea04af3"
+      ]
+    },
+    {
+      "id": "neurological_issues__polyneuropathy",
+      "name": "Polyneuropathy",
+      "retrieval_query": "Polyneuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-5bcac9eab5404341"
+      ],
+      "disease_rag_source_ids": [
+        "rag-ff175cd271f88014",
+        "rag-5bcac9eab5404341",
+        "rag-e3c9afc2e1ee1a79",
+        "rag-399fee887cf27b3c"
+      ]
+    },
+    {
+      "id": "neurological_issues__transient_ischemic_attack",
+      "name": "Transient Ischemic Attack",
+      "retrieval_query": "Transient Ischemic Attack diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-20d3a8148523d014"
+      ],
+      "disease_rag_source_ids": [
+        "rag-9c829a59affdd531",
+        "rag-e003707b0f22499a",
+        "rag-66ff86508dba735e",
+        "rag-fe2c619db19b8f8d"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "neurological_issues",
+    "evidence_status": "sufficient",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": "headache",
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-ffc04298df227587",
+        "rag-e5ea3eafe991e33a",
+        "rag-67e70434c6d5aa75",
+        "rag-c11a2103e40596fa",
+        "rag-ff175cd271f88014",
+        "rag-5bcac9eab5404341",
+        "rag-e3c9afc2e1ee1a79",
+        "rag-399fee887cf27b3c",
+        "rag-9c829a59affdd531",
+        "rag-e003707b0f22499a"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "neurological_issues__stroke__hemiparesis",
+        "description": "Weakness on one side of the body.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neurological_issues__stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a"
+        ]
+      },
+      {
+        "code": "neurological_issues__stroke__hemisensory_loss",
+        "description": "Loss of sensation on one side of the body.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neurological_issues__stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a"
+        ]
+      },
+      {
+        "code": "neurological_issues__stroke__dysarthria",
+        "description": "Difficulty speaking or slurred speech.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neurological_issues__stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "code": "neurological_issues__stroke__ataxia",
+        "description": "Problems with balance or coordination.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neurological_issues__stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "code": "neurological_issues__stroke__vertigo",
+        "description": "A spinning sensation.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "code": "neurological_issues__stroke__visual_loss",
+        "description": "Loss of vision in one or both eyes.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neurological_issues__stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "code": "neurological_issues__stroke__headache",
+        "description": "Headache.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a"
+        ]
+      },
+      {
+        "code": "neurological_issues__brain_neoplasm__focal_motor_or_sensory_deficit",
+        "description": "Focal motor or sensory deficits.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neurological_issues__brain_neoplasm"
+        ],
+        "source_ids": [
+          "rag-67e70434c6d5aa75"
+        ]
+      },
+      {
+        "code": "neurological_issues__brain_neoplasm__gait_disturbance",
+        "description": "Gait disturbance.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__brain_neoplasm"
+        ],
+        "source_ids": [
+          "rag-67e70434c6d5aa75"
+        ]
+      },
+      {
+        "code": "neurological_issues__brain_neoplasm__suspicious_headache",
+        "description": "Suspicious headache.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__brain_neoplasm"
+        ],
+        "source_ids": [
+          "rag-67e70434c6d5aa75"
+        ]
+      },
+      {
+        "code": "neurological_issues__brain_neoplasm__ataxia_or_incoordination",
+        "description": "Ataxia or incoordination.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__brain_neoplasm"
+        ],
+        "source_ids": [
+          "rag-3f7b9613be1f17a2",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "neurological_issues__neurocysticercosis__focal_neurologic_deficits",
+        "description": "Focal neurological deficits, such as one-sided weakness, sensory loss, or movement problems.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neurological_issues__neurocysticercosis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "code": "neurological_issues__neurocysticercosis__headache",
+        "description": "Headache as a symptom.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__neurocysticercosis"
+        ],
+        "source_ids": [
+          "rag-c11a2103e40596fa"
+        ]
+      },
+      {
+        "code": "neurological_issues__neurocysticercosis__gait_disturbance",
+        "description": "Disturbances in walking or balance.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__neurocysticercosis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "code": "neurological_issues__neurocysticercosis__paresthesia",
+        "description": "Abnormal sensations such as tingling or pins and needles.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__neurocysticercosis"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341"
+        ]
+      },
+      {
+        "code": "neurological_issues__d_5a318d6c04a6__neurological_issues_chronic_inflammatory_demyel__cf02387d93",
+        "description": "Neurological symptoms are predominantly sensory in nature.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__chronic_inflammatory_demyelinating_polyradiculoneuropathy"
+        ],
+        "source_ids": [
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "code": "neurological_issues__d_5a318d6c04a6__neurological_issues_chronic_inflammatory_demyel__0f36e806ee",
+        "description": "Neurological symptoms involve both sensory and motor deficits in multiple, distinct nerve distributions.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__chronic_inflammatory_demyelinating_polyradiculoneuropathy"
+        ],
+        "source_ids": [
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "code": "neurological_issues__polyneuropathy__sensory_symptoms",
+        "description": "感覺異常，如疼痛或感覺遲鈍。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__polyneuropathy"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-399fee887cf27b3c"
+        ]
+      },
+      {
+        "code": "neurological_issues__polyneuropathy__distal_weakness",
+        "description": "肢體末端無力。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__polyneuropathy"
+        ],
+        "source_ids": [
+          "rag-e3c9afc2e1ee1a79",
+          "rag-399fee887cf27b3c"
+        ]
+      },
+      {
+        "code": "neurological_issues__polyneuropathy__gait_abnormality",
+        "description": "步態異常。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__polyneuropathy"
+        ],
+        "source_ids": [
+          "rag-e3c9afc2e1ee1a79"
+        ]
+      },
+      {
+        "code": "neurological_issues__polyneuropathy__paresthesia",
+        "description": "感覺異常，如刺痛感。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__polyneuropathy"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341"
+        ]
+      },
+      {
+        "code": "neurological_issues__transient_ischemic_attack__focal_weakness",
+        "description": "Weakness in a specific part of the body.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neurological_issues__transient_ischemic_attack"
+        ],
+        "source_ids": [
+          "rag-9c829a59affdd531"
+        ]
+      },
+      {
+        "code": "neurological_issues__transient_ischemic_attack__dizziness",
+        "description": "A sensation of dizziness.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__transient_ischemic_attack"
+        ],
+        "source_ids": [
+          "rag-9c829a59affdd531"
+        ]
+      },
+      {
+        "code": "neurological_issues__transient_ischemic_attack__headache",
+        "description": "Pain in the head.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "neurological_issues__transient_ischemic_attack"
+        ],
+        "source_ids": [
+          "rag-9c829a59affdd531"
+        ]
+      },
+      {
+        "code": "neurological_issues__transient_ischemic_attack__speech_language_difficulty",
+        "description": "Difficulty with speech or language.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neurological_issues__transient_ischemic_attack"
+        ],
+        "source_ids": [
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "code": "neurological_issues__transient_ischemic_attack__gait_unsteadiness",
+        "description": "Difficulty walking or maintaining balance.",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neurological_issues__transient_ischemic_attack"
+        ],
+        "source_ids": [
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "code": "neurological_issues__transient_ischemic_attack__focal_sensory_symptom",
+        "description": "Numbness or tingling in a specific part of the body.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neurological_issues__transient_ischemic_attack"
+        ],
+        "source_ids": [
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "code": "neurological_issues__transient_ischemic_attack__visual_changes",
+        "description": "Changes in vision.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "neurological_issues__transient_ischemic_attack"
+        ],
+        "source_ids": [
+          "rag-e003707b0f22499a"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "symptom_onset_pattern",
+        "option": "突然發生",
+        "mapping": {
+          "onset": "sudden"
+        },
+        "disease_ids": [
+          "neurological_issues__stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "field": "symptom_location",
+        "option": "單側身體",
+        "mapping": {
+          "findings": [
+            "neurological_issues__stroke__hemiparesis",
+            "neurological_issues__stroke__hemisensory_loss",
+            "neurological_issues__neurocysticercosis__focal_neurologic_deficits"
+          ]
+        },
+        "disease_ids": [
+          "neurological_issues__stroke",
+          "neurological_issues__neurocysticercosis"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a",
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "field": "symptom_description",
+        "option": "麻木",
+        "mapping": {
+          "findings": [
+            "neurological_issues__stroke__hemisensory_loss",
+            "neurological_issues__brain_neoplasm__focal_motor_or_sensory_deficit",
+            "neurological_issues__neurocysticercosis__focal_neurologic_deficits",
+            "neurological_issues__d_5a318d6c04a6__neurological_issues_chronic_inflammatory_demyel__cf02387d93",
+            "neurological_issues__polyneuropathy__sensory_symptoms",
+            "neurological_issues__transient_ischemic_attack__focal_sensory_symptom"
+          ]
+        },
+        "disease_ids": [
+          "neurological_issues__stroke",
+          "neurological_issues__brain_neoplasm",
+          "neurological_issues__neurocysticercosis",
+          "neurological_issues__chronic_inflammatory_demyelinating_polyradiculoneuropathy",
+          "neurological_issues__polyneuropathy",
+          "neurological_issues__transient_ischemic_attack"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a",
+          "rag-67e70434c6d5aa75",
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-ff175cd271f88014",
+          "rag-399fee887cf27b3c",
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "field": "symptom_description",
+        "option": "癱瘓",
+        "mapping": {
+          "findings": [
+            "neurological_issues__stroke__hemiparesis",
+            "neurological_issues__brain_neoplasm__focal_motor_or_sensory_deficit",
+            "neurological_issues__neurocysticercosis__focal_neurologic_deficits"
+          ]
+        },
+        "disease_ids": [
+          "neurological_issues__stroke",
+          "neurological_issues__brain_neoplasm",
+          "neurological_issues__neurocysticercosis"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a",
+          "rag-67e70434c6d5aa75",
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "field": "symptom_description",
+        "option": "無力感",
+        "mapping": {
+          "findings": [
+            "neurological_issues__stroke__hemiparesis",
+            "neurological_issues__brain_neoplasm__focal_motor_or_sensory_deficit",
+            "neurological_issues__neurocysticercosis__focal_neurologic_deficits",
+            "neurological_issues__d_5a318d6c04a6__neurological_issues_chronic_inflammatory_demyel__0f36e806ee",
+            "neurological_issues__polyneuropathy__distal_weakness",
+            "neurological_issues__transient_ischemic_attack__focal_weakness"
+          ]
+        },
+        "disease_ids": [
+          "neurological_issues__stroke",
+          "neurological_issues__brain_neoplasm",
+          "neurological_issues__neurocysticercosis",
+          "neurological_issues__chronic_inflammatory_demyelinating_polyradiculoneuropathy",
+          "neurological_issues__polyneuropathy",
+          "neurological_issues__transient_ischemic_attack"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a",
+          "rag-67e70434c6d5aa75",
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-ff175cd271f88014",
+          "rag-e3c9afc2e1ee1a79",
+          "rag-399fee887cf27b3c",
+          "rag-9c829a59affdd531"
+        ]
+      },
+      {
+        "field": "associated_neurological_symptoms",
+        "option": "頭痛",
+        "mapping": {
+          "findings": [
+            "neurological_issues__stroke__headache",
+            "neurological_issues__brain_neoplasm__suspicious_headache",
+            "neurological_issues__neurocysticercosis__headache",
+            "neurological_issues__transient_ischemic_attack__headache"
+          ]
+        },
+        "disease_ids": [
+          "neurological_issues__stroke",
+          "neurological_issues__brain_neoplasm",
+          "neurological_issues__neurocysticercosis",
+          "neurological_issues__transient_ischemic_attack"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a",
+          "rag-67e70434c6d5aa75",
+          "rag-c11a2103e40596fa",
+          "rag-9c829a59affdd531"
+        ]
+      },
+      {
+        "field": "associated_neurological_symptoms",
+        "option": "頭暈",
+        "mapping": {
+          "findings": [
+            "neurological_issues__stroke__vertigo",
+            "neurological_issues__transient_ischemic_attack__dizziness"
+          ]
+        },
+        "disease_ids": [
+          "neurological_issues__stroke",
+          "neurological_issues__transient_ischemic_attack"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-9c829a59affdd531"
+        ]
+      },
+      {
+        "field": "associated_neurological_symptoms",
+        "option": "視力改變",
+        "mapping": {
+          "findings": [
+            "neurological_issues__stroke__visual_loss",
+            "neurological_issues__transient_ischemic_attack__visual_changes"
+          ]
+        },
+        "disease_ids": [
+          "neurological_issues__stroke",
+          "neurological_issues__transient_ischemic_attack"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "field": "associated_neurological_symptoms",
+        "option": "說話困難",
+        "mapping": {
+          "findings": [
+            "neurological_issues__stroke__dysarthria",
+            "neurological_issues__transient_ischemic_attack__speech_language_difficulty"
+          ]
+        },
+        "disease_ids": [
+          "neurological_issues__stroke",
+          "neurological_issues__transient_ischemic_attack"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "field": "associated_neurological_symptoms",
+        "option": "身體平衡或協調問題",
+        "mapping": {
+          "findings": [
+            "neurological_issues__stroke__ataxia",
+            "neurological_issues__brain_neoplasm__gait_disturbance",
+            "neurological_issues__brain_neoplasm__ataxia_or_incoordination",
+            "neurological_issues__neurocysticercosis__gait_disturbance",
+            "neurological_issues__polyneuropathy__gait_abnormality",
+            "neurological_issues__transient_ischemic_attack__gait_unsteadiness"
+          ]
+        },
+        "disease_ids": [
+          "neurological_issues__stroke",
+          "neurological_issues__brain_neoplasm",
+          "neurological_issues__neurocysticercosis",
+          "neurological_issues__polyneuropathy",
+          "neurological_issues__transient_ischemic_attack"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-67e70434c6d5aa75",
+          "rag-3f7b9613be1f17a2",
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-e3c9afc2e1ee1a79",
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "field": "symptom_description",
+        "option": "刺痛",
+        "mapping": {
+          "findings": [
+            "neurological_issues__neurocysticercosis__paresthesia",
+            "neurological_issues__d_5a318d6c04a6__neurological_issues_chronic_inflammatory_demyel__cf02387d93",
+            "neurological_issues__polyneuropathy__paresthesia",
+            "neurological_issues__transient_ischemic_attack__focal_sensory_symptom"
+          ]
+        },
+        "disease_ids": [
+          "neurological_issues__neurocysticercosis",
+          "neurological_issues__chronic_inflammatory_demyelinating_polyradiculoneuropathy",
+          "neurological_issues__polyneuropathy",
+          "neurological_issues__transient_ischemic_attack"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-e003707b0f22499a"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "neurological_issues__neurocysticercosis",
+        "name": "Neurocysticercosis",
+        "must_not_miss": false,
+        "retrieval_query": "Neurocysticercosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "neurological_issues__neurocysticercosis__focal_neurologic_deficits",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-c11a2103e40596fa",
+              "rag-5bcac9eab5404341",
+              "rag-3a72d4c38d9a0bb7"
+            ]
+          },
+          {
+            "fact": "neurological_issues__neurocysticercosis__headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-c11a2103e40596fa"
+            ]
+          },
+          {
+            "fact": "neurological_issues__neurocysticercosis__gait_disturbance",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-c11a2103e40596fa",
+              "rag-5bcac9eab5404341",
+              "rag-3a72d4c38d9a0bb7"
+            ]
+          },
+          {
+            "fact": "neurological_issues__neurocysticercosis__paresthesia",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-5bcac9eab5404341"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "id": "neurological_issues__chronic_inflammatory_demyelinating_polyradiculoneuropathy",
+        "name": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy",
+        "must_not_miss": false,
+        "retrieval_query": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "neurological_issues__d_5a318d6c04a6__neurological_issues_chronic_inflammatory_demyel__cf02387d93",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-ff175cd271f88014"
+            ]
+          },
+          {
+            "fact": "neurological_issues__d_5a318d6c04a6__neurological_issues_chronic_inflammatory_demyel__0f36e806ee",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-ff175cd271f88014"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "id": "neurological_issues__polyneuropathy",
+        "name": "Polyneuropathy",
+        "must_not_miss": false,
+        "retrieval_query": "Polyneuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "neurological_issues__polyneuropathy__sensory_symptoms",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-5bcac9eab5404341",
+              "rag-399fee887cf27b3c"
+            ]
+          },
+          {
+            "fact": "neurological_issues__polyneuropathy__distal_weakness",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-e3c9afc2e1ee1a79",
+              "rag-399fee887cf27b3c"
+            ]
+          },
+          {
+            "fact": "neurological_issues__polyneuropathy__gait_abnormality",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-e3c9afc2e1ee1a79"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-e3c9afc2e1ee1a79",
+          "rag-399fee887cf27b3c"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_neurological_issues__neurocysticercosis__focal_neurologic_deficits",
+        "label": "Focal neurologic deficits",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "neurological_issues"
+          ],
+          "any_findings": [
+            "neurological_issues__neurocysticercosis__focal_neurologic_deficits"
+          ]
+        },
+        "possible_conditions": [
+          "Neurocysticercosis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_neurological_issues__transient_ischemic_attack__sudden_focal_neurological_symptoms",
+        "label": "Sudden onset of focal neurological symptoms",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "neurological_issues"
+          ],
+          "onset_in": [
+            "sudden"
+          ],
+          "any_findings": [
+            "neurological_issues__transient_ischemic_attack__focal_weakness",
+            "neurological_issues__transient_ischemic_attack__speech_language_difficulty",
+            "neurological_issues__transient_ischemic_attack__gait_unsteadiness",
+            "neurological_issues__transient_ischemic_attack__focal_sensory_symptom",
+            "neurological_issues__transient_ischemic_attack__visual_changes"
+          ]
+        },
+        "possible_conditions": [
+          "Transient Ischemic Attack"
+        ],
+        "source_ids": [
+          "rag-9c829a59affdd531",
+          "rag-e003707b0f22499a"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Determine if headache is 'suspicious' based on specific characteristics (e.g., worse in morning, wakes from sleep, associated with nausea/vomiting).",
+        "reason": "The available RAG sources mention 'suspicious headache' as a sign but do not provide specific criteria to define it, which would be necessary for structured questioning."
+      },
+      {
+        "requirement": "Identify signs of elevated intracranial pressure (e.g., papilledema).",
+        "reason": "This requires a physical examination, which is outside the scope of a patient-reported questionnaire."
+      },
+      {
+        "requirement": "Differentiate between various types of focal neurological deficits (e.g., specific cranial nerve palsies, nystagmus, pyramidal signs).",
+        "reason": "These are clinical examination findings that cannot be reliably self-reported by a patient through a questionnaire."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Rule out hypoglycemia as a mimic for TIA.",
+        "reason": "The available RAG sources mention hypoglycemia as a differential diagnosis, but there is no information in the questionnaire or fact library to assess blood sugar levels."
+      },
+      {
+        "requirement": "Rule out seizure as a mimic for TIA.",
+        "reason": "The available RAG sources mention seizure as a differential diagnosis, but the questionnaire does not contain specific questions to differentiate seizure from TIA (e.g., positive vs. negative phenomena, post-ictal state)."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-67e70434c6d5aa75",
+          "rag-3f7b9613be1f17a2"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[0], fact_proposals[2], semantic_options[0], semantic_options[1], semantic_options[3], semantic_options[4], semantic_options[6], profiles[0], profiles[0].clues[0], profiles[0].clues[2]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "Local compiler mechanically namespaced generated codes and updated all internal references; no clinical values or conditions were changed.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ff175cd271f88014",
+          "rag-61dcef30d62b7d07",
+          "rag-80aa6ad45ea04af3"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-399fee887cf27b3c"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-9c829a59affdd531",
+          "rag-e003707b0f22499a",
+          "rag-66ff86508dba735e",
+          "rag-fe2c619db19b8f8d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[0], profiles[0], profiles[0].clues[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-9c829a59affdd531",
+          "rag-e003707b0f22499a",
+          "rag-66ff86508dba735e",
+          "rag-fe2c619db19b8f8d"
+        ]
+      }
+    ]
+  }
+}

@@ -97,6 +97,7 @@ class TranscriptionResponse(BaseModel):
 
 class AvatarSpeechRequest(BaseModel):
     text: str = Field(min_length=1, max_length=1200)
+    language: Literal["mandarin", "minnan"] = "mandarin"
 
     @field_validator("text")
     @classmethod
@@ -113,6 +114,7 @@ class AvatarStatusResponse(BaseModel):
     speech_model: str
     animation_model: str
     device: str
+    loaded: bool = False
 
 
 class InvitationResponse(BaseModel):

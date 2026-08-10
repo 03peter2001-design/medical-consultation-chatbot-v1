@@ -42,6 +42,31 @@ schema／來源完整性測試，但 `build_questionnaire` 對它們 fail closed
 JSON 格式、重複欄位、輸入型態、選項設定、條件欄位順序與路由目錄同步性
 會在載入時驗證；格式錯誤時後端會直接回報檔名與問題欄位，不會靜默略過。
 
+## 病患問診流程文案
+
+題目本身仍由各問卷的 `questions[].prompt` 管理；開場、上一題、輸入錯誤、section
+轉場、完成、儘早就醫與人工轉交等組裝文案，統一放在
+[`ui/patient_messages.json`](ui/patient_messages.json)。要調整數位醫療助理的固定
+話術時直接修改該檔，不需進入 `app/routes/patient.py`。
+
+文案檔採固定 `schema_version: 1`、`locale: zh-TW` 與完整 key 集合。大括號內容是
+程式提供的動態值，例如 `{prompt}`、`{queue_number}`、`{route_label}`；可以調整其
+前後文字及位置，但不可刪除、改名或增加 placeholder。`domain.patient_messages`
+會嚴格驗證所有 key 與 placeholder，避免問診進行到一半才因格式錯誤失敗。
+
+修改後執行：
+
+```bash
+cd backend
+venv/bin/python -m unittest tests.test_patient_messages tests.test_patient_back_navigation \
+  tests.test_main_input_validation tests.test_patient_triage_payload tests.test_questionnaires
+```
+
+文案由 process cache 載入；本機 Uvicorn 或 Docker backend 必須重新啟動才會套用。
+Avatar 朗讀的是組裝後的 `reply`，因此新的固定文案會一併生效。儘早就醫、安全轉交
+等內容雖已資料化，仍屬臨床安全文案，修改後必須由合格人員審查；JSON 文案不得用來
+改變 Safety 規則、問卷選題、路由 disposition 或完成條件。
+
 疾病問卷另有 `policy`。目前 schema version 2 保留固定疾病表投票，並以
 `priority_fields`、`required_fields`、一般問題作為選題層級；同層問題再依當輪
 ClinicalFact 建立的疾病漏斗排序。`frontier_vote_margin` 定義領先群與第一名可容許
@@ -54,3 +79,8 @@ ClinicalFact 建立的疾病漏斗排序。`frontier_vote_margin` 定義領先�
 檔案存在而上線；必須先用具 reviewer、日期、問卷來源與 route catalog hash、逐路由核准與 review-note
 處理紀錄的 signoff manifest 重新 promotion，輸出 `clinically_approved` 文件後，
 才會在下一次啟動成為執行期路由。
+
+疾病名稱導向 Gemini＋RAG 產生的 fact／semantic／profile／Safety 提案不存放於本目錄，
+而是隔離在 `questionnaire_drafts/clinical_artifacts/`。這些 overlay 不會回填此處仍為空的
+candidate `semantic_options`，也不能由 questionnaire-only promoter 帶入 runtime；其
+`complete` 僅代表生成檔案齊全，不是 clinical signoff。

@@ -91,6 +91,7 @@ from app.services.patient_interview import (
     urgent_possible_conditions as _urgent_possible_conditions,
 )
 from app.services.security_audit import audit_patient, safe_log
+from domain.patient_messages import patient_message
 from domain.questionnaires import (
     CHIEF_QUESTIONNAIRE,
     ROUTE_LABELS,
@@ -140,7 +141,7 @@ def _restore_previous_question(session: dict) -> dict:
     if session.get("index") == -1 or not history:
         return _question_payload(
             session,
-            reply="目前沒有可返回的上一題。",
+            reply=patient_message("navigation.no_previous_question"),
             completed=session.get("index") == -1,
         )
 
@@ -161,7 +162,7 @@ def _restore_previous_question(session: dict) -> dict:
     current = questionnaire[index]
     return _question_payload(
         session,
-        reply=f"已回到上一題，您可以重新作答。\n\n{current['prompt']}",
+        reply=patient_message("navigation.previous_question", prompt=current["prompt"]),
     )
 
 
@@ -314,7 +315,7 @@ async def _complete_consultation(
             "type": ctype,
             "reason": data.get("reason", ""),
             "summary": build_summary(data),
-            "report": "【AI 預問診摘要】\n摘要產生中，請稍候。",
+            "report": patient_message("report.summary_pending"),
             "data": data,
             "triage_level": "routine",
             "status": "summary_pending",
@@ -328,14 +329,7 @@ async def _complete_consultation(
     )
     session["step"] = -1
     session["index"] = -1
-    reply = (
-        f"謝謝您的回答，問診已完成。\n\n"
-        f"────────────\n"
-        f"📋 您的問診編號為：{queue_number}\n"
-        f"────────────\n\n"
-        "請您耐心等候叫號，輪到您的號碼時醫師會與您看診。"
-        "如果您感到非常不舒服，請立即告知現場護理師。"
-    )
+    reply = patient_message("completion.routine", queue_number=queue_number)
     return _question_payload(
         session,
         reply=reply,
@@ -356,14 +350,20 @@ async def _complete_urgent_consultation(
     flag_labels = "、".join(flag.get("label", "") for flag in red_flags if flag.get("label"))
     possible_conditions = _urgent_possible_conditions(session)
     condition_summary = "、".join(possible_conditions)
-    condition_line = f"可能涉及的緊急疾病：{condition_summary}\n" if condition_summary else ""
-    report = (
-        "【儘早就醫警示】\n"
-        f"{URGENT_CARE_MESSAGE}\n"
-        f"觸發項目：{flag_labels or '問診安全規則'}\n\n"
-        f"{condition_line}"
-        "此內容為預問診分級提示，不是正式診斷。\n\n"
-        "【AI 預問診摘要】\n摘要產生中，請稍候。"
+    condition_line = (
+        patient_message(
+            "report.urgent_condition_line",
+            condition_summary=condition_summary,
+        )
+        if condition_summary
+        else ""
+    )
+    report = patient_message(
+        "report.urgent",
+        urgent_care_message=URGENT_CARE_MESSAGE,
+        trigger_labels=flag_labels or patient_message("report.urgent_trigger_default"),
+        condition_line=condition_line,
+        summary_pending=patient_message("report.summary_pending"),
     )
     created = consultation_repository.create_with_identifiers(
         {
@@ -385,12 +385,10 @@ async def _complete_urgent_consultation(
     )
     session["step"] = -1
     session["index"] = -1
-    reply = (
-        f"⚠️ {URGENT_CARE_MESSAGE}\n\n"
-        "本次預問診已停止，不會再繼續追問。\n\n"
-        "────────────\n"
-        f"📋 您的儘早就醫編號為：{queue_number}\n"
-        "────────────"
+    reply = patient_message(
+        "completion.urgent",
+        urgent_care_message=URGENT_CARE_MESSAGE,
+        queue_number=queue_number,
     )
     return _question_payload(
         session,
@@ -616,7 +614,10 @@ async def _governed_route_entry(
     )
     return await _handoff_amie_consultation(
         session,
-        reason=f"{label}需要由現場醫療人員即時確認處置與檢查順序",
+        reason=patient_message(
+            "handoff.reason.route_disposition",
+            route_label=label,
+        ),
         user_display=user_display,
     )
 
@@ -640,12 +641,10 @@ async def _handoff_amie_consultation(
     route = data.get("type", "other")
     red_flags = session.get("amie_state", {}).get("red_flags", [])
     flag_labels = "、".join(flag.get("label", "") for flag in red_flags if flag.get("label"))
-    report = (
-        "【AMIE安全轉交】\n"
-        f"{reason}\n"
-        f"觸發項目：{flag_labels or '需由醫療人員進一步分流'}\n\n"
-        "此內容為預問診安全提示，不是正式診斷；"
-        "請由現場醫療人員進一步確認病人狀況。"
+    report = patient_message(
+        "report.handoff",
+        reason=reason,
+        trigger_labels=(flag_labels or patient_message("report.handoff_trigger_default")),
     )
     created = consultation_repository.create_with_identifiers(
         {
@@ -663,11 +662,11 @@ async def _handoff_amie_consultation(
     queue_number = created["queue_number"]
     session["step"] = -1
     session["index"] = -1
-    labels = flag_labels or "需要進一步確認的情況"
-    reply = (
-        f"我注意到您提到「{labels}」。為了安全起見，"
-        "一般預問診已停止，請洽現場護理師或醫師進一步確認。\n\n"
-        f"您的問診編號為：{queue_number}"
+    labels = flag_labels or patient_message("handoff.label_default")
+    reply = patient_message(
+        "handoff.reply",
+        labels=labels,
+        queue_number=queue_number,
     )
     return _question_payload(
         session,
@@ -687,11 +686,9 @@ async def _chat_amie(
         sessions[req.session_id] = session
         return _question_payload(
             session,
-            reply=(
-                "您好！我是您的數位醫療助理。接下來會依照您的回答"
-                "動態調整問題；若發現需要儘早就醫的警訊，系統會"
-                "結束預問診並提供三位數編號。\n\n"
-                f"{CHIEF_QUESTIONNAIRE[0]['prompt']}"
+            reply=patient_message(
+                "interview.amie_welcome",
+                prompt=CHIEF_QUESTIONNAIRE[0]["prompt"],
             ),
         )
 
@@ -700,7 +697,7 @@ async def _chat_amie(
     if session.get("index") == -1:
         return _question_payload(
             session,
-            reply="本次預問診已完成，請重新整理頁面開始新的問診。",
+            reply=patient_message("interview.already_completed"),
             user_display=req.message or None,
             completed=True,
         )
@@ -718,7 +715,11 @@ async def _chat_amie(
     if validation_error:
         return _question_payload(
             session,
-            reply=f"{validation_error}\n\n{current['prompt']}",
+            reply=patient_message(
+                "interview.validation_retry",
+                validation_error=validation_error,
+                prompt=current["prompt"],
+            ),
         )
 
     _record_question_history(session)
@@ -766,7 +767,7 @@ async def _chat_amie(
             )
             return await _handoff_amie_consultation(
                 session,
-                reason=("語意安全檢查暫時無法完成，請由現場醫療人員確認"),
+                reason=patient_message("handoff.reason.safety_unavailable"),
                 user_display=user_display,
             )
         if route not in SUPPORTED_PATIENT_ROUTES:
@@ -788,7 +789,7 @@ async def _chat_amie(
             )
             return await _handoff_amie_consultation(
                 session,
-                reason="主訴無法對應目前支援的問卷路由",
+                reason=patient_message("handoff.reason.unsupported_route"),
                 user_display=user_display,
             )
         routes = _complaint_routes(data, route)
@@ -839,7 +840,7 @@ async def _chat_amie(
     except ClinicalOperationTimeout:
         return await _handoff_amie_consultation(
             session,
-            reason="語意問診處理逾時，無法安全完成本次自動問診",
+            reason=patient_message("handoff.reason.processing_timeout"),
             user_display=user_display,
         )
     session["data"] = result.data
@@ -864,7 +865,7 @@ async def _chat_amie(
     if result.action == "handoff":
         return await _handoff_amie_consultation(
             session,
-            reason=result.handoff_reason or "需要醫療人員進一步確認",
+            reason=result.handoff_reason or patient_message("handoff.reason.default"),
             user_display=user_display,
         )
     if result.action == "complete":
@@ -878,7 +879,7 @@ async def _chat_amie(
     if not next_question:
         return await _handoff_amie_consultation(
             session,
-            reason="動態問診未能選出安全的下一個問題",
+            reason=patient_message("handoff.reason.no_next_question"),
             user_display=user_display,
         )
     next_index = next(
@@ -892,7 +893,7 @@ async def _chat_amie(
     if next_index < 0:
         return await _handoff_amie_consultation(
             session,
-            reason="動態問診選出的問題不在核准問題庫",
+            reason=patient_message("handoff.reason.unapproved_next_question"),
             user_display=user_display,
         )
 
@@ -901,7 +902,11 @@ async def _chat_amie(
     session["questionnaire"] = questionnaire
     session["step"] = session["turn_count"]
     if result.acknowledgement:
-        reply = f"{result.acknowledgement}\n\n{next_question['prompt']}"
+        reply = patient_message(
+            "interview.acknowledgement_question",
+            acknowledgement=result.acknowledgement,
+            prompt=next_question["prompt"],
+        )
     else:
         reply = _section_transition_reply(
             current["section"],
@@ -962,10 +967,9 @@ async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
             }
         return _question_payload(
             session,
-            reply=(
-                "您好！我是您的數位醫療助理。請先說明主訴，"
-                "之後會依序填寫基本資料、病史與症狀問卷。\n\n"
-                f"{CHIEF_QUESTIONNAIRE[0]['prompt']}"
+            reply=patient_message(
+                "interview.legacy_welcome",
+                prompt=CHIEF_QUESTIONNAIRE[0]["prompt"],
             ),
         )
 
@@ -974,7 +978,7 @@ async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
     if session.get("index") == -1:
         return _question_payload(
             session,
-            reply="本次預問診已完成，請重新整理頁面開始新的問診。",
+            reply=patient_message("interview.already_completed"),
             user_display=req.message or None,
             completed=True,
         )
@@ -992,7 +996,11 @@ async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
     if validation_error:
         return _question_payload(
             session,
-            reply=f"{validation_error}\n\n{current['prompt']}",
+            reply=patient_message(
+                "interview.validation_retry",
+                validation_error=validation_error,
+                prompt=current["prompt"],
+            ),
         )
     _record_question_history(session)
     field = current["field"]
@@ -1026,7 +1034,7 @@ async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
             session["index"] = -1
             return _question_payload(
                 session,
-                reply=("目前無法完成語意安全檢查，請直接由現場護理師或醫師確認後續處置。"),
+                reply=patient_message("handoff.safety_unavailable"),
                 user_display=user_display,
                 completed=True,
             )
@@ -1035,10 +1043,7 @@ async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
             session["index"] = -1
             return _question_payload(
                 session,
-                reply=(
-                    "了解，您描述的症狀目前無法對應已核准的問卷路由，"
-                    "建議直接由現場護理師或醫師進一步分流。"
-                ),
+                reply=patient_message("handoff.unsupported_route"),
                 user_display=user_display,
                 completed=True,
             )

@@ -1,0 +1,285 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "eye_problems",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "33fb319ca42b6e2e46be68a9eee56baae193c7b0f172cd9596a821bbbb4fdfdf",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history",
+      "eye problems eye problem red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "2a0dcbaeeb19349b4a1cf19af72d11607a7198710c3daeca83bb17efcd3ac6ab"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "ff6705b46d3a58619dad377c995f5a54687553681eb933f6a5e59040df01a8e1",
+    "generated_at": "2026-08-10T04:03:15+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-4cae719e5b4139e0",
+      "chunk_id": "87a181a0b00717e2b480_5",
+      "title": "Acute Conjunctivitis (Pink Eye): Overview, Clinical Evaluation, Bacterial Conjunctivitis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/797874-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.36,
+      "excerpt": "Keratoconjunctivitis Clinical Evaluation In classic presentations, patients complain of eyelids sticking together on waking. They may describe itching and burning or a gritty, foreign-body sensation. Pus sliding across the eye may distort vision, although visual acuity is normal. Photophobia is minimal. Family members with similar complaints typically present with conjunctivitis from an infectious cause. A history of a recent upper respiratory infection (URI) is typically associated with a viral cause. In any patient with ocular complaints, perform a complete physical examination of the eye,",
+      "text_sha256": "089db1494dc9411598e1c8e57950e572e8967bb1ee24cf73fd9f910fbb65e636"
+    },
+    {
+      "id": "rag-5696c5f72b79ba31",
+      "chunk_id": "0d46b40beab510bc09b2_3",
+      "title": "Dry Eye Disease (Keratoconjunctivitis Sicca): Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1210417-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3627,
+      "excerpt": "with SS (non-SS KCS). Signs and symptoms While diagnosis of DED does not require for any specific symptom to be present, the following are the most common complaints associated with dry eye disease : Foreign-body, burning, itching, gritty or sandy sensation Hyperemia Mucoid discharge Ocular irritation Excessive tearing (secondary to reflex secretion) Photophobia Blurry vision that may improve with blinkingJ See Clinical Presentation for more detail. Diagnosis Studies that may be used for diagnosis include the following : Vital staining of corneal and conjunctival epithelium with fluorescein,",
+      "text_sha256": "df850f87fd04334a3bf2533240c083e53ed6268651a8684db017a4b421bc7d45"
+    },
+    {
+      "id": "rag-1adbb26c6857d6ae",
+      "chunk_id": "a1ee184b297277b0a132_9",
+      "title": "Acute Orbital Compartment Syndrome: Background, Anatomy, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/799528-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3704,
+      "excerpt": "serious and 3% as blinding. All of the latter resulted from optic nerve injury, retinal detachment, or corneal-scleral rupture. Other studies have found AOCS to occur in less than 0.1% of all cases of facial trauma and in 3.6% of patients with diagnosed orbital trauma. Prognosis Acute orbital compartment syndrome with visual acuity loss is associated with a poor prognosis. Permanent blindness occurs if effective therapy is not initiated promptly. AOCS due to retrobulbar hematoma is the most common cause of blindness associated with facial trauma. Emergent decompressive surgery may be",
+      "text_sha256": "6d075272bd02f8c7d40d9aa808adf510a1465a6e7a51d0d0dd275ee45809f62d"
+    },
+    {
+      "id": "rag-5272bf37b4996b11",
+      "chunk_id": "a1ee184b297277b0a132_10",
+      "title": "Acute Orbital Compartment Syndrome: Background, Anatomy, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/799528-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4055,
+      "excerpt": "blindness associated with facial trauma. Emergent decompressive surgery may be sight-saving in patients with severe symptoms. Significant evidence shows that long-term outcomes correlate with time to intervention in patients with severe AOCS. Half of patients presenting with decreased visual acuity due to retrobulbar hematoma experience immediate resolution of symptoms with emergent decompression. Irreversible visual loss can be expected with retinal ischemia that lasts longer than 120 minutes, although some patients may experience partial recovery with decompression outside this window.",
+      "text_sha256": "1257140b29ca41d624fbdacb0d8fe1caf34ef929faebfba35977e51ce8fb04d5"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history",
+        "eye problems eye problem red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4221,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-ffc04298df227587",
+      "chunk_id": "536871af6462d18d854b_2",
+      "title": "Ischemic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916852-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4796,
+      "excerpt": "neurologic deficit or any alteration in level of consciousness. Common stroke signs and symptoms include the following: Abrupt onset of hemiparesis, monoparesis, or (rarely) quadriparesis Hemisensory deficits Monocular or binocular visual loss Visual field deficits Diplopia Dysarthria Facial droop Ataxia Vertigo (rarely in isolation) Nystagmus Aphasia Sudden decrease in level of consciousness Although such symptoms can occur alone, they are more likely to occur in combination. No historical feature distinguishes ischemic from hemorrhagic stroke, although nausea, vomiting, headache, and sudden",
+      "text_sha256": "08c3fc70520a54c0cfbb79c8c6a6cb6799bd65cec892fd371b3de9cf705a3f55"
+    },
+    {
+      "id": "rag-d28ebb49bb7c15d4",
+      "chunk_id": "0b4e124e43266b2d82b6_21",
+      "title": "Neurological Sequelae of Infectious Endocarditis: Infective Endocarditis and the CNS, Etiology of CNS Sequelae, Epidemiology of CNS Sequelae",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165712-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4979,
+      "excerpt": "metastatic brain disease, herpes simplex encephalitis, orbital cellulitis, and carotid disease and stroke should also be considered in the differential diagnosis. Diagnosis of CNS Sequelae Cerebrospinal fluid examination In the Massachusetts General Hospital series of 218 patients, 33 had meningeal symptoms (15%). Of patients with CNS involvement from infective endocarditis, one third had completely normal cerebrospinal fluid (CSF), one fourth had a slightly abnormal CSF but an aseptic culture, and one fourth had frankly purulent CSF. Noteworthy as well is that one sixth had hemorrhagic fluid.",
+      "text_sha256": "f98e813835d89c8700502e851754fc84e41fef6ea7d4ce08932f1a8db9173930"
+    },
+    {
+      "id": "rag-ccf1e7b73ae6413c",
+      "chunk_id": "4896d83f97abe6f575d4_56",
+      "title": "Ocular Manifestations of HIV Infection: Overview, Adnexal Manifestations, Anterior Segment Manifestations",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1216172-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5043,
+      "excerpt": "include the following: · Eyelids: ptosis, edema, hemorrhagic necrosis · Cornea: pseudodendritic keratitis, stromal keratitis, disciform keratitis, neurotrophic keratitis · Iris/trabecular meshwork: iritis, iris atrophy, trabeculitis · Episclera/sclera: episcleritis/scleritis · Retina/choroid: necrotizing or non-necrotizing retinitis, vascular occlusion, choroiditis Neurologic complications of HZO may include optic neuritis, vasculitis, encephalitis, external ocular muscle palsies, acute neuralgia, and postherpetic neuralgia. Herpes simplex virus Primary ocular HSV infection often presents as",
+      "text_sha256": "493109ae4dcfbaa5ee8bcc98404ea0023bc025dfe35a8acc9686f4778a90c9c0"
+    },
+    {
+      "id": "rag-96a90437160454ff",
+      "chunk_id": "60a8e9fb259d62f055c2_43",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5457,
+      "excerpt": "(cTn), whether conventional or high sensitivity (hs), exclusively for these purposes. The main clinical outcome of interest after initial emergency department (ED) evaluation of patients with suspected ACS is 30-day MACE. MACE includes MI, death, target lesion revascularization, or death. In 2018, The American College of Emergency Physicians (ACEP) updated its level C recommendations regarding testing strategies for ruling out non-ST-elevation MI (NSTEMI) in lower risk patients to include the use of the HEART score and conventional or high-sensitivity cardiac troponins (hs-cTn) as follows: In",
+      "text_sha256": "4828c8d733507191a7786f8b1f2baf9a4c8185d49b0cb05028c18c2b64ce27ff"
+    }
+  ],
+  "discovery": {
+    "route": "eye_problems",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "eye_problems__conjunctivitis",
+        "name": "Conjunctivitis",
+        "rationale": "The questionnaire asks about red eyes, discharge, and precipitating events like infection, which align with symptoms of conjunctivitis such as eyelids sticking together, itching, burning, and a gritty sensation. A history of a recent upper respiratory infection is also noted as being associated with viral causes.",
+        "source_ids": [
+          "rag-4cae719e5b4139e0"
+        ]
+      },
+      {
+        "id": "eye_problems__dry_eye_disease",
+        "name": "Dry Eye Disease",
+        "rationale": "The questionnaire addresses symptoms like eye pain, redness, and blurry vision. These overlap with common complaints of Dry Eye Disease (Keratoconjunctivitis Sicca), which include a foreign-body sensation, burning, itching, redness (hyperemia), and blurry vision that may improve with blinking.",
+        "source_ids": [
+          "rag-5696c5f72b79ba31"
+        ]
+      },
+      {
+        "id": "eye_problems__orbital_compartment_syndrome",
+        "name": "Orbital Compartment Syndrome",
+        "rationale": "The questionnaire asks about trauma, vision loss, and eye pain. These are critical symptoms for Acute Orbital Compartment Syndrome (AOCS), a condition that can follow facial trauma and lead to permanent blindness if not treated promptly. AOCS is a common cause of blindness associated with facial trauma.",
+        "source_ids": [
+          "rag-1adbb26c6857d6ae",
+          "rag-5272bf37b4996b11"
+        ]
+      },
+      {
+        "id": "eye_problems__stroke",
+        "name": "Stroke",
+        "rationale": "The questionnaire includes questions about sudden onset, vision loss, blurry vision, double vision (diplopia), and headache. These are recognized as common signs and symptoms of an ischemic stroke, which can present with monocular or binocular visual loss, visual field deficits, and diplopia.",
+        "source_ids": [
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "id": "eye_problems__herpes_zoster_ophthalmicus",
+        "name": "Herpes Zoster Ophthalmicus",
+        "rationale": "The questionnaire asks about facial rash and various eye symptoms like pain, redness, and vision changes. Herpes Zoster Ophthalmicus (HZO) can manifest with ocular symptoms such as keratitis, iritis, and retinitis, as well as neurologic complications like optic neuritis. The presence of a facial rash is a key diagnostic clue.",
+        "source_ids": [
+          "rag-ccf1e7b73ae6413c"
+        ]
+      },
+      {
+        "id": "eye_problems__orbital_cellulitis",
+        "name": "Orbital Cellulitis",
+        "rationale": "The questionnaire asks about infection, eye pain, and redness. Orbital cellulitis is mentioned as a potential differential diagnosis for central nervous system sequelae of infectious endocarditis, indicating it is a relevant condition to consider in the context of eye problems potentially linked to infection.",
+        "source_ids": [
+          "rag-d28ebb49bb7c15d4"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "The questionnaire includes red flag symptoms such as diplopia, severe headache, and focal neurologic deficits. These can be associated with serious conditions like stroke or syncope and require careful evaluation.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "A history of trauma preceding eye symptoms is a critical finding, as it can be associated with Acute Orbital Compartment Syndrome, which may require emergent intervention to prevent permanent vision loss.",
+        "source_ids": [
+          "rag-1adbb26c6857d6ae",
+          "rag-5272bf37b4996b11"
+        ]
+      }
+    ]
+  }
+}

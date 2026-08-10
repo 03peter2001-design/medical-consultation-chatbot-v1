@@ -26,7 +26,11 @@ class Settings:
     )
     instruction: str = os.getenv(
         "COSYVOICE_INSTRUCTION",
-        "You are a helpful assistant. 請使用平穩、親切、清晰的華語，以專業醫療人員的語氣說話。<|endofprompt|>",
+        "You are a helpful assistant. 請使用平穩、親切、清晰的台灣國語，以專業醫療人員的語氣說話。<|endofprompt|>",
+    )
+    minnan_instruction: str = os.getenv(
+        "COSYVOICE_MINNAN_INSTRUCTION",
+        "You are a helpful assistant. 请用闽南话表达。<|endofprompt|>",
     )
     face_bbox: str = os.getenv("MUSETALK_FACE_BBOX", "585,140,915,520")
     fps: int = max(10, min(30, int(os.getenv("MUSETALK_FPS", "25"))))
@@ -36,7 +40,7 @@ class Settings:
     static_fallback: bool = _flag("AVATAR_STATIC_FALLBACK", True)
     release_gpu_after_render: bool = _flag(
         "AVATAR_RELEASE_GPU_AFTER_RENDER",
-        True,
+        False,
     )
     cache_max_files: int = max(10, int(os.getenv("AVATAR_CACHE_MAX_FILES", "200")))
 

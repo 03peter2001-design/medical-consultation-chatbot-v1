@@ -128,6 +128,37 @@ async def avatar_status():
 
 
 @router.post(
+    "/avatar/warmup",
+    response_model=AvatarStatusResponse,
+    responses=error_responses(401, 500, 503),
+    summary="Preload local ASR, speech, and talking-head models",
+    dependencies=[Depends(require_patient_session)],
+)
+async def avatar_warmup():
+    patient_session = current_patient_session()
+    try:
+        await run_in_threadpool(runtime.asr_service.warmup)
+        status = await run_in_threadpool(runtime.avatar_client.warmup)
+        if patient_session is not None:
+            audit_patient("patient.avatar.warmup", "success", patient_session)
+        safe_log("patient.avatar.warmup", "success")
+        return status
+    except (ASRUnavailableError, AvatarUnavailableError) as error:
+        if patient_session is not None:
+            audit_patient("patient.avatar.warmup", "failure", patient_session)
+        safe_log("patient.avatar.warmup", "unavailable", error=error)
+        raise HTTPException(
+            status_code=503,
+            detail="Avatar 語音模型預載失敗，請稍後再試",
+        ) from error
+    except Exception as error:
+        if patient_session is not None:
+            audit_patient("patient.avatar.warmup", "failure", patient_session)
+        safe_log("patient.avatar.warmup", "failure", error=error)
+        raise HTTPException(status_code=500, detail="Avatar 模型預載失敗") from error
+
+
+@router.post(
     "/avatar/speak",
     response_class=Response,
     responses={
@@ -143,7 +174,11 @@ async def avatar_status():
 async def avatar_speak(payload: AvatarSpeechRequest):
     patient_session = current_patient_session()
     try:
-        video = await run_in_threadpool(runtime.avatar_client.render, payload.text)
+        video = await run_in_threadpool(
+            runtime.avatar_client.render,
+            payload.text,
+            payload.language,
+        )
         if patient_session is not None:
             audit_patient("patient.avatar.speak", "success", patient_session)
         safe_log("patient.avatar.speak", "success")

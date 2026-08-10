@@ -1,0 +1,1421 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "fall",
+  "label": "跌倒",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "e8b3b9f2630d2b1de32cc12382dbef62312142a5dccd93e10687749fe4487c8a",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"fall fall differential diagnosis diseases clinical presentation symptoms history\",\"Subarachnoid Hemorrhage diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Conversion Disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"fall fall red flags emergency warning signs urgent referral rule out\",\"Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Seizure Disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Decompression Sickness diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "b3c266798730a5cd98ffd1c1c9d81a251535b90bb1f4de71b9c2b62db32856df"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "42fb570b9fb14a0123a1502345548855c38275492d95a5f245467428d6dc4a87",
+    "generated_at": "2026-08-10T04:04:58+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-02b622cf0e22d994",
+      "chunk_id": "40949ab525cdb33ba040_4",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "fall__subarachnoid_hemorrhage"
+      ],
+      "retrieval_queries": [
+        "fall fall differential diagnosis diseases clinical presentation symptoms history",
+        "Subarachnoid Hemorrhage diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4721,
+      "excerpt": "by hemorrhage from both nares, and by visualization of blood draining in the posterior pharynx. Differential Diagnosis The differential diagnosis includes the following: Barotrauma Disseminated Intravascular Coagulation Endometriosis Foreign Bodies, Nose Hemophilia, Type A Hemophilia, Type B Osler-Weber-Rendu syndrome Rhinitis Plant Poisoning, Glycosides - Coumarin Sinusitis Toxicity, Cocaine Toxicity, Nonsteroidal Anti-inflammatory Agents Toxicity, Rodenticide Toxicity, Salicylate Toxicity, Warfarin and Superwarfarins von Willebrand Disease Diagnostic Considerations Other problems to be",
+      "text_sha256": "7fb71c7de80704fe1be64c3cae7c04a246ddeb7d5647ec8fe71d4107e8974654"
+    },
+    {
+      "id": "rag-d4b3be3f72be1cbb",
+      "chunk_id": "0e015057c60c6e6987b9_45",
+      "title": "Decompression Sickness: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769717-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fall fall differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4771,
+      "excerpt": "affected about 3 times as often as lower limbs. The pain caused by type I DCS may mask neurologic signs that are hallmarks of the more serious type II DCS. Dysbaric osteonecrosis is a phenomenon that occurs in divers with high numbers of dives. This is a persistent problem, suggesting that the mechanisms involved in the disorder are not yet understood. Cutaneous abnormalities, joint and muscular pain, and neurologic manifestations (covered in the next section) were the three most common symptoms. The initial symptoms started within 6 hours of surfacing in 99% of cases with an overall mean",
+      "text_sha256": "1c09248935cf9dba02e751b8b94ba9d95bac576e4d8d7f16e32f4f4c6a6818e9"
+    },
+    {
+      "id": "rag-ad79e1246e2a7f0b",
+      "chunk_id": "53fc3e4f98765d889be9_31",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fall fall differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.473,
+      "excerpt": "is often due to cortical contusion, dilution from a focal collection, or intraventricular hemorrhage due to delayed presentation. Catheter angiography is usually indicated on an emergency basis to identify cerebral aneurysms and to define their anatomy prior to surgical intervention (see the second image below). The prognosis for patients with subarachnoid hemorrhage is variable depending on the extent of injury. Traumatic subarachnoid hemorrhage is common and often associated with other injuries affecting outcome. Subarachnoid hemorrhage - Emergency neuroradiology. Axial CT scan at the level",
+      "text_sha256": "11b2429faf969ad8805a999d70fd7d3313e37e2644db90dcb78db8bddc81ab0a"
+    },
+    {
+      "id": "rag-fe2c619db19b8f8d",
+      "chunk_id": "c2fe2cb9045703583e9f_2",
+      "title": "Conversion Disorder in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/805361-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "fall__conversion_disorder"
+      ],
+      "retrieval_queries": [
+        "fall fall differential diagnosis diseases clinical presentation symptoms history",
+        "Conversion Disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3583,
+      "excerpt": "or known pathological mechanism (after appropriate medical evaluation). NB: nscious/intentional production of physical symptoms is classified as ctitious disorder malingering. Though classified with somatic symptom/somatoform disorders in DSM-III through DSM-5-TR, conversion disorder is classified as a dissociative disorder in ICD-10, keeping its long association with hysteria (Dissociative Disorders in DSM). Clinical descriptions of conversion disorder date to almost 4000 years ago; the Egyptians attributed symptoms to a \"wandering uterus.\" In the 19th century, Paul Briquet described the",
+      "text_sha256": "9f1b3dd395445f75b03a1fb0a8b21191733659ec47e9bfe7f1eecbd0f3fb1fea"
+    },
+    {
+      "id": "rag-3a72d4c38d9a0bb7",
+      "chunk_id": "9f7eb5027998a34eb6c2_8",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fall fall differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4697,
+      "excerpt": "conduction defects are truly diagnostic only when they coincide with symptoms Loop recorders have a higher diagnostic yield than Holter monitor evaluation, with a marginal cost savings Ambulatory monitoring appears to have a higher negative than positive diagnostic yield Other diagnostic tests and procedures include the following: Head-up tilt-table test - Useful for confirming autonomic dysfunction and can generally be safely arranged on an outpatient basis Electroencephalography (EEG) - Can be performed at the discretion of a neurologist if seizure is considered a likely alternative",
+      "text_sha256": "bce92127a34f3c0ce64d226f3f059473b46561d6c8d76961f1c0a09f5b6874fc"
+    },
+    {
+      "id": "rag-fac29dab4a80564b",
+      "chunk_id": "689b3d55803f83765ad0_12",
+      "title": "Dysbarism: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769902-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fall fall differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4774,
+      "excerpt": "or vomiting during or shortly after a decompression dive or a dive near the no-decompression limits should be presumed to have inner-ear DCS. Any symptom that occurs after diving (from minutes to days) should be presumed to be related to diving. Other symptoms of DCS include paresis, paralysis, paresthesia, joint pain, dyspnea, and rash. For more information on this topic, please see the article on Decompression Sickness. Pulmonary As an individual descends, the lungs decrease in size according to the Boyle law. This is true only if the diver is holding his or her breath. When former",
+      "text_sha256": "a8c1c52fe6058fa90d6456e35b4591e75154e5bbf5487cf3ef027a1224816a6b"
+    },
+    {
+      "id": "rag-d28ebb49bb7c15d4",
+      "chunk_id": "0b4e124e43266b2d82b6_21",
+      "title": "Neurological Sequelae of Infectious Endocarditis: Infective Endocarditis and the CNS, Etiology of CNS Sequelae, Epidemiology of CNS Sequelae",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165712-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fall fall differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4795,
+      "excerpt": "metastatic brain disease, herpes simplex encephalitis, orbital cellulitis, and carotid disease and stroke should also be considered in the differential diagnosis. Diagnosis of CNS Sequelae Cerebrospinal fluid examination In the Massachusetts General Hospital series of 218 patients, 33 had meningeal symptoms (15%). Of patients with CNS involvement from infective endocarditis, one third had completely normal cerebrospinal fluid (CSF), one fourth had a slightly abnormal CSF but an aseptic culture, and one fourth had frankly purulent CSF. Noteworthy as well is that one sixth had hemorrhagic fluid.",
+      "text_sha256": "f98e813835d89c8700502e851754fc84e41fef6ea7d4ce08932f1a8db9173930"
+    },
+    {
+      "id": "rag-de3af13019638ec4",
+      "chunk_id": "979327ccd28feefe2932",
+      "title": "Updated: Dec 11, 2018",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/806280-overview",
+      "routes": [
+        "legacy"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fall fall red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5972,
+      "excerpt": "in the ED? Framework for Care of the Bereaved Family Red Flags: Scenarios of Concern Family Presence During Resuscitations Special Points for the Death of Children Procedures on Newly Dead Patients Future Contact A worried father is brought to a private waiting area. The physician arrives and says, \"Your daughter is dead and your wife is in the ICU.\" Common sense would dictate otherwise, but this approach to delivering bad news occurs regularly in busy EDs where staff are emotionally fatigued and training on grief support is lacking.\n [1, 2] \nThe ED approach to the support of family and friends of patients who are dead or dying is based on common sense, but an organized framework for speaking with surviving family members and friends will ease the process for all concerned.\n [3, 4]",
+      "text_sha256": "979327ccd28feefe29325ac6f87a96cc3244ba631bedd7a21e5f69264fc06345"
+    },
+    {
+      "id": "rag-ff175cd271f88014",
+      "chunk_id": "6abb4726efd0e023f805_11",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fall__syncope"
+      ],
+      "retrieval_queries": [
+        "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.476,
+      "excerpt": "with predominantly sensory symptoms, those with a distal symmetric disorder (DADS), those with multifocal sensorimotor neuropathy or sensorimotor mononeuropathy multiplex with prominent conduction block (also known as Lewis-Sumner neuropathy), and those with CIDP with associated CNS demyelination or with other systemic disorders. The following disorders are considered distinct from CIDP because they have specific pathophysiologic features and respond to treatments differently than do patients with CIDP: Demyelinating neuropathies associated with immunoglobulin M (IgM) paraproteins, including",
+      "text_sha256": "9bcc687a6e728f319204b3de3fc10d7168b581aebb57ba68bafb0dddb461ee00"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fall__syncope"
+      ],
+      "retrieval_queries": [
+        "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4859,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-9569f87b2d38b7d4",
+      "chunk_id": "53b354e14520b0f0479f_7",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fall__syncope"
+      ],
+      "retrieval_queries": [
+        "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5162,
+      "excerpt": "This complex syndrome has been further classified into two subtypes:J Type I: No evidence of peripheral nerve injury (formerly reflex sympathetic dystrophy)J Type II: Peripheral nerve injury present (formerly causalgia )J Epidemiology Frequency CRPS occurs in approximately 1 15% of peripheral nerve injury cases. Schwartzman states that CRPS usually occurs secondary to fractures, sprains, and trivial soft tissue injury. The incidence after fractures and contusions ranges from 10% to 30%. While some cases are associated with an identifiable nerve injury, many are not. Even \"microtrauma\" as might",
+      "text_sha256": "f92854d983ca7db67bc2172e7aa263a6e48ca5fce7aa1fad47b16359cb9a44c5"
+    },
+    {
+      "id": "rag-d71a0a73f65f79a2",
+      "chunk_id": "c073c38d1231a0946898_1",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fall__syncope"
+      ],
+      "retrieval_queries": [
+        "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5168,
+      "excerpt": "alternative diagnoses. Signs of dysfunction of other cranial neruves or other neurologic abnormality exclude the diagnosis of classic trigeminal neuralgia and suggest that pain may be secondary to a structural lesion. The International Association for the Study of Pain (IASP) classifies TN into three categories. Classical TN is described as vascular compression that causes anatomical changes in the trigeminal nerve root. Next, secondary TN is due to an underlying neurologic disease. Third, idiopathic TN, is diagnosed after all studies reveal no etiology or there is no apparent cause. Classic",
+      "text_sha256": "ce29c6daab7ff6fd5cd95a131c5c0f906c846e7d275efa50d3ee5c72823e1ba8"
+    },
+    {
+      "id": "rag-96851f20eb41d937",
+      "chunk_id": "2b6eb94497953c8a6426_9",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "fall__seizure_disorder"
+      ],
+      "retrieval_queries": [
+        "Seizure Disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2961,
+      "excerpt": "contribute to seizures in patients with known seizure disorder, but these are diagnoses of exclusion. For patients presenting with new-onset seizure disorder, the list of possible causes is longer and includes the following: Central nervous system (CNS) pathologies (stroke, neoplasm, trauma, hypoxia, vascular abnormality) Metabolic abnormalities (hypoglycemia/hyperglycemia, hyponatremia/hypernatremia, hypercalcemia, hepatic encephalopathy) Toxicologic etiologies (alcohol withdrawal, cocaine, isoniazid, theophylline) Infectious etiologies (meningitis, encephalitis, brain abscess)",
+      "text_sha256": "ce82f5d4c7452266eee090f3dc36beebd5e254400fb703088d5038a3fe468d39"
+    },
+    {
+      "id": "rag-98dfd27812d7a9ca",
+      "chunk_id": "2b6eb94497953c8a6426_30",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fall__seizure_disorder"
+      ],
+      "retrieval_queries": [
+        "Seizure Disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3211,
+      "excerpt": "CT if any of the following are present: new focal deficits, trauma, persistent fever, new character or pattern to the seizures, suspicion of AIDS, infection, or anticoagulation. In general, however, the evidence is inadequate to support or refute the usefulness of emergency CT in persons with chronic seizures. Magnetic Resonance Imaging Magnetic resonance imaging (MRI) may be a better diagnostic test because of higher yield and ability to identify smaller lesions, but its availability in the ED may be a limiting factor. In addition, MRI is time-consuming and may interfere with adequate patient",
+      "text_sha256": "eed6d011163791af4805fbef225ea0cc599ba26cb44b7205c05e20380c8d5521"
+    },
+    {
+      "id": "rag-3621455ec67c20e8",
+      "chunk_id": "f955a6b6ecb0fe7b4201_21",
+      "title": "Absence Seizures: Overview, Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1183858-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fall__seizure_disorder"
+      ],
+      "retrieval_queries": [
+        "Seizure Disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3332,
+      "excerpt": "and resolution. In symptomatic generalized epilepsies, physical and neurologic findings may be abnormal, reflecting the underlying disorder. Physical examination may reveal stigmata of a genetic disease, such as a neurocutaneous disorder (eg, tuberous sclerosis) or an inborn error of metabolism. Neurologic examination may show signs of developmental delay or more specific signs, such as spastic paresis in cerebral palsy. Table 1. Clinical and EEG Findings in Typical and Atypical Absence Seizures* (Open Table in a new window) Type of Clinical Seizure EEG Findings Typical absence Impairment of",
+      "text_sha256": "f9bc30f80518b99b49bb00fc9cd8fe94fb52f4e6a90266d68b151460542235c7"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "fall__subarachnoid_hemorrhage",
+        "fall__conversion_disorder",
+        "fall__decompression_sickness"
+      ],
+      "retrieval_queries": [
+        "Subarachnoid Hemorrhage diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Conversion Disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Decompression Sickness diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4007,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-3697ea6f89d68fd5",
+      "chunk_id": "5f385aa936e8b9c4d48d_4",
+      "title": "Hemolytic Uremic Syndrome in Emergency Medicine: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779218-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "fall__subarachnoid_hemorrhage"
+      ],
+      "retrieval_queries": [
+        "Subarachnoid Hemorrhage diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4996,
+      "excerpt": "seizures, or altered mental status) Diarrhea may improve as the other HUS signs and symptoms beginJ Atypical HUS does not typically begin with a gastrointestinal illness. Patients with pneumococcal HUS may have had`recent respiratory illness. Clinical manifestations of atypical HUS are similar to those of typical HUS, although neurologic involvement is more common. See Presentation. HUS is primarily a clinical diagnosis coupled with consistent laboratory findings, including the following: Microangiopathic hemolytic anemia, with a hemoglobin level that is typically less than 8 g/dLJ",
+      "text_sha256": "8794e56e32229d991eb34ce0ebf51c81b6fdd260c654a355f24fd9e8a874c4d9"
+    },
+    {
+      "id": "rag-8356ec010ed3ff6f",
+      "chunk_id": "87996f6a71b53073e20c_3",
+      "title": "Acute Hypopituitarism: Overview, Diagnostic Considerations, Hormone Deficiency Symptoms",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767828-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "fall__subarachnoid_hemorrhage"
+      ],
+      "retrieval_queries": [
+        "Subarachnoid Hemorrhage diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5144,
+      "excerpt": "rate. The setting is not uncommon in which an emergency physician is evaluating a patient with complaints of weakness, fatigue, or altered mental status without a clear diagnosis. Subtle, but still abnormal, vital signs, such as slightly reduced blood pressure or heart rate, may be the only initial clues to suggest a pituitary deficiency rather than a relatively benign etiology. Emergency physicians frequently provide care to patients at risk of developing hypopituitarism. Risk factors include, but are not limited to, TBI, cocaine use, subarachnoid hemorrhage, and postpartum hypotension (a",
+      "text_sha256": "66493d5f742848008b29c1bb6e2ef99b7317d22019ad008feed96fe38c63f932"
+    },
+    {
+      "id": "rag-68fb5876f7a7dbdb",
+      "chunk_id": "c2fe2cb9045703583e9f_4",
+      "title": "Conversion Disorder in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/805361-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fall__conversion_disorder"
+      ],
+      "retrieval_queries": [
+        "Conversion Disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3899,
+      "excerpt": "most commonly reported are weakness, paralysis, pseudoseizures, involuntary movements (eg, tremors), and sensory disturbances. These losses or distortions of neurologic function cannot adequately be accounted for by organic disease. Functional MRI (fMRI) and transcranial magnetic stimulation (TMS) studies have shown different activation patterns in patients with conversion symptoms and healthy control subjects; this is in keeping with the \"involuntary\" nature of conversion symptoms. Patients whose symptoms are limited to pain or sexual functioning are not classified under conversion disorder;",
+      "text_sha256": "cd3ac2cef761527986a07c173d06a9f88734e6e5c869126347f77a53b4b65cc3"
+    },
+    {
+      "id": "rag-669675c00c342b83",
+      "chunk_id": "297d70c96fc165d2a9a3_12",
+      "title": "Ganser Syndrome: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/287390-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fall__conversion_disorder"
+      ],
+      "retrieval_queries": [
+        "Conversion Disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4878,
+      "excerpt": "case reports published earlier by both Neisser and Dietz, where patients with similar symptoms were assumed to be malingering; Ganser strongly argued against this interpretation. He pointed to the change in consciousness as well as the conversion symptoms as proof that this was a \"hysterical\" syndrome and not simple malingering. By hysteria here, Ganser is referring to a broad concept that would encompass many of the diagnoses listed in the DSM under both somatic symptom disorders and dissociative disorders. Shortly after the publication of his findings, a healthy debate ensued. Aside from the",
+      "text_sha256": "0511f518e3142b68d61e06cc32334a59ef8de10610e50e548d180dc8d521e040"
+    },
+    {
+      "id": "rag-a394352415d0560a",
+      "chunk_id": "0e015057c60c6e6987b9_47",
+      "title": "Decompression Sickness: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769717-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fall__decompression_sickness"
+      ],
+      "retrieval_queries": [
+        "Decompression Sickness diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3467,
+      "excerpt": "that there are no concomitant spinal or central neurologic symptoms or signs (see the next section on type II DCS for details). Type II decompression sickness The following characterizes type II DCS: (1) pulmonary symptoms, (2) hypovolemic shock, or (3) nervous system involvement. Pain occurs in only about 30% of cases. Because of the anatomic complexity of the central and peripheral nervous systems, signs and symptoms are variable and diverse. Symptom onset is usually immediate but may occur up to 36 hours later. Nervous system The spinal cord is the most common site affected by type II DCS;",
+      "text_sha256": "a748e780fa2a573050defcbbf2fab5726aca55f2026cd743ec1d608d37da88d8"
+    },
+    {
+      "id": "rag-7311154d5c6de6ab",
+      "chunk_id": "0e015057c60c6e6987b9_77",
+      "title": "Decompression Sickness: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769717-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fall__decompression_sickness"
+      ],
+      "retrieval_queries": [
+        "Decompression Sickness diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4392,
+      "excerpt": "dizziness, headache, and profound anxiousness. More severe symptoms, such as unresponsiveness, shock, and seizures, can quickly occur. Neurologic symptoms vary, and death can result. DCS of the CNS is clinically similar to AGE. Since the treatment of either requires recompression, differentiating between them is not of great importance. During the numerous dives involved in the recovery of wreckage from TWA Flight 800 (July 17, 1996 off the coast of East Moriches, Long Island, NY), rapid ascents resulting in AGE were uncommon even under stressful conditions (115-130 ft, 35-40 m; 3,167 dives;",
+      "text_sha256": "0a331f80c3cf89ccc12cc5e505df678d7fa3d1981a08a5f6e9ee5822fd3f94d1"
+    },
+    {
+      "id": "rag-3424602f9c965022",
+      "chunk_id": "a742c3686546c8f2ecf3_7",
+      "title": "Multiple Organ Dysfunction Syndrome in Sepsis: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/169640-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "fall__decompression_sickness"
+      ],
+      "retrieval_queries": [
+        "Decompression Sickness diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4981,
+      "excerpt": "dysregulated host response to infection. Organ dysfunction is represented by an increase in the Sequential [sepsis-related] Organ Failure Assessment (SOFA) score of 2 points or more, which is associated with an in-hospital mortality greater than 10%. Septic shock is defined as a subset of sepsis in which profound circulatory, cellular, and metabolic abnormalities are associated with a greater risk of mortality than with sepsis alone. Patients with septic shock can be clinically identified by a vasopressor requirement to maintain a mean arterial pressure of 65 mm Hg or greater and serum lactate",
+      "text_sha256": "777d9821bdb4aafab8f72e303b93ce169df0cb0106e388ef2e573f44da3bf3cd"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "fall__syncope",
+      "name": "Syncope",
+      "retrieval_query": "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-3a72d4c38d9a0bb7"
+      ],
+      "disease_rag_source_ids": [
+        "rag-ff175cd271f88014",
+        "rag-5bcac9eab5404341",
+        "rag-9569f87b2d38b7d4",
+        "rag-d71a0a73f65f79a2"
+      ]
+    },
+    {
+      "id": "fall__seizure_disorder",
+      "name": "Seizure Disorder",
+      "retrieval_query": "Seizure Disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-3a72d4c38d9a0bb7"
+      ],
+      "disease_rag_source_ids": [
+        "rag-96851f20eb41d937",
+        "rag-98dfd27812d7a9ca",
+        "rag-3621455ec67c20e8"
+      ]
+    },
+    {
+      "id": "fall__subarachnoid_hemorrhage",
+      "name": "Subarachnoid Hemorrhage",
+      "retrieval_query": "Subarachnoid Hemorrhage diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-ad79e1246e2a7f0b"
+      ],
+      "disease_rag_source_ids": [
+        "rag-02b622cf0e22d994",
+        "rag-f09c5253c7a82445",
+        "rag-3697ea6f89d68fd5",
+        "rag-8356ec010ed3ff6f"
+      ]
+    },
+    {
+      "id": "fall__conversion_disorder",
+      "name": "Conversion Disorder",
+      "retrieval_query": "Conversion Disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-fe2c619db19b8f8d"
+      ],
+      "disease_rag_source_ids": [
+        "rag-fe2c619db19b8f8d",
+        "rag-f09c5253c7a82445",
+        "rag-68fb5876f7a7dbdb",
+        "rag-669675c00c342b83"
+      ]
+    },
+    {
+      "id": "fall__decompression_sickness",
+      "name": "Decompression Sickness",
+      "retrieval_query": "Decompression Sickness diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-d4b3be3f72be1cbb",
+        "rag-fac29dab4a80564b"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-a394352415d0560a",
+        "rag-7311154d5c6de6ab",
+        "rag-3424602f9c965022"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "fall",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-ff175cd271f88014",
+        "rag-5bcac9eab5404341",
+        "rag-9569f87b2d38b7d4",
+        "rag-d71a0a73f65f79a2",
+        "rag-96851f20eb41d937",
+        "rag-98dfd27812d7a9ca",
+        "rag-3621455ec67c20e8",
+        "rag-02b622cf0e22d994",
+        "rag-f09c5253c7a82445",
+        "rag-3697ea6f89d68fd5",
+        "rag-8356ec010ed3ff6f",
+        "rag-68fb5876f7a7dbdb",
+        "rag-a394352415d0560a",
+        "rag-7311154d5c6de6ab",
+        "rag-3424602f9c965022"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "fall__subarachnoid_hemorrhage__severe_headache",
+        "description": "Severe headache.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "fall__subarachnoid_hemorrhage"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "fall__subarachnoid_hemorrhage__altered_mental_status",
+        "description": "Altered mental status.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "fall__subarachnoid_hemorrhage"
+        ],
+        "source_ids": [
+          "rag-3697ea6f89d68fd5",
+          "rag-8356ec010ed3ff6f"
+        ]
+      },
+      {
+        "code": "fall__subarachnoid_hemorrhage__focal_neurologic_deficits",
+        "description": "Focal neurologic deficits.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "fall__subarachnoid_hemorrhage"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "fall__conversion_disorder__weakness_or_paralysis",
+        "description": "Weakness or paralysis.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fall__conversion_disorder"
+        ],
+        "source_ids": [
+          "rag-68fb5876f7a7dbdb"
+        ]
+      },
+      {
+        "code": "fall__conversion_disorder__sensory_disturbances",
+        "description": "Sensory disturbances.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fall__conversion_disorder"
+        ],
+        "source_ids": [
+          "rag-68fb5876f7a7dbdb"
+        ]
+      },
+      {
+        "code": "fall__decompression_sickness__paresthesia",
+        "description": "Numbness, tingling, or other abnormal skin sensations (paresthesia).",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fall__decompression_sickness"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-a394352415d0560a",
+          "rag-7311154d5c6de6ab",
+          "rag-3424602f9c965022"
+        ]
+      },
+      {
+        "code": "fall__decompression_sickness__paresis_paralysis",
+        "description": "Weakness (paresis) or inability to move (paralysis).",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "fall__decompression_sickness"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-a394352415d0560a",
+          "rag-7311154d5c6de6ab",
+          "rag-3424602f9c965022"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "post_fall_symptoms",
+        "option": "感到手腳無力、麻木、刺痛或說話困難",
+        "mapping": {
+          "findings": [
+            "focal_neurologic_symptom",
+            "fall__subarachnoid_hemorrhage__focal_neurologic_deficits",
+            "fall__conversion_disorder__weakness_or_paralysis",
+            "fall__conversion_disorder__sensory_disturbances",
+            "fall__decompression_sickness__paresthesia",
+            "fall__decompression_sickness__paresis_paralysis"
+          ]
+        },
+        "disease_ids": [
+          "fall__seizure_disorder",
+          "fall__subarachnoid_hemorrhage",
+          "fall__conversion_disorder",
+          "fall__decompression_sickness"
+        ],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2",
+          "rag-98dfd27812d7a9ca",
+          "rag-f09c5253c7a82445",
+          "rag-68fb5876f7a7dbdb",
+          "rag-a394352415d0560a",
+          "rag-7311154d5c6de6ab",
+          "rag-3424602f9c965022"
+        ]
+      },
+      {
+        "field": "pre_fall_symptoms",
+        "option": "頭暈",
+        "mapping": {
+          "findings": [
+            "dizziness_unspecified"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "field": "pre_fall_symptoms",
+        "option": "胸痛",
+        "mapping": {
+          "findings": [
+            "symptom_chest_pain"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "field": "pre_fall_symptoms",
+        "option": "心悸",
+        "mapping": {
+          "findings": [
+            "palpitations"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "field": "pre_fall_symptoms",
+        "option": "四肢無力",
+        "mapping": {
+          "findings": [
+            "focal_weakness",
+            "fall__conversion_disorder__weakness_or_paralysis"
+          ]
+        },
+        "disease_ids": [
+          "fall__conversion_disorder"
+        ],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2",
+          "rag-68fb5876f7a7dbdb"
+        ]
+      },
+      {
+        "field": "loss_of_consciousness",
+        "option": "是",
+        "mapping": {
+          "findings": [
+            "syncope"
+          ]
+        },
+        "disease_ids": [
+          "fall__seizure_disorder"
+        ],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2",
+          "rag-3621455ec67c20e8"
+        ]
+      },
+      {
+        "field": "post_fall_symptoms",
+        "option": "撞到頭部、頭痛、混亂或記憶喪失",
+        "mapping": {
+          "findings": [
+            "fall__subarachnoid_hemorrhage__severe_headache",
+            "fall__subarachnoid_hemorrhage__altered_mental_status",
+            "symptom_headache"
+          ]
+        },
+        "disease_ids": [
+          "fall__subarachnoid_hemorrhage",
+          "fall__decompression_sickness"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-3697ea6f89d68fd5",
+          "rag-7311154d5c6de6ab"
+        ]
+      },
+      {
+        "field": "post_fall_symptoms",
+        "option": "感到頭暈或旋轉感",
+        "mapping": {
+          "findings": [
+            "dizziness_unspecified"
+          ]
+        },
+        "disease_ids": [
+          "fall__decompression_sickness"
+        ],
+        "source_ids": [
+          "rag-7311154d5c6de6ab"
+        ]
+      },
+      {
+        "field": "post_fall_symptoms",
+        "option": "感到噁心或嘔吐",
+        "mapping": {
+          "findings": [
+            "nausea",
+            "vomiting"
+          ]
+        },
+        "disease_ids": [
+          "fall__decompression_sickness"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-a394352415d0560a",
+          "rag-7311154d5c6de6ab",
+          "rag-3424602f9c965022"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "fall__syncope",
+        "name": "Syncope",
+        "must_not_miss": false,
+        "retrieval_query": "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "syncope",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-ff175cd271f88014",
+              "rag-5bcac9eab5404341",
+              "rag-9569f87b2d38b7d4",
+              "rag-d71a0a73f65f79a2"
+            ]
+          },
+          {
+            "fact": "palpitations",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-ff175cd271f88014",
+              "rag-5bcac9eab5404341",
+              "rag-9569f87b2d38b7d4",
+              "rag-d71a0a73f65f79a2"
+            ]
+          },
+          {
+            "fact": "dizziness_unspecified",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-ff175cd271f88014",
+              "rag-5bcac9eab5404341",
+              "rag-9569f87b2d38b7d4",
+              "rag-d71a0a73f65f79a2"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "id": "fall__seizure_disorder",
+        "name": "Seizure Disorder",
+        "must_not_miss": false,
+        "retrieval_query": "Seizure Disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "syncope",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-3621455ec67c20e8"
+            ]
+          },
+          {
+            "fact": "focal_neurologic_symptom",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-98dfd27812d7a9ca"
+            ]
+          },
+          {
+            "fact": "recent_head_trauma",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-96851f20eb41d937",
+              "rag-98dfd27812d7a9ca"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-98dfd27812d7a9ca",
+          "rag-3621455ec67c20e8"
+        ]
+      },
+      {
+        "id": "fall__subarachnoid_hemorrhage",
+        "name": "Subarachnoid Hemorrhage",
+        "must_not_miss": true,
+        "retrieval_query": "Subarachnoid Hemorrhage diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [
+          "experimental_fall__subarachnoid_hemorrhage__severe_headache",
+          "experimental_fall__subarachnoid_hemorrhage__altered_mental_status",
+          "experimental_fall__subarachnoid_hemorrhage__focal_neurologic_deficits"
+        ],
+        "clues": [
+          {
+            "fact": "fall__subarachnoid_hemorrhage__severe_headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          },
+          {
+            "fact": "fall__subarachnoid_hemorrhage__altered_mental_status",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-3697ea6f89d68fd5",
+              "rag-8356ec010ed3ff6f"
+            ]
+          },
+          {
+            "fact": "fall__subarachnoid_hemorrhage__focal_neurologic_deficits",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          },
+          {
+            "fact": "palpitations",
+            "status": "absent",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-3697ea6f89d68fd5",
+          "rag-8356ec010ed3ff6f"
+        ]
+      },
+      {
+        "id": "fall__conversion_disorder",
+        "name": "Conversion Disorder",
+        "must_not_miss": false,
+        "retrieval_query": "Conversion Disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "fall__conversion_disorder__weakness_or_paralysis",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-68fb5876f7a7dbdb"
+            ]
+          },
+          {
+            "fact": "fall__conversion_disorder__sensory_disturbances",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-68fb5876f7a7dbdb"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-68fb5876f7a7dbdb",
+          "rag-fe2c619db19b8f8d",
+          "rag-669675c00c342b83"
+        ]
+      },
+      {
+        "id": "fall__decompression_sickness",
+        "name": "Decompression Sickness",
+        "must_not_miss": false,
+        "retrieval_query": "Decompression Sickness diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "focal_neurologic_symptom",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-a394352415d0560a",
+              "rag-7311154d5c6de6ab",
+              "rag-3424602f9c965022"
+            ]
+          },
+          {
+            "fact": "dizziness_unspecified",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-7311154d5c6de6ab"
+            ]
+          },
+          {
+            "fact": "symptom_headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-7311154d5c6de6ab"
+            ]
+          },
+          {
+            "fact": "nausea",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-a394352415d0560a",
+              "rag-7311154d5c6de6ab",
+              "rag-3424602f9c965022"
+            ]
+          },
+          {
+            "fact": "vomiting",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-a394352415d0560a",
+              "rag-7311154d5c6de6ab",
+              "rag-3424602f9c965022"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-a394352415d0560a",
+          "rag-7311154d5c6de6ab",
+          "rag-3424602f9c965022"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_fall__syncope__loss_of_consciousness",
+        "label": "跌倒時失去意識",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "fall"
+          ],
+          "any_findings": [
+            "syncope"
+          ]
+        },
+        "possible_conditions": [
+          "Syncope",
+          "Seizure",
+          "Head Injury"
+        ],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "code": "experimental_fall__syncope__chest_pain_or_palpitations",
+        "label": "跌倒前出現胸痛或心悸",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "fall"
+          ],
+          "any_findings": [
+            "symptom_chest_pain",
+            "palpitations"
+          ]
+        },
+        "possible_conditions": [
+          "Cardiac Syncope",
+          "Arrhythmia",
+          "Myocardial Infarction"
+        ],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "code": "experimental_fall__syncope__focal_neurologic_symptoms",
+        "label": "跌倒後出現局部神經學症狀",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "fall"
+          ],
+          "any_findings": [
+            "focal_neurologic_symptom"
+          ]
+        },
+        "possible_conditions": [
+          "Stroke",
+          "Transient Ischemic Attack",
+          "Head Injury"
+        ],
+        "source_ids": [
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "code": "experimental_fall__subarachnoid_hemorrhage__severe_headache",
+        "label": "Severe headache",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "fall"
+          ],
+          "any_findings": [
+            "fall__subarachnoid_hemorrhage__severe_headache"
+          ]
+        },
+        "possible_conditions": [
+          "Subarachnoid Hemorrhage"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_fall__subarachnoid_hemorrhage__altered_mental_status",
+        "label": "Altered mental status",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "fall"
+          ],
+          "any_findings": [
+            "fall__subarachnoid_hemorrhage__altered_mental_status"
+          ]
+        },
+        "possible_conditions": [
+          "Subarachnoid Hemorrhage"
+        ],
+        "source_ids": [
+          "rag-3697ea6f89d68fd5",
+          "rag-8356ec010ed3ff6f"
+        ]
+      },
+      {
+        "code": "experimental_fall__subarachnoid_hemorrhage__focal_neurologic_deficits",
+        "label": "Focal neurologic deficits",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "fall"
+          ],
+          "any_findings": [
+            "fall__subarachnoid_hemorrhage__focal_neurologic_deficits"
+          ]
+        },
+        "possible_conditions": [
+          "Subarachnoid Hemorrhage"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Detailed diagnostic criteria for different subtypes of syncope (e.g., vasovagal, cardiac, orthostatic).",
+        "reason": "The provided RAG sources are high-level and do not contain specific diagnostic criteria or features to differentiate between syncope etiologies."
+      },
+      {
+        "requirement": "Specific red flags for syncope that would warrant immediate emergency evaluation.",
+        "reason": "The RAG sources mention diagnostic tests but do not explicitly list a set of red flag symptoms or signs for syncope in an emergency context."
+      },
+      {
+        "requirement": "Guidance on assessing fall risk factors or post-fall management.",
+        "reason": "The provided text focuses on the diagnostic workup of syncope and related neuropathies, not on the broader topic of fall prevention or post-fall care."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create safety rules for Seizure Disorder.",
+        "reason": "The provided RAG sources list potential causes and indications for imaging (e.g., new focal deficits, trauma, persistent fever) but do not contain explicit emergency guidance, thresholds, or rule-out criteria suitable for creating structured safety rules."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Differentiate Conversion Disorder from malingering or factitious disorder.",
+        "reason": "This requires assessing conscious/intentional production of symptoms, which is beyond the scope of a digital symptom checker and requires clinical evaluation."
+      },
+      {
+        "requirement": "Rule out organic disease before considering Conversion Disorder.",
+        "reason": "The provided RAG sources state that Conversion Disorder is a diagnosis made after appropriate medical evaluation has excluded organic causes. This system cannot perform a medical evaluation."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create a specific fact for recent diving activity.",
+        "reason": "The questionnaire does not currently ask about recent diving, which is the primary risk factor for Decompression Sickness. This context is crucial for accurate risk assessment."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "The discovered disease is 'Syncope', but the supporting RAG sources (rag-ff175cd271f88014, rag-5bcac9eab5404341, rag-9569f87b2d38b7d4, rag-d71a0a73f65f79a2) are about various neuropathies and trigeminal neuralgia. While neuropathy can be a risk factor for falls, these sources do not directly support the diagnosis or workup of syncope itself. The only relevant source is the discovery source rag-3a72d4c38d9a0bb7. This limits the ability to create a detailed and well-supported profile for Syncope.",
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-5bcac9eab5404341"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[3], semantic_options[4], semantic_options[5], safety_proposals[0], safety_proposals[1], profiles[0], profiles[0].clues[0], profiles[0].clues[1]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The discovery of Seizure Disorder is based on a source discussing diagnostic tests for syncope, where EEG is mentioned if a seizure is a likely alternative. This is an indirect link but clinically reasonable for a fall presentation.",
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-98dfd27812d7a9ca",
+          "rag-3621455ec67c20e8"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The evidence for Seizure Disorder is limited. The sources discuss assessment in an emergency department setting and list potential causes and imaging criteria, rather than describing the typical presentation of a seizure itself. The profile is based on these associated findings rather than core seizure symptoms.",
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-98dfd27812d7a9ca"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-98dfd27812d7a9ca"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, review_notes[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-98dfd27812d7a9ca",
+          "rag-3621455ec67c20e8"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The provided RAG sources support identifying red flag symptoms associated with a fall that could indicate a serious underlying condition like Subarachnoid Hemorrhage. However, the sources do not provide enough detail to create a comprehensive differential diagnosis for the 'fall' route itself, focusing instead on symptoms that might co-occur.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-3697ea6f89d68fd5",
+          "rag-8356ec010ed3ff6f"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-f09c5253c7a82445",
+          "rag-3697ea6f89d68fd5",
+          "rag-8356ec010ed3ff6f"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The diagnosis of Conversion Disorder is complex and one of exclusion. The proposed profile should be considered with extreme caution, as it is critical to first rule out organic neurological or other medical conditions that can present with similar symptoms. The system cannot perform the necessary physical examination or diagnostic testing to do so.",
+        "source_ids": [
+          "rag-68fb5876f7a7dbdb",
+          "rag-fe2c619db19b8f8d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-68fb5876f7a7dbdb"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The profile for Decompression Sickness is proposed based on its potential to cause neurological symptoms (e.g., paresis, paresthesia, dizziness) that could lead to a fall. However, this is a rare condition highly specific to individuals with a recent history of diving or exposure to rapid pressure changes. The clinical utility of this profile is low without a screening question for such exposures.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-a394352415d0560a",
+          "rag-7311154d5c6de6ab",
+          "rag-3424602f9c965022"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-a394352415d0560a",
+          "rag-7311154d5c6de6ab",
+          "rag-3424602f9c965022"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], semantic_options[0], semantic_options[3], profiles[0], profiles[0].clues[0], profiles[0].clues[1], profiles[0].clues[4], profiles[0].clues[5]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-a394352415d0560a",
+          "rag-7311154d5c6de6ab",
+          "rag-3424602f9c965022"
+        ]
+      }
+    ]
+  }
+}

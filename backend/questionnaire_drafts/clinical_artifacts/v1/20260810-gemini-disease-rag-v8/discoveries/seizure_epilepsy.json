@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "seizure_epilepsy",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "d8a0ba1a68337a5dc64d9d47371688d19a381d3f1d448a298b7976c1e20ad0dc",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "seizure epilepsy seizure epilepsy differential diagnosis diseases clinical presentation symptoms history",
+      "seizure epilepsy seizure epilepsy red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "c9d470a9c9ba2d8ea1b3b494b56433458c00a02a6921d8c59bcf38c4adcafb72"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "155a051c52ecc0ce32f7d04f3628e31bcc1f7819219ee18b3c5d4d0b21c74604",
+    "generated_at": "2026-08-10T04:17:06+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-65eb41e9a6e1db7b",
+      "chunk_id": "ff681d097ae92651a7ea_64",
+      "title": "Epilepsy and Seizures: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1184846-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "seizure epilepsy seizure epilepsy differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.268,
+      "excerpt": "at the present time, hundreds of genes have been shown to cause or predispose individuals to seizure disorders of various types. Seizures are frequently seen in patients that are referred to a genetics clinic. In some cases, the seizures are isolated in an otherwise normal child. In many cases, seizures are part of a syndrome that may also include intellectual disability, specific brain malformations, or a host of multiple congenital anomalies. For the sake of brevity and clarity, genetic disorders that can cause seizures will be broken into the following categories: Syndromes in which",
+      "text_sha256": "5cfaeaea90f13ffe940b94c0975babaa52886f107379686763ec3e333be41305"
+    },
+    {
+      "id": "rag-38d61b7c6fae85d4",
+      "chunk_id": "b9850611a0f7f5bc9ed9_16",
+      "title": "Neonatal Seizures: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1177069-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "seizure epilepsy seizure epilepsy differential diagnosis diseases clinical presentation symptoms history",
+        "seizure epilepsy seizure epilepsy red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.326,
+      "excerpt": "examination at seizure onset, (4) cerebral ultrasonogram, (5) efficacy of anticonvulsant therapy, and (6) presence of neonatal status epilepticus. Each variable was scored from 0 to 3 to represent the range from normal to severely abnormal; these were then added together to produce a total composite score, ranging from 0 to 12. A cutoff score of 4 or higher provided the greatest sensitivity and specificity for prediction of adverse neurologic outcome. Morbidity and mortality Neonatal seizures are a risk factor that markedly increases rates of long-term morbidity and neonatal mortality. The",
+      "text_sha256": "a916841d7b1c1f502028d3f43c40c9c10c06846baaccdab6ca87dfe0b478c14d"
+    },
+    {
+      "id": "rag-00fc4ab69ee94192",
+      "chunk_id": "ee365f7a8a7eed6a32c3_16",
+      "title": "First Adult Seizure: Background, Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1186214-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "seizure epilepsy seizure epilepsy differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3342,
+      "excerpt": "despite technical differences in the studies. Racial differences have not been studied, but there appears to be a small to moderate male preponderance of men studies of first adult seizures in most reports. However, in an early study, Annegers et al found a slight overall preponderance of women. Their etiologic categories were neurologic deficit from birth, remote symptomatic, and no known previous etiology. The investigators identified a preponderance of men in the group with neurologic deficit from birth, no sex preponderance in the group with remote symptomatic seizures, and a slight",
+      "text_sha256": "529d687a4b441401de92ddf29e4d6fe9c477d0d407695e68afc0621cdd686b57"
+    },
+    {
+      "id": "rag-1f754e9f85910066",
+      "chunk_id": "2b6eb94497953c8a6426_13",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "seizure epilepsy seizure epilepsy differential diagnosis diseases clinical presentation symptoms history",
+        "seizure epilepsy seizure epilepsy red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.336,
+      "excerpt": "unconscious, family, friends, or prehospital personnel can be questioned). Other history findings may include the following: Recent noncompliance with medications History of central nervous system (CNS) pathology (stroke, neoplasms, recent surgery) History of systemic neoplasms, infections, metabolic disorders, or toxic ingestions Recent trauma or fall Alcohol abuse Recent travel or immigration to the United States Pregnancy Focal symptoms (partial seizure activity) that then progressed to a generalized seizure Physical examination A generalized seizure is recognizable at the bedside when",
+      "text_sha256": "fd4372dfb400601e922c7ab565bfae9da493bc65453502b3422b083a97baa01f"
+    },
+    {
+      "id": "rag-af1dca7759ecbfbf",
+      "chunk_id": "2b6eb94497953c8a6426_25",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "seizure epilepsy seizure epilepsy red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4012,
+      "excerpt": "the following in adults with new-onset seizure: rum glucose level, serum sodium level, and pregnancy test in women of childbearing age. For patients with a first-time, generalized tonic-clonic seizure, an electrolyte panel and a urine or serum pregnancy test should be obtained. Other tests can be ordered at the physician s discretion on the basis of the history and symptoms. For patients with known seizure disorder who are currently taking medications, blood levels of antiepileptic medications should be obtained. levels are often not available for newer agents. For patients with a history of",
+      "text_sha256": "1571c3f6ccf4b68d97537b48b5d919ea45c14a7824848b0eccf8b9383ef86514"
+    }
+  ],
+  "discovery": {
+    "route": "seizure_epilepsy",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "seizure_epilepsy__epilepsy",
+        "name": "Epilepsy",
+        "rationale": "The questionnaire asks about previous seizure history, which is central to diagnosing epilepsy. The RAG sources discuss epilepsy as a primary seizure disorder, which can be caused by or predisposed by hundreds of genes. This represents a chronic condition characterized by recurrent, unprovoked seizures.",
+        "source_ids": [
+          "rag-65eb41e9a6e1db7b"
+        ]
+      },
+      {
+        "id": "seizure_epilepsy__first_time_seizure",
+        "name": "First-time seizure",
+        "rationale": "The questionnaire explicitly asks if this is the first seizure event. The RAG sources highlight the importance of evaluating a first adult seizure to determine its etiology, which could be due to a neurologic deficit, a remote symptomatic cause, or have no known previous etiology.",
+        "source_ids": [
+          "rag-00fc4ab69ee94192",
+          "rag-af1dca7759ecbfbf"
+        ]
+      },
+      {
+        "id": "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology",
+        "name": "Symptomatic seizure due to CNS pathology",
+        "rationale": "The questionnaire asks about a history of stroke, brain hemorrhage, head trauma, or brain tumor. The RAG sources confirm that a history of central nervous system (CNS) pathology, such as stroke or neoplasms, is a key consideration in the etiology of seizures.",
+        "source_ids": [
+          "rag-1f754e9f85910066"
+        ]
+      },
+      {
+        "id": "seizure_epilepsy__symptomatic_seizure_due_to_metabolic_disorder",
+        "name": "Symptomatic seizure due to metabolic disorder",
+        "rationale": "The questionnaire asks about associated symptoms like fever, which can be related to systemic conditions. The RAG sources mention that a history of systemic infections or metabolic disorders is a potential cause for seizures and that lab tests for glucose and sodium levels are recommended for new-onset seizures.",
+        "source_ids": [
+          "rag-1f754e9f85910066",
+          "rag-af1dca7759ecbfbf"
+        ]
+      },
+      {
+        "id": "seizure_epilepsy__symptomatic_seizure_due_to_toxic_ingestion",
+        "name": "Symptomatic seizure due to toxic ingestion",
+        "rationale": "The questionnaire asks about associated symptoms that could be related to systemic issues. The RAG sources identify toxic ingestions and alcohol abuse as important historical factors to investigate when assessing a patient with a seizure.",
+        "source_ids": [
+          "rag-1f754e9f85910066"
+        ]
+      },
+      {
+        "id": "seizure_epilepsy__neonatal_seizure",
+        "name": "Neonatal seizure",
+        "rationale": "While the questionnaire is not specific to age, one of the RAG sources is dedicated to neonatal seizures, which are a distinct clinical entity. These seizures are a significant risk factor for long-term morbidity and mortality in newborns.",
+        "source_ids": [
+          "rag-38d61b7c6fae85d4"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The provided RAG sources cover a broad range of seizure etiologies, including genetic syndromes, first-time adult seizures, and neonatal seizures. The proposed diseases reflect these distinct clinical contexts.",
+        "source_ids": [
+          "rag-65eb41e9a6e1db7b",
+          "rag-00fc4ab69ee94192",
+          "rag-38d61b7c6fae85d4"
+        ]
+      }
+    ]
+  }
+}

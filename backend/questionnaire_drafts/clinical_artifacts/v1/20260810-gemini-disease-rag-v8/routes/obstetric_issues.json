@@ -1,0 +1,560 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "obstetric_issues",
+  "label": "產科問題",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "3289a5df07d4e7efb5aa1036a4bd7a824adf15fcd07e56394756d964222233c6",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"obstetric issues obstetric differential diagnosis diseases clinical presentation symptoms history\",\"obstetric issues obstetric red flags emergency warning signs urgent referral rule out\"]",
+    "rag_corpus_hash": "f3e035fd14c29f654c275db05e169b9981ecb1b33b90a9bbcafa46d72dcea9f1"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "bac47093d2298b1277d3b575e1755d4df4bd379fec67cf2570af5c74fdf2af54",
+    "generated_at": "2026-08-10T04:09:12+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-18fe378652eab677",
+      "chunk_id": "aa487a13953bac9fe331_2",
+      "title": "Pelvic Inflammatory Disease: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/256448-overview",
+      "routes": [
+        "common",
+        "abdomen",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "obstetric issues obstetric differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3923,
+      "excerpt": "urinary tract infection, endometriosis, ovarian torsion, and adnexal tumors. Ectopic pregnancy can be mistaken for PID; indeed, PID is the most common incorrect diagnosis in cases of ectopic pregnancy. Consequently, a pregnancy test is mandatory in the workup of women of childbearing age who have lower abdominal pain. (See DDx.) PID may produce tubo-ovarian abscess (TOA) and may progress to peritonitis and Fitz-Hugh−Curtis syndrome (perihepatitis; see the image below). Note that a rare but life-threatening complication of acute rupture of a TOA may result in diffuse peritonitis and necessitate",
+      "text_sha256": "da48aef116c096634c6732eab7ba125ac5a6f84c68ede01e38e36730129abcd5"
+    },
+    {
+      "id": "rag-c22cb0530d56e56d",
+      "chunk_id": "3046d06c862cf3a8d792_18",
+      "title": "Emergent Management of Ectopic Pregnancy: Practice Essentials, Ultrasonography, Other Diagnostic Imaging Modalities",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/796451-overview",
+      "routes": [
+        "common",
+        "abdomen",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "obstetric issues obstetric differential diagnosis diseases clinical presentation symptoms history",
+        "obstetric issues obstetric red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.411,
+      "excerpt": "sign is considered diagnostic of IUP by experienced sonographers, it can easily be confused with the pseudogestational sac found in ectopic pregnancy (caused by breakdown of stimulated endometrial lining) and lead to incorrect ruling out of ectopic pregnancy. The pseudogestational sac (seen in 10-20% of ectopic pregnancies ) can be differentiated by its central location in the uterus, oval shape, thin echogenic rim, and lack of double decidual sac sign (see the image below). Pseudogestational sac of ectopic pregnancy can be confused with embryonic demise. Pseudogestational sac is produced when",
+      "text_sha256": "dd9becc2658291456e8ece546dfdb71abbea31498f92c2cd84abe7989b47a0cd"
+    },
+    {
+      "id": "rag-f74acdef97ae6bb8",
+      "chunk_id": "2d52e0b25b95aa71cedd_11",
+      "title": "Early Pregnancy Loss in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795085-overview",
+      "routes": [
+        "common",
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "obstetric issues obstetric differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4192,
+      "excerpt": "recurrent spontaneous miscarriages. Congenital anatomic lesions include mr%rian duct anomalies (eg, septate uterus, diethylstilbestrol [DES]-related anomalies). Mr%rian duct lesions usually are found in second-trimester pregnancy loss. Anomalies of the uterine artery with compromised endometrial blood flow are congenital. Acquired lesions include intrauterine adhesions (ie, synechiae), leiomyoma, and endometriosis. Other diseases or abnormalities of the reproductive system that may result in miscarriage include congenital or acquired uterine defects, fibroids, cervical incompetence, abnormal",
+      "text_sha256": "c692331ade971cf1d927c3578a4671f959e19b1593d2cf558224f17c4d128160"
+    },
+    {
+      "id": "rag-a76f161a6be269a2",
+      "chunk_id": "2d52e0b25b95aa71cedd_7",
+      "title": "Early Pregnancy Loss in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795085-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "obstetric issues obstetric differential diagnosis diseases clinical presentation symptoms history",
+        "obstetric issues obstetric red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4229,
+      "excerpt": "usually have subsided. Ultrasonography reveals a vacant uterus. Diagnosis may be confirmed by observation of the aborted fetus with the complete placenta, although caution is recommended in making this diagnosis without ultrasonography because it can be difficult to determine if the miscarriage is complete. Etiology Causes of first- and second-trimester miscarriage Embryonic abnormalities Embryonic abnormalities account for 80-90% of rst-trimester miscarriages. Note the following: Chromosomal abnormalities are the most common cause of spontaneous miscarriage. More than 90% of cytogenic and",
+      "text_sha256": "e418143c55f0e41d9be572c2d83ec881b8de022dcf3551223c4286e115393f57"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "obstetric issues obstetric differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4323,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-237cdc7f25e842dd",
+      "chunk_id": "ada6d59cceae5f007a5d_17",
+      "title": "Asthma in Pregnancy: Risks and Prevalence, Pathophysiologic Mechanisms, Asthma Differentials",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/796274-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "obstetric issues obstetric red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5561,
+      "excerpt": "Chest radiographs (2 views) with a shielded maternal abdomen expose the fetus to approximately 0.00005 rad. Go to Imaging in Asthma for more complete information on this topic. Pulmonary Function Testing Hand-held peak flow meters are available in most emergency departments (EDs). If the patient s baseline is known, clinicians can use measurement to assess the severity of an attack and the patient s response to medications. Reversible airflow obstruction is central to the diagnosis and assessment of asthma. Changes in pulmonary function during acute asthma include the following: Decreased peak",
+      "text_sha256": "17887e59b05b80cedae82ebbb718068f5e167d658c08d29c2d65e1a10d8ead2a"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "obstetric issues obstetric red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5675,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    }
+  ],
+  "disease_candidates": [],
+  "proposal": {
+    "route": "obstetric_issues",
+    "evidence_status": "sufficient",
+    "route_review": {
+      "recommended_disposition": "handoff",
+      "recommended_clinical_domain": "abdomen",
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-18fe378652eab677",
+        "rag-c22cb0530d56e56d",
+        "rag-a76f161a6be269a2"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "obstetric_issues__vaginal_bleeding",
+        "description": "陰道出血。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-f74acdef97ae6bb8",
+          "rag-a76f161a6be269a2",
+          "rag-f09c5253c7a82445",
+          "rag-237cdc7f25e842dd",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "code": "obstetric_issues__lower_abdominal_pain",
+        "description": "下腹部疼痛。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-f74acdef97ae6bb8",
+          "rag-a76f161a6be269a2",
+          "rag-f09c5253c7a82445",
+          "rag-237cdc7f25e842dd",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "code": "obstetric_issues__contractions",
+        "description": "子宮收縮。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-f74acdef97ae6bb8",
+          "rag-a76f161a6be269a2",
+          "rag-f09c5253c7a82445",
+          "rag-237cdc7f25e842dd",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "code": "obstetric_issues__bloody_show",
+        "description": "見紅。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-f74acdef97ae6bb8",
+          "rag-a76f161a6be269a2",
+          "rag-f09c5253c7a82445",
+          "rag-237cdc7f25e842dd",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "code": "obstetric_issues__decreased_fetal_movement",
+        "description": "胎動減少。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-f74acdef97ae6bb8",
+          "rag-a76f161a6be269a2",
+          "rag-f09c5253c7a82445",
+          "rag-237cdc7f25e842dd",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "code": "obstetric_issues__dizziness_or_syncope",
+        "description": "頭暈或昏厥。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "obstetric_issues__extremity_or_facial_swelling",
+        "description": "手、腳或臉部腫脹。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-f74acdef97ae6bb8",
+          "rag-a76f161a6be269a2",
+          "rag-f09c5253c7a82445",
+          "rag-237cdc7f25e842dd",
+          "rag-62f530bca02a29ef"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "obstetric_symptoms",
+        "option": "產道出血",
+        "mapping": {
+          "findings": [
+            "obstetric_issues__vaginal_bleeding"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-f74acdef97ae6bb8",
+          "rag-a76f161a6be269a2",
+          "rag-f09c5253c7a82445",
+          "rag-237cdc7f25e842dd",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "field": "obstetric_symptoms",
+        "option": "下腹疼痛",
+        "mapping": {
+          "findings": [
+            "obstetric_issues__lower_abdominal_pain"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-f74acdef97ae6bb8",
+          "rag-a76f161a6be269a2",
+          "rag-f09c5253c7a82445",
+          "rag-237cdc7f25e842dd",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "field": "obstetric_symptoms",
+        "option": "宮縮",
+        "mapping": {
+          "findings": [
+            "obstetric_issues__contractions"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-f74acdef97ae6bb8",
+          "rag-a76f161a6be269a2",
+          "rag-f09c5253c7a82445",
+          "rag-237cdc7f25e842dd",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "field": "obstetric_symptoms",
+        "option": "見紅",
+        "mapping": {
+          "findings": [
+            "obstetric_issues__bloody_show"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-f74acdef97ae6bb8",
+          "rag-a76f161a6be269a2",
+          "rag-f09c5253c7a82445",
+          "rag-237cdc7f25e842dd",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "field": "decreased_fetal_movement",
+        "option": "是",
+        "mapping": {
+          "findings": [
+            "obstetric_issues__decreased_fetal_movement"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-f74acdef97ae6bb8",
+          "rag-a76f161a6be269a2",
+          "rag-f09c5253c7a82445",
+          "rag-237cdc7f25e842dd",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "field": "dizziness_or_syncope",
+        "option": "是",
+        "mapping": {
+          "findings": [
+            "obstetric_issues__dizziness_or_syncope"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-f74acdef97ae6bb8",
+          "rag-a76f161a6be269a2",
+          "rag-f09c5253c7a82445",
+          "rag-237cdc7f25e842dd",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "field": "extremity_or_facial_swelling",
+        "option": "是",
+        "mapping": {
+          "findings": [
+            "obstetric_issues__extremity_or_facial_swelling"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-f74acdef97ae6bb8",
+          "rag-a76f161a6be269a2",
+          "rag-f09c5253c7a82445",
+          "rag-237cdc7f25e842dd",
+          "rag-62f530bca02a29ef"
+        ]
+      }
+    ],
+    "profile_status": "not_applicable",
+    "profiles": [],
+    "safety_proposals": [
+      {
+        "code": "experimental_obstetric_issues__dizziness_or_syncope",
+        "label": "Dizziness or syncope in pregnancy",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "obstetric_issues"
+          ],
+          "any_findings": [
+            "obstetric_issues__dizziness_or_syncope"
+          ]
+        },
+        "possible_conditions": [
+          "Ectopic pregnancy",
+          "Hemorrhage",
+          "Cardiovascular event"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-18fe378652eab677"
+        ]
+      },
+      {
+        "code": "experimental_obstetric_issues__vaginal_bleeding",
+        "label": "Vaginal bleeding in pregnancy",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "obstetric_issues"
+          ],
+          "any_findings": [
+            "obstetric_issues__vaginal_bleeding"
+          ]
+        },
+        "possible_conditions": [
+          "Ectopic pregnancy",
+          "Miscarriage",
+          "Placental abruption",
+          "Placenta previa"
+        ],
+        "source_ids": [
+          "rag-a76f161a6be269a2",
+          "rag-c22cb0530d56e56d"
+        ]
+      },
+      {
+        "code": "experimental_obstetric_issues__lower_abdominal_pain",
+        "label": "Lower abdominal pain in pregnancy",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "obstetric_issues"
+          ],
+          "any_findings": [
+            "obstetric_issues__lower_abdominal_pain"
+          ]
+        },
+        "possible_conditions": [
+          "Ectopic pregnancy",
+          "Miscarriage",
+          "Preterm labor",
+          "Pelvic inflammatory disease"
+        ],
+        "source_ids": [
+          "rag-18fe378652eab677"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Create a safety rule for decreased fetal movement.",
+        "reason": "The provided RAG sources do not contain information about decreased fetal movement as a specific red flag or its associated conditions, preventing the creation of an evidence-based safety rule."
+      },
+      {
+        "requirement": "Create a safety rule for extremity or facial swelling.",
+        "reason": "The provided RAG sources do not contain information about swelling in pregnancy or its association with conditions like pre-eclampsia, preventing the creation of an evidence-based safety rule."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "This is a handoff route for obstetric issues. The primary goal is to capture key symptoms and escalate for clinical evaluation. No disease profiles are proposed as the disposition is not 'questionnaire'.",
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-f74acdef97ae6bb8",
+          "rag-a76f161a6be269a2",
+          "rag-f09c5253c7a82445",
+          "rag-237cdc7f25e842dd",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The provided RAG sources focus on early pregnancy complications like ectopic pregnancy and miscarriage. They do not cover later-term obstetric issues such as pre-eclampsia, placental abruption, or term labor, which may be relevant to the user's symptoms depending on gestational age. The proposed safety rules and facts are therefore limited by the scope of the available evidence.",
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-a76f161a6be269a2"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], fact_proposals[4], fact_proposals[6], semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[3], semantic_options[4], semantic_options[5]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-18fe378652eab677",
+          "rag-c22cb0530d56e56d",
+          "rag-f74acdef97ae6bb8",
+          "rag-a76f161a6be269a2",
+          "rag-f09c5253c7a82445",
+          "rag-237cdc7f25e842dd",
+          "rag-62f530bca02a29ef"
+        ]
+      }
+    ]
+  }
+}

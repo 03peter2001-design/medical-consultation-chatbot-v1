@@ -1,0 +1,1671 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "peripheral_vascular_leg_pain",
+  "label": "週邊血管 腿痛",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "70412b03e9aeab9252e2c8a0eb82a2f8c549818b5ae8db25498b9f01966b76f4",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history\",\"peripheral vascular leg pain leg pain peripheral vascular red flags emergency warning signs urgent referral rule out\",\"Complex Regional Pain Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Peripheral Arterial Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Deep Vein Thrombosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Lumbar Radiculopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Acute Limb Ischemia diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Cellulitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "f1b94788e2c4d8d0ef738c40e3cbcf32f01107f468f560b288745050328d3dbb"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "551a5f936b53cfc270fff6d6d14e473a596cf23047329e347e430020f3003151",
+    "generated_at": "2026-08-10T04:10:56+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-94a8e6edb9127701",
+      "chunk_id": "53b354e14520b0f0479f_1",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history",
+        "peripheral vascular leg pain leg pain peripheral vascular red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3841,
+      "excerpt": "phantom limb pain during his time as a military surgeon and his experiences with limb amputations. (ysicians throughout the world have described similar syndromes over the centuries and CRPS has held many names, even just within the English language.JCRPS, an entity formally called reflex sympathetic dystrophy (RSD), has readily identifiable signs and symptoms and is treatable if recognized early; however, the syndrome may become disabling if unrecognized. mergency medicine physicians may be the first to see the syndrome and their actions can vastly improve the quality of life and",
+      "text_sha256": "052206cb83a26a39421944480659ffd9843f01b3616c922b01641af1d18910e0"
+    },
+    {
+      "id": "rag-9deab9f70e8a586b",
+      "chunk_id": "164cc724f2b9fd145f51_5",
+      "title": "Chronic Pelvic Pain in Men: Practice Essentials, Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/437745-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4413,
+      "excerpt": "includes recommendations for the treatment of CPPS (see Guidelines). Etiology Chronic pelvic pain syndrome (CPPS) in the male is actually not a syndrome, in that it is not a discrete, narrowly defined constellation of consistent symptoms and objective findings ultimately traceable to a single, known etiology. Rather, CPPS in the male is a catch-all category of convenience into which physicians arbitrarily group the heterogeneous admixture of cases in male patients that meet the following three criteria: Patients have a variety of long-standing symptoms, a significant number of which relate to",
+      "text_sha256": "236ab1618e0bcf0d4a66548cdc91c1d36e9ee7f4097fc22fe764bd717201e888"
+    },
+    {
+      "id": "rag-835f66b18c883b66",
+      "chunk_id": "8bf15e6896ffc7065ab1_1",
+      "title": "Peripheral Vascular Injury Management in the Emergency Department: Practice Essentials, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/828558-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history",
+        "peripheral vascular leg pain leg pain peripheral vascular red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3872,
+      "excerpt": "hard and soft signs below) of a peripheral vascular injury, a careful history of bleeding, physical examination that includes an ankle-brachial index (ABI) or brachial-brachial index (BBI), and CT arteriography (depending on an ABI < 0.9) should determine the diagnosis of arterial injury. Hard and soft signs The presence of \"hard\" signs of vascular injury has a 92-95% sensitivity for injuries requiring intervention. The vast majority of patients exhibiting the following \"hard\" signs require intervention, with a positive predictive value greater than 95% : Bruit or thrill: These are present in",
+      "text_sha256": "e2a9f681649a008ff1eafe4306d7f4bc4c84e06cc4de8bbf67b973dc4f887227"
+    },
+    {
+      "id": "rag-ec954f001c548195",
+      "chunk_id": "164cc724f2b9fd145f51_0",
+      "title": "Chronic Pelvic Pain in Men: Practice Essentials, Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/437745-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4414,
+      "excerpt": "Overview Practice Essentials The term chronic pelvic pain syndrome (CPPS) is used to designate unexplained chronic pelvic pain in men. This pain is associated with irritative voiding symptoms and/or pain in the groin, genitalia, or perineum in the absence of pyuria and bacteriuria (no pus cells or bacteria seen on microscopic analysis of the urine). However, excess white blood cells (WBCs) or bacteria seen on Gram stain and culture of expressed prostatic secretions (EPS) may be found. (See Workup.) CPPS has also been termed prostatodynia; however, the use of this term is not encouraged in",
+      "text_sha256": "139258e959b0253ecf9a660a1f7c6902ed68a17d152841a0fa429e03f8b76fd1"
+    },
+    {
+      "id": "rag-c59525897414abb0",
+      "chunk_id": "8bf15e6896ffc7065ab1_2",
+      "title": "Peripheral Vascular Injury Management in the Emergency Department: Practice Essentials, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/828558-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3914,
+      "excerpt": "predictive value greater than 95% : Bruit or thrill: These are present in only 45% of patients with an arteriovenous fistula Active or pulsatile hemorrhage Pulsatile or expanding hematoma Signs of limb ischemia and elevated compartment pressure including the 5 \"P's: pallor, paresthesias, pulse deficit, paralysis, and pain on passive extension of the compartment. Pain on passive extension is the earliest and most sensitive physical finding. Diminished or absent pulses: This is not a sensitive prognostic finding, as up to 25% of patients with major vascular injuries requiring repair have normal",
+      "text_sha256": "943f9c3c277b0d0582389e37dd444fd6a01ce25e940299470cb6974905f4c959"
+    },
+    {
+      "id": "rag-2e06058fcff327f6",
+      "chunk_id": "53b354e14520b0f0479f_3",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "abdomen",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "peripheral_vascular_leg_pain__complex_regional_pain_syndrome"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history",
+        "Complex Regional Pain Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2396,
+      "excerpt": "characterized by a continuing (spontaneous and/or evoked) regional pain that is seemingly disproportionate in time or degree to the usual course of any known trauma or other lesion. The pain is regional (not in a specific nerve territory or dermatome) and usually has a distal predominance of abnormal sensory, motor, sudomotor, vasomotor, and/or trophic findings. The syndrome shows variable progression over time. Schwartzman stated that a common mechanism may be injury to central or peripheral neural tissue. Roberts proposed that sympathetic pain results from tonic activity in myelinated",
+      "text_sha256": "dee01c8dbefb642cc24e011d6414c1d6b17e04916638837cb18bf5eedd8e6837"
+    },
+    {
+      "id": "rag-7f0a0f4a5a402b2f",
+      "chunk_id": "74ab9de94000c37ef9b4_11",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4616,
+      "excerpt": "caudal sac. The classic presentation is bilateral sciatica, with lower extremity bowel or bladder dysfunction present in 90% of patients. Urinary retention is initially observed and followed by overflow incontinence. Perineal or perianal anesthesia is present in 60-80% of patients. Musculoskeletal pain syndromes Musculoskeletal pain syndromes that produce low back pain include myofascial pain syndromes and fibromyalgia. Myofascial pain is characterized by pain and tenderness over localized areas (trigger points), loss of range of motion in the involved muscle groups, and pain radiating in a",
+      "text_sha256": "5e8b0e4bddf178f04369b3d2139c4b28bf31da607287cda7de719fbb83462798"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "peripheral_vascular_leg_pain__peripheral_arterial_disease",
+        "peripheral_vascular_leg_pain__deep_vein_thrombosis",
+        "peripheral_vascular_leg_pain__lumbar_radiculopathy",
+        "peripheral_vascular_leg_pain__complex_regional_pain_syndrome",
+        "peripheral_vascular_leg_pain__acute_limb_ischemia"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular differential diagnosis diseases clinical presentation symptoms history",
+        "peripheral vascular leg pain leg pain peripheral vascular red flags emergency warning signs urgent referral rule out",
+        "Peripheral Arterial Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Deep Vein Thrombosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Lumbar Radiculopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Complex Regional Pain Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Acute Limb Ischemia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3801,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-cdf3e304df9694d7",
+      "chunk_id": "8bf15e6896ffc7065ab1_3",
+      "title": "Peripheral Vascular Injury Management in the Emergency Department: Practice Essentials, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/828558-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "peripheral_vascular_leg_pain__peripheral_arterial_disease"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular red flags emergency warning signs urgent referral rule out",
+        "Peripheral Arterial Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4028,
+      "excerpt": "up to 25% of patients with major vascular injuries requiring repair have normal pulses distal to the injury. The following \"soft\" signs are much less useful in predicting or excluding major vascular injuries that require intervention. The positive predictive value of \"soft\" signs indicating abnormal findings on an arteriogram is only 35%. The vast majority of these lesions do not require emergent repair. Hypotension or shock Neurologic deficit due to primary nerve injury occurs immediately after injury. In contrast, ischemic neuropathy is delayed in onset, developing within minutes to hours",
+      "text_sha256": "4f8430635db8b399edab8e71b37571a2bd80360ba5b3aeb05f73c103455e2b11"
+    },
+    {
+      "id": "rag-1a14728db5654797",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5493,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the",
+      "text_sha256": "a012e90799aaae112f8e2f59bf68f6b84cb309ef80df02b30b572ab01eb67b32"
+    },
+    {
+      "id": "rag-b364bf74b088d6d7",
+      "chunk_id": "ad7813cfe26a12fee4af_8",
+      "title": "Infective Endocarditis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/216650-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "peripheral vascular leg pain leg pain peripheral vascular red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.55,
+      "excerpt": "distal pads of the digits Janeway lesions: Nontender maculae on the palms and soles Roth spots: Retinal hemorrhages with small, clear centers (rare) Signs of neurologic disease include the following : Embolic stroke with focal neurologic deficits (the most common neurologic sign) Intracerebral hemorrhage Multiple microabscesses Other signs of IE include the following: Splenomegaly Stiff neck Delirium Paralysis, hemiparesis, aphasia Conjunctival hemorrhage Pallor Gallops Rales Cardiac arrhythmia Pericardial rub Pleural friction rub Low-grade fever (absent in 3-15% of patients) Anorexia Weight",
+      "text_sha256": "05226ba9cb8f5124f0b5fd68c91573da0cbdbb47e252e4b4a789c85b317296e1"
+    },
+    {
+      "id": "rag-b4c3735a3edc9535",
+      "chunk_id": "66b33c95b2ca1af9c721_44",
+      "title": "Hypertensive Heart Disease: Overview, Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/162449-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__peripheral_arterial_disease"
+      ],
+      "retrieval_queries": [
+        "Peripheral Arterial Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4363,
+      "excerpt": "and ophthalmologic system Central nervous system (CNS) examination findings are usually unremarkable unless the patient has had previous cerebrovascular accidents with residual deficit. CNS changes may also be seen in patients who present with hypertensive emergency. Examination of the fundi may reveal evidence of hypertensive retinopathy, the severity of which depends on the duration and severity of the patient's hypertension, or earlier signs of hypertension, such as arteriovenous nicking. Staging of Hypertension Although hypertensive heart disease typically is not described in various",
+      "text_sha256": "72a55f8dd6c3f6a7dc024fac212489fdf7ce80676cdde9c8015a957ff15d95a2"
+    },
+    {
+      "id": "rag-80aa6ad45ea04af3",
+      "chunk_id": "0b4e124e43266b2d82b6_20",
+      "title": "Neurological Sequelae of Infectious Endocarditis: Infective Endocarditis and the CNS, Etiology of CNS Sequelae, Epidemiology of CNS Sequelae",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165712-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__peripheral_arterial_disease"
+      ],
+      "retrieval_queries": [
+        "Peripheral Arterial Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4321,
+      "excerpt": "focal neurologic signs. Presumably, the transient nature (resolution) results from the disintegration and dislodgement of small emboli. Other conditions to consider in the differential diagnosis include the following: Aphasia Cardioembolic Stroke Cerebellar Hemorrhage Cerebral Aneurysms Cerebral Venous Thrombosis Complex Partial Seizures Lacunar Syndromes Primary CNS Lymphoma Spinal Epidural Abscess Subarachnoid Hemorrhage Depression, psychosis, aseptic meningitis, cavernous sinus syndromes, dissection syndromes, metastatic brain disease, herpes simplex encephalitis, orbital cellulitis, and",
+      "text_sha256": "fb338b461b87e6f7a7bd0014be98b96fa4d2fb470d5b90a9bff0775f0b6c9841"
+    },
+    {
+      "id": "rag-1d3d90d85d843b24",
+      "chunk_id": "53fc3e4f98765d889be9_19",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__deep_vein_thrombosis"
+      ],
+      "retrieval_queries": [
+        "Deep Vein Thrombosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4841,
+      "excerpt": "malformation, thromboembolic/hemorrhagic stroke, veno-occlusive disease, and vasospasm. Relative contraindications include hypotension, severe hypertension, coagulopathy, renal insufficiency, congestive heart failure, and sensitivity to iodinated contrast material. Patients should be stabilized, and tenuous conditions should be corrected prior to study. Conventional radiography Due to the advancements and accessibility of imaging technology, conventional radiography generally does not serve a role in the evaluation of the patient with acute head injury unless CT and MRI are unavailable. In",
+      "text_sha256": "142428e891c01675252948ca0626d9f0fd8378569a05552fda8f4c576dcdd171"
+    },
+    {
+      "id": "rag-02b622cf0e22d994",
+      "chunk_id": "40949ab525cdb33ba040_4",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__deep_vein_thrombosis"
+      ],
+      "retrieval_queries": [
+        "Deep Vein Thrombosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4488,
+      "excerpt": "by hemorrhage from both nares, and by visualization of blood draining in the posterior pharynx. Differential Diagnosis The differential diagnosis includes the following: Barotrauma Disseminated Intravascular Coagulation Endometriosis Foreign Bodies, Nose Hemophilia, Type A Hemophilia, Type B Osler-Weber-Rendu syndrome Rhinitis Plant Poisoning, Glycosides - Coumarin Sinusitis Toxicity, Cocaine Toxicity, Nonsteroidal Anti-inflammatory Agents Toxicity, Rodenticide Toxicity, Salicylate Toxicity, Warfarin and Superwarfarins von Willebrand Disease Diagnostic Considerations Other problems to be",
+      "text_sha256": "7fb71c7de80704fe1be64c3cae7c04a246ddeb7d5647ec8fe71d4107e8974654"
+    },
+    {
+      "id": "rag-99625dd7040d9eda",
+      "chunk_id": "e1fe0660ecbe5789652f_27",
+      "title": "Deep Venous Thrombosis (DVT): Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1911303-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__deep_vein_thrombosis"
+      ],
+      "retrieval_queries": [
+        "Deep Vein Thrombosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4451,
+      "excerpt": "Decreased vein wall contractility and vein valve dysfunction contribute to the development of chronic venous insufficiency. The rise in ambulatory venous pressure causes a variety of clinical symptoms of varicose veins, lower extremity edema, and venous ulceration. Development of thrombosis Thrombosis is the homeostatic mechanism whereby blood coagulates or clots, a process crucial to the establishment of hemostasis after a wound. It may be initiated via several pathways, usually consisting of cascading activation of enzymes that magnify the effect of an initial trigger event. A similar",
+      "text_sha256": "c69e62c9a4d87f89b84bae09c3d144e47ebe1ed6a91bb449406071e1d5a026ef"
+    },
+    {
+      "id": "rag-eab8b5d3ffaaf12a",
+      "chunk_id": "8180322f2e2a0415d2af_4",
+      "title": "Cysticercosis in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/781845-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__cellulitis"
+      ],
+      "retrieval_queries": [
+        "Cellulitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.494,
+      "excerpt": "locations are skin, skeletal muscle, heart, eye, and the central nervous system (CNS). Involvement of the CNS leads to the most important manifestation of the disease, neurocysticercosis (NCC). Symptomatology of neurocysticercosis (NCC) ranges from completely asymptomatic to severe disease and death. Symptoms largely depend on the presence of pericystic inflammation, the absence of which will usually manifest as asymptomatic disease. Lack of perilesional inflammation is seen with both \"active\" healthy parasites, which are able to evade host immunity (an adaptive feat that may be abetted by the",
+      "text_sha256": "e52b7644a37568d16e4d030f708a4d4f19ce327179d09d53a6efab7a73dd1062"
+    },
+    {
+      "id": "rag-601acb0947ec1d64",
+      "chunk_id": "d6b5ea4327e58bdeed45_19",
+      "title": "Cellulitis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/214222-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__cellulitis"
+      ],
+      "retrieval_queries": [
+        "Cellulitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5208,
+      "excerpt": "results from the metastatic seeding of an organism from a distant focus of infection, especially in immunocompromised individuals. Distant seeding is particularly common in cellulitis due to S pneumoniae (pneumococcus) and marine Vibriospecies. Neisseria meningitidis, Pseudomonas aeruginosa, Brucella species, and Legionella species have also been reported as rare causes of cellulitis resulting from hematogenous spread. Etiology Host factors Certain host factors predispose to severe infection. The elderly and individuals with diabetes mellitus are at risk for more severe disease. In addition,",
+      "text_sha256": "80f606d3d1f99dfbdb4b7853f08c31f52d94982d4fe6ee237477dc20e10e0159"
+    },
+    {
+      "id": "rag-3b08c1446770cfb3",
+      "chunk_id": "2caa64d4f6479c047b53_26",
+      "title": "Monoclonal Gammopathies of Undetermined Significance (MGUS): Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/204297-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__cellulitis"
+      ],
+      "retrieval_queries": [
+        "Cellulitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5288,
+      "excerpt": "risk extended to both bacterial and viral infections, and the following specific infections were noted: Pneumonia Osteomyelitis Septicemia Pyelonephritis Cellulitis Endocarditis Meningitis Influenza Herpes zoster Infection risk was highest in patients with M-protein concentrations over 2.5 g/dL, but was also increased in those with concentrations below 0.5 g/dL. Patients with MGUS who developed infections had no excess risk of progression to related malignancy. Clinical Presentation",
+      "text_sha256": "34feb8ae160e967e8eabf0f3b54442ca10defc2e92f88f938d12533f91d9f072"
+    },
+    {
+      "id": "rag-1886138bf63decc0",
+      "chunk_id": "5038c2c2522a60cb47cd_17",
+      "title": "Echinococcosis Hydatid Cyst: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/216432-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__cellulitis"
+      ],
+      "retrieval_queries": [
+        "Cellulitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5301,
+      "excerpt": "cases, due to the lack of official notification systems in many countries. Even countries that do have notification systems often do not collect data on CE. When they have reported cases, uneven reporting occurred in different regions of countries. Moreover, the groups most at risk for CE are usually underserved by medical services. Recently, epidemiological studies carried out with ultrasound have clarified that the disease is severely underreported. Furthermore, the EuropeanRegistry for Cystic Echinococcosis (ERCE) has gathered a number of cases superior to those present in the ECDC",
+      "text_sha256": "4ef2b8149865ef3be20c9a8c4c82220503be271f1934b123f7b1ec60fb6a045e"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__lumbar_radiculopathy"
+      ],
+      "retrieval_queries": [
+        "Lumbar Radiculopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4583,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-09f5bf5fd5fee52e",
+      "chunk_id": "596cdd4cd1ee540afa22_6",
+      "title": "Rheumatoid Factor: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087091-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__lumbar_radiculopathy"
+      ],
+      "retrieval_queries": [
+        "Lumbar Radiculopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4336,
+      "excerpt": "low-titer RF positivity can occur in the inflammatory disease sarcoidosis, while abnormally high RF levels can exist in the presence of leukemia, multiple myeloma, and other cancers. RF is also observed in 1-5% of healthy individuals. Thus, RF is not considered specific for RA. RF results may also be positive in patients without RA who have the following conditions: Systemic lupus erythematosus Polymyositis Tuberculosis Syphilis Viral hepatitis Infectious mononucleosis Influenza Indications/Applications RA is a chronic, autoimmune, peripheral polyarthropathy of unknown etiogenesis. The",
+      "text_sha256": "2eadd44adccf6efe29f4a66500aab40dd3eff0d527d50cbae803ba97fa4956d7"
+    },
+    {
+      "id": "rag-6de2861f53c8ba52",
+      "chunk_id": "42ce68fce3585e84032d_2",
+      "title": "Iritis and Uveitis: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/798323-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__lumbar_radiculopathy"
+      ],
+      "retrieval_queries": [
+        "Lumbar Radiculopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4887,
+      "excerpt": "Photophobia Blurred vision Increased lacrimation Chronic anterior uveitis presents primarily as blurred vision and mild redness. Patients have little pain or photophobia except when having an acute episode. Posterior uveitis presents as follows : Blurred vision and floaters Absence of symptoms of anterior uveitis (ie, pain, redness, and photophobia) The presence of symptoms of posterior uveitis, redness and pain suggests one of the following: Anterior chamber involvement Bacterial endophthalmitis Posterior scleritis Intermediate uveitis presents as follows : Painless floaters and decreased",
+      "text_sha256": "cf6a3cc6ec1bbe0958f29a1f11479acf0397023cc43ebdd06166ea735c44c8ea"
+    },
+    {
+      "id": "rag-9569f87b2d38b7d4",
+      "chunk_id": "53b354e14520b0f0479f_7",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__complex_regional_pain_syndrome"
+      ],
+      "retrieval_queries": [
+        "Complex Regional Pain Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2722,
+      "excerpt": "This complex syndrome has been further classified into two subtypes:J Type I: No evidence of peripheral nerve injury (formerly reflex sympathetic dystrophy)J Type II: Peripheral nerve injury present (formerly causalgia )J Epidemiology Frequency CRPS occurs in approximately 1 15% of peripheral nerve injury cases. Schwartzman states that CRPS usually occurs secondary to fractures, sprains, and trivial soft tissue injury. The incidence after fractures and contusions ranges from 10% to 30%. While some cases are associated with an identifiable nerve injury, many are not. Even \"microtrauma\" as might",
+      "text_sha256": "f92854d983ca7db67bc2172e7aa263a6e48ca5fce7aa1fad47b16359cb9a44c5"
+    },
+    {
+      "id": "rag-654afbed0c099b74",
+      "chunk_id": "a742c3686546c8f2ecf3_21",
+      "title": "Multiple Organ Dysfunction Syndrome in Sepsis: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/169640-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__complex_regional_pain_syndrome"
+      ],
+      "retrieval_queries": [
+        "Complex Regional Pain Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.515,
+      "excerpt": "contributors. In severe sepsis and septic shock, microcirculatory dysfunction and mitochondrial depression cause regional tissue distress, and regional dysoxia therefore persists. This condition is termed microcirculatory and mitochondrial distress syndrome (MMDS). Sepsis-induced inflammatory autoregulatory dysfunction persists, and oxygen need is not matched by supply, leading to MODS. Redistribution of intravascular fluid volume resulting from reduced arterial vascular tone, diminished venous return from venous dilation, and release of myocardial depressant substances causes hypotension.",
+      "text_sha256": "e1bb2f2c7c95541acce5fb5258a83bcf55e5e532b7466ed06d14becf7b3b8d49"
+    },
+    {
+      "id": "rag-bf455aa598e18457",
+      "chunk_id": "60a8e9fb259d62f055c2_69",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__acute_limb_ischemia"
+      ],
+      "retrieval_queries": [
+        "Acute Limb Ischemia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4623,
+      "excerpt": "that transient myocardial ischemia during exercise testing was associated with an immediate rise in BNP levels. In addition, the severity of ischemia was directly proportional to the elevation in BNP. Heart failure The presence of acute heart failure in patients with ACS is a well-known predictor of adverse cardiac events and higher risk. Therefore, it is not surprising that an elevated BNP level, as a marker of heart failure, is also predictive of adverse cardiac events in patients with ACS. Furthermore, the use of BNP and cardiac troponins on admission to the hospital is recommended by the",
+      "text_sha256": "ac51f37ad34d79d0eee7108f3112081d8943fc4633b68cd6e915d3022feaa14a"
+    },
+    {
+      "id": "rag-55e92e5f15424777",
+      "chunk_id": "d3dc873cbe44d16416a7_8",
+      "title": "Beriberi (Thiamine Deficiency): Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/116930-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__acute_limb_ischemia"
+      ],
+      "retrieval_queries": [
+        "Acute Limb Ischemia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.427,
+      "excerpt": "syndrome Bilateral, symmetrical lower extremities paresthesias, burning pain Muscle cramps Decreased vibratory position sensation Absent knee and ankle jerk Muscle atrophy Foot drop (late stage) Cardiovascular signs and mptoms are as follows: Tachycardia Chest pain Wide pulse pressure Heart failure (orthopnea with or without edema, warm skin due to vasodilation) Hypotension, shock Gastroenterologic symptoms are as follows: Anorexia Abdominal discomfort Constipation Dysphagia Infantile beriberisigns and mptoms are as follows : Congestive heart failure (CHF) Aphonia Absent deep tendon reflex",
+      "text_sha256": "336c2e06c8bb13641029727a13f1f4da11a248e8d676c00a3569c0a15e5d01fb"
+    },
+    {
+      "id": "rag-e003707b0f22499a",
+      "chunk_id": "34f74c815c14d4939e42_4",
+      "title": "Transient Ischemic Attack: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1910519-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "peripheral_vascular_leg_pain__acute_limb_ischemia"
+      ],
+      "retrieval_queries": [
+        "Acute Limb Ischemia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4469,
+      "excerpt": "focus in particular on the neurovascular distribution suggested by the patient s symptoms. Subsets of the neurologic examination include the following: Cranial nerve testing Determination of somatic motor strength Somatic sensory testing Speech and language testing Assessment of the cerebellar system (be sure to watch the patient walk) See Presentation for more detail. Diagnosis It is important to rule out other causes, such as metabolic or drug-induced etiologies, which can present with symptoms similar to that of TIA. The following tests are considered on an emergency basis: A fingerstick",
+      "text_sha256": "d5ae037326f32e91c6c522dbc9e842c488b897f40d10d2a7f677b4ea2560ae18"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "peripheral_vascular_leg_pain__peripheral_arterial_disease",
+      "name": "Peripheral Arterial Disease",
+      "retrieval_query": "Peripheral Arterial Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-c59525897414abb0",
+        "rag-835f66b18c883b66"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-cdf3e304df9694d7",
+        "rag-b4c3735a3edc9535",
+        "rag-80aa6ad45ea04af3"
+      ]
+    },
+    {
+      "id": "peripheral_vascular_leg_pain__deep_vein_thrombosis",
+      "name": "Deep Vein Thrombosis",
+      "retrieval_query": "Deep Vein Thrombosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-1a14728db5654797",
+        "rag-2e06058fcff327f6",
+        "rag-7f0a0f4a5a402b2f",
+        "rag-835f66b18c883b66",
+        "rag-94a8e6edb9127701",
+        "rag-9deab9f70e8a586b",
+        "rag-b364bf74b088d6d7",
+        "rag-c59525897414abb0",
+        "rag-cdf3e304df9694d7",
+        "rag-ec954f001c548195",
+        "rag-f09c5253c7a82445"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-1d3d90d85d843b24",
+        "rag-02b622cf0e22d994",
+        "rag-99625dd7040d9eda"
+      ]
+    },
+    {
+      "id": "peripheral_vascular_leg_pain__cellulitis",
+      "name": "Cellulitis",
+      "retrieval_query": "Cellulitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-1a14728db5654797",
+        "rag-2e06058fcff327f6",
+        "rag-7f0a0f4a5a402b2f",
+        "rag-835f66b18c883b66",
+        "rag-94a8e6edb9127701",
+        "rag-9deab9f70e8a586b",
+        "rag-b364bf74b088d6d7",
+        "rag-c59525897414abb0",
+        "rag-cdf3e304df9694d7",
+        "rag-ec954f001c548195",
+        "rag-f09c5253c7a82445"
+      ],
+      "disease_rag_source_ids": [
+        "rag-eab8b5d3ffaaf12a",
+        "rag-601acb0947ec1d64",
+        "rag-3b08c1446770cfb3",
+        "rag-1886138bf63decc0"
+      ]
+    },
+    {
+      "id": "peripheral_vascular_leg_pain__lumbar_radiculopathy",
+      "name": "Lumbar Radiculopathy",
+      "retrieval_query": "Lumbar Radiculopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-7f0a0f4a5a402b2f"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-5bcac9eab5404341",
+        "rag-09f5bf5fd5fee52e",
+        "rag-6de2861f53c8ba52"
+      ]
+    },
+    {
+      "id": "peripheral_vascular_leg_pain__complex_regional_pain_syndrome",
+      "name": "Complex Regional Pain Syndrome",
+      "retrieval_query": "Complex Regional Pain Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-94a8e6edb9127701",
+        "rag-2e06058fcff327f6"
+      ],
+      "disease_rag_source_ids": [
+        "rag-2e06058fcff327f6",
+        "rag-f09c5253c7a82445",
+        "rag-9569f87b2d38b7d4",
+        "rag-654afbed0c099b74"
+      ]
+    },
+    {
+      "id": "peripheral_vascular_leg_pain__acute_limb_ischemia",
+      "name": "Acute Limb Ischemia",
+      "retrieval_query": "Acute Limb Ischemia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-c59525897414abb0"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-bf455aa598e18457",
+        "rag-55e92e5f15424777",
+        "rag-e003707b0f22499a"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "peripheral_vascular_leg_pain",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-cdf3e304df9694d7",
+        "rag-b4c3735a3edc9535",
+        "rag-80aa6ad45ea04af3",
+        "rag-99625dd7040d9eda",
+        "rag-eab8b5d3ffaaf12a",
+        "rag-601acb0947ec1d64",
+        "rag-3b08c1446770cfb3",
+        "rag-1886138bf63decc0",
+        "rag-5bcac9eab5404341",
+        "rag-09f5bf5fd5fee52e",
+        "rag-6de2861f53c8ba52",
+        "rag-2e06058fcff327f6",
+        "rag-9569f87b2d38b7d4",
+        "rag-654afbed0c099b74",
+        "rag-bf455aa598e18457",
+        "rag-55e92e5f15424777",
+        "rag-e003707b0f22499a"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "peripheral_vascular_leg_pain__peripheral_arterial_disease__limb_pallor",
+        "description": "The leg appears pale.",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__peripheral_arterial_disease__limb_cyanosis",
+        "description": "The leg has a bluish or purplish discoloration.",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__peripheral_arterial_disease__limb_redness",
+        "description": "The leg appears red.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__peripheral_arterial_disease__limb_coldness",
+        "description": "The affected area of the leg feels cold to the touch.",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__peripheral_arterial_disease__limb_hotness",
+        "description": "The affected area of the leg feels hot to the touch.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__peripheral_arterial_disease__exertional_leg_pain",
+        "description": "Leg pain is aggravated by walking.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__peripheral_arterial_disease__rest_pain_relief",
+        "description": "Leg pain is relieved by rest.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__peripheral_arterial_disease__hypertension_history",
+        "description": "History of high blood pressure.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease"
+        ],
+        "source_ids": [
+          "rag-b4c3735a3edc9535"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__deep_vein_thrombosis__leg_pain_or_tenderness",
+        "description": "腿部疼痛或壓痛。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__deep_vein_thrombosis"
+        ],
+        "source_ids": [
+          "rag-99625dd7040d9eda"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__deep_vein_thrombosis__skin_discoloration_or_erythema",
+        "description": "腿部皮膚變色或發紅。",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__deep_vein_thrombosis"
+        ],
+        "source_ids": [
+          "rag-99625dd7040d9eda"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__deep_vein_thrombosis__warmth_in_affected_leg",
+        "description": "患肢皮膚溫度升高。",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__deep_vein_thrombosis"
+        ],
+        "source_ids": [
+          "rag-99625dd7040d9eda"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__cellulitis__skin_redness",
+        "description": "皮膚發紅。",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__cellulitis"
+        ],
+        "source_ids": [
+          "rag-601acb0947ec1d64"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__cellulitis__localized_warmth",
+        "description": "局部皮膚發熱或發燙。",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__cellulitis"
+        ],
+        "source_ids": [
+          "rag-601acb0947ec1d64"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__lumbar_radiculopathy__paresthesia",
+        "description": "感覺異常，例如麻木感或針刺感。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__lumbar_radiculopathy"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__acute_limb_ischemia__leg_pallor",
+        "description": "Leg skin appears pale.",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__acute_limb_ischemia"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-bf455aa598e18457",
+          "rag-55e92e5f15424777",
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__acute_limb_ischemia__leg_cyanosis",
+        "description": "Leg skin appears blue or purple.",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__acute_limb_ischemia"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-bf455aa598e18457",
+          "rag-55e92e5f15424777",
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__acute_limb_ischemia__leg_coldness",
+        "description": "The affected leg feels cold to the touch.",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__acute_limb_ischemia"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-bf455aa598e18457",
+          "rag-55e92e5f15424777",
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "code": "peripheral_vascular_leg_pain__acute_limb_ischemia__sudden_onset_pain",
+        "description": "Leg pain started suddenly.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__acute_limb_ischemia"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-bf455aa598e18457",
+          "rag-55e92e5f15424777",
+          "rag-e003707b0f22499a"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "leg_skin_color_change",
+        "option": "蒼白",
+        "mapping": {
+          "findings": [
+            "peripheral_vascular_leg_pain__peripheral_arterial_disease__limb_pallor",
+            "peripheral_vascular_leg_pain__acute_limb_ischemia__leg_pallor"
+          ]
+        },
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease",
+          "peripheral_vascular_leg_pain__acute_limb_ischemia"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3",
+          "rag-bf455aa598e18457",
+          "rag-55e92e5f15424777",
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "field": "leg_skin_color_change",
+        "option": "發紺",
+        "mapping": {
+          "findings": [
+            "peripheral_vascular_leg_pain__peripheral_arterial_disease__limb_cyanosis",
+            "peripheral_vascular_leg_pain__acute_limb_ischemia__leg_cyanosis"
+          ]
+        },
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease",
+          "peripheral_vascular_leg_pain__acute_limb_ischemia"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3",
+          "rag-bf455aa598e18457",
+          "rag-55e92e5f15424777",
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "field": "leg_skin_color_change",
+        "option": "發紅",
+        "mapping": {
+          "findings": [
+            "peripheral_vascular_leg_pain__peripheral_arterial_disease__limb_redness",
+            "peripheral_vascular_leg_pain__deep_vein_thrombosis__skin_discoloration_or_erythema",
+            "peripheral_vascular_leg_pain__cellulitis__skin_redness"
+          ]
+        },
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease",
+          "peripheral_vascular_leg_pain__deep_vein_thrombosis",
+          "peripheral_vascular_leg_pain__cellulitis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3",
+          "rag-99625dd7040d9eda",
+          "rag-601acb0947ec1d64"
+        ]
+      },
+      {
+        "field": "affected_area_temperature",
+        "option": "冰冷",
+        "mapping": {
+          "findings": [
+            "peripheral_vascular_leg_pain__peripheral_arterial_disease__limb_coldness",
+            "peripheral_vascular_leg_pain__acute_limb_ischemia__leg_coldness"
+          ]
+        },
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease",
+          "peripheral_vascular_leg_pain__acute_limb_ischemia"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3",
+          "rag-bf455aa598e18457",
+          "rag-55e92e5f15424777",
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "field": "affected_area_temperature",
+        "option": "發燙",
+        "mapping": {
+          "findings": [
+            "peripheral_vascular_leg_pain__peripheral_arterial_disease__limb_hotness",
+            "peripheral_vascular_leg_pain__deep_vein_thrombosis__warmth_in_affected_leg",
+            "peripheral_vascular_leg_pain__cellulitis__localized_warmth"
+          ]
+        },
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease",
+          "peripheral_vascular_leg_pain__deep_vein_thrombosis",
+          "peripheral_vascular_leg_pain__cellulitis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3",
+          "rag-99625dd7040d9eda",
+          "rag-601acb0947ec1d64"
+        ]
+      },
+      {
+        "field": "pain_aggravating_factors",
+        "option": "走路",
+        "mapping": {
+          "findings": [
+            "peripheral_vascular_leg_pain__peripheral_arterial_disease__exertional_leg_pain"
+          ]
+        },
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "field": "pain_relieving_factors",
+        "option": "休息",
+        "mapping": {
+          "findings": [
+            "peripheral_vascular_leg_pain__peripheral_arterial_disease__rest_pain_relief"
+          ]
+        },
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3"
+        ]
+      },
+      {
+        "field": "diagnosed_conditions",
+        "option": "高血壓",
+        "mapping": {
+          "findings": [
+            "peripheral_vascular_leg_pain__peripheral_arterial_disease__hypertension_history"
+          ]
+        },
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__peripheral_arterial_disease"
+        ],
+        "source_ids": [
+          "rag-b4c3735a3edc9535"
+        ]
+      },
+      {
+        "field": "pain_location",
+        "option": "小腿",
+        "mapping": {
+          "findings": [
+            "peripheral_vascular_leg_pain__deep_vein_thrombosis__leg_pain_or_tenderness"
+          ]
+        },
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__deep_vein_thrombosis"
+        ],
+        "source_ids": [
+          "rag-99625dd7040d9eda"
+        ]
+      },
+      {
+        "field": "pain_location",
+        "option": "大腿",
+        "mapping": {
+          "findings": [
+            "peripheral_vascular_leg_pain__deep_vein_thrombosis__leg_pain_or_tenderness"
+          ]
+        },
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__deep_vein_thrombosis"
+        ],
+        "source_ids": [
+          "rag-99625dd7040d9eda"
+        ]
+      },
+      {
+        "field": "diagnosed_conditions",
+        "option": "深靜脈血栓",
+        "mapping": {
+          "findings": [
+            "course_recurrent"
+          ]
+        },
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__deep_vein_thrombosis"
+        ],
+        "source_ids": [
+          "rag-99625dd7040d9eda"
+        ]
+      },
+      {
+        "field": "pain_character",
+        "option": "刺痛",
+        "mapping": {
+          "findings": [
+            "peripheral_vascular_leg_pain__lumbar_radiculopathy__paresthesia"
+          ]
+        },
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__lumbar_radiculopathy"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341"
+        ]
+      },
+      {
+        "field": "pain_onset_pattern",
+        "option": "突然發作",
+        "mapping": {
+          "onset": "sudden",
+          "findings": [
+            "peripheral_vascular_leg_pain__acute_limb_ischemia__sudden_onset_pain"
+          ]
+        },
+        "disease_ids": [
+          "peripheral_vascular_leg_pain__acute_limb_ischemia"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-bf455aa598e18457",
+          "rag-55e92e5f15424777",
+          "rag-e003707b0f22499a"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "peripheral_vascular_leg_pain__peripheral_arterial_disease",
+        "name": "Peripheral Arterial Disease",
+        "must_not_miss": false,
+        "retrieval_query": "Peripheral Arterial Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "peripheral_vascular_leg_pain__peripheral_arterial_disease__exertional_leg_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          },
+          {
+            "fact": "peripheral_vascular_leg_pain__peripheral_arterial_disease__limb_pallor",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-cdf3e304df9694d7",
+              "rag-b4c3735a3edc9535",
+              "rag-80aa6ad45ea04af3"
+            ]
+          },
+          {
+            "fact": "peripheral_vascular_leg_pain__peripheral_arterial_disease__hypertension_history",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-b4c3735a3edc9535"
+            ]
+          },
+          {
+            "fact": "peripheral_vascular_leg_pain__peripheral_arterial_disease__rest_pain_relief",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-cdf3e304df9694d7",
+              "rag-b4c3735a3edc9535",
+              "rag-80aa6ad45ea04af3"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3"
+        ]
+      },
+      {
+        "id": "peripheral_vascular_leg_pain__deep_vein_thrombosis",
+        "name": "Deep Vein Thrombosis",
+        "must_not_miss": false,
+        "retrieval_query": "Deep Vein Thrombosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "peripheral_vascular_leg_pain__deep_vein_thrombosis__leg_pain_or_tenderness",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-99625dd7040d9eda"
+            ]
+          },
+          {
+            "fact": "peripheral_vascular_leg_pain__deep_vein_thrombosis__warmth_in_affected_leg",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-99625dd7040d9eda"
+            ]
+          },
+          {
+            "fact": "peripheral_vascular_leg_pain__deep_vein_thrombosis__skin_discoloration_or_erythema",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-99625dd7040d9eda"
+            ]
+          },
+          {
+            "fact": "course_recurrent",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-99625dd7040d9eda"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-99625dd7040d9eda",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "id": "peripheral_vascular_leg_pain__cellulitis",
+        "name": "Cellulitis",
+        "must_not_miss": false,
+        "retrieval_query": "Cellulitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "peripheral_vascular_leg_pain__cellulitis__skin_redness",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-601acb0947ec1d64"
+            ]
+          },
+          {
+            "fact": "peripheral_vascular_leg_pain__cellulitis__localized_warmth",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-601acb0947ec1d64"
+            ]
+          },
+          {
+            "fact": "fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-601acb0947ec1d64"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-601acb0947ec1d64"
+        ]
+      },
+      {
+        "id": "peripheral_vascular_leg_pain__lumbar_radiculopathy",
+        "name": "Lumbar Radiculopathy",
+        "must_not_miss": false,
+        "retrieval_query": "Lumbar Radiculopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "peripheral_vascular_leg_pain__lumbar_radiculopathy__paresthesia",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-5bcac9eab5404341"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-09f5bf5fd5fee52e",
+          "rag-6de2861f53c8ba52"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_peripheral_vascular_leg_pain__peripheral_arterial_disease__signs_of_limb_ischemia",
+        "label": "Signs of limb ischemia",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "peripheral_vascular_leg_pain"
+          ],
+          "any_findings": [
+            "peripheral_vascular_leg_pain__peripheral_arterial_disease__limb_pallor"
+          ]
+        },
+        "possible_conditions": [
+          "Acute limb ischemia"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3"
+        ]
+      },
+      {
+        "code": "experimental_peripheral_vascular_leg_pain__deep_vein_thrombosis__chest_pain_or_dyspnea",
+        "label": "腿痛伴隨胸痛或呼吸困難",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "peripheral_vascular_leg_pain"
+          ],
+          "any_findings": [
+            "symptom_chest_pain",
+            "dyspnea"
+          ]
+        },
+        "possible_conditions": [
+          "Pulmonary Embolism"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Create facts for paresthesias, pulse deficit, paralysis, and pain on passive extension.",
+        "reason": "These are signs of limb ischemia that are typically assessed during a physical examination and are not suitable for a patient-facing questionnaire."
+      },
+      {
+        "requirement": "Create a fact for non-healing ulcers or wounds.",
+        "reason": "The provided RAG sources do not contain information about non-healing ulcers or wounds in the context of Peripheral Arterial Disease."
+      },
+      {
+        "requirement": "Create facts for specific risk factors like diabetes, heart disease, peripheral artery disease, DVT, or varicose veins.",
+        "reason": "While these are relevant risk factors, the provided RAG sources for Peripheral Arterial Disease only explicitly mention hypertension."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Map the questionnaire option 'leg_swelling' to a structured fact.",
+        "reason": "The 'leg_swelling' field is a free-text field, which cannot be mapped to a structured fact code. A structured fact for unilateral swelling has been created, but it cannot be directly linked to this free-text input."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Map questionnaire options to specific sensory, motor, sudomotor, vasomotor, and trophic findings for CRPS.",
+        "reason": "The provided RAG sources describe these findings generally but do not provide enough specific detail to confidently map them to the available questionnaire options (e.g., '發燙', '冰冷', '蒼白', '發紺', '發紅')."
+      },
+      {
+        "requirement": "Create safety rules based on red flags for CRPS.",
+        "reason": "The provided RAG sources do not contain specific red flag symptoms or emergency criteria for CRPS that would warrant an urgent safety rule."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Detect paresthesias (numbness, tingling).",
+        "reason": "The questionnaire does not include a specific question about numbness, tingling, or altered sensation in the leg."
+      },
+      {
+        "requirement": "Detect paralysis or focal weakness in the leg.",
+        "reason": "The questionnaire does not include a specific question about leg weakness or inability to move the leg."
+      },
+      {
+        "requirement": "Detect pulselessness.",
+        "reason": "This is a physical exam finding that cannot be assessed through a patient questionnaire."
+      },
+      {
+        "requirement": "Detect pain on passive extension.",
+        "reason": "This is a physical exam finding that cannot be reliably assessed through a patient questionnaire."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The RAG sources for Peripheral Arterial Disease are limited. Many of the proposed facts and semantic options are based on general clinical knowledge of PAD rather than direct evidence from the provided text. For example, cyanosis, coldness, and relief with rest are classic symptoms but not explicitly mentioned in the supplied snippets for PAD.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The RAG source rag-c59525897414abb0 lists the 5 'P's of limb ischemia (pallor, paresthesias, pulse deficit, paralysis, and pain on passive extension). Only pallor is directly mappable from the questionnaire. The other signs require a physical exam and cannot be reliably elicited from the current questions.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-80aa6ad45ea04af3",
+          "rag-cdf3e304df9694d7"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], fact_proposals[4], fact_proposals[6], semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[3], semantic_options[4]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-cdf3e304df9694d7",
+          "rag-b4c3735a3edc9535",
+          "rag-80aa6ad45ea04af3"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-99625dd7040d9eda"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-601acb0947ec1d64"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-eab8b5d3ffaaf12a",
+          "rag-601acb0947ec1d64",
+          "rag-3b08c1446770cfb3",
+          "rag-1886138bf63decc0"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-09f5bf5fd5fee52e",
+          "rag-6de2861f53c8ba52"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[1], fact_proposals[2], fact_proposals[3], safety_proposals[0], profiles[0], profiles[0].clues[0], profiles[0].clues[2]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-09f5bf5fd5fee52e",
+          "rag-6de2861f53c8ba52"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The concept of 'disproportionate pain' is central to CRPS but is difficult to ascertain from the current questionnaire structure. This may require more nuanced questioning or clinical judgment.",
+        "source_ids": [
+          "rag-2e06058fcff327f6"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-2e06058fcff327f6",
+          "rag-9569f87b2d38b7d4"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-2e06058fcff327f6",
+          "rag-f09c5253c7a82445",
+          "rag-9569f87b2d38b7d4",
+          "rag-654afbed0c099b74"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The RAG source for Acute Limb Ischemia mentions the '5 P's' (pallor, paresthesias, pulse deficit, paralysis, pain on passive extension). The current questionnaire can only detect pallor. Paresthesias and paralysis are not queried, while pulse deficit and pain on passive extension are physical exam findings. The inability to detect these other key signs limits the sensitivity for Acute Limb Ischemia.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-bf455aa598e18457",
+          "rag-55e92e5f15424777",
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The fact `peripheral_vascular_leg_pain__acute_limb_ischemia__leg_cyanosis` (發紺) is proposed based on clinical knowledge of ischemia, as it is a common sign, although not explicitly mentioned in the provided RAG sources for this disease. This requires clinical validation.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-bf455aa598e18457",
+          "rag-55e92e5f15424777",
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The fact `peripheral_vascular_leg_pain__acute_limb_ischemia__leg_coldness` (冰冷) is proposed based on clinical knowledge of ischemia (poikilothermia), as it is a common sign, although not explicitly mentioned in the provided RAG sources for this disease. This requires clinical validation.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-bf455aa598e18457",
+          "rag-55e92e5f15424777",
+          "rag-e003707b0f22499a"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-55e92e5f15424777"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[3], safety_proposals[0], profiles[0], profiles[0].clues[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-bf455aa598e18457",
+          "rag-55e92e5f15424777",
+          "rag-e003707b0f22499a"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,401 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "psychosocial_issues",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "5d7e5e5986b9be8f23a5ca6ad9f77932ab538c1c5294b5d147a4a6076630ce31",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "psychosocial issues psychosocial differential diagnosis diseases clinical presentation symptoms history",
+      "psychosocial issues psychosocial red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "5874f2243a4e61148540a6d07d27c4214771c7b702d86cce26da67a336500e57"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "8ccf517e0d41bbb5b5eeef2718c9bba6fc610483b117b89a6d89f5bcb28c3abc",
+    "generated_at": "2026-08-10T04:16:00+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "psychosocial issues psychosocial differential diagnosis diseases clinical presentation symptoms history",
+        "psychosocial issues psychosocial red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.393,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-d1bc752827795cad",
+      "chunk_id": "dde91349b90002a67a04_14",
+      "title": "Factitious Disorder Imposed on Another (Munchausen by proxy): Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/295258-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "psychosocial issues psychosocial differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3768,
+      "excerpt": "disabled person), the principal diagnosis is malingering. However, in many cases of FDIA, there is tangible gain that appears to be secondary to the non-tangible gain. FDIA and malingering are not mutually exclusive. Most of the symptoms in known and documented cases are physical complaints; feigning of behavioral symptoms appears to occur to a lesser extent. However, the full range of presentations is essentially unlimited. Physical presentations commonly include vomiting, diarrhea, respiratory arrest, asthma, seizure, recurrent conjunctivitis, clumsiness, syncope, fever, infection, bleeding,",
+      "text_sha256": "06df57f0e93ed86975fc7a205eeb6f8b963465e59df8246e641381247fa106c9"
+    },
+    {
+      "id": "rag-fe2c619db19b8f8d",
+      "chunk_id": "c2fe2cb9045703583e9f_2",
+      "title": "Conversion Disorder in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/805361-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "psychosocial issues psychosocial differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4015,
+      "excerpt": "or known pathological mechanism (after appropriate medical evaluation). NB: nscious/intentional production of physical symptoms is classified as ctitious disorder malingering. Though classified with somatic symptom/somatoform disorders in DSM-III through DSM-5-TR, conversion disorder is classified as a dissociative disorder in ICD-10, keeping its long association with hysteria (Dissociative Disorders in DSM). Clinical descriptions of conversion disorder date to almost 4000 years ago; the Egyptians attributed symptoms to a \"wandering uterus.\" In the 19th century, Paul Briquet described the",
+      "text_sha256": "9f1b3dd395445f75b03a1fb0a8b21191733659ec47e9bfe7f1eecbd0f3fb1fea"
+    },
+    {
+      "id": "rag-e1144a8990f72a66",
+      "chunk_id": "9aeedc640c68352d7494_39",
+      "title": "Dysmenorrhea: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/253812-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "psychosocial issues psychosocial differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4454,
+      "excerpt": "dysphoric disorder Besides dysmenorrhea, patients with premenstrual dysphoric disorder (formerly premenstrual syndrome) may have bloating, body aches, migraine headaches, breast tenderness, and emotional complaints. The effects of these symptoms are occasionally debilitating. Aside from possible vaginal brownish discharge or bleeding, pelvic examination findings are normal. It is the emergency physician s responsibility to ensure adequate analgesia and appropriate follow-up with a gynecologist. Epidemiology United States statistics Dysmenorrhea may affect more than 50% of menstruating women,",
+      "text_sha256": "bb63510b8350971d2228ebae08b7761a42c85ad97062900917d877d7e33f0df7"
+    },
+    {
+      "id": "rag-f2b39dca78f4e6f5",
+      "chunk_id": "bc9172913065a4ae8c05_1",
+      "title": "Brief Psychotic Disorder: Practice Essentials, Background, Pathophysiology and Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/294416-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "psychosocial issues psychosocial differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4004,
+      "excerpt": "of the following symptoms: Delusions Hallucinations Bizarre behavior and posture Disorganized speech Associated symptoms may include the following: Affective symptoms Disorientation Impaired attention Catatonic behavior The following are also commonly observed in brief psychotic disorder: Emotional volatility Outlandish dress or behavior Screaming or muteness Impaired memory for recent events A psychiatric history may be helpful. Symptoms of brief psychotic disorder must be distinguished from culturally sanctioned response patterns that may resemble such symptoms. Cultural and religious",
+      "text_sha256": "48a5f15df29e72c10bbc19a4067bdd4701c1c055f7cd053318ee7b2962d5205a"
+    },
+    {
+      "id": "rag-5517284893113a1c",
+      "chunk_id": "c2fe2cb9045703583e9f_1",
+      "title": "Conversion Disorder in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/805361-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "psychosocial issues psychosocial differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4485,
+      "excerpt": "to be the expression of an underlying psychological conflict or need. Conversion symptoms are presumed to result from some unconscious process. The precipitating psychological conflict or stressor may not be apparent initially, but may become evident in the course of obtaining a patient s history: ideally, it is a psychological issue related symbolically and temporally to symptom onset. nversion symptoms are not considered to be under voluntary control, and, should not be due to any physical disorder or known pathological mechanism (after appropriate medical evaluation). NB:",
+      "text_sha256": "d1517e4041137d2c2463a99e5ded3f891057acca77f019cb22c225c241bb3e4c"
+    },
+    {
+      "id": "rag-b6cc6e7662e93688",
+      "chunk_id": "bc9172913065a4ae8c05_9",
+      "title": "Brief Psychotic Disorder: Practice Essentials, Background, Pathophysiology and Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/294416-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "psychosocial issues psychosocial differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4062,
+      "excerpt": "when catatonia is associated with brief psychotic disorder to indicate the presence of the comorbid catatonia. The severity of brief psychotic disorder can be specified on the basis of quantitative assessment of the primary symptoms (see above), though a diagnosis can be made without specifying severity in this manner. Each symptom is rated with respect to current severity on a 5-point scale that ranges from 0 (not present) to 4 (present and severe). Pathophysiology and Etiology The causes of brief psychotic episodes are largely unknown. Patients with personality disorder may have biologic or",
+      "text_sha256": "4782d2a3bee2d1652bd60131e73c1f69e7723b075a8cdd2db1e8a963d91ffb75"
+    },
+    {
+      "id": "rag-656565d1f32268c7",
+      "chunk_id": "297d70c96fc165d2a9a3_5",
+      "title": "Ganser Syndrome: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/287390-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "psychosocial issues psychosocial differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4619,
+      "excerpt": "Manual of Mental Disorders, Fifth Edition, Text Revision (DSM-5-TR) but had been in previous editions (e.g., was considered a \"dissociative disorder not otherwise specified\" in the DSM-IV). In 1898, German psychiatrist Sigbert Ganser first published a lecture, delivered the previous year, describing 3 patients who exhibited a set of symptoms that he felt described a new \"hysterical\" syndrome. He began the lecture with an extract of the following conversation he had with one of these patients (as translated from German by C.E. Shorer). Q. Are you able to count to ten? A. Yes (But he does not,",
+      "text_sha256": "c8cac06767ca40175e862e4820f00149bb9fb89a134b6108c84ad5610a2d6c63"
+    },
+    {
+      "id": "rag-bbae70e5d19b6922",
+      "chunk_id": "bc9172913065a4ae8c05_6",
+      "title": "Brief Psychotic Disorder: Practice Essentials, Background, Pathophysiology and Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/294416-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "psychosocial issues psychosocial red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5358,
+      "excerpt": "hallucinations, disorganized thinking, motor behavior abnormalities (including catatonia), and negative symptoms. Brief psychotic disorder is distinguished from related disorders by the combination of sudden onset, relatively short duration (< 1 month) and full return of functioning. The diagnosis has been better appreciated and more completely studied in Scandinavia and other Western European countries than it has been in the United States. Diagnostic criteria (DSM-5) The specific DSM-5 criteria for brief psychotic disorder are as follows : The patient must have 1 or more of the following",
+      "text_sha256": "05e0c44829795e6745a9166cc4204f32168d48edaacc5567dd4eb8185711ad5c"
+    },
+    {
+      "id": "rag-0d5692b45e1350b2",
+      "chunk_id": "dde91349b90002a67a04_1",
+      "title": "Factitious Disorder Imposed on Another (Munchausen by proxy): Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/295258-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "psychosocial issues psychosocial red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5659,
+      "excerpt": "child abuse. Signs and symptoms Warning signs that raise the possibility of this disorder include the following: Problems that are unexplainable, persistent, or resistant to interventions that \"should\" work, after adequate evaluation and treatment attempts Serious discrepancies among the history, clinical findings, and patient's general presentation A working diagnosis of a disorder so rare that maltreatment is more likely Symptoms and signs that occur only in association with one person and/or schedule (e.g., weekly, monthly) or in the absence of a family member (e.g., whenever one parent",
+      "text_sha256": "8229278ec8553f7278811d135d8587e3bc03f740eb908944239ef35709d60f35"
+    },
+    {
+      "id": "rag-9518cc90f9d81c75",
+      "chunk_id": "645c0c6724630f509222_2",
+      "title": "Caffeine Toxicity: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/821863-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "psychosocial issues psychosocial red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5705,
+      "excerpt": "tremulousness, perioral and extremity tingling, confusion, psychosis, seizures Cardiovascular Palpitations or racing heart rate, chest pain Gastrointestinal (GI) Nausea and vomiting, abdominal pain, diarrhea, bowel incontinence, anorexia CNS findings on physical examination include the following: Anxiety, agitation Tremors Seizures Altered mental status Head, eyes, ears, nose, and throat findings Pupils that are dilated but reactive to light The thyroid should be examined because thyrotoxicosis may mimic caffeine toxicity. Cardiovascular findings on physical examination include the following:",
+      "text_sha256": "3f7d6c7189052ca7e4ba99c1c6681acf80612657671ce7cfeef8559d98d6de95"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "psychosocial issues psychosocial red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5414,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    },
+    {
+      "id": "rag-8356ec010ed3ff6f",
+      "chunk_id": "87996f6a71b53073e20c_3",
+      "title": "Acute Hypopituitarism: Overview, Diagnostic Considerations, Hormone Deficiency Symptoms",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767828-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "psychosocial issues psychosocial red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.571,
+      "excerpt": "rate. The setting is not uncommon in which an emergency physician is evaluating a patient with complaints of weakness, fatigue, or altered mental status without a clear diagnosis. Subtle, but still abnormal, vital signs, such as slightly reduced blood pressure or heart rate, may be the only initial clues to suggest a pituitary deficiency rather than a relatively benign etiology. Emergency physicians frequently provide care to patients at risk of developing hypopituitarism. Risk factors include, but are not limited to, TBI, cocaine use, subarachnoid hemorrhage, and postpartum hypotension (a",
+      "text_sha256": "66493d5f742848008b29c1bb6e2ef99b7317d22019ad008feed96fe38c63f932"
+    },
+    {
+      "id": "rag-3074fafca96e9376",
+      "chunk_id": "53fc3e4f98765d889be9_15",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "psychosocial issues psychosocial red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5784,
+      "excerpt": "encephalitis, headache, mental status change, hydrocephalus, ischemic disease and infarction, suspected pituitary dysfunction, inflammation or infection of the brain or meninges or their complications, demyelination and dysmyelination disorders, vascular malformations, and arterial or venous/dural sinus abnormalities. Patients who have cardiac pacemakers, ferromagnetic intracranial aneurysm clips, and certain ferromagnetic foreign bodies or electronic devices or implants should not undergo MRI. The routine MRI protocol varies considerably based on strength of the unit's field, machine",
+      "text_sha256": "efd6bcf781abb9e97e13fb806d50dc265fab9d450d001ad3cde9e6629777e105"
+    }
+  ],
+  "discovery": {
+    "route": "psychosocial_issues",
+    "evidence_status": "limited",
+    "diseases": [
+      {
+        "id": "psychosocial_issues__brief_psychotic_disorder",
+        "name": "Brief Psychotic Disorder",
+        "rationale": "The questionnaire addresses psychosocial issues which can sometimes manifest with severe symptoms. Brief psychotic disorder is characterized by a sudden onset of symptoms like delusions, hallucinations, or disorganized speech, lasting less than a month, with a full return to functioning. This could be a consideration for a patient presenting with acute, severe psychological distress.",
+        "source_ids": [
+          "rag-f2b39dca78f4e6f5",
+          "rag-bbae70e5d19b6922",
+          "rag-b6cc6e7662e93688"
+        ]
+      },
+      {
+        "id": "psychosocial_issues__conversion_disorder",
+        "name": "Conversion Disorder",
+        "rationale": "The questionnaire asks about unexplained physical symptoms like headaches or digestive issues. Conversion disorder involves neurological symptoms that cannot be explained by a medical condition and are thought to be linked to psychological conflict or stress. This diagnosis could be relevant if a patient's primary complaint is a physical symptom stemming from a psychosocial stressor.",
+        "source_ids": [
+          "rag-fe2c619db19b8f8d",
+          "rag-5517284893113a1c"
+        ]
+      },
+      {
+        "id": "psychosocial_issues__premenstrual_dysphoric_disorder",
+        "name": "Premenstrual Dysphoric Disorder",
+        "rationale": "The questionnaire covers a range of emotional and physical symptoms such as irritability, sadness, fatigue, and physical discomfort. Premenstrual dysphoric disorder (PMDD) is a severe form of PMS that includes debilitating emotional complaints and physical symptoms like body aches and headaches, which aligns with the symptoms being screened for.",
+        "source_ids": [
+          "rag-e1144a8990f72a66"
+        ]
+      },
+      {
+        "id": "psychosocial_issues__factitious_disorder",
+        "name": "Factitious Disorder",
+        "rationale": "This diagnosis is relevant in cases where physical or psychological symptoms are intentionally produced or feigned in the absence of external incentives. While the questionnaire assumes genuine reporting, factitious disorder remains a consideration in the differential for complex psychosocial presentations, especially if there are discrepancies between reported history and clinical findings.",
+        "source_ids": [
+          "rag-d1bc752827795cad"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "critical",
+        "note": "The questionnaire includes a direct question about suicidal or self-harm thoughts. Any positive response to this question requires immediate and urgent safety assessment and intervention.",
+        "source_ids": [
+          "rag-0d5692b45e1350b2",
+          "rag-3074fafca96e9376",
+          "rag-5517284893113a1c",
+          "rag-62f530bca02a29ef",
+          "rag-656565d1f32268c7",
+          "rag-8356ec010ed3ff6f",
+          "rag-9518cc90f9d81c75",
+          "rag-b6cc6e7662e93688",
+          "rag-bbae70e5d19b6922",
+          "rag-d1bc752827795cad",
+          "rag-e1144a8990f72a66",
+          "rag-f09c5253c7a82445",
+          "rag-f2b39dca78f4e6f5",
+          "rag-fe2c619db19b8f8d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The questionnaire asks about physical symptoms such as chest pain, headache, and fatigue. It is critical to rule out underlying medical conditions that can present with psychiatric or psychosocial symptoms, such as cardiac events, neurological issues, or endocrine disorders.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-62f530bca02a29ef",
+          "rag-8356ec010ed3ff6f",
+          "rag-3074fafca96e9376"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope discovery citations with the complete route RAG evidence pack for: review_notes[0]. These citations remain unverified.",
+        "source_ids": [
+          "rag-0d5692b45e1350b2",
+          "rag-3074fafca96e9376",
+          "rag-5517284893113a1c",
+          "rag-62f530bca02a29ef",
+          "rag-656565d1f32268c7",
+          "rag-8356ec010ed3ff6f",
+          "rag-9518cc90f9d81c75",
+          "rag-b6cc6e7662e93688",
+          "rag-bbae70e5d19b6922",
+          "rag-d1bc752827795cad",
+          "rag-e1144a8990f72a66",
+          "rag-f09c5253c7a82445",
+          "rag-f2b39dca78f4e6f5",
+          "rag-fe2c619db19b8f8d"
+        ]
+      }
+    ]
+  }
+}

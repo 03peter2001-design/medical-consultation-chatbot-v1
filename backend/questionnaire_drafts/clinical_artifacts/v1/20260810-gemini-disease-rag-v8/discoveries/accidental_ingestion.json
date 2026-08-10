@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "accidental_ingestion",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "006e1c3ca1b895d15b712034dceae7e28ac7c6712400e3bba3d1525c40e32c0a",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "accidental ingestion poisoning accidental ingestion differential diagnosis diseases clinical presentation symptoms history",
+      "accidental ingestion poisoning accidental ingestion red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "a1e3dda08898b175fc468db1ffbc7b5e1c15fe9afa37cde65d9edf396721ab32"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "ea566f95fadbe5bcc7350f10d819dd75abe81823d6cd6596d88626c13ba503ab",
+    "generated_at": "2026-08-10T03:53:25+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-80a1512617e77243",
+      "chunk_id": "533df8c4e1c8cc2bd460_14",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "abdomen",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "accidental ingestion poisoning accidental ingestion differential diagnosis diseases clinical presentation symptoms history",
+        "accidental ingestion poisoning accidental ingestion red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3497,
+      "excerpt": "most common clinical manifestations of an allergic reaction to a food or food additive. Symptoms range from acute urticaria (most common) to flushing to angioedema to exacerbations of atopic dermatitis. Food allergy is rarely the cause of chronic urticaria or angioedema. Atopic dermatitis Controversy surrounds the role of food allergy in the pathogenesis of atopic dermatitis. Studies show that among patients with moderate chronic atopic dermatitis, 35-40% have IgE-mediated food allergy. Food-specific IgE-mediated and cellular mechanisms appear responsible for chronic eczematous inflammation.",
+      "text_sha256": "844a1bbac3426efe4bf1acffd9503ea80bb65946263bb74b9cf52519fd6ce260"
+    },
+    {
+      "id": "rag-3f8e610ef37f1c03",
+      "chunk_id": "5a28fd292d33d89227fe_17",
+      "title": "Intestinal Flukes: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/219662-overview",
+      "routes": [
+        "abdomen",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "accidental ingestion poisoning accidental ingestion differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3667,
+      "excerpt": "ulcers with mild inflammation and/or local necrosis. Mild infections do not cause symptoms, but heavy infections produce diarrhea, flatulence, and intestinal colic similar to fasciolopsiasis. Disease manifestations in humans likely result from two pathogenetic mechanisms, including fluke-induced mechanical irritation and/or the related allergic reaction to various toxic metabolites. Humoral responses to echinostomal infections may include elevated serum and gut-associated immunoglobulin A (IgA), immunoglobulin G (IgG), and immunoglobulin M (IgM) levels, as demonstrated by studies involving",
+      "text_sha256": "5e63903603fa88e422015004c18be8598c0defa6fe70afcf38d878d117250dab"
+    },
+    {
+      "id": "rag-546751b7f9804cf3",
+      "chunk_id": "8e2efb27c1e6c31ea64f_6",
+      "title": "Food Poisoning: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/175569-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "accidental ingestion poisoning accidental ingestion differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3968,
+      "excerpt": "symptoms or if the clinical picture suggests perforation. Procedures Consider performing the following procedures when a stool examination is nondiagnostic, especially in immunocompromised patients: Sigmoidoscopy/colonoscopy with biopsy EGD with duodenal aspirate and biopsy In patients with bloody diarrhea, sigmoidoscopy can be useful in diagnosing inflammatory bowel disease, antibiotic-associated diarrhea, shigellosis, and amebic dysentery. See Workup for more detail. Management Most food-borne illnesses are mild and improve without any specific treatment. Some patients have severe disease",
+      "text_sha256": "03894e0fe88305944b3d288ada6ea1803cf32a92d839be01be76b05334460c7d"
+    },
+    {
+      "id": "rag-cab6197197eae1c7",
+      "chunk_id": "533df8c4e1c8cc2bd460_3",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "accidental ingestion poisoning accidental ingestion differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.415,
+      "excerpt": "All observed symptoms and each one s severity Duration of the reaction Treatment provided and clinical response to treatment Most recent reaction Physical examination findings are most useful for the following: Assessing nutritional status, growth parameters, and signs of other allergic disease Helping to rule out other conditions that may mimic food allergy See Clinical Presentation for more detail. Diagnosis Laboratory studies that may be helpful include the following: Specific immunoglobulin E (IgE) antibody testing: Positive results primarily denote sensitization and may not confirm",
+      "text_sha256": "24ae1a28521ea2399ffc3d19797531e94ed9a8f83ede29825697f4ffacf1b107"
+    },
+    {
+      "id": "rag-d9c00f697dca51b6",
+      "chunk_id": "8e2efb27c1e6c31ea64f_4",
+      "title": "Food Poisoning: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/175569-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "accidental ingestion poisoning accidental ingestion differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3969,
+      "excerpt": "following routine laboratory tests may help to assess the patient s inflammatory response and the degree of dehydration: CBC with differential Serum electrolyte assessment BUN and creatinine levels Other laboratory studies can be helpful in cases of food poisoning and include the following: Stool Gram staining and Loeffler methylene blue staining for WBCs: To help differentiate invasive disease from noninvasive disease Microscopic examination of the stool: To detect any ova and parasites Bacterial culture for enteric pathogens (eg, Salmonella, Shigella,Campylobacter organisms): Mandatory when",
+      "text_sha256": "0e2dfacfea3e67bfeab52b8160f3d4dc2fabb7700e6c14b49a149a0dad2aa17f"
+    },
+    {
+      "id": "rag-d28ebb49bb7c15d4",
+      "chunk_id": "0b4e124e43266b2d82b6_21",
+      "title": "Neurological Sequelae of Infectious Endocarditis: Infective Endocarditis and the CNS, Etiology of CNS Sequelae, Epidemiology of CNS Sequelae",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165712-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "accidental ingestion poisoning accidental ingestion differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4807,
+      "excerpt": "metastatic brain disease, herpes simplex encephalitis, orbital cellulitis, and carotid disease and stroke should also be considered in the differential diagnosis. Diagnosis of CNS Sequelae Cerebrospinal fluid examination In the Massachusetts General Hospital series of 218 patients, 33 had meningeal symptoms (15%). Of patients with CNS involvement from infective endocarditis, one third had completely normal cerebrospinal fluid (CSF), one fourth had a slightly abnormal CSF but an aseptic culture, and one fourth had frankly purulent CSF. Noteworthy as well is that one sixth had hemorrhagic fluid.",
+      "text_sha256": "f98e813835d89c8700502e851754fc84e41fef6ea7d4ce08932f1a8db9173930"
+    },
+    {
+      "id": "rag-ed6248be74521851",
+      "chunk_id": "9b99f2d418e0fa19b275_1",
+      "title": "Typhoid Fever: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/231135-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "accidental ingestion poisoning accidental ingestion differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.484,
+      "excerpt": "in a wide variety of ways ranging from an overwhelming septic illness to minor cases of diarrhea with low-grade fever. The classic presentation is one of fever, malaise, diffuse abdominal pain, and constipation. Untreated typhoid fever may progress to delirium, obtundation, intestinal hemorrhage, bowel perforation, and death within 1 month of onset. Survivors may be left with long-term or permanent neuropsychiatric complications. The term typhoid derived from the ancient Greek word for cloud, was chosen to emphasize the severity and long lasting neuropsychiatric effects among the untreated.",
+      "text_sha256": "9b331377996ee9cf91b44d0bc3cf30c96f99411d4c53e1b68304db1fc767d844"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "accidental ingestion poisoning accidental ingestion differential diagnosis diseases clinical presentation symptoms history",
+        "accidental ingestion poisoning accidental ingestion red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4918,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-141c45b725f6f5f4",
+      "chunk_id": "533df8c4e1c8cc2bd460_8",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "accidental ingestion poisoning accidental ingestion red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.454,
+      "excerpt": "accidental or inadvertent ingestions may occur and lead to a reaction. Strategies for dealing with such a reaction include the following: Creation of a concise written emergency management plan (see www.foodallergy.org), copies of which should be available in appropriate places (eg, daycare, schools, work locations, and college dormitory advisors) Use of medical identification jewelry indicating food allergies Ensuring that the patient has an emergency contact number available Provision of anticipatory guidance measures (eg, educating the patient about potential sources of accidental exposure)",
+      "text_sha256": "3ebb7a7916a5d341fffc58e3ef32f96b2cf1724040de92cd8f49e20954ff22ec"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "accidental ingestion poisoning accidental ingestion red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5766,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    }
+  ],
+  "discovery": {
+    "route": "accidental_ingestion",
+    "evidence_status": "sufficient",
+    "diseases": [],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The user is reporting an accidental ingestion, which requires a handoff for professional medical evaluation. The provided RAG sources discuss potential consequences of ingestion, such as food poisoning, allergic reactions, and systemic effects, but the immediate priority is safety assessment by a healthcare professional, not differential diagnosis.",
+        "source_ids": [
+          "rag-546751b7f9804cf3",
+          "rag-80a1512617e77243",
+          "rag-141c45b725f6f5f4"
+        ]
+      }
+    ]
+  }
+}

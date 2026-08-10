@@ -1,0 +1,1294 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "seizure_epilepsy",
+  "label": "抽搐 癲癇",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "d8a0ba1a68337a5dc64d9d47371688d19a381d3f1d448a298b7976c1e20ad0dc",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"seizure epilepsy seizure epilepsy differential diagnosis diseases clinical presentation symptoms history\",\"seizure epilepsy seizure epilepsy red flags emergency warning signs urgent referral rule out\",\"Neonatal seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Epilepsy diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"First-time seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Symptomatic seizure due to CNS pathology diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Symptomatic seizure due to metabolic disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Symptomatic seizure due to toxic ingestion diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "76710806a1ad45915d75e65d1264ab91f4de5ca2dc168e6ebef55401c239c42f"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "cb09989d983b05393f22cf52b2f0b9b55492571e129ac3ba22a42b19036dc40f",
+    "generated_at": "2026-08-10T04:19:19+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-65eb41e9a6e1db7b",
+      "chunk_id": "ff681d097ae92651a7ea_64",
+      "title": "Epilepsy and Seizures: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1184846-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "seizure epilepsy seizure epilepsy differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.268,
+      "excerpt": "at the present time, hundreds of genes have been shown to cause or predispose individuals to seizure disorders of various types. Seizures are frequently seen in patients that are referred to a genetics clinic. In some cases, the seizures are isolated in an otherwise normal child. In many cases, seizures are part of a syndrome that may also include intellectual disability, specific brain malformations, or a host of multiple congenital anomalies. For the sake of brevity and clarity, genetic disorders that can cause seizures will be broken into the following categories: Syndromes in which",
+      "text_sha256": "5cfaeaea90f13ffe940b94c0975babaa52886f107379686763ec3e333be41305"
+    },
+    {
+      "id": "rag-38d61b7c6fae85d4",
+      "chunk_id": "b9850611a0f7f5bc9ed9_16",
+      "title": "Neonatal Seizures: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1177069-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "seizure_epilepsy__neonatal_seizure"
+      ],
+      "retrieval_queries": [
+        "seizure epilepsy seizure epilepsy differential diagnosis diseases clinical presentation symptoms history",
+        "seizure epilepsy seizure epilepsy red flags emergency warning signs urgent referral rule out",
+        "Neonatal seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3175,
+      "excerpt": "examination at seizure onset, (4) cerebral ultrasonogram, (5) efficacy of anticonvulsant therapy, and (6) presence of neonatal status epilepticus. Each variable was scored from 0 to 3 to represent the range from normal to severely abnormal; these were then added together to produce a total composite score, ranging from 0 to 12. A cutoff score of 4 or higher provided the greatest sensitivity and specificity for prediction of adverse neurologic outcome. Morbidity and mortality Neonatal seizures are a risk factor that markedly increases rates of long-term morbidity and neonatal mortality. The",
+      "text_sha256": "a916841d7b1c1f502028d3f43c40c9c10c06846baaccdab6ca87dfe0b478c14d"
+    },
+    {
+      "id": "rag-00fc4ab69ee94192",
+      "chunk_id": "ee365f7a8a7eed6a32c3_16",
+      "title": "First Adult Seizure: Background, Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1186214-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "seizure epilepsy seizure epilepsy differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3342,
+      "excerpt": "despite technical differences in the studies. Racial differences have not been studied, but there appears to be a small to moderate male preponderance of men studies of first adult seizures in most reports. However, in an early study, Annegers et al found a slight overall preponderance of women. Their etiologic categories were neurologic deficit from birth, remote symptomatic, and no known previous etiology. The investigators identified a preponderance of men in the group with neurologic deficit from birth, no sex preponderance in the group with remote symptomatic seizures, and a slight",
+      "text_sha256": "529d687a4b441401de92ddf29e4d6fe9c477d0d407695e68afc0621cdd686b57"
+    },
+    {
+      "id": "rag-1f754e9f85910066",
+      "chunk_id": "2b6eb94497953c8a6426_13",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "seizure epilepsy seizure epilepsy differential diagnosis diseases clinical presentation symptoms history",
+        "seizure epilepsy seizure epilepsy red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.336,
+      "excerpt": "unconscious, family, friends, or prehospital personnel can be questioned). Other history findings may include the following: Recent noncompliance with medications History of central nervous system (CNS) pathology (stroke, neoplasms, recent surgery) History of systemic neoplasms, infections, metabolic disorders, or toxic ingestions Recent trauma or fall Alcohol abuse Recent travel or immigration to the United States Pregnancy Focal symptoms (partial seizure activity) that then progressed to a generalized seizure Physical examination A generalized seizure is recognizable at the bedside when",
+      "text_sha256": "fd4372dfb400601e922c7ab565bfae9da493bc65453502b3422b083a97baa01f"
+    },
+    {
+      "id": "rag-af1dca7759ecbfbf",
+      "chunk_id": "2b6eb94497953c8a6426_25",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "seizure epilepsy seizure epilepsy red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4012,
+      "excerpt": "the following in adults with new-onset seizure: rum glucose level, serum sodium level, and pregnancy test in women of childbearing age. For patients with a first-time, generalized tonic-clonic seizure, an electrolyte panel and a urine or serum pregnancy test should be obtained. Other tests can be ordered at the physician s discretion on the basis of the history and symptoms. For patients with known seizure disorder who are currently taking medications, blood levels of antiepileptic medications should be obtained. levels are often not available for newer agents. For patients with a history of",
+      "text_sha256": "1571c3f6ccf4b68d97537b48b5d919ea45c14a7824848b0eccf8b9383ef86514"
+    },
+    {
+      "id": "rag-96851f20eb41d937",
+      "chunk_id": "2b6eb94497953c8a6426_9",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "seizure_epilepsy__epilepsy",
+        "seizure_epilepsy__first_time_seizure",
+        "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology",
+        "seizure_epilepsy__symptomatic_seizure_due_to_metabolic_disorder",
+        "seizure_epilepsy__symptomatic_seizure_due_to_toxic_ingestion",
+        "seizure_epilepsy__neonatal_seizure"
+      ],
+      "retrieval_queries": [
+        "Epilepsy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "First-time seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Symptomatic seizure due to CNS pathology diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Symptomatic seizure due to metabolic disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Symptomatic seizure due to toxic ingestion diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Neonatal seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2943,
+      "excerpt": "contribute to seizures in patients with known seizure disorder, but these are diagnoses of exclusion. For patients presenting with new-onset seizure disorder, the list of possible causes is longer and includes the following: Central nervous system (CNS) pathologies (stroke, neoplasm, trauma, hypoxia, vascular abnormality) Metabolic abnormalities (hypoglycemia/hyperglycemia, hyponatremia/hypernatremia, hypercalcemia, hepatic encephalopathy) Toxicologic etiologies (alcohol withdrawal, cocaine, isoniazid, theophylline) Infectious etiologies (meningitis, encephalitis, brain abscess)",
+      "text_sha256": "ce82f5d4c7452266eee090f3dc36beebd5e254400fb703088d5038a3fe468d39"
+    },
+    {
+      "id": "rag-3621455ec67c20e8",
+      "chunk_id": "f955a6b6ecb0fe7b4201_21",
+      "title": "Absence Seizures: Overview, Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1183858-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "seizure_epilepsy__epilepsy",
+        "seizure_epilepsy__first_time_seizure",
+        "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology",
+        "seizure_epilepsy__symptomatic_seizure_due_to_metabolic_disorder",
+        "seizure_epilepsy__symptomatic_seizure_due_to_toxic_ingestion"
+      ],
+      "retrieval_queries": [
+        "Epilepsy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "First-time seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Symptomatic seizure due to CNS pathology diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Symptomatic seizure due to metabolic disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Symptomatic seizure due to toxic ingestion diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2839,
+      "excerpt": "and resolution. In symptomatic generalized epilepsies, physical and neurologic findings may be abnormal, reflecting the underlying disorder. Physical examination may reveal stigmata of a genetic disease, such as a neurocutaneous disorder (eg, tuberous sclerosis) or an inborn error of metabolism. Neurologic examination may show signs of developmental delay or more specific signs, such as spastic paresis in cerebral palsy. Table 1. Clinical and EEG Findings in Typical and Atypical Absence Seizures* (Open Table in a new window) Type of Clinical Seizure EEG Findings Typical absence Impairment of",
+      "text_sha256": "f9bc30f80518b99b49bb00fc9cd8fe94fb52f4e6a90266d68b151460542235c7"
+    },
+    {
+      "id": "rag-c3b33a861bff133f",
+      "chunk_id": "a251860ce7f206ac8400_15",
+      "title": "Status Epilepticus: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1164462-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "seizure_epilepsy__epilepsy"
+      ],
+      "retrieval_queries": [
+        "Epilepsy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3171,
+      "excerpt": "the initial manifestation of a seizure disorder, or an insult other than a seizure disorder (see Etiology). In patients with known epilepsy, the most common cause is a change in medication. Recognition of SE may be easy or difficult. SE in the patient with sequential, generalized major motor convulsions is obvious; the patient with nonconvulsive or subtle SE presents a diagnostic dilemma (see Differentials). Aggressive treatment is necessary. Maintenance of vital signs, including respiratory function, is of major importance. Early treatment measures are performed in concert with diagnostic",
+      "text_sha256": "722bfc6dea532d0c83211e88370ea7baff19dca318ee1dada98c7c590316d56f"
+    },
+    {
+      "id": "rag-8c92cf18bfe1b774",
+      "chunk_id": "ff681d097ae92651a7ea_82",
+      "title": "Epilepsy and Seizures: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1184846-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "seizure_epilepsy__epilepsy"
+      ],
+      "retrieval_queries": [
+        "Epilepsy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3518,
+      "excerpt": "have recurrent headache and vomiting. Myoclonic epilepsy with ragged red fibers (MERRF) is characterized by myoclonus, seizures, and ataxia; myopathy, hearing loss, and vision loss can also occur. Genetic tests are available for these disorders. Seizure disorders caused by single-gene mutations Autosomal dominant nocturnal frontal lobe epilepsy is caused by mutations in the CHRNA4, CHRNB2, or CHRNA2 genes. It is characterized by nocturnal motor seizures. The severity of autosomal dominant nocturnal frontal lobe epilepsy can be variable, can include awakening episodes, and can result in",
+      "text_sha256": "e6d7c102e7491aefcf189cd3daf48e102141ab172777845ffc103676c7f2caf9"
+    },
+    {
+      "id": "rag-98dfd27812d7a9ca",
+      "chunk_id": "2b6eb94497953c8a6426_30",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "seizure_epilepsy__first_time_seizure",
+        "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology",
+        "seizure_epilepsy__symptomatic_seizure_due_to_metabolic_disorder"
+      ],
+      "retrieval_queries": [
+        "First-time seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Symptomatic seizure due to CNS pathology diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Symptomatic seizure due to metabolic disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3355,
+      "excerpt": "CT if any of the following are present: new focal deficits, trauma, persistent fever, new character or pattern to the seizures, suspicion of AIDS, infection, or anticoagulation. In general, however, the evidence is inadequate to support or refute the usefulness of emergency CT in persons with chronic seizures. Magnetic Resonance Imaging Magnetic resonance imaging (MRI) may be a better diagnostic test because of higher yield and ability to identify smaller lesions, but its availability in the ED may be a limiting factor. In addition, MRI is time-consuming and may interfere with adequate patient",
+      "text_sha256": "eed6d011163791af4805fbef225ea0cc599ba26cb44b7205c05e20380c8d5521"
+    },
+    {
+      "id": "rag-39ebd4cc1f9f9929",
+      "chunk_id": "ee365f7a8a7eed6a32c3_6",
+      "title": "First Adult Seizure: Background, Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1186214-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "seizure_epilepsy__first_time_seizure"
+      ],
+      "retrieval_queries": [
+        "First-time seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.388,
+      "excerpt": "seizure is associated with a previous CNS insult known to increase the risk of developing epilepsy. An acute symptomatic seizure is one that occurs following a recent acute disorder such as a metabolic insult, toxic insult, CNS infection, stroke, brain trauma, cerebral hemorrhage, medication toxicity, alcohol withdrawal, or drug withdrawal. An example of an acute symptomatic seizure is a seizure that occurs within 1 week of a stroke or head injury. Studies have reported that 25-30% of first seizures are acute symptomatic seizures. A remote symptomatic seizure is a seizure that occurs longer",
+      "text_sha256": "9c57c2aec4522a66785630282acd367bd6d687fa5b15772c980071c1665247e2"
+    },
+    {
+      "id": "rag-c11a2103e40596fa",
+      "chunk_id": "c3ac65c4ac2f328bf4e4_1",
+      "title": "Neuroimaging in Neurocysticercosis: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1168784-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology"
+      ],
+      "retrieval_queries": [
+        "Symptomatic seizure due to CNS pathology diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3417,
+      "excerpt": "is associated with clinical manifestations such as seizures, headache, and focal neurological deficits, and may lead to long-term neurological sequelae such as epilepsy, hydrocephalus, and dementia. The pleomorphism of NC makes its diagnosis impossible on clinical grounds alone. An accurate diagnosis is possible only after suspicion on epidemiologic grounds, proper interpretation of clinical data, and synthesis of findings on neuroimaging studies specific immunologic tests on the cerebrospinal fluid (CSF). Biology Humans are the only known host to harbor the adult cestode parasite, Taenia",
+      "text_sha256": "12c0822d631284eb661059f36827e76af0801c89a1c2136bdfd59a506e9c8297"
+    },
+    {
+      "id": "rag-a3ab0d9c872c897c",
+      "chunk_id": "2b6eb94497953c8a6426_39",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "seizure_epilepsy__symptomatic_seizure_due_to_toxic_ingestion"
+      ],
+      "retrieval_queries": [
+        "Symptomatic seizure due to toxic ingestion diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3963,
+      "excerpt": "be individualized. Sometimes, the most difficult part of the ED evaluation is determining whether the patient has had a seizure. Clues to the diagnosis include a clear history of tonic-clonic movements, urinary or bowel incontinence, postepisode confusion, and tongue biting. However, one study showed that myoclonic jerking was found in 90% of individuals in which syncope was induced. Attempt to obtain history from EMS providers, family, friends, or observers who may have been present during the episode. Medications Current consensus is that benzodiazepines are the preferred drug class for the",
+      "text_sha256": "49be617c5ead7699c4efa6adfb43393a7df95229131aaf4f3b17d91befd5b27c"
+    },
+    {
+      "id": "rag-78f2efcd11b59682",
+      "chunk_id": "28f7e65d945fb55cb0ed_7",
+      "title": "Ammonia: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2054408-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "seizure_epilepsy__symptomatic_seizure_due_to_toxic_ingestion"
+      ],
+      "retrieval_queries": [
+        "Symptomatic seizure due to toxic ingestion diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4458,
+      "excerpt": "of coma of unknown origin. Indications for the test in newborns include the following: Irritability Vomiting Lethargy Seizures in the first few days following birth Indications for the test in children in whom Reye syndrome is suspected include the following: Irritability Vomiting Lethargy Seizures following a viral illness Infection Cold Indications for the test in adults include the following: Mental changes Sleepiness Coma An acute change for the worse in patients with liver disease TPN use (hyperalimentation) Causes of problems in metabolizing/breaking down ammonia include the following:",
+      "text_sha256": "34e23db63a7fdbc64556fbf51e11e372d522ef89acf636eabe104b7195ee6131"
+    },
+    {
+      "id": "rag-5661d0bdb0b129a5",
+      "chunk_id": "870c6f676767810775ec_0",
+      "title": "Benign Neonatal Convulsions: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1175719-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "seizure_epilepsy__neonatal_seizure"
+      ],
+      "retrieval_queries": [
+        "Neonatal seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3315,
+      "excerpt": "Overview Background Benign neonatal convulsions are defined as seizures with onset after birth through day 28 in an otherwise healthy child with no other known medical or neurologic problems. Such cases may be familial or isolated. Psychomotor development should be normal for a full-term or near full-term infant with benign convulsions. Between seizures, findings on neurologic examination should be normal. Clinically, the seizures are frequent and brief, occasionally occurring many times within a day. The brief seizures are followed by a short or no postictal state. The episodes usually",
+      "text_sha256": "fafc846d18a759eea5d2c60fa7ffd44414b48b156183a3091d109f8b8ab0fcd1"
+    },
+    {
+      "id": "rag-748d18a212326977",
+      "chunk_id": "870c6f676767810775ec_21",
+      "title": "Benign Neonatal Convulsions: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1175719-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "seizure_epilepsy__neonatal_seizure"
+      ],
+      "retrieval_queries": [
+        "Neonatal seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3407,
+      "excerpt": "appear, it is likely that neonatal seizures are affected by the normal developmental sequence of the other neurotransmitter systems. Epidemiology Benign neonatal convulsions in the United States and internationally are uncommon; that is, not rare but not common, either. Underreporting is likely an issue. Seizures that resolve in the early months of life without sequelae and normal neonatal development are often lost to follow-up. Exact frequencies are undetermined. Families identified with the familial form thus far have been primarily of western European origin, although reports from Japan",
+      "text_sha256": "6e09295ab91d910e4f34a769eb418857ee42c1963897ad47df8a7d5a55a8aeb6"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "seizure_epilepsy__epilepsy",
+      "name": "Epilepsy",
+      "retrieval_query": "Epilepsy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-65eb41e9a6e1db7b"
+      ],
+      "disease_rag_source_ids": [
+        "rag-96851f20eb41d937",
+        "rag-3621455ec67c20e8",
+        "rag-c3b33a861bff133f",
+        "rag-8c92cf18bfe1b774"
+      ]
+    },
+    {
+      "id": "seizure_epilepsy__first_time_seizure",
+      "name": "First-time seizure",
+      "retrieval_query": "First-time seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-00fc4ab69ee94192",
+        "rag-af1dca7759ecbfbf"
+      ],
+      "disease_rag_source_ids": [
+        "rag-96851f20eb41d937",
+        "rag-3621455ec67c20e8",
+        "rag-98dfd27812d7a9ca",
+        "rag-39ebd4cc1f9f9929"
+      ]
+    },
+    {
+      "id": "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology",
+      "name": "Symptomatic seizure due to CNS pathology",
+      "retrieval_query": "Symptomatic seizure due to CNS pathology diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-1f754e9f85910066"
+      ],
+      "disease_rag_source_ids": [
+        "rag-96851f20eb41d937",
+        "rag-3621455ec67c20e8",
+        "rag-98dfd27812d7a9ca",
+        "rag-c11a2103e40596fa"
+      ]
+    },
+    {
+      "id": "seizure_epilepsy__symptomatic_seizure_due_to_metabolic_disorder",
+      "name": "Symptomatic seizure due to metabolic disorder",
+      "retrieval_query": "Symptomatic seizure due to metabolic disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-1f754e9f85910066",
+        "rag-af1dca7759ecbfbf"
+      ],
+      "disease_rag_source_ids": [
+        "rag-96851f20eb41d937",
+        "rag-3621455ec67c20e8",
+        "rag-98dfd27812d7a9ca"
+      ]
+    },
+    {
+      "id": "seizure_epilepsy__symptomatic_seizure_due_to_toxic_ingestion",
+      "name": "Symptomatic seizure due to toxic ingestion",
+      "retrieval_query": "Symptomatic seizure due to toxic ingestion diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-1f754e9f85910066"
+      ],
+      "disease_rag_source_ids": [
+        "rag-96851f20eb41d937",
+        "rag-3621455ec67c20e8",
+        "rag-a3ab0d9c872c897c",
+        "rag-78f2efcd11b59682"
+      ]
+    },
+    {
+      "id": "seizure_epilepsy__neonatal_seizure",
+      "name": "Neonatal seizure",
+      "retrieval_query": "Neonatal seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-38d61b7c6fae85d4"
+      ],
+      "disease_rag_source_ids": [
+        "rag-38d61b7c6fae85d4",
+        "rag-96851f20eb41d937",
+        "rag-5661d0bdb0b129a5",
+        "rag-748d18a212326977"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "seizure_epilepsy",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": "headache",
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-96851f20eb41d937",
+        "rag-c3b33a861bff133f",
+        "rag-3621455ec67c20e8",
+        "rag-39ebd4cc1f9f9929",
+        "rag-98dfd27812d7a9ca",
+        "rag-c11a2103e40596fa",
+        "rag-a3ab0d9c872c897c",
+        "rag-78f2efcd11b59682",
+        "rag-38d61b7c6fae85d4"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "seizure_epilepsy__epilepsy__recurrent_seizures",
+        "description": "History of recurrent seizures.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "seizure_epilepsy__epilepsy"
+        ],
+        "source_ids": [
+          "rag-c3b33a861bff133f",
+          "rag-8c92cf18bfe1b774"
+        ]
+      },
+      {
+        "code": "seizure_epilepsy__epilepsy__new_onset_seizure",
+        "description": "No prior history of seizures.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "seizure_epilepsy__epilepsy"
+        ],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-c3b33a861bff133f"
+        ]
+      },
+      {
+        "code": "seizure_epilepsy__first_time_seizure__no_prior_seizure_history",
+        "description": "Patient reports no previous history of seizures.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "seizure_epilepsy__first_time_seizure"
+        ],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-39ebd4cc1f9f9929"
+        ]
+      },
+      {
+        "code": "seizure_epilepsy__first_time_seizure__prior_seizure_history",
+        "description": "Patient reports a previous history of seizures.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "seizure_epilepsy__first_time_seizure"
+        ],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-39ebd4cc1f9f9929"
+        ]
+      },
+      {
+        "code": "seizure_epilepsy__first_time_seizure__focal_neurologic_deficit_post_seizure",
+        "description": "Focal neurologic deficits such as weakness, numbness, or speech difficulty after the seizure.",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "seizure_epilepsy__first_time_seizure"
+        ],
+        "source_ids": [
+          "rag-98dfd27812d7a9ca"
+        ]
+      },
+      {
+        "code": "seizure_epilepsy__first_time_seizure__fever_with_seizure",
+        "description": "Fever occurring before or after the seizure.",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "seizure_epilepsy__first_time_seizure"
+        ],
+        "source_ids": [
+          "rag-98dfd27812d7a9ca",
+          "rag-96851f20eb41d937"
+        ]
+      },
+      {
+        "code": "seizure_epilepsy__first_time_seizure__headache_with_seizure",
+        "description": "Headache associated with a seizure episode.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "seizure_epilepsy__first_time_seizure"
+        ],
+        "source_ids": [
+          "rag-39ebd4cc1f9f9929"
+        ]
+      },
+      {
+        "code": "seizure_epilepsy__first_time_seizure__trauma_during_seizure",
+        "description": "Injury sustained during the seizure episode.",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "seizure_epilepsy__first_time_seizure"
+        ],
+        "source_ids": [
+          "rag-98dfd27812d7a9ca"
+        ]
+      },
+      {
+        "code": "seizure_epilepsy__first_time_seizure__onset_sudden",
+        "description": "Seizure began suddenly.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "seizure_epilepsy__first_time_seizure"
+        ],
+        "source_ids": [
+          "rag-39ebd4cc1f9f9929"
+        ]
+      },
+      {
+        "code": "seizure_epilepsy__first_time_seizure__onset_gradual",
+        "description": "Seizure began gradually.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "seizure_epilepsy__first_time_seizure"
+        ],
+        "source_ids": [
+          "rag-39ebd4cc1f9f9929"
+        ]
+      },
+      {
+        "code": "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology__focal_neurological_deficit",
+        "description": "癲癇發作後出現新的局部神經功能缺損，例如單側肢體無力、麻木或說話困難。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology"
+        ],
+        "source_ids": [
+          "rag-98dfd27812d7a9ca",
+          "rag-c11a2103e40596fa"
+        ]
+      },
+      {
+        "code": "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology__fever_with_seizure",
+        "description": "癲癇發作前後伴隨發燒。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology"
+        ],
+        "source_ids": [
+          "rag-98dfd27812d7a9ca"
+        ]
+      },
+      {
+        "code": "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology__headache_with_seizure",
+        "description": "癲癇發作伴隨頭痛。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology"
+        ],
+        "source_ids": [
+          "rag-c11a2103e40596fa"
+        ]
+      },
+      {
+        "code": "seizure_epilepsy__symptomatic_seizure_due_to_metabolic_disorder__abnormal_neurologic_findings",
+        "description": "神經學檢查發現異常，可能反映潛在的代謝性疾病。",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "seizure_epilepsy__symptomatic_seizure_due_to_metabolic_disorder"
+        ],
+        "source_ids": [
+          "rag-3621455ec67c20e8"
+        ]
+      },
+      {
+        "code": "seizure_epilepsy__symptomatic_seizure_due_to_toxic_ingestion__vomiting",
+        "description": "嘔吐",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "seizure_epilepsy__symptomatic_seizure_due_to_toxic_ingestion"
+        ],
+        "source_ids": [
+          "rag-78f2efcd11b59682"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "previous_seizure_history",
+        "option": "是",
+        "mapping": {
+          "findings": [
+            "seizure_epilepsy__epilepsy__recurrent_seizures",
+            "seizure_epilepsy__first_time_seizure__prior_seizure_history"
+          ]
+        },
+        "disease_ids": [
+          "seizure_epilepsy__epilepsy",
+          "seizure_epilepsy__first_time_seizure"
+        ],
+        "source_ids": [
+          "rag-c3b33a861bff133f",
+          "rag-96851f20eb41d937",
+          "rag-39ebd4cc1f9f9929"
+        ]
+      },
+      {
+        "field": "previous_seizure_history",
+        "option": "否",
+        "mapping": {
+          "findings": [
+            "seizure_epilepsy__epilepsy__new_onset_seizure",
+            "seizure_epilepsy__first_time_seizure__no_prior_seizure_history"
+          ]
+        },
+        "disease_ids": [
+          "seizure_epilepsy__epilepsy",
+          "seizure_epilepsy__first_time_seizure"
+        ],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-39ebd4cc1f9f9929"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "癲癇發作前或發作後有發燒",
+        "mapping": {
+          "findings": [
+            "fever",
+            "seizure_epilepsy__first_time_seizure__fever_with_seizure",
+            "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology__fever_with_seizure"
+          ]
+        },
+        "disease_ids": [
+          "seizure_epilepsy__epilepsy",
+          "seizure_epilepsy__first_time_seizure",
+          "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology"
+        ],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-98dfd27812d7a9ca"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "感到頭痛",
+        "mapping": {
+          "findings": [
+            "symptom_headache",
+            "seizure_epilepsy__first_time_seizure__headache_with_seizure",
+            "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology__headache_with_seizure"
+          ]
+        },
+        "disease_ids": [
+          "seizure_epilepsy__epilepsy",
+          "seizure_epilepsy__first_time_seizure",
+          "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology"
+        ],
+        "source_ids": [
+          "rag-8c92cf18bfe1b774",
+          "rag-39ebd4cc1f9f9929",
+          "rag-c11a2103e40596fa"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "感到噁心或嘔吐",
+        "mapping": {
+          "findings": [
+            "nausea",
+            "vomiting",
+            "seizure_epilepsy__symptomatic_seizure_due_to_toxic_ingestion__vomiting"
+          ]
+        },
+        "disease_ids": [
+          "seizure_epilepsy__epilepsy",
+          "seizure_epilepsy__symptomatic_seizure_due_to_toxic_ingestion"
+        ],
+        "source_ids": [
+          "rag-8c92cf18bfe1b774",
+          "rag-78f2efcd11b59682"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "癲癇發作後有局部神經功能缺損，包括手腳無力、虛弱、麻木、說話困難",
+        "mapping": {
+          "findings": [
+            "focal_neurologic_symptom",
+            "seizure_epilepsy__first_time_seizure__focal_neurologic_deficit_post_seizure",
+            "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology__focal_neurological_deficit",
+            "seizure_epilepsy__symptomatic_seizure_due_to_metabolic_disorder__abnormal_neurologic_findings"
+          ]
+        },
+        "disease_ids": [
+          "seizure_epilepsy__epilepsy",
+          "seizure_epilepsy__first_time_seizure",
+          "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology",
+          "seizure_epilepsy__symptomatic_seizure_due_to_metabolic_disorder"
+        ],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-98dfd27812d7a9ca",
+          "rag-c11a2103e40596fa",
+          "rag-3621455ec67c20e8"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "感到胸痛、心悸或呼吸困難",
+        "mapping": {
+          "findings": [
+            "symptom_chest_pain",
+            "palpitations",
+            "dyspnea"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-3621455ec67c20e8",
+          "rag-c3b33a861bff133f",
+          "rag-8c92cf18bfe1b774"
+        ]
+      },
+      {
+        "field": "seizure_onset_pattern",
+        "option": "突然發作",
+        "mapping": {
+          "onset": "sudden",
+          "findings": [
+            "seizure_epilepsy__first_time_seizure__onset_sudden"
+          ]
+        },
+        "disease_ids": [
+          "seizure_epilepsy__first_time_seizure"
+        ],
+        "source_ids": [
+          "rag-39ebd4cc1f9f9929"
+        ]
+      },
+      {
+        "field": "seizure_onset_pattern",
+        "option": "逐漸發作",
+        "mapping": {
+          "onset": "gradual",
+          "findings": [
+            "seizure_epilepsy__first_time_seizure__onset_gradual"
+          ]
+        },
+        "disease_ids": [
+          "seizure_epilepsy__first_time_seizure"
+        ],
+        "source_ids": [
+          "rag-39ebd4cc1f9f9929"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "癲癇發作期間有受傷",
+        "mapping": {
+          "findings": [
+            "seizure_epilepsy__first_time_seizure__trauma_during_seizure"
+          ]
+        },
+        "disease_ids": [
+          "seizure_epilepsy__first_time_seizure"
+        ],
+        "source_ids": [
+          "rag-98dfd27812d7a9ca"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "seizure_epilepsy__epilepsy",
+        "name": "Epilepsy",
+        "must_not_miss": false,
+        "retrieval_query": "Epilepsy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "seizure_epilepsy__epilepsy__recurrent_seizures",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-c3b33a861bff133f"
+            ]
+          },
+          {
+            "fact": "seizure_epilepsy__epilepsy__new_onset_seizure",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-96851f20eb41d937",
+              "rag-c3b33a861bff133f"
+            ]
+          },
+          {
+            "fact": "focal_neurologic_symptom",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-96851f20eb41d937"
+            ]
+          },
+          {
+            "fact": "fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-96851f20eb41d937"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-3621455ec67c20e8",
+          "rag-c3b33a861bff133f",
+          "rag-8c92cf18bfe1b774"
+        ]
+      },
+      {
+        "id": "seizure_epilepsy__first_time_seizure",
+        "name": "First-time seizure",
+        "must_not_miss": false,
+        "retrieval_query": "First-time seizure diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "seizure_epilepsy__first_time_seizure__no_prior_seizure_history",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-96851f20eb41d937",
+              "rag-39ebd4cc1f9f9929"
+            ]
+          },
+          {
+            "fact": "seizure_epilepsy__first_time_seizure__prior_seizure_history",
+            "status": "present",
+            "direction": "oppose",
+            "weight": 3,
+            "source_ids": [
+              "rag-96851f20eb41d937",
+              "rag-39ebd4cc1f9f9929"
+            ]
+          },
+          {
+            "fact": "seizure_epilepsy__first_time_seizure__onset_sudden",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-39ebd4cc1f9f9929"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-3621455ec67c20e8",
+          "rag-98dfd27812d7a9ca",
+          "rag-39ebd4cc1f9f9929"
+        ]
+      },
+      {
+        "id": "seizure_epilepsy__symptomatic_seizure_due_to_metabolic_disorder",
+        "name": "Symptomatic seizure due to metabolic disorder",
+        "must_not_miss": false,
+        "retrieval_query": "Symptomatic seizure due to metabolic disorder diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "seizure_epilepsy__symptomatic_seizure_due_to_metabolic_disorder__abnormal_neurologic_findings",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-3621455ec67c20e8"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-3621455ec67c20e8"
+        ]
+      },
+      {
+        "id": "seizure_epilepsy__symptomatic_seizure_due_to_toxic_ingestion",
+        "name": "Symptomatic seizure due to toxic ingestion",
+        "must_not_miss": false,
+        "retrieval_query": "Symptomatic seizure due to toxic ingestion diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "seizure_epilepsy__symptomatic_seizure_due_to_toxic_ingestion__vomiting",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-78f2efcd11b59682"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-3621455ec67c20e8",
+          "rag-a3ab0d9c872c897c",
+          "rag-78f2efcd11b59682"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_seizure_epilepsy__first_time_seizure__new_focal_deficit",
+        "label": "New focal neurologic deficit with seizure",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "seizure_epilepsy"
+          ],
+          "any_findings": [
+            "seizure_epilepsy__first_time_seizure__focal_neurologic_deficit_post_seizure"
+          ]
+        },
+        "possible_conditions": [
+          "Stroke",
+          "CNS neoplasm",
+          "CNS infection"
+        ],
+        "source_ids": [
+          "rag-98dfd27812d7a9ca"
+        ]
+      },
+      {
+        "code": "experimental_seizure_epilepsy__first_time_seizure__fever",
+        "label": "Fever with seizure",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "seizure_epilepsy"
+          ],
+          "any_findings": [
+            "seizure_epilepsy__first_time_seizure__fever_with_seizure"
+          ]
+        },
+        "possible_conditions": [
+          "Meningitis",
+          "Encephalitis",
+          "Brain abscess"
+        ],
+        "source_ids": [
+          "rag-98dfd27812d7a9ca",
+          "rag-96851f20eb41d937"
+        ]
+      },
+      {
+        "code": "experimental_seizure_epilepsy__first_time_seizure__trauma",
+        "label": "Trauma associated with seizure",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "seizure_epilepsy"
+          ],
+          "any_findings": [
+            "seizure_epilepsy__first_time_seizure__trauma_during_seizure",
+            "recent_head_trauma"
+          ]
+        },
+        "possible_conditions": [
+          "Intracranial hemorrhage",
+          "Traumatic brain injury"
+        ],
+        "source_ids": [
+          "rag-98dfd27812d7a9ca"
+        ]
+      },
+      {
+        "code": "experimental_seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology__focal_deficit",
+        "label": "Seizure with new focal neurological deficit",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "seizure_epilepsy"
+          ],
+          "any_findings": [
+            "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology__focal_neurological_deficit"
+          ]
+        },
+        "possible_conditions": [
+          "Symptomatic seizure due to CNS pathology"
+        ],
+        "source_ids": [
+          "rag-98dfd27812d7a9ca"
+        ]
+      },
+      {
+        "code": "experimental_seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology__fever",
+        "label": "Seizure with fever",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "seizure_epilepsy"
+          ],
+          "any_findings": [
+            "seizure_epilepsy__symptomatic_seizure_due_to_cns_pathology__fever_with_seizure"
+          ]
+        },
+        "possible_conditions": [
+          "Symptomatic seizure due to CNS pathology"
+        ],
+        "source_ids": [
+          "rag-98dfd27812d7a9ca"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Determine if a seizure is ongoing or has lasted longer than a specific duration (e.g., 5 minutes) to assess for status epilepticus.",
+        "reason": "The model cannot perform real-time duration calculations or assess the patient's current state. This requires immediate medical evaluation."
+      },
+      {
+        "requirement": "Differentiate between specific seizure types (e.g., generalized tonic-clonic, absence, focal) based on textual descriptions.",
+        "reason": "Accurate seizure classification requires clinical observation and often EEG findings, which is beyond the scope of text-based triage."
+      },
+      {
+        "requirement": "Evaluate for specific metabolic abnormalities (e.g., hypoglycemia, hyponatremia) or toxicologic causes.",
+        "reason": "These diagnoses require laboratory testing and are not suitable for a symptom-based questionnaire."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Differentiate seizure types (e.g., generalized tonic-clonic vs. focal).",
+        "reason": "The provided RAG sources do not contain sufficient detail to create distinct clinical profiles or rules for specific seizure semiologies based on user descriptions."
+      },
+      {
+        "requirement": "Assess postictal state details (e.g., confusion, lethargy, incontinence).",
+        "reason": "The provided RAG sources do not offer specific guidance on how to interpret different postictal symptoms for differential diagnosis or risk stratification."
+      },
+      {
+        "requirement": "Incorporate specific metabolic abnormalities (e.g., hypoglycemia, hyponatremia) into rules.",
+        "reason": "The RAG sources mention metabolic causes but do not provide user-reportable symptoms that can reliably map to these specific lab abnormalities, which require clinical testing."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Specific metabolic abnormalities (e.g., hypoglycemia, hyponatremia) as distinct facts.",
+        "reason": "The provided RAG sources list various metabolic abnormalities but do not offer detailed descriptions of their unique clinical presentations that can be reliably elicited through a patient questionnaire. Creating facts for each would require clinical interpretation beyond the scope of the text."
+      },
+      {
+        "requirement": "Specific laboratory test results (e.g., serum glucose, sodium levels).",
+        "reason": "The model cannot process or recommend specific laboratory tests or interpret their results. This requires clinical judgment and diagnostic testing."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Specific toxicologic etiologies (e.g., cocaine, isoniazid, theophylline) mentioned in the source text.",
+        "reason": "The questionnaire does not ask about specific substance use or medication history in enough detail to create specific facts for these etiologies."
+      },
+      {
+        "requirement": "Physical examination findings (e.g., stigmata of genetic disease, spastic paresis).",
+        "reason": "Physical examination findings are outside the scope of a patient-reported symptom questionnaire."
+      },
+      {
+        "requirement": "Laboratory findings (e.g., metabolic abnormalities).",
+        "reason": "Laboratory results are not collected through the patient questionnaire."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Develop profiles for common adult seizure etiologies (e.g., first-time seizure, epilepsy, symptomatic seizures due to metabolic or CNS causes).",
+        "reason": "The provided RAG sources focus almost exclusively on neonatal seizures, offering insufficient detail to create robust profiles for other, more common seizure presentations in a general population."
+      },
+      {
+        "requirement": "Create safety rules for seizure-related emergencies like status epilepticus or seizures secondary to life-threatening conditions (e.g., stroke, meningitis).",
+        "reason": "The provided RAG sources mention these conditions as part of a differential list but do not provide specific red flags, signs, or symptoms required to build evidence-based safety rules."
+      },
+      {
+        "requirement": "Map questionnaire options to specific clinical facts.",
+        "reason": "The available evidence on neonatal seizures does not align with the general nature of the questionnaire prompts (e.g., 'seizure_duration', 'associated_symptoms' like chest pain), preventing meaningful semantic mapping."
+      },
+      {
+        "requirement": "Determine patient age to assess the relevance of neonatal seizure.",
+        "reason": "The questionnaire does not include a field for patient age, which is critical for applying the 'Neonatal seizure' profile."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The term 'Epilepsy' is used as a general profile for seizure-related presentations. The RAG sources indicate that a seizure can be the first manifestation of epilepsy or due to other causes (e.g., metabolic, infectious, CNS pathology). The profile clues reflect this by including factors relevant to both new-onset and recurrent seizures.",
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-c3b33a861bff133f"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-3621455ec67c20e8",
+          "rag-8c92cf18bfe1b774"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: semantic_options[6]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-3621455ec67c20e8",
+          "rag-c3b33a861bff133f",
+          "rag-8c92cf18bfe1b774"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-3621455ec67c20e8",
+          "rag-98dfd27812d7a9ca",
+          "rag-c11a2103e40596fa"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[4], profiles[0], profiles[0].clues[0], profiles[0].clues[1]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-3621455ec67c20e8",
+          "rag-98dfd27812d7a9ca",
+          "rag-c11a2103e40596fa"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-3621455ec67c20e8"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-3621455ec67c20e8",
+          "rag-98dfd27812d7a9ca"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-3621455ec67c20e8",
+          "rag-a3ab0d9c872c897c",
+          "rag-78f2efcd11b59682"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], profiles[0], profiles[0].clues[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-96851f20eb41d937",
+          "rag-3621455ec67c20e8",
+          "rag-a3ab0d9c872c897c",
+          "rag-78f2efcd11b59682"
+        ]
+      },
+      {
+        "severity": "critical",
+        "note": "The entire evidence base provided is for 'Neonatal seizure', a condition specific to infants up to 28 days old. The generated profile is clinically irrelevant for the vast majority of users. The system requires evidence for common adult seizure causes to be useful.",
+        "source_ids": [
+          "rag-5661d0bdb0b129a5",
+          "rag-96851f20eb41d937"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-5661d0bdb0b129a5"
+        ]
+      }
+    ]
+  }
+}

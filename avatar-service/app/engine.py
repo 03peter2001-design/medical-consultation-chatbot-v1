@@ -13,6 +13,7 @@ from .config import Settings
 
 SPEECH_MODEL = "FunAudioLLM/Fun-CosyVoice3-0.5B-2512"
 ANIMATION_MODEL = "TMElyralab/MuseTalk 1.5"
+SUPPORTED_LANGUAGES = frozenset({"mandarin", "minnan"})
 
 
 class AvatarEngineError(RuntimeError):
@@ -25,6 +26,13 @@ def clean_speech_text(text: str) -> str:
     cleaned = re.sub(r"^[a-zA-Z]\.\s?.*$", "", cleaned, flags=re.MULTILINE)
     cleaned = re.sub(r"^選項[：:].*$", "", cleaned, flags=re.MULTILINE)
     return re.sub(r"\s+", " ", cleaned).strip()
+
+
+def normalize_language(language: str) -> str:
+    normalized = language.strip().lower()
+    if normalized not in SUPPORTED_LANGUAGES:
+        raise AvatarEngineError("不支援的 Avatar 語言")
+    return normalized
 
 
 class AvatarEngine:
@@ -53,14 +61,38 @@ class AvatarEngine:
             "models_downloaded": self._models_downloaded(),
             "speech_loaded": self._cosyvoice is not None,
             "animation_loaded": self._muse is not None,
+            "keep_models_loaded": not self.settings.release_gpu_after_render,
         }
 
-    def render(self, raw_text: str) -> tuple[Path, bool, str]:
+    def warmup(self) -> dict[str, object]:
+        """Load every Avatar model once and retain it for subsequent renders."""
+        with self._lock:
+            try:
+                self._assert_runtime()
+                self._ensure_models()
+                self._load_cosyvoice()
+                self._load_muse()
+            except Exception:
+                self._release_models()
+                raise
+        return self.health()
+
+    def render(
+        self,
+        raw_text: str,
+        language: str = "mandarin",
+    ) -> tuple[Path, bool, str]:
         text = clean_speech_text(raw_text)
         if not text:
             raise AvatarEngineError("沒有可朗讀的文字")
+        language = normalize_language(language)
+        instruction = (
+            self.settings.minnan_instruction
+            if language == "minnan"
+            else self.settings.instruction
+        )
         digest = hashlib.sha256(
-            f"v2\0{self.settings.instruction}\0{text}".encode("utf-8")
+            f"v3\0{language}\0{instruction}\0{text}".encode("utf-8")
         ).hexdigest()
         output = self.settings.output_dir / f"{digest}.mp4"
         if output.is_file() and output.stat().st_size > 0:
@@ -76,7 +108,7 @@ class AvatarEngine:
                 with tempfile.TemporaryDirectory(dir=self.settings.data_dir) as temp_dir:
                     wav_path = Path(temp_dir) / "speech.wav"
                     rendered_path = Path(temp_dir) / "avatar.mp4"
-                    self._synthesize(text, wav_path)
+                    self._synthesize(text, wav_path, instruction)
                     if self.settings.release_gpu_after_render:
                         # The WAV is on CPU/disk now, so CosyVoice can be
                         # released before MuseTalk claims its own GPU memory.
@@ -250,7 +282,7 @@ class AvatarEngine:
             providers=["CPUExecutionProvider"],
         )
 
-    def _synthesize(self, text: str, target: Path) -> None:
+    def _synthesize(self, text: str, target: Path, instruction: str) -> None:
         import soundfile
         import torch
 
@@ -259,7 +291,7 @@ class AvatarEngine:
             item["tts_speech"].detach().cpu()
             for item in voice.inference_instruct2(
                 text,
-                self.settings.instruction,
+                instruction,
                 str(self.settings.prompt_wav),
                 stream=False,
             )
@@ -408,11 +440,21 @@ class AvatarEngine:
         x1, y1, x2, y2 = bbox
         face = cv2.resize(face.astype(np.uint8), (x2 - x1, y2 - y1))
         height, width = face.shape[:2]
-        alpha = np.zeros((height, width), dtype=np.float32)
-        top = round(height * 0.42)
-        alpha[top:, :] = 1.0
-        kernel = max(11, (round(width * 0.08) // 2) * 2 + 1)
-        alpha = cv2.GaussianBlur(alpha, (kernel, kernel), 0)[..., None]
+        # MuseTalk returns a square reconstruction of the face crop. Blending
+        # that whole rectangle creates a visible seam across the doctor's neck
+        # and coat. Restrict replacement to a feathered lower-face oval whose
+        # alpha reaches zero well before every crop edge; hair, cheek outline,
+        # jaw edge, neck, and clothing therefore stay on the source portrait.
+        mask = np.zeros((height, width), dtype=np.uint8)
+        center = (width // 2, round(height * 0.64))
+        axes = (
+            max(1, round(width * 0.36)),
+            max(1, round(height * 0.23)),
+        )
+        cv2.ellipse(mask, center, axes, 0, 0, 360, 255, -1)
+        kernel = max(11, (round(min(width, height) * 0.1) // 2) * 2 + 1)
+        alpha = cv2.GaussianBlur(mask, (kernel, kernel), 0).astype(np.float32)
+        alpha = (alpha / 255.0)[..., None]
         output = frame.copy()
         base = output[y1:y2, x1:x2].astype(np.float32)
         output[y1:y2, x1:x2] = (face * alpha + base * (1 - alpha)).astype(np.uint8)

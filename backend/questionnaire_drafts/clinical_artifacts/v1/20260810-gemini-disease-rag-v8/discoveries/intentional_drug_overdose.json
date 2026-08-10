@@ -1,0 +1,321 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "intentional_drug_overdose",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "bb7a4fdd80e2d7edfa7218a7519f1e93e139c0efb376ff43a47b92091c6ea744",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "intentional drug overdose overdose differential diagnosis diseases clinical presentation symptoms history",
+      "intentional drug overdose overdose red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "8d12f0516a72e81c542650343d0ac9f53eedb29e1d25d4bf0419ec587a0631d7"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "2a6b6c31623c800a3f789aa1f61598c92a47510243cbc1acd71c8553bc4e6f9a",
+    "generated_at": "2026-08-10T04:07:57+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-af792cdec0a52af8",
+      "chunk_id": "384109719888d643aec6_97",
+      "title": "Cocaine Toxicity: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/813959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "intentional drug overdose overdose differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4211,
+      "excerpt": "In 18, an estimated 977,000 (0.4%) persons aged 12 years and older reported a substance use disorder in the past year involving cocaine. The Annual Report of the American Association of Poison Control Centers' National Poison Data System reported 1162 single exposures to cocaine in 2022. Major outcomes occurred in 148 cases and 28 deaths were reported. From the early 1970s until its discontinuation in 2011, the Drug Abuse Awareness Network (DAWN), a national survey of approximately 600 hospital EDs, reported the number of episodes of patients seeking treatment related to their use of an",
+      "text_sha256": "b200ac2c0754741d1d00b222cc6129c15abaeaf70dc436afbf9443f4dbcfbedf"
+    },
+    {
+      "id": "rag-4b141b201280567d",
+      "chunk_id": "2ffc757e5b7c5cc2294b_18",
+      "title": "Sympathomimetic Toxicity: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/818583-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "intentional drug overdose overdose differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4334,
+      "excerpt": "of 102 patients with sympathomimetic toxicity, rhabdomyolysis occurred in 42% of subjects. Rhabdomyoysis was most prevalent in users of synthetic cathinones (63%) but was also seen in MDMA (40%) and cocaine users (33%). n addition to rhabdomyolysis, a systematic review of nephrotoxicity from drugs of abuse identified the following nal complications : Cocaine - Renal hypertension, renal infarction; with cocaine adulterated with levamisole, pauci-immune crescentic glomerulonephritisJ Methamphetamines - rerenal azotemia, malignant hypertensive nephropathy, hyponatremia, necrotizing vasculitis",
+      "text_sha256": "1406b7618a257f453c4ef7b86124a5e5fbebb4a26db7ab0149bd5f54c567f9dd"
+    },
+    {
+      "id": "rag-3c3b846e96a04622",
+      "chunk_id": "4e93ade1759d99abb7d6_2",
+      "title": "Procainamide Level: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2090328-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "intentional drug overdose overdose differential diagnosis diseases clinical presentation symptoms history",
+        "intentional drug overdose overdose red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4395,
+      "excerpt": "are typically checked before the administration of the second dose. Toxicity may occur when levels of either or the combination of both are too high (see Reference Range). Signs and symptoms of toxicity include confusion, dizziness, drowsiness, decreased urination, nausea, vomiting, hypotension, tachycardia, and arrhythmias. Collection and Panels See the list below: Specimen: Blood Container: Red-top tube Minimum: 0.4 mL Method: Routine venipuncture Background Description Procainamide hydrochloride is a class 1a antiarrhythmic that is used to treat a wide variety of ventricular and atrial",
+      "text_sha256": "988b0982d4f0bb747b1ac85adc421a77a8445bc8c1262c5cbb0126684c5d0ef2"
+    },
+    {
+      "id": "rag-7a1e739431d5a385",
+      "chunk_id": "ab9063a525e89c555d29_31",
+      "title": "Cocaine-Related Cardiomyopathy: Overview, Cardiac Effects of Cocaine, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/152535-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "intentional drug overdose overdose differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.442,
+      "excerpt": "patient in their report, a 35-year-old woman, underwent endomyocardial biopsy that failed to reveal any necrosis, fibrosis, or inflammatory infiltrate. In autopsies of 40 patients, 31 of whom died cocaine-related deaths and 9 of whom were homicide victims with detectable blood cocaine levels, Virmani et al found that 20% of the patients showed evidence of myocarditis on toxic screening tests. !zelaar, in an autopsy study, reported contraction-based myocardial necrosis similar to that observed in pheochromocytoma. In a case report by Robledo-Carmona, histologic findings of the left ventricular",
+      "text_sha256": "93e179b6f7d726031deddd1c29c580849c6af57ca1808c3ef418e8ad87ac070d"
+    },
+    {
+      "id": "rag-91f048ee01f22ffa",
+      "chunk_id": "2b6eb94497953c8a6426_21",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "intentional drug overdose overdose differential diagnosis diseases clinical presentation symptoms history",
+        "intentional drug overdose overdose red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4316,
+      "excerpt": "antidepressant (TCA) overdose and isoniazid (INH) therapy/overdose are 2 of the more common causes of drug-induced seizures. An electrocardiogram (ECG) will show a widened QRS and prominent R wave in lead aVR. A QRS duration of more than 100 milliseconds was linked to increased risk of seizures, which has been validated by multiple studies. Treatment of TCA overdose consists of bicarbonate infusion and supportive care. Pyridoxine is the treatment of choice for knownsoniazid (INH) ingestion. Differential Diagnosis Delirium Tremens Delirium, Dementia, and Amnesia Eclampsia Encephalitis Epidural",
+      "text_sha256": "944ee0d0af539ef3236fb8efa18d9f6b88df636d1a5a6768dce15fb1832f6a66"
+    },
+    {
+      "id": "rag-31d375cca11151e3",
+      "chunk_id": "681f8d85afff0d057cd0_6",
+      "title": "Carbamazepine Level: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2089796-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "intentional drug overdose overdose red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5262,
+      "excerpt": "CNS depressant, and vestibular-brainstem effects; however, the levels at which various toxicities occur are approximate at best. In mild to moderate overdose, nystagmus, ataxia, ophthalmoplegia, dyskinesia, dystonia, mydriasis may be observed. In particular, ataxia and nystagmus usually occur with serum concentrations greater than 10 mg/L. Other manifestations that occur with more significant toxicity include seizures, respiratory depression, and coma, which have been observed at serum levels of greater than 40 mg/L. One cardiac manifestation of overdose is sinus tachycardia. Atrioventricular",
+      "text_sha256": "4025490de46c48498a345ba94b3e169d3d42712e361852c381cb0d738e016c6e"
+    },
+    {
+      "id": "rag-d325100b4157e133",
+      "chunk_id": "39dd1d25515828147ad6_21",
+      "title": "Amphetamine-Related Psychiatric Disorders: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/289973-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "intentional drug overdose overdose red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5332,
+      "excerpt": "which is why the WHO first classified it as a \"hazardous and harmful substance\" in its Primary Care Geneva report in 2011. Mortality/Morbidity The Drug Abuse Warning Network (DAWN) Annual Medical Examiner Data for 2021 showed that 11.2% of all drug-related hospital emergency department visits were associated with methamphetamine use, listed 3rd after alcohol and opioid-related presentations. The South and Western regions of the United States accounted for greater than 70% of all methamphetamine-related ED visits. In high doses, illicit and prescription amphetamines can produce cardiovascular",
+      "text_sha256": "56b6b45a5d72211fc2fb9fa76073c88db9d42cf3a5fd3a1b411a23f13c28f65b"
+    },
+    {
+      "id": "rag-1daeb5e3ed408e54",
+      "chunk_id": "681f8d85afff0d057cd0_7",
+      "title": "Carbamazepine Level: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2089796-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "intentional drug overdose overdose red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5501,
+      "excerpt": "One cardiac manifestation of overdose is sinus tachycardia. Atrioventricular block and bradycardia have also been reported, although mostly in individuals older than 50 years. On electrocardiography, QT and QRS interval prolongation can be observed. QRS widening is usually no longer than 100-120 msec in length and is usually transient. In patients who are asymptomatic but in whom overdose is suspected, a minimum of 6 hours of observation is suggested and a minimum of 12 hours for those taking extended-release tablets. In addition to airway protection and cardiovascular stabilization and",
+      "text_sha256": "baa4f1548b1f91e1e84e9e101b52bf3594d987c893d4954acdf22271fb87de14"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "intentional drug overdose overdose red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5619,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-2d03ed69c3a55821",
+      "chunk_id": "f2827ee86a87b72f0fca_17",
+      "title": "Amphetamine Toxicity: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/812518-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "intentional drug overdose overdose red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5802,
+      "excerpt": "other metals, organic solvents, and precursor molecules all have been found in amphetamine samples and blood of individuals with amphetamine toxicity. Acute overdose of amphetamines can result in the following: Seizures Hypertension Tachycardia Myocardial infarction Hyperthermia Psychosis Hallucinosis Stroke Death Habitual amphetamine use produces toxic psychosis resembling paranoid schizophrenia. Hallucinations, delusions, and bizarre violent behavior are common. In a few patients, amphetamine use produces long-term paranoid schizophrenia; whether this results from unmasking underlying",
+      "text_sha256": "fecf3a7fdd0fe9aacbef338d25de3cdff4bc5472cd3337aaa0b6e63d4f82ea5f"
+    },
+    {
+      "id": "rag-96a90437160454ff",
+      "chunk_id": "60a8e9fb259d62f055c2_43",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "intentional drug overdose overdose red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5842,
+      "excerpt": "(cTn), whether conventional or high sensitivity (hs), exclusively for these purposes. The main clinical outcome of interest after initial emergency department (ED) evaluation of patients with suspected ACS is 30-day MACE. MACE includes MI, death, target lesion revascularization, or death. In 2018, The American College of Emergency Physicians (ACEP) updated its level C recommendations regarding testing strategies for ruling out non-ST-elevation MI (NSTEMI) in lower risk patients to include the use of the HEART score and conventional or high-sensitivity cardiac troponins (hs-cTn) as follows: In",
+      "text_sha256": "4828c8d733507191a7786f8b1f2baf9a4c8185d49b0cb05028c18c2b64ce27ff"
+    }
+  ],
+  "discovery": {
+    "route": "intentional_drug_overdose",
+    "evidence_status": "sufficient",
+    "diseases": [],
+    "review_notes": [
+      {
+        "severity": "critical",
+        "note": "Intentional overdose is a medical emergency. The questionnaire asks about symptoms like chest pain, palpitations, and difficulty breathing, which can be associated with severe toxicity from various substances. For example, cocaine toxicity can lead to myocardial infarction and death. Amphetamine overdose can cause seizures, hypertension, tachycardia, and stroke. Tricyclic antidepressant overdose can cause seizures and life-threatening arrhythmias.",
+        "source_ids": [
+          "rag-af792cdec0a52af8",
+          "rag-2d03ed69c3a55821",
+          "rag-91f048ee01f22ffa"
+        ]
+      },
+      {
+        "severity": "critical",
+        "note": "The questionnaire screens for suicidal ideation. This, combined with an intentional overdose, indicates a high risk of self-harm and requires immediate psychiatric and medical evaluation.",
+        "source_ids": [
+          "rag-1daeb5e3ed408e54",
+          "rag-2d03ed69c3a55821",
+          "rag-31d375cca11151e3",
+          "rag-3c3b846e96a04622",
+          "rag-4b141b201280567d",
+          "rag-7a1e739431d5a385",
+          "rag-91f048ee01f22ffa",
+          "rag-96a90437160454ff",
+          "rag-af792cdec0a52af8",
+          "rag-d325100b4157e133",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Several common medications and substances of abuse can cause cardiotoxicity. Procainamide, carbamazepine, and tricyclic antidepressants can cause arrhythmias and ECG changes like QRS widening. Cocaine is associated with cardiomyopathy and myocardial infarction. Amphetamines can also cause myocardial infarction.",
+        "source_ids": [
+          "rag-3c3b846e96a04622",
+          "rag-1daeb5e3ed408e54",
+          "rag-91f048ee01f22ffa",
+          "rag-7a1e739431d5a385",
+          "rag-2d03ed69c3a55821"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Drug overdose is a common cause of seizures. Specific examples from the provided evidence include tricyclic antidepressants, isoniazid, carbamazepine, and amphetamines.",
+        "source_ids": [
+          "rag-91f048ee01f22ffa",
+          "rag-31d375cca11151e3",
+          "rag-2d03ed69c3a55821"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope discovery citations with the complete route RAG evidence pack for: review_notes[1]. These citations remain unverified.",
+        "source_ids": [
+          "rag-1daeb5e3ed408e54",
+          "rag-2d03ed69c3a55821",
+          "rag-31d375cca11151e3",
+          "rag-3c3b846e96a04622",
+          "rag-4b141b201280567d",
+          "rag-7a1e739431d5a385",
+          "rag-91f048ee01f22ffa",
+          "rag-96a90437160454ff",
+          "rag-af792cdec0a52af8",
+          "rag-d325100b4157e133",
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ]
+  }
+}

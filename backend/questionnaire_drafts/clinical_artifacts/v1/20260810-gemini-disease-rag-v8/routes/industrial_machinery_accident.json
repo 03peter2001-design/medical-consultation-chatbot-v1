@@ -1,0 +1,368 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "industrial_machinery_accident",
+  "label": "工業機械事故",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "632e41d3677c21328b3118613a6413425cf0b5966d85650002203a00b3fb1c2e",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"industrial machinery accident industrial machinery differential diagnosis diseases clinical presentation symptoms history\"]",
+    "rag_corpus_hash": "01f70991bd0e96999156cbe4980dfbfc6af2d375f86597fd56afc3ab36442239"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "2a3e3cc1e505217a3a02a13733dc38ccd26d8c95d5b603aa4b770c068d6e4512",
+    "generated_at": "2026-08-10T04:07:51+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "industrial machinery accident industrial machinery differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.514,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-d28ebb49bb7c15d4",
+      "chunk_id": "0b4e124e43266b2d82b6_21",
+      "title": "Neurological Sequelae of Infectious Endocarditis: Infective Endocarditis and the CNS, Etiology of CNS Sequelae, Epidemiology of CNS Sequelae",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165712-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "industrial machinery accident industrial machinery differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5399,
+      "excerpt": "metastatic brain disease, herpes simplex encephalitis, orbital cellulitis, and carotid disease and stroke should also be considered in the differential diagnosis. Diagnosis of CNS Sequelae Cerebrospinal fluid examination In the Massachusetts General Hospital series of 218 patients, 33 had meningeal symptoms (15%). Of patients with CNS involvement from infective endocarditis, one third had completely normal cerebrospinal fluid (CSF), one fourth had a slightly abnormal CSF but an aseptic culture, and one fourth had frankly purulent CSF. Noteworthy as well is that one sixth had hemorrhagic fluid.",
+      "text_sha256": "f98e813835d89c8700502e851754fc84e41fef6ea7d4ce08932f1a8db9173930"
+    },
+    {
+      "id": "rag-0ad869b486186143",
+      "chunk_id": "a3220c20d237b6cc54e8_8",
+      "title": "Erythema Infectiosum: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1132078-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "industrial machinery accident industrial machinery differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5487,
+      "excerpt": "is observed most commonly in adult women and occurs in fewer than 10% of children. It is a symmetrical polyarthritis, usually involving finger joints. The onset of joint symptoms occurs 2-3 weeks after exposure. Aplastic anemia The association of human PV-B19 with aplastic anemia is thought to be due to the affinity and cytotoxicity of the virus for erythroid progenitor cells. This complication is primarily observed in patients with underlying hemolytic anemias (eg, sickle cell disease, thalassemia) or immunodeficiency states (eg, leukemia, HIV). These disease states depend on high red blood",
+      "text_sha256": "276f542e0703859dde0feca1ced3750f62504558b318332f1f020e0e4dc6595d"
+    },
+    {
+      "id": "rag-cb3fa4e3a441df1f",
+      "chunk_id": "6e91495982ecfba39d3d_6",
+      "title": "Histoplasmosis: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/299054-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "industrial machinery accident industrial machinery differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5617,
+      "excerpt": "< 1 month indicate acute disease; symptoms 1-3 months indicate subacute disease; symptoms >3 months indicate chronic disease Acute syndromes: Pneumonia, disseminated disease in immunocompromised persons Chronic syndromes: Cavitary pulmonary lung disease, calcified lymph nodes, mediastinal fibrosis Physical examination: Uncommon findings include erythema nodosum and erythema multiforme CBC count: Thrombocytopenia in disseminated disease Serology: Useful in testing immunocompetent individuals with acute or subacute disease. Antigen testing: Useful in testing infiltrative or chronic disease in",
+      "text_sha256": "7005331c10225fef64efa561ff1ea700607aac10baf03744d7a3644725fe5359"
+    },
+    {
+      "id": "rag-2ff56bcca8311479",
+      "chunk_id": "53fc3e4f98765d889be9_5",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "industrial machinery accident industrial machinery differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5198,
+      "excerpt": "management. Also see Ischemic Stroke in Emergency Medicine and Hemorrhagic Stroke. Clinical Presentation History See the list below: Age, comorbidities Head trauma Motor vehicle collision Fall/jump from height Assault Penetrating injury Loss of consciousness Headache Changes in vision Changes in strength or sensation Coordination or balance problems Loss of executive function or cognition Seizure Coagulation disorders or therapy Intoxication; history of substance abuse Previous neurosurgery Physical See the list below: Altered mental status; unresponsiveness; deficits in Glasgow Coma Scale",
+      "text_sha256": "252df4637d2a17c89677f559ca6491086be258138a9d51fb666d01414f1ab6fc"
+    }
+  ],
+  "disease_candidates": [],
+  "proposal": {
+    "route": "industrial_machinery_accident",
+    "evidence_status": "sufficient",
+    "route_review": {
+      "recommended_disposition": "handoff",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-2ff56bcca8311479",
+        "rag-f09c5253c7a82445"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "industrial_machinery_accident__altered_consciousness",
+        "description": "Altered mental status or loss of consciousness following an industrial machinery accident.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-2ff56bcca8311479"
+        ]
+      },
+      {
+        "code": "industrial_machinery_accident__severe_breathing_difficulty",
+        "description": "Severe difficulty breathing following an industrial machinery accident.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "industrial_machinery_accident__major_bleeding",
+        "description": "Significant or uncontrolled bleeding from the injury site.",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-d28ebb49bb7c15d4",
+          "rag-0ad869b486186143",
+          "rag-cb3fa4e3a441df1f",
+          "rag-2ff56bcca8311479"
+        ]
+      },
+      {
+        "code": "industrial_machinery_accident__focal_neurologic_symptom",
+        "description": "Focal neurologic symptoms, such as one-sided weakness or numbness, following an industrial machinery accident.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "symptoms",
+        "option": "意識模糊",
+        "mapping": {
+          "findings": [
+            "industrial_machinery_accident__altered_consciousness"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-2ff56bcca8311479"
+        ]
+      },
+      {
+        "field": "symptoms",
+        "option": "呼吸困難",
+        "mapping": {
+          "findings": [
+            "industrial_machinery_accident__severe_breathing_difficulty"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "field": "bleeding",
+        "option": "是",
+        "mapping": {
+          "findings": [
+            "industrial_machinery_accident__major_bleeding"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-d28ebb49bb7c15d4",
+          "rag-0ad869b486186143",
+          "rag-cb3fa4e3a441df1f",
+          "rag-2ff56bcca8311479"
+        ]
+      },
+      {
+        "field": "symptoms",
+        "option": "無力麻木",
+        "mapping": {
+          "findings": [
+            "industrial_machinery_accident__focal_neurologic_symptom"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ],
+    "profile_status": "not_applicable",
+    "profiles": [],
+    "safety_proposals": [
+      {
+        "code": "experimental_industrial_machinery_accident__altered_consciousness",
+        "label": "Altered consciousness after machinery accident",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "industrial_machinery_accident"
+          ],
+          "any_findings": [
+            "industrial_machinery_accident__altered_consciousness"
+          ]
+        },
+        "possible_conditions": [
+          "Traumatic Brain Injury"
+        ],
+        "source_ids": [
+          "rag-2ff56bcca8311479"
+        ]
+      },
+      {
+        "code": "experimental_industrial_machinery_accident__severe_breathing_difficulty",
+        "label": "Severe breathing difficulty after machinery accident",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "industrial_machinery_accident"
+          ],
+          "any_findings": [
+            "industrial_machinery_accident__severe_breathing_difficulty"
+          ]
+        },
+        "possible_conditions": [
+          "Chest Trauma",
+          "Pneumothorax"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_industrial_machinery_accident__major_bleeding",
+        "label": "Major bleeding after machinery accident",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "industrial_machinery_accident"
+          ],
+          "any_findings": [
+            "industrial_machinery_accident__major_bleeding"
+          ]
+        },
+        "possible_conditions": [
+          "Hemorrhagic Shock",
+          "Severe Laceration"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-d28ebb49bb7c15d4",
+          "rag-0ad869b486186143",
+          "rag-cb3fa4e3a441df1f",
+          "rag-2ff56bcca8311479"
+        ]
+      },
+      {
+        "code": "experimental_industrial_machinery_accident__focal_neurologic_symptom",
+        "label": "Focal neurologic symptoms after machinery accident",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "industrial_machinery_accident"
+          ],
+          "any_findings": [
+            "industrial_machinery_accident__focal_neurologic_symptom"
+          ]
+        },
+        "possible_conditions": [
+          "Traumatic Brain Injury",
+          "Spinal Cord Injury"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ],
+    "unsupported_requirements": [],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The route is correctly set to 'handoff' due to the high-risk nature of industrial machinery accidents. The proposed safety rules capture critical red flags such as altered consciousness, severe breathing difficulty, major bleeding, and focal neurologic symptoms, which are appropriate for this context.",
+        "source_ids": [
+          "rag-2ff56bcca8311479",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[2], semantic_options[2], safety_proposals[2]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-d28ebb49bb7c15d4",
+          "rag-0ad869b486186143",
+          "rag-cb3fa4e3a441df1f",
+          "rag-2ff56bcca8311479"
+        ]
+      }
+    ]
+  }
+}

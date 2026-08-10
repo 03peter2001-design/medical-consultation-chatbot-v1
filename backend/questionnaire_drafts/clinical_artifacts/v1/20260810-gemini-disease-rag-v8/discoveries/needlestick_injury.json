@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "needlestick_injury",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "8fc9dabc596a7868d513120b26fadf5eb73f7f4d48c7de24c6a0fad5b00b1cae",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "needlestick injury needlestick differential diagnosis diseases clinical presentation symptoms history",
+      "needlestick injury needlestick red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "f9b595cea44c36213865cc03ea6cf6f2111e3cac34467fb3a7ce1199caaa2b9b"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "8413345935875192be85dd59e04eae909b88218962c9ed1575774093f519867c",
+    "generated_at": "2026-08-10T04:08:44+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-da206d8bd5416019",
+      "chunk_id": "946610927a231214762d_22",
+      "title": "Perilymphatic Fistula: Practice Essentials, History of the Procedure, Problem",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/856806-overview",
+      "routes": [
+        "headache",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "needlestick injury needlestick differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4434,
+      "excerpt": "83% of their patients with traumatic PLF had complaints of sudden or fluctuating sensorineural loss. Vestibular symptoms occur in most patients. Balance disturbance can be described as true rotational vertigo, lightheadedness, disequilibrium, intolerance to motion, or any combination of these symptoms. Seltzer and McCabe reported such symptoms in 80% of patients with PLF, and Glasscock et al reported 77% incidence of true vertigo or disequilibrium. In obvious cases, membrane rupture is accompanied (or followed within a few minutes) by rapid, severe hearing loss; loud, roaring tinnitus; and",
+      "text_sha256": "a79c30850371ebf43b86678f5bbe5abd48fa69820142c3d688ca414ddc51d83b"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "needlestick injury needlestick differential diagnosis diseases clinical presentation symptoms history",
+        "needlestick injury needlestick red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4146,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-b9aa3a2c87d315d1",
+      "chunk_id": "0049aa900b24cc7c1ccf_4",
+      "title": "Urinary Tract Infections in Spinal Cord Injury: Epidemiology and Pathophysiology, Clinical Presentation, Diagnostic Testing",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2040171-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "needlestick injury needlestick differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4103,
+      "excerpt": "autonomic dysreflexia to noxious stimuli, such as an overdistended bladder. The sympathetic response below the level of injury is uninhibited, producing severe vasoconstriction and reflexive bradycardia. If the patient is febrile, this may appear as a pulse-temperature dissociation. Please see Urinary Tract Infection (UTI) and Cystitis (Bladder Infection) in Females. Diagnostic Testing Urinary tract infection (UTI) in patients with spinal cord injury (SCI) is challenging to diagnose because all of these individuals have some degree of bacteruria, but not all are actively infected. Treatment",
+      "text_sha256": "134cd5b960e6dcb5be03b8d0220abd9a1cacaa353f8663bffe7019fe9f2c50b6"
+    },
+    {
+      "id": "rag-5db846a062f8bd3a",
+      "chunk_id": "f313a7914d14df5f9743_34",
+      "title": "Spinal Cord Injuries: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793582-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "needlestick injury needlestick differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4402,
+      "excerpt": "syndromes. Spinal cord syndromes may be complete or incomplete. In most clinical scenarios, physicians should use a best-fit model to classify the SCI syndrome. A complete cord syndrome is characterized clinically as complete loss of motor and sensory function below the level of the traumatic lesion. Incomplete cord syndromes have variable neurologic findings with partial loss of sensory and/or motor function below the level of injury; these include the anterior cord syndrome, the Brown-Suard syndrome, and the central cord syndrome. Anterior cord syndrome involves a lesion causing variable",
+      "text_sha256": "d15e70e01f38da3960950d02b456a0bb085fa0e28ff3929429f0d2dab4511e8e"
+    },
+    {
+      "id": "rag-f535f7d2452b0d38",
+      "chunk_id": "4a333b8daf252bbcafcd_1",
+      "title": "Toxic Shock Syndrome: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/169177-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "needlestick injury needlestick differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4451,
+      "excerpt": "headache, and nonfocal neurologic abnormalities. See the image below. A 46-year-old man presented with nonnecrotizing cellulitis and streptococcal toxic shock syndrome. The patient had diffuse erythroderma, a characteristic feature of the syndrome. The patient improved with antibiotics and intravenous gammaglobulin therapy. Several days later, a characteristic desquamation of the skin occurred over palms and soles. Courtesy of Rob Green, MD. TSS was first described in children in 1978. Subsequent reports identified an association with tampon use by menstruating women. Menstrual TSS is more",
+      "text_sha256": "26ca000008738031089e37f3efef58bcc8269ac23eaf735f7d7686e20f667032"
+    },
+    {
+      "id": "rag-fba9ae355237ff91",
+      "chunk_id": "e8536acaf963b32c55a7_3",
+      "title": "Myopathies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/759487-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "needlestick injury needlestick differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4482,
+      "excerpt": "Very late findings: Atrophy and hyporeflexia (early presence usually implicates neuropathies) Normal level of consciousness Gottron papules in dermatomyositis: Pink-to-violaceous scaly areas over knuckles, elbows, and knees The acuity of symptom onset may aid in the diagnosis, as follows: Weakness progressing over hours: Possible toxic etiology or one of episodic paralyses Weakness developing over days: May be an acute dermatomyositis or rhabdomyolysis Symptom development over a period of weeks: May be polymyositis, steroid myopathy, or myopathy resulting from endocrine causes (eg,",
+      "text_sha256": "008b291405b473a7892ba0b84dfbdd78b6367d4e03a39055e38c4c2d638d97a8"
+    },
+    {
+      "id": "rag-8b3fcf23df0bdada",
+      "chunk_id": "75d137aeab02f68f7979_2",
+      "title": "Temporomandibular Joint (TMJ) Syndrome: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/809598-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "needlestick injury needlestick differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4593,
+      "excerpt": "muscles of mastication described as a dull ache, typically unilateral; pain may radiate to the ear and jaw and is worsened with chewing Locking of the jaw when attempting to open the mouth Ear clicking or popping, usually when displacement of the articular disk is present Headache and/or neck ache Characteristic findings on physical examination include the following: Limitation of jaw opening (normal range is at least 40 mm as measured from lower to upper anterior teeth) Palpable spasm of facial muscles (masseter and internal pterygoid muscles) Unilateral facial swelling Clicking or popping in",
+      "text_sha256": "0f4f9c88cb4c1d05c0458aa255c5bd3369280f8e979843ce989bda3c08c72c99"
+    },
+    {
+      "id": "rag-c4c084dcf2f8fd92",
+      "chunk_id": "48a9d19cda5ce3d648cd_6",
+      "title": "Hand-Foot-and-Mouth Disease in Emergency Medicine: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/802260-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "needlestick injury needlestick differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4909,
+      "excerpt": "a secondary skin infection may occur. Severe complications may occur when CNS or cardiopulmonary involvement is present. These sequelae include dysphagia, limb weakness, cardiopulmonary failure, and even death. Although death is very rare, it is most often due to pulmonary hemorrhage or edema.`meta-analysis by Ni et al identified the following risk factors associated with fatal HFM disease in children: dyspnea, seizures, lethargy, pneumoedema/pneumorrhagia, and coma. Enteroviruses as a group are a cause of aseptic meningitis and encephalitis; however, Hand-foot-and-mouth disease is not usually",
+      "text_sha256": "03985b4d459c0c3115c2e02b63ea69da9fe2bae6d61b04e4e118b9927a78947b"
+    },
+    {
+      "id": "rag-429a8bca76071355",
+      "chunk_id": "07486b1d5e69e024cfb4_12",
+      "title": "Urinary N-Methylhistamine: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2093933-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "needlestick injury needlestick red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5817,
+      "excerpt": "patients with indolent systemic mastocytosis have elevated levels of urinary mast-cell mediator metabolites, including N-methylhistamine, the same is not true for individuals with the mast-cell disorder symptomatic hereditary alpha tryptasemia, even though both disorders can present with symptoms of mast-cell activation, a condition associated with elevation of those metabolites. According to the investigators, this may suggest that the symptoms of hereditary alpha tryptasemia are not driven by granule- and membrane-derived mast-cell mediators.",
+      "text_sha256": "039e2b7c9ad710030dce6d4c079945033756736facd5e4ef6e7c38058179654d"
+    }
+  ],
+  "discovery": {
+    "route": "needlestick_injury",
+    "evidence_status": "sufficient",
+    "diseases": [],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The disposition for this route is 'handoff', which bypasses the disease voting stage. Therefore, no disease candidates are proposed. The system will proceed directly to safety review and disposition.",
+        "source_ids": [
+          "rag-429a8bca76071355",
+          "rag-5db846a062f8bd3a",
+          "rag-8b3fcf23df0bdada",
+          "rag-b9aa3a2c87d315d1",
+          "rag-c4c084dcf2f8fd92",
+          "rag-da206d8bd5416019",
+          "rag-f09c5253c7a82445",
+          "rag-f535f7d2452b0d38",
+          "rag-fba9ae355237ff91"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope discovery citations with the complete route RAG evidence pack for: review_notes[0]. These citations remain unverified.",
+        "source_ids": [
+          "rag-429a8bca76071355",
+          "rag-5db846a062f8bd3a",
+          "rag-8b3fcf23df0bdada",
+          "rag-b9aa3a2c87d315d1",
+          "rag-c4c084dcf2f8fd92",
+          "rag-da206d8bd5416019",
+          "rag-f09c5253c7a82445",
+          "rag-f535f7d2452b0d38",
+          "rag-fba9ae355237ff91"
+        ]
+      }
+    ]
+  }
+}

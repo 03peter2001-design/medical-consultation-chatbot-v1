@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "bite",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "2827666e3e4e868b7ed58f068129a2d72df6bd08b2076cb0c46288e507572564",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "bite bite differential diagnosis diseases clinical presentation symptoms history",
+      "bite bite red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "dd37319266fa43a236d6ea9aa4630d1b0b19e2497a7821d35cf4e8e9718353c2"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "daa4334bcf03b1ca267a3645de0c1bfd5926f8354f43fe764b2fb70fdc58344f",
+    "generated_at": "2026-08-10T03:53:52+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-5bb6be615f7d4044",
+      "chunk_id": "5f0c535325053b5addec_8",
+      "title": "Tick-Borne Diseases: Overview, Biology and Life Cycle of Ticks, Guidelines on the Diagnosis and Management of Tickborne Rickettsial Diseases",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/786652-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "bite bite differential diagnosis diseases clinical presentation symptoms history",
+        "bite bite red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4741,
+      "excerpt": "suspected cases of AGS were identified in the United States. Places where the lone star tick is found are most affected. Cases predominantly occur in counties within the southern, midwestern, and mid-Atlantic regions. The primary management of mammalian meat allergy is avoidance of mammalian meat. The allergy can cause symptoms ranging from urticaria to angioedema and anaphylaxis. Delayed anaphylactic shock has also been reported to occur 4-6 hours after consumption of red meat. These symptoms are treated in the usual manner. Oral antihistamines are recommended for patients who remain",
+      "text_sha256": "9a799da850ee0b0204e66a0471a8199aa92fea7b19b1c914e3d4bd413c39103e"
+    },
+    {
+      "id": "rag-da72a4f7e9e54847",
+      "chunk_id": "eade270c103e6d7a9a0d_16",
+      "title": "Human Bites: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/218901-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bite bite differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4502,
+      "excerpt": "toddlers placed in crowded daycare centers are usually superficial and rarely become infected. Patient Education Patients must clearly understand the signs and symptoms of wound infection that signal a need to return for immediate reevaluation. These include, but are not limited to, the following: Fever Odor Drainage Purulence Swelling Cellulitis Warmth Pain Decreased mobility Patients must also clearly understand the importance of early and regular follow-up care for this seemingly minor injury, as well as the rationale for providing antibiotics and the importance of compliance with this",
+      "text_sha256": "53ec82df68ad5453a564627875f31471f4a2da249cfcf3854705e2c86ce5894d"
+    },
+    {
+      "id": "rag-80a1512617e77243",
+      "chunk_id": "533df8c4e1c8cc2bd460_14",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bite bite differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4906,
+      "excerpt": "most common clinical manifestations of an allergic reaction to a food or food additive. Symptoms range from acute urticaria (most common) to flushing to angioedema to exacerbations of atopic dermatitis. Food allergy is rarely the cause of chronic urticaria or angioedema. Atopic dermatitis Controversy surrounds the role of food allergy in the pathogenesis of atopic dermatitis. Studies show that among patients with moderate chronic atopic dermatitis, 35-40% have IgE-mediated food allergy. Food-specific IgE-mediated and cellular mechanisms appear responsible for chronic eczematous inflammation.",
+      "text_sha256": "844a1bbac3426efe4bf1acffd9503ea80bb65946263bb74b9cf52519fd6ce260"
+    },
+    {
+      "id": "rag-7c620a5ccb741927",
+      "chunk_id": "ab7d430962cf4300f40b_23",
+      "title": "Noncandidal Fungal Infections of the Mouth: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1077685-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bite bite differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4928,
+      "excerpt": "E–specific antibody levels may support the diagnosis. The diagnosis of blastomycosis is based on smear or culture results. Biopsy may show Blastomyces species in the tissue, with granulomas. Staining with PAS, methenamine silver nitrate, or Fontana-Masson stain helps in the identification. The organism can be mistaken for H capsulatum, C neoformans, Bipolaris species, or Wangiella dermatitidis. Direct immunostaining is the most useful means of confirmation. DNA probes can yield an answer in 2 hours. Skin test and serology results are, unfortunately, unreliable, although serotesting has",
+      "text_sha256": "ed4cd43b10167c6e49c642073bec069e7af1f715b2a385adcaa174c12aa19c36"
+    },
+    {
+      "id": "rag-dcfb333a49cc8e48",
+      "chunk_id": "e5e866e92c8de8af247a_22",
+      "title": "Viral Meningitis: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1168529-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bite bite differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4074,
+      "excerpt": "areas of endemic disease, and the presence of erythema chronicum migrans at the site of tick bite is pathognomonic. Lyme meningitis has a predilection to cause focal cranial nerve palsies, with the seventh nerve most commonly affected. Clinicians must consider partially-treated bacterial meningitis as a possible etiology for the aseptic nature of their patient's disease; for example, patients with bacterial otitis and sinusitis who have been taking antibiotics may present with meningitis and CSF findings identical to those of viral meningitis. The clinician should also realize that the picture",
+      "text_sha256": "de18028256962200dea5018320074030939acf418e06837c9823040f9e3816b3"
+    },
+    {
+      "id": "rag-b47422e50134c735",
+      "chunk_id": "709d501e5392c47ae3b5_32",
+      "title": "Lyme Disease: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/330178-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bite bite differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.44,
+      "excerpt": "infection progresses to disseminated disease in approximately 50% of untreated patients. Only a few genotypes of B burgdorferi appear to be responsible for the large majority of cases of disseminated disease. Stage 1 disease Stage 1 is also known as primary or early localized infection. It generally occurs within 30 days of the tick bite. Most patients present with a characteristic expanding rash (erythema migrans) at the site of the tick bite 7-14 days after the tick is removed. Nonspecific symptoms may include the following: Fatigue Myalgias Arthralgias Headache Fever Chills Neck stiffness",
+      "text_sha256": "740f74cb1b97010640b0197c650279a916781146ecc04260034b3b92f597aeb4"
+    },
+    {
+      "id": "rag-786d5c82e1d5b2b7",
+      "chunk_id": "533df8c4e1c8cc2bd460_5",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "bite bite red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5324,
+      "excerpt": "of inducing a systemic reaction Patch testing: Appears promising, but additional studies are needed and it is not recommended for routine practice Diet-related diagnostic measures may be helpful, as follows: Diet diary Elimination diet (may be used for diagnostic as well as therapeutic purposes) Food challenge confirmation of food allergy (may be open; single-blind; or double-blind, placebo-controlled) See Workup for more detail. Management There are currently no curative therapies for food allergy. The only proven treatment is strict dietarylimination of the offending food allergen. A",
+      "text_sha256": "eb4efdbe7c771eeb55882e804a15a15fa64a4f10c193f2088ada256c405d92b6"
+    },
+    {
+      "id": "rag-3a01ae2e52d02ccd",
+      "chunk_id": "533df8c4e1c8cc2bd460_4",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "bite bite red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5629,
+      "excerpt": "testing: Positive results primarily denote sensitization and may not confirm clinical allergy; specific laboratory tests for some food hypersensitivities are not available Basophil histamine-release assays: These are limited primarily to research settings Skin testing includes the following approaches: Prick testing: This is the most common screening test for food allergy; negative predictive accuracy exceeds positive predictive accuracy (>90% vs < 50%) Intradermal testing: Generally avoided, because of the risk of inducing a systemic reaction Patch testing: Appears promising, but additional",
+      "text_sha256": "ab9c0cc6990510f768f7977a8202aaa662a2878cc3cf5ccf03771044afcfb5a5"
+    }
+  ],
+  "discovery": {
+    "route": "bite",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "bite__lyme_disease",
+        "name": "Lyme disease",
+        "rationale": "The questionnaire asks about the source of the bite, which could be a tick. Lyme disease is a tick-borne illness that can present with an expanding rash (erythema migrans) at the bite site, along with non-specific symptoms like fatigue, myalgias, headache, fever, and chills, which are covered in the systemic symptoms question.",
+        "source_ids": [
+          "rag-b47422e50134c735",
+          "rag-dcfb333a49cc8e48"
+        ]
+      },
+      {
+        "id": "bite__tick_borne_rickettsial_disease",
+        "name": "Tick-borne rickettsial disease",
+        "rationale": "The questionnaire asks about the source of the bite. If a tick is identified, rickettsial diseases are a key consideration. The provided evidence discusses the diagnosis and management of these diseases, which can be associated with tick bites.",
+        "source_ids": [
+          "rag-5bb6be615f7d4044"
+        ]
+      },
+      {
+        "id": "bite__alpha_gal_syndrome",
+        "name": "Alpha-gal syndrome",
+        "rationale": "This condition is associated with bites from the lone star tick. It can cause a delayed allergic reaction, including urticaria, angioedema, and anaphylaxis, 4-6 hours after consuming mammalian meat. The questionnaire asks about systemic symptoms like hives, itching, and swelling of the face, lips, or tongue, which are consistent with this syndrome.",
+        "source_ids": [
+          "rag-5bb6be615f7d4044"
+        ]
+      },
+      {
+        "id": "bite__wound_infection",
+        "name": "Wound infection",
+        "rationale": "The questionnaire asks about local symptoms like worsening redness, swelling, and systemic symptoms like fever. These are classic signs of a wound infection, which is a common complication of any bite, including human bites.",
+        "source_ids": [
+          "rag-da72a4f7e9e54847"
+        ]
+      },
+      {
+        "id": "bite__allergic_reaction",
+        "name": "Allergic reaction",
+        "rationale": "The questionnaire asks about initial reactions like swelling and redness, as well as systemic symptoms like hives (urticaria), itching, swelling of the face/lips/tongue, and difficulty breathing. These are hallmark symptoms of an allergic reaction, which can be triggered by an insect or animal bite.",
+        "source_ids": [
+          "rag-80a1512617e77243",
+          "rag-5bb6be615f7d4044"
+        ]
+      }
+    ],
+    "review_notes": []
+  }
+}

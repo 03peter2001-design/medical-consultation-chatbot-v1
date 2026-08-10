@@ -1,0 +1,917 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "substance_abuse",
+  "label": "物質濫用",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "69ed48c7e2a5896932e02c3e8571053aaade590db68e4eedc4d114f6447461ec",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"substance abuse substance abuse differential diagnosis diseases clinical presentation symptoms history\",\"substance abuse substance abuse red flags emergency warning signs urgent referral rule out\",\"Cocaine Toxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Drug-Induced Hepatotoxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Amphetamine Toxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Alcoholic Hepatitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Amphetamine-Related Psychiatric Disorders diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Cocaine-Related Cardiomyopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "e22dc9d56ec318d057db322a9b16940206bbb01b7ebd7d041704188d046f432e"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "ad6db89332bf6ca5e262f7573b386f02e0ff09418c7c920b4e7e533441cbeca6",
+    "generated_at": "2026-08-10T04:17:21+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-af792cdec0a52af8",
+      "chunk_id": "384109719888d643aec6_97",
+      "title": "Cocaine Toxicity: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/813959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "substance_abuse__cocaine_toxicity"
+      ],
+      "retrieval_queries": [
+        "substance abuse substance abuse differential diagnosis diseases clinical presentation symptoms history",
+        "substance abuse substance abuse red flags emergency warning signs urgent referral rule out",
+        "Cocaine Toxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3644,
+      "excerpt": "In 18, an estimated 977,000 (0.4%) persons aged 12 years and older reported a substance use disorder in the past year involving cocaine. The Annual Report of the American Association of Poison Control Centers' National Poison Data System reported 1162 single exposures to cocaine in 2022. Major outcomes occurred in 148 cases and 28 deaths were reported. From the early 1970s until its discontinuation in 2011, the Drug Abuse Awareness Network (DAWN), a national survey of approximately 600 hospital EDs, reported the number of episodes of patients seeking treatment related to their use of an",
+      "text_sha256": "b200ac2c0754741d1d00b222cc6129c15abaeaf70dc436afbf9443f4dbcfbedf"
+    },
+    {
+      "id": "rag-decc6a9403c80e36",
+      "chunk_id": "384109719888d643aec6_6",
+      "title": "Cocaine Toxicity: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/813959-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "substance abuse substance abuse differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4041,
+      "excerpt": "cocaine-induced rhabdomyolysis, the reported incidence of which is 5-30% in ED patients who use cocaine Toxicology evaluations: Including for urine, blood, gastric contents, and unknown substances clinging to the patient s body See Workup for more detail. Radiography Chest radiographs, which should be obtained in patients with chest pain, hypoxia, or moderate to severe cocaine toxicity, may reveal the following: Diffuse granulomatous changes: In cases of chronic parenteral cocaine use, due to the injection of inert insoluble ingredients of oral preparations or insolubles used to cut cocaine",
+      "text_sha256": "49ae6d4a91092d0e1eb73f6b59625ebcd219ca39bfe91bec03e7bb244c0d7450"
+    },
+    {
+      "id": "rag-7a1e739431d5a385",
+      "chunk_id": "ab9063a525e89c555d29_31",
+      "title": "Cocaine-Related Cardiomyopathy: Overview, Cardiac Effects of Cocaine, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/152535-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "substance_abuse__cocaine_toxicity"
+      ],
+      "retrieval_queries": [
+        "substance abuse substance abuse differential diagnosis diseases clinical presentation symptoms history",
+        "Cocaine Toxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3689,
+      "excerpt": "patient in their report, a 35-year-old woman, underwent endomyocardial biopsy that failed to reveal any necrosis, fibrosis, or inflammatory infiltrate. In autopsies of 40 patients, 31 of whom died cocaine-related deaths and 9 of whom were homicide victims with detectable blood cocaine levels, Virmani et al found that 20% of the patients showed evidence of myocarditis on toxic screening tests. !zelaar, in an autopsy study, reported contraction-based myocardial necrosis similar to that observed in pheochromocytoma. In a case report by Robledo-Carmona, histologic findings of the left ventricular",
+      "text_sha256": "93e179b6f7d726031deddd1c29c580849c6af57ca1808c3ef418e8ad87ac070d"
+    },
+    {
+      "id": "rag-6eed99dd19d3f20c",
+      "chunk_id": "89664fb35e761e629dde_84",
+      "title": "Drug-Induced Hepatotoxicity: Overview, Metabolism of Drugs, Clinical and Pathological Manifestations of Drug-Induced Liver Disease",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/169814-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "substance_abuse__drug_induced_hepatotoxicity"
+      ],
+      "retrieval_queries": [
+        "substance abuse substance abuse differential diagnosis diseases clinical presentation symptoms history",
+        "Drug-Induced Hepatotoxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3302,
+      "excerpt": "Patients should be instructed to immediately report any symptoms, specifically unexplained anorexia, nausea, vomiting, dark urine, icterus, rash, persistent paresthesias of the hand and feet, persistent fatigue, weakness or fever of greater than 3 days' duration, and/or abdominal tenderness, especially right quadrant discomfort. In such cases, INH should be discontinued because continued use can lead to severe liver damage. Methyldopa is an antihypertensive that is contraindicated in patients with active liver disease. Periodic determination of hepatic function should be performed during the",
+      "text_sha256": "348017cc2d3166a29a19d0a64959f7ffd81731e1123637550ff000fa87f8963a"
+    },
+    {
+      "id": "rag-db4bc24235077276",
+      "chunk_id": "e2b6a9f747093816d337_15",
+      "title": "Alcohol and Substance Abuse Evaluation: Overview, Epidemiology, Clinical Presentation",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/805084-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "substance abuse substance abuse differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4004,
+      "excerpt": "as cough and cold medicines containing dextromethorphan, can also be abused and lead to significant CNS effects including a dissociative state. This is a special problem among teenagers. Parents should be aware of the potential for abuse of these medications, especially when consumed in large quantities, which should signal concern and the possible need for intervention. Epidemiology Quantitative information on the prevalence of substance abuse is difficult to obtain because of the unwillingness of abusers to accurately disclose consumption. Surveys are taken routinely in high schools and",
+      "text_sha256": "b0a5a2bf6c05ff880e87847193cd97f1f30c01881aaeee02d8da29ffa8f02d67"
+    },
+    {
+      "id": "rag-8957227baf263917",
+      "chunk_id": "e2bd29aaeb522a43246b_1",
+      "title": "Alcoholic Hepatitis: Practice Essentials, Background, Etiology and Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/170539-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "substance abuse substance abuse differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4747,
+      "excerpt": "See Clinical Presentation for more detail. Diagnosis The diagnosis of alcoholic hepatitis is straightforward and requires no further diagnostic studies in patients presenting with a history of alcohol abuse, typical symptoms and physical findings, evidence of liver functional impairment, and compatible liver enzyme levels. In milder cases of alcoholic hepatitis, a mild elevation of the aspartate aminotransferase (AST) level may be the only diagnostic clue. See Workup for more detail. Management In most patients with alcoholic hepatitis, the illness is mild. The short-term prognosis is good,",
+      "text_sha256": "40d26026f66711381d06d32e7b59e40d403376683ce596bfd71dea285f890c95"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "substance_abuse__amphetamine_toxicity",
+        "substance_abuse__alcoholic_hepatitis",
+        "substance_abuse__amphetamine_related_psychiatric_disorders",
+        "substance_abuse__drug_induced_hepatotoxicity"
+      ],
+      "retrieval_queries": [
+        "substance abuse substance abuse red flags emergency warning signs urgent referral rule out",
+        "Amphetamine Toxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Alcoholic Hepatitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Amphetamine-Related Psychiatric Disorders diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Drug-Induced Hepatotoxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4258,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-d325100b4157e133",
+      "chunk_id": "39dd1d25515828147ad6_21",
+      "title": "Amphetamine-Related Psychiatric Disorders: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/289973-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "substance_abuse__amphetamine_toxicity",
+        "substance_abuse__amphetamine_related_psychiatric_disorders"
+      ],
+      "retrieval_queries": [
+        "substance abuse substance abuse red flags emergency warning signs urgent referral rule out",
+        "Amphetamine Toxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Amphetamine-Related Psychiatric Disorders diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3789,
+      "excerpt": "which is why the WHO first classified it as a \"hazardous and harmful substance\" in its Primary Care Geneva report in 2011. Mortality/Morbidity The Drug Abuse Warning Network (DAWN) Annual Medical Examiner Data for 2021 showed that 11.2% of all drug-related hospital emergency department visits were associated with methamphetamine use, listed 3rd after alcohol and opioid-related presentations. The South and Western regions of the United States accounted for greater than 70% of all methamphetamine-related ED visits. In high doses, illicit and prescription amphetamines can produce cardiovascular",
+      "text_sha256": "56b6b45a5d72211fc2fb9fa76073c88db9d42cf3a5fd3a1b411a23f13c28f65b"
+    },
+    {
+      "id": "rag-f588e0f74377e773",
+      "chunk_id": "39dd1d25515828147ad6_11",
+      "title": "Amphetamine-Related Psychiatric Disorders: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/289973-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "substance_abuse__amphetamine_toxicity",
+        "substance_abuse__amphetamine_related_psychiatric_disorders"
+      ],
+      "retrieval_queries": [
+        "substance abuse substance abuse red flags emergency warning signs urgent referral rule out",
+        "Amphetamine Toxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Amphetamine-Related Psychiatric Disorders diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.352,
+      "excerpt": "high doses of prescription amphetamines or from chronic or intermittent abuse of amphetamines. Individuals who use prescription amphetamines can easily correct their sleep disturbance by lowering the dose or taking their medication earlier in the day than they have been. Insomnia is the most common adverse effect of prescription amphetamines. Unspecified stimulant-related disorder is a diagnosis assigned to those who have several psychiatric symptoms associated with amphetamine use but who do not meet the criteria for a specific amphetamine-related psychiatric disorder. Case study A",
+      "text_sha256": "bb2778fbf2db6354a7e83d77788260f900c01b37c64b477fbd83c7c823d88b6a"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "substance abuse substance abuse red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5884,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    },
+    {
+      "id": "rag-2d03ed69c3a55821",
+      "chunk_id": "f2827ee86a87b72f0fca_17",
+      "title": "Amphetamine Toxicity: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/812518-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "substance_abuse__amphetamine_related_psychiatric_disorders"
+      ],
+      "retrieval_queries": [
+        "substance abuse substance abuse red flags emergency warning signs urgent referral rule out",
+        "Amphetamine-Related Psychiatric Disorders diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4704,
+      "excerpt": "other metals, organic solvents, and precursor molecules all have been found in amphetamine samples and blood of individuals with amphetamine toxicity. Acute overdose of amphetamines can result in the following: Seizures Hypertension Tachycardia Myocardial infarction Hyperthermia Psychosis Hallucinosis Stroke Death Habitual amphetamine use produces toxic psychosis resembling paranoid schizophrenia. Hallucinations, delusions, and bizarre violent behavior are common. In a few patients, amphetamine use produces long-term paranoid schizophrenia; whether this results from unmasking underlying",
+      "text_sha256": "fecf3a7fdd0fe9aacbef338d25de3cdff4bc5472cd3337aaa0b6e63d4f82ea5f"
+    },
+    {
+      "id": "rag-56aebbd1daae9cd9",
+      "chunk_id": "ab9063a525e89c555d29_20",
+      "title": "Cocaine-Related Cardiomyopathy: Overview, Cardiac Effects of Cocaine, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/152535-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "substance abuse substance abuse red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5919,
+      "excerpt": "symptoms of myocardial ischemia/infarct usually are present, including diaphoresis, nausea/vomiting, dyspnea, and a sense of impending catastrophe. In patients presenting with chest pain, aortic dissection also should be considered. Congestive heart failure The symptoms of cocaine-related cardiomyopathy are the same as symptoms for other forms of congestive heart failure. The onset may be very sudden and of short duration. A history of myocardial infarction (due to cocaine-induced vasospastic ischemia) may be present but often is absent. Symptoms of chronic congestive heart failure usually are",
+      "text_sha256": "5dfa5d36973240d4f694303d36087e1f414d3bd8796ebceca490e9b42b2e7a9f"
+    },
+    {
+      "id": "rag-bec27ceda63d76c1",
+      "chunk_id": "384109719888d643aec6_31",
+      "title": "Cocaine Toxicity: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/813959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "substance_abuse__cocaine_toxicity"
+      ],
+      "retrieval_queries": [
+        "Cocaine Toxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3882,
+      "excerpt": "some people have a genetic deficiency of plasma pseudocholinesterase or a nutritional predisposition to abnormally low pseudocholinesterase levels. Some have postulated that these patients may metabolize cocaine slowly and have increased sensitivity to small doses of cocaine, which places them at risk for increased toxicity and sudden death. Evidence supporting this postulate is scant. Most of the remaining amount of cocaine is metabolized by hepatic N-demethylation into norcocaine, which is metabolically active. Pregnancy, during which circulating progesterone levels are high, or the",
+      "text_sha256": "3e75fe9075868a3b74be590d2070ee87196db5925fa27f5fb2e4f576b7d80d41"
+    },
+    {
+      "id": "rag-31d375cca11151e3",
+      "chunk_id": "681f8d85afff0d057cd0_6",
+      "title": "Carbamazepine Level: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2089796-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "substance_abuse__amphetamine_toxicity"
+      ],
+      "retrieval_queries": [
+        "Amphetamine Toxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4245,
+      "excerpt": "CNS depressant, and vestibular-brainstem effects; however, the levels at which various toxicities occur are approximate at best. In mild to moderate overdose, nystagmus, ataxia, ophthalmoplegia, dyskinesia, dystonia, mydriasis may be observed. In particular, ataxia and nystagmus usually occur with serum concentrations greater than 10 mg/L. Other manifestations that occur with more significant toxicity include seizures, respiratory depression, and coma, which have been observed at serum levels of greater than 40 mg/L. One cardiac manifestation of overdose is sinus tachycardia. Atrioventricular",
+      "text_sha256": "4025490de46c48498a345ba94b3e169d3d42712e361852c381cb0d738e016c6e"
+    },
+    {
+      "id": "rag-a9f26a03d3dcb663",
+      "chunk_id": "26377302d1bc1c6a8477_11",
+      "title": "Hepatitis B Test: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2109144-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "substance_abuse__alcoholic_hepatitis"
+      ],
+      "retrieval_queries": [
+        "Alcoholic Hepatitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4651,
+      "excerpt": "(-/+) means may be detectable*Nondetectable with non-PCR method**May be positive in 10%-15% patients with reactivation of infection Persons with chronic HBV infection can either be inactive carriers or develop chronic hepatitis. Inactive carriers refer to HBeAg-negative individuals who have normal serum ALT levels and low (< 2000 IU/mL) or undetectable HBV DNA, while patients with chronic hepatitis usually have fluctuating ALT and/or HBV DNA levels. Differentiating between the two is important in clinical management, as inactive carriers generally have a good prognosis and antiviral treatment",
+      "text_sha256": "f91907e429dc1e92734ec616f5d9e702288e52a4146cd2552038e7f9ffce7ee8"
+    },
+    {
+      "id": "rag-e02421e9b79f2ec2",
+      "chunk_id": "b06eb642a9247a3024e1_2",
+      "title": "Hepatitis C Test: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/1996209-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "substance_abuse__alcoholic_hepatitis"
+      ],
+      "retrieval_queries": [
+        "Alcoholic Hepatitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.505,
+      "excerpt": "sufficient to exclude a diagnosis of chronic HCV infection in immune-competent patients. Those on hemodialysis and patients with immune deficiencies may have false-negative results, whereas false-positives may occur in patients with autoimmune disorders. Molecular assays These tests are approved by the US Food and Drug Administration (FDA) for the detection of HCV RNA; they can be qualitative or quantitative. Qualitative tests only detect the presence of HCV RNA (specificity, approximately 98%) whereas the quantitative assays detect the viral load in IU/mL (specificity, approximately 98-99%)",
+      "text_sha256": "4b0f9db69d2543f9b80f5c63322c113bbdf2b8d1d67fa8e121fd613a10cb20c3"
+    },
+    {
+      "id": "rag-c551997d405fa928",
+      "chunk_id": "b06eb642a9247a3024e1_4",
+      "title": "Hepatitis C Test: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/1996209-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "substance_abuse__alcoholic_hepatitis"
+      ],
+      "retrieval_queries": [
+        "Alcoholic Hepatitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5144,
+      "excerpt": "Both test results are positive in case of acute or chronic infection. However, anti-HCV positivity with nondetectable HCV RNA could be seen in cases of acute infection during a period of viral clearance and false positives may result; this may also occur after recovery from infection or following spontaneous resolution of HCV infection. On the other hand, HCV RNA results can be positive with negative anti-HCV findings in cases of early stages of acute infection, false positive results, or chronic infection in an immunosuppressed individual. Collection and Panels Obtain 3.5 mL of blood in a",
+      "text_sha256": "70ee46db42a138529d5ade54adf8d50358dcf096b96ee3ffced3ea745c78fd16"
+    },
+    {
+      "id": "rag-56db1eb29dfd7134",
+      "chunk_id": "ab9063a525e89c555d29_29",
+      "title": "Cocaine-Related Cardiomyopathy: Overview, Cardiac Effects of Cocaine, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/152535-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "substance_abuse__cocaine_related_cardiomyopathy"
+      ],
+      "retrieval_queries": [
+        "Cocaine-Related Cardiomyopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2846,
+      "excerpt": "report that the diagnosis was first suggested at bedside echocardiography in the emergency department. They concluded that the recognition of the classic echocardiographic appearance of TC (apical hypokinesis that causes ballooning of the left ventricle during systole) may greatly aid health care providers in the early identification of this condition. Cardiac catheterization usually shows normal coronary arteries or only minimal disease, even in the presence of myocardial infarction. However, coronary angiography has demonstrated coronary artery aneurysms in 30% of cocaine users. In acute",
+      "text_sha256": "5a73851c6ba0aed4309d33e428630243404302494adddd76d7f6ddc7bfae4f31"
+    },
+    {
+      "id": "rag-68c4be5c6ced4d13",
+      "chunk_id": "ab9063a525e89c555d29_30",
+      "title": "Cocaine-Related Cardiomyopathy: Overview, Cardiac Effects of Cocaine, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/152535-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "substance_abuse__cocaine_related_cardiomyopathy"
+      ],
+      "retrieval_queries": [
+        "Cocaine-Related Cardiomyopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3,
+      "excerpt": "has demonstrated coronary artery aneurysms in 30% of cocaine users. In acute chest pain syndromes, the electrocardiogram (ECG) may show evidence of acute ischemia or infarction. In cases of cardiomyopathy, the ECG is not specific but may show evidence of left ventricular hypertrophy and nonspecific ST-T wave changes. Arrhythmias also may be detected, and continuous monitoring may be advisable. Histologic Findings Chokshi et al were among the first authors to describe a reversible cocaine-related cardiomyopathy. The patient in their report, a 35-year-old woman, underwent endomyocardial biopsy",
+      "text_sha256": "8bd3c9dfb4d65c69e58069ba4fba92492df655160d9c98045888734b060e77f2"
+    },
+    {
+      "id": "rag-5ca1125f578c7b9b",
+      "chunk_id": "89664fb35e761e629dde_7",
+      "title": "Drug-Induced Hepatotoxicity: Overview, Metabolism of Drugs, Clinical and Pathological Manifestations of Drug-Induced Liver Disease",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/169814-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "substance_abuse__drug_induced_hepatotoxicity"
+      ],
+      "retrieval_queries": [
+        "Drug-Induced Hepatotoxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3147,
+      "excerpt": "The boxed warning emphasizes the risk for severe liver injury and acute liver failure, which may be fatal. The boxed warning also states that propylthiouracil should be reserved for use in those who cannot tolerate other treatments such as methimazole, radioactive iodine, or surgery. The decision to include a boxed warning was based on the FDA's review of postmarketing safety reports and meetings held with the American Thyroid Association, the National Institute of Child Health and Human Development, and the pediatric endocrine clinical community. In 2009, the FDA issued guidelines to assist",
+      "text_sha256": "2f54da005219c13299b4f9e1771788d558aefc3721330e7f9775757c5a5859bf"
+    },
+    {
+      "id": "rag-46f79e477f171655",
+      "chunk_id": "8199177768b4d5c71da1_4",
+      "title": "Aldolase: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087158-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "substance_abuse__drug_induced_hepatotoxicity"
+      ],
+      "retrieval_queries": [
+        "Drug-Induced Hepatotoxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5392,
+      "excerpt": "A levels. Aldolase B levels are elevated in liver disease or heart disease (myocardial infarction). This particular marker is not widely used because other blood tests are more specific for liver and heart-related diseases (LFT’s and Cardiac enzymes). Collection and Panels Serum aldolase Serum aldolase collection details are as follows: Specimen: Blood Container: Red-top tube (plain, no gel tube). Collection method: Routine venipuncture, 3.0 mL of blood (minimum of 0.2 mL for processing) Fasting for at least 8 hours and avoiding strenuous activity are important in order to obtain accurate",
+      "text_sha256": "9650a1e1b2a00cb091f20f86fee4f44d87dba3f0aa0a5e3de5521fe11d65c9d9"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "substance_abuse__cocaine_toxicity",
+      "name": "Cocaine Toxicity",
+      "retrieval_query": "Cocaine Toxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-af792cdec0a52af8",
+        "rag-decc6a9403c80e36"
+      ],
+      "disease_rag_source_ids": [
+        "rag-af792cdec0a52af8",
+        "rag-7a1e739431d5a385",
+        "rag-bec27ceda63d76c1"
+      ]
+    },
+    {
+      "id": "substance_abuse__amphetamine_toxicity",
+      "name": "Amphetamine Toxicity",
+      "retrieval_query": "Amphetamine Toxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-2d03ed69c3a55821"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-d325100b4157e133",
+        "rag-f588e0f74377e773",
+        "rag-31d375cca11151e3"
+      ]
+    },
+    {
+      "id": "substance_abuse__alcoholic_hepatitis",
+      "name": "Alcoholic Hepatitis",
+      "retrieval_query": "Alcoholic Hepatitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-8957227baf263917"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-a9f26a03d3dcb663",
+        "rag-e02421e9b79f2ec2",
+        "rag-c551997d405fa928"
+      ]
+    },
+    {
+      "id": "substance_abuse__cocaine_related_cardiomyopathy",
+      "name": "Cocaine-Related Cardiomyopathy",
+      "retrieval_query": "Cocaine-Related Cardiomyopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-7a1e739431d5a385",
+        "rag-56aebbd1daae9cd9"
+      ],
+      "disease_rag_source_ids": [
+        "rag-56db1eb29dfd7134",
+        "rag-68c4be5c6ced4d13"
+      ]
+    },
+    {
+      "id": "substance_abuse__amphetamine_related_psychiatric_disorders",
+      "name": "Amphetamine-Related Psychiatric Disorders",
+      "retrieval_query": "Amphetamine-Related Psychiatric Disorders diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-d325100b4157e133",
+        "rag-f588e0f74377e773"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-d325100b4157e133",
+        "rag-f588e0f74377e773",
+        "rag-2d03ed69c3a55821"
+      ]
+    },
+    {
+      "id": "substance_abuse__drug_induced_hepatotoxicity",
+      "name": "Drug-Induced Hepatotoxicity",
+      "retrieval_query": "Drug-Induced Hepatotoxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-6eed99dd19d3f20c"
+      ],
+      "disease_rag_source_ids": [
+        "rag-6eed99dd19d3f20c",
+        "rag-f09c5253c7a82445",
+        "rag-5ca1125f578c7b9b",
+        "rag-46f79e477f171655"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "substance_abuse",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-a9f26a03d3dcb663",
+        "rag-e02421e9b79f2ec2",
+        "rag-c551997d405fa928",
+        "rag-f588e0f74377e773",
+        "rag-2d03ed69c3a55821",
+        "rag-6eed99dd19d3f20c"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "substance_abuse__alcoholic_hepatitis__history_of_alcohol_abuse",
+        "description": "有酒精濫用史。",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "substance_abuse__alcoholic_hepatitis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-a9f26a03d3dcb663",
+          "rag-e02421e9b79f2ec2",
+          "rag-c551997d405fa928"
+        ]
+      },
+      {
+        "code": "substance_abuse__amphetamine_related_psychiatric_disorders__psychosis",
+        "description": "Psychotic symptoms such as hallucinations or delusions associated with amphetamine use.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "substance_abuse__amphetamine_related_psychiatric_disorders"
+        ],
+        "source_ids": [
+          "rag-2d03ed69c3a55821"
+        ]
+      },
+      {
+        "code": "substance_abuse__amphetamine_related_psychiatric_disorders__violent_behavior",
+        "description": "Bizarre or violent behavior associated with amphetamine use.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "substance_abuse__amphetamine_related_psychiatric_disorders"
+        ],
+        "source_ids": [
+          "rag-2d03ed69c3a55821"
+        ]
+      },
+      {
+        "code": "substance_abuse__amphetamine_related_psychiatric_disorders__insomnia",
+        "description": "Difficulty sleeping (insomnia) as an adverse effect of amphetamine use.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "substance_abuse__amphetamine_related_psychiatric_disorders"
+        ],
+        "source_ids": [
+          "rag-f588e0f74377e773"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "primary_abused_substance",
+        "option": "酒精",
+        "mapping": {
+          "findings": [
+            "substance_abuse__alcoholic_hepatitis__history_of_alcohol_abuse"
+          ]
+        },
+        "disease_ids": [
+          "substance_abuse__alcoholic_hepatitis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-a9f26a03d3dcb663",
+          "rag-e02421e9b79f2ec2",
+          "rag-c551997d405fa928"
+        ]
+      },
+      {
+        "field": "primary_abused_substance",
+        "option": "甲基安非他命（如冰毒）",
+        "mapping": {
+          "findings": [
+            "substance_abuse__amphetamine_related_psychiatric_disorders__psychosis",
+            "substance_abuse__amphetamine_related_psychiatric_disorders__violent_behavior",
+            "substance_abuse__amphetamine_related_psychiatric_disorders__insomnia"
+          ]
+        },
+        "disease_ids": [
+          "substance_abuse__amphetamine_related_psychiatric_disorders"
+        ],
+        "source_ids": [
+          "rag-f588e0f74377e773",
+          "rag-2d03ed69c3a55821"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "substance_abuse__alcoholic_hepatitis",
+        "name": "Alcoholic Hepatitis",
+        "must_not_miss": false,
+        "retrieval_query": "Alcoholic Hepatitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "substance_abuse__alcoholic_hepatitis__history_of_alcohol_abuse",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-a9f26a03d3dcb663",
+              "rag-e02421e9b79f2ec2",
+              "rag-c551997d405fa928"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-a9f26a03d3dcb663",
+          "rag-e02421e9b79f2ec2",
+          "rag-c551997d405fa928"
+        ]
+      },
+      {
+        "id": "substance_abuse__amphetamine_related_psychiatric_disorders",
+        "name": "Amphetamine-Related Psychiatric Disorders",
+        "must_not_miss": false,
+        "retrieval_query": "Amphetamine-Related Psychiatric Disorders diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "substance_abuse__amphetamine_related_psychiatric_disorders__psychosis",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-2d03ed69c3a55821"
+            ]
+          },
+          {
+            "fact": "substance_abuse__amphetamine_related_psychiatric_disorders__violent_behavior",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-2d03ed69c3a55821"
+            ]
+          },
+          {
+            "fact": "substance_abuse__amphetamine_related_psychiatric_disorders__insomnia",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f588e0f74377e773"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-d325100b4157e133",
+          "rag-f588e0f74377e773",
+          "rag-2d03ed69c3a55821"
+        ]
+      },
+      {
+        "id": "substance_abuse__drug_induced_hepatotoxicity",
+        "name": "Drug-Induced Hepatotoxicity",
+        "must_not_miss": false,
+        "retrieval_query": "Drug-Induced Hepatotoxicity diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "nausea",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-6eed99dd19d3f20c"
+            ]
+          },
+          {
+            "fact": "vomiting",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-6eed99dd19d3f20c"
+            ]
+          },
+          {
+            "fact": "fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-6eed99dd19d3f20c"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-6eed99dd19d3f20c",
+          "rag-f09c5253c7a82445",
+          "rag-5ca1125f578c7b9b",
+          "rag-46f79e477f171655"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_substance_abuse__amphetamine_related_psychiatric_disorders__psychosis_or_violence",
+        "label": "Possible amphetamine-induced psychosis or violent behavior",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "substance_abuse"
+          ],
+          "any_findings": [
+            "substance_abuse__amphetamine_related_psychiatric_disorders__psychosis",
+            "substance_abuse__amphetamine_related_psychiatric_disorders__violent_behavior"
+          ]
+        },
+        "possible_conditions": [
+          "Amphetamine-Related Psychiatric Disorders"
+        ],
+        "source_ids": [
+          "rag-2d03ed69c3a55821"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Determine specific liver enzyme levels (e.g., AST) for diagnosing Alcoholic Hepatitis.",
+        "reason": "The model cannot interpret or request specific lab test results, which are required for a definitive diagnosis."
+      },
+      {
+        "requirement": "Perform a physical examination to check for physical findings related to Alcoholic Hepatitis.",
+        "reason": "The model cannot perform physical examinations, which are a key part of the diagnostic process."
+      },
+      {
+        "requirement": "Differentiate between inactive carrier status and chronic hepatitis in cases of HBV or HCV infection.",
+        "reason": "This requires specific lab results (ALT, HBV DNA, HCV RNA) and clinical evaluation beyond the model's capabilities."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Specific diagnostic criteria for Amphetamine-Related Psychiatric Disorders (e.g., duration, severity thresholds).",
+        "reason": "The provided RAG sources describe symptoms and complications but do not detail the specific DSM/ICD diagnostic criteria needed to formally define the condition."
+      },
+      {
+        "requirement": "Guidance on differentiating between acute intoxication psychosis and a long-term paranoid schizophrenia unmasked by amphetamine use.",
+        "reason": "The RAG sources mention this possibility but do not provide clinical rules or features to make this distinction, which would require a detailed psychiatric evaluation beyond the scope of this system."
+      },
+      {
+        "requirement": "Specific vital sign thresholds (e.g., for hypertension, tachycardia, hyperthermia).",
+        "reason": "The RAG sources list these as signs of toxicity but do not provide specific numerical values, which are essential for creating precise, executable clinical logic."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Determine specific numeric thresholds for liver function tests (LFTs) or other lab values.",
+        "reason": "The provided RAG sources mention lab tests like LFTs but do not contain specific numeric thresholds for diagnosis or action. This requires clinical guidelines not present in the source material."
+      },
+      {
+        "requirement": "Provide specific management instructions for discontinuing medications (e.g., INH, methyldopa, propylthiouracil).",
+        "reason": "The provided RAG sources mention that certain drugs should be discontinued in case of liver injury, but this model cannot generate executable patient-care logic or medication management advice."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Generate disease semantics for Cocaine Toxicity",
+        "reason": "Strict Gemini output validation failed: RuntimeError: Gemini 在 3 次內未產生有效 artifact：ValueError: semantic_options[0].mapping 沒有任何可執行語意"
+      },
+      {
+        "requirement": "Generate disease semantics for Amphetamine Toxicity",
+        "reason": "Strict Gemini output validation failed: RuntimeError: Gemini 在 3 次內未產生有效 artifact：ValueError: semantic_options[0].mapping 必須是非空語意 mapping"
+      },
+      {
+        "requirement": "Generate disease semantics for Cocaine-Related Cardiomyopathy",
+        "reason": "Strict Gemini output validation failed: RuntimeError: Gemini 在 3 次內未產生有效 artifact：ValueError: semantic_options[0].mapping 沒有任何可執行語意"
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-a9f26a03d3dcb663",
+          "rag-e02421e9b79f2ec2",
+          "rag-c551997d405fa928"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], semantic_options[0], profiles[0], profiles[0].clues[0], profiles[0].clues[1], profiles[0].clues[2]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-a9f26a03d3dcb663",
+          "rag-e02421e9b79f2ec2",
+          "rag-c551997d405fa928"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-2d03ed69c3a55821"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-6eed99dd19d3f20c"
+        ]
+      },
+      {
+        "severity": "critical",
+        "note": "No validated semantic/profile proposal was produced for Cocaine Toxicity; clinical review and regeneration are required.",
+        "source_ids": [
+          "rag-af792cdec0a52af8",
+          "rag-7a1e739431d5a385",
+          "rag-bec27ceda63d76c1"
+        ]
+      },
+      {
+        "severity": "critical",
+        "note": "No validated semantic/profile proposal was produced for Amphetamine Toxicity; clinical review and regeneration are required.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-d325100b4157e133",
+          "rag-f588e0f74377e773",
+          "rag-31d375cca11151e3"
+        ]
+      },
+      {
+        "severity": "critical",
+        "note": "No validated semantic/profile proposal was produced for Cocaine-Related Cardiomyopathy; clinical review and regeneration are required.",
+        "source_ids": [
+          "rag-56db1eb29dfd7134",
+          "rag-68c4be5c6ced4d13"
+        ]
+      }
+    ]
+  }
+}

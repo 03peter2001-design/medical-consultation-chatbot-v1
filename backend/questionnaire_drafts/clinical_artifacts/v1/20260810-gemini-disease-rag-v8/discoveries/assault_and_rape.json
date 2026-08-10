@@ -1,0 +1,267 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "assault_and_rape",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "ea111214c6fad1b9359c70b52d3cfd977e100479d324ac3049024cb7b64d3002",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "assault and rape assault rape differential diagnosis diseases clinical presentation symptoms history",
+      "assault and rape assault rape red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "53f145d1df797df6f731a4600d66c7294f2a017b7d0d1c249caccead7bad5590"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "83de3650bfcc5bf1251c71ae1c93b3e6ea3146d350e053449bc3dc8898f8721b",
+    "generated_at": "2026-08-10T03:53:40+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-3850aad212b04904",
+      "chunk_id": "f25efa3cdebc1baa6da2_20",
+      "title": "Pregnancy Trauma: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/796979-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "assault and rape assault rape differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4481,
+      "excerpt": "reported to occur in 9-30% of cases. However, one study of 151 women found an incidence of only 2.6%, which is similar to that of the general population. Clinical Presentation",
+      "text_sha256": "dce3a478abf30d33f7c59c5e53af0946b1ce788774b459ea88cadeee9d360b98"
+    },
+    {
+      "id": "rag-db9c1d1255db289e",
+      "chunk_id": "6c2baec4fcf2f3ef041a_7",
+      "title": "Child Sexual Abuse in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/800770-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "assault and rape assault rape differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4878,
+      "excerpt": "but are known to the child (eg, stepfathers, uncles, mother's paramour). Female perpetrators are reported less often. Parents who have been abused do not always abuse their own children, but the risk for continued familial abuse is present. Girls are at higher risk than boys Multiple caretakers for the child Caretaker or parent who has multiple sexual partners Drug and/or alcohol abuse Stress associated with poverty Social isolation and family secrecy Child with poor self-esteem or other vulnerable state Other family members (eg, siblings, cousins) abused Gang member associations Epidemiology",
+      "text_sha256": "0263c918a02b4c5c9b1e7550970bcfeac1813e6e0bc4c34a756ac4c79f012b41"
+    },
+    {
+      "id": "rag-c8b23c2ac4c61eed",
+      "chunk_id": "f25efa3cdebc1baa6da2_7",
+      "title": "Pregnancy Trauma: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/796979-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "assault and rape assault rape differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5104,
+      "excerpt": "for 25% of injuries (may be related to physiologic changes that result in loss of balance). Assaults account for 18% of injuries. Guns account for 4% of injuries. Burns account for 1% of injuries. The prevalence of domestic and intimate partner violence across various populations has been evaluated extensively, with more than 60 studies from more than 20 countries reporting a frequency during pregnancy ranging from 1-57%. One explanation for this wide range is the inclusion of emotional, verbal, and/or physical violence within the definition of domestic violence/intimate partner violence in",
+      "text_sha256": "e951c5a5a5f4a543b4bae8e9b50943b67998c550112b46c31ff9116c9be0cf69"
+    },
+    {
+      "id": "rag-0d5692b45e1350b2",
+      "chunk_id": "dde91349b90002a67a04_1",
+      "title": "Factitious Disorder Imposed on Another (Munchausen by proxy): Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/295258-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "assault and rape assault rape differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5125,
+      "excerpt": "child abuse. Signs and symptoms Warning signs that raise the possibility of this disorder include the following: Problems that are unexplainable, persistent, or resistant to interventions that \"should\" work, after adequate evaluation and treatment attempts Serious discrepancies among the history, clinical findings, and patient's general presentation A working diagnosis of a disorder so rare that maltreatment is more likely Symptoms and signs that occur only in association with one person and/or schedule (e.g., weekly, monthly) or in the absence of a family member (e.g., whenever one parent",
+      "text_sha256": "8229278ec8553f7278811d135d8587e3bc03f740eb908944239ef35709d60f35"
+    },
+    {
+      "id": "rag-acededefea9280f0",
+      "chunk_id": "e5e866e92c8de8af247a_37",
+      "title": "Viral Meningitis: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1168529-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "assault and rape assault rape differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5229,
+      "excerpt": "7-10 days. Implicit in the diagnosis is the self-limited nature of this disease. The exception falls with the neonatal patients, in whom viral meningitis can be fatal or associated with significant morbidity. Concomitant encephalitis adds significant potential for adverse outcomes. Concurrent systemic manifestations, such as pericarditis and hepatitis, are other indicators of poor prognosis. Patient Education Pregnant women should avoid exposure to rodents, rats, and house mice, which carry LCMV. Some investigators even suggest avoidance of young children and public pools by pregnant women in",
+      "text_sha256": "722c8a7d549e9600d00a0de2cffa0652ff489b5ffb3ca47d06cccaffa9e7d8bb"
+    },
+    {
+      "id": "rag-32b3abb80a987f64",
+      "chunk_id": "f5233609f5cb95633b13_4",
+      "title": "Central Nervous System Complications in HIV: Overview, Pathophysiology, CNS Manifestations",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1167008-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "assault and rape assault rape differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.533,
+      "excerpt": "meningitis Cytomegalovirus (CMV) encephalitis In addition, HIV-infected patients are susceptible to the same neurologic diseases as patients without infection. In AIDS, a clinical presentation often cannot be explained with a single diagnosis. New-onset neurologic complications often are superimposed on an ongoing process with a different etiology. Clinical features reflect the sum of deficits at several anatomic sites. CNS Complications in Children The manifestations of AIDS and its neurologic complications differ in children, whose immune and nervous systems are infected at an immature",
+      "text_sha256": "ccb7c566441a1f4032f7d63149406e3d487489eaf9d1c7d1346099ff6ad9ef2a"
+    },
+    {
+      "id": "rag-3265669834ea38ee",
+      "chunk_id": "44e4b69bbf4b36ff6698_6",
+      "title": "Cytomegalovirus Encephalitis in HIV: Overview, History and Physical Examination, Differential Diagnosis",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1167229-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "assault and rape assault rape differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.54,
+      "excerpt": "between CMV retinitis and encephalitis is apparent. In an autopsy series of 47 patients with AIDS, 75% of those with CMV retinitis involving the peripapillary area also had encephalitis. Findings on physical examination may include the following: Confusion, cognitive decline Rare focal neurologic signs Cranial nerve palsies Differential Diagnosis The differential diagnosis of cytomegalovirus (CMV) encephalitis includes the following: Herpes simplex encephalitis HIV-1 cerebrovascular complications HIV-1 CNS cryptococcosis HIV-1 CNS toxoplasmosis HIV-1 progressive multifocal leukoencephalopathy",
+      "text_sha256": "80f38b9d6f6faa5bcf3bf57ec38e5738fc1b4c707e5267d0f22b6e456a5f5f51"
+    },
+    {
+      "id": "rag-63ab7c8382cae9da",
+      "chunk_id": "86cbf33ea2ced58c5a35_6",
+      "title": "Progressive Polyradiculopathy in HIV: Overview, Clinical Presentation, Diagnosis",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1168009-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "assault and rape assault rape differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5529,
+      "excerpt": "progressive ascending numbness, pain, bowel dysfunction, and asymmetric weakness affecting the legs and later occasionally also the arms. These symptoms can develop acutely over days or more subacutely in 1 to 6 weeks. Possibly co-existing CMV-related conditions include retinitis, colitis, and encephalitis. With idiopathic polyradiculopathy, symptoms are more benign and the clinical progression is slower. Physical examination The following may be noted in CMV-related polyradiculopathy: Rapidly progressive, ascending course Paresthesias Sensory loss, invariable Rarely, sensory level suggestive",
+      "text_sha256": "0a52c66d04cf4f54710b4ef3e84817807e5563ac0ee8ff18a826afbd53c98fd8"
+    },
+    {
+      "id": "rag-a256bac6e3633e12",
+      "chunk_id": "3cc084abbf653bde67bc_1",
+      "title": "Syphilis Detection Test: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2093294-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "assault and rape assault rape red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5914,
+      "excerpt": "(EIA): Nonreactive Interpretation The results of syphilis detection tests need to be placed in the context of the patient’s clinical presentation; primary syphilis may not yet show seroconversion, and levels in patients with latent or tertiary syphilis may decline to the point of nonreactivity. Table 1. Sensitivity of Syphilis Tests (Open Table in a new window) Primary Syphilis Secondary Syphilis Latent Syphilis Tertiary Syphilis RPR/VDRL 78%-86% 100% 95%-100% 71%-73% FTA-ABS 84% 100% 96% TP-PA 89% 100% Data not yet available EIA 82%-100% 100% 98-100% Data not yet available The specificity",
+      "text_sha256": "6ca936f25a1d9728c04c5c42a15618ae759af34c1dbd78189168f9dcaf57dcb8"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "assault and rape assault rape red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5806,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    }
+  ],
+  "discovery": {
+    "route": "assault_and_rape",
+    "evidence_status": "sufficient",
+    "diseases": [],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The disposition for this route is 'handoff', indicating an immediate need for professional evaluation rather than differential diagnosis through a questionnaire. Therefore, no disease candidates are proposed.",
+        "source_ids": [
+          "rag-0d5692b45e1350b2",
+          "rag-3265669834ea38ee",
+          "rag-32b3abb80a987f64",
+          "rag-3850aad212b04904",
+          "rag-62f530bca02a29ef",
+          "rag-63ab7c8382cae9da",
+          "rag-a256bac6e3633e12",
+          "rag-acededefea9280f0",
+          "rag-c8b23c2ac4c61eed",
+          "rag-db9c1d1255db289e"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope discovery citations with the complete route RAG evidence pack for: review_notes[0]. These citations remain unverified.",
+        "source_ids": [
+          "rag-0d5692b45e1350b2",
+          "rag-3265669834ea38ee",
+          "rag-32b3abb80a987f64",
+          "rag-3850aad212b04904",
+          "rag-62f530bca02a29ef",
+          "rag-63ab7c8382cae9da",
+          "rag-a256bac6e3633e12",
+          "rag-acededefea9280f0",
+          "rag-c8b23c2ac4c61eed",
+          "rag-db9c1d1255db289e"
+        ]
+      }
+    ]
+  }
+}

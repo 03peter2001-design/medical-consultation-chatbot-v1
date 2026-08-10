@@ -1,0 +1,1666 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "fluid_nutrition_changes",
+  "label": "液體/營養改變",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "40e5b60087a2c3ed4a2b3c89a0d0ca4ac78793133900a08db8b29ba11aa524f6",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history\",\"Chronic Diarrhea diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Glucagonoma Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"fluid nutrition changes fluid nutrition red flags emergency warning signs urgent referral rule out\",\"Dehydration diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Diabetes Insipidus diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Diabetic Ketoacidosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"WDHA Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "9194a46a48a1a8ce15b6cabc6214e45ea60b88c702798162fc21c0facdf3a7a3"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "f5bda1eb7b7bb788016dfe0dfe2c8887b4a3e7ce2eadfe4828619c2867d8676c",
+    "generated_at": "2026-08-10T04:06:27+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-f34dac00f7f605ae",
+      "chunk_id": "87996f6a71b53073e20c_18",
+      "title": "Acute Hypopituitarism: Overview, Diagnostic Considerations, Hormone Deficiency Symptoms",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767828-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3405,
+      "excerpt": "If fluid intake matches fluid output, serum sodium and osmolality may remain normal. Central diabetes insipidus is caused by a decrease in ADH secretion, in contrast to nephrogenic diabetes insipidus, in which the kidney is ADH resistant. Oxytocin deficiency Deficiency in oxytocin is characterized by a decrease in milk ejection during lactation. Interestingly, women with known oxytocin deficiency undergo normal labor and delivery despite the lack of hormone. One of the initial clues to the presence of Sheehan syndrome should be the lack of lactation secondary to oxytocin deficiency. Imaging",
+      "text_sha256": "1e2cd32c32bd8cd3788a37f22b1dd6be028e57d025eed9404e78d8ebe1802d0a"
+    },
+    {
+      "id": "rag-a0a3983d9ce778ae",
+      "chunk_id": "bcb31ce1c7a861eb7bb9_16",
+      "title": "Hypocitraturia: Practice Essentials, Importance of Citrate, Risk Factors in Hypocitraturia",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/444968-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4027,
+      "excerpt": "syndrome results in fluid loss and intestinal alkali loss. Patients with chronic diarrhea and inflammatory bowel disease frequently have hypocitraturia due to bicarbonate loss from the intestinal tract. Hypocitraturia caused by RTA or chronic diarrheal syndrome is associated with other metabolic abnormalities (eg, hypercalciuria, hyperuricosuria) or may occur alone. In chronic diarrheal syndrome, other risk factors for stone formation often are present (eg, low urinary volume, hyperoxaluria, hypomagnesuria, low urinary pH). Thiazide diuretic or acetazolamide therapy Thiazide therapy may induce",
+      "text_sha256": "dbcd6473e540b5f6274e5dce57d10063e3997f9316e4de574f1ae49f73673c4b"
+    },
+    {
+      "id": "rag-e0252c5d56df5562",
+      "chunk_id": "7bf6fe05bdcc5c4370b8_21",
+      "title": "WDHA Syndrome: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/183189-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "fluid_nutrition_changes__chronic_diarrhea"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history",
+        "Chronic Diarrhea diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4188,
+      "excerpt": "tubular nephropathy Dehydration Non anion gap metabolic acidosis Perianal skin irritation from severe diarrhea Poor quality of life from severe diarrhea Clinical Presentation",
+      "text_sha256": "9e0c03712e7dd78fd186aea4b9e728dddfc4cfd8bd0bf87355cc1c9039d13873"
+    },
+    {
+      "id": "rag-269161b5f0aa9e5e",
+      "chunk_id": "7bf6fe05bdcc5c4370b8_0",
+      "title": "WDHA Syndrome: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/183189-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4424,
+      "excerpt": "Overview Background The syndrome of watery diarrhea, hypokalemia, and achlorhydria (ie, WDHA syndrome) is a rare condition characterized by severe, watery diarrhea resulting from the oversecretion of vasoactive intestinal peptide (VIP) from non beta pancreatic islet cells. Patients usually have elevated VIP levels and have a history of frequent hospitalizations for dehydration and/or hypokalemia. Because this condition resembles cholera, Matsumoto et al suggested the alternative term pancreatic cholera. (See Etiology, Presentation, Treatment, and Medication.) A small percentage of patients",
+      "text_sha256": "d8ed0c06b47c48b7bddd6cc82e3bc01f444312701d30f01344e6fdb98826f4d6"
+    },
+    {
+      "id": "rag-466e564bdc3353f3",
+      "chunk_id": "a9b2d72df127beb59ec9_3",
+      "title": "Cerebrospinal Fluid Analysis: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2093316-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4609,
+      "excerpt": "include (but are not limited to) the following: Infectious diseases (eg, encephalitis, meningitis) Intracranial/subarachnoid hemorrhage Inflammatory or autoimmune diseases (eg, multiple sclerosis, Guillain-Barre syndrome, meningeal sarcoidosis) Primary or metastatic central nervous system (CNS) malignancies Conditions associated with changes in the appearance of CSF Under normal circumstances, CSF samples are clear and colorless, appearing similar to water. Xanthochromia is the term used for any kind of discoloration of CSF. Multiple conditions are associated with xanthochromia, including the",
+      "text_sha256": "423e4b984fe22af887ab3de2831f073c51c51b081f17bd35074d148e72d1158c"
+    },
+    {
+      "id": "rag-72133dae1737420b",
+      "chunk_id": "5cd8a0287a40de3695ff_20",
+      "title": "Pericardial Fluid Analysis: Reference Range, Interpretation, Background",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2123066-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4889,
+      "excerpt": "method to the systemic approach to the diagnosis of pericardial effusion. Elevation of B-type natriuretic peptide (BNP) levels in pericardial fluid is noted in patients with postmyocardial infarction, reflecting the stretching of ventricular cardiomyocytes after an injury to the myocardium. No statistical association is noted between elevated pericardial BNP levels and left ventricular systolic function. Other considerations The accuracy and diagnostic value of biochemical and cell count analysis of pericardial effusions in distinguishing the various etiology of the effusion is lacking. A",
+      "text_sha256": "38eaa0226717885296b024ecb68b2ffcccb6d17b3e55669ac778e2932cfb2ab4"
+    },
+    {
+      "id": "rag-a7dd2b4d54cb0698",
+      "chunk_id": "2a896961ed57d0483825_2",
+      "title": "Hyperglucagonemia (Glucagonoma Syndrome): Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/121575-overview",
+      "routes": [
+        "safety",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "fluid_nutrition_changes__glucagonoma_syndrome"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history",
+        "Glucagonoma Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4406,
+      "excerpt": "complications, pancreatitis, trauma, burns, infection and sepsis, myocardial infarction, increased cortisol levels, increased catecholamine or growth hormone levels, renal failure, and hepatic cirrhosis. The most common clinical features of glucagonoma syndrome are weight loss, necrolytic migratory erythema (NME), and diabetes. The diabetes mellitus associated with glucagonoma syndrome tends to be mild and usually can be controlled with diet and/or oral hypoglycemic agents.9pically, the associated anemia is normochromic normocytic, although macrocytic anemia has been described in some",
+      "text_sha256": "015ff5332e50ea0bb39ce37af3915d3a687ff65555dc15a6c905b355bff9f336"
+    },
+    {
+      "id": "rag-a01d320d40e24277",
+      "chunk_id": "5cd8a0287a40de3695ff_13",
+      "title": "Pericardial Fluid Analysis: Reference Range, Interpretation, Background",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2123066-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5252,
+      "excerpt": "results. The use of tumor marker measurement in pericardial fluid may be helpful in cytologically negative pericardial fluid. The interpretation of these tumor marker levels is similar to that in serum. Malignant pericardial effusion is associated with high levels of tumor markers. However, low levels of these markers do not exclude neoplastic involvement of the pericardial membrane. The cut-off of these markers in pericardial fluid is not yet clear at this point. Moreover, different types of cancer can have different tumor markers. Various tumor markers have been tested, such as",
+      "text_sha256": "7fe7c1bfc2eee290df7e93de86f4d1a6fa355043662a9f6b9e62363fb199c79a"
+    },
+    {
+      "id": "rag-ea0d576135625da4",
+      "chunk_id": "5cd8a0287a40de3695ff_25",
+      "title": "Pericardial Fluid Analysis: Reference Range, Interpretation, Background",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2123066-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5561,
+      "excerpt": "of pericardial fluid resemble an exudate if Light et al’s criteria is applied (namely LDH and total protein levels), other factors in the composition of the fluid (ratio of small soluble molecules) suggest transudate. Therefore, Light et al’s criteria is unlikely to be applicable in the evaluation of pericardial fluid composition. Abnormal accumulation of pericardial fluid can be secondary to obstruction of fluid drainage, injury or insult to the pericardium, infection, malignancy, systemic or autoimmune processes, drugs, or procedures. Numerous cases are idiopathic. The etiology of",
+      "text_sha256": "4f8db6167fb483b030a26b5c1585faa5a931e7b965e6f1e314a6c982288e3f4d"
+    },
+    {
+      "id": "rag-786d5c82e1d5b2b7",
+      "chunk_id": "533df8c4e1c8cc2bd460_5",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5589,
+      "excerpt": "of inducing a systemic reaction Patch testing: Appears promising, but additional studies are needed and it is not recommended for routine practice Diet-related diagnostic measures may be helpful, as follows: Diet diary Elimination diet (may be used for diagnostic as well as therapeutic purposes) Food challenge confirmation of food allergy (may be open; single-blind; or double-blind, placebo-controlled) See Workup for more detail. Management There are currently no curative therapies for food allergy. The only proven treatment is strict dietarylimination of the offending food allergen. A",
+      "text_sha256": "eb4efdbe7c771eeb55882e804a15a15fa64a4f10c193f2088ada256c405d92b6"
+    },
+    {
+      "id": "rag-db1f97d8adf4b525",
+      "chunk_id": "2352ce71ea4316a34407_0",
+      "title": "Beta-Hydroxybutyrate: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087381-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5616,
+      "excerpt": "Reference Range The reference range is less than 0.4-0.5 mmol/L. Levels of more than 1 mmol/L require further action, whereas levels of more than 3 mmol/L require immediate medical review. Interpretation Elevated serum β-hydroxybutyrate levels can be observed in various conditions associated with metabolic substrate use disorders, insulin deficiency, and altered redox status, including the following : Diabetic ketoacidosis: Ketone body production is stimulated by dehydration and insulin deficiency. Levels are usually more than 3 mmol/L. Alcoholic ketoacidosis: Ketone body production is",
+      "text_sha256": "db94424336c082b008a4ac485b56cd36416d110e9af6ea1272612bc6bf7739f5"
+    },
+    {
+      "id": "rag-9bfcf8ccb350ee0c",
+      "chunk_id": "a9b2d72df127beb59ec9_9",
+      "title": "Cerebrospinal Fluid Analysis: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2093316-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5864,
+      "excerpt": "greater risk for morbidity and mortality, due to a missed diagnosis. Bilirubin evaluation in CSF (and serum) is the most effective biomarker to be considered for evaluation of potential subarachnoid hemorrhage. However, a traumatic tap concurrent with subarachnoid hemorrhage can be confusing to interpret. A traumatic tap introduces red cells into the CSF, but this contamination clears as the collection proceeds from tubes 1 to 4. In a traumatic tap, bilirubin is not produced, given that bilirubin production is an in vivo process. Spectrophotometric evaluation of CSF can provide additional",
+      "text_sha256": "007ff0f070189654549463ecfa74a09fc8885b2037d668faa008d24ed9f8c135"
+    },
+    {
+      "id": "rag-89360c5ff566f5c4",
+      "chunk_id": "60a8e9fb259d62f055c2_72",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5979,
+      "excerpt": "who develop flash pulmonary edema, as the symptoms and signs may develop before the rise in levels occurs. Markers of Cardiac Inflammation C-reactive protein (CRP) CRP, a nonspecific marker of inflammation, is considered to be directly involved in coronary plaque atherogenesis. Extensive studies beginning in the early 1990s showed that an elevated CRP level independently predicted adverse cardiac events at the primary and secondary prevention levels. Data indicate that CRP is a useful prognostic indicator in patients with acute coronary syndrome (ACS), as elevated CRP levels are independent",
+      "text_sha256": "3e4a960d7dfeb49d60fdf7e13af6636383de2c4c5cade9394e12e0906b553269"
+    },
+    {
+      "id": "rag-e5257b482e39c691",
+      "chunk_id": "71bb683201e3ecc68e8c_15",
+      "title": "Pediatric Pyloric Stenosis: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/803489-overview",
+      "routes": [
+        "chest",
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__dehydration"
+      ],
+      "retrieval_queries": [
+        "Dehydration diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4456,
+      "excerpt": "delays in diagnosis with eventual dehydration and shock. Complications In the patient who presents with vomiting and has a missed/delayed diagnosis of pyloric stenosis, there is risk of significant dehydration leading to hypovolemic shock. Clinical Presentation",
+      "text_sha256": "e222dc7fb7d432891e133de75ade39cef01daceace80e23425bb4535f5108834"
+    },
+    {
+      "id": "rag-60c2ff97c7b6eb16",
+      "chunk_id": "09fd7a4c8f46f9094143_1",
+      "title": "Pediatric Dehydration: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801012-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__dehydration"
+      ],
+      "retrieval_queries": [
+        "Dehydration diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4002,
+      "excerpt": "a systematic review, Steiner et al found that the most useful signs (ie, highest likelihood ratios) for recognizing 5% dehydration are the following : Abnormal capillary refill time Abnormal skin turgor Abnormal respiratory pattern See Presentation for more detail. Diagnosis Laboratory studies are of limited utility in cases of mild dehydration, but they may be considered under certain conditions and are recommended in patients with more severe dehydration. See Workup for more detail. Management Mild or moderate volume depletion should be treated with oral rehydration when possible.",
+      "text_sha256": "c11360c2c0024d74a3ed6317fdd2cf23c61ae906e5865dd125958c3df6e77bca"
+    },
+    {
+      "id": "rag-673cbb2500a2a5af",
+      "chunk_id": "09fd7a4c8f46f9094143_0",
+      "title": "Pediatric Dehydration: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801012-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__dehydration"
+      ],
+      "retrieval_queries": [
+        "Dehydration diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4104,
+      "excerpt": "Overview Practice Essentials Dehydrations a common complication of illness observed in pediatric patients presenting to the emergency department (ED). Early recognition and early intervention are important to reduce risk of progression to hypovolemic shock and end-organ failure. Signs and symptoms In most cases, volume depletion in children is caused by fluid losses from vomiting or diarrhea. On physical examination, combinations of findings can be used to determine the degree of dehydration. On the basis of a systematic review, Steiner et al found that the most useful signs (ie, highest",
+      "text_sha256": "9635a95f8d7aa5d5f190921188f73d1af4950dbbe528d5b7163eeee8e214e33a"
+    },
+    {
+      "id": "rag-8dd199bbb3de65c8",
+      "chunk_id": "62a9c88bee90b553d77c_21",
+      "title": "Pediatric Gastroenteritis in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801948-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__dehydration"
+      ],
+      "retrieval_queries": [
+        "Dehydration diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.48,
+      "excerpt": "signs of more severe dehydration such as irritability or lethargy, sunken eyes, reduced skin pinch, decreased tears, or refusal to drink fluids. Parents should also be told to return if the child develops high fevers, seizures, worsening abdominal pain, or bloody diarrhea, or if the diarrhea continues to persist beyond 1-2 weeks. Clinical Presentation",
+      "text_sha256": "0f167cbbe7ec8d4ebc312ec12e142f126609f4feeb7c203f09ea6fd8106000db"
+    },
+    {
+      "id": "rag-62a9df3e7ad773c3",
+      "chunk_id": "51fbd588a0e343ab1f23_17",
+      "title": "Diabetes Insipidus: Practice Essentials, Background, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/117648-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__diabetes_insipidus"
+      ],
+      "retrieval_queries": [
+        "Diabetes Insipidus diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4729,
+      "excerpt": "DI having different causes than does nephrogenic DI. In rare cases, central or nephrogenic DI may be an inherited disorder. Central diabetes insipidus Central DI has many possible causes. According to the literature, the principal causes of central DI and their oft-cited approximate frequencies are as follows: Idiopathic - 30% Malignant or benign tumors of the brain or pituitary - 25% Cranial surgery - 20% Head trauma - 16% Idiopathic DI Idiopathic central DI presumably develops when cells in the hypothalamus are damaged or destroyed. Identification of antibodies against AVP-secreting cells",
+      "text_sha256": "1f0fe47344e2d24939fc73ec5f58082ca90d85fe3d31c6c8e9e45bb6d26f2cde"
+    },
+    {
+      "id": "rag-11670883bb9d0d30",
+      "chunk_id": "791b392395fdb02a4e02_40",
+      "title": "Leptospirosis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/220563-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__diabetes_insipidus"
+      ],
+      "retrieval_queries": [
+        "Diabetes Insipidus diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.487,
+      "excerpt": "Weil disease, knowledge of the species type does not necessarily help predict disease severity. Particular serovars may be associated with specific clinical manifestations. For example, a characteristic pretibial erythematous rash is seen in patients with L autumnalis infection, and gastrointestinal symptoms predominate in patients infected with L grippotyphosa. Nevertheless, any leptospiral serovar can lead to the signs and symptoms seen with this disease. For example, jaundice occurs in 83% of patients with L icterohaemorrhagiae infection and in 30% of patients infected with L pomona.",
+      "text_sha256": "bb35617180d365781ea65ba40e4aeddc49cd14798f1bf4025f66a05c576a1779"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "headache",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__diabetes_insipidus",
+        "fluid_nutrition_changes__glucagonoma_syndrome"
+      ],
+      "retrieval_queries": [
+        "Diabetes Insipidus diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Glucagonoma Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4643,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-4e2dd6c8089abd42",
+      "chunk_id": "51fbd588a0e343ab1f23_2",
+      "title": "Diabetes Insipidus: Practice Essentials, Background, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/117648-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__diabetes_insipidus"
+      ],
+      "retrieval_queries": [
+        "Diabetes Insipidus diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.494,
+      "excerpt": "one of the following three patterns: Transient Permanent Triphasic (observed more often clinically) In infants with DI, the most apparent signs may be the following: Crying Irritability Growth retardation Hyperthermia Weight loss In children, the following manifestations typically predominate: Enuresis Anorexia Linear growth defects Fatigability If the condition that caused DI also damaged the anterior pituitary or hypothalamic centers that produce releasing factors, patients may present with the following: Excessive fatigue Diminished libido or erectile dysfunction Headache Dry skin Hair loss",
+      "text_sha256": "5c047554cf27360c01ecf87799b5a6d33cc8d0b8d6c255c2d92a6f17c07c4aa0"
+    },
+    {
+      "id": "rag-cbc9566e14825ddc",
+      "chunk_id": "e90c70bbdc9062fb05b2_2",
+      "title": "Metabolic Acidosis in Emergency Medicine: Practice Essentials, Pathophysiology, Prognosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/768268-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__diabetic_ketoacidosis"
+      ],
+      "retrieval_queries": [
+        "Diabetic Ketoacidosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.49,
+      "excerpt": "musculoskeletal dysfunction. Symptoms are often a result of and specific to the underlying etiology of the metabolic acidosis. Neurologic signs and symptoms include the following: Cranial nerve palsies may occur with ethylene glycol intoxication Retinal edema may be seen in methanol ingestions Lethargy, stupor, and coma may occur in severe metabolic acidosis, particularly when it is associated with a toxic ingestion With regard to the cardiovascular system, severe acidemia (ie, pH < 7.10) can predispose a patient to potentially fatal ventricular arrhythmias, and it can reduce cardiac",
+      "text_sha256": "5190cf027a10d42656fcc5d16be6b1d00b692521a898379655bffac5b20eeff3"
+    },
+    {
+      "id": "rag-042fbd5ae3603dfa",
+      "chunk_id": "51fbd588a0e343ab1f23_1",
+      "title": "Diabetes Insipidus: Practice Essentials, Background, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/117648-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__diabetic_ketoacidosis"
+      ],
+      "retrieval_queries": [
+        "Diabetic Ketoacidosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4999,
+      "excerpt": "polydipsia (dipsogenic DI); both are caused by deficiencies in AVP, but the deficiencies do not result from a defect in the neurohypophysis or kidneys. Signs and symptoms of diabetes insipidus The predominant manifestations of DI are as follows: Polyuria -(e daily urine volume is relatively constant for each patient but is highly variable between patients (3-20 L) Polydipsia Nocturia The most common form is central DI after trauma or surgery to the region of the pituitary and hypothalamus; this condition may exhibit one of the following three patterns: Transient Permanent Triphasic (observed",
+      "text_sha256": "d9aabe6b5fe41ffdc6d5ee410496211b8aa4e90b7a9a14d6250764e217e0b292"
+    },
+    {
+      "id": "rag-f96d0f0382915290",
+      "chunk_id": "45bd5d71fd01370c0ead_8",
+      "title": "Acute Kidney Injury (Renal Failure) in Emergency Medicine: Practice Essentials, Prognosis, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/777845-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__diabetic_ketoacidosis"
+      ],
+      "retrieval_queries": [
+        "Diabetic Ketoacidosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5167,
+      "excerpt": "iritis, uveitis, dry conjunctivae: Autoimmune vasculitis Jaundice: Liver diseases Band keratopathy (ie, hypercalcemia): Multiple myeloma Signs of diabetes mellitus Signs of hypertension Atheroemboli: Retinopathy (ie, Hollenhorst plaque in cholesterol microembolism) Ears Examination of the patient s ears may reveal the following signs: Hearing loss: Alport disease and aminoglycoside toxicity Mucosal or cartilaginous ulcerations: Granulomatosis with polyangiitis ( Wegener granulomatosis) Cardiovascular system Cardiovascular examination may reveal the following: Irregular rhythms (ie, atrial",
+      "text_sha256": "53674bdc97d1ea5fcc03fb87b0c98499228f06b87b4fdd851882484adda41717"
+    },
+    {
+      "id": "rag-9907f7d223a7bf6e",
+      "chunk_id": "eb9c8979dffbbe522699_1",
+      "title": "Malakoplakia: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1055606-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__diabetic_ketoacidosis"
+      ],
+      "retrieval_queries": [
+        "Diabetic Ketoacidosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5276,
+      "excerpt": "Malakoplakia presents clinically with a wide spectrum of findings, and the criterion standard for diagnosis is pathological examination. Signs and symptoms Also see History. Malakoplakia lesions may present as erythematous papules, subcutaneous nodules, draining abscesses, ulcers, nonhealing surgical wounds, indurated plaque, or draining fistulas. Malakoplakia was also reported masquerading as pyoderma gangrenosum, presenting as a nonhealing malleolar ulcer for 2 years. The most common site affected in the reported cases was perianal (19%). Other affected sites included the abdomen, face,",
+      "text_sha256": "c5a27bb926a4465f7eba91480ad5d4b9cf849cba97c9e0297ff753cd677e7c0d"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__glucagonoma_syndrome",
+        "fluid_nutrition_changes__chronic_diarrhea"
+      ],
+      "retrieval_queries": [
+        "Glucagonoma Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Chronic Diarrhea diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4437,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-0224558d008f5bcb",
+      "chunk_id": "2a896961ed57d0483825_3",
+      "title": "Hyperglucagonemia (Glucagonoma Syndrome): Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/121575-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__glucagonoma_syndrome"
+      ],
+      "retrieval_queries": [
+        "Glucagonoma Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3957,
+      "excerpt": "normochromic normocytic, although macrocytic anemia has been described in some patients. nous thrombosiss thought to occur in as many as 30% of patients with glucagonoma syndrome.J Diagnosis is aided by the typical skin appearance of patients with NME and by the evaluation of a skin biopsy. Glucagon should be tested by RIA of a fasting plasma sample./rmones that may be elevated in glucagonoma syndrome include insulin, VIP, gastrin, pancreatic polypeptide, 5-HT, calcitonin, adrenocorticotropic hormone, and adrenocorticotropic hormone (ACTH).n glucagonoma syndrome, glucagon levels are well in",
+      "text_sha256": "cbd4db7d89cb5de2b086a92e87a6bbbd6009e502ba2446a90f9c62c7e78c51a8"
+    },
+    {
+      "id": "rag-3a72d4c38d9a0bb7",
+      "chunk_id": "9f7eb5027998a34eb6c2_8",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__wdha_syndrome"
+      ],
+      "retrieval_queries": [
+        "WDHA Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4417,
+      "excerpt": "conduction defects are truly diagnostic only when they coincide with symptoms Loop recorders have a higher diagnostic yield than Holter monitor evaluation, with a marginal cost savings Ambulatory monitoring appears to have a higher negative than positive diagnostic yield Other diagnostic tests and procedures include the following: Head-up tilt-table test - Useful for confirming autonomic dysfunction and can generally be safely arranged on an outpatient basis Electroencephalography (EEG) - Can be performed at the discretion of a neurologist if seizure is considered a likely alternative",
+      "text_sha256": "bce92127a34f3c0ce64d226f3f059473b46561d6c8d76961f1c0a09f5b6874fc"
+    },
+    {
+      "id": "rag-cb96a42148d5df6c",
+      "chunk_id": "8440d93890b7b8e00423_1",
+      "title": "Hyperviscosity Syndrome: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/780258-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__wdha_syndrome"
+      ],
+      "retrieval_queries": [
+        "WDHA Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4417,
+      "excerpt": "in HVS consists principally of the triad of mucosal bleeding, visual changes, and neurologic symptoms. Constitutional symptoms and cardiorespiratory symptoms may also occur. The diagnosis of HVS is confirmed by measurement of elevated serum viscosity in a patient with characteristic clinical manifestations of HVS. No exact diagnostic cut-off exists for serum viscosity, however, as different patients will have symptoms at different values. Plasmapheresis is the treatment of choice for initial management and stabilization of HVS from elevated immunoglobulin levels. Leukapheresis,",
+      "text_sha256": "b0b8ea7d9a842594f22c2383d58329aeeebd25a770a061898cd70beedf1a5ce8"
+    },
+    {
+      "id": "rag-e7aadeb477b013e8",
+      "chunk_id": "5f4facbbb49d611054a2_1",
+      "title": "Wolff-Parkinson-White Syndrome: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/159222-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__wdha_syndrome"
+      ],
+      "retrieval_queries": [
+        "WDHA Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4511,
+      "excerpt": "below for a typical \"preexcited\" ECG. Wolff-Parkinson-White Syndrome. Classic Wolff-Parkinson-White electrocardiogram with short PR, QRS >120 ms, and delta wave. Signs and symptoms The clinical manifestations of WPW syndrome reflect the associated tachyarrhythmia episodes rather than the anomalous ventricular excitation per se. They may have their onset at any time from childhood to middle age, and they can vary in severity from mild chest discomfort or palpitations with or without syncope to severe cardiopulmonary compromise and cardiac arrest. Thus, presentation varies by patient age.",
+      "text_sha256": "31a1544b3ea86d34dcadefbe2454e8aa1ba417fdfe7b23ce1d969475f78e6f02"
+    },
+    {
+      "id": "rag-9e68931c10b3d55f",
+      "chunk_id": "2ec7db6c11d8ff900b3f_3",
+      "title": "Hyperventilation Syndrome: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/807277-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__wdha_syndrome"
+      ],
+      "retrieval_queries": [
+        "WDHA Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4518,
+      "excerpt": "syndrome Upon a first attack of acute HVS, the diagnosis depends on recognizing the typical constellation of signs and symptoms and ruling out the serious conditions that can cause the presenting symptoms. A low pulse oximetry reading in a patient who is hyperventilating should never be attributed to HVS. These patients should always be evaluated for other causes of hyperventilation. Arterial blood gas (ABG) measurement is indicated if any doubt exists as to the patient s underlying respiratory status. In chronic HVS, ABG sampling confirms a compensated respiratory alkalosis in a majority of",
+      "text_sha256": "d3666bff262021e62ad06bb5cf7fa686a66bf066ab06ae72ed2c6e8935a27408"
+    },
+    {
+      "id": "rag-3697ea6f89d68fd5",
+      "chunk_id": "5f385aa936e8b9c4d48d_4",
+      "title": "Hemolytic Uremic Syndrome in Emergency Medicine: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779218-overview",
+      "routes": [
+        "abdomen",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__chronic_diarrhea"
+      ],
+      "retrieval_queries": [
+        "Chronic Diarrhea diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4537,
+      "excerpt": "seizures, or altered mental status) Diarrhea may improve as the other HUS signs and symptoms beginJ Atypical HUS does not typically begin with a gastrointestinal illness. Patients with pneumococcal HUS may have had`recent respiratory illness. Clinical manifestations of atypical HUS are similar to those of typical HUS, although neurologic involvement is more common. See Presentation. HUS is primarily a clinical diagnosis coupled with consistent laboratory findings, including the following: Microangiopathic hemolytic anemia, with a hemoglobin level that is typically less than 8 g/dLJ",
+      "text_sha256": "8794e56e32229d991eb34ce0ebf51c81b6fdd260c654a355f24fd9e8a874c4d9"
+    },
+    {
+      "id": "rag-673ca2595da29953",
+      "chunk_id": "67f94523e6850cb7f365_3",
+      "title": "Acute Gastritis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/175909-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "fluid_nutrition_changes__chronic_diarrhea"
+      ],
+      "retrieval_queries": [
+        "Chronic Diarrhea diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4521,
+      "excerpt": "symptoms. Fever, chills, and hiccups also may be present. The diagnosis of acute gastritis may be suspected from the patient's history and can be confirmed histologically by biopsy specimens taken at endoscopy. See related CME at Evaluation of Acute Abdominal Pain Reviewed. Pathophysiology Acute gastritis has a number of causes, including certain drugs; alcohol; bile; ischemia; bacterial, viral, and fungal infections; acute stress (shock); radiation; allergy and food poisoning; and direct trauma. The common mechanism of injury is an imbalance between the aggressive and the defensive factors",
+      "text_sha256": "b058373d070d5000d3dbb177386d88dc203c5d22e4624c9224db3b40fe3911e2"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "fluid_nutrition_changes__dehydration",
+      "name": "Dehydration",
+      "retrieval_query": "Dehydration diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-e0252c5d56df5562",
+        "rag-db1f97d8adf4b525"
+      ],
+      "disease_rag_source_ids": [
+        "rag-e5257b482e39c691",
+        "rag-60c2ff97c7b6eb16",
+        "rag-673cbb2500a2a5af",
+        "rag-8dd199bbb3de65c8"
+      ]
+    },
+    {
+      "id": "fluid_nutrition_changes__diabetes_insipidus",
+      "name": "Diabetes Insipidus",
+      "retrieval_query": "Diabetes Insipidus diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-f34dac00f7f605ae"
+      ],
+      "disease_rag_source_ids": [
+        "rag-62a9df3e7ad773c3",
+        "rag-11670883bb9d0d30",
+        "rag-5bcac9eab5404341",
+        "rag-4e2dd6c8089abd42"
+      ]
+    },
+    {
+      "id": "fluid_nutrition_changes__diabetic_ketoacidosis",
+      "name": "Diabetic Ketoacidosis",
+      "retrieval_query": "Diabetic Ketoacidosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-db1f97d8adf4b525"
+      ],
+      "disease_rag_source_ids": [
+        "rag-cbc9566e14825ddc",
+        "rag-042fbd5ae3603dfa",
+        "rag-f96d0f0382915290",
+        "rag-9907f7d223a7bf6e"
+      ]
+    },
+    {
+      "id": "fluid_nutrition_changes__glucagonoma_syndrome",
+      "name": "Glucagonoma Syndrome",
+      "retrieval_query": "Glucagonoma Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-a7dd2b4d54cb0698"
+      ],
+      "disease_rag_source_ids": [
+        "rag-a7dd2b4d54cb0698",
+        "rag-5bcac9eab5404341",
+        "rag-f09c5253c7a82445",
+        "rag-0224558d008f5bcb"
+      ]
+    },
+    {
+      "id": "fluid_nutrition_changes__wdha_syndrome",
+      "name": "WDHA Syndrome",
+      "retrieval_query": "WDHA Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-269161b5f0aa9e5e"
+      ],
+      "disease_rag_source_ids": [
+        "rag-3a72d4c38d9a0bb7",
+        "rag-cb96a42148d5df6c",
+        "rag-e7aadeb477b013e8",
+        "rag-9e68931c10b3d55f"
+      ]
+    },
+    {
+      "id": "fluid_nutrition_changes__chronic_diarrhea",
+      "name": "Chronic Diarrhea",
+      "retrieval_query": "Chronic Diarrhea diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-a0a3983d9ce778ae"
+      ],
+      "disease_rag_source_ids": [
+        "rag-e0252c5d56df5562",
+        "rag-f09c5253c7a82445",
+        "rag-3697ea6f89d68fd5",
+        "rag-673ca2595da29953"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "fluid_nutrition_changes",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-673cbb2500a2a5af",
+        "rag-4e2dd6c8089abd42",
+        "rag-62a9df3e7ad773c3",
+        "rag-cbc9566e14825ddc",
+        "rag-042fbd5ae3603dfa",
+        "rag-f96d0f0382915290",
+        "rag-9907f7d223a7bf6e",
+        "rag-a7dd2b4d54cb0698",
+        "rag-3a72d4c38d9a0bb7",
+        "rag-cb96a42148d5df6c",
+        "rag-e7aadeb477b013e8",
+        "rag-9e68931c10b3d55f",
+        "rag-e0252c5d56df5562",
+        "rag-f09c5253c7a82445",
+        "rag-3697ea6f89d68fd5",
+        "rag-673ca2595da29953"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "fluid_nutrition_changes__dehydration__decreased_urine_output",
+        "description": "尿量減少。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration"
+        ],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-8dd199bbb3de65c8"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__dehydration__dry_mouth",
+        "description": "口乾舌燥。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration"
+        ],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-8dd199bbb3de65c8"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__dehydration__dry_skin",
+        "description": "皮膚乾燥。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration"
+        ],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-8dd199bbb3de65c8"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__dehydration__vomiting",
+        "description": "嘔吐。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration"
+        ],
+        "source_ids": [
+          "rag-673cbb2500a2a5af"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__dehydration__diarrhea",
+        "description": "腹瀉。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration"
+        ],
+        "source_ids": [
+          "rag-673cbb2500a2a5af"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__dehydration__dizziness",
+        "description": "頭暈。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration"
+        ],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-8dd199bbb3de65c8"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__dehydration__fatigue",
+        "description": "乏力。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration"
+        ],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-8dd199bbb3de65c8"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__dehydration__thirst",
+        "description": "口渴。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration"
+        ],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-8dd199bbb3de65c8"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__diabetes_insipidus__polyuria",
+        "description": "Increased urine output.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__diabetes_insipidus"
+        ],
+        "source_ids": [
+          "rag-4e2dd6c8089abd42"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__diabetes_insipidus__anorexia",
+        "description": "Loss of appetite.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__diabetes_insipidus"
+        ],
+        "source_ids": [
+          "rag-4e2dd6c8089abd42"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__diabetes_insipidus__fatigue",
+        "description": "Excessive fatigue.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__diabetes_insipidus"
+        ],
+        "source_ids": [
+          "rag-4e2dd6c8089abd42"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__diabetes_insipidus__dry_skin",
+        "description": "Dry skin.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__diabetes_insipidus"
+        ],
+        "source_ids": [
+          "rag-4e2dd6c8089abd42"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__diabetic_ketoacidosis__polyuria",
+        "description": "排尿量異常增加。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__diabetic_ketoacidosis"
+        ],
+        "source_ids": [
+          "rag-042fbd5ae3603dfa"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__diabetic_ketoacidosis__polydipsia",
+        "description": "異常口渴或飲水量增加。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__diabetic_ketoacidosis"
+        ],
+        "source_ids": [
+          "rag-042fbd5ae3603dfa"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__glucagonoma_syndrome__weight_loss",
+        "description": "Unexplained weight loss.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__glucagonoma_syndrome"
+        ],
+        "source_ids": [
+          "rag-a7dd2b4d54cb0698"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__wdha_syndrome__severe_watery_diarrhea",
+        "description": "Severe, watery diarrhea.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__wdha_syndrome"
+        ],
+        "source_ids": [
+          "rag-3a72d4c38d9a0bb7",
+          "rag-cb96a42148d5df6c",
+          "rag-e7aadeb477b013e8",
+          "rag-9e68931c10b3d55f"
+        ]
+      },
+      {
+        "code": "fluid_nutrition_changes__chronic_diarrhea__dehydration",
+        "description": "脫水。",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fluid_nutrition_changes__chronic_diarrhea"
+        ],
+        "source_ids": [
+          "rag-e0252c5d56df5562"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "fluid_changes",
+        "option": "尿量減少",
+        "mapping": {
+          "findings": [
+            "fluid_nutrition_changes__dehydration__decreased_urine_output"
+          ]
+        },
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration"
+        ],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-8dd199bbb3de65c8"
+        ]
+      },
+      {
+        "field": "fluid_changes",
+        "option": "口乾舌燥",
+        "mapping": {
+          "findings": [
+            "fluid_nutrition_changes__dehydration__dry_mouth",
+            "fluid_nutrition_changes__chronic_diarrhea__dehydration"
+          ]
+        },
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration",
+          "fluid_nutrition_changes__chronic_diarrhea"
+        ],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-8dd199bbb3de65c8",
+          "rag-e0252c5d56df5562"
+        ]
+      },
+      {
+        "field": "fluid_changes",
+        "option": "皮膚乾燥",
+        "mapping": {
+          "findings": [
+            "fluid_nutrition_changes__dehydration__dry_skin",
+            "fluid_nutrition_changes__diabetes_insipidus__dry_skin",
+            "fluid_nutrition_changes__chronic_diarrhea__dehydration"
+          ]
+        },
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration",
+          "fluid_nutrition_changes__diabetes_insipidus",
+          "fluid_nutrition_changes__chronic_diarrhea"
+        ],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-8dd199bbb3de65c8",
+          "rag-4e2dd6c8089abd42",
+          "rag-e0252c5d56df5562"
+        ]
+      },
+      {
+        "field": "digestive_symptoms",
+        "option": "嘔吐",
+        "mapping": {
+          "findings": [
+            "fluid_nutrition_changes__dehydration__vomiting"
+          ]
+        },
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration"
+        ],
+        "source_ids": [
+          "rag-673cbb2500a2a5af"
+        ]
+      },
+      {
+        "field": "digestive_symptoms",
+        "option": "腹瀉",
+        "mapping": {
+          "findings": [
+            "fluid_nutrition_changes__dehydration__diarrhea",
+            "fluid_nutrition_changes__wdha_syndrome__severe_watery_diarrhea",
+            "diarrhea"
+          ]
+        },
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration",
+          "fluid_nutrition_changes__wdha_syndrome",
+          "fluid_nutrition_changes__chronic_diarrhea"
+        ],
+        "source_ids": [
+          "rag-673cbb2500a2a5af",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-cb96a42148d5df6c",
+          "rag-e7aadeb477b013e8",
+          "rag-9e68931c10b3d55f",
+          "rag-e0252c5d56df5562",
+          "rag-f09c5253c7a82445",
+          "rag-3697ea6f89d68fd5",
+          "rag-673ca2595da29953"
+        ]
+      },
+      {
+        "field": "other_related_symptoms",
+        "option": "頭暈",
+        "mapping": {
+          "findings": [
+            "fluid_nutrition_changes__dehydration__dizziness"
+          ]
+        },
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration"
+        ],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-8dd199bbb3de65c8"
+        ]
+      },
+      {
+        "field": "other_related_symptoms",
+        "option": "乏力",
+        "mapping": {
+          "findings": [
+            "fluid_nutrition_changes__dehydration__fatigue",
+            "fluid_nutrition_changes__diabetes_insipidus__fatigue"
+          ]
+        },
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration",
+          "fluid_nutrition_changes__diabetes_insipidus"
+        ],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-8dd199bbb3de65c8",
+          "rag-4e2dd6c8089abd42"
+        ]
+      },
+      {
+        "field": "other_related_symptoms",
+        "option": "口渴",
+        "mapping": {
+          "findings": [
+            "fluid_nutrition_changes__dehydration__thirst",
+            "fluid_nutrition_changes__diabetic_ketoacidosis__polydipsia"
+          ]
+        },
+        "disease_ids": [
+          "fluid_nutrition_changes__dehydration",
+          "fluid_nutrition_changes__diabetic_ketoacidosis"
+        ],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-8dd199bbb3de65c8",
+          "rag-042fbd5ae3603dfa"
+        ]
+      },
+      {
+        "field": "fluid_changes",
+        "option": "尿量增加",
+        "mapping": {
+          "findings": [
+            "fluid_nutrition_changes__diabetes_insipidus__polyuria",
+            "fluid_nutrition_changes__diabetic_ketoacidosis__polyuria"
+          ]
+        },
+        "disease_ids": [
+          "fluid_nutrition_changes__diabetes_insipidus",
+          "fluid_nutrition_changes__diabetic_ketoacidosis"
+        ],
+        "source_ids": [
+          "rag-4e2dd6c8089abd42",
+          "rag-042fbd5ae3603dfa"
+        ]
+      },
+      {
+        "field": "nutritional_problems",
+        "option": "食慾不振",
+        "mapping": {
+          "findings": [
+            "fluid_nutrition_changes__diabetes_insipidus__anorexia"
+          ]
+        },
+        "disease_ids": [
+          "fluid_nutrition_changes__diabetes_insipidus"
+        ],
+        "source_ids": [
+          "rag-4e2dd6c8089abd42"
+        ]
+      },
+      {
+        "field": "nutritional_problems",
+        "option": "不明原因的體重變化",
+        "mapping": {
+          "findings": [
+            "fluid_nutrition_changes__glucagonoma_syndrome__weight_loss"
+          ]
+        },
+        "disease_ids": [
+          "fluid_nutrition_changes__glucagonoma_syndrome"
+        ],
+        "source_ids": [
+          "rag-a7dd2b4d54cb0698"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "fluid_nutrition_changes__dehydration",
+        "name": "Dehydration",
+        "must_not_miss": false,
+        "retrieval_query": "Dehydration diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "fluid_nutrition_changes__dehydration__vomiting",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-673cbb2500a2a5af"
+            ]
+          },
+          {
+            "fact": "fluid_nutrition_changes__dehydration__diarrhea",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-673cbb2500a2a5af"
+            ]
+          },
+          {
+            "fact": "fluid_nutrition_changes__dehydration__dry_mouth",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-e5257b482e39c691",
+              "rag-60c2ff97c7b6eb16",
+              "rag-673cbb2500a2a5af",
+              "rag-8dd199bbb3de65c8"
+            ]
+          },
+          {
+            "fact": "fluid_nutrition_changes__dehydration__decreased_urine_output",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-e5257b482e39c691",
+              "rag-60c2ff97c7b6eb16",
+              "rag-673cbb2500a2a5af",
+              "rag-8dd199bbb3de65c8"
+            ]
+          },
+          {
+            "fact": "fluid_nutrition_changes__dehydration__thirst",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-e5257b482e39c691",
+              "rag-60c2ff97c7b6eb16",
+              "rag-673cbb2500a2a5af",
+              "rag-8dd199bbb3de65c8"
+            ]
+          },
+          {
+            "fact": "fluid_nutrition_changes__dehydration__dizziness",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-e5257b482e39c691",
+              "rag-60c2ff97c7b6eb16",
+              "rag-673cbb2500a2a5af",
+              "rag-8dd199bbb3de65c8"
+            ]
+          },
+          {
+            "fact": "fluid_nutrition_changes__dehydration__fatigue",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-e5257b482e39c691",
+              "rag-60c2ff97c7b6eb16",
+              "rag-673cbb2500a2a5af",
+              "rag-8dd199bbb3de65c8"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-8dd199bbb3de65c8"
+        ]
+      },
+      {
+        "id": "fluid_nutrition_changes__diabetes_insipidus",
+        "name": "Diabetes Insipidus",
+        "must_not_miss": false,
+        "retrieval_query": "Diabetes Insipidus diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "fluid_nutrition_changes__diabetes_insipidus__polyuria",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-4e2dd6c8089abd42"
+            ]
+          },
+          {
+            "fact": "fluid_nutrition_changes__diabetes_insipidus__fatigue",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-4e2dd6c8089abd42"
+            ]
+          },
+          {
+            "fact": "fluid_nutrition_changes__diabetes_insipidus__anorexia",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-4e2dd6c8089abd42"
+            ]
+          },
+          {
+            "fact": "fluid_nutrition_changes__diabetes_insipidus__dry_skin",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-4e2dd6c8089abd42"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-4e2dd6c8089abd42",
+          "rag-62a9df3e7ad773c3"
+        ]
+      },
+      {
+        "id": "fluid_nutrition_changes__glucagonoma_syndrome",
+        "name": "Glucagonoma Syndrome",
+        "must_not_miss": false,
+        "retrieval_query": "Glucagonoma Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "fluid_nutrition_changes__glucagonoma_syndrome__weight_loss",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-a7dd2b4d54cb0698"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-a7dd2b4d54cb0698"
+        ]
+      },
+      {
+        "id": "fluid_nutrition_changes__wdha_syndrome",
+        "name": "WDHA Syndrome",
+        "must_not_miss": false,
+        "retrieval_query": "WDHA Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "fluid_nutrition_changes__wdha_syndrome__severe_watery_diarrhea",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-3a72d4c38d9a0bb7",
+              "rag-cb96a42148d5df6c",
+              "rag-e7aadeb477b013e8",
+              "rag-9e68931c10b3d55f"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-3a72d4c38d9a0bb7",
+          "rag-cb96a42148d5df6c",
+          "rag-e7aadeb477b013e8",
+          "rag-9e68931c10b3d55f"
+        ]
+      },
+      {
+        "id": "fluid_nutrition_changes__chronic_diarrhea",
+        "name": "Chronic Diarrhea",
+        "must_not_miss": false,
+        "retrieval_query": "Chronic Diarrhea diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "diarrhea",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-e0252c5d56df5562",
+              "rag-f09c5253c7a82445",
+              "rag-3697ea6f89d68fd5",
+              "rag-673ca2595da29953"
+            ]
+          },
+          {
+            "fact": "fluid_nutrition_changes__chronic_diarrhea__dehydration",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-e0252c5d56df5562"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-e0252c5d56df5562",
+          "rag-f09c5253c7a82445",
+          "rag-3697ea6f89d68fd5",
+          "rag-673ca2595da29953"
+        ]
+      }
+    ],
+    "safety_proposals": [],
+    "unsupported_requirements": [
+      {
+        "requirement": "Create a fact for 'abnormal capillary refill time'",
+        "reason": "This is a physical exam finding that cannot be reliably self-reported by a patient."
+      },
+      {
+        "requirement": "Create a fact for 'abnormal respiratory pattern'",
+        "reason": "This is a physical exam finding that is difficult for a patient to self-assess accurately."
+      },
+      {
+        "requirement": "Create a fact for 'sunken eyes'",
+        "reason": "This is a physical exam finding that is difficult for a patient to self-assess accurately."
+      },
+      {
+        "requirement": "Create a fact for 'decreased tears'",
+        "reason": "This is a physical exam finding that is difficult for a patient to self-assess accurately."
+      },
+      {
+        "requirement": "Create a fact for 'lethargy'",
+        "reason": "This symptom overlaps significantly with existing fact codes like 'altered_consciousness' and requires more specific evidence to differentiate and define for this route."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create a fact for headache as a symptom of Diabetes Insipidus.",
+        "reason": "The existing generic fact code `symptom_headache` should be used for this symptom to maintain consistency across different routes and conditions. Creating a disease-specific fact for a common symptom like headache is redundant."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Specific lab value thresholds for beta-hydroxybutyrate to define diabetic ketoacidosis.",
+        "reason": "The model is not permitted to use specific lab value thresholds for diagnosis or triage."
+      },
+      {
+        "requirement": "Specific pH levels to define severe acidemia.",
+        "reason": "The model is not permitted to use specific lab value thresholds for diagnosis or triage."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create safety rules for red flag symptoms associated with Glucagonoma Syndrome (e.g., exertional onset, chest pain, dyspnea, severe headache, focal neurologic deficits).",
+        "reason": "The provided RAG source (rag-f09c5253c7a82445) lists red flag symptoms in the context of syncope, not specifically for Glucagonoma Syndrome. Attributing these as direct safety triggers for Glucagonoma Syndrome would be an unsupported clinical inference."
+      },
+      {
+        "requirement": "Create a fact for deep vein thrombosis (DVT) as a complication of Glucagonoma Syndrome.",
+        "reason": "The RAG source (rag-0224558d008f5bcb) mentions 'nous thrombosiss thought to occur in as many as 30% of patients', which appears to be a truncated or corrupted phrase ('venous thrombosis'). Due to the ambiguity, creating a definitive fact is not appropriate without clearer evidence."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Detailed diagnostic criteria for WDHA Syndrome, including specific lab values (e.g., VIP levels, potassium levels, achlorhydria) and associated symptoms beyond diarrhea.",
+        "reason": "The provided RAG sources do not contain sufficient detail to create specific, actionable clinical logic or rules for WDHA Syndrome. The primary source only gives a high-level overview, and the other sources are irrelevant to this condition."
+      },
+      {
+        "requirement": "Differential diagnosis and red flags for fluid and nutrition changes.",
+        "reason": "The provided RAG sources do not contain information on the differential diagnosis or red flags for the general complaint of fluid/nutrition changes or for WDHA Syndrome specifically."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The provided RAG sources focus on pediatric dehydration. While the signs and symptoms are generally applicable to adults, the clinical context and thresholds may differ. The proposed facts and profile are based on this pediatric-focused evidence and should be reviewed for adult applicability.",
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-8dd199bbb3de65c8"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "Several classic signs of dehydration mentioned in the RAG sources (e.g., abnormal capillary refill, abnormal skin turgor, sunken eyes) are physical exam findings. These are difficult for a patient to self-report accurately and have been noted in 'unsupported_requirements'. The fact 'fluid_nutrition_changes__dehydration__abnormal_skin_turgor' was created but not mapped to any user-facing option due to the difficulty of self-assessment.",
+        "source_ids": [
+          "rag-60c2ff97c7b6eb16",
+          "rag-8dd199bbb3de65c8"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-60c2ff97c7b6eb16"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[5], fact_proposals[6], fact_proposals[7], semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[5], semantic_options[6], semantic_options[7]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-8dd199bbb3de65c8"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-4e2dd6c8089abd42",
+          "rag-62a9df3e7ad773c3"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-cbc9566e14825ddc",
+          "rag-042fbd5ae3603dfa",
+          "rag-f96d0f0382915290",
+          "rag-9907f7d223a7bf6e"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[3], profiles[0], profiles[0].clues[2]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-cbc9566e14825ddc",
+          "rag-042fbd5ae3603dfa",
+          "rag-f96d0f0382915290",
+          "rag-9907f7d223a7bf6e"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-a7dd2b4d54cb0698"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The evidence for WDHA Syndrome is extremely limited, stemming from a single discovery source. The other provided RAG sources are for unrelated conditions (WPW, Hyperviscosity, Hyperventilation, Syncope) and offer no support. The proposed profile is based on this single, brief description and should be considered a very preliminary placeholder.",
+        "source_ids": [
+          "rag-3a72d4c38d9a0bb7",
+          "rag-cb96a42148d5df6c",
+          "rag-e7aadeb477b013e8",
+          "rag-9e68931c10b3d55f"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The core symptom of WDHA syndrome, 'severe, watery diarrhea', is mapped to the general 'diarrhea' option in the questionnaire. The questionnaire does not currently allow for capturing the severity or character (watery) of the diarrhea, which is a key diagnostic feature.",
+        "source_ids": [
+          "rag-3a72d4c38d9a0bb7",
+          "rag-cb96a42148d5df6c",
+          "rag-e7aadeb477b013e8",
+          "rag-9e68931c10b3d55f"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-3a72d4c38d9a0bb7",
+          "rag-cb96a42148d5df6c",
+          "rag-e7aadeb477b013e8",
+          "rag-9e68931c10b3d55f"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], semantic_options[0], profiles[0], profiles[0].clues[0], profiles[0].clues[1], profiles[0].clues[2], review_notes[0], review_notes[1]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-3a72d4c38d9a0bb7",
+          "rag-cb96a42148d5df6c",
+          "rag-e7aadeb477b013e8",
+          "rag-9e68931c10b3d55f"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-3697ea6f89d68fd5",
+          "rag-673ca2595da29953"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, semantic_options[0], profiles[0], profiles[0].clues[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-e0252c5d56df5562",
+          "rag-f09c5253c7a82445",
+          "rag-3697ea6f89d68fd5",
+          "rag-673ca2595da29953"
+        ]
+      }
+    ]
+  }
+}

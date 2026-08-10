@@ -1,0 +1,330 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "neck_pain",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "28e09d521a01801192f4437d39dfca4631d4e142bee86d23fca09381432791dc",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history",
+      "neck pain neck pain red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "57432251d3c8caa632dd9af0e79488d111a0946ce446a39dc1d03de82ea677e6"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "96b31298b8166ce884e17e9af0f911c34aeea780efa9a60daf733af2820242c2",
+    "generated_at": "2026-08-10T04:10:52+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-bd0c20de46e8bd2f",
+      "chunk_id": "709d501e5392c47ae3b5_33",
+      "title": "Lyme Disease: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/330178-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history",
+        "neck pain neck pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3976,
+      "excerpt": "the following: Fatigue Myalgias Arthralgias Headache Fever Chills Neck stiffness Stage 2 disease Stage 2 is also known as early disseminated disease. It generally occurs weeks to months after the bite. Musculoskeletal and neurologic symptoms are the most common; less common symptoms are cardiac and dermatologic. B burgdorferi spreads throughout the body and produces symptoms by direct invasion (eg, erythema migrans), particularly in the early stages of the disease. Because growing B burgdorferi in culture is difficult, confirming that the organism is actually present in a specific organ that",
+      "text_sha256": "f34efa7309affa9f0e81949f33769cdcad27720360650caa02ba3e13e2bcd31c"
+    },
+    {
+      "id": "rag-cab28b2a868cee8a",
+      "chunk_id": "77deb79ba058e8b1d0d2_4",
+      "title": "Retropharyngeal Abscess: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764421-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3982,
+      "excerpt": "of the neck - Obtain a CT scan of the neck with intravenous contrast when the findings on the lateral neck radiograph are equivocal or if the clinical suspicion for RPA is high in patients with negative findings on lateral neck radiograph Chest radiography - A chest radiograph is indicated to look for aspiration pneumonia and mediastinitis Magnetic resonance imaging (MRI) with gadolinium enhancement - This modality can veal thexistence and size of a retropharyngeal abscess, although the imaging study takes/ng than does CT scanning Management of retropharyngeal abscess ED management of RPA",
+      "text_sha256": "d699b3c287af3fb90fca17b8bd38e50f7facd34b6d8f371fcbf7a1690f9fd8c1"
+    },
+    {
+      "id": "rag-ea2ab454d0d9c67f",
+      "chunk_id": "1a041e74ccb8dd2fa833_12",
+      "title": "Spinal Cord Neoplasms: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779872-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4029,
+      "excerpt": "younger patients. Pain is the most common early complaint of adult patients with spinal cord neoplasms, followed by the insidious progression of spinal cord dysfunction. Clinical Presentation",
+      "text_sha256": "1d38418d65e3b2c4d4afafb8bfbfadde552e3e08acf7e1114768c6a7333fa4e3"
+    },
+    {
+      "id": "rag-15ce66364be76637",
+      "chunk_id": "74ab9de94000c37ef9b4_6",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4298,
+      "excerpt": "musculoskeletal pain syndromes, and skeletal causes. Nerve root syndromes Classic nerve root syndrome is characterized by radicular pain arising from nerve root impingement due to herniated discs. A similar syndrome can also be produced by inflammation and irritation, which may explain why patients whose presentation is consistent with this diagnosis respond to conservative therapies. Impingement pain tends to be sharp, well localized, and can be associated with paresthesia, whereas irritation pain tends to be dull, poorly localized, and without paresthesia. Impingement is associated with a",
+      "text_sha256": "1cc816f5d16418b5390dd4c89e734cba13cb748771c9292c53729d2bfaf846b6"
+    },
+    {
+      "id": "rag-93469eb32013b428",
+      "chunk_id": "8919cb19dc79345a0a9c_3",
+      "title": "Cervical Strain (Whiplash): Practice Essentials, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822893-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history",
+        "neck pain neck pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4119,
+      "excerpt": "Diagnosis The chief diagnostic challenge in the emergent or urgent setting is to differentiate cervical strain from other causes of neck pain. All posttrauma patients with cervical pain should be \"clinically cleared\" using National Emergency X-Radiography Utilization Study (NEXUS) or the Canadian C-Spine Rule as decision rules to guide the use of cervical spine radiography to rule out cervical fractures, dislocations, or spinal cord injury. Edema of cervical tissues, although not to the point of pitting, is a common finding in patients with cervical strain. The most common presentation is a",
+      "text_sha256": "0e6b82725c065ad99eafccb8396f1a31a7504ddc0900875184dc7f3a303fa8a6"
+    },
+    {
+      "id": "rag-dca02ee6db3ba08a",
+      "chunk_id": "bbce752c4c2a785b6f5c_5",
+      "title": "Neck Trauma Management: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827223-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4322,
+      "excerpt": "of the trachea Thrill Bruit Pulse deficit Signs of jugular vein injurynclude hematoma, external hemorrhage, and hypotension. Signs of spinal cord or brachial plexus injury include the following: Diminished upper arm capacity Quadriplegia Pathologic reflexes Brown-Suard syndrome Priapism and loss of the bulbocavernous reflex Poor rectal tone Urinary retention, fecal incontinence, and paralytic ileus Horner syndrome Neurogenic shock Hypoxia and hypoventilation Signs of cranial nerve injury include the following: Facial nerve (cranial nerve VII): Drooping of the corner of the mouth.",
+      "text_sha256": "7cd670a3040fcb53cfd0c8cb26914a0bde10ad70e8f63fbd224f82c5eed3f121"
+    },
+    {
+      "id": "rag-2f21ba21be782fc8",
+      "chunk_id": "00fa3ded7b1b38e9881f_23",
+      "title": "Penetrating Neck Trauma: Practice Essentials, History of the Procedure, Problem",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/433306-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4173,
+      "excerpt": "acid, pepsin, and even bile. Undiagnosed, this can produce early suppurative infection and an intense necrotizing inflammatory response in the neck, as well as a more devastating outcome if it descends to the mediastinum. An 11-17% increase in the overall mortality rate has been observed after delays of 12 hours in the diagnosis of esophageal injuries. Two reports demonstrate the importance of the setting in which penetrating neck injuries occur, particularly treatment protocols in combat zones. Sarkar et al presented 2 cases from Western Baghdad, nd Ramasamy et al performed a retrospective",
+      "text_sha256": "7268fb4551454dc979f211e7fd3405e7a011a547577e345527eaa3da5a1f6459"
+    },
+    {
+      "id": "rag-ba7cc7e69e94433a",
+      "chunk_id": "bbce752c4c2a785b6f5c_4",
+      "title": "Neck Trauma Management: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827223-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4356,
+      "excerpt": "or swallowing Pain with tongue movement Crepitus: Noteworthy in only one third of cases Signs of esophageal and pharyngeal injury nclude the following: Dysphagia Bloody saliva Sucking neck wound Bloody nasogastric aspirate Pain and tenderness in the neck Resistance of neck with passive motion testing Crepitus Bleeding from the mouth or nasogastric tube Signs of carotid artery injury nclude the following: Decreased level of consciousness Contralateral hemiparesis Hemorrhage Hematoma Dyspnea secondary to compression of the trachea Thrill Bruit Pulse deficit Signs of jugular vein injurynclude",
+      "text_sha256": "87db51f59c823f14cb2ebee57ac6edef8bfc005d3fd8b2b12cf68fd0701f7844"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4198,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-4af25e33880f4d9d",
+      "chunk_id": "ea9c50f6a6987b2f173e_2",
+      "title": "Peritonsillar Abscess in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764188-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5175,
+      "excerpt": "anteriorly. The patient has a \"hot potato sounding\" voice. Signs and symptoms of peritonsillar abscess Symptoms of PTA usually begin 3-5 days before evaluation and may include the following: Fever Malaise Headache Neck pain Throat pain (more severe on the affected side; occasionally referred to thepsilateral ear) Dysphagia Change in voice Otalgia Odynophagia Physical findings may include the following: Mild-to-moderate distress Fever Tachycardia Dehydration Drooling, salivation, or trouble handling oral secretions Trismus Hot potato or muffled voice Rancid or fetid breath Cervical",
+      "text_sha256": "22f5619d7d54985d76a08e3b1772f696a3380b3efd461e2737f6816a1c7f3022"
+    },
+    {
+      "id": "rag-94a8e6edb9127701",
+      "chunk_id": "53b354e14520b0f0479f_1",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5202,
+      "excerpt": "phantom limb pain during his time as a military surgeon and his experiences with limb amputations. (ysicians throughout the world have described similar syndromes over the centuries and CRPS has held many names, even just within the English language.JCRPS, an entity formally called reflex sympathetic dystrophy (RSD), has readily identifiable signs and symptoms and is treatable if recognized early; however, the syndrome may become disabling if unrecognized. mergency medicine physicians may be the first to see the syndrome and their actions can vastly improve the quality of life and",
+      "text_sha256": "052206cb83a26a39421944480659ffd9843f01b3616c922b01641af1d18910e0"
+    },
+    {
+      "id": "rag-7e38428a85995b57",
+      "chunk_id": "77deb79ba058e8b1d0d2_2",
+      "title": "Retropharyngeal Abscess: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764421-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "neck pain neck pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5685,
+      "excerpt": "adenopathy Fever Drooling Stridor Torticollis Trismus Physical signs of RPA in infants and children include the following: Cervical adenopathy Retropharyngeal bulge - Do not palpate in children Fever Stridor Torticollis Neck stiffness Drooling Agitation Neck mass Lethargy Respiratory distress Trismus Change in vocal quality Tonsillar displacement Associated signs, including tonsillitis, peritonsillitis, pharyngitis, and otitis media Workup in retropharyngeal abscess Laboratory studies include the following: Complete blood count (CBC) Blood cultures - Indicated before administration of",
+      "text_sha256": "65a35dc3647a22ece0f1e9d854dc2c1b381d518d0b3f878f7b7d38b7c08db340"
+    }
+  ],
+  "discovery": {
+    "route": "neck_pain",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "neck_pain__cervical_strain",
+        "name": "Cervical Strain",
+        "rationale": "The questionnaire addresses key features of cervical strain, such as a history of trauma or sudden movement, and localized neck pain. RAG source rag-93469eb32013b428 mentions that the primary diagnostic challenge is differentiating cervical strain from other causes of neck pain, particularly after trauma, which aligns with questions about triggering events like injury or accidents.",
+        "source_ids": [
+          "rag-93469eb32013b428"
+        ]
+      },
+      {
+        "id": "neck_pain__cervical_radiculopathy",
+        "name": "Cervical Radiculopathy",
+        "rationale": "The questionnaire specifically asks about symptoms radiating to the arms or hands, including numbness, tingling, and weakness. This aligns with the description of radicular pain from nerve root impingement, which can be sharp and associated with paresthesia, as described in the context of nerve root syndromes.",
+        "source_ids": [
+          "rag-15ce66364be76637"
+        ]
+      },
+      {
+        "id": "neck_pain__retropharyngeal_abscess",
+        "name": "Retropharyngeal Abscess",
+        "rationale": "The questionnaire includes questions about fever, difficulty swallowing (dysphagia), and neck stiffness. These are key symptoms of a retropharyngeal abscess, a serious infection in the deep spaces of the neck.",
+        "source_ids": [
+          "rag-7e38428a85995b57",
+          "rag-cab28b2a868cee8a"
+        ]
+      },
+      {
+        "id": "neck_pain__spinal_cord_neoplasm",
+        "name": "Spinal Cord Neoplasm",
+        "rationale": "The questionnaire explores the nature of the pain and the presence of neurological deficits. Pain is noted as the most common early complaint in adult patients with spinal cord neoplasms, often followed by progressive spinal cord dysfunction, which could manifest as the arm/hand symptoms queried.",
+        "source_ids": [
+          "rag-ea2ab454d0d9c67f"
+        ]
+      },
+      {
+        "id": "neck_pain__lyme_disease",
+        "name": "Lyme Disease",
+        "rationale": "The questionnaire asks about systemic symptoms like fever, chills, and neck stiffness. These are characteristic symptoms of early disseminated (Stage 2) Lyme disease, which can also present with myalgias and arthralgias that could be perceived as neck pain.",
+        "source_ids": [
+          "rag-bd0c20de46e8bd2f"
+        ]
+      },
+      {
+        "id": "neck_pain__neck_trauma",
+        "name": "Neck Trauma",
+        "rationale": "Several questions focus on a history of injury or accident, as well as symptoms like difficulty swallowing (dysphagia) or breathing (dyspnea). These are important signs to evaluate in the context of potential neck trauma, which can involve injury to the esophagus, pharynx, or spinal cord.",
+        "source_ids": [
+          "rag-dca02ee6db3ba08a",
+          "rag-ba7cc7e69e94433a",
+          "rag-2f21ba21be782fc8"
+        ]
+      }
+    ],
+    "review_notes": []
+  }
+}

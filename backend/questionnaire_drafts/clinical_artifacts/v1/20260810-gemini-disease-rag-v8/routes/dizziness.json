@@ -1,0 +1,1819 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "dizziness",
+  "label": "暈眩",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "5047b3e9f66211929b5066375ef45d91185e1a0d90666ba3d5a7b5e61cc1a69d",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history\",\"dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out\",\"Hemorrhagic Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Central Vertigo diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Perilymphatic Fistula diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Benign Paroxysmal Positional Vertigo diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Post-concussion syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "01300c7c15722ae0b077a60af22a702487f0190d337c64ed92b21ff627838894"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "f5d5d69756f26d103f0e3ea4c1a177586f9af87d62e27fd1ddd8068e18b294dc",
+    "generated_at": "2026-08-10T04:03:06+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-e5ea3eafe991e33a",
+      "chunk_id": "fb667a66b0c052e9418e_2",
+      "title": "Hemorrhagic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916662-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "dizziness__hemorrhagic_stroke"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history",
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out",
+        "Hemorrhagic Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3018,
+      "excerpt": "Puzzles slideshow to help recognize diagnostic clues in vertigo cases. Signs and symptoms Patients with intracerebral bleeds are more likely than those with ischemic stroke to have headache, altered mental status, seizures, nausea and vomiting, and/or marked hypertension. Even so, none of these findings reliably distinguishes between hemorrhagic and ischemic stroke. Focal neurologic deficits The type of deficit depends on the area of brain involved. If the dominant (usually the left) hemisphere is involved, a syndrome consisting of the following may result: Right hemiparesis Right hemisensory",
+      "text_sha256": "d46a05c09019859b4bb142e4b7ab6e3eab8771922c2987f776b61d11724c2bfa"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "dizziness__central_vertigo",
+        "dizziness__perilymphatic_fistula",
+        "dizziness__benign_paroxysmal_positional_vertigo",
+        "dizziness__post_concussion_syndrome"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history",
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out",
+        "Central Vertigo diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Perilymphatic Fistula diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Benign Paroxysmal Positional Vertigo diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Post-concussion syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3812,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-50ca2f8e23f83778",
+      "chunk_id": "e08f5e1e7bad8a17621b_10",
+      "title": "Central Vertigo: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794789-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history",
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.2439,
+      "excerpt": "by peripheral disease should not necessarily be expected in central vertigo. A study of the rate and predictors of CNS disease in emergency department patients with dizziness, vertigo, or imbalance found that most cases were benign, although a substantial fraction of patients had serious neurologic disease. Of 907 patients experiencing dizziness (mean age, 59 years; 58% women [n=529]), 49 (5%) had a serious neurologic diagnosis, including 37 cerebrovascular events. Dizziness was often caused by benign conditions, such as peripheral vertigo (294 patients [32%]) or orthostatic hypotension (121",
+      "text_sha256": "c2a4c4396cc1716a136476b6086746ea78020ab7f2038af15d59e0d3895dbfad"
+    },
+    {
+      "id": "rag-da206d8bd5416019",
+      "chunk_id": "946610927a231214762d_22",
+      "title": "Perilymphatic Fistula: Practice Essentials, History of the Procedure, Problem",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/856806-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history",
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3393,
+      "excerpt": "83% of their patients with traumatic PLF had complaints of sudden or fluctuating sensorineural loss. Vestibular symptoms occur in most patients. Balance disturbance can be described as true rotational vertigo, lightheadedness, disequilibrium, intolerance to motion, or any combination of these symptoms. Seltzer and McCabe reported such symptoms in 80% of patients with PLF, and Glasscock et al reported 77% incidence of true vertigo or disequilibrium. In obvious cases, membrane rupture is accompanied (or followed within a few minutes) by rapid, severe hearing loss; loud, roaring tinnitus; and",
+      "text_sha256": "a79c30850371ebf43b86678f5bbe5abd48fa69820142c3d688ca414ddc51d83b"
+    },
+    {
+      "id": "rag-d61360e166d7fe23",
+      "chunk_id": "946610927a231214762d_23",
+      "title": "Perilymphatic Fistula: Practice Essentials, History of the Procedure, Problem",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/856806-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3605,
+      "excerpt": "within a few minutes) by rapid, severe hearing loss; loud, roaring tinnitus; and severe rotational vertigo. Vertigo is often incapacitating and accompanied by visceral symptoms (eg, sweating, pallor, nausea, vomiting). Even cursory examination demonstrates marked instability and nystagmus. Audiometric evaluation reveals sensorineural hearing loss. Platform posturography confirms disequilibrium with a vestibular pattern, and platform fistula test results are positive. Vertigo and, to a lesser degree, tinnitus and hearing loss are sometimes exacerbated by straining (the Valsalva maneuver).",
+      "text_sha256": "46b00ddbfe9d4d2091419e5239b63de571df56c6ca17eb375ce8916a22146a6b"
+    },
+    {
+      "id": "rag-ea596981644e0fc2",
+      "chunk_id": "e08f5e1e7bad8a17621b_0",
+      "title": "Central Vertigo: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794789-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3183,
+      "excerpt": "Overview Background Central vertigo is vertigo due to a disease originating from the central nervous system (CNS). In clinical practice, it often includes lesions of cranial nerve VIII as well. Individuals with vertigo experience hallucinations of motion of their surroundings. Central vertigo may be caused by hemorrhagic or ischemic insults to the cerebellum (see the image below), the vestibular nuclei, and their connections within the brain stem. Other causes include CNS tumors, infection, trauma, and multiple sclerosis. CT scan of a patient with an acute spontaneous cerebellar hemorrhage.",
+      "text_sha256": "f51dd67d76b69e8fdc451b94dcacaa1753d7b94a3285bbce8985b162abf13a00"
+    },
+    {
+      "id": "rag-0a562fba6ef89a31",
+      "chunk_id": "689b3d55803f83765ad0_45",
+      "title": "Dysbarism: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769902-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history",
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.327,
+      "excerpt": "descent, when the differences in middle ear pressures on each side are greater, the unbalanced stimulation may cause alternobaric vertigo. This vertigo can persist for several days. Finally, vertigo may be caused by inner ear DCS. In inner ear DCS, vertigo was the major presenting complaint. In contrast to this, in dysbaric barotrauma, vertigo was not found to be the presenting complaint or a significant problem. Instead, those patients complained of tinnitus and hearing loss. For more on inner ear DCS, please see the article on Decompression Sickness. Divers who experience inner ear DCS or",
+      "text_sha256": "e15c9c8dad2f50b5d75589839fdd9374b7162970c0cc98018194db217e17ec48"
+    },
+    {
+      "id": "rag-3f94ff6ad0365222",
+      "chunk_id": "0e015057c60c6e6987b9_55",
+      "title": "Decompression Sickness: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769717-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3837,
+      "excerpt": "causes a combination of nausea, vomiting, vertigo, and nystagmus, in addition to tinnitus and partial deafness. This alternobaric vertigo can be difficult to differentiate from dysbaric eustachian tube dysfunction. A history of eustachian tube problems depicted by past otitis media, past eustachian tube dysfunction, and problems equalizing pressure in the ears during the dive is associated with an increased prevalence of alternobaric vertigo. In inner-ear DCS (IEDCS), vertigo was the major presenting complaint in 77-100%. Hearing loss occurred in 6-40% and a combination of both in 18%.",
+      "text_sha256": "15e59ecb690cab1f944c4044b23d9097eb11ecdefb70a8c6db98e7ea2d14700a"
+    },
+    {
+      "id": "rag-eedb84403963e781",
+      "chunk_id": "edce4b7d7d015e5a6ec6_8",
+      "title": "Benign Positional Vertigo in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/791414-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4583,
+      "excerpt": "who were discharged home from the ED with a diagnosis of isolated dizziness or vertigo and determined that stroke occurs in less than 1 in 500 patients within the first month. rebrovascular risk factors should be considered for individual patients. Clinical Presentation",
+      "text_sha256": "e945511da535bdaa1b2a0f17b6f484206ca91d01a7276b5701d3f1d4e0ab03a3"
+    },
+    {
+      "id": "rag-3074fafca96e9376",
+      "chunk_id": "53fc3e4f98765d889be9_15",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5111,
+      "excerpt": "encephalitis, headache, mental status change, hydrocephalus, ischemic disease and infarction, suspected pituitary dysfunction, inflammation or infection of the brain or meninges or their complications, demyelination and dysmyelination disorders, vascular malformations, and arterial or venous/dural sinus abnormalities. Patients who have cardiac pacemakers, ferromagnetic intracranial aneurysm clips, and certain ferromagnetic foreign bodies or electronic devices or implants should not undergo MRI. The routine MRI protocol varies considerably based on strength of the unit's field, machine",
+      "text_sha256": "efd6bcf781abb9e97e13fb806d50dc265fab9d450d001ad3cde9e6629777e105"
+    },
+    {
+      "id": "rag-bb184b814cb80dda",
+      "chunk_id": "5eb9b00069b052a70566_7",
+      "title": "Postconcussion Syndrome: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/828904-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "dizziness dizziness vertigo red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5309,
+      "excerpt": "vertigo, and nausea; psychological and neurovegetative problems such as anxiety, depression, or sleep disturbance; and cognitive impairment such as memory loss and decreased ability to concentrate. Imaging modalities such as MRI, SPECT, and MEG have been shown to be more sensitive than CT at detecting brain injuries associated with postconcussion syndrome. Patients with the symptom constellation consistent with postconcussion syndrome require thorough physical and neurological examinations. A CT scan should be obtained if significant concern about intracranial hemorrhage exists. See%diatric",
+      "text_sha256": "0d1e29531081c3fa0331975e36371efd9ffe00b7b5c8e347da76bb5d596a723b"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "headache",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "dizziness__central_vertigo",
+        "dizziness__syncope"
+      ],
+      "retrieval_queries": [
+        "Central Vertigo diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4781,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-9c829a59affdd531",
+      "chunk_id": "53fc3e4f98765d889be9_0",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "dizziness__central_vertigo"
+      ],
+      "retrieval_queries": [
+        "Central Vertigo diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4974,
+      "excerpt": "Overview Neuroimaging has become a key diagnostic tool in the emergency department. Complaints of weakness, dizziness, headache, and trauma lend themselves to rapid evaluation and diagnosis through the use of computed tomography (CT) and magnetic resonance imaging (MRI). This article focuses on the basic principles and key considerations in ordering and interpreting neuroimaging in the emergency department in conjunction with the radiologist. Trauma is the leading cause of death in patients younger than 45 years. Cranial trauma accounts for a substantial proportion of morbidity and mortality",
+      "text_sha256": "a1ee1d43e475359f345b863f6b0c7aa363195f65220b94c8d77d54974c6411fb"
+    },
+    {
+      "id": "rag-3a72d4c38d9a0bb7",
+      "chunk_id": "9f7eb5027998a34eb6c2_8",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "dizziness__central_vertigo",
+        "dizziness__benign_paroxysmal_positional_vertigo"
+      ],
+      "retrieval_queries": [
+        "Central Vertigo diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Benign Paroxysmal Positional Vertigo diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4119,
+      "excerpt": "conduction defects are truly diagnostic only when they coincide with symptoms Loop recorders have a higher diagnostic yield than Holter monitor evaluation, with a marginal cost savings Ambulatory monitoring appears to have a higher negative than positive diagnostic yield Other diagnostic tests and procedures include the following: Head-up tilt-table test - Useful for confirming autonomic dysfunction and can generally be safely arranged on an outpatient basis Electroencephalography (EEG) - Can be performed at the discretion of a neurologist if seizure is considered a likely alternative",
+      "text_sha256": "bce92127a34f3c0ce64d226f3f059473b46561d6c8d76961f1c0a09f5b6874fc"
+    },
+    {
+      "id": "rag-a33926a5c3b5389c",
+      "chunk_id": "cf1647722f4ac0a9af3e_2",
+      "title": "Neurocysticercosis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1168656-overview",
+      "routes": [
+        "headache",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "dizziness__hemorrhagic_stroke"
+      ],
+      "retrieval_queries": [
+        "Hemorrhagic Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4148,
+      "excerpt": "Dysarthria Extraocular movement palsy or paresis Hemiparesis or hemiplegia, which may be related to stroke, or Todd paralysis Hemisensory loss Movement disorders Hyper/hyporeflexia Gait disturbances Meningeal signs See Clinical Presentation for more detail. Diagnosis Neurocysticercosis is commonly diagnosed with the routine use of diagnostic methods such as computed tomography (CT) and magnetic resonance imaging (MRI) of the brain. Imaging studies CT findings vary as follows, depending on the stage of evolution of the infestation: Vesicular stage (viable larva): Hypodense, nonenhancing lesions",
+      "text_sha256": "942f8095511a4ff5beb25bd45839b5e4c8a4f8f853b81462683da63ef6b873fb"
+    },
+    {
+      "id": "rag-ffc04298df227587",
+      "chunk_id": "536871af6462d18d854b_2",
+      "title": "Ischemic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916852-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "dizziness__hemorrhagic_stroke"
+      ],
+      "retrieval_queries": [
+        "Hemorrhagic Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3806,
+      "excerpt": "neurologic deficit or any alteration in level of consciousness. Common stroke signs and symptoms include the following: Abrupt onset of hemiparesis, monoparesis, or (rarely) quadriparesis Hemisensory deficits Monocular or binocular visual loss Visual field deficits Diplopia Dysarthria Facial droop Ataxia Vertigo (rarely in isolation) Nystagmus Aphasia Sudden decrease in level of consciousness Although such symptoms can occur alone, they are more likely to occur in combination. No historical feature distinguishes ischemic from hemorrhagic stroke, although nausea, vomiting, headache, and sudden",
+      "text_sha256": "08c3fc70520a54c0cfbb79c8c6a6cb6799bd65cec892fd371b3de9cf705a3f55"
+    },
+    {
+      "id": "rag-ae1f46fdf3eef001",
+      "chunk_id": "53fc3e4f98765d889be9_4",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "dizziness__hemorrhagic_stroke"
+      ],
+      "retrieval_queries": [
+        "Hemorrhagic Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4083,
+      "excerpt": "disability. An estimated 80-85% of strokes are ischemic (either thrombosis or embolism), whereas 15-20% of strokes are hemorrhagic. Stroke syndromes can present along a wide spectrum of disease from transient ischemic attacks with complete resolution of symptoms to large intracranial hemorrhages with uncal or tonsillar herniation. Rapid evaluation and neuroimaging is standard of care for all patients with suspected strokes and guides the decision to administer thrombolytics, intra-arterial intervention, or medical management. Also see Ischemic Stroke in Emergency Medicine and Hemorrhagic",
+      "text_sha256": "a180011f6fbf0d9ab6f47dfed467deb49bf88d1928675e433dfef69024406d94"
+    },
+    {
+      "id": "rag-fcd79cf716726ced",
+      "chunk_id": "946610927a231214762d_2",
+      "title": "Perilymphatic Fistula: Practice Essentials, History of the Procedure, Problem",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/856806-overview",
+      "routes": [
+        "chest",
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "dizziness__perilymphatic_fistula"
+      ],
+      "retrieval_queries": [
+        "Perilymphatic Fistula diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4177,
+      "excerpt": "nausea, vomiting). Even cursory examination demonstrates marked instability and nystagmus. Unfortunately, many perilymphatic fistulas (PLFs) do not manifest in a straightforward fashion. A combination of otologic symptoms may result, and symptoms may fluctuate in complex ways that are difficult for the patient to explain. Onset of symptoms may be delayed by several days, or the acute phase may be masked by more serious injuries in other areas. Rotational vertigo may be entirely absent, and disequilibrium may be mild, vague, and episodic. Hearing loss, tinnitus, and aural fullness may come and",
+      "text_sha256": "95a0183cdafd42612fc63a8212255479a65cb0c30cee124c1f44a98bdf31d222"
+    },
+    {
+      "id": "rag-44143091d8ca8240",
+      "chunk_id": "cfd0fc45afcf3af64118_4",
+      "title": "Perilymph Fistula in Emergency Medicine: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764117-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "dizziness__perilymphatic_fistula"
+      ],
+      "retrieval_queries": [
+        "Perilymphatic Fistula diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4499,
+      "excerpt": "appropriate long-term follow-up of patients after surgery has been reported. The presenting complaint and symptoms of perilymph fistula are often consistent witheniere syndrome. Therefore, in the absence of prior surgery or definite traumatic event, distinguishing a perilymph fistula from Meniere syndrome may be difficult. Signs and symptoms of perilymph fistula History for perilymph fistula may include the following: FluctuatingJ sensorineural hearing loss(at may be sudden or progressive Vestibular symptoms - Vertigo, with or without head position changes; disequilibrium; motion intolerance;",
+      "text_sha256": "e798319035165aac378a20edfd697fa79a3fb29a3bb1db639dd6f446657200f2"
+    },
+    {
+      "id": "rag-d0a31c0f0dfc4f38",
+      "chunk_id": "cfd0fc45afcf3af64118_7",
+      "title": "Perilymph Fistula in Emergency Medicine: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764117-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "dizziness__perilymphatic_fistula"
+      ],
+      "retrieval_queries": [
+        "Perilymphatic Fistula diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4353,
+      "excerpt": "middle ear exploration or by in-office endoscopy. Management of perilymph fistula The primary purpose of emergency evaluation is to seek other, more emergent causes of symptoms. However, consider the diagnosis with hearing loss and vertigo following head trauma. Vertigo suppressants, such as diazepam and meclizine, may be used, although their benefit remains unproven in this setting. Medical therapy is rarely reported. Some reports exist of spontaneous healing with bedrest, head elevation to 30 and avoidance of lifting or middle-ear pressure increasing activities. Pathophysiology Most",
+      "text_sha256": "b707c5da21253cd2e4a64993a6eba185eabf1cc52d9e5af3e2265720bcce1112"
+    },
+    {
+      "id": "rag-0c445423fb371061",
+      "chunk_id": "edce4b7d7d015e5a6ec6_1",
+      "title": "Benign Positional Vertigo in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/791414-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "dizziness__benign_paroxysmal_positional_vertigo"
+      ],
+      "retrieval_queries": [
+        "Benign Paroxysmal Positional Vertigo diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4292,
+      "excerpt": "and introduced the classic provocative diagnostic test that is still used today. Using positional testing, benign positional vertigo can readily be diagnosed in the emergency department. Benign positional vertigo is one of the few neurologic entities the emergency physician can cure at the patient's bedside by performing a series of simple and safe head-hanging maneuvers. Pathophysiology Benign positional vertigo (BPV) is caused by calcium carbonate particles called otoliths (or otoconia) that are inappropriately displaced into the semicircular canals of the vestibular labyrinth of the inner",
+      "text_sha256": "407cc90dd2b971ad7acc2734cfdac37d1f959dc5c11d0d4d1af00e1812096426"
+    },
+    {
+      "id": "rag-80121733d16edb20",
+      "chunk_id": "edce4b7d7d015e5a6ec6_7",
+      "title": "Benign Positional Vertigo in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/791414-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "dizziness__benign_paroxysmal_positional_vertigo"
+      ],
+      "retrieval_queries": [
+        "Benign Paroxysmal Positional Vertigo diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4391,
+      "excerpt": "onset in the mid 50s. Vertigo in young patients is more likely to be caused by labyrinthitis (associated with hearing loss) or vestibular neuronitis (normal hearing). Prognosis Benign positional vertigo (BPV) tends to resolve spontaneously after several days or weeks. Patients may experience recurrences months or years later (if the otoliths got out once, they can do it again). Variants range from a single, short-lived episode to decades of vertigo with only short remissions. A study by Kim et al assessed patients who were discharged home from the ED with a diagnosis of isolated dizziness or",
+      "text_sha256": "66e40081aeb9d23e98395d3cb91d0a070247f10e87c82206aaeb3a21d586c838"
+    },
+    {
+      "id": "rag-ff175cd271f88014",
+      "chunk_id": "6abb4726efd0e023f805_11",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "dizziness__syncope"
+      ],
+      "retrieval_queries": [
+        "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.476,
+      "excerpt": "with predominantly sensory symptoms, those with a distal symmetric disorder (DADS), those with multifocal sensorimotor neuropathy or sensorimotor mononeuropathy multiplex with prominent conduction block (also known as Lewis-Sumner neuropathy), and those with CIDP with associated CNS demyelination or with other systemic disorders. The following disorders are considered distinct from CIDP because they have specific pathophysiologic features and respond to treatments differently than do patients with CIDP: Demyelinating neuropathies associated with immunoglobulin M (IgM) paraproteins, including",
+      "text_sha256": "9bcc687a6e728f319204b3de3fc10d7168b581aebb57ba68bafb0dddb461ee00"
+    },
+    {
+      "id": "rag-9569f87b2d38b7d4",
+      "chunk_id": "53b354e14520b0f0479f_7",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "dizziness__syncope"
+      ],
+      "retrieval_queries": [
+        "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5162,
+      "excerpt": "This complex syndrome has been further classified into two subtypes:J Type I: No evidence of peripheral nerve injury (formerly reflex sympathetic dystrophy)J Type II: Peripheral nerve injury present (formerly causalgia )J Epidemiology Frequency CRPS occurs in approximately 1 15% of peripheral nerve injury cases. Schwartzman states that CRPS usually occurs secondary to fractures, sprains, and trivial soft tissue injury. The incidence after fractures and contusions ranges from 10% to 30%. While some cases are associated with an identifiable nerve injury, many are not. Even \"microtrauma\" as might",
+      "text_sha256": "f92854d983ca7db67bc2172e7aa263a6e48ca5fce7aa1fad47b16359cb9a44c5"
+    },
+    {
+      "id": "rag-d71a0a73f65f79a2",
+      "chunk_id": "c073c38d1231a0946898_1",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "dizziness__syncope"
+      ],
+      "retrieval_queries": [
+        "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5168,
+      "excerpt": "alternative diagnoses. Signs of dysfunction of other cranial neruves or other neurologic abnormality exclude the diagnosis of classic trigeminal neuralgia and suggest that pain may be secondary to a structural lesion. The International Association for the Study of Pain (IASP) classifies TN into three categories. Classical TN is described as vascular compression that causes anatomical changes in the trigeminal nerve root. Next, secondary TN is due to an underlying neurologic disease. Third, idiopathic TN, is diagnosed after all studies reveal no etiology or there is no apparent cause. Classic",
+      "text_sha256": "ce29c6daab7ff6fd5cd95a131c5c0f906c846e7d275efa50d3ee5c72823e1ba8"
+    },
+    {
+      "id": "rag-7a57a456accfeeb5",
+      "chunk_id": "5eb9b00069b052a70566_17",
+      "title": "Postconcussion Syndrome: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/828904-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "dizziness__post_concussion_syndrome"
+      ],
+      "retrieval_queries": [
+        "Post-concussion syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3908,
+      "excerpt": "of a concussion at least once during the season and that concussion rates in soccer players were comparable to those of football players. Athletes who suffered a concussion were found to be 4 to 6 times more likely to suffer a second concussion. Prognosis True prognosis is difficult to define given that many patients with minor symptoms may not enter the health care system and those that participate in research appear to have more significant symptoms at baseline. In addition, a wide heterogeneity exists in patients enrolled in studies. Most patients recover fully in less than 3 months,",
+      "text_sha256": "93573d134d429791abf9cd9b31e0dc49151206d16e792e688db373b32042cc46"
+    },
+    {
+      "id": "rag-d123446aa5e45f44",
+      "chunk_id": "5eb9b00069b052a70566_5",
+      "title": "Postconcussion Syndrome: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/828904-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "dizziness__post_concussion_syndrome"
+      ],
+      "retrieval_queries": [
+        "Post-concussion syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4297,
+      "excerpt": "dizziness, (3) fatigue, (4) irritability, (5) insomnia, (6) concentration or (7) memory difficulty, and (8) intolerance of stress, emotion, or alcohol. According to the American Psychiatric Association's Diagnostic and Statistical Manual of Mental Disorders, Fifth Edition (DSM-5), postconcussion syndrome is given a diagnosis of eitherajor or mild neurocognitive disorder (NCD) due to TBI. The DSM-5 criteria for neurocognitive disorder due to I include the following: Evidence of traumatic brain injury: impact to the head or other mechanisms of rapid movement or displacement of the brain within",
+      "text_sha256": "49aa7bd131ad3c7c1c8ea364172ec797af8a9bc5eab6cf99acea8927b3a34f6b"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "dizziness__central_vertigo",
+      "name": "Central Vertigo",
+      "retrieval_query": "Central Vertigo diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-ea596981644e0fc2",
+        "rag-50ca2f8e23f83778"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-5bcac9eab5404341",
+        "rag-9c829a59affdd531",
+        "rag-3a72d4c38d9a0bb7"
+      ]
+    },
+    {
+      "id": "dizziness__hemorrhagic_stroke",
+      "name": "Hemorrhagic Stroke",
+      "retrieval_query": "Hemorrhagic Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-e5ea3eafe991e33a"
+      ],
+      "disease_rag_source_ids": [
+        "rag-e5ea3eafe991e33a",
+        "rag-a33926a5c3b5389c",
+        "rag-ffc04298df227587",
+        "rag-ae1f46fdf3eef001"
+      ]
+    },
+    {
+      "id": "dizziness__perilymphatic_fistula",
+      "name": "Perilymphatic Fistula",
+      "retrieval_query": "Perilymphatic Fistula diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-da206d8bd5416019",
+        "rag-d61360e166d7fe23"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-fcd79cf716726ced",
+        "rag-44143091d8ca8240",
+        "rag-d0a31c0f0dfc4f38"
+      ]
+    },
+    {
+      "id": "dizziness__benign_paroxysmal_positional_vertigo",
+      "name": "Benign Paroxysmal Positional Vertigo",
+      "retrieval_query": "Benign Paroxysmal Positional Vertigo diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-eedb84403963e781"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-3a72d4c38d9a0bb7",
+        "rag-0c445423fb371061",
+        "rag-80121733d16edb20"
+      ]
+    },
+    {
+      "id": "dizziness__syncope",
+      "name": "Syncope",
+      "retrieval_query": "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-f09c5253c7a82445"
+      ],
+      "disease_rag_source_ids": [
+        "rag-5bcac9eab5404341",
+        "rag-ff175cd271f88014",
+        "rag-9569f87b2d38b7d4",
+        "rag-d71a0a73f65f79a2"
+      ]
+    },
+    {
+      "id": "dizziness__post_concussion_syndrome",
+      "name": "Post-concussion syndrome",
+      "retrieval_query": "Post-concussion syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-bb184b814cb80dda"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-7a57a456accfeeb5",
+        "rag-d123446aa5e45f44"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "dizziness",
+    "evidence_status": "sufficient",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": "headache",
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-5bcac9eab5404341",
+        "rag-9c829a59affdd531",
+        "rag-3a72d4c38d9a0bb7",
+        "rag-e5ea3eafe991e33a",
+        "rag-ffc04298df227587",
+        "rag-fcd79cf716726ced",
+        "rag-44143091d8ca8240",
+        "rag-d0a31c0f0dfc4f38",
+        "rag-0c445423fb371061",
+        "rag-80121733d16edb20",
+        "rag-ff175cd271f88014",
+        "rag-9569f87b2d38b7d4",
+        "rag-d71a0a73f65f79a2",
+        "rag-7a57a456accfeeb5",
+        "rag-d123446aa5e45f44"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "dizziness__perilymphatic_fistula__hearing_loss",
+        "description": "聽力下降或改變。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "dizziness__perilymphatic_fistula"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-fcd79cf716726ced",
+          "rag-44143091d8ca8240",
+          "rag-d0a31c0f0dfc4f38"
+        ]
+      },
+      {
+        "code": "dizziness__perilymphatic_fistula__tinnitus",
+        "description": "耳鳴。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "dizziness__perilymphatic_fistula"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-fcd79cf716726ced",
+          "rag-44143091d8ca8240",
+          "rag-d0a31c0f0dfc4f38"
+        ]
+      },
+      {
+        "code": "dizziness__benign_paroxysmal_positional_vertigo__positional_trigger",
+        "description": "Dizziness is triggered by changes in head position.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "dizziness__benign_paroxysmal_positional_vertigo"
+        ],
+        "source_ids": [
+          "rag-0c445423fb371061"
+        ]
+      },
+      {
+        "code": "dizziness__benign_paroxysmal_positional_vertigo__recurrent_episodes",
+        "description": "Patient has experienced recurrences of vertigo episodes.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "dizziness__benign_paroxysmal_positional_vertigo"
+        ],
+        "source_ids": [
+          "rag-80121733d16edb20"
+        ]
+      },
+      {
+        "code": "dizziness__benign_paroxysmal_positional_vertigo__experimental_dizziness_benign_parox__731149ea0f",
+        "description": "Dizziness is accompanied by focal neurologic deficits, such as one-sided weakness or numbness, difficulty speaking, or difficulty walking.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "dizziness__benign_paroxysmal_positional_vertigo"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "dizziness__benign_paroxysmal_positional_vertigo__experimental_dizziness_benign_parox__2b7a297334",
+        "description": "Dizziness is accompanied by a severe headache.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "dizziness__benign_paroxysmal_positional_vertigo"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "dizziness__benign_paroxysmal_positional_vertigo__experimental_dizziness_benign_parox__5777088471",
+        "description": "Dizziness is accompanied by chest pain or difficulty breathing.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "dizziness__benign_paroxysmal_positional_vertigo"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "dizziness__benign_paroxysmal_positional_vertigo__experimental_dizziness_benign_parox__a61d516533",
+        "description": "Dizziness is accompanied by palpitations.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "dizziness__benign_paroxysmal_positional_vertigo"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "dizziness__syncope__chest_pain",
+        "description": "Patient reports chest pain associated with dizziness.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "dizziness__syncope"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "code": "dizziness__syncope__dyspnea",
+        "description": "Patient reports difficulty breathing associated with dizziness.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "dizziness__syncope"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "code": "dizziness__syncope__palpitations",
+        "description": "Patient reports palpitations associated with dizziness.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "dizziness__syncope"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "code": "dizziness__syncope__severe_headache",
+        "description": "Patient reports a severe headache associated with dizziness.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "dizziness__syncope"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "code": "dizziness__syncope__focal_neurologic_deficits",
+        "description": "Patient reports focal neurologic deficits, such as one-sided weakness or numbness, associated with dizziness.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "dizziness__syncope"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "code": "dizziness__syncope__ataxia",
+        "description": "Patient reports ataxia or difficulty with coordinated movements associated with dizziness.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "dizziness__syncope"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "code": "dizziness__syncope__dysarthria",
+        "description": "Patient reports dysarthria or difficulty speaking associated with dizziness.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "dizziness__syncope"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "dizziness_sensation_type",
+        "option": "眩暈",
+        "mapping": {
+          "findings": [
+            "vertigo"
+          ]
+        },
+        "disease_ids": [
+          "dizziness__central_vertigo",
+          "dizziness__hemorrhagic_stroke",
+          "dizziness__perilymphatic_fistula",
+          "dizziness__benign_paroxysmal_positional_vertigo",
+          "dizziness__post_concussion_syndrome"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-9c829a59affdd531",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-ffc04298df227587",
+          "rag-fcd79cf716726ced",
+          "rag-44143091d8ca8240",
+          "rag-d0a31c0f0dfc4f38",
+          "rag-0c445423fb371061",
+          "rag-80121733d16edb20",
+          "rag-7a57a456accfeeb5",
+          "rag-d123446aa5e45f44"
+        ]
+      },
+      {
+        "field": "dizziness_associated_symptoms",
+        "option": "手腳無力、麻木、說話困難或走路困難",
+        "mapping": {
+          "findings": [
+            "focal_neurologic_symptom",
+            "dizziness__benign_paroxysmal_positional_vertigo__experimental_dizziness_benign_parox__731149ea0f",
+            "dizziness__syncope__focal_neurologic_deficits",
+            "dizziness__syncope__dysarthria",
+            "dizziness__syncope__ataxia"
+          ]
+        },
+        "disease_ids": [
+          "dizziness__central_vertigo",
+          "dizziness__hemorrhagic_stroke",
+          "dizziness__benign_paroxysmal_positional_vertigo",
+          "dizziness__syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-e5ea3eafe991e33a",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "field": "dizziness_associated_symptoms",
+        "option": "頭痛，特別是嚴重或突然發作的",
+        "mapping": {
+          "findings": [
+            "symptom_headache",
+            "dizziness__benign_paroxysmal_positional_vertigo__experimental_dizziness_benign_parox__2b7a297334",
+            "dizziness__syncope__severe_headache"
+          ]
+        },
+        "disease_ids": [
+          "dizziness__central_vertigo",
+          "dizziness__hemorrhagic_stroke",
+          "dizziness__benign_paroxysmal_positional_vertigo",
+          "dizziness__syncope",
+          "dizziness__post_concussion_syndrome"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-e5ea3eafe991e33a",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2",
+          "rag-d123446aa5e45f44"
+        ]
+      },
+      {
+        "field": "dizziness_preceding_events",
+        "option": "頭部外傷",
+        "mapping": {
+          "findings": [
+            "recent_head_trauma"
+          ]
+        },
+        "disease_ids": [
+          "dizziness__central_vertigo",
+          "dizziness__perilymphatic_fistula",
+          "dizziness__post_concussion_syndrome"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-9c829a59affdd531",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-fcd79cf716726ced",
+          "rag-44143091d8ca8240",
+          "rag-d0a31c0f0dfc4f38",
+          "rag-d123446aa5e45f44"
+        ]
+      },
+      {
+        "field": "dizziness_preceding_events",
+        "option": "感染",
+        "mapping": {
+          "findings": [
+            "recent_infection"
+          ]
+        },
+        "disease_ids": [
+          "dizziness__central_vertigo"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-9c829a59affdd531",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "field": "dizziness_onset_pattern",
+        "option": "突然發作",
+        "mapping": {
+          "onset": "sudden"
+        },
+        "disease_ids": [
+          "dizziness__hemorrhagic_stroke",
+          "dizziness__perilymphatic_fistula"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-f09c5253c7a82445",
+          "rag-fcd79cf716726ced",
+          "rag-44143091d8ca8240",
+          "rag-d0a31c0f0dfc4f38"
+        ]
+      },
+      {
+        "field": "dizziness_associated_symptoms",
+        "option": "噁心、嘔吐、解黑便或腹痛",
+        "mapping": {
+          "findings": [
+            "nausea",
+            "vomiting"
+          ]
+        },
+        "disease_ids": [
+          "dizziness__hemorrhagic_stroke",
+          "dizziness__perilymphatic_fistula",
+          "dizziness__post_concussion_syndrome"
+        ],
+        "source_ids": [
+          "rag-e5ea3eafe991e33a",
+          "rag-f09c5253c7a82445",
+          "rag-fcd79cf716726ced",
+          "rag-44143091d8ca8240",
+          "rag-d0a31c0f0dfc4f38",
+          "rag-7a57a456accfeeb5",
+          "rag-d123446aa5e45f44"
+        ]
+      },
+      {
+        "field": "dizziness_associated_symptoms",
+        "option": "聽力改變，如聽力下降或耳鳴",
+        "mapping": {
+          "findings": [
+            "dizziness__perilymphatic_fistula__hearing_loss",
+            "dizziness__perilymphatic_fistula__tinnitus"
+          ]
+        },
+        "disease_ids": [
+          "dizziness__perilymphatic_fistula"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-fcd79cf716726ced",
+          "rag-44143091d8ca8240",
+          "rag-d0a31c0f0dfc4f38"
+        ]
+      },
+      {
+        "field": "dizziness_triggers",
+        "option": "轉動頭部",
+        "mapping": {
+          "findings": [
+            "dizziness__benign_paroxysmal_positional_vertigo__positional_trigger"
+          ]
+        },
+        "disease_ids": [
+          "dizziness__benign_paroxysmal_positional_vertigo"
+        ],
+        "source_ids": [
+          "rag-0c445423fb371061"
+        ]
+      },
+      {
+        "field": "dizziness_triggers",
+        "option": "某些活動和姿勢",
+        "mapping": {
+          "findings": [
+            "dizziness__benign_paroxysmal_positional_vertigo__positional_trigger"
+          ]
+        },
+        "disease_ids": [
+          "dizziness__benign_paroxysmal_positional_vertigo"
+        ],
+        "source_ids": [
+          "rag-0c445423fb371061"
+        ]
+      },
+      {
+        "field": "dizziness_previous_episodes",
+        "option": "是",
+        "mapping": {
+          "findings": [
+            "dizziness__benign_paroxysmal_positional_vertigo__recurrent_episodes"
+          ]
+        },
+        "disease_ids": [
+          "dizziness__benign_paroxysmal_positional_vertigo"
+        ],
+        "source_ids": [
+          "rag-80121733d16edb20"
+        ]
+      },
+      {
+        "field": "dizziness_associated_symptoms",
+        "option": "胸痛、心悸、呼吸困難或心跳快速或不規則的感覺",
+        "mapping": {
+          "findings": [
+            "dizziness__benign_paroxysmal_positional_vertigo__experimental_dizziness_benign_parox__5777088471",
+            "dizziness__benign_paroxysmal_positional_vertigo__experimental_dizziness_benign_parox__a61d516533",
+            "dizziness__syncope__chest_pain",
+            "dizziness__syncope__palpitations",
+            "dizziness__syncope__dyspnea"
+          ]
+        },
+        "disease_ids": [
+          "dizziness__benign_paroxysmal_positional_vertigo",
+          "dizziness__syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "field": "dizziness_sensation_type",
+        "option": "要暈倒",
+        "mapping": {
+          "findings": [
+            "syncope"
+          ]
+        },
+        "disease_ids": [
+          "dizziness__syncope"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "dizziness__perilymphatic_fistula",
+        "name": "Perilymphatic Fistula",
+        "must_not_miss": false,
+        "retrieval_query": "Perilymphatic Fistula diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "vertigo",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-fcd79cf716726ced",
+              "rag-44143091d8ca8240",
+              "rag-d0a31c0f0dfc4f38"
+            ]
+          },
+          {
+            "fact": "dizziness__perilymphatic_fistula__hearing_loss",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-fcd79cf716726ced",
+              "rag-44143091d8ca8240",
+              "rag-d0a31c0f0dfc4f38"
+            ]
+          },
+          {
+            "fact": "recent_head_trauma",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-fcd79cf716726ced",
+              "rag-44143091d8ca8240",
+              "rag-d0a31c0f0dfc4f38"
+            ]
+          },
+          {
+            "fact": "onset_sudden",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-fcd79cf716726ced",
+              "rag-44143091d8ca8240",
+              "rag-d0a31c0f0dfc4f38"
+            ]
+          },
+          {
+            "fact": "dizziness__perilymphatic_fistula__tinnitus",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-fcd79cf716726ced",
+              "rag-44143091d8ca8240",
+              "rag-d0a31c0f0dfc4f38"
+            ]
+          },
+          {
+            "fact": "nausea",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-fcd79cf716726ced",
+              "rag-44143091d8ca8240",
+              "rag-d0a31c0f0dfc4f38"
+            ]
+          },
+          {
+            "fact": "vomiting",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-fcd79cf716726ced",
+              "rag-44143091d8ca8240",
+              "rag-d0a31c0f0dfc4f38"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-fcd79cf716726ced",
+          "rag-44143091d8ca8240",
+          "rag-d0a31c0f0dfc4f38"
+        ]
+      },
+      {
+        "id": "dizziness__benign_paroxysmal_positional_vertigo",
+        "name": "Benign Paroxysmal Positional Vertigo",
+        "must_not_miss": false,
+        "retrieval_query": "Benign Paroxysmal Positional Vertigo diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "vertigo",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-0c445423fb371061",
+              "rag-80121733d16edb20"
+            ]
+          },
+          {
+            "fact": "dizziness__benign_paroxysmal_positional_vertigo__positional_trigger",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-0c445423fb371061"
+            ]
+          },
+          {
+            "fact": "dizziness__benign_paroxysmal_positional_vertigo__recurrent_episodes",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-80121733d16edb20"
+            ]
+          },
+          {
+            "fact": "dizziness__benign_paroxysmal_positional_vertigo__experimental_dizziness_benign_parox__731149ea0f",
+            "status": "absent",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          },
+          {
+            "fact": "dizziness__benign_paroxysmal_positional_vertigo__experimental_dizziness_benign_parox__2b7a297334",
+            "status": "absent",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-0c445423fb371061",
+          "rag-80121733d16edb20",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "id": "dizziness__syncope",
+        "name": "Syncope",
+        "must_not_miss": false,
+        "retrieval_query": "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "syncope",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-5bcac9eab5404341",
+              "rag-ff175cd271f88014",
+              "rag-9569f87b2d38b7d4",
+              "rag-d71a0a73f65f79a2"
+            ]
+          },
+          {
+            "fact": "dizziness__syncope__chest_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-5bcac9eab5404341",
+              "rag-ff175cd271f88014",
+              "rag-9569f87b2d38b7d4",
+              "rag-d71a0a73f65f79a2"
+            ]
+          },
+          {
+            "fact": "dizziness__syncope__dyspnea",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-5bcac9eab5404341",
+              "rag-ff175cd271f88014",
+              "rag-9569f87b2d38b7d4",
+              "rag-d71a0a73f65f79a2"
+            ]
+          },
+          {
+            "fact": "dizziness__syncope__palpitations",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-5bcac9eab5404341",
+              "rag-ff175cd271f88014",
+              "rag-9569f87b2d38b7d4",
+              "rag-d71a0a73f65f79a2"
+            ]
+          },
+          {
+            "fact": "dizziness__syncope__focal_neurologic_deficits",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-5bcac9eab5404341",
+              "rag-ff175cd271f88014",
+              "rag-9569f87b2d38b7d4",
+              "rag-d71a0a73f65f79a2"
+            ]
+          },
+          {
+            "fact": "dizziness__syncope__severe_headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-5bcac9eab5404341",
+              "rag-ff175cd271f88014",
+              "rag-9569f87b2d38b7d4",
+              "rag-d71a0a73f65f79a2"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "id": "dizziness__post_concussion_syndrome",
+        "name": "Post-concussion syndrome",
+        "must_not_miss": false,
+        "retrieval_query": "Post-concussion syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "recent_head_trauma",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-d123446aa5e45f44"
+            ]
+          },
+          {
+            "fact": "symptom_headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-d123446aa5e45f44"
+            ]
+          },
+          {
+            "fact": "vertigo",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-7a57a456accfeeb5",
+              "rag-d123446aa5e45f44"
+            ]
+          },
+          {
+            "fact": "nausea",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-7a57a456accfeeb5",
+              "rag-d123446aa5e45f44"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-7a57a456accfeeb5",
+          "rag-d123446aa5e45f44"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_dizziness__benign_paroxysmal_positional_vertigo__focal_neurologic_deficits",
+        "label": "Dizziness with focal neurologic deficits",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "dizziness"
+          ],
+          "any_findings": [
+            "dizziness__benign_paroxysmal_positional_vertigo__experimental_dizziness_benign_parox__731149ea0f"
+          ]
+        },
+        "possible_conditions": [
+          "Stroke"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_dizziness__benign_paroxysmal_positional_vertigo__severe_headache",
+        "label": "Dizziness with severe headache",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "dizziness"
+          ],
+          "any_findings": [
+            "dizziness__benign_paroxysmal_positional_vertigo__experimental_dizziness_benign_parox__2b7a297334"
+          ]
+        },
+        "possible_conditions": [
+          "Cerebrovascular event"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_dizziness__benign_paroxysmal_positional_vertigo__cardiac_symptoms",
+        "label": "Dizziness with chest pain, dyspnea, or palpitations",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "dizziness"
+          ],
+          "any_findings": [
+            "dizziness__benign_paroxysmal_positional_vertigo__experimental_dizziness_benign_parox__5777088471",
+            "dizziness__benign_paroxysmal_positional_vertigo__experimental_dizziness_benign_parox__a61d516533"
+          ]
+        },
+        "possible_conditions": [
+          "Cardiac event"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_dizziness__post_concussion_syndrome__focal_neurologic_deficits",
+        "label": "Dizziness with focal neurologic deficits",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "dizziness"
+          ],
+          "any_findings": [
+            "focal_neurologic_symptom",
+            "diplopia",
+            "gait_unsteadiness",
+            "speech_difficulty"
+          ]
+        },
+        "possible_conditions": [
+          "Post-concussion syndrome"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_dizziness__post_concussion_syndrome__severe_headache",
+        "label": "Dizziness with severe headache",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "dizziness"
+          ],
+          "any_findings": [
+            "symptom_headache"
+          ],
+          "severity_in": [
+            "severe"
+          ]
+        },
+        "possible_conditions": [
+          "Post-concussion syndrome"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Detailed physical examination findings (e.g., nystagmus characteristics, specific neurologic tests) to differentiate central from peripheral vertigo.",
+        "reason": "The model cannot process physical examination findings, which are critical for diagnosing vertigo etiologies."
+      },
+      {
+        "requirement": "Neuroimaging results (CT/MRI).",
+        "reason": "The model cannot interpret or request diagnostic imaging, which is a key tool for evaluating central vertigo."
+      },
+      {
+        "requirement": "Patient's medication history, personal or familial history of cardiac disease.",
+        "reason": "The model does not have access to the user's detailed medical history, which is cited as important context."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Differentiate between ischemic and hemorrhagic stroke based on symptoms.",
+        "reason": "RAG sources explicitly state that no historical feature reliably distinguishes between hemorrhagic and ischemic stroke (rag-e5ea3eafe991e33a, rag-ffc04298df227587). This requires neuroimaging."
+      },
+      {
+        "requirement": "Assess for marked hypertension.",
+        "reason": "The model cannot process or interpret vital sign measurements like blood pressure readings."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Differentiate Perilymphatic Fistula from Meniere's syndrome.",
+        "reason": "The provided RAG sources state that distinguishing between Perilymphatic Fistula and Meniere's syndrome can be difficult in the absence of a definite traumatic event, which is beyond the scope of a questionnaire."
+      },
+      {
+        "requirement": "Incorporate physical exam findings like nystagmus or posturography results into the assessment.",
+        "reason": "The model cannot process physical examination findings or specialized test results. RAG sources mention these as key diagnostic elements, but they cannot be collected via a patient-facing questionnaire."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Determine specific age ranges for differential diagnosis (e.g., labyrinthitis/vestibular neuronitis in young patients, BPPV onset in mid-50s).",
+        "reason": "The model cannot interpret or apply specific numeric age thresholds from text."
+      },
+      {
+        "requirement": "Perform physical examination maneuvers (e.g., Dix-Hallpike test).",
+        "reason": "The model cannot generate logic for physical examinations, which are outside the scope of a questionnaire-based system."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Detailed assessment of patient's medication history.",
+        "reason": "The provided questionnaire and RAG sources do not support the collection or interpretation of specific medication lists."
+      },
+      {
+        "requirement": "Assessment of personal or familial history of cardiac disease.",
+        "reason": "The provided questionnaire and RAG sources do not include questions to systematically collect family or detailed personal medical history."
+      },
+      {
+        "requirement": "Measurement of glucose level.",
+        "reason": "This requires a physical exam or lab test, which is outside the scope of a questionnaire-based system."
+      },
+      {
+        "requirement": "Analysis of vital signs.",
+        "reason": "This requires a physical exam, which is outside the scope of a questionnaire-based system."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Determine if imaging (CT, MRI, SPECT, MEG) is indicated for post-concussion syndrome.",
+        "reason": "The decision to order imaging requires clinical judgment, physical examination findings, and consideration of specific red flags (e.g., concern for intracranial hemorrhage) that are beyond the scope of this offline model."
+      },
+      {
+        "requirement": "Provide a prognosis for post-concussion syndrome, including recovery time.",
+        "reason": "Prognosis is highly variable and depends on individual patient factors. The provided text notes that most patients recover in less than 3 months, but this is a general statistic and not suitable for individual patient-care logic."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, semantic_options[0], semantic_options[3], semantic_options[4], safety_proposals[0], profiles[0], profiles[0].clues[5], profiles[0].clues[6], profiles[0].clues[7]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-9c829a59affdd531",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The RAG sources indicate that vertigo is rarely an isolated symptom of stroke (rag-ffc04298df227587). The profile and safety rules should prioritize the co-occurrence of dizziness/vertigo with other neurological deficits.",
+        "source_ids": [
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-e5ea3eafe991e33a",
+          "rag-a33926a5c3b5389c",
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: profiles[0].clues[7]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-e5ea3eafe991e33a",
+          "rag-a33926a5c3b5389c",
+          "rag-ffc04298df227587",
+          "rag-ae1f46fdf3eef001"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The profile for Perilymphatic Fistula is based on classic presentations described in the RAG sources, including vertigo, hearing loss, and a potential history of trauma. However, sources also note that symptoms can be vague, episodic, or delayed, which may limit the sensitivity of this profile.",
+        "source_ids": [
+          "rag-fcd79cf716726ced"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-fcd79cf716726ced",
+          "rag-44143091d8ca8240",
+          "rag-d0a31c0f0dfc4f38"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[3], semantic_options[4], profiles[0], profiles[0].clues[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-fcd79cf716726ced",
+          "rag-44143091d8ca8240",
+          "rag-d0a31c0f0dfc4f38"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "Local compiler mechanically namespaced generated codes and updated all internal references; no clinical values or conditions were changed.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-0c445423fb371061",
+          "rag-80121733d16edb20"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-80121733d16edb20"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-0c445423fb371061",
+          "rag-80121733d16edb20"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], fact_proposals[4], fact_proposals[5], fact_proposals[6], fact_proposals[7], fact_proposals[8], semantic_options[0], semantic_options[1]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-d123446aa5e45f44"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, semantic_options[1], semantic_options[2], profiles[0], profiles[0].clues[2], profiles[0].clues[3]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-7a57a456accfeeb5",
+          "rag-d123446aa5e45f44"
+        ]
+      }
+    ]
+  }
+}

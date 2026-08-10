@@ -139,6 +139,12 @@ class SpeechTranscriber:
             "loaded": self.loaded,
         }
 
+    def warmup(self) -> dict[str, Any]:
+        """Load the configured local ASR pipeline before the first recording."""
+        if self.provider == "breeze":
+            self._load_breeze_pipeline()
+        return self.status()
+
     def _load_breeze_pipeline(self) -> Any:
         if self._pipeline is not None:
             return self._pipeline

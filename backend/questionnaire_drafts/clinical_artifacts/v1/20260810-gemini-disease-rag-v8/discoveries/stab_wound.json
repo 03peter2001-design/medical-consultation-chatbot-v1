@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "stab_wound",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "b6653f65644082e19137fa8d051199ec0140e65d1d55d6ad1a9e2a8320a805ec",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "stab wound stab wound differential diagnosis diseases clinical presentation symptoms history",
+      "stab wound stab wound red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "620a45ba35f1b68dff808192b94d1b6a38783d304770c6f0c1eb5c55db5934a2"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "b9fa88a0c348fdf2ff64c22835190ce4f6eac790ab1d1449714e4cbd80807a5d",
+    "generated_at": "2026-08-10T04:13:29+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-6e675c492dd7b55b",
+      "chunk_id": "abc2f0cdfd5e5d758428_1",
+      "title": "Arthritis as a Manifestation of Systemic Disease: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/334845-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "stab wound stab wound differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4057,
+      "excerpt": "Hyperlipidemia Hemochromatosis Syphilis Infections Certain malignancies Post-acute sequelae of COVID-19 (PACS; \"long COVID\") is characterized by a wide spectrum of symptoms similar to fibromyalgia. A chronic pain syndrome phenotype with primarily arthralgia and myalgia has been identified in 16-24% of patients. Some rheumatologic illnesses (eg, polymyalgia rheumatica, fibromyalgia, polymyositis) can also present as arthralgias without true arthritis. Most patients who complain of joint pain and swelling, muscle pain, or limited range of motion have a primary disorder of the joint, such as",
+      "text_sha256": "235cfebe2676cad861415e519a0d69ed0d587ff7317a84acaa4429e72eb10c64"
+    },
+    {
+      "id": "rag-9569f87b2d38b7d4",
+      "chunk_id": "53b354e14520b0f0479f_7",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "stab wound stab wound differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4224,
+      "excerpt": "This complex syndrome has been further classified into two subtypes:J Type I: No evidence of peripheral nerve injury (formerly reflex sympathetic dystrophy)J Type II: Peripheral nerve injury present (formerly causalgia )J Epidemiology Frequency CRPS occurs in approximately 1 15% of peripheral nerve injury cases. Schwartzman states that CRPS usually occurs secondary to fractures, sprains, and trivial soft tissue injury. The incidence after fractures and contusions ranges from 10% to 30%. While some cases are associated with an identifiable nerve injury, many are not. Even \"microtrauma\" as might",
+      "text_sha256": "f92854d983ca7db67bc2172e7aa263a6e48ca5fce7aa1fad47b16359cb9a44c5"
+    },
+    {
+      "id": "rag-2439651f6018f3c6",
+      "chunk_id": "1f775e978c93f6c93fa0_16",
+      "title": "Soft Tissue Injuries of the Hand: Practice Essentials, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/826498-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "stab wound stab wound differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4476,
+      "excerpt": "and crush injuries to the hand result in nerve damage. Nerve injury is divided into 3 types, as follows: Neurapraxial injury occurs when a nerve is bruised or stunned but remains essentially intact. Axonotmesis describes a partial injury in which the axonal core of a nerve is damaged but the myelin sheath remains intact. These injuries usually regenerate at a rate of 1-3 mm per day. Neurotmesis is complete disruption of both axons and myelin sheath. It requires reapproximation of the nerve endings for healing to occur. Dislocations The DIP joint is stabilized not only by collateral ligaments",
+      "text_sha256": "d1f9891f1dba08f8dfe4fdbba0983a316094ebc00dfb94b9a7d4142f75217c15"
+    },
+    {
+      "id": "rag-864a577a350e6914",
+      "chunk_id": "b99371e17aeaf2183ed7_1",
+      "title": "Rotator Cuff Injury Management in the ED: Practice Essentials, Pathophysiology, Prognosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827841-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "stab wound stab wound differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4525,
+      "excerpt": "abnormalities. Intrinsic factors also exist, such as altered tendon vascular supply, microstructural collagen fiber abnormalities, and regional variations. Pain or contracture may limit shoulder passive range of motion in patients with a rotator cuff tear, with mild or moderate limitations occurring in more than 40% of patients who have full-thickness tears. The most common causes are bursitis and synovitis due to the tear and frozen shoulde due to contracture of the soft tissues around the glenohumeral joint. Although pain management of this acute injury primarily consists of nonsteroidal",
+      "text_sha256": "f9569e6aa23179f0bb4ca117751479116039d42d71d3799417ea065a99745339"
+    },
+    {
+      "id": "rag-579accb9251e1a3e",
+      "chunk_id": "ad1ba37a75d2bf17e98b_13",
+      "title": "Dermatologic Manifestations of Necrotizing Fasciitis: Overview, Types of Necrotizing Fasciitis, Clinical Evaluation",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1054438-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "stab wound stab wound differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4959,
+      "excerpt": "wound cellulitis; however, the severe pain and systemic toxicity reflect the widespread tissue necrosis underlying the apparently viable skin. When surgically confirmed necrotizing fasciitis cases were compared with 12 patients with superficial soft-tissue infection, the patients with necrotizing fasciitis were more likely to have skin areas of ischemia or necrosis, fluid-filled vesicles, and severe sepsis or septic shock. Gas usually is not evident in affected tissues in type II necrotizing fasciitis. Although the following features can occur with cellulitis, they may instead suggest",
+      "text_sha256": "b75314bf961732f22edd056cba29ada574c2c92a8d2d88998409ab243c129569"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "stab wound stab wound differential diagnosis diseases clinical presentation symptoms history",
+        "stab wound stab wound red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5036,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-d002eda8880551d5",
+      "chunk_id": "709d501e5392c47ae3b5_18",
+      "title": "Lyme Disease: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/330178-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "stab wound stab wound differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5116,
+      "excerpt": "migrans, which currently is referred to simply as erythema migrans (EM). In the 1920s, Garin and Bujadoux described a patient with meningoencephalitis, painful sensory radiculitis, and erythema migrans following a tick bite, which they attributed to a spirochetal infection. By the mid 1930s, neurologic manifestations associated with Ixodes ticks (also known as deer ticks) were recognized and were known as tick-borne meningoencephalitis. In the 1940s, Bannwarth described several cases of chronic lymphocytic meningitis and polyradiculoneuritis, some of which were accompanied by erythematous skin",
+      "text_sha256": "752c65aba9621ee838afdaee427034c99e5d929d3e2762a4f947774b862ea402"
+    },
+    {
+      "id": "rag-2dcf5e11b2eac290",
+      "chunk_id": "53b354e14520b0f0479f_8",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "stab wound stab wound red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5692,
+      "excerpt": "with an identifiable nerve injury, many are not. Even \"microtrauma\" as might occur with an immunization may be responsible. The upper extremities are more likely to be involved than the lower. Entities that have led to RSDS include the following: Head injury Stroke Polio Amyotrophic lateral sclerosis (ALS) Myocardial infarction Polymyalgia rheumatica Operative procedures (eg, carpal tunnel release) Brachial plexopathy Cast/splint immobilization Minor extremity injury Prolonged bedrest A retrospective epidemiologic analysis of CRPS patients compared to patients with other pain disorders found",
+      "text_sha256": "dff131061a4f6ee0e0fae46403a4db768ffbf78d3bd8472e31967eb2865e7b0c"
+    },
+    {
+      "id": "rag-886d20366831faf8",
+      "chunk_id": "60a8e9fb259d62f055c2_34",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "stab wound stab wound red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5921,
+      "excerpt": "muscle injury, but not if they have both. Therefore, in the combined setting of acute MI and skeletal muscle injury (rhabdomyolysis, heavy exercise, polymyositis), the fall in sensitivity is significant. Note that the diagnosis of acute MI must not be based on an elevated relative index alone, because the relative index may be elevated in clinical settings when either the total CK or the CK-MB is within normal limits. The relative index is only clinically useful when both the total CK and the CK-MB levels are increased. CK-MB isoforms The CK-MB isoenzyme exists as two isoforms: CK-MB1 and",
+      "text_sha256": "3aaf7e942e17cae9e7853f0a1ae6eaaeaadbe675ef7b3f174afcfca41ac5a398"
+    }
+  ],
+  "discovery": {
+    "route": "stab_wound",
+    "evidence_status": "insufficient",
+    "diseases": [],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The disposition for this route is 'urgent'. As per instructions, no disease differentials are proposed for urgent or handoff dispositions, which undergo safety review only.",
+        "source_ids": [
+          "rag-2439651f6018f3c6",
+          "rag-2dcf5e11b2eac290",
+          "rag-579accb9251e1a3e",
+          "rag-6e675c492dd7b55b",
+          "rag-864a577a350e6914",
+          "rag-886d20366831faf8",
+          "rag-9569f87b2d38b7d4",
+          "rag-d002eda8880551d5",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope discovery citations with the complete route RAG evidence pack for: review_notes[0]. These citations remain unverified.",
+        "source_ids": [
+          "rag-2439651f6018f3c6",
+          "rag-2dcf5e11b2eac290",
+          "rag-579accb9251e1a3e",
+          "rag-6e675c492dd7b55b",
+          "rag-864a577a350e6914",
+          "rag-886d20366831faf8",
+          "rag-9569f87b2d38b7d4",
+          "rag-d002eda8880551d5",
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ]
+  }
+}

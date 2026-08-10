@@ -1,0 +1,1594 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "fever",
+  "label": "發燒",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "e4a2a5b6599b6073734ec8ef09c6d42e39ab3284b2635b71e656b69147bea31d",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"fever fever differential diagnosis diseases clinical presentation symptoms history\",\"Rheumatic Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Meningitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Q Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"fever fever red flags emergency warning signs urgent referral rule out\",\"Mediterranean Spotted Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Scarlet Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Viral Hemorrhagic Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "30704de99274ee666733c6f3cd834f94f604b6dadcb4feb95f9cab56414ac619"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "f53974347a218ee82a2e400a15595970c3ae49507ac4deafba1987aa547e9069",
+    "generated_at": "2026-08-10T04:06:31+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-2bd559b5496c39e1",
+      "chunk_id": "5039574c392446d9404b_1",
+      "title": "Rheumatic Fever: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/236582-overview",
+      "routes": [
+        "headache",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "fever__rheumatic_fever"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history",
+        "Rheumatic Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3642,
+      "excerpt": "Clinical manifestations and time course. Pathophysiology ARF is characterized by nonsuppurative inflammatory lesions of the joints, heart, subcutaneous tissue, and central nervous system. An extensive literature search has shown that, at least in developed countries, rheumatic fever follows pharyngeal infection with rheumatogenic group A streptococci. The risk of developing rheumatic fever after an episode of streptococcal pharyngitis has been estimated at 0.3-3%. Investigations of rheumatic fever occurring in the aboriginal populations of Australia suggest that streptococcal skin infections",
+      "text_sha256": "c1641db1df64dd9ab99a3d6d163294920155159b8d63be6110df9709c0fd41de"
+    },
+    {
+      "id": "rag-df30ee352c228b98",
+      "chunk_id": "a663d18c5f77da4d66fd_26",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "fever__meningitis"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history",
+        "Meningitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3162,
+      "excerpt": "specific meningeal signs, such as the Kernig or Brudzinski sign, may not be present. A hemorrhagic rash is classically described as resulting from overwhelming systemic bacterial infection due to meningococcemia but may be due to other (usually serious) infections. The presence of petechiae or purpura in febrile children indicates the need for prompt evaluation and therapy. Clinical observation scales have been developed to aid in the determination of the degree of illness. Clinical observation by house staff and seasoned clinicians has produced inconsistent results over the reliability and",
+      "text_sha256": "b03f8637294b3e707e6947f97f5ce6c6972647fa1b7817bd9b5c591b70b9bcf1"
+    },
+    {
+      "id": "rag-d0da7d31f8cfa17e",
+      "chunk_id": "20e49fc9d5997e5585a9_14",
+      "title": "Dermatologic Manifestations of Viral Hemorrhagic Fevers: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1134475-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.317,
+      "excerpt": "in hemorrhagic fever with different complications, symptoms, and severity, as previously discussed. See the list below : Flaviviruses: Yellow fever, dengue, Kyasanur Forest disease, Alkhumra viruses, Omsk hemorrhagic fever Filoviruses: Ebola and Marburg virus Arenaviruses: Lassa and other Old World arenaviruses and New World arenaviruses Hantaviruses, nairoviruses, and phenuiviruses, formerly included in Bunyaviridae family: Rift Valley fever, Congo-Crimean hemorrhagic fever (CCHF), Huaiyangshan virus (alternatively known as severe fever with thrombocytopenia syndrome virus) and hantaviruses",
+      "text_sha256": "d0881386f77d66691764603051eb47e6e9b40269f3a8f86bcc6294a1e258ae38"
+    },
+    {
+      "id": "rag-bcbb563b4c3d5099",
+      "chunk_id": "0ea09dc2a01d498032ed_7",
+      "title": "Mediterranean Spotted Fever (Boutonneuse Fever): Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/221240-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3404,
+      "excerpt": "isolated lymphadenopathy is the only symptom. R conorii infection should be considered in patients with isolated lymphadenopathy who live in or have traveled to an endemic area, even when other more specific features are not present. In this setting, care should be taken to examine the area distal to the lymphadenopathy for an inoculation eschar, which, if present, can help support the diagnosis. Although MSF is usually a mild disease, severe complications including neurologic involvement does occur in 6-10% of cases. Neurologic manifestations can result in a delayed diagnosis and appropriate",
+      "text_sha256": "b21bb80283510ba7b468e22993af591f010341c4666b4746bc55a929dd3f86f1"
+    },
+    {
+      "id": "rag-656bae93d1d8a0a9",
+      "chunk_id": "20e49fc9d5997e5585a9_2",
+      "title": "Dermatologic Manifestations of Viral Hemorrhagic Fevers: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1134475-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.353,
+      "excerpt": "share certain clinical manifestations, regardless of the virus that causes the disease. However, different viruses can cause a range of various clinical problems in addition to viral hemorrhagic fever. Common clinical manifestations of viral hemorrhagic fever are increased capillary permeability, leukopenia, and thrombocytopenia. Viral hemorrhagic fever is manifested by sudden onset, fever, headache, generalized myalgia, backache, petechiae, conjunctivitis, and severe prostration. Various hemorrhagic symptoms follow, ultimately resulting in focal inflammatory reaction and necrosis with",
+      "text_sha256": "bb6c303ce4c37d6c6bca115c1571a4af246611dca482058f82d922e3dceea682"
+    },
+    {
+      "id": "rag-42c74898c5492779",
+      "chunk_id": "42abd839791f077270e0_1",
+      "title": "Q Fever: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/227156-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "fever__q_fever"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history",
+        "Q Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2685,
+      "excerpt": "with normal findings. B: Chest radiograph demonstrating Q fever pneumonia. Signs and symptoms Acute Q fever The 3 main clinical presentations of acute Q fever are as follows: A self-limited, influenzalike febrile illness (up to 40°C) (88-100%) of abrupt onset, which often is accompanied by headache (68-98%) (typically retrobulbar), myalgia (47-69%) (arthralgia is uncommon), chills (68-88%), fatigue (97-100%), and sweats (31-98%); the temperature returns to normal within 5-14 days Pneumonia (predominant in North America), usually mild in nature (crackles auscultated in 50% of cases) or as an",
+      "text_sha256": "253857d731a4f3f18f19b81398fc7734bbc2ff78609f496425f2fb5d54a45fc3"
+    },
+    {
+      "id": "rag-9e19ba8249da3cae",
+      "chunk_id": "5039574c392446d9404b_12",
+      "title": "Rheumatic Fever: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/236582-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "fever__rheumatic_fever"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history",
+        "Rheumatic Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3612,
+      "excerpt": "cohort. Recurrent episodes, with their predisposition to cause or exacerbate valvular damage, occur until middle age. Clinical Presentation",
+      "text_sha256": "04feabcdda36a0835f39f8bbe128cd667110b89985c6cda346a42b72ac280b30"
+    },
+    {
+      "id": "rag-43ec98734c0d3adb",
+      "chunk_id": "0e1ac052c3a4cacff70c_13",
+      "title": "Scarlet Fever: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1053253-overview",
+      "routes": [
+        "safety",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "fever__q_fever",
+        "fever__mediterranean_spotted_fever"
+      ],
+      "retrieval_queries": [
+        "fever fever differential diagnosis diseases clinical presentation symptoms history",
+        "fever fever red flags emergency warning signs urgent referral rule out",
+        "Q Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Mediterranean Spotted Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3798,
+      "excerpt": "complications (eg, peritonsillar abscess, sinusitis, bronchopneumonia, and meningitis) or problems associated with immune-mediated sequelae, rheumatic fever, or glomerulonephritis. Very rare complications, such as septic shock with multisystem organ failure, have been reported. Known complications, such as septicemia, vasculitis, hepatitis, or rheumatic fever, should be considered on a case-by-case basis as determined by the presence of clinical history and examination findings suggestive of those diseases. Localized soft tissue infections may suggest the presence of underlying osteomyelitis,",
+      "text_sha256": "05c8b384f960cb39e2910869f0ad5cc58d34f3c82a442a3cfcf15e88a2c5670c"
+    },
+    {
+      "id": "rag-b377ee7124332213",
+      "chunk_id": "c05a612cd5603c6b2c31_3",
+      "title": "Rheumatic Fever in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/808945-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "fever__scarlet_fever",
+        "fever__viral_hemorrhagic_fever"
+      ],
+      "retrieval_queries": [
+        "fever fever red flags emergency warning signs urgent referral rule out",
+        "Scarlet Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Viral Hemorrhagic Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4172,
+      "excerpt": "The connection with scarlet fever was made in the early 1900s. In 1944, the Jones criteria were formulated to assist disease identification. These criteria, with some modification, remain in use today. The introduction of antibiotics in the late 1940s allowed for the development of treatment and preventive strategies. Dramatic declines in the incidence of rheumatic fever are thought to be largely due to antibiotic treatment of streptococcal infection; however, there are regions where the incidence is significant, especially in sub-Saharan Africa, the Middle East, Central and South Asia, the",
+      "text_sha256": "82a6d31f7f26e80f5b2961c0b4bb1beb9206a62c9685d191de8184bc3ca86a76"
+    },
+    {
+      "id": "rag-727fc2a84c8a4ba4",
+      "chunk_id": "8b3c2070100dab46af68_14",
+      "title": "Fever of Unknown Origin (FUO): Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/217675-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "fever__mediterranean_spotted_fever"
+      ],
+      "retrieval_queries": [
+        "fever fever red flags emergency warning signs urgent referral rule out",
+        "Mediterranean Spotted Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4309,
+      "excerpt": "of unsuccessful diagnosis varies widely because the diagnostic approach to fever is highly dependent upon the tools accessible in a given healthcare setting, including socioeconomic, and other disparities in healthcare. Similarly, local geography and epidemiology factor into diagnostics. How aggressive and prolonged the evaluation must be before declaring failure also is subjective and dependent on the setting. Reflecting this, Fusco et al found only 6 series out of 18 publications from across the globe predefined a minimum diagnostic workup. \"In general, complete blood count, routine",
+      "text_sha256": "d81c7e209024a522da12129d91aaa065b9aad1f03cd606a94e129cd6363a3324"
+    },
+    {
+      "id": "rag-5c3465b61aac62ae",
+      "chunk_id": "8b3c2070100dab46af68_4",
+      "title": "Fever of Unknown Origin (FUO): Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/217675-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fever fever red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4982,
+      "excerpt": "in 23%. In light of considerable advances in diagnostics, this number seems surprisingly high and consistent. A study of 132 patients seen in a university FUO clinic from May 2019 to February 2022 found that 40% of cases remained undiagnosed, but another 31% met criteria for \"functional hyperthermia\", which they defined as fever without a physiologic cause and preceded by and resolves upon removal of a psychological stressor. The authors propose a \"functional hyperthermia\" as an unrecognized cause of FUO, postulated due to sympathetic hyperactivity. Background The syndrome of fever of unknown",
+      "text_sha256": "f3cc83b77d155604252d5ef5c208b131023ccae69da0a92f034a629a549548fb"
+    },
+    {
+      "id": "rag-334df77a69ae8048",
+      "chunk_id": "a663d18c5f77da4d66fd_25",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "fever__scarlet_fever"
+      ],
+      "retrieval_queries": [
+        "fever fever red flags emergency warning signs urgent referral rule out",
+        "Scarlet Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4651,
+      "excerpt": "level. Toxicity is defined as a clinical syndrome with the following: lethargy with (1) poor perfusion as evidenced by delayed capillary refill or (2) cyanosis or other signs of respiratory distress. Cold hands and feet, limb pain, and pale or mottled skin are considered \"red flag\" manifestations of septicemia. The presence or absence of meningeal signs is documented in older children. Clinicians should bear in mind that in some infants and younger children (perhaps younger than 12-15 months) who develop meningitis, specific meningeal signs, such as the Kernig or Brudzinski sign, may not be",
+      "text_sha256": "9daae7f637800aff088b25d6d63b40d6e8a1a84743e4aa9ddcac9a456004ac3b"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fever fever red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5304,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fever fever red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5451,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    },
+    {
+      "id": "rag-188e1ad37e900df7",
+      "chunk_id": "c05a612cd5603c6b2c31_1",
+      "title": "Rheumatic Fever in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/808945-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "fever__rheumatic_fever"
+      ],
+      "retrieval_queries": [
+        "Rheumatic Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3719,
+      "excerpt": "(ie, detected by echocardiography) Arthritis Chorea Erythema marginatum Subcutaneous nodules In the emergency department, treatment includes measures to relieve pain and inflammation, ameliorate heart failure, and control chorea (see2eatment and Medication). Background Rheumatic fever causes chronic progressive damage to the heart and its valves and is the most common cause of pediatric heart disease in the world. Until 1960, it was a leading cause of death in children and a common cause of structural heart disease. The disease has been known for many centuries. Baillou (1538-1616) first",
+      "text_sha256": "cbb29d6b630ab88d9e4b0e0e823c3a64b920f68dc45b408735190d4f98020509"
+    },
+    {
+      "id": "rag-dd74b17fb69c5839",
+      "chunk_id": "c05a612cd5603c6b2c31_9",
+      "title": "Rheumatic Fever in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/808945-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fever__rheumatic_fever"
+      ],
+      "retrieval_queries": [
+        "Rheumatic Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3701,
+      "excerpt": "of individuals with rheumatic fever. This new approach has demonstrated involvement of the A-DQA1 to HLA-DQB1 region, as well as the locus that codes immunoglobulin heavy chain in chromosome 14, specifically the IGHV4-61 gene segment. The RhEumatiC Heart diseAse Genetics (RECHARGE) study is currently underway in Rwanda, where approximately 1000 participants are undergoing next-generation genetic sequencing. It is expected to be completed in 2024. Etiology Acute rheumatic fever (ARF) has been linked definitively with a preceding streptococcal infection, usually of the upper respiratory tract.",
+      "text_sha256": "0a17524f706d630fcf25fb67263367d8fad3f5196ca9ecce3542a633bc2100ec"
+    },
+    {
+      "id": "rag-60ba06cd87b3aa3d",
+      "chunk_id": "0e1ac052c3a4cacff70c_10",
+      "title": "Scarlet Fever: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1053253-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "fever__scarlet_fever"
+      ],
+      "retrieval_queries": [
+        "Scarlet Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3698,
+      "excerpt": "Scarlet fever is rare in children younger than 1 year because of the presence of maternal antiexotoxin antibodies and lack of prior sensitization. Leslie et al suggest from a case-control study that antecedent streptococcal infection can increase the likelihood of children developing certain neuropsychiatric disorders, including Tourette syndrome, attention-deficit/hyperactivity disorder, and major depressive disorder. Males and females are affected equally. No racial or ethnic predilection is reported for group A streptococcal infection. Prognosis When the condition is identified in a timely",
+      "text_sha256": "edd1da662ce5d7b6bbf34fb17d0e3b59dbf3cdb635696dc86ef16d95b7f06782"
+    },
+    {
+      "id": "rag-0c73f34ab3a2bb46",
+      "chunk_id": "0ea09dc2a01d498032ed_20",
+      "title": "Mediterranean Spotted Fever (Boutonneuse Fever): Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/221240-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "fever__scarlet_fever",
+        "fever__viral_hemorrhagic_fever",
+        "fever__mediterranean_spotted_fever"
+      ],
+      "retrieval_queries": [
+        "Scarlet Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Viral Hemorrhagic Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Mediterranean Spotted Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3227,
+      "excerpt": "people of all races. Prognosis Traditionally, MSF was characterized as a benign rickettsiosis. However, severe sequala have been reported and include Guillain-Barré syndrome, polyneuropathy, altered mental status, hepatomegaly, acute renal failure, thrombocytopenia, hypoxemia, hemophagocytic lymphohistiocytosis, and death have been reported. Factors associated with more severe disease include older age, alcoholism, immune compromise, and glucose-6-phosphatase dehydrogenase (G6PD) deficiency. Such complications notwithstanding, MSF is still a benign condition in most cases, carrying a low",
+      "text_sha256": "08fff7b104deeadc0ceb69a62f3ced7192a6f74245a953a65cdafdc6274e41d4"
+    },
+    {
+      "id": "rag-658e4e849f82f38d",
+      "chunk_id": "20e49fc9d5997e5585a9_33",
+      "title": "Dermatologic Manifestations of Viral Hemorrhagic Fevers: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1134475-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "fever__viral_hemorrhagic_fever"
+      ],
+      "retrieval_queries": [
+        "Viral Hemorrhagic Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4345,
+      "excerpt": "health care workers and others about the detrimental effects of nosocomial transmission and about how such spread can be prevented by implementing infectious disease safety and contact precautions, such as the following: Equipment sterilization Isolation of individuals who are infected Barrier nursing Educate health care workers and others about decontamination procedures, such as the use of hypochlorite or phenolic disinfectants. Clinical Presentation",
+      "text_sha256": "6170f8cf0cdd96a8e8f81d6122a051956cb9b9965b566d4608ae939a43561ea8"
+    },
+    {
+      "id": "rag-47d02d2df5d6263a",
+      "chunk_id": "8c0fd3de343713eb7a55_43",
+      "title": "Vaccinia: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/231773-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "fever__viral_hemorrhagic_fever"
+      ],
+      "retrieval_queries": [
+        "Viral Hemorrhagic Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4599,
+      "excerpt": "by those receiving vaccinia vaccine is a constellation of symptoms called acute vaccinia syndrome. This is characterized by fever, headache, myalgias, and fatigue. Research suggests that a person's risk of developing fever following inoculation with vaccinia vaccine may to some extent be predicted by genetic analysis. Mortality due to generalized vaccinia or erythematous rash has not been reported. Differences in human morbidity and mortality associated with newer forms of vaccinia vaccine are not yet established. However, studies evaluating certain later generations of vaccinia vaccine may be",
+      "text_sha256": "be4bc357b5ba43548d85dcccc14cb79ab3e6842932dc17eaf0fd7a09fb6ff49d"
+    },
+    {
+      "id": "rag-e22f10e5672d5fca",
+      "chunk_id": "42abd839791f077270e0_4",
+      "title": "Q Fever: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/227156-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "fever__q_fever"
+      ],
+      "retrieval_queries": [
+        "Q Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3076,
+      "excerpt": "defects, rheumatic heart disease, and prosthetic valves. Patients may present with heart failure or nonspecific symptoms, including low-grade fever, fatigue, chills, arthralgia, dyspnea, rash from septic thromboembolism, and night sweats. See Clinical Presentation for more detail. Diagnosis Lab tests Acute Q fever may present with the following laboratory results: A complete blood cell (CBC) count usually shows a normal white blood cell (WBC) count (70-90%) (elevated WBC in as many as 30%), mild thrombocytopenia (25%) (followed by a reactive thrombocytosis during the convalescent period ),",
+      "text_sha256": "df18d752d4eccb9de23d756530628ff7da5d94bcaf48796f7f5f1af9a7a1f7f8"
+    },
+    {
+      "id": "rag-740a5a532df62027",
+      "chunk_id": "3ef70e8e70f570451ea4_3",
+      "title": "Yellow Fever: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/232244-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fever__q_fever"
+      ],
+      "retrieval_queries": [
+        "Q Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4649,
+      "excerpt": "Physical findings in yellow fever include the following: Fever Relative bradycardia for the degree of fever (Faget sign) Conjunctival injection Skin flushing As the disease progresses, additional physical findings include the following: Scleral icterus Jaundice Epigastric tenderness Hepatomegaly The following is also often apparent in severe disease: Petechiae Purpura Mucosal bleeding Gastrointestinal bleeding (gross or occult) Organ ischemia, which primarily affects the kidneys and central nervous system, leads to altered mental status and/or signs of volume overload. In the late stages of",
+      "text_sha256": "054009bbf24300caed0eb7d75325e7d6c88289504f9deb424a52f304b49f5d85"
+    },
+    {
+      "id": "rag-34ee3edd9ffd40ee",
+      "chunk_id": "0ea09dc2a01d498032ed_18",
+      "title": "Mediterranean Spotted Fever (Boutonneuse Fever): Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/221240-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "fever__mediterranean_spotted_fever"
+      ],
+      "retrieval_queries": [
+        "Mediterranean Spotted Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4231,
+      "excerpt": "coast of Turkey, immunoglobulin G (IgG) antibodies against R conorii were detected in 13.3% of the healthy population. A seroprevalence study of kenneled dogs in southern Italy revealed an R conorii seroprevalence of 72%. In Zambia, the seroprevalence of antibodies against R. conorii is estimated to be 16.7% in the human population and higher in cattle-breeding areas. In Germany, Norway, and the Netherlands, sporadic cases of so-called imported MSF (eg, disease acquired via infected dogs or as a holiday souvenir) are described. MSF and other rickettsial infections are reported from Korea. In",
+      "text_sha256": "bd695c77a5d06aacd868b56966688c6321fe77a12de544f82a9598bf5098a86c"
+    },
+    {
+      "id": "rag-613130502d5e1d8c",
+      "chunk_id": "510d6a7c9f0bbdd24b95_0",
+      "title": "Meningitis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/232915-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "fever__meningitis"
+      ],
+      "retrieval_queries": [
+        "Meningitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3217,
+      "excerpt": "Overview Practice Essentials Meningitis is a clinical syndrome characterized by inflammation of the meninges. Acute bacterial meningitis. This axial nonenhanced computed tomography scan shows mild ventriculomegaly and sulcal effacement. Signs and symptoms The classic triad of bacterial meningitis consists of the following : Fever Headache Neck stiffness Up to 95% of patients with bacterial meningitis have at least 2 of the 4 following symptoms: fever, headache, stiff neck, or altered mental status. Other symptoms can include nausea, vomiting, photalgia (photophobia), sleepiness, confusion,",
+      "text_sha256": "22594e2f8b6c7ff46992b8e791de572d190cccfedd5f6f6d9f2f0da398b178f2"
+    },
+    {
+      "id": "rag-593bade92933064c",
+      "chunk_id": "510d6a7c9f0bbdd24b95_4",
+      "title": "Meningitis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/232915-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "fever__meningitis"
+      ],
+      "retrieval_queries": [
+        "Meningitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2635,
+      "excerpt": "the following: Focal neurologic signs Signs of meningeal irritation Systemic and extracranial findings Level of consciousness In chronic meningitis, it is essential to perform careful general, systemic, and neurologic examinations, looking especially for the following: Lymphadenopathy Papilledema Meningismus Cranial nerve palsies Other focal neurologic signs Patients with aseptic meningitis syndrome usually appear clinically nontoxic, with no vascular instability. They characteristically have an acute onset of meningeal symptoms, fever, and CSF pleocytosis that is usually prominently",
+      "text_sha256": "4b0def73a732e47aefe33481cd1180890165d3519ba08f889f46020afb88c698"
+    },
+    {
+      "id": "rag-e16443ba01aaff73",
+      "chunk_id": "f44c431baf092773d96d_5",
+      "title": "Meningococcemia: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/221473-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "fever__meningitis"
+      ],
+      "retrieval_queries": [
+        "Meningitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3615,
+      "excerpt": "The physical findings may include the following: Dermatologic manifestations: Petechiae, rash, ecchymoses, purpura Meningococcal meningitis: Pain and resistance to neck flexion, other signs of meningeal irritation, petechiae, fever (of variable intensity) Fulminant meningococcemia: Purpuric eruption, hemorrhages on buccal mucosa and conjunctivae, cyanosis, hypotension, profound shock, high fever, pulmonary insufficiency, no signs of meningitis Meningococcal septicemia: Fever, rash, tachycardia, hypotension, cool extremities, initially normal level of consciousness See Clinical Presentation for",
+      "text_sha256": "83dc6d489a39bdea427e63b32c90800f4778447d4f49f56a1d73cfaf0e500924"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "fever__rheumatic_fever",
+      "name": "Rheumatic Fever",
+      "retrieval_query": "Rheumatic Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-2bd559b5496c39e1",
+        "rag-9e19ba8249da3cae"
+      ],
+      "disease_rag_source_ids": [
+        "rag-2bd559b5496c39e1",
+        "rag-9e19ba8249da3cae",
+        "rag-188e1ad37e900df7",
+        "rag-dd74b17fb69c5839"
+      ]
+    },
+    {
+      "id": "fever__scarlet_fever",
+      "name": "Scarlet Fever",
+      "retrieval_query": "Scarlet Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-43ec98734c0d3adb",
+        "rag-b377ee7124332213"
+      ],
+      "disease_rag_source_ids": [
+        "rag-b377ee7124332213",
+        "rag-334df77a69ae8048",
+        "rag-60ba06cd87b3aa3d",
+        "rag-0c73f34ab3a2bb46"
+      ]
+    },
+    {
+      "id": "fever__viral_hemorrhagic_fever",
+      "name": "Viral Hemorrhagic Fever",
+      "retrieval_query": "Viral Hemorrhagic Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-d0da7d31f8cfa17e",
+        "rag-656bae93d1d8a0a9"
+      ],
+      "disease_rag_source_ids": [
+        "rag-b377ee7124332213",
+        "rag-0c73f34ab3a2bb46",
+        "rag-658e4e849f82f38d",
+        "rag-47d02d2df5d6263a"
+      ]
+    },
+    {
+      "id": "fever__q_fever",
+      "name": "Q Fever",
+      "retrieval_query": "Q Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-42c74898c5492779"
+      ],
+      "disease_rag_source_ids": [
+        "rag-42c74898c5492779",
+        "rag-43ec98734c0d3adb",
+        "rag-e22f10e5672d5fca",
+        "rag-740a5a532df62027"
+      ]
+    },
+    {
+      "id": "fever__mediterranean_spotted_fever",
+      "name": "Mediterranean Spotted Fever",
+      "retrieval_query": "Mediterranean Spotted Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-bcbb563b4c3d5099"
+      ],
+      "disease_rag_source_ids": [
+        "rag-43ec98734c0d3adb",
+        "rag-727fc2a84c8a4ba4",
+        "rag-0c73f34ab3a2bb46",
+        "rag-34ee3edd9ffd40ee"
+      ]
+    },
+    {
+      "id": "fever__meningitis",
+      "name": "Meningitis",
+      "retrieval_query": "Meningitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-df30ee352c228b98",
+        "rag-43ec98734c0d3adb"
+      ],
+      "disease_rag_source_ids": [
+        "rag-df30ee352c228b98",
+        "rag-613130502d5e1d8c",
+        "rag-593bade92933064c",
+        "rag-e16443ba01aaff73"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "fever",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-2bd559b5496c39e1",
+        "rag-188e1ad37e900df7",
+        "rag-b377ee7124332213",
+        "rag-334df77a69ae8048",
+        "rag-0c73f34ab3a2bb46",
+        "rag-658e4e849f82f38d",
+        "rag-47d02d2df5d6263a",
+        "rag-42c74898c5492779",
+        "rag-43ec98734c0d3adb",
+        "rag-727fc2a84c8a4ba4",
+        "rag-34ee3edd9ffd40ee",
+        "rag-613130502d5e1d8c"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "fever__rheumatic_fever__joint_pain",
+        "description": "Pain in the joints.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__rheumatic_fever"
+        ],
+        "source_ids": [
+          "rag-2bd559b5496c39e1",
+          "rag-188e1ad37e900df7"
+        ]
+      },
+      {
+        "code": "fever__rheumatic_fever__chest_pain_or_palpitations",
+        "description": "Chest pain or a noticeably rapid, strong, or irregular heartbeat (palpitations), potentially related to heart inflammation.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__rheumatic_fever"
+        ],
+        "source_ids": [
+          "rag-2bd559b5496c39e1",
+          "rag-188e1ad37e900df7"
+        ]
+      },
+      {
+        "code": "fever__rheumatic_fever__skin_manifestations",
+        "description": "Skin changes such as erythema marginatum (a specific type of rash) or subcutaneous nodules.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__rheumatic_fever"
+        ],
+        "source_ids": [
+          "rag-188e1ad37e900df7"
+        ]
+      },
+      {
+        "code": "fever__scarlet_fever__sore_throat",
+        "description": "喉嚨痛",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__scarlet_fever"
+        ],
+        "source_ids": [
+          "rag-b377ee7124332213"
+        ]
+      },
+      {
+        "code": "fever__scarlet_fever__rash",
+        "description": "皮疹",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__scarlet_fever"
+        ],
+        "source_ids": [
+          "rag-b377ee7124332213"
+        ]
+      },
+      {
+        "code": "fever__scarlet_fever__meningitis_signs",
+        "description": "腦膜炎症狀，如頸部僵硬。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "fever__scarlet_fever"
+        ],
+        "source_ids": [
+          "rag-b377ee7124332213",
+          "rag-334df77a69ae8048",
+          "rag-60ba06cd87b3aa3d",
+          "rag-0c73f34ab3a2bb46"
+        ]
+      },
+      {
+        "code": "fever__viral_hemorrhagic_fever__headache",
+        "description": "Headache.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__viral_hemorrhagic_fever"
+        ],
+        "source_ids": [
+          "rag-b377ee7124332213",
+          "rag-0c73f34ab3a2bb46",
+          "rag-658e4e849f82f38d",
+          "rag-47d02d2df5d6263a"
+        ]
+      },
+      {
+        "code": "fever__viral_hemorrhagic_fever__myalgia",
+        "description": "Generalized muscle aches.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__viral_hemorrhagic_fever"
+        ],
+        "source_ids": [
+          "rag-b377ee7124332213",
+          "rag-0c73f34ab3a2bb46",
+          "rag-658e4e849f82f38d",
+          "rag-47d02d2df5d6263a"
+        ]
+      },
+      {
+        "code": "fever__viral_hemorrhagic_fever__petechiae",
+        "description": "Petechiae (small red or purple spots caused by bleeding into the skin).",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__viral_hemorrhagic_fever"
+        ],
+        "source_ids": [
+          "rag-b377ee7124332213",
+          "rag-0c73f34ab3a2bb46",
+          "rag-658e4e849f82f38d",
+          "rag-47d02d2df5d6263a"
+        ]
+      },
+      {
+        "code": "fever__q_fever__headache",
+        "description": "頭痛",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__q_fever"
+        ],
+        "source_ids": [
+          "rag-42c74898c5492779"
+        ]
+      },
+      {
+        "code": "fever__q_fever__myalgia",
+        "description": "肌肉痛",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__q_fever"
+        ],
+        "source_ids": [
+          "rag-42c74898c5492779"
+        ]
+      },
+      {
+        "code": "fever__q_fever__chills",
+        "description": "畏寒",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__q_fever"
+        ],
+        "source_ids": [
+          "rag-42c74898c5492779"
+        ]
+      },
+      {
+        "code": "fever__q_fever__fatigue",
+        "description": "疲倦",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__q_fever"
+        ],
+        "source_ids": [
+          "rag-42c74898c5492779"
+        ]
+      },
+      {
+        "code": "fever__q_fever__pneumonia_symptoms",
+        "description": "肺炎相關症狀",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__q_fever"
+        ],
+        "source_ids": [
+          "rag-42c74898c5492779"
+        ]
+      },
+      {
+        "code": "fever__q_fever__arthralgia",
+        "description": "關節痛",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__q_fever"
+        ],
+        "source_ids": [
+          "rag-e22f10e5672d5fca"
+        ]
+      },
+      {
+        "code": "fever__q_fever__rash",
+        "description": "皮疹",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__q_fever"
+        ],
+        "source_ids": [
+          "rag-e22f10e5672d5fca"
+        ]
+      },
+      {
+        "code": "fever__mediterranean_spotted_fever__inoculation_eschar",
+        "description": "An inoculation eschar (a dark, crusted sore at the site of a tick bite).",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "fever__mediterranean_spotted_fever"
+        ],
+        "source_ids": [
+          "rag-43ec98734c0d3adb",
+          "rag-727fc2a84c8a4ba4",
+          "rag-0c73f34ab3a2bb46",
+          "rag-34ee3edd9ffd40ee"
+        ]
+      },
+      {
+        "code": "fever__meningitis__petechiae_purpura",
+        "description": "皮膚出現點狀或片狀出血、紫斑。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "fever__meningitis"
+        ],
+        "source_ids": [
+          "rag-df30ee352c228b98",
+          "rag-e16443ba01aaff73"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "associated_symptoms",
+        "option": "關節痛或肌肉痛",
+        "mapping": {
+          "findings": [
+            "fever__rheumatic_fever__joint_pain",
+            "fever__viral_hemorrhagic_fever__myalgia",
+            "fever__q_fever__arthralgia",
+            "fever__q_fever__myalgia"
+          ]
+        },
+        "disease_ids": [
+          "fever__rheumatic_fever",
+          "fever__viral_hemorrhagic_fever",
+          "fever__q_fever"
+        ],
+        "source_ids": [
+          "rag-2bd559b5496c39e1",
+          "rag-188e1ad37e900df7",
+          "rag-b377ee7124332213",
+          "rag-0c73f34ab3a2bb46",
+          "rag-658e4e849f82f38d",
+          "rag-47d02d2df5d6263a",
+          "rag-42c74898c5492779",
+          "rag-e22f10e5672d5fca"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "胸痛、心悸或心跳加速",
+        "mapping": {
+          "findings": [
+            "fever__rheumatic_fever__chest_pain_or_palpitations"
+          ]
+        },
+        "disease_ids": [
+          "fever__rheumatic_fever"
+        ],
+        "source_ids": [
+          "rag-2bd559b5496c39e1",
+          "rag-188e1ad37e900df7"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "皮疹、紅斑、皮膚瘙癢、水泡、焦痂、出血點、或腫脹",
+        "mapping": {
+          "findings": [
+            "fever__rheumatic_fever__skin_manifestations",
+            "fever__scarlet_fever__rash",
+            "fever__viral_hemorrhagic_fever__petechiae",
+            "fever__q_fever__rash",
+            "fever__mediterranean_spotted_fever__inoculation_eschar",
+            "fever__meningitis__petechiae_purpura"
+          ]
+        },
+        "disease_ids": [
+          "fever__rheumatic_fever",
+          "fever__scarlet_fever",
+          "fever__viral_hemorrhagic_fever",
+          "fever__q_fever",
+          "fever__mediterranean_spotted_fever",
+          "fever__meningitis"
+        ],
+        "source_ids": [
+          "rag-188e1ad37e900df7",
+          "rag-b377ee7124332213",
+          "rag-0c73f34ab3a2bb46",
+          "rag-658e4e849f82f38d",
+          "rag-47d02d2df5d6263a",
+          "rag-e22f10e5672d5fca",
+          "rag-43ec98734c0d3adb",
+          "rag-727fc2a84c8a4ba4",
+          "rag-34ee3edd9ffd40ee",
+          "rag-df30ee352c228b98",
+          "rag-e16443ba01aaff73"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "咳嗽、呼吸困難、喉嚨痛、鼻塞或流鼻涕",
+        "mapping": {
+          "findings": [
+            "fever__scarlet_fever__sore_throat",
+            "fever__q_fever__pneumonia_symptoms"
+          ]
+        },
+        "disease_ids": [
+          "fever__scarlet_fever",
+          "fever__q_fever"
+        ],
+        "source_ids": [
+          "rag-b377ee7124332213",
+          "rag-42c74898c5492779"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "頭痛或是頸部僵硬",
+        "mapping": {
+          "findings": [
+            "fever__scarlet_fever__meningitis_signs",
+            "fever__viral_hemorrhagic_fever__headache",
+            "fever__q_fever__headache",
+            "symptom_headache",
+            "neck_stiffness"
+          ]
+        },
+        "disease_ids": [
+          "fever__scarlet_fever",
+          "fever__viral_hemorrhagic_fever",
+          "fever__q_fever",
+          "fever__meningitis"
+        ],
+        "source_ids": [
+          "rag-b377ee7124332213",
+          "rag-334df77a69ae8048",
+          "rag-60ba06cd87b3aa3d",
+          "rag-0c73f34ab3a2bb46",
+          "rag-658e4e849f82f38d",
+          "rag-47d02d2df5d6263a",
+          "rag-42c74898c5492779",
+          "rag-613130502d5e1d8c"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "畏寒或是全身倦怠",
+        "mapping": {
+          "findings": [
+            "fever__q_fever__chills",
+            "fever__q_fever__fatigue"
+          ]
+        },
+        "disease_ids": [
+          "fever__q_fever"
+        ],
+        "source_ids": [
+          "rag-42c74898c5492779"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "噁心、嘔吐、腹痛或腹瀉",
+        "mapping": {
+          "findings": [
+            "nausea",
+            "vomiting"
+          ]
+        },
+        "disease_ids": [
+          "fever__meningitis"
+        ],
+        "source_ids": [
+          "rag-613130502d5e1d8c"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "fever__rheumatic_fever",
+        "name": "Rheumatic Fever",
+        "must_not_miss": false,
+        "retrieval_query": "Rheumatic Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "fever__rheumatic_fever__joint_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-2bd559b5496c39e1",
+              "rag-188e1ad37e900df7"
+            ]
+          },
+          {
+            "fact": "fever__rheumatic_fever__chest_pain_or_palpitations",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-2bd559b5496c39e1",
+              "rag-188e1ad37e900df7"
+            ]
+          },
+          {
+            "fact": "fever__rheumatic_fever__skin_manifestations",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-188e1ad37e900df7"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-2bd559b5496c39e1",
+          "rag-188e1ad37e900df7",
+          "rag-dd74b17fb69c5839"
+        ]
+      },
+      {
+        "id": "fever__scarlet_fever",
+        "name": "Scarlet Fever",
+        "must_not_miss": false,
+        "retrieval_query": "Scarlet Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-b377ee7124332213"
+            ]
+          },
+          {
+            "fact": "fever__scarlet_fever__sore_throat",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-b377ee7124332213"
+            ]
+          },
+          {
+            "fact": "fever__scarlet_fever__rash",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-b377ee7124332213"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-b377ee7124332213"
+        ]
+      },
+      {
+        "id": "fever__viral_hemorrhagic_fever",
+        "name": "Viral Hemorrhagic Fever",
+        "must_not_miss": false,
+        "retrieval_query": "Viral Hemorrhagic Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-b377ee7124332213",
+              "rag-0c73f34ab3a2bb46",
+              "rag-658e4e849f82f38d",
+              "rag-47d02d2df5d6263a"
+            ]
+          },
+          {
+            "fact": "onset_sudden",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-b377ee7124332213",
+              "rag-0c73f34ab3a2bb46",
+              "rag-658e4e849f82f38d",
+              "rag-47d02d2df5d6263a"
+            ]
+          },
+          {
+            "fact": "fever__viral_hemorrhagic_fever__headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-b377ee7124332213",
+              "rag-0c73f34ab3a2bb46",
+              "rag-658e4e849f82f38d",
+              "rag-47d02d2df5d6263a"
+            ]
+          },
+          {
+            "fact": "fever__viral_hemorrhagic_fever__myalgia",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-b377ee7124332213",
+              "rag-0c73f34ab3a2bb46",
+              "rag-658e4e849f82f38d",
+              "rag-47d02d2df5d6263a"
+            ]
+          },
+          {
+            "fact": "fever__viral_hemorrhagic_fever__petechiae",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-b377ee7124332213",
+              "rag-0c73f34ab3a2bb46",
+              "rag-658e4e849f82f38d",
+              "rag-47d02d2df5d6263a"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-b377ee7124332213",
+          "rag-0c73f34ab3a2bb46",
+          "rag-658e4e849f82f38d",
+          "rag-47d02d2df5d6263a"
+        ]
+      },
+      {
+        "id": "fever__q_fever",
+        "name": "Q Fever",
+        "must_not_miss": false,
+        "retrieval_query": "Q Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "fever__q_fever__headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-42c74898c5492779"
+            ]
+          },
+          {
+            "fact": "fever__q_fever__myalgia",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-42c74898c5492779"
+            ]
+          },
+          {
+            "fact": "fever__q_fever__chills",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-42c74898c5492779"
+            ]
+          },
+          {
+            "fact": "fever__q_fever__fatigue",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-42c74898c5492779"
+            ]
+          },
+          {
+            "fact": "fever__q_fever__pneumonia_symptoms",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-42c74898c5492779"
+            ]
+          },
+          {
+            "fact": "fever__q_fever__arthralgia",
+            "status": "absent",
+            "direction": "oppose",
+            "weight": 1,
+            "source_ids": [
+              "rag-42c74898c5492779"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-42c74898c5492779",
+          "rag-e22f10e5672d5fca"
+        ]
+      },
+      {
+        "id": "fever__mediterranean_spotted_fever",
+        "name": "Mediterranean Spotted Fever",
+        "must_not_miss": false,
+        "retrieval_query": "Mediterranean Spotted Fever diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "fever__mediterranean_spotted_fever__inoculation_eschar",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-43ec98734c0d3adb",
+              "rag-727fc2a84c8a4ba4",
+              "rag-0c73f34ab3a2bb46",
+              "rag-34ee3edd9ffd40ee"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-43ec98734c0d3adb",
+          "rag-727fc2a84c8a4ba4",
+          "rag-0c73f34ab3a2bb46",
+          "rag-34ee3edd9ffd40ee"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_fever__scarlet_fever__meningitis",
+        "label": "Meningitis signs with fever",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "fever"
+          ],
+          "any_findings": [
+            "fever__scarlet_fever__meningitis_signs"
+          ]
+        },
+        "possible_conditions": [
+          "Meningitis"
+        ],
+        "source_ids": [
+          "rag-b377ee7124332213",
+          "rag-334df77a69ae8048",
+          "rag-60ba06cd87b3aa3d",
+          "rag-0c73f34ab3a2bb46"
+        ]
+      },
+      {
+        "code": "experimental_fever__meningitis__petechiae_purpura",
+        "label": "Fever with petechiae or purpura",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "fever"
+          ],
+          "any_findings": [
+            "fever__meningitis__petechiae_purpura"
+          ]
+        },
+        "possible_conditions": [
+          "Meningitis",
+          "Meningococcemia"
+        ],
+        "source_ids": [
+          "rag-df30ee352c228b98",
+          "rag-e16443ba01aaff73"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Create a fact for chorea as a symptom of Rheumatic Fever.",
+        "reason": "The provided questionnaire does not ask about involuntary movements or neurological symptoms consistent with chorea, making it impossible to map this clinical feature."
+      },
+      {
+        "requirement": "Create a fact for carditis based on echocardiography findings.",
+        "reason": "The provided evidence mentions carditis detected by echocardiography, which is a diagnostic test result and not a symptom that can be collected through the current questionnaire."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Detailed characterization of the scarlet fever rash (e.g., sandpaper texture, Pastia's lines, strawberry tongue).",
+        "reason": "The provided RAG sources mention rash as a feature but do not contain sufficient detail to create specific fact codes for its unique characteristics."
+      },
+      {
+        "requirement": "Specific age-based risk stratification for scarlet fever.",
+        "reason": "The RAG sources mention that scarlet fever is rare in children younger than 1 year but do not provide enough detail for creating specific age-based logic."
+      },
+      {
+        "requirement": "Logic related to rheumatic fever as a sequela.",
+        "reason": "While rheumatic fever is mentioned as a complication, the provided text does not detail its acute presenting symptoms in a way that can be mapped to the current questionnaire for immediate risk assessment."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create a fact for 'conjunctivitis' as a symptom of Viral Hemorrhagic Fever.",
+        "reason": "The questionnaire does not include a specific option for eye symptoms like conjunctivitis, preventing a direct mapping."
+      },
+      {
+        "requirement": "Create a fact for 'prostration' as a symptom of Viral Hemorrhagic Fever.",
+        "reason": "The questionnaire option '畏寒或是全身倦怠' (chills or general malaise) is too general to confidently map to the specific and severe symptom of 'prostration'."
+      },
+      {
+        "requirement": "Create a fact for 'immunocompromised' as a risk factor for severe Viral Hemorrhagic Fever.",
+        "reason": "The questionnaire does not ask about immune status, preventing the creation and mapping of this fact."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create safety rules for severe complications of febrile illnesses (e.g., meningitis, septic shock).",
+        "reason": "The provided RAG sources mention severe complications like meningitis and septic shock but do not contain specific, actionable red flag signs or symptoms (e.g., altered mental status, severe hypotension) that can be directly translated into structured safety rules without making clinical inferences."
+      },
+      {
+        "requirement": "Incorporate specific exposure risks for Q Fever (e.g., contact with livestock) into the profile.",
+        "reason": "The provided RAG sources describe the clinical presentation of Q Fever but do not detail the specific epidemiological risk factors or exposure histories (like contact with cattle, sheep, goats) needed to create specific history-based facts."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create specific safety rules for thrombocytopenia and acute renal failure.",
+        "reason": "These are laboratory or clinical diagnoses that cannot be reliably determined from patient-reported symptoms alone via a questionnaire."
+      },
+      {
+        "requirement": "Define endemic areas for Mediterranean Spotted Fever.",
+        "reason": "The provided RAG sources mention several regions (Turkey, Italy, Zambia, Korea, etc.) but do not provide a comprehensive, clinically actionable list of all endemic areas for automated logic."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create a fact for Kernig or Brudzinski sign.",
+        "reason": "These are physical exam findings that cannot be elicited through a patient questionnaire."
+      },
+      {
+        "requirement": "Create a fact for papilledema or cranial nerve palsies.",
+        "reason": "These are physical exam findings that cannot be elicited through a patient questionnaire."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The profile for Rheumatic Fever is based on its major manifestations (arthritis, carditis symptoms, skin changes) and its link to a preceding streptococcal infection. The questionnaire captures several of these key symptoms.",
+        "source_ids": [
+          "rag-2bd559b5496c39e1",
+          "rag-188e1ad37e900df7",
+          "rag-dd74b17fb69c5839"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-2bd559b5496c39e1",
+          "rag-dd74b17fb69c5839"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The profile for Scarlet Fever is based on the classic triad of fever, sore throat, and rash. The term 'streptococcal infection' is used in the source as the antecedent cause.",
+        "source_ids": [
+          "rag-b377ee7124332213"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The safety rules for meningitis and septicemia are based on general red flags mentioned as potential complications of scarlet fever. The fact `fever__scarlet_fever__septicemia_signs` is a high-level concept representing clinical toxicity (lethargy, poor perfusion, respiratory distress) which may be difficult to ascertain accurately through a patient questionnaire.",
+        "source_ids": [
+          "rag-b377ee7124332213",
+          "rag-334df77a69ae8048",
+          "rag-60ba06cd87b3aa3d",
+          "rag-0c73f34ab3a2bb46"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-b377ee7124332213",
+          "rag-334df77a69ae8048",
+          "rag-60ba06cd87b3aa3d",
+          "rag-0c73f34ab3a2bb46"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[2], fact_proposals[3], semantic_options[2], safety_proposals[0], review_notes[1]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-b377ee7124332213",
+          "rag-334df77a69ae8048",
+          "rag-60ba06cd87b3aa3d",
+          "rag-0c73f34ab3a2bb46"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-b377ee7124332213",
+          "rag-0c73f34ab3a2bb46",
+          "rag-658e4e849f82f38d",
+          "rag-47d02d2df5d6263a"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], fact_proposals[4], semantic_options[0], semantic_options[1], semantic_options[2], safety_proposals[1], profiles[0], profiles[0].clues[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-b377ee7124332213",
+          "rag-0c73f34ab3a2bb46",
+          "rag-658e4e849f82f38d",
+          "rag-47d02d2df5d6263a"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-42c74898c5492779",
+          "rag-e22f10e5672d5fca"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The profile for Mediterranean Spotted Fever is based on classic findings like travel history and an eschar. However, the source material notes that the disease can present with non-specific symptoms like isolated lymphadenopathy, which is not captured in the current questionnaire structure.",
+        "source_ids": [
+          "rag-43ec98734c0d3adb",
+          "rag-727fc2a84c8a4ba4",
+          "rag-0c73f34ab3a2bb46",
+          "rag-34ee3edd9ffd40ee"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The RAG sources mention several severe complications of Mediterranean Spotted Fever, including Guillain-Barré syndrome, polyneuropathy, hepatomegaly, and hypoxemia. The current fact proposals and safety rules only capture altered mental status. Further development may be needed to screen for other neurologic or systemic red flags if this disease is a common consideration.",
+        "source_ids": [
+          "rag-0c73f34ab3a2bb46"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-43ec98734c0d3adb",
+          "rag-727fc2a84c8a4ba4",
+          "rag-0c73f34ab3a2bb46",
+          "rag-34ee3edd9ffd40ee"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], semantic_options[0], profiles[0], profiles[0].clues[0], profiles[0].clues[1], review_notes[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-43ec98734c0d3adb",
+          "rag-727fc2a84c8a4ba4",
+          "rag-0c73f34ab3a2bb46",
+          "rag-34ee3edd9ffd40ee"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The classic triad of meningitis is fever, headache, and neck stiffness. Up to 95% of patients have at least two of the four symptoms: fever, headache, stiff neck, or altered mental status. The absence of all four virtually rules out meningitis.",
+        "source_ids": [
+          "rag-613130502d5e1d8c"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The presence of petechiae or purpura in a febrile patient is a red flag indicating the need for prompt evaluation and therapy, as it can be a sign of overwhelming systemic bacterial infection like meningococcemia.",
+        "source_ids": [
+          "rag-df30ee352c228b98"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-613130502d5e1d8c"
+        ]
+      }
+    ]
+  }
+}

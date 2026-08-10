@@ -1,0 +1,1551 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "body_temperature_related",
+  "label": "體溫相關",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "e0f2ca8a51c36a9029af16fa24eae9289b5b93bc7ea690115f4895e92f47c2e8",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"body temperature related hypothermia heatstroke differential diagnosis diseases clinical presentation symptoms history\",\"body temperature related hypothermia heatstroke red flags emergency warning signs urgent referral rule out\",\"Heat Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Heat Exhaustion diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Sepsis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Hypothermia diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Pneumonia diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "0468695eb68662d74e470da533d8bee9596fb72b6c7a782983fb7090e4db2221"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "6db602d8f4d01ce5d2f30edbd1783f89146be5d99f9d3433ffb123d9ffbfba80",
+    "generated_at": "2026-08-10T04:02:00+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-247a744020c3e621",
+      "chunk_id": "91ca4fdf1eac03a68c7f_42",
+      "title": "Heat Stroke: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/166320-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3338,
+      "excerpt": "of poor prognosis during acute episodes include the following: Initial temperature measurement higher than 41 (106 or a temperature higher than 42 (108 or a temperature persisting above 39 (102 despite aggressive cooling measures Coma duration longer than 2 hours Severe pulmonary edema Delayed or prolonged hypotension Lactic acidosis in patients with classic heat stroke Acute kidney injury and hyperkalemia Aminotransferase levels greater than 1000 IU/L during the first 24 hours Morbidity and mortality from heat stroke are related to the duration of the temperature elevation. When therapy is",
+      "text_sha256": "bb3cc28d2616d12c92f28ef5c7ec44d886dfd0a648236933bd0d92c1b717f854"
+    },
+    {
+      "id": "rag-29d671a6476a22fe",
+      "chunk_id": "553dc2102363f6b18057_9",
+      "title": "Targeted Temperature Management (Therapeutic Hypothermia): Practice Essentials, Overview, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/812407-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3454,
+      "excerpt": "(most commonly bradycardia) associated with hypothermia If life-threatening dysrhythmia arises and persists, or hemodynamic instability or bleeding develops, discontinue active cooling and rewarm the patient During cooling, an ECG Osbourne or camel wave may be present; heart rate less than 40 bpm is common and is not a cause for concern in the absence of other evidence of hemodynamic instability Check skin every 2-6 hours for thermal injury caused by cold blankets Regularly check the patient s temperature with a secondary temperature monitoring device when cooling After TTM, fever should be",
+      "text_sha256": "a671e3f47b325b968d251bcc6f53dc5e0128381cb17bd353eeddf3be29e2781a"
+    },
+    {
+      "id": "rag-b81f505e035d0701",
+      "chunk_id": "553dc2102363f6b18057_80",
+      "title": "Targeted Temperature Management (Therapeutic Hypothermia): Practice Essentials, Overview, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/812407-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3631,
+      "excerpt": "sepsis, coagulopathy, and electrolytes and metabolic disturbances. ld diuresis and hypovolemia may result. However, many large clinical trials and meta-analyses have reported these adverse effects to be infrequent. A trend toward increased incidence of sepsis has been noted. Questions & Answers Overview What is the effect of targeted temperature management (TTM) on out-of-hospital cardiac arrest survival? What is the efficacy of targeted temperature management (TTM)? Which conditions may benefit from treatment with targeted temperature management (TTM)? What are the AHA guidelines for targeted",
+      "text_sha256": "6e4c56623b69d0e7ed6370d2843b76b952e69593f3263cde141b39f75fe814ba"
+    },
+    {
+      "id": "rag-6e729ba613271cb0",
+      "chunk_id": "91ca4fdf1eac03a68c7f_0",
+      "title": "Heat Stroke: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/166320-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3731,
+      "excerpt": "Overview Practice Essentials Heat illness may be viewed as a continuum of illnesses relating to the body's inability to cope with heat. It includes minor illnesses, such as heat edema, heat rash (ie, prickly heat), heat cramps, heat tetany, as well as heat syncope and heat exhaustion. Heat stroke is the most severe heat-related illness and is defined as a body temperature higher than 40 (104 associated with neurologic dysfunction. Two forms of heat stroke exist. Exertional heat stroke (EHS) generally occurs in young individuals who engage in strenuous physical activity for a prolonged period",
+      "text_sha256": "a2282822dd8952a3bd8edb27a63fb12be1a660dc634f1476270bb996ab48e12c"
+    },
+    {
+      "id": "rag-ea5e8e712838454a",
+      "chunk_id": "6902d3b9fb0ee79f0ae6_18",
+      "title": "Chlamydial Pneumonias: Overview, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/297351-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4235,
+      "excerpt": "in less than half of patients. Physical findings that suggest ornithosis include a pulse-temperature dissociation (fever without elevated pulse), somnolence, and splenomegaly. The pulse-temperature dissociation is also seen in Q fever, typhoid fever, and Legionnaires disease. Signs of meningitis or encephalitis, including a focal neurologic deficit and seizures, may develop. In addition, hepatitis, hemolytic anemia, disseminated intravascular coagulation, meningoencephalitis, or reactive arthritis may be observed, as well as cutaneous manifestations, including Horder spots (erythematous,",
+      "text_sha256": "8140ab0a31491143241ea4783e34916ba330732f72299233e5fe87a4b3521c12"
+    },
+    {
+      "id": "rag-a58aa97118b67e82",
+      "chunk_id": "91ca4fdf1eac03a68c7f_3",
+      "title": "Heat Stroke: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/166320-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "body_temperature_related__heat_stroke"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke red flags emergency warning signs urgent referral rule out",
+        "Heat Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.352,
+      "excerpt": "exceeding 40 (104 associated with an altered sensorium. /wever, when a patient is allowed to cool down prior to measurement of the temperature (as may occur during transportation in a cool ambulance or evaluation in an emergency department), the measured temperature may be lower than 41 making the temperature criterion relative. Anhidrosis, or lack of sweating, has been cited as a feature of heat stroke, but some patients with heat stroke present with profuse sweating. Because of variable presentations, a high index of suspicion is needed to avoid delays in diagnosis and treatment. Diagnostics",
+      "text_sha256": "1e27e0739dd56c969b8ce468bc7d07f54b7cb445cdd2da76a35de4a4653e8b00"
+    },
+    {
+      "id": "rag-89e996535a376f0c",
+      "chunk_id": "91ca4fdf1eac03a68c7f_12",
+      "title": "Heat Stroke: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/166320-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5058,
+      "excerpt": "because of the risk of malignant hyperthermia. Patients may resume activity when their temperature has stabilized. Long-term monitoring Long-term outpatient therapy may be required when chronic renal failure develops and when irreversible damage to the CNS, lungs, heart, and liver occurs. Prevention Heat stroke is a preventable illness, and education is the single most important tool for its prevention. Recognition of host risk factors and modification of behavior (eg, limiting alcohol and drug intake, avoiding use of medications and drugs that interfere with heat dissipation) and physical",
+      "text_sha256": "3d69229a098207abcf292b4d4e4dad0ab0c7fba1ddf804977f35af4df99c6ea1"
+    },
+    {
+      "id": "rag-1daf91c163154755",
+      "chunk_id": "553dc2102363f6b18057_76",
+      "title": "Targeted Temperature Management (Therapeutic Hypothermia): Practice Essentials, Overview, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/812407-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4622,
+      "excerpt": "(target temperature of 33 can be safely used following intra-arterial reperfusion therapy (IAT) in patients with large pretreatment core infarcts. Phase 2 of this trial will randomize patients with acute ischemic stroke to hypothermia or normothermia. A 2016 pilot study of endovascular hypothermia with cold isotonic saline infusion (4 in 26 patients with acute ischemic stroke demonstrated 100% technical success and no reports of obvious complications associated with the intra-arterial hypothermia. Pediatric cardiac arrest and neonatal hypoxic-ischemic encephalopathy The International Liaison",
+      "text_sha256": "3192df85b06d9efcdd20592e4de6f6b88d62c0eedc1ebcaafb136874802a09e9"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "body temperature related hypothermia heatstroke red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5498,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    },
+    {
+      "id": "rag-254655696b955b08",
+      "chunk_id": "91ca4fdf1eac03a68c7f_28",
+      "title": "Heat Stroke: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/166320-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__heat_stroke"
+      ],
+      "retrieval_queries": [
+        "Heat Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3953,
+      "excerpt": "dysfunction syndrome (MODS), and ultimately death. Progression to heat stroke may occur through thermoregulatory failure, an amplified acute-phase response, and alterations in the expression of HSPs. The Wet Bulb Globe Temperature (WBGT) is an index used to gauge ambient conditions that can place an individual at risk for heat illness. This environmental heat stress index, used by the American College of Sports Medicine, is calculated using three parameters: temperature, humidity, and radiant heat. There is low risk if the WBGT is less than 65 moderate risk if it is 65-73 high risk if 73-82",
+      "text_sha256": "bf248cba16729ca3a046b847dc18993e8d7320b7b9a4638bcf1a3a9c931dfdbd"
+    },
+    {
+      "id": "rag-e5ea3eafe991e33a",
+      "chunk_id": "fb667a66b0c052e9418e_2",
+      "title": "Hemorrhagic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916662-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__heat_stroke"
+      ],
+      "retrieval_queries": [
+        "Heat Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4706,
+      "excerpt": "Puzzles slideshow to help recognize diagnostic clues in vertigo cases. Signs and symptoms Patients with intracerebral bleeds are more likely than those with ischemic stroke to have headache, altered mental status, seizures, nausea and vomiting, and/or marked hypertension. Even so, none of these findings reliably distinguishes between hemorrhagic and ischemic stroke. Focal neurologic deficits The type of deficit depends on the area of brain involved. If the dominant (usually the left) hemisphere is involved, a syndrome consisting of the following may result: Right hemiparesis Right hemisensory",
+      "text_sha256": "d46a05c09019859b4bb142e4b7ab6e3eab8771922c2987f776b61d11724c2bfa"
+    },
+    {
+      "id": "rag-ffc04298df227587",
+      "chunk_id": "536871af6462d18d854b_2",
+      "title": "Ischemic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916852-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__heat_stroke"
+      ],
+      "retrieval_queries": [
+        "Heat Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4764,
+      "excerpt": "neurologic deficit or any alteration in level of consciousness. Common stroke signs and symptoms include the following: Abrupt onset of hemiparesis, monoparesis, or (rarely) quadriparesis Hemisensory deficits Monocular or binocular visual loss Visual field deficits Diplopia Dysarthria Facial droop Ataxia Vertigo (rarely in isolation) Nystagmus Aphasia Sudden decrease in level of consciousness Although such symptoms can occur alone, they are more likely to occur in combination. No historical feature distinguishes ischemic from hemorrhagic stroke, although nausea, vomiting, headache, and sudden",
+      "text_sha256": "08c3fc70520a54c0cfbb79c8c6a6cb6799bd65cec892fd371b3de9cf705a3f55"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__heat_exhaustion",
+        "body_temperature_related__sepsis"
+      ],
+      "retrieval_queries": [
+        "Heat Exhaustion diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Sepsis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4587,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-945379ac850eee4d",
+      "chunk_id": "603fbb87de7ec375134e_2",
+      "title": "Hyperkalemia in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/766479-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__heat_exhaustion"
+      ],
+      "retrieval_queries": [
+        "Heat Exhaustion diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4757,
+      "excerpt": "and neurologic symptoms predominate): Generalized fatigue Weakness Paresthesias Paralysis Palpitations Evaluation of vital signs is essential for determining the patient s hemodynamic stability and the presence of cardiac arrhythmias related to hyperkalemia. Additional important components of the physical exam may include the following: Cardiac examination may reveal extrasystoles, pauses, or bradycardia Neurologic examination may reveal diminished deep tendon reflexes or decreased motor strength In rare cases, muscular paralysis and hypoventilation may be observed Signs of renal failure, such",
+      "text_sha256": "1ed1867f158a6c2c9c0d75237f1854e30612b669adb809e1bbd8e4ca3dced248"
+    },
+    {
+      "id": "rag-3a72d4c38d9a0bb7",
+      "chunk_id": "9f7eb5027998a34eb6c2_8",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__heat_exhaustion"
+      ],
+      "retrieval_queries": [
+        "Heat Exhaustion diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4883,
+      "excerpt": "conduction defects are truly diagnostic only when they coincide with symptoms Loop recorders have a higher diagnostic yield than Holter monitor evaluation, with a marginal cost savings Ambulatory monitoring appears to have a higher negative than positive diagnostic yield Other diagnostic tests and procedures include the following: Head-up tilt-table test - Useful for confirming autonomic dysfunction and can generally be safely arranged on an outpatient basis Electroencephalography (EEG) - Can be performed at the discretion of a neurologist if seizure is considered a likely alternative",
+      "text_sha256": "bce92127a34f3c0ce64d226f3f059473b46561d6c8d76961f1c0a09f5b6874fc"
+    },
+    {
+      "id": "rag-1dfa4e033131b963",
+      "chunk_id": "9bb83180a83ba3081d84_39",
+      "title": "MDMA Toxicity: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/821572-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__heat_exhaustion"
+      ],
+      "retrieval_queries": [
+        "Heat Exhaustion diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4921,
+      "excerpt": "fatalities have been attributed to symptoms of heat stroke and hyperthermia. Many of these patients exhibited features of the serotonin syndrome. Hyperthermia results from the catecholamine surge caused by MDMA and is exacerbated in the setting of raves. Increased body temperatures with vigorous dancing in crowded hot clubs can cause dehydration, DIC, rhabdomyolysis, and acute renal failure. MDMA users are informed at raves to stay adequately hydrated and take cooling measures as needed. Studies in rats have shown that high ambient temperatures enhance MDMA-induced locomotor activity,",
+      "text_sha256": "41a0a97a7858e2e48dcbbf8e53a4cf385d5c5b433bbb1b59c507b4c11ceef1d7"
+    },
+    {
+      "id": "rag-8356ec010ed3ff6f",
+      "chunk_id": "87996f6a71b53073e20c_3",
+      "title": "Acute Hypopituitarism: Overview, Diagnostic Considerations, Hormone Deficiency Symptoms",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767828-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__hypothermia"
+      ],
+      "retrieval_queries": [
+        "Hypothermia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3893,
+      "excerpt": "rate. The setting is not uncommon in which an emergency physician is evaluating a patient with complaints of weakness, fatigue, or altered mental status without a clear diagnosis. Subtle, but still abnormal, vital signs, such as slightly reduced blood pressure or heart rate, may be the only initial clues to suggest a pituitary deficiency rather than a relatively benign etiology. Emergency physicians frequently provide care to patients at risk of developing hypopituitarism. Risk factors include, but are not limited to, TBI, cocaine use, subarachnoid hemorrhage, and postpartum hypotension (a",
+      "text_sha256": "66493d5f742848008b29c1bb6e2ef99b7317d22019ad008feed96fe38c63f932"
+    },
+    {
+      "id": "rag-c45f111ad36ff7c4",
+      "chunk_id": "6bf3610cae447cfa658b_1",
+      "title": "Hypophosphatemia in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767955-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__hypothermia"
+      ],
+      "retrieval_queries": [
+        "Hypothermia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3681,
+      "excerpt": "is the most common symptom suggesting hypophosphatemia and may involve any muscular system to any extent. Other symptoms include the following: Diplopia Dysarthria Dysphagia Symptoms of respiratory insufficiency or myocardial depression may indicate hypophosphatemia. Neurologic symptoms may range from simple paresthesias to profound alterations in mental status. See Presentation for more detail. Diagnosis 9pophosphatemia Laboratory studies Hypophosphatemia is defined as mild (2-2.5 mg/dL), moderate (1-2 mg/dL), or severe (< 1 mg/dL).bnormalities in serum magnesium, calcium, and potassium",
+      "text_sha256": "091eb6dafa0e57aab855c5c76e928572ad6ff8466d6a7a63513e46ed6f4bee8e"
+    },
+    {
+      "id": "rag-837bdf638b3e4ef8",
+      "chunk_id": "1d5d5ce3beb840da8d22_4",
+      "title": "Hyponatremia in Emergency Medicine: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767624-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__hypothermia"
+      ],
+      "retrieval_queries": [
+        "Hypothermia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4358,
+      "excerpt": "Nausea and vomiting Difficulty concentrating Confusion Lethargy Agitation Headache Seizures Workup in hyponatremia The diagnosis of hyponatremia depends entirely on the ability to properly obtain a sample of the patient's serum and to accurately measure its concentration of sodium. Serum osmolarity is helpful in establishing the diagnosis of true hyposmolar hyponatremia. Urine sodium levels are helpful in distinguishing renal causes of hyponatremia from nonrenal causes. Patients with hypovolemic hyponatremia due to nonrenal causes (eg, vomiting, diarrhea, fistulas, GI drainage, third spacing",
+      "text_sha256": "1ebb85e9baa65b05d70f924c79188a7964c2f3c067aa6fa2a2a40b11de67c8b3"
+    },
+    {
+      "id": "rag-5721a45019ee90ee",
+      "chunk_id": "1d5d5ce3beb840da8d22_17",
+      "title": "Hyponatremia in Emergency Medicine: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767624-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__hypothermia"
+      ],
+      "retrieval_queries": [
+        "Hypothermia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4491,
+      "excerpt": "chronic hyponatremia reaches levels of 110 mEq/L or less) and cerebral pontine myelinolysis (an unusual demyelination syndrome that occurs in association with chronic hyponatremia and its rapid correction). The distinction between acute hyponatremia and chronic hyponatremia has critical implications in terms of morbidity and mortality and in terms of proper corrective therapy. A study of 98,411 hospitalized patients found that even mild degrees of hyponatremia were associated with increased inhospital, 1-year and 5-year mortality rates. Mortality was particularly increased in those with",
+      "text_sha256": "4186a7fe06c2c07157a2b67ce61b7fc260134998080ba4adb5e9172b04341704"
+    },
+    {
+      "id": "rag-3424602f9c965022",
+      "chunk_id": "a742c3686546c8f2ecf3_7",
+      "title": "Multiple Organ Dysfunction Syndrome in Sepsis: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/169640-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__sepsis"
+      ],
+      "retrieval_queries": [
+        "Sepsis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.429,
+      "excerpt": "dysregulated host response to infection. Organ dysfunction is represented by an increase in the Sequential [sepsis-related] Organ Failure Assessment (SOFA) score of 2 points or more, which is associated with an in-hospital mortality greater than 10%. Septic shock is defined as a subset of sepsis in which profound circulatory, cellular, and metabolic abnormalities are associated with a greater risk of mortality than with sepsis alone. Patients with septic shock can be clinically identified by a vasopressor requirement to maintain a mean arterial pressure of 65 mm Hg or greater and serum lactate",
+      "text_sha256": "777d9821bdb4aafab8f72e303b93ce169df0cb0106e388ef2e573f44da3bf3cd"
+    },
+    {
+      "id": "rag-59b875a6dab7065d",
+      "chunk_id": "a742c3686546c8f2ecf3_4",
+      "title": "Multiple Organ Dysfunction Syndrome in Sepsis: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/169640-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__sepsis"
+      ],
+      "retrieval_queries": [
+        "Sepsis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4962,
+      "excerpt": "organisms is characteristic. However, viral infections can be indistinguishable from bacteria infections in their presentation. Bacteremia is the presence of viable bacteria in the blood. Systemic inflammatory response syndrome (SIRS) may follow a variety of clinical insults, including infection, pancreatitis, ischemia, multiple trauma, tissue injury, hemorrhagic shock, or immune-mediated organ injury. SIRS is a nonspecific presentation of these insults and is defined by the presence of 2 or more of the following: Temperature greater than 38.0°C or less than 36.0°C Heart rate higher than 90",
+      "text_sha256": "3e48005554eb4d7185a8084814fd71b361138d8b50554c256ea1b7b197bd8f7a"
+    },
+    {
+      "id": "rag-0c048cd7f7d40129",
+      "chunk_id": "d380ffc75e88a30abfdd_1",
+      "title": "Peptic Ulcer Disease: Background, Anatomy, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/181753-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__sepsis"
+      ],
+      "retrieval_queries": [
+        "Sepsis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5024,
+      "excerpt": "clinical findings are few and nonspecific. Alarm features\" that warrant prompt gastroenterology referral include bleeding, anemia, early satiety, unexplained weight loss, progressive dysphagia or odynophagia, recurrent vomiting, and a family history of gastrointestinal (GI) cancer. Patients with perforated peptic ulcer disease usually present with a sudden onset of severe, sharp abdominal pain. (See Presentation.) In most patients with uncomplicated peptic ulcer disease, routine laboratory tests usually are not helpful; instead, documentation of peptic ulcer disease depends on radiographic and",
+      "text_sha256": "ffff2562a4d559a95a495ce5561498d1423c9559fe944e433fa606686b634e90"
+    },
+    {
+      "id": "rag-352aeb5c6249e1ca",
+      "chunk_id": "a91349e70c98ad75a93d_1",
+      "title": "Viral Pneumonia: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/300455-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__pneumonia"
+      ],
+      "retrieval_queries": [
+        "Pneumonia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4203,
+      "excerpt": "pneumonia. Signs and symptoms The common constitutional symptoms of viral pneumonia are as follows: Fever Chills Nonproductive cough Rhinitis Myalgias Headaches Fatigue During physical examination, the patient may also display the following: Tachypnea and/or dyspnea Tachycardia or bradycardia Wheezing Rhonchi Rales Sternal or intercostal retractions Dullness to percussion Decreased breath sounds Pleurisy Pleural friction rub Cyanosis Rash Acute respiratory distress Influenza pneumonia The influenza viruses are the most common viral cause of pneumonia. Primary influenza pneumonia manifests with",
+      "text_sha256": "169a99290fde61144f3e8b8629bc9780e414d9d877665dd6ef3316a4dfaea774"
+    },
+    {
+      "id": "rag-5d225945d41d0570",
+      "chunk_id": "6902d3b9fb0ee79f0ae6_21",
+      "title": "Chlamydial Pneumonias: Overview, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/297351-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__pneumonia"
+      ],
+      "retrieval_queries": [
+        "Pneumonia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.439,
+      "excerpt": "Alternate Diagnoses The differential diagnoses of chlamydial pneumonias include the following conditions: Influenza Legionnaires Disease Mycoplasmal Infections Bacterial Pneumonia Fungal Pneumonia Viral Pneumonia Psittacosis (Parrot Fever) Q Fever Tuberculosis (TB) Tularemia Other disorders to consider include the following: C trachomatis infant pneumonia Respiratory syncytial virus infection Bordetella pertussis infection Infection with other respiratory viruses Tests in Chlamydial Pneumonias Laboratory studies for diagnosis of chlamydial pneumonias vary with the causative organism. C",
+      "text_sha256": "ca52797761e283877285ffb4e1270973006a6e41273954ed8a0813fc348638bc"
+    },
+    {
+      "id": "rag-5d5e40fead2c6877",
+      "chunk_id": "6902d3b9fb0ee79f0ae6_29",
+      "title": "Chlamydial Pneumonias: Overview, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/297351-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__pneumonia"
+      ],
+      "retrieval_queries": [
+        "Pneumonia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4444,
+      "excerpt": "linked to a confirmed case or that has a single antibody titer of 32 or greater by MIF or CF after the onset of symptoms. Above definitions were originally developed for epidemiologic purposes and should not be used as the sole criteria for establishing clinical diagnoses. A CF test can cross-react with C pneumoniae and C trachomatis. MIF and PCR assays can be used to distinguish C psittaci infection from other chlamydial infections. PCR methods for the detection of C psittaci are not standardized and currently under investigation. The following laboratories offer diagnostic testing for C",
+      "text_sha256": "cc21a78ade85827742448ddb7d5b83478a571f2f2b114e3dd068947854704094"
+    },
+    {
+      "id": "rag-67d5443f6430c072",
+      "chunk_id": "e2db83523988003421e1_21",
+      "title": "Hospital-Acquired Pneumonia (Nosocomial Pneumonia) and Ventilator-Associated Pneumonia: Overview, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/234753-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "body_temperature_related__pneumonia"
+      ],
+      "retrieval_queries": [
+        "Pneumonia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4625,
+      "excerpt": "scans help to exclude pneumonia mimics. ECGs, cardiac enzymes, and Swan-Ganz readings may rule out left ventricular failure caused by exacerbation of heart failure or new myocardial infarction. Diagnostic Concerns Below is a summary of the recommendations of the recent IDSA/ATF guidelines for the management of hospital-acquired pneumonia (HAP) and ventilator-associated pneumonia (VAP). General approach: Noninvasive sampling with semiquantitative culture can be performed much more rapidly, with fewer resources and fewer complications compared to invasive sampling techniques. For patients with",
+      "text_sha256": "16fa124e98395c3c084a53cd291a5e5d33dbb29588b845e58325d2dcb7de44c5"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "body_temperature_related__heat_stroke",
+      "name": "Heat Stroke",
+      "retrieval_query": "Heat Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-6e729ba613271cb0",
+        "rag-a58aa97118b67e82"
+      ],
+      "disease_rag_source_ids": [
+        "rag-a58aa97118b67e82",
+        "rag-254655696b955b08",
+        "rag-e5ea3eafe991e33a",
+        "rag-ffc04298df227587"
+      ]
+    },
+    {
+      "id": "body_temperature_related__heat_exhaustion",
+      "name": "Heat Exhaustion",
+      "retrieval_query": "Heat Exhaustion diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-6e729ba613271cb0"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-945379ac850eee4d",
+        "rag-3a72d4c38d9a0bb7",
+        "rag-1dfa4e033131b963"
+      ]
+    },
+    {
+      "id": "body_temperature_related__hypothermia",
+      "name": "Hypothermia",
+      "retrieval_query": "Hypothermia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-29d671a6476a22fe",
+        "rag-b81f505e035d0701"
+      ],
+      "disease_rag_source_ids": [
+        "rag-8356ec010ed3ff6f",
+        "rag-c45f111ad36ff7c4",
+        "rag-837bdf638b3e4ef8",
+        "rag-5721a45019ee90ee"
+      ]
+    },
+    {
+      "id": "body_temperature_related__sepsis",
+      "name": "Sepsis",
+      "retrieval_query": "Sepsis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-b81f505e035d0701"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-3424602f9c965022",
+        "rag-59b875a6dab7065d",
+        "rag-0c048cd7f7d40129"
+      ]
+    },
+    {
+      "id": "body_temperature_related__pneumonia",
+      "name": "Pneumonia",
+      "retrieval_query": "Pneumonia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-ea5e8e712838454a"
+      ],
+      "disease_rag_source_ids": [
+        "rag-352aeb5c6249e1ca",
+        "rag-5d225945d41d0570",
+        "rag-5d5e40fead2c6877",
+        "rag-67d5443f6430c072"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "body_temperature_related",
+    "evidence_status": "sufficient",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-a58aa97118b67e82",
+        "rag-254655696b955b08",
+        "rag-e5ea3eafe991e33a",
+        "rag-ffc04298df227587",
+        "rag-f09c5253c7a82445",
+        "rag-945379ac850eee4d",
+        "rag-3a72d4c38d9a0bb7",
+        "rag-1dfa4e033131b963",
+        "rag-8356ec010ed3ff6f",
+        "rag-c45f111ad36ff7c4",
+        "rag-837bdf638b3e4ef8",
+        "rag-5721a45019ee90ee",
+        "rag-3424602f9c965022",
+        "rag-59b875a6dab7065d",
+        "rag-0c048cd7f7d40129",
+        "rag-352aeb5c6249e1ca",
+        "rag-5d225945d41d0570",
+        "rag-5d5e40fead2c6877",
+        "rag-67d5443f6430c072"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "body_temperature_related__heat_stroke__altered_sensorium",
+        "description": "Altered sensorium or neurologic dysfunction.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "body_temperature_related__heat_stroke"
+        ],
+        "source_ids": [
+          "rag-a58aa97118b67e82",
+          "rag-254655696b955b08",
+          "rag-e5ea3eafe991e33a",
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "code": "body_temperature_related__heat_stroke__profuse_sweating",
+        "description": "Profuse sweating, although lack of sweating (anhidrosis) can also occur.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "body_temperature_related__heat_stroke"
+        ],
+        "source_ids": [
+          "rag-a58aa97118b67e82"
+        ]
+      },
+      {
+        "code": "body_temperature_related__heat_stroke__nausea_or_vomiting",
+        "description": "Nausea and vomiting.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "body_temperature_related__heat_stroke"
+        ],
+        "source_ids": [
+          "rag-e5ea3eafe991e33a",
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "code": "body_temperature_related__heat_stroke__headache",
+        "description": "Headache.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "body_temperature_related__heat_stroke"
+        ],
+        "source_ids": [
+          "rag-e5ea3eafe991e33a",
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "code": "body_temperature_related__heat_exhaustion__fatigue",
+        "description": "全身疲勞或疲倦。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "body_temperature_related__heat_exhaustion"
+        ],
+        "source_ids": [
+          "rag-945379ac850eee4d"
+        ]
+      },
+      {
+        "code": "body_temperature_related__hypothermia__altered_mental_status",
+        "description": "出現意識模糊、混亂、嗜睡或精神狀態改變。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "body_temperature_related__hypothermia"
+        ],
+        "source_ids": [
+          "rag-8356ec010ed3ff6f",
+          "rag-837bdf638b3e4ef8"
+        ]
+      },
+      {
+        "code": "body_temperature_related__hypothermia__fatigue_weakness",
+        "description": "感到疲倦、虛弱或乏力。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "body_temperature_related__hypothermia"
+        ],
+        "source_ids": [
+          "rag-8356ec010ed3ff6f",
+          "rag-c45f111ad36ff7c4"
+        ]
+      },
+      {
+        "code": "body_temperature_related__hypothermia__nausea_vomiting",
+        "description": "感到噁心或已經嘔吐。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "body_temperature_related__hypothermia"
+        ],
+        "source_ids": [
+          "rag-837bdf638b3e4ef8"
+        ]
+      },
+      {
+        "code": "body_temperature_related__hypothermia__headache",
+        "description": "頭部疼痛。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "body_temperature_related__hypothermia"
+        ],
+        "source_ids": [
+          "rag-837bdf638b3e4ef8"
+        ]
+      },
+      {
+        "code": "body_temperature_related__sepsis__infection_context",
+        "description": "症狀發生在感染的背景下。",
+        "kind": "context",
+        "safety_candidate": false,
+        "disease_ids": [
+          "body_temperature_related__sepsis"
+        ],
+        "source_ids": [
+          "rag-3424602f9c965022",
+          "rag-59b875a6dab7065d"
+        ]
+      },
+      {
+        "code": "body_temperature_related__pneumonia__chills",
+        "description": "發冷或寒顫",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "body_temperature_related__pneumonia"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "code": "body_temperature_related__pneumonia__nonproductive_cough",
+        "description": "無痰的乾咳",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "body_temperature_related__pneumonia"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "code": "body_temperature_related__pneumonia__myalgia",
+        "description": "肌肉疼痛",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "body_temperature_related__pneumonia"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "code": "body_temperature_related__pneumonia__headache",
+        "description": "頭痛",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "body_temperature_related__pneumonia"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "code": "body_temperature_related__pneumonia__fatigue",
+        "description": "疲倦或乏力",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "body_temperature_related__pneumonia"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "code": "body_temperature_related__pneumonia__fever",
+        "description": "發燒",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "body_temperature_related__pneumonia"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "accompanying_symptoms",
+        "option": "意識模糊",
+        "mapping": {
+          "findings": [
+            "body_temperature_related__heat_stroke__altered_sensorium",
+            "body_temperature_related__hypothermia__altered_mental_status"
+          ]
+        },
+        "disease_ids": [
+          "body_temperature_related__heat_stroke",
+          "body_temperature_related__hypothermia"
+        ],
+        "source_ids": [
+          "rag-a58aa97118b67e82",
+          "rag-8356ec010ed3ff6f",
+          "rag-837bdf638b3e4ef8"
+        ]
+      },
+      {
+        "field": "accompanying_symptoms",
+        "option": "出汗",
+        "mapping": {
+          "findings": [
+            "body_temperature_related__heat_stroke__profuse_sweating"
+          ]
+        },
+        "disease_ids": [
+          "body_temperature_related__heat_stroke"
+        ],
+        "source_ids": [
+          "rag-a58aa97118b67e82"
+        ]
+      },
+      {
+        "field": "accompanying_symptoms",
+        "option": "頭痛",
+        "mapping": {
+          "findings": [
+            "body_temperature_related__heat_stroke__headache",
+            "body_temperature_related__hypothermia__headache",
+            "body_temperature_related__pneumonia__headache"
+          ]
+        },
+        "disease_ids": [
+          "body_temperature_related__heat_stroke",
+          "body_temperature_related__hypothermia",
+          "body_temperature_related__pneumonia"
+        ],
+        "source_ids": [
+          "rag-e5ea3eafe991e33a",
+          "rag-ffc04298df227587",
+          "rag-837bdf638b3e4ef8",
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "field": "accompanying_symptoms",
+        "option": "噁心或嘔吐",
+        "mapping": {
+          "findings": [
+            "body_temperature_related__heat_stroke__nausea_or_vomiting",
+            "body_temperature_related__hypothermia__nausea_vomiting"
+          ]
+        },
+        "disease_ids": [
+          "body_temperature_related__heat_stroke",
+          "body_temperature_related__hypothermia"
+        ],
+        "source_ids": [
+          "rag-e5ea3eafe991e33a",
+          "rag-ffc04298df227587",
+          "rag-837bdf638b3e4ef8"
+        ]
+      },
+      {
+        "field": "accompanying_symptoms",
+        "option": "疲倦或乏力",
+        "mapping": {
+          "findings": [
+            "body_temperature_related__heat_exhaustion__fatigue",
+            "body_temperature_related__hypothermia__fatigue_weakness",
+            "body_temperature_related__pneumonia__fatigue"
+          ]
+        },
+        "disease_ids": [
+          "body_temperature_related__heat_exhaustion",
+          "body_temperature_related__hypothermia",
+          "body_temperature_related__pneumonia"
+        ],
+        "source_ids": [
+          "rag-945379ac850eee4d",
+          "rag-8356ec010ed3ff6f",
+          "rag-c45f111ad36ff7c4",
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "field": "recent_infections_or_illnesses",
+        "option": "感冒",
+        "mapping": {
+          "findings": [
+            "body_temperature_related__sepsis__infection_context"
+          ]
+        },
+        "disease_ids": [
+          "body_temperature_related__sepsis"
+        ],
+        "source_ids": [
+          "rag-59b875a6dab7065d"
+        ]
+      },
+      {
+        "field": "recent_infections_or_illnesses",
+        "option": "流感",
+        "mapping": {
+          "findings": [
+            "body_temperature_related__sepsis__infection_context"
+          ]
+        },
+        "disease_ids": [
+          "body_temperature_related__sepsis"
+        ],
+        "source_ids": [
+          "rag-59b875a6dab7065d"
+        ]
+      },
+      {
+        "field": "recent_infections_or_illnesses",
+        "option": "尿路感染",
+        "mapping": {
+          "findings": [
+            "body_temperature_related__sepsis__infection_context"
+          ]
+        },
+        "disease_ids": [
+          "body_temperature_related__sepsis"
+        ],
+        "source_ids": [
+          "rag-59b875a6dab7065d"
+        ]
+      },
+      {
+        "field": "recent_infections_or_illnesses",
+        "option": "支氣管炎",
+        "mapping": {
+          "findings": [
+            "body_temperature_related__sepsis__infection_context"
+          ]
+        },
+        "disease_ids": [
+          "body_temperature_related__sepsis"
+        ],
+        "source_ids": [
+          "rag-59b875a6dab7065d"
+        ]
+      },
+      {
+        "field": "recent_infections_or_illnesses",
+        "option": "肺炎",
+        "mapping": {
+          "findings": [
+            "body_temperature_related__sepsis__infection_context",
+            "body_temperature_related__pneumonia__fever",
+            "body_temperature_related__pneumonia__chills",
+            "body_temperature_related__pneumonia__nonproductive_cough",
+            "body_temperature_related__pneumonia__myalgia",
+            "body_temperature_related__pneumonia__headache",
+            "body_temperature_related__pneumonia__fatigue"
+          ]
+        },
+        "disease_ids": [
+          "body_temperature_related__sepsis",
+          "body_temperature_related__pneumonia"
+        ],
+        "source_ids": [
+          "rag-59b875a6dab7065d",
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "field": "recent_infections_or_illnesses",
+        "option": "胃腸炎",
+        "mapping": {
+          "findings": [
+            "body_temperature_related__sepsis__infection_context"
+          ]
+        },
+        "disease_ids": [
+          "body_temperature_related__sepsis"
+        ],
+        "source_ids": [
+          "rag-59b875a6dab7065d"
+        ]
+      },
+      {
+        "field": "accompanying_symptoms",
+        "option": "發冷或寒顫",
+        "mapping": {
+          "findings": [
+            "body_temperature_related__pneumonia__chills"
+          ]
+        },
+        "disease_ids": [
+          "body_temperature_related__pneumonia"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      },
+      {
+        "field": "accompanying_symptoms",
+        "option": "肌肉或關節疼痛",
+        "mapping": {
+          "findings": [
+            "body_temperature_related__pneumonia__myalgia"
+          ]
+        },
+        "disease_ids": [
+          "body_temperature_related__pneumonia"
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "body_temperature_related__heat_stroke",
+        "name": "Heat Stroke",
+        "must_not_miss": true,
+        "retrieval_query": "Heat Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [
+          "experimental_body_temperature_related__heat_stroke__altered_consciousness_with_high_temperature"
+        ],
+        "clues": [
+          {
+            "fact": "body_temperature_related__heat_stroke__altered_sensorium",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-a58aa97118b67e82",
+              "rag-254655696b955b08",
+              "rag-e5ea3eafe991e33a",
+              "rag-ffc04298df227587"
+            ]
+          },
+          {
+            "fact": "body_temperature_related__heat_stroke__headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-e5ea3eafe991e33a",
+              "rag-ffc04298df227587"
+            ]
+          },
+          {
+            "fact": "body_temperature_related__heat_stroke__nausea_or_vomiting",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-e5ea3eafe991e33a",
+              "rag-ffc04298df227587"
+            ]
+          },
+          {
+            "fact": "body_temperature_related__heat_stroke__profuse_sweating",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-a58aa97118b67e82"
+            ]
+          },
+          {
+            "fact": "focal_neurologic_symptom",
+            "status": "absent",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-e5ea3eafe991e33a",
+              "rag-ffc04298df227587"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-a58aa97118b67e82",
+          "rag-254655696b955b08",
+          "rag-e5ea3eafe991e33a",
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "id": "body_temperature_related__heat_exhaustion",
+        "name": "Heat Exhaustion",
+        "must_not_miss": false,
+        "retrieval_query": "Heat Exhaustion diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "body_temperature_related__heat_exhaustion__fatigue",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-945379ac850eee4d"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-945379ac850eee4d",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-1dfa4e033131b963"
+        ]
+      },
+      {
+        "id": "body_temperature_related__hypothermia",
+        "name": "Hypothermia",
+        "must_not_miss": false,
+        "retrieval_query": "Hypothermia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "body_temperature_related__hypothermia__altered_mental_status",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-8356ec010ed3ff6f",
+              "rag-837bdf638b3e4ef8"
+            ]
+          },
+          {
+            "fact": "body_temperature_related__hypothermia__fatigue_weakness",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-8356ec010ed3ff6f",
+              "rag-c45f111ad36ff7c4"
+            ]
+          },
+          {
+            "fact": "body_temperature_related__hypothermia__nausea_vomiting",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-837bdf638b3e4ef8"
+            ]
+          },
+          {
+            "fact": "body_temperature_related__hypothermia__headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-837bdf638b3e4ef8"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-8356ec010ed3ff6f",
+          "rag-c45f111ad36ff7c4",
+          "rag-837bdf638b3e4ef8"
+        ]
+      },
+      {
+        "id": "body_temperature_related__sepsis",
+        "name": "Sepsis",
+        "must_not_miss": false,
+        "retrieval_query": "Sepsis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "body_temperature_related__sepsis__infection_context",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-3424602f9c965022",
+              "rag-59b875a6dab7065d"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-3424602f9c965022",
+          "rag-59b875a6dab7065d"
+        ]
+      },
+      {
+        "id": "body_temperature_related__pneumonia",
+        "name": "Pneumonia",
+        "must_not_miss": false,
+        "retrieval_query": "Pneumonia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "body_temperature_related__pneumonia__fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-352aeb5c6249e1ca"
+            ]
+          },
+          {
+            "fact": "body_temperature_related__pneumonia__chills",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-352aeb5c6249e1ca"
+            ]
+          },
+          {
+            "fact": "body_temperature_related__pneumonia__nonproductive_cough",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-352aeb5c6249e1ca"
+            ]
+          },
+          {
+            "fact": "body_temperature_related__pneumonia__myalgia",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-352aeb5c6249e1ca"
+            ]
+          },
+          {
+            "fact": "body_temperature_related__pneumonia__headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-352aeb5c6249e1ca"
+            ]
+          },
+          {
+            "fact": "body_temperature_related__pneumonia__fatigue",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-352aeb5c6249e1ca"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-352aeb5c6249e1ca"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_body_temperature_related__heat_stroke__altered_consciousness_with_high_temperature",
+        "label": "Possible Heat Stroke",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "body_temperature_related"
+          ],
+          "any_findings": [
+            "body_temperature_related__heat_stroke__altered_sensorium"
+          ]
+        },
+        "possible_conditions": [
+          "Heat Stroke"
+        ],
+        "source_ids": [
+          "rag-a58aa97118b67e82",
+          "rag-254655696b955b08",
+          "rag-e5ea3eafe991e33a",
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "code": "experimental_body_temperature_related__hypothermia__altered_mental_status",
+        "label": "意識模糊或精神狀態改變",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "body_temperature_related"
+          ],
+          "any_findings": [
+            "body_temperature_related__hypothermia__altered_mental_status"
+          ]
+        },
+        "possible_conditions": [
+          "Hypothermia"
+        ],
+        "source_ids": [
+          "rag-8356ec010ed3ff6f",
+          "rag-837bdf638b3e4ef8"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Create a specific fact for body temperature > 40°C (104°F).",
+        "reason": "The questionnaire captures body temperature as free text, which cannot be reliably parsed to check against a specific numeric threshold without advanced NLP capabilities not assumed by the model."
+      },
+      {
+        "requirement": "Create a specific fact for exposure to extreme temperatures.",
+        "reason": "The questionnaire captures this information as free text, which cannot be reliably parsed into a structured fact."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Specific body temperature thresholds for defining heat exhaustion vs. heat stroke.",
+        "reason": "The provided RAG sources mention a threshold for heat stroke (>40°C or 104°F) but do not provide a specific range for heat exhaustion. Applying a numeric threshold requires precise clinical guidelines not available in the supplied text."
+      },
+      {
+        "requirement": "Detailed list of neurologic symptoms to differentiate heat exhaustion from heat stroke.",
+        "reason": "The sources state that heat stroke is associated with neurologic dysfunction, and one source lists red flags like focal neurologic deficits, but a comprehensive list of signs specific to heat-related illness (e.g., confusion, seizures) is not detailed enough to create robust rule-out logic for heat exhaustion."
+      },
+      {
+        "requirement": "Specific symptoms of heat exhaustion such as nausea, vomiting, headache, or dizziness.",
+        "reason": "While these are common symptoms of heat exhaustion, the provided RAG sources do not explicitly list them in the context of heat exhaustion, instead focusing on more general symptoms like fatigue and weakness or red flags associated with other conditions like syncope."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Specific body temperature thresholds for defining hypothermia.",
+        "reason": "The provided RAG sources do not contain specific temperature values or ranges to define hypothermia, which is essential for clinical decision-making."
+      },
+      {
+        "requirement": "Vital sign abnormalities associated with hypothermia (e.g., bradycardia, hypotension).",
+        "reason": "The provided RAG sources mention vital sign changes like reduced blood pressure or heart rate but do not provide specific thresholds or detailed descriptions suitable for creating structured clinical logic."
+      },
+      {
+        "requirement": "Symptoms like shivering, slurred speech, or loss of coordination.",
+        "reason": "These classic symptoms of hypothermia are not mentioned in the provided RAG sources."
+      },
+      {
+        "requirement": "Specific numeric thresholds for heart rate and temperature to confirm SIRS criteria for Sepsis.",
+        "reason": "The model cannot implement precise numeric thresholds for vital signs from text-based user input. This requires clinical measurement and interpretation."
+      },
+      {
+        "requirement": "Diagnosis of Sepsis or Septic Shock based on SOFA score, vasopressor requirement, or serum lactate levels.",
+        "reason": "These are clinical and laboratory-based diagnostic criteria that are beyond the scope of a symptom-checking questionnaire and require in-person medical evaluation, lab tests, and clinical assessment."
+      },
+      {
+        "requirement": "Identification of red flag symptoms for Sepsis such as focal neurologic deficits, dyspnea, or severe headache.",
+        "reason": "While the source document mentions these red flags in the context of syncope, which can be related, the direct linkage and specific criteria for Sepsis were not detailed enough to create robust safety rules without risk of misinterpretation. These symptoms are handled by other, more specific routes (e.g., neurological, respiratory)."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create a safety rule for focal neurologic deficit or seizures associated with pneumonia.",
+        "reason": "The provided RAG sources mention these as possible signs but do not contain sufficient detail to formulate a specific, safe, and actionable rule without making clinical assumptions. The questionnaire does not currently ask about these specific symptoms."
+      },
+      {
+        "requirement": "Create a safety rule for acute respiratory distress associated with pneumonia.",
+        "reason": "The provided RAG sources mention acute respiratory distress, but do not provide specific, patient-reportable criteria that can be used to create a structured safety rule without clinical interpretation. The questionnaire has a general 'severe breathing' symptom, but more detail would be needed to map this specifically to ARDS criteria."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "The evidence for headache and nausea/vomiting as symptoms of heat stroke comes from sources discussing stroke in general (hemorrhagic and ischemic), not specifically heat stroke. While these symptoms can occur, the citation is indirect and should be reviewed for appropriateness.",
+        "source_ids": [
+          "rag-e5ea3eafe991e33a",
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "Heat stroke is defined by a core body temperature >40°C (104°F) plus neurologic dysfunction. The source notes that the measured temperature may be lower if cooling has occurred prior to measurement, so a high index of suspicion is needed.",
+        "source_ids": [
+          "rag-a58aa97118b67e82"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-a58aa97118b67e82",
+          "rag-254655696b955b08",
+          "rag-e5ea3eafe991e33a",
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[3], safety_proposals[0], profiles[0], profiles[0].clues[0], profiles[0].clues[1], profiles[0].clues[2]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-a58aa97118b67e82",
+          "rag-254655696b955b08",
+          "rag-e5ea3eafe991e33a",
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-945379ac850eee4d",
+          "rag-1dfa4e033131b963",
+          "rag-f09c5253c7a82445",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[3], profiles[0], profiles[0].clues[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-945379ac850eee4d",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-1dfa4e033131b963"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The discovered disease 'Hypothermia' is based on RAG sources that discuss it in the context of other conditions (Hyponatremia, Hypophosphatemia, Hypopituitarism) or as a therapeutic intervention (Targeted Temperature Management). The evidence for primary hypothermia as a diagnosis is indirect and limited. The proposed facts are general symptoms that can be associated with many conditions.",
+        "source_ids": [
+          "rag-8356ec010ed3ff6f",
+          "rag-c45f111ad36ff7c4",
+          "rag-837bdf638b3e4ef8",
+          "rag-5721a45019ee90ee"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, review_notes[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-8356ec010ed3ff6f",
+          "rag-c45f111ad36ff7c4",
+          "rag-837bdf638b3e4ef8",
+          "rag-5721a45019ee90ee"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The profile for Sepsis is based on the Systemic Inflammatory Response Syndrome (SIRS) criteria available in the provided text, specifically abnormal temperature and high heart rate in the context of a recent infection. The model cannot assess for other SIRS criteria like respiratory rate or white blood cell count, nor can it apply the more current Sepsis-3 (qSOFA/SOFA) definitions which require clinical assessment of mental status, respiratory rate, and blood pressure.",
+        "source_ids": [
+          "rag-59b875a6dab7065d",
+          "rag-3424602f9c965022"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-59b875a6dab7065d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-3424602f9c965022",
+          "rag-59b875a6dab7065d",
+          "rag-0c048cd7f7d40129"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-352aeb5c6249e1ca",
+          "rag-5d225945d41d0570",
+          "rag-5d5e40fead2c6877",
+          "rag-67d5443f6430c072"
+        ]
+      }
+    ]
+  }
+}

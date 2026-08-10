@@ -37,7 +37,7 @@ test('uses the page hostname and default backend port', () => {
       protocol: 'http:',
       hostname: '192.168.1.20',
     }),
-    'http://192.168.1.20:8000',
+    'http://192.168.1.20:18000',
   )
 })
 
@@ -86,7 +86,7 @@ test('ignores backend query overrides by default', () => {
       protocol: 'https:',
       hostname: 'app.example.test',
     }),
-    'https://app.example.test:8000',
+    'https://app.example.test:18000',
   )
 })
 

@@ -7,6 +7,7 @@ from threading import RLock
 
 from dotenv import load_dotenv
 
+from domain.patient_messages import patient_message
 from infrastructure.asr import SpeechTranscriber
 from infrastructure.avatar import AvatarClient
 from infrastructure.consultation_repository import ConsultationRepository
@@ -17,15 +18,9 @@ load_dotenv()
 llm_client = LLMClient()
 print(f"[LLM] 使用 {llm_client.provider}（{llm_client.model}）")
 asr_service = SpeechTranscriber(llm_client=llm_client)
-print(
-    "[ASR] 使用 "
-    f"{asr_service.status()['provider']}（{asr_service.status()['model']}，延遲載入）"
-)
+print(f"[ASR] 使用 {asr_service.status()['provider']}（{asr_service.status()['model']}，延遲載入）")
 avatar_client = AvatarClient()
-print(
-    "[Avatar] "
-    + ("啟用本地 CosyVoice3 + MuseTalk" if avatar_client.enabled else "未啟用")
-)
+print("[Avatar] " + ("啟用本地 CosyVoice3 + MuseTalk" if avatar_client.enabled else "未啟用"))
 
 INTERVIEW_ENGINE = os.getenv("INTERVIEW_ENGINE", "amie").strip().lower()
 if INTERVIEW_ENGINE not in {"amie", "legacy"}:
@@ -54,10 +49,7 @@ doctor_sessions_lock = RLock()
 DOCTOR_SESSION_TTL = 60 * 60
 DOCTOR_HISTORY_MAX_TURNS = 8
 
-URGENT_CARE_MESSAGE = (
-    "根據您目前提供的症狀，可能有需要立即處理的危險狀況。"
-    "請立刻告知現場醫護人員；若不在醫療院所，請聯絡當地緊急醫療服務。"
-)
+URGENT_CARE_MESSAGE = patient_message("safety.urgent_care")
 
 consultation_repository = ConsultationRepository.from_environment()
 

@@ -1,0 +1,824 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "toothache",
+  "label": "牙痛",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "662aecb6b277bbd83d45d9e8dec2ea691ae5e7388656b2642f84174f689289ee",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"toothache toothache differential diagnosis diseases clinical presentation symptoms history\",\"Acute Sinusitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Chronic Sinusitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"toothache toothache red flags emergency warning signs urgent referral rule out\",\"Barodontalgia diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "566b45cfba2101fc55e0c702e447f6eb06e56ef9bc68a0089849214e2ad846e4"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "8c20eaeff90da0122185393e32126376ce9dae1ae606f9bc9cad38c9e79c8f9a",
+    "generated_at": "2026-08-10T04:22:34+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-4ea2180697835e1d",
+      "chunk_id": "ab269e7484f04df70cd4_3",
+      "title": "Nasal Foreign Bodies: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/763767-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "toothache toothache differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4514,
+      "excerpt": "Other signs and symptoms include the following: Epistaxis Pain Irritation J Chronic sinusitis Unilateral nare obstruction New-onset snoring Sneezing Wheezing Stridor Unilateral facial swelling A retrospective study by Schuldt et al of 12,887 children and adolescents in the German population who received medical attention for aural or nasal foreign bodies showed a higher incidence in%rsons with a hyperkinetic disorder (14.1% of patients), a congenital malformation (50.8% of patients), or a psychological developmental disorder (52.7% of patients), Physical Examination The patient may present",
+      "text_sha256": "2ade2dd0f19865d3ab456fee6cbe37ba07c08d1a7c84f4d0f8a861c0a57ab4ee"
+    },
+    {
+      "id": "rag-62741c23744c5362",
+      "chunk_id": "2cf2b5608b381af04fa2_1",
+      "title": "Acute Sinusitis: Practice Essentials, Background, Anatomy",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/232670-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "toothache toothache differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4662,
+      "excerpt": "rhinosinusitis is the preferred term for this condition. It is more common in females, and the highest incidence is between the ages 45 to 64 years. Air-fluid level (arrow) in the maxillary sinus suggests sinusitis. Signs and symptoms Clinical findings in acute sinusitis may include the following: Pain over cheek and radiating to frontal region or teeth, increasing with straining or bending down Redness of nose, cheeks, or eyelids Tenderness to pressure over the floor of the frontal sinus immediately above the inner canthus Referred pain to the vertex, temple, or occiput Postnasal discharge A",
+      "text_sha256": "26fc7c9b5b06d61e6d3636f15e9bf49b23a4f943d8d6d57f44def8ed3f793a47"
+    },
+    {
+      "id": "rag-892dc889d4da8ebd",
+      "chunk_id": "689b3d55803f83765ad0_51",
+      "title": "Dysbarism: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769902-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "toothache toothache differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4202,
+      "excerpt": "posterior alveolar nerve, the symptoms would be located in the upper teeth or gums. In addition, dysfunction of the sphenoid sinus can result in involvement of any of the divisions of the trigeminal nerve. The two other divisions go to the forehead and the jaw with the same symptoms. Tooth squeeze When considering barodontalgia (tooth squeeze), it is important to recognize that many of the head and neck issues discussed before and after this section can cause referred pain leading the affected individual to believe that it is dental in origin. This is classified as indirect barodontalgia and",
+      "text_sha256": "09b50c6ac58bf71160bd5bf16d85190a59ceeb32c5e83046e567ed34646d2708"
+    },
+    {
+      "id": "rag-bf36a9eb2c4248ca",
+      "chunk_id": "689b3d55803f83765ad0_52",
+      "title": "Dysbarism: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769902-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "toothache toothache differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4251,
+      "excerpt": "that it is dental in origin. This is classified as indirect barodontalgia and is related to disease, such as upper respiratory tract infection or chronic sinusitis, in the air spaces such as the sinuses or ears. As these are above the oral cavity, the sensation of pain usually involves the upper teeth and as it is frequently due to an equalization issue, it is noticed on initial decent. Indirect barodontalgia from barosinusitis was reported in 9.7% of the cases of barodontalgia. Clinically, there may be tenderness on percussion (tapping) of the affected sinus. Direct barodontalgia involves the",
+      "text_sha256": "671596b418b811cb4219764bd640755b5c83035ebc21bfe58a06b08779032ddf"
+    },
+    {
+      "id": "rag-9545dfbf60a6154b",
+      "chunk_id": "2cf2b5608b381af04fa2_4",
+      "title": "Acute Sinusitis: Practice Essentials, Background, Anatomy",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/232670-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "toothache__acute_sinusitis",
+        "toothache__chronic_sinusitis"
+      ],
+      "retrieval_queries": [
+        "toothache toothache differential diagnosis diseases clinical presentation symptoms history",
+        "Acute Sinusitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Chronic Sinusitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3415,
+      "excerpt": "Facial erythema Diagnosis Acute sinusitis is a clinical diagnosis. However, the evaluation might include the following laboratory tests : Nasal cytology Nasal-sinus biopsy Tests for immunodeficiency, cystic fibrosis, or ciliary dysfunction Nasal cytology examinations may be useful to elucidate the following entities: Allergic rhinitis Eosinophilia Nasal polyposis Aspirin sensitivity Tests for immunodeficiency are indicated if history findings indicate recurrent infection; they include the following: Immunoglobulin studies HIV serology Cultures are not routinely obtained in the evaluation of",
+      "text_sha256": "b615c23e11471f2ef01b007649cd88170dd62242c1fac30bb79a738b837cb6ab"
+    },
+    {
+      "id": "rag-41936184396f98a2",
+      "chunk_id": "ab7d430962cf4300f40b_10",
+      "title": "Noncandidal Fungal Infections of the Mouth: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1077685-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "toothache toothache differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4616,
+      "excerpt": "the antral wall is destroyed, with antral pain, swelling, sequelae from orbital invasion (eg, impaired ocular motility, exophthalmos, or impaired vision), or intracranial extension (eg, headaches, meningism). Chronic sinus aspergillosis is uncommon, and patients present with a diffusely opaque antrum radiographically, sometimes with dense punctate radiopacities. This disease is unresponsive to treatments used for bacterial sinusitis. Allergic fungal sinusitis is also uncommon and is usually due to fungi other than Aspergillus organisms. Interestingly, subclinical defects in cell-mediated",
+      "text_sha256": "97e4b63840db0bccfd4004da017aecc500ea9fd6d0058b463051e3fd8ce12976"
+    },
+    {
+      "id": "rag-bd0c20de46e8bd2f",
+      "chunk_id": "709d501e5392c47ae3b5_33",
+      "title": "Lyme Disease: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/330178-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "toothache toothache differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4873,
+      "excerpt": "the following: Fatigue Myalgias Arthralgias Headache Fever Chills Neck stiffness Stage 2 disease Stage 2 is also known as early disseminated disease. It generally occurs weeks to months after the bite. Musculoskeletal and neurologic symptoms are the most common; less common symptoms are cardiac and dermatologic. B burgdorferi spreads throughout the body and produces symptoms by direct invasion (eg, erythema migrans), particularly in the early stages of the disease. Because growing B burgdorferi in culture is difficult, confirming that the organism is actually present in a specific organ that",
+      "text_sha256": "f34efa7309affa9f0e81949f33769cdcad27720360650caa02ba3e13e2bcd31c"
+    },
+    {
+      "id": "rag-545aa9217fbeeaea",
+      "chunk_id": "915bc21ad8118bc73bc3_6",
+      "title": "Labyrinthitis: Background, Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/856215-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "toothache toothache differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4877,
+      "excerpt": "into the inner ear (serous labyrinthitis). !byrinthitis is the most common complication of otitis media, accounting for 32% of all intracranial and extracranial complications in one study. Although bacterial labyrinthitis is rare in the postantibiotic era, bacterial meningitis remains a significant cause of hearing loss. Auditory symptoms, vestibular symptoms, or both may be present in as many as 20% of children with meningitis. Meningitis typically affects both ears, whereas otogenic infections typically cause unilateral symptoms. Suppurative labyrinthitis In patients with meningitis,",
+      "text_sha256": "111999c56b63c6f00048401ab3fbe58a4ae7964e87ab03eb9ee6574ee8be86af"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "common",
+        "safety",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "toothache__barodontalgia"
+      ],
+      "retrieval_queries": [
+        "toothache toothache red flags emergency warning signs urgent referral rule out",
+        "Barodontalgia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4078,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-6ae0616b48e3e591",
+      "chunk_id": "7b75cfde54b1a7a1a4c2_4",
+      "title": "Infectious or Allergic Chronic Laryngitis: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/864767-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "toothache toothache red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5715,
+      "excerpt": "(GI) series, manometry Videostrobe Skin tests can be performed if allergies are suspected, as can 24-hour pH monitoring if gastroesophageal reflux disease (GERD) is in the differential diagnosis. The larynx can be directly examined with a flexible fiberoptic nasopharyngolaryngoscope. Direct laryngoscopy with a rigid laryngoscope (under general anesthesia) may be required for a detailed laryngeal inspection and may help obtain tissue for biopsy, cultures, and smears to identify the presence of organisms. Undertake this examination when noninvasive studies fail. Accomplish a thorough evaluation",
+      "text_sha256": "6ca717ea930887673cf9b00cc458c5eb7a52bc0ebbe3efb9aa11030ad7624aba"
+    },
+    {
+      "id": "rag-2339bba0ce428eaa",
+      "chunk_id": "dd9970b5cca993dde8ee_20",
+      "title": "Latex Allergy: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/756632-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "toothache toothache red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5968,
+      "excerpt": "groups frequently maintain lists of latex-safe medical and dental practices; many track regulatory and legislative developments. Clinical Presentation",
+      "text_sha256": "fd9a5ee3c2c1d6410e50469cf543ff9e5b6ee3961b0e7eda89c6bac87694208e"
+    },
+    {
+      "id": "rag-ccccad9b14647dd6",
+      "chunk_id": "2774c8178c5c95a25ee1_35",
+      "title": "Chronic Sinusitis: Practice Essentials, Background, Anatomy",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/232791-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "toothache__acute_sinusitis",
+        "toothache__chronic_sinusitis"
+      ],
+      "retrieval_queries": [
+        "Acute Sinusitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Chronic Sinusitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4051,
+      "excerpt": "rare, with 3.7% to 10% of intracranial infections related to sinusitis. (See Complications.) Clinical Presentation",
+      "text_sha256": "8a0c8ea988571bc61f14e3da8943ada3d743f2f322f517a18fcfc78b041c51e8"
+    },
+    {
+      "id": "rag-73c4ee905b1272a8",
+      "chunk_id": "2774c8178c5c95a25ee1_3",
+      "title": "Chronic Sinusitis: Practice Essentials, Background, Anatomy",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/232791-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "toothache__acute_sinusitis",
+        "toothache__chronic_sinusitis"
+      ],
+      "retrieval_queries": [
+        "Acute Sinusitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Chronic Sinusitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3993,
+      "excerpt": "Visual disturbances Exacerbation of asthma Unexplained fever Diagnosis of chronic sinusitis Serious underlying conditions, such as tumors and immunodeficiency states, should always be considered in the workup of chronic sinusitis. Radiologic examination is the cornerstone in the diagnostic workup of chronic sinusitis. Nasal endoscopy usually is recommended before obtaining imaging, because is shows the condition of the nasal mucosa and evaluates for purulent drainage. Imaging studies Plain radiographic views provide limited information regarding anterior ethmoid anatomy; computed tomography",
+      "text_sha256": "e72773f309e6f0ab8225afcbc73c7ad438749411f05f42e63f573e05686b35a0"
+    },
+    {
+      "id": "rag-302646001d4d1b3e",
+      "chunk_id": "f4e75cd4ab6f9dc54f19_22",
+      "title": "Fungal Sinusitis: Practice Essentials, History of the Procedure, Problem",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/863062-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "toothache__acute_sinusitis"
+      ],
+      "retrieval_queries": [
+        "Acute Sinusitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.422,
+      "excerpt": "A high index of suspicion for early diagnosis is critical, especially in individuals who are immunocompromised. Acute invasive fungal sinusitis carries a mortality rate of up to 50%. Signs and symptoms include dark eschars on the septum, inferior and middle turbinates, and/or palate. In the late stages, signs and symptoms of cavernous sinus thrombosis and cranial neuropathies are present. Chronic invasive fungal sinusitis Patients present with symptoms of long-standing rhinosinusitis. Symptoms are usually not acute, and fever and mental status changes are absent. Orbital apex syndrome, which",
+      "text_sha256": "aee4cb3fb7806ead46ff381864eda849e34febc02427a3a25f780ee71c4b5b5f"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "toothache__barodontalgia",
+        "toothache__chronic_sinusitis"
+      ],
+      "retrieval_queries": [
+        "Barodontalgia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Chronic Sinusitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4304,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-98236fa686f0861f",
+      "chunk_id": "c073c38d1231a0946898_5",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "toothache__barodontalgia"
+      ],
+      "retrieval_queries": [
+        "Barodontalgia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4482,
+      "excerpt": "small arteries or veins compressing the facial nerve. In about 85% of cases, no lesion is identified, even after extensive investigations, and the etiology is labeled idiopathic (classic) by default. Aneurysms, tumors, chronic meningeal inflammation, or other lesions may irritate trigeminal nerve roots along the pons, causing symptomatic trigeminal neuralgia. Uncommonly, an area of demyelination from multiple sclerosis may be the precipitant. Lesions of the entry zone of the trigeminal roots within the pons may cause a similar pain syndrome. An area of demyelination is shown in the image",
+      "text_sha256": "2e35c0c87d3c5a3c69190f62d48674f5f65630ceaf100a46670cdf14d962ef54"
+    },
+    {
+      "id": "rag-3a72d4c38d9a0bb7",
+      "chunk_id": "9f7eb5027998a34eb6c2_8",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "toothache__barodontalgia"
+      ],
+      "retrieval_queries": [
+        "Barodontalgia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4554,
+      "excerpt": "conduction defects are truly diagnostic only when they coincide with symptoms Loop recorders have a higher diagnostic yield than Holter monitor evaluation, with a marginal cost savings Ambulatory monitoring appears to have a higher negative than positive diagnostic yield Other diagnostic tests and procedures include the following: Head-up tilt-table test - Useful for confirming autonomic dysfunction and can generally be safely arranged on an outpatient basis Electroencephalography (EEG) - Can be performed at the discretion of a neurologist if seizure is considered a likely alternative",
+      "text_sha256": "bce92127a34f3c0ce64d226f3f059473b46561d6c8d76961f1c0a09f5b6874fc"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "toothache__acute_sinusitis",
+      "name": "Acute Sinusitis",
+      "retrieval_query": "Acute Sinusitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-62741c23744c5362"
+      ],
+      "disease_rag_source_ids": [
+        "rag-9545dfbf60a6154b",
+        "rag-ccccad9b14647dd6",
+        "rag-73c4ee905b1272a8",
+        "rag-302646001d4d1b3e"
+      ]
+    },
+    {
+      "id": "toothache__barodontalgia",
+      "name": "Barodontalgia",
+      "retrieval_query": "Barodontalgia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-892dc889d4da8ebd",
+        "rag-bf36a9eb2c4248ca"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-5bcac9eab5404341",
+        "rag-98236fa686f0861f",
+        "rag-3a72d4c38d9a0bb7"
+      ]
+    },
+    {
+      "id": "toothache__chronic_sinusitis",
+      "name": "Chronic Sinusitis",
+      "retrieval_query": "Chronic Sinusitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-bf36a9eb2c4248ca",
+        "rag-4ea2180697835e1d"
+      ],
+      "disease_rag_source_ids": [
+        "rag-9545dfbf60a6154b",
+        "rag-ccccad9b14647dd6",
+        "rag-73c4ee905b1272a8",
+        "rag-5bcac9eab5404341"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "toothache",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-9545dfbf60a6154b",
+        "rag-ccccad9b14647dd6",
+        "rag-73c4ee905b1272a8",
+        "rag-302646001d4d1b3e",
+        "rag-f09c5253c7a82445",
+        "rag-5bcac9eab5404341",
+        "rag-98236fa686f0861f",
+        "rag-3a72d4c38d9a0bb7"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "toothache__acute_sinusitis__recent_infection",
+        "description": "近期有呼吸道感染。",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "toothache__acute_sinusitis"
+        ],
+        "source_ids": [
+          "rag-9545dfbf60a6154b"
+        ]
+      },
+      {
+        "code": "toothache__barodontalgia__referred_pain_from_sinusitis",
+        "description": "Tooth pain referred from sinus inflammation or infection, often affecting the upper teeth.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "toothache__barodontalgia"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-98236fa686f0861f",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "code": "toothache__barodontalgia__paresthesia",
+        "description": "Numbness or tingling sensations.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "toothache__barodontalgia"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341"
+        ]
+      },
+      {
+        "code": "toothache__chronic_sinusitis__recent_respiratory_infection",
+        "description": "Recent upper respiratory tract infection.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "toothache__chronic_sinusitis"
+        ],
+        "source_ids": [
+          "rag-9545dfbf60a6154b",
+          "rag-ccccad9b14647dd6",
+          "rag-73c4ee905b1272a8",
+          "rag-5bcac9eab5404341"
+        ]
+      },
+      {
+        "code": "toothache__chronic_sinusitis__facial_swelling",
+        "description": "Swelling of the face.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "toothache__chronic_sinusitis"
+        ],
+        "source_ids": [
+          "rag-9545dfbf60a6154b",
+          "rag-ccccad9b14647dd6",
+          "rag-73c4ee905b1272a8",
+          "rag-5bcac9eab5404341"
+        ]
+      },
+      {
+        "code": "toothache__chronic_sinusitis__fever",
+        "description": "Unexplained fever.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "toothache__chronic_sinusitis"
+        ],
+        "source_ids": [
+          "rag-73c4ee905b1272a8"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "associated_symptoms",
+        "option": "最近有呼吸道感染、喉嚨痛或吞嚥困難",
+        "mapping": {
+          "findings": [
+            "toothache__acute_sinusitis__recent_infection",
+            "toothache__barodontalgia__referred_pain_from_sinusitis",
+            "toothache__chronic_sinusitis__recent_respiratory_infection"
+          ]
+        },
+        "disease_ids": [
+          "toothache__acute_sinusitis",
+          "toothache__barodontalgia",
+          "toothache__chronic_sinusitis"
+        ],
+        "source_ids": [
+          "rag-9545dfbf60a6154b",
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-98236fa686f0861f",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-ccccad9b14647dd6",
+          "rag-73c4ee905b1272a8"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "臉或口腔有麻木或刺痛感",
+        "mapping": {
+          "findings": [
+            "toothache__barodontalgia__paresthesia"
+          ]
+        },
+        "disease_ids": [
+          "toothache__barodontalgia"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "牙齦、臉部或脖子腫脹",
+        "mapping": {
+          "findings": [
+            "toothache__chronic_sinusitis__facial_swelling"
+          ]
+        },
+        "disease_ids": [
+          "toothache__chronic_sinusitis"
+        ],
+        "source_ids": [
+          "rag-9545dfbf60a6154b",
+          "rag-ccccad9b14647dd6",
+          "rag-73c4ee905b1272a8",
+          "rag-5bcac9eab5404341"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "發燒或是畏寒",
+        "mapping": {
+          "findings": [
+            "toothache__chronic_sinusitis__fever"
+          ]
+        },
+        "disease_ids": [
+          "toothache__chronic_sinusitis"
+        ],
+        "source_ids": [
+          "rag-73c4ee905b1272a8"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "toothache__acute_sinusitis",
+        "name": "Acute Sinusitis",
+        "must_not_miss": false,
+        "retrieval_query": "Acute Sinusitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "toothache__acute_sinusitis__recent_infection",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-9545dfbf60a6154b"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-9545dfbf60a6154b",
+          "rag-ccccad9b14647dd6",
+          "rag-73c4ee905b1272a8",
+          "rag-302646001d4d1b3e"
+        ]
+      },
+      {
+        "id": "toothache__barodontalgia",
+        "name": "Barodontalgia",
+        "must_not_miss": false,
+        "retrieval_query": "Barodontalgia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "toothache__barodontalgia__referred_pain_from_sinusitis",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-5bcac9eab5404341",
+              "rag-98236fa686f0861f",
+              "rag-3a72d4c38d9a0bb7"
+            ]
+          },
+          {
+            "fact": "toothache__barodontalgia__paresthesia",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-5bcac9eab5404341"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-98236fa686f0861f",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "id": "toothache__chronic_sinusitis",
+        "name": "Chronic Sinusitis",
+        "must_not_miss": false,
+        "retrieval_query": "Chronic Sinusitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "toothache__chronic_sinusitis__recent_respiratory_infection",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-9545dfbf60a6154b",
+              "rag-ccccad9b14647dd6",
+              "rag-73c4ee905b1272a8",
+              "rag-5bcac9eab5404341"
+            ]
+          },
+          {
+            "fact": "toothache__chronic_sinusitis__facial_swelling",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-9545dfbf60a6154b",
+              "rag-ccccad9b14647dd6",
+              "rag-73c4ee905b1272a8",
+              "rag-5bcac9eab5404341"
+            ]
+          },
+          {
+            "fact": "toothache__chronic_sinusitis__fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-73c4ee905b1272a8"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-9545dfbf60a6154b",
+          "rag-ccccad9b14647dd6",
+          "rag-73c4ee905b1272a8",
+          "rag-5bcac9eab5404341"
+        ]
+      }
+    ],
+    "safety_proposals": [],
+    "unsupported_requirements": [
+      {
+        "requirement": "Create facts for facial redness, eyelid redness, or tenderness to pressure over the frontal sinus.",
+        "reason": "These are findings that require a physical examination and cannot be reliably reported by a patient through a questionnaire."
+      },
+      {
+        "requirement": "Create facts for fever or mental status changes.",
+        "reason": "While fever is mentioned in the context of chronic sinusitis exacerbation and invasive fungal sinusitis, the provided RAG sources for Acute Sinusitis do not explicitly list fever as a typical sign or symptom for uncomplicated cases. Mental status changes are associated with severe complications like intracranial infections or invasive fungal sinusitis, which are beyond the scope of a standard toothache questionnaire."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create safety rules for red flag symptoms associated with Barodontalgia.",
+        "reason": "The provided RAG sources mention red flags like exertional onset, chest pain, dyspnea, and focal neurologic deficits in the context of syncope, not directly for Barodontalgia. The evidence is insufficient to create specific, justifiable safety rules for the toothache route based on the supplied context."
+      },
+      {
+        "requirement": "Create a comprehensive clinical profile for Barodontalgia.",
+        "reason": "The core feature of Barodontalgia (pain related to pressure changes) is not covered by the questionnaire, and the provided RAG sources offer limited, indirect details. A comprehensive profile cannot be built without more specific evidence."
+      },
+      {
+        "requirement": "Create a fact for tenderness on percussion of the affected sinus.",
+        "reason": "This is a physical exam finding that cannot be elicited through a patient questionnaire."
+      },
+      {
+        "requirement": "Create a fact for visual disturbances.",
+        "reason": "The current questionnaire does not ask about visual disturbances."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-9545dfbf60a6154b",
+          "rag-ccccad9b14647dd6",
+          "rag-73c4ee905b1272a8",
+          "rag-302646001d4d1b3e"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], profiles[0], profiles[0].clues[0], profiles[0].clues[1], profiles[0].clues[2]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-9545dfbf60a6154b",
+          "rag-ccccad9b14647dd6",
+          "rag-73c4ee905b1272a8",
+          "rag-302646001d4d1b3e"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The evidence for Barodontalgia is very limited. The key supporting clue is the link to upper respiratory infections/sinusitis causing referred tooth pain. The questionnaire does not ask about the defining feature of barodontalgia, which is pain triggered by changes in ambient pressure (e.g., flying, diving). The profile is therefore weak.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-98236fa686f0861f",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "Source rag-5bcac9eab5404341 mentions paresthesia in the context of a neuropathy associated with Acrodermatitis Chronica Atrophicans (ACA), not directly with Barodontalgia. The link is weak and based on paresthesia being a general neurological symptom that could theoretically occur with nerve involvement, but this is a significant inferential leap.",
+        "source_ids": [
+          "rag-5bcac9eab5404341"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], semantic_options[1], profiles[0], profiles[0].clues[0], review_notes[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-98236fa686f0861f",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The connection between toothache and chronic sinusitis is supported by the evidence, specifically mentioning pain in the upper teeth related to barosinusitis. The proposed facts and profile reflect this connection. The evidence is limited as it primarily comes from the context of dysbarism (barodontalgia) rather than general presentations of chronic sinusitis.",
+        "source_ids": [
+          "rag-9545dfbf60a6154b",
+          "rag-ccccad9b14647dd6",
+          "rag-73c4ee905b1272a8",
+          "rag-5bcac9eab5404341"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-9545dfbf60a6154b",
+          "rag-ccccad9b14647dd6",
+          "rag-73c4ee905b1272a8",
+          "rag-5bcac9eab5404341"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], semantic_options[0], semantic_options[2], profiles[0], profiles[0].clues[0], profiles[0].clues[1], profiles[0].clues[2], review_notes[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-9545dfbf60a6154b",
+          "rag-ccccad9b14647dd6",
+          "rag-73c4ee905b1272a8",
+          "rag-5bcac9eab5404341"
+        ]
+      }
+    ]
+  }
+}

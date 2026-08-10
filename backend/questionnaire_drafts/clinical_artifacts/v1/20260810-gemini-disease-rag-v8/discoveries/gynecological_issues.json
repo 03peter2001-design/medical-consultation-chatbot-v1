@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "gynecological_issues",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "87aa9b4f5fb33ac5a1cdd2a6e94f2864e849cb308112ae60599f09412d4807ed",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history",
+      "gynecological issues gynecological red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "9a13b5e7ce7b1d92c96ccbfd669b6b0fdbd963b7e8871745deab7057d4d36556"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "0c89505e9d6ae776654279ffbe32722db72aa1e3f73acbc503a6d53e4f4e5f0d",
+    "generated_at": "2026-08-10T04:06:40+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-f5e1e00c1829f30d",
+      "chunk_id": "9aeedc640c68352d7494_37",
+      "title": "Dysmenorrhea: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/253812-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.413,
+      "excerpt": "accordingly, diagnosis is difficult. Definitive diagnosis is typically accomplished by means of transvaginal ultrasonography or magnetic resonance imaging (MRI). When the latter is used, the key finding is a thickened junctional zone (JZ line) that is, the border between myometrium and endometrium. One paper showed that adenomyosis should be in the differential diagnosis when a patient is treated for presumptive endometriosis and has chronic persistent pain. Intrauterine contraceptive device IUCDs (IUDs) may cause bladder or uterine perforation. The sooner a patient has a uterine perforation",
+      "text_sha256": "b41e67ad043ef0ecacb7e5671de11422c0854e7a473b5c54d8b9387c9652b649"
+    },
+    {
+      "id": "rag-0224558d008f5bcb",
+      "chunk_id": "2a896961ed57d0483825_3",
+      "title": "Hyperglucagonemia (Glucagonoma Syndrome): Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/121575-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4559,
+      "excerpt": "normochromic normocytic, although macrocytic anemia has been described in some patients. nous thrombosiss thought to occur in as many as 30% of patients with glucagonoma syndrome.J Diagnosis is aided by the typical skin appearance of patients with NME and by the evaluation of a skin biopsy. Glucagon should be tested by RIA of a fasting plasma sample./rmones that may be elevated in glucagonoma syndrome include insulin, VIP, gastrin, pancreatic polypeptide, 5-HT, calcitonin, adrenocorticotropic hormone, and adrenocorticotropic hormone (ACTH).n glucagonoma syndrome, glucagon levels are well in",
+      "text_sha256": "cbd4db7d89cb5de2b086a92e87a6bbbd6009e502ba2446a90f9c62c7e78c51a8"
+    },
+    {
+      "id": "rag-f3faa0ec1e3b4d47",
+      "chunk_id": "aa487a13953bac9fe331_1",
+      "title": "Pelvic Inflammatory Disease: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/256448-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4402,
+      "excerpt": "transmitted disease (STD). Signs and symptoms of pelvic inflammatory disease The diagnosis of acute PID is primarily based on historical and clinical findings. Clinical manifestations of PID vary widely. Many patients exhibit few or no symptoms, whereas others have acute, serious illness. The most common presenting complaint is lower abdominal pain. Many women report an abnormal vaginal discharge. (See Presentation.) Diagnosis of pelvic inflammatory disease The differential diagnosis includes appendicitis, cervicitis, urinary tract infection, endometriosis, ovarian torsion, and adnexal tumors.",
+      "text_sha256": "ab3a505dc39be5b0fb2fff4d31c517a1e310d8de29acce89cde5193b5ac706a4"
+    },
+    {
+      "id": "rag-e1144a8990f72a66",
+      "chunk_id": "9aeedc640c68352d7494_39",
+      "title": "Dysmenorrhea: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/253812-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4568,
+      "excerpt": "dysphoric disorder Besides dysmenorrhea, patients with premenstrual dysphoric disorder (formerly premenstrual syndrome) may have bloating, body aches, migraine headaches, breast tenderness, and emotional complaints. The effects of these symptoms are occasionally debilitating. Aside from possible vaginal brownish discharge or bleeding, pelvic examination findings are normal. It is the emergency physician s responsibility to ensure adequate analgesia and appropriate follow-up with a gynecologist. Epidemiology United States statistics Dysmenorrhea may affect more than 50% of menstruating women,",
+      "text_sha256": "bb63510b8350971d2228ebae08b7761a42c85ad97062900917d877d7e33f0df7"
+    },
+    {
+      "id": "rag-1d3f048a40e712fd",
+      "chunk_id": "fb961f7e1c8b575b2ec5_2",
+      "title": "Hypogammaglobulinemia: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/136471-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4598,
+      "excerpt": "A detailed clinical history should emphasize the following: Reason for lab draw that defined the abnormality Symptoms (especially infections) Age of onset Family history Site of infections Type of microorganisms Recurrent infections Gastrointestinal symptoms Musculoskeletal symptoms Autoimmune and collagen vascular diseases Physical findings will vary by etiology, but primary hypogammaglobulinemia (associated with a primary immune deficiency) may include the following: Growth retardation Abnormalities of lymphoid tissue and organs (eg, a paucity of tonsillar tissue, adenoids, and peripheral",
+      "text_sha256": "ab891bcda27d7a883d0b123b5247a35b050b1a6eafe7573b51d1970df8792d59"
+    },
+    {
+      "id": "rag-8b9ab8ada128e5ae",
+      "chunk_id": "818eca5072b6ba4dd12a_3",
+      "title": "Focal Segmental Glomerulosclerosis: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/245915-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4504,
+      "excerpt": "insufficiency ) However, some patients may be asymptomatic. See Presentation for more detail. Diagnosis Although clinical features are suggestive, a diagnosis of FSGS is established only by histopathology findings. Detailed medical history and pertnent laboratory tests are essential to distnguish between primary (idiopathic) and secondary forms of FSGS. n massively obese patients, FSGS, mostlys a diagnosis of exclusion. Examination of patients with FSGS may include the following findings: Leg edema Ascites Pleural effusion Abdominal pain: Common in children; may be symptom of peritonitis",
+      "text_sha256": "659ed990b335202f9d60a9fd23de1d33221a3d563a8a94db70487c478ba28849"
+    },
+    {
+      "id": "rag-ac671dc6a838934a",
+      "chunk_id": "f6c8905a3254558b14b7_12",
+      "title": "Median Neuropathy: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1141168-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4646,
+      "excerpt": "to data from the 1980s, the prevalence of electrophysiologically confirmed symptomatic CTS is about 3% among women and 2% among men. A cross-sectional survey reported in 2001 calculated the lowest possible prevalence of symptomatic CTS in the general US population as 3.72%. Among residents of Olmsted County, Minnesota, the adjusted annual rates of medically diagnosed CTS increased from 258/100,000 in 1981-1985 to 424/100,000 in 2000-2005. For this last period included in the study, the incidence in women was 542/100,000 and in men was 303/100,000. Generally, the most marked increases in CTS",
+      "text_sha256": "2b7c5cda7210957a40eca34883951a740475eada9c5660c1c191d63a20f76e34"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history",
+        "gynecological issues gynecological red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4653,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-cad1d6cea568461d",
+      "chunk_id": "013e43e6534e2929231d_22",
+      "title": "CA 125: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087557-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5616,
+      "excerpt": "tumor marker recommended for clinical use in the diagnosis and management of ovarian cancer. There are 5 main indications in which the determination of CA 125 levels is recommended. Table 1 summarizes the recommendations from different societies in both Europe and the United States. Table 1. Recommendations for CA 125 Testing in Ovarian Cancer by Different Expert Groups (Open Table in a new window) NCCN NIH NACB EGTM ESMO Early detection in hereditary cancer syndromes Yes None Differential diagnosis of pelvic mass Yes None Monitoring response to therapy Yes None Yes Detection of recurrence Yes",
+      "text_sha256": "e55757a67a3049a26503cb9bab9c430e8de2a791d893142d47097184aee9d1e2"
+    },
+    {
+      "id": "rag-a6d1f75d3dc4177f",
+      "chunk_id": "013e43e6534e2929231d_2",
+      "title": "CA 125: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087557-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5619,
+      "excerpt": "detected stage. The degree of elevation has also been shown to correlate with tumor burden and International Federation of Obstetrics and Gynecologic (FIGO) pathologic stage. However, owing to the lack of sensitivity and specificity, elevations in single or sequential CA 125 levels alone are not recommended for ovarian cancer screening or in the initial diagnosis of ovarian cancer. CA 125 levels may also be elevated in other malignancies, as well as in benign and physiologic conditions. Malignant conditions associated with elevated CA 125 levels include the following: Epithelial ovarian",
+      "text_sha256": "ac0d686d0938883879b97e06100805463972fc8d42b3b844bbeca7cd8016d8ac"
+    },
+    {
+      "id": "rag-a76f161a6be269a2",
+      "chunk_id": "2d52e0b25b95aa71cedd_7",
+      "title": "Early Pregnancy Loss in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795085-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.578,
+      "excerpt": "usually have subsided. Ultrasonography reveals a vacant uterus. Diagnosis may be confirmed by observation of the aborted fetus with the complete placenta, although caution is recommended in making this diagnosis without ultrasonography because it can be difficult to determine if the miscarriage is complete. Etiology Causes of first- and second-trimester miscarriage Embryonic abnormalities Embryonic abnormalities account for 80-90% of rst-trimester miscarriages. Note the following: Chromosomal abnormalities are the most common cause of spontaneous miscarriage. More than 90% of cytogenic and",
+      "text_sha256": "e418143c55f0e41d9be572c2d83ec881b8de022dcf3551223c4286e115393f57"
+    },
+    {
+      "id": "rag-56a8c3f553c2afd3",
+      "chunk_id": "3046d06c862cf3a8d792_28",
+      "title": "Emergent Management of Ectopic Pregnancy: Practice Essentials, Ultrasonography, Other Diagnostic Imaging Modalities",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/796451-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5866,
+      "excerpt": "shock Urinalysis to eliminate urinary tract infection as a cause of pelvic pain Blood type and Rh factor, if transfusion is required or if RhoGAM will be provided for Rh-negative patients with vaginal bleeding Other Tests Dilation and curettage Dilation and curettage (D&C) can be used to rule out ectopic pregnancy by determining the presence of chorionic villi. The obvious drawback to its frequent use is that a certain number of normal intrauterine pregnancies (IUPs) will be aborted. It may be an option in the further workup of PUL when the pregnancy is undesired. Culdocentesis Culdocentesis",
+      "text_sha256": "54b534a6b192e81465f25aa5c3c1ddcd7d3d1d7bcd430c3c5ee67f21e64a44d5"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5885,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    },
+    {
+      "id": "rag-8356ec010ed3ff6f",
+      "chunk_id": "87996f6a71b53073e20c_3",
+      "title": "Acute Hypopituitarism: Overview, Diagnostic Considerations, Hormone Deficiency Symptoms",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767828-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.593,
+      "excerpt": "rate. The setting is not uncommon in which an emergency physician is evaluating a patient with complaints of weakness, fatigue, or altered mental status without a clear diagnosis. Subtle, but still abnormal, vital signs, such as slightly reduced blood pressure or heart rate, may be the only initial clues to suggest a pituitary deficiency rather than a relatively benign etiology. Emergency physicians frequently provide care to patients at risk of developing hypopituitarism. Risk factors include, but are not limited to, TBI, cocaine use, subarachnoid hemorrhage, and postpartum hypotension (a",
+      "text_sha256": "66493d5f742848008b29c1bb6e2ef99b7317d22019ad008feed96fe38c63f932"
+    }
+  ],
+  "discovery": {
+    "route": "gynecological_issues",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "gynecological_issues__pelvic_inflammatory_disease",
+        "name": "Pelvic inflammatory disease",
+        "rationale": "The questionnaire asks about lower abdominal or pelvic pain, vaginal discharge, and fever, which are common symptoms of Pelvic Inflammatory Disease (PID). The provided text states that the most common presenting complaint for PID is lower abdominal pain, and many women also report abnormal vaginal discharge.",
+        "source_ids": [
+          "rag-f3faa0ec1e3b4d47"
+        ]
+      },
+      {
+        "id": "gynecological_issues__dysmenorrhea",
+        "name": "Dysmenorrhea",
+        "rationale": "The questionnaire addresses symptoms like pain and cramping in the lower abdomen or pelvis, which are characteristic of dysmenorrhea. The source material mentions that dysmenorrhea can affect a large percentage of menstruating women and may present with symptoms like bloating and brownish vaginal discharge.",
+        "source_ids": [
+          "rag-e1144a8990f72a66"
+        ]
+      },
+      {
+        "id": "gynecological_issues__endometriosis",
+        "name": "Endometriosis",
+        "rationale": "The questionnaire asks about pelvic pain and irregular bleeding. Endometriosis is a key differential diagnosis for pelvic inflammatory disease and can cause chronic persistent pain, which aligns with the symptoms being investigated.",
+        "source_ids": [
+          "rag-f3faa0ec1e3b4d47",
+          "rag-f5e1e00c1829f30d"
+        ]
+      },
+      {
+        "id": "gynecological_issues__adenomyosis",
+        "name": "Adenomyosis",
+        "rationale": "The questionnaire explores pelvic pain and menstrual irregularities. The source material suggests that adenomyosis should be considered in the differential diagnosis for patients with chronic persistent pain, particularly when endometriosis is also being considered.",
+        "source_ids": [
+          "rag-f5e1e00c1829f30d"
+        ]
+      },
+      {
+        "id": "gynecological_issues__urinary_tract_infection",
+        "name": "Urinary tract infection",
+        "rationale": "The questionnaire specifically asks about urinary symptoms like difficulty urinating, frequency, urgency, or changes in urine color/odor. The provided text lists urinary tract infection as part of the differential diagnosis for pelvic inflammatory disease, which presents with similar lower abdominal pain.",
+        "source_ids": [
+          "rag-f3faa0ec1e3b4d47"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "The questionnaire asks about pregnancy status. It is critical to consider pregnancy-related complications such as ectopic pregnancy or early pregnancy loss, especially in patients with pelvic pain or bleeding. Ectopic pregnancy can present as a medical emergency.",
+        "source_ids": [
+          "rag-56a8c3f553c2afd3",
+          "rag-a76f161a6be269a2"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The questionnaire asks about triggers like trauma. The source material mentions that intrauterine contraceptive devices (IUDs) can cause uterine perforation, which should be considered in patients with a relevant history.",
+        "source_ids": [
+          "rag-f5e1e00c1829f30d"
+        ]
+      }
+    ]
+  }
+}

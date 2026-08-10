@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "motor_vehicle_accident_injury",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "1e62f8d4e6b31b524153c069ba2dd67ceecdab0ff6ade7c5ccdbfc0ecc1379d7",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "motor vehicle accident injury motor vehicle accident differential diagnosis diseases clinical presentation symptoms history",
+      "motor vehicle accident injury motor vehicle accident red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "a69346b3583043d47f755d609d98017d3166e23727ef543c0a75ce4815c359b3"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "915d1dec6654a65c0d44d0a149bda504a321d5af30e790c0560edf660d598707",
+    "generated_at": "2026-08-10T04:08:31+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-2ff56bcca8311479",
+      "chunk_id": "53fc3e4f98765d889be9_5",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "motor vehicle accident injury motor vehicle accident differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.487,
+      "excerpt": "management. Also see Ischemic Stroke in Emergency Medicine and Hemorrhagic Stroke. Clinical Presentation History See the list below: Age, comorbidities Head trauma Motor vehicle collision Fall/jump from height Assault Penetrating injury Loss of consciousness Headache Changes in vision Changes in strength or sensation Coordination or balance problems Loss of executive function or cognition Seizure Coagulation disorders or therapy Intoxication; history of substance abuse Previous neurosurgery Physical See the list below: Altered mental status; unresponsiveness; deficits in Glasgow Coma Scale",
+      "text_sha256": "252df4637d2a17c89677f559ca6491086be258138a9d51fb666d01414f1ab6fc"
+    },
+    {
+      "id": "rag-d0645c9d7392669b",
+      "chunk_id": "53fc3e4f98765d889be9_43",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "motor vehicle accident injury motor vehicle accident differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4516,
+      "excerpt": "is either due to vertebral artery dissection or carotid artery dissection. Risk factors for these injuries include penetrating trauma, C1-3 fractures, chiropractor manipulation, and possibly bruising to the neck from seatbelts. In ischemic stoke, acute (12-48 h) occlusion of one or more large vessels results in focal, wedge-shaped peripheral areas of loss of grey/white matter differentiation involving the cortex and contiguous white matter, or simply as a focal mass effect (see the image below). Anoxia or hypotension results in diffuse loss of gyral/cortical markings and diffuse mass effect.",
+      "text_sha256": "c62afd8be005538ea2aa62a2bd5ed7732142da9922209725430333eb3aa53263"
+    },
+    {
+      "id": "rag-6a8147dfcd11eed4",
+      "chunk_id": "0e015057c60c6e6987b9_53",
+      "title": "Decompression Sickness: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769717-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "motor vehicle accident injury motor vehicle accident differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4928,
+      "excerpt": "nerve injuries. Neurological deficits after a spinal cord injury can be multifocal. Sensory and motor disturbances can present independently, often resulting in a situation of \"dissociation.\" This dissociation is found in most cases of spinal cord DCS. MRI studies have seemingly revealed arterial patterns of infarction in spinal DCS. Eyes When DCS affects the brain, many symptoms can result. Negative scotomata, devoid of any lights or shapes, are the earliest symptom. Negative scotomata become positive after a few minutes. Other common symptoms include headaches or visual disturbances,",
+      "text_sha256": "bc48c73071cb46914079c7fe7c11defe40ef5cc54f94e08d6a41af8d41baafce"
+    },
+    {
+      "id": "rag-fe2c619db19b8f8d",
+      "chunk_id": "c2fe2cb9045703583e9f_2",
+      "title": "Conversion Disorder in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/805361-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "motor vehicle accident injury motor vehicle accident differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4934,
+      "excerpt": "or known pathological mechanism (after appropriate medical evaluation). NB: nscious/intentional production of physical symptoms is classified as ctitious disorder malingering. Though classified with somatic symptom/somatoform disorders in DSM-III through DSM-5-TR, conversion disorder is classified as a dissociative disorder in ICD-10, keeping its long association with hysteria (Dissociative Disorders in DSM). Clinical descriptions of conversion disorder date to almost 4000 years ago; the Egyptians attributed symptoms to a \"wandering uterus.\" In the 19th century, Paul Briquet described the",
+      "text_sha256": "9f1b3dd395445f75b03a1fb0a8b21191733659ec47e9bfe7f1eecbd0f3fb1fea"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "motor vehicle accident injury motor vehicle accident differential diagnosis diseases clinical presentation symptoms history",
+        "motor vehicle accident injury motor vehicle accident red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4562,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    }
+  ],
+  "discovery": {
+    "route": "motor_vehicle_accident_injury",
+    "evidence_status": "sufficient",
+    "diseases": [],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "This route has a 'handoff' disposition, indicating it is intended for immediate triage or handoff to a professional rather than differential diagnosis. Per instructions, no disease candidates are proposed for such routes.",
+        "source_ids": [
+          "rag-2ff56bcca8311479",
+          "rag-6a8147dfcd11eed4",
+          "rag-d0645c9d7392669b",
+          "rag-f09c5253c7a82445",
+          "rag-fe2c619db19b8f8d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope discovery citations with the complete route RAG evidence pack for: review_notes[0]. These citations remain unverified.",
+        "source_ids": [
+          "rag-2ff56bcca8311479",
+          "rag-6a8147dfcd11eed4",
+          "rag-d0645c9d7392669b",
+          "rag-f09c5253c7a82445",
+          "rag-fe2c619db19b8f8d"
+        ]
+      }
+    ]
+  }
+}

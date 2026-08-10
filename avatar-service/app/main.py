@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Literal
+
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
@@ -18,11 +20,23 @@ engine = AvatarEngine()
 
 class SynthesisRequest(BaseModel):
     text: str = Field(min_length=1, max_length=1200)
+    language: Literal["mandarin", "minnan"] = "mandarin"
 
 
 @app.get("/health")
 def health():
     return engine.health()
+
+
+@app.post("/v1/warmup")
+async def warmup():
+    try:
+        return await run_in_threadpool(engine.warmup)
+    except AvatarEngineError as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
+    except Exception as error:
+        print(f"[Avatar] warmup failed: {type(error).__name__}: {error}")
+        raise HTTPException(status_code=500, detail="本地 Avatar 模型預載失敗") from error
 
 
 @app.post("/v1/synthesize")
@@ -31,6 +45,7 @@ async def synthesize(payload: SynthesisRequest):
         video_path, cache_hit, animation_model = await run_in_threadpool(
             engine.render,
             payload.text,
+            payload.language,
         )
     except AvatarEngineError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error

@@ -1,0 +1,863 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "severe_dehydration",
+  "label": "嚴重脫水",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "3854701d541e5fd68b61ab7342b1e27c4bb671a8eaef3a0359474e6487ce7739",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"severe dehydration dehydration differential diagnosis diseases clinical presentation symptoms history\",\"severe dehydration dehydration red flags emergency warning signs urgent referral rule out\"]",
+    "rag_corpus_hash": "346630fd597cc014ebd0fa3709620b025e092ee2cb722ac87bc0b30edc11f0f9"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "f4d75bc2250abf859ce95beee230e14fd5f5b42f08b5015e5ee6c7fd16cb5a34",
+    "generated_at": "2026-08-10T04:13:26+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-e5257b482e39c691",
+      "chunk_id": "71bb683201e3ecc68e8c_15",
+      "title": "Pediatric Pyloric Stenosis: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/803489-overview",
+      "routes": [
+        "chest",
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "severe dehydration dehydration differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4173,
+      "excerpt": "delays in diagnosis with eventual dehydration and shock. Complications In the patient who presents with vomiting and has a missed/delayed diagnosis of pyloric stenosis, there is risk of significant dehydration leading to hypovolemic shock. Clinical Presentation",
+      "text_sha256": "e222dc7fb7d432891e133de75ade39cef01daceace80e23425bb4535f5108834"
+    },
+    {
+      "id": "rag-60c2ff97c7b6eb16",
+      "chunk_id": "09fd7a4c8f46f9094143_1",
+      "title": "Pediatric Dehydration: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801012-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "severe dehydration dehydration differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3261,
+      "excerpt": "a systematic review, Steiner et al found that the most useful signs (ie, highest likelihood ratios) for recognizing 5% dehydration are the following : Abnormal capillary refill time Abnormal skin turgor Abnormal respiratory pattern See Presentation for more detail. Diagnosis Laboratory studies are of limited utility in cases of mild dehydration, but they may be considered under certain conditions and are recommended in patients with more severe dehydration. See Workup for more detail. Management Mild or moderate volume depletion should be treated with oral rehydration when possible.",
+      "text_sha256": "c11360c2c0024d74a3ed6317fdd2cf23c61ae906e5865dd125958c3df6e77bca"
+    },
+    {
+      "id": "rag-673cbb2500a2a5af",
+      "chunk_id": "09fd7a4c8f46f9094143_0",
+      "title": "Pediatric Dehydration: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801012-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "severe dehydration dehydration differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3438,
+      "excerpt": "Overview Practice Essentials Dehydrations a common complication of illness observed in pediatric patients presenting to the emergency department (ED). Early recognition and early intervention are important to reduce risk of progression to hypovolemic shock and end-organ failure. Signs and symptoms In most cases, volume depletion in children is caused by fluid losses from vomiting or diarrhea. On physical examination, combinations of findings can be used to determine the degree of dehydration. On the basis of a systematic review, Steiner et al found that the most useful signs (ie, highest",
+      "text_sha256": "9635a95f8d7aa5d5f190921188f73d1af4950dbbe528d5b7163eeee8e214e33a"
+    },
+    {
+      "id": "rag-e0252c5d56df5562",
+      "chunk_id": "7bf6fe05bdcc5c4370b8_21",
+      "title": "WDHA Syndrome: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/183189-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "severe dehydration dehydration differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4138,
+      "excerpt": "tubular nephropathy Dehydration Non anion gap metabolic acidosis Perianal skin irritation from severe diarrhea Poor quality of life from severe diarrhea Clinical Presentation",
+      "text_sha256": "9e0c03712e7dd78fd186aea4b9e728dddfc4cfd8bd0bf87355cc1c9039d13873"
+    },
+    {
+      "id": "rag-cb4ac53c17d87dd1",
+      "chunk_id": "b0cd3d0ff2f63ab91c71_35",
+      "title": "Disseminated Intravascular Coagulation (DIC): Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/199627-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "severe dehydration dehydration differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5078,
+      "excerpt": "of conception Hematologic Myeloproliferative syndromes Vascular Rheumatoid arthritisRaynaud disease Cardiovascular Myocardial infarction Inflammatory Ulcerative colitisCrohn diseaseSarcoidosis Localized DIC Aortic aneurysmsGiant hemangioma (Kasabach-Merritt syndrome)Acute renal allograft rejection Bacterial infection (in particular, bloodstream infection [BSI]) is commonly associated with DIC. There is no difference in the incidence of DIC between patients with gram-negative sepsis and those with gram-positive sepsis. Systemic infections with other microorganisms, such as viruses and",
+      "text_sha256": "f68afaf9c861b8dc7f8b5f087f69965e29b456fe2068683a63b6c337abae2edb"
+    },
+    {
+      "id": "rag-46113cd4c3dab089",
+      "chunk_id": "38ddb953a9f7896fb9ae_1",
+      "title": "Fibrinogen: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2085501-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "severe dehydration dehydration differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5168,
+      "excerpt": "liver disease: Chronic Severe malnutrition: Chronic Disseminated intravascular coagulation (DIC): Acute Abnormal fibrinolysis: Acute Large-volume blood transfusions: Acute Fibrinogen is an acute-phase reactant, meaning that elevated fibrinogen levels can be seen the following conditions: Inflammation Tissue damage/trauma Infection Cancer Acute coronary syndrome Strokes Inflammatory conditions Collection and Panels Specimen: Plasma Container: Light blue (sodium citrate) Collection method: Routine venipuncture Processing: Electromagnetic mechanical clot detection/radial immunodiffusion; 2 mL",
+      "text_sha256": "b0d5ee0649025f68fac7c45f175f033bcd62639585c1d81587d411c7dc8902a4"
+    },
+    {
+      "id": "rag-76e890d4be4936b1",
+      "chunk_id": "cf14fe061baf2a896dac_8",
+      "title": "C-Reactive Protein: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2086909-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "severe dehydration dehydration differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5236,
+      "excerpt": "CRP levels augur a worse prognosis in patients with acute coronary syndromes. hs-CRP is also a marker of metabolic syndrome. Indications/Applications See the list below: CRP - Suspected inflammatory state (vasculitis, autoimmune disorders, SLE, psoriasis, infection) CRP may sometimes be ordered along with erythrocyte sedimentation rate (ESR) CRP may be ordered, for example, when a newborn shows signs of infection or when an individual has symptoms of sepsis, such as fever, chills, and rapid breathing and heart rate CRP may also be ordered to monitor conditions such as rheumatoid arthritis and",
+      "text_sha256": "adab93c058ba63de7b93b6c45d0ab23befbdf993b9fa0c8db2509de9d264f566"
+    },
+    {
+      "id": "rag-6f38ffb0a97c0c17",
+      "chunk_id": "4544aeb789a7980a8b03_22",
+      "title": "Nephrotic Syndrome: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/244631-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "severe dehydration dehydration differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5259,
+      "excerpt": "seen in familial hypercholesterolemia, a disease that predisposes individuals to myocardial infarction. Hypocalcemia Hypocalcemia is common in the nephrotic syndrome, but rather than being a true hypocalcemia, it is usually caused by a low serum albumin level. Nonetheless, low bone density and abnormal bone histology are reported in association with nephrotic syndrome. This could be caused by urinary losses of vitamin D binding proteins, with consequent hypovitaminosis D and, as a result, reduced intestinal calcium absorption. Tessitore et al reported that when the GFR was normal, persons with",
+      "text_sha256": "3a9501cc6ade0085e89c72fbf218217c6261e76e7d656d95a173394fa1697203"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "severe dehydration dehydration red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.571,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-8b8ed8966675eebe",
+      "chunk_id": "e765e2164f83a0ef5f0c_5",
+      "title": "Erythrocyte Count (RBC): Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2054474-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "severe dehydration dehydration red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5376,
+      "excerpt": "such as dehydration will increase these values and do not reflect absolute polycythemia.",
+      "text_sha256": "af730977706fe2f70ce975a4f59366fa5cdc38fd9720c336844a3a7056b56611"
+    },
+    {
+      "id": "rag-b1ec1e4d32cb5873",
+      "chunk_id": "9ef4c6bf7ec809c67a73_6",
+      "title": "Urinary Free Cortisol: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2088848-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "severe dehydration dehydration red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5466,
+      "excerpt": "free cortisol measurements are less helpful for diagnosing hypocortisolism (cortisol deficiency). While hypercortisolism is uncommon, the signs and symptoms are common and include obesity, high blood pressure, and increased blood glucose concentration. The cause of Cushing syndrome (endogenous hypercortisolism rather than exogenous hypercortisolism resulting from medication) is overproduction of cortisol due to either a primary adrenal disease (eg, adenoma, carcinoma, nodular hyperplasia) or an excess of corticotropin (from a pituitary tumor or an ectopic source). The most frequently diagnosed",
+      "text_sha256": "f3981cf1fb952f7b3efbece970f24672057f4b3a60dbd24ff81f4eb82702bdcf"
+    },
+    {
+      "id": "rag-b8903d24e6cf005d",
+      "chunk_id": "75b4ab526b54e2bdd30e_2",
+      "title": "Porphobilinogen: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2088383-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "severe dehydration dehydration red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5644,
+      "excerpt": "the reference range effectively rules out porphyria as a cause of the patient’s symptoms. However, patients with a distant history that suggests porphyria may have porphobilinogen levels within the reference range, particularly if they have had prolonged disease latency. These patients may be evaluated further with enzyme activity measurements or gene analysis. Collection and Panels Urinary porphobilinogen (PBG) is ideally measured during an acute porphyric attack as a random spot test. Twenty-four–hour levels may also be obtained. The sample should be collected with a urinalysis container or",
+      "text_sha256": "6b59728705c2148dc21c9a8fe385b6b5d80cae93da8fc36e593af7f1f0fdf0d7"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "severe dehydration dehydration red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5413,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    }
+  ],
+  "disease_candidates": [],
+  "proposal": {
+    "route": "severe_dehydration",
+    "evidence_status": "sufficient",
+    "route_review": {
+      "recommended_disposition": "handoff",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-673cbb2500a2a5af",
+        "rag-60c2ff97c7b6eb16"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "severe_dehydration__syncope",
+        "description": "Brief loss of consciousness or fainting.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "severe_dehydration__dizziness",
+        "description": "Feeling dizzy or lightheaded.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "code": "severe_dehydration__extreme_thirst",
+        "description": "An intense or extreme feeling of needing to drink.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "code": "severe_dehydration__dry_mouth",
+        "description": "A dry or sticky feeling in the mouth.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "code": "severe_dehydration__decreased_urination",
+        "description": "Urinating less often than usual.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "code": "severe_dehydration__dark_urine",
+        "description": "Urine that is dark yellow or orange in color.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "code": "severe_dehydration__dry_skin",
+        "description": "Skin that is dry or has lost its elasticity.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-60c2ff97c7b6eb16"
+        ]
+      },
+      {
+        "code": "severe_dehydration__fatigue",
+        "description": "Extreme tiredness or lack of energy.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "code": "severe_dehydration__tachycardia",
+        "description": "A rapid heartbeat.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "code": "severe_dehydration__vomiting",
+        "description": "Recent episode of vomiting.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-673cbb2500a2a5af"
+        ]
+      },
+      {
+        "code": "severe_dehydration__diarrhea",
+        "description": "Recent episode of diarrhea.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-673cbb2500a2a5af"
+        ]
+      },
+      {
+        "code": "severe_dehydration__fever",
+        "description": "Recent episode of high fever.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "code": "severe_dehydration__excessive_sweating",
+        "description": "Recent episode of excessive sweating.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "present_symptoms",
+        "option": "口乾舌燥",
+        "mapping": {
+          "findings": [
+            "severe_dehydration__dry_mouth"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "field": "present_symptoms",
+        "option": "極度口渴",
+        "mapping": {
+          "findings": [
+            "severe_dehydration__extreme_thirst"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "field": "present_symptoms",
+        "option": "尿液顏色深黃或橙色",
+        "mapping": {
+          "findings": [
+            "severe_dehydration__dark_urine"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "field": "present_symptoms",
+        "option": "小便次數減少",
+        "mapping": {
+          "findings": [
+            "severe_dehydration__decreased_urination"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "field": "present_symptoms",
+        "option": "皮膚乾燥或失去彈性",
+        "mapping": {
+          "findings": [
+            "severe_dehydration__dry_skin"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-60c2ff97c7b6eb16"
+        ]
+      },
+      {
+        "field": "present_symptoms",
+        "option": "頭暈或昏厥",
+        "mapping": {
+          "findings": [
+            "severe_dehydration__dizziness",
+            "severe_dehydration__syncope"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "field": "present_symptoms",
+        "option": "極度疲勞或乏力",
+        "mapping": {
+          "findings": [
+            "severe_dehydration__fatigue"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "field": "present_symptoms",
+        "option": "心跳加速",
+        "mapping": {
+          "findings": [
+            "severe_dehydration__tachycardia"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "field": "recent_conditions",
+        "option": "高熱",
+        "mapping": {
+          "findings": [
+            "severe_dehydration__fever"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "field": "recent_conditions",
+        "option": "過度出汗",
+        "mapping": {
+          "findings": [
+            "severe_dehydration__excessive_sweating"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "field": "recent_conditions",
+        "option": "嘔吐",
+        "mapping": {
+          "findings": [
+            "severe_dehydration__vomiting"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-673cbb2500a2a5af"
+        ]
+      },
+      {
+        "field": "recent_conditions",
+        "option": "腹瀉",
+        "mapping": {
+          "findings": [
+            "severe_dehydration__diarrhea"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-673cbb2500a2a5af"
+        ]
+      }
+    ],
+    "profile_status": "not_applicable",
+    "profiles": [],
+    "safety_proposals": [],
+    "unsupported_requirements": [
+      {
+        "requirement": "Determine specific thresholds for abnormal capillary refill time or abnormal respiratory pattern.",
+        "reason": "These are physical exam findings that require clinical assessment and cannot be reliably determined through a patient questionnaire."
+      },
+      {
+        "requirement": "Quantify the degree of dehydration (e.g., 5% dehydration).",
+        "reason": "Quantifying dehydration requires clinical assessment and potentially laboratory tests, which is beyond the scope of a questionnaire."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[0], fact_proposals[2], fact_proposals[3], fact_proposals[4], fact_proposals[5], fact_proposals[6], fact_proposals[8], fact_proposals[9], fact_proposals[12], fact_proposals[13], semantic_options[0], semantic_options[1]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-e5257b482e39c691",
+          "rag-60c2ff97c7b6eb16",
+          "rag-673cbb2500a2a5af",
+          "rag-e0252c5d56df5562",
+          "rag-cb4ac53c17d87dd1",
+          "rag-46113cd4c3dab089",
+          "rag-76e890d4be4936b1",
+          "rag-6f38ffb0a97c0c17",
+          "rag-f09c5253c7a82445",
+          "rag-8b8ed8966675eebe",
+          "rag-b1ec1e4d32cb5873",
+          "rag-b8903d24e6cf005d",
+          "rag-62f530bca02a29ef"
+        ]
+      }
+    ]
+  }
+}

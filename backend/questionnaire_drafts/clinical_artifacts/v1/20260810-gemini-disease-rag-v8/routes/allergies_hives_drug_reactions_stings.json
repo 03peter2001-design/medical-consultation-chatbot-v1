@@ -1,0 +1,1787 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "allergies_hives_drug_reactions_stings",
+  "label": "過敏 蕁麻疹 藥物反應 螯傷",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "ae1d96af3971db5cbd49997e6ced93cccd3e6282fc52371d5194008b8af2adcf",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"allergies hives drug reactions stings allergy hives differential diagnosis diseases clinical presentation symptoms history\",\"allergies hives drug reactions stings allergy hives red flags emergency warning signs urgent referral rule out\",\"Insect Sting Reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Allergic Reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Angioedema diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Atopic Dermatitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Anaphylaxis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Urticaria diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "384b15a67fdaabc65dd17a70304b87e1a2ce04fe1ea8a8616f537b71d84281a8"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "d27b4057861fde8ead654bbcb43f39681b82d720d5a359474f63f49dee4e86a9",
+    "generated_at": "2026-08-10T03:55:38+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-c0eed2db30ff9bc8",
+      "chunk_id": "533df8c4e1c8cc2bd460_20",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "allergies hives drug reactions stings allergy hives differential diagnosis diseases clinical presentation symptoms history",
+        "allergies hives drug reactions stings allergy hives red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3545,
+      "excerpt": "between certain pollen and food allergens. For example, individuals with ragweed allergy may experience oropharyngeal symptoms following the ingestion of bananas or melons, and patients with birch pollen allergy may experience these symptoms following the ingestion of raw carrots, celery, potato, apple, peach or hazelnut. Mixed IgE/non-IgE gastrointestinal food allergy (eosinophilic esophagitis and gastroenteritis) Symptoms vary according to location of the eosinophilia. Typical symptoms include postprandial nausea, abdominal pain, and a sensation of early satiety. Eosinophilic esophagitis may",
+      "text_sha256": "6a4613180c5b5e5b536701b34221afe546b1fe4a3d5c2e90bafcb10b4b7245da"
+    },
+    {
+      "id": "rag-80a1512617e77243",
+      "chunk_id": "533df8c4e1c8cc2bd460_14",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "allergies hives drug reactions stings allergy hives differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3613,
+      "excerpt": "most common clinical manifestations of an allergic reaction to a food or food additive. Symptoms range from acute urticaria (most common) to flushing to angioedema to exacerbations of atopic dermatitis. Food allergy is rarely the cause of chronic urticaria or angioedema. Atopic dermatitis Controversy surrounds the role of food allergy in the pathogenesis of atopic dermatitis. Studies show that among patients with moderate chronic atopic dermatitis, 35-40% have IgE-mediated food allergy. Food-specific IgE-mediated and cellular mechanisms appear responsible for chronic eczematous inflammation.",
+      "text_sha256": "844a1bbac3426efe4bf1acffd9503ea80bb65946263bb74b9cf52519fd6ce260"
+    },
+    {
+      "id": "rag-ccf9b70030c23227",
+      "chunk_id": "dd9970b5cca993dde8ee_5",
+      "title": "Latex Allergy: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/756632-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "allergies hives drug reactions stings allergy hives differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4077,
+      "excerpt": "Images slideshow, to help identify a variety of allergens and symptoms. For related information, see Medscape's Allergy & Immunology Resource Center. Pathophysiology Latex exposure is associated with 3 clinical syndromes. Irritant dermatitis results from mechanical disruption of the skin due to the rubbing of gloves and accounts for the majority of latex-induced local skin rashes. It is not immune mediated, is not associated with allergic complications, and is not the subject of this article. It may be confused with Type IV hypersensitivity. Any chronic hand dermatitis in HCWs raises the risk",
+      "text_sha256": "5b56241972bfb600425e25d659b0b591393b6d0c28b4e83625200fd97861ebe1"
+    },
+    {
+      "id": "rag-080d7a3a9d89be06",
+      "chunk_id": "67f5134253d24ca50a45_7",
+      "title": "Emergent Management of Acute Schistosomiasis: Overview, Prehospital and Emergency Department Care, Pharmacologic Therapy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/788867-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "allergies hives drug reactions stings allergy hives differential diagnosis diseases clinical presentation symptoms history",
+        "allergies hives drug reactions stings allergy hives red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5625,
+      "excerpt": "symptoms.J Findings suggestive of acute schistosomiasis include : Systemic symptoms such as fever, general malaise, myalgias, pruritic rash (due to larval penetration into the skin) Central nervous system (CNS): headache, rarely encephalitis Cardiopulmonary: cough, especially nocturnal, and pulmonary infiltrates Gastrointestinal (GI): abdominal pain, nausea Genitourinary (GU): dysuria, hematuria, genital sores Findings suggestive of chronic schistosomiasis include those above, in addition to : Systemic: fever, general malaise, myalgias, pruritic rash CNS: granulomatous disease with seizure,",
+      "text_sha256": "e14a82e5930121aed728cef36ee919eaad966323d3e547cb8b37a404bf8b334a"
+    },
+    {
+      "id": "rag-a615b76452a8371f",
+      "chunk_id": "bd171df957b0cc6f2399_16",
+      "title": "Insect Bites: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769067-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "allergies hives drug reactions stings allergy hives differential diagnosis diseases clinical presentation symptoms history",
+        "allergies hives drug reactions stings allergy hives red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.57,
+      "excerpt": "of a systemic allergic reaction preceding anaphylactic shock is of paramount importance in treating any patient in whom insect exposure is suspected. Severe anaphylaxis can be fatal in as little as 10 minutes. The reoccurrence rate is 40-60% for insect stings. Hence, the patient should be instructed on how to avoid future exposure to the causative agent, if possible. A prescription and clear instructions on the use of an epinephrine autoinjector should be provided to patients when the risk of another reaction is judged to be substantial. Diseases transmitted by insect bites The need to be",
+      "text_sha256": "e5e5e1c5867540538484aa56e14b364ddafc0cf3899a3bf54ffa31112354a105"
+    },
+    {
+      "id": "rag-5bb6be615f7d4044",
+      "chunk_id": "5f0c535325053b5addec_8",
+      "title": "Tick-Borne Diseases: Overview, Biology and Life Cycle of Ticks, Guidelines on the Diagnosis and Management of Tickborne Rickettsial Diseases",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/786652-overview",
+      "routes": [
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "allergies_hives_drug_reactions_stings__insect_sting_reaction"
+      ],
+      "retrieval_queries": [
+        "allergies hives drug reactions stings allergy hives differential diagnosis diseases clinical presentation symptoms history",
+        "Insect Sting Reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5345,
+      "excerpt": "suspected cases of AGS were identified in the United States. Places where the lone star tick is found are most affected. Cases predominantly occur in counties within the southern, midwestern, and mid-Atlantic regions. The primary management of mammalian meat allergy is avoidance of mammalian meat. The allergy can cause symptoms ranging from urticaria to angioedema and anaphylaxis. Delayed anaphylactic shock has also been reported to occur 4-6 hours after consumption of red meat. These symptoms are treated in the usual manner. Oral antihistamines are recommended for patients who remain",
+      "text_sha256": "9a799da850ee0b0204e66a0471a8199aa92fea7b19b1c914e3d4bd413c39103e"
+    },
+    {
+      "id": "rag-5be620d58c45ca6e",
+      "chunk_id": "533df8c4e1c8cc2bd460_32",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "allergies hives drug reactions stings allergy hives red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3879,
+      "excerpt": "symptoms observed during acute allergic reactions to food. Cell-mediated responses Cell-mediated responses to food allergens may also mediate allergic responses, particularly in disorders with delayed or chronic symptoms. For example, food protein induced enterocolitis syndrome (FPIES), a gastrointestinal food allergy, appears to be mediated by T-cell elaboration of the cytokine tumor necrosis factor (TNF)-alpha. Persons with atopic dermatitis that flares with ingestion of milk have been noted to have T cells that, in vitro, express the homing receptor cutaneous lymphocyte antigen, which is",
+      "text_sha256": "7aec97cabeff35fa00c9e708c16359dec1a36b386d7970e24095fb615d4b6b7d"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "headache",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__allergic_reaction",
+        "allergies_hives_drug_reactions_stings__angioedema",
+        "allergies_hives_drug_reactions_stings__atopic_dermatitis"
+      ],
+      "retrieval_queries": [
+        "Allergic Reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Angioedema diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Atopic Dermatitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4612,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-f535f7d2452b0d38",
+      "chunk_id": "4a333b8daf252bbcafcd_1",
+      "title": "Toxic Shock Syndrome: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/169177-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__allergic_reaction"
+      ],
+      "retrieval_queries": [
+        "Allergic Reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5272,
+      "excerpt": "headache, and nonfocal neurologic abnormalities. See the image below. A 46-year-old man presented with nonnecrotizing cellulitis and streptococcal toxic shock syndrome. The patient had diffuse erythroderma, a characteristic feature of the syndrome. The patient improved with antibiotics and intravenous gammaglobulin therapy. Several days later, a characteristic desquamation of the skin occurred over palms and soles. Courtesy of Rob Green, MD. TSS was first described in children in 1978. Subsequent reports identified an association with tampon use by menstruating women. Menstrual TSS is more",
+      "text_sha256": "26ca000008738031089e37f3efef58bcc8269ac23eaf735f7d7686e20f667032"
+    },
+    {
+      "id": "rag-0ec6cf320b130122",
+      "chunk_id": "5744d7d83e6b58390517_6",
+      "title": "Toxic Neuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1175276-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__allergic_reaction"
+      ],
+      "retrieval_queries": [
+        "Allergic Reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5296,
+      "excerpt": "problems began for the patient. Quantitative sensory testing in the diagnosis of neuropathy includes the following: Vibration threshold Thermal threshold Portable motor and sensory latency Current perception threshold (CPT) Other studies that help to prove the presence of neuropathy include the following: Intraepidermal nerve fiber density (IENF) Sympathetic skin reflex Electromyography (EMG) Nerve conduction Laboratory studies in patients with neuropathy can include the following: Glucose tolerance Serum, urine, or blood Vitamin B-12 Monoclonal gammopathy of unknown significance Axonal",
+      "text_sha256": "927d569dd989327dbcc124e2827369b74d7cf1d2ce048502730600b532527ed5"
+    },
+    {
+      "id": "rag-8c9545124d6662f3",
+      "chunk_id": "297d70c96fc165d2a9a3_11",
+      "title": "Ganser Syndrome: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/287390-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__allergic_reaction"
+      ],
+      "retrieval_queries": [
+        "Allergic Reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5382,
+      "excerpt": "patient complaints), as well as \"hysterical\" stigmata. By this last statement, Ganser is referring to symptoms we would today presumably associate with a conversion disorder. Ganser found sensory changes involving decreased reactivity to pinprick in all 3 patients, and in 1 patient he found the areas that were hypoalgesic to change depending on the day. He further described another case in the literature where the patient displayed \"intractable paralysis and sensory disturbances.\" In this initial paper, Ganser identified case reports published earlier by both Neisser and Dietz, where patients",
+      "text_sha256": "500722ac65609c67212d8ccee199f6876d7b0697d7a4db832f9dc7aa05ec37e4"
+    },
+    {
+      "id": "rag-4e13e8a1e7bc931c",
+      "chunk_id": "284dd884243168d7dfbd_26",
+      "title": "Pediatric Anaphylaxis: Overview, Pathophysiology, Common Triggers of Pediatric Anaphylaxis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/799744-overview",
+      "routes": [
+        "chest",
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__anaphylaxis"
+      ],
+      "retrieval_queries": [
+        "Anaphylaxis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4251,
+      "excerpt": "or associated symptoms of end-organ dysfunction (eg, hypotonia, syncope, incontinence). Other problems to be considered include mastocytosis, physical urticaria, \"red man syndrome\" (related to the intravenous administration of vancomycin), and vocal cord dysfunction. Diagnosis of Pediatric Anaphylaxis Laboratory tests generally are not useful for the acute diagnosis of this condition, although serum histamine and tryptase may be of limited help in confirming the diagnosis retrospectively; other tests (eg, specific antigen testing following recovery) may provide some clues to triggering agents.",
+      "text_sha256": "54bc696cd21a3f89149d0274ad81fa2aaee4ccf6b296549b1cb6574cbcd9d2e0"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__anaphylaxis",
+        "allergies_hives_drug_reactions_stings__urticaria",
+        "allergies_hives_drug_reactions_stings__angioedema",
+        "allergies_hives_drug_reactions_stings__atopic_dermatitis"
+      ],
+      "retrieval_queries": [
+        "Anaphylaxis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Urticaria diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Angioedema diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Atopic Dermatitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4058,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-cbc9566e14825ddc",
+      "chunk_id": "e90c70bbdc9062fb05b2_2",
+      "title": "Metabolic Acidosis in Emergency Medicine: Practice Essentials, Pathophysiology, Prognosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/768268-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__anaphylaxis"
+      ],
+      "retrieval_queries": [
+        "Anaphylaxis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.477,
+      "excerpt": "musculoskeletal dysfunction. Symptoms are often a result of and specific to the underlying etiology of the metabolic acidosis. Neurologic signs and symptoms include the following: Cranial nerve palsies may occur with ethylene glycol intoxication Retinal edema may be seen in methanol ingestions Lethargy, stupor, and coma may occur in severe metabolic acidosis, particularly when it is associated with a toxic ingestion With regard to the cardiovascular system, severe acidemia (ie, pH < 7.10) can predispose a patient to potentially fatal ventricular arrhythmias, and it can reduce cardiac",
+      "text_sha256": "5190cf027a10d42656fcc5d16be6b1d00b692521a898379655bffac5b20eeff3"
+    },
+    {
+      "id": "rag-3a72d4c38d9a0bb7",
+      "chunk_id": "9f7eb5027998a34eb6c2_8",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__anaphylaxis"
+      ],
+      "retrieval_queries": [
+        "Anaphylaxis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4287,
+      "excerpt": "conduction defects are truly diagnostic only when they coincide with symptoms Loop recorders have a higher diagnostic yield than Holter monitor evaluation, with a marginal cost savings Ambulatory monitoring appears to have a higher negative than positive diagnostic yield Other diagnostic tests and procedures include the following: Head-up tilt-table test - Useful for confirming autonomic dysfunction and can generally be safely arranged on an outpatient basis Electroencephalography (EEG) - Can be performed at the discretion of a neurologist if seizure is considered a likely alternative",
+      "text_sha256": "bce92127a34f3c0ce64d226f3f059473b46561d6c8d76961f1c0a09f5b6874fc"
+    },
+    {
+      "id": "rag-b8db23959a8e357b",
+      "chunk_id": "525d2d2f1773793663e6_22",
+      "title": "Emergency Care of Urticaria: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1956597-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__urticaria"
+      ],
+      "retrieval_queries": [
+        "Urticaria diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3741,
+      "excerpt": "lesion of urticaria pigmentosa is stroked, a linear wheal is formed; this characteristic and diagnostic sign is known as the Darier sign. heals present with angioedema in 40% of pediatric urticaria cases. Recurrent urticaria can be related to the following: Sun exposure -Solar urticaria, occurring only on skin exposed to the sun Exercise (cholinergic urticaria) Emotional or physical stress Water (aquagenic urticaria) Epidemiology In the United States, acute urticaria affects 15-20% of the general population at some time during their lifetime. The frequency of urticaria internationally is",
+      "text_sha256": "7b84ad0dab1becddc7ced3898ddf62a6728e05c8763ee03814362735a24d2249"
+    },
+    {
+      "id": "rag-d65b78cc091f2d5e",
+      "chunk_id": "525d2d2f1773793663e6_33",
+      "title": "Emergency Care of Urticaria: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1956597-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__urticaria"
+      ],
+      "retrieval_queries": [
+        "Urticaria diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3933,
+      "excerpt": "Skin for evidence of bacterial or fungal infection Differential Diagnosis The differential diagnosis includes the following: Allergic Contact Dermatitis Atopic Dermatitis Drug Eruptions Erythema Multiforme Henoch-Schonlein Purpura (Anaphylactoid Purpura) Insect Bites Mastocytosis Pityriasis Rosea Scabies Urticarial Vasculitis Sweet syndrome Other problems to consider include the following: Neurodermatitis Eczema Urticaria pigmentosa Potential diagnostic pitfalls include the following: Missing the diagnosis of life-threatening laryngeal angioedema in a patient presenting with the primary",
+      "text_sha256": "89f2bc61d13f795e3e8ca97a61c4c166adc2f1337d62517645da7c2e6e3eed6e"
+    },
+    {
+      "id": "rag-c082e3ac134a8665",
+      "chunk_id": "eb0523ce47f0bbaf8055_0",
+      "title": "Uremic Neuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1175425-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__urticaria"
+      ],
+      "retrieval_queries": [
+        "Urticaria diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4191,
+      "excerpt": "Overview Practice Essentials Uremic neuropathy is a distal sensorimotor polyneuropathy caused by uremic toxins. Symptoms are insidious in onset. Paresthesia is usually the earliest symptom; weakness and atrophy will follow the sensory symptoms. The pathologic features are severe axonal degeneration in the most distal nerve trunks with secondary segmental demyelination. The occurrence of neuropathy is highly correlated with the severity and duration of renal failure. The diagnosis of a uremic peripheral neuropathy is established by medical history, neurologic examination, and",
+      "text_sha256": "4731b3adccd6993d54afd94705be053c6c2c541b1c7eaafb5f1fee6dd3b66ef6"
+    },
+    {
+      "id": "rag-ef4dd319c3603b3b",
+      "chunk_id": "ed4b664e50a4e7cca9ab_1",
+      "title": "Unstable Angina: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/159383-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__angioedema"
+      ],
+      "retrieval_queries": [
+        "Angioedema diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4653,
+      "excerpt": "image below. Unstable Angina. Pathogenesis of acute coronary syndromes. Signs and symptoms With unstable angina, symptoms may (1) occur at rest; (2) become more frequent, severe, or prolonged than the usual pattern of angina; (3) change from the usual pattern of angina; or (4) not respond to rest or nitroglycerin. Symptoms of unstable angina are similar to those of myocardial infarction (MI) and include the following: Chest pain or pressure Pain or pressure in the back, neck, jaw, abdomen, shoulders or arms Sweating Dyspnea Nausea, vomiting Dizziness or sudden weakness Fatigue The patient s",
+      "text_sha256": "ff791390dd1847d03ee6305c4492c86eeb9e971f5417a713444862bc5d9b4eb7"
+    },
+    {
+      "id": "rag-6de2861f53c8ba52",
+      "chunk_id": "42ce68fce3585e84032d_2",
+      "title": "Iritis and Uveitis: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/798323-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__angioedema"
+      ],
+      "retrieval_queries": [
+        "Angioedema diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4971,
+      "excerpt": "Photophobia Blurred vision Increased lacrimation Chronic anterior uveitis presents primarily as blurred vision and mild redness. Patients have little pain or photophobia except when having an acute episode. Posterior uveitis presents as follows : Blurred vision and floaters Absence of symptoms of anterior uveitis (ie, pain, redness, and photophobia) The presence of symptoms of posterior uveitis, redness and pain suggests one of the following: Anterior chamber involvement Bacterial endophthalmitis Posterior scleritis Intermediate uveitis presents as follows : Painless floaters and decreased",
+      "text_sha256": "cf6a3cc6ec1bbe0958f29a1f11479acf0397023cc43ebdd06166ea735c44c8ea"
+    },
+    {
+      "id": "rag-2e500c65fbc8a43c",
+      "chunk_id": "df4d844c99ff1c0a458a_10",
+      "title": "Subcorneal Pustular Dermatosis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1124252-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__atopic_dermatitis"
+      ],
+      "retrieval_queries": [
+        "Atopic Dermatitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4115,
+      "excerpt": "neutrophils and an absence or moderate acantholysis is observed; additionally, the condition is usually responsive to dapsone. Epidemiology Subcorneal pustular dermatosis (SPD) is a rare condition, and no estimate of prevalence or incidence is available. Cases have been reported worldwide, but no particular geographical predominance is apparent. Subcorneal pustular dermatosis affects middle-aged or elderly women more commonly than men. Subcorneal pustular dermatosis is most common in individuals aged 40 years or older. It has been reported in children, without differences described in clinical",
+      "text_sha256": "e55fab5942429022f2574cc9208ac9766b859720986f7fb7dd1c2396d7d9ddfa"
+    },
+    {
+      "id": "rag-28abfcd69cd04aba",
+      "chunk_id": "df4d844c99ff1c0a458a_1",
+      "title": "Subcorneal Pustular Dermatosis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1124252-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__atopic_dermatitis"
+      ],
+      "retrieval_queries": [
+        "Atopic Dermatitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4352,
+      "excerpt": "palms, and soles has been described. Despite marked improvement in investigation techniques, the pathogenesis of this entity is still controversial. Direct and indirect immunofluorescence results are commonly negative in the subcorneal pustular dermatosis. These findings suggest that subcorneal pustular dermatosis may not be an autoantibody-mediated disease. However, it was found that some patients with subcorneal pustular dermatosis show epidermal intercellular immunoglobulin A (IgA) deposits on direct and indirect immunofluorescence, which places them in the group of IgA pemphigus.J",
+      "text_sha256": "c84af4e1b641e50126a46688891d1f21247a605a6a35b70ca9657d94eae5793d"
+    },
+    {
+      "id": "rag-2e9735844f456ab6",
+      "chunk_id": "3f77a00f7204ed0016ad_2",
+      "title": "Hymenoptera Stings: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/768764-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__insect_sting_reaction"
+      ],
+      "retrieval_queries": [
+        "Insect Sting Reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4976,
+      "excerpt": "slideshow, for help identifying and treating various envenomations. See also All About Allergies: Be Ready for Spring, to help identify a variety of allergens and symptoms. Pathophysiology Target organs are the skin, vascular system, and respiratory system. Pathology is similar to other immunoglobulin E (IgE) mediated allergic reactions. Anaphylaxis is a common and life-threatening consequence of Hymenoptera stings and is typically a result of sudden systemic release of mast cells and basophil mediators. Urticaria, vasodilation, bronchospasm, laryngospasm, and angioedema are prominent symptoms",
+      "text_sha256": "6ae5865560d0207c8e006fa5b8786b6cc202cf324dd59062ee58542ed60e9129"
+    },
+    {
+      "id": "rag-d2a7b97441b44e49",
+      "chunk_id": "5f0c535325053b5addec_30",
+      "title": "Tick-Borne Diseases: Overview, Biology and Life Cycle of Ticks, Guidelines on the Diagnosis and Management of Tickborne Rickettsial Diseases",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/786652-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__insect_sting_reaction"
+      ],
+      "retrieval_queries": [
+        "Insect Sting Reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5305,
+      "excerpt": "ehrlichiosis or anaplasmosis; however, sensitivity increases in patients with severe disease. For spotted fever group (SFG) rickettsioses, immunostaining of skin rash or eschar biopsy specimens or a PCR assay using DNA extracted from these specimens can help provide a pathogen-specific diagnosis. Immunostaining of autopsy specimens can be particularly useful for diagnosing fatal tickborne rickettsial infections. Blood-smear or buffy-coat preparation microscopy might reveal the presence of morulae in infected leukocytes, which is highly suggestive of anaplasmosis or ehrlichiosis. Blood-smear",
+      "text_sha256": "2fa675cb40ef81a13b799a7db54de885c64e7d85454bafa4569f7d90709c3999"
+    },
+    {
+      "id": "rag-a17a88cf643fd7db",
+      "chunk_id": "f3a0e8ebab5000f04492_9",
+      "title": "Lyme Disease Serology: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2094578-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "allergies_hives_drug_reactions_stings__insect_sting_reaction"
+      ],
+      "retrieval_queries": [
+        "Insect Sting Reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5458,
+      "excerpt": "risk of B burgdorferi infection who are seeking Lyme testing for symptoms of a more nonspecific nature. Indication/Applications Testing is indicated for clinically suspected cases of Lyme disease; it is not necessary if the patient has a tick bite and erythema migrans. Considerations Diagnosis of Lyme disease is made based on a combination clinical manifestations and available testing. No test is 100% sensitive or specific for Lyme disease. If the test is performed before an adequate antibody response develops, results may be false negative. In this case, repeat testing in 2-4 weeks is",
+      "text_sha256": "7d9f427e83fb51568453997ac93924341f108db8dcdd1e9ee603c71d86fdb87c"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "allergies_hives_drug_reactions_stings__allergic_reaction",
+      "name": "Allergic Reaction",
+      "retrieval_query": "Allergic Reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-80a1512617e77243",
+        "rag-ccf9b70030c23227",
+        "rag-a615b76452a8371f"
+      ],
+      "disease_rag_source_ids": [
+        "rag-5bcac9eab5404341",
+        "rag-f535f7d2452b0d38",
+        "rag-0ec6cf320b130122",
+        "rag-8c9545124d6662f3"
+      ]
+    },
+    {
+      "id": "allergies_hives_drug_reactions_stings__anaphylaxis",
+      "name": "Anaphylaxis",
+      "retrieval_query": "Anaphylaxis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-a615b76452a8371f",
+        "rag-5bb6be615f7d4044"
+      ],
+      "disease_rag_source_ids": [
+        "rag-4e13e8a1e7bc931c",
+        "rag-f09c5253c7a82445",
+        "rag-cbc9566e14825ddc",
+        "rag-3a72d4c38d9a0bb7"
+      ]
+    },
+    {
+      "id": "allergies_hives_drug_reactions_stings__urticaria",
+      "name": "Urticaria",
+      "retrieval_query": "Urticaria diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-80a1512617e77243",
+        "rag-5bb6be615f7d4044"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-b8db23959a8e357b",
+        "rag-d65b78cc091f2d5e",
+        "rag-c082e3ac134a8665"
+      ]
+    },
+    {
+      "id": "allergies_hives_drug_reactions_stings__angioedema",
+      "name": "Angioedema",
+      "retrieval_query": "Angioedema diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-80a1512617e77243",
+        "rag-5bb6be615f7d4044"
+      ],
+      "disease_rag_source_ids": [
+        "rag-5bcac9eab5404341",
+        "rag-f09c5253c7a82445",
+        "rag-ef4dd319c3603b3b",
+        "rag-6de2861f53c8ba52"
+      ]
+    },
+    {
+      "id": "allergies_hives_drug_reactions_stings__atopic_dermatitis",
+      "name": "Atopic Dermatitis",
+      "retrieval_query": "Atopic Dermatitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-80a1512617e77243"
+      ],
+      "disease_rag_source_ids": [
+        "rag-5bcac9eab5404341",
+        "rag-f09c5253c7a82445",
+        "rag-2e500c65fbc8a43c",
+        "rag-28abfcd69cd04aba"
+      ]
+    },
+    {
+      "id": "allergies_hives_drug_reactions_stings__insect_sting_reaction",
+      "name": "Insect Sting Reaction",
+      "retrieval_query": "Insect Sting Reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-a615b76452a8371f"
+      ],
+      "disease_rag_source_ids": [
+        "rag-5bb6be615f7d4044",
+        "rag-2e9735844f456ab6",
+        "rag-d2a7b97441b44e49",
+        "rag-a17a88cf643fd7db"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "allergies_hives_drug_reactions_stings",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-5bcac9eab5404341",
+        "rag-f535f7d2452b0d38",
+        "rag-0ec6cf320b130122",
+        "rag-8c9545124d6662f3",
+        "rag-4e13e8a1e7bc931c",
+        "rag-f09c5253c7a82445",
+        "rag-cbc9566e14825ddc",
+        "rag-3a72d4c38d9a0bb7",
+        "rag-b8db23959a8e357b",
+        "rag-d65b78cc091f2d5e",
+        "rag-ef4dd319c3603b3b",
+        "rag-6de2861f53c8ba52",
+        "rag-2e500c65fbc8a43c",
+        "rag-28abfcd69cd04aba",
+        "rag-5bb6be615f7d4044",
+        "rag-2e9735844f456ab6",
+        "rag-d2a7b97441b44e49",
+        "rag-a17a88cf643fd7db"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "allergies_hives_drug_reactions_stings__allergic_reaction__urticaria",
+        "description": "皮膚出現蕁麻疹。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__allergic_reaction__angioedema",
+        "description": "皮膚或黏膜（如嘴唇、眼睛）出現血管性水腫。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__allergic_reaction__skin_redness",
+        "description": "皮膚發紅。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-f535f7d2452b0d38"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__allergic_reaction__skin_swelling",
+        "description": "皮膚腫脹。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__allergic_reaction__skin_itching",
+        "description": "皮膚搔癢。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__allergic_reaction__systemic_reaction",
+        "description": "反應為全身性。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__allergic_reaction__facial_swelling",
+        "description": "臉部、眼睛、嘴唇、舌頭或喉嚨腫脹。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__anaphylaxis__dyspnea",
+        "description": "Difficulty breathing, wheezing, or shortness of breath.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__anaphylaxis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__anaphylaxis__angioedema",
+        "description": "Swelling of the face, eyes, lips, tongue, or throat.",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__anaphylaxis"
+        ],
+        "source_ids": [
+          "rag-4e13e8a1e7bc931c",
+          "rag-f09c5253c7a82445",
+          "rag-cbc9566e14825ddc",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__anaphylaxis__urticaria",
+        "description": "Hives or urticaria.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__anaphylaxis"
+        ],
+        "source_ids": [
+          "rag-4e13e8a1e7bc931c",
+          "rag-f09c5253c7a82445",
+          "rag-cbc9566e14825ddc",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__anaphylaxis__gastrointestinal_symptoms",
+        "description": "Nausea, vomiting, diarrhea, or abdominal pain.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-4e13e8a1e7bc931c",
+          "rag-f09c5253c7a82445",
+          "rag-cbc9566e14825ddc",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__anaphylaxis__dizziness_or_tachycardia",
+        "description": "Feeling dizzy, lightheaded, or having a rapid or irregular heartbeat.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-4e13e8a1e7bc931c",
+          "rag-f09c5253c7a82445",
+          "rag-cbc9566e14825ddc",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__anaphylaxis__systemic_reaction",
+        "description": "The reaction is described as systemic or generalized.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__anaphylaxis"
+        ],
+        "source_ids": [
+          "rag-4e13e8a1e7bc931c",
+          "rag-f09c5253c7a82445",
+          "rag-cbc9566e14825ddc",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__urticaria__wheals",
+        "description": "出現蕁麻疹樣的皮膚病灶（膨疹）。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__urticaria"
+        ],
+        "source_ids": [
+          "rag-b8db23959a8e357b"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__urticaria__angioedema",
+        "description": "皮膚或黏膜深層組織腫脹（血管性水腫）。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__urticaria"
+        ],
+        "source_ids": [
+          "rag-b8db23959a8e357b",
+          "rag-d65b78cc091f2d5e"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__angioedema__swelling_of_face_eyes_lips_tongue_or_throat",
+        "description": "臉部、眼睛、嘴唇、舌頭或喉嚨腫脹。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__angioedema"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f09c5253c7a82445",
+          "rag-ef4dd319c3603b3b",
+          "rag-6de2861f53c8ba52"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__angioedema__urticaria",
+        "description": "蕁麻疹。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__angioedema"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f09c5253c7a82445",
+          "rag-ef4dd319c3603b3b",
+          "rag-6de2861f53c8ba52"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__insect_sting_reaction__urticaria",
+        "description": "皮膚出現蕁麻疹。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__insect_sting_reaction"
+        ],
+        "source_ids": [
+          "rag-2e9735844f456ab6",
+          "rag-5bb6be615f7d4044"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__insect_sting_reaction__angioedema",
+        "description": "臉部、眼睛、嘴唇、舌頭或喉嚨腫脹。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__insect_sting_reaction"
+        ],
+        "source_ids": [
+          "rag-2e9735844f456ab6",
+          "rag-5bb6be615f7d4044"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__insect_sting_reaction__systemic_reaction",
+        "description": "反應為全身性。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__insect_sting_reaction"
+        ],
+        "source_ids": [
+          "rag-5bb6be615f7d4044",
+          "rag-2e9735844f456ab6",
+          "rag-d2a7b97441b44e49",
+          "rag-a17a88cf643fd7db"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__insect_sting_reaction__respiratory_symptoms",
+        "description": "感到呼吸困難、喘鳴或呼吸急促。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__insect_sting_reaction"
+        ],
+        "source_ids": [
+          "rag-2e9735844f456ab6"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__insect_sting_reaction__gastrointestinal_symptoms",
+        "description": "噁心、嘔吐、腹瀉或腹痛。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-5bb6be615f7d4044",
+          "rag-2e9735844f456ab6",
+          "rag-d2a7b97441b44e49",
+          "rag-a17a88cf643fd7db"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__insect_sting_reaction__cardiovascular_symptoms",
+        "description": "感到頭暈、暈眩或心跳加速或不規則。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-5bb6be615f7d4044",
+          "rag-2e9735844f456ab6",
+          "rag-d2a7b97441b44e49",
+          "rag-a17a88cf643fd7db"
+        ]
+      },
+      {
+        "code": "allergies_hives_drug_reactions_stings__insect_sting_reaction__constitutional_symptoms",
+        "description": "發燒、發冷或整體不適的感覺。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-5bb6be615f7d4044",
+          "rag-2e9735844f456ab6",
+          "rag-d2a7b97441b44e49",
+          "rag-a17a88cf643fd7db"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "reaction_location",
+        "option": "眼睛",
+        "mapping": {
+          "findings": [
+            "allergies_hives_drug_reactions_stings__allergic_reaction__angioedema",
+            "allergies_hives_drug_reactions_stings__angioedema__swelling_of_face_eyes_lips_tongue_or_throat"
+          ]
+        },
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__allergic_reaction",
+          "allergies_hives_drug_reactions_stings__angioedema"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3",
+          "rag-f09c5253c7a82445",
+          "rag-ef4dd319c3603b3b",
+          "rag-6de2861f53c8ba52"
+        ]
+      },
+      {
+        "field": "reaction_location",
+        "option": "嘴唇",
+        "mapping": {
+          "findings": [
+            "allergies_hives_drug_reactions_stings__allergic_reaction__angioedema",
+            "allergies_hives_drug_reactions_stings__angioedema__swelling_of_face_eyes_lips_tongue_or_throat"
+          ]
+        },
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__allergic_reaction",
+          "allergies_hives_drug_reactions_stings__angioedema"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3",
+          "rag-f09c5253c7a82445",
+          "rag-ef4dd319c3603b3b",
+          "rag-6de2861f53c8ba52"
+        ]
+      },
+      {
+        "field": "reaction_scope",
+        "option": "全身性",
+        "mapping": {
+          "findings": [
+            "allergies_hives_drug_reactions_stings__allergic_reaction__systemic_reaction",
+            "allergies_hives_drug_reactions_stings__anaphylaxis__systemic_reaction",
+            "allergies_hives_drug_reactions_stings__insect_sting_reaction__systemic_reaction"
+          ]
+        },
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__allergic_reaction",
+          "allergies_hives_drug_reactions_stings__anaphylaxis",
+          "allergies_hives_drug_reactions_stings__insect_sting_reaction"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3",
+          "rag-4e13e8a1e7bc931c",
+          "rag-f09c5253c7a82445",
+          "rag-cbc9566e14825ddc",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-5bb6be615f7d4044",
+          "rag-2e9735844f456ab6",
+          "rag-d2a7b97441b44e49",
+          "rag-a17a88cf643fd7db"
+        ]
+      },
+      {
+        "field": "reaction_description",
+        "option": "紅",
+        "mapping": {
+          "findings": [
+            "allergies_hives_drug_reactions_stings__allergic_reaction__skin_redness"
+          ]
+        },
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-f535f7d2452b0d38"
+        ]
+      },
+      {
+        "field": "reaction_description",
+        "option": "癢",
+        "mapping": {
+          "findings": [
+            "allergies_hives_drug_reactions_stings__allergic_reaction__skin_itching"
+          ]
+        },
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__allergic_reaction"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3"
+        ]
+      },
+      {
+        "field": "reaction_description",
+        "option": "腫",
+        "mapping": {
+          "findings": [
+            "allergies_hives_drug_reactions_stings__allergic_reaction__skin_swelling",
+            "allergies_hives_drug_reactions_stings__angioedema__swelling_of_face_eyes_lips_tongue_or_throat"
+          ]
+        },
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__allergic_reaction",
+          "allergies_hives_drug_reactions_stings__angioedema"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3",
+          "rag-f09c5253c7a82445",
+          "rag-ef4dd319c3603b3b",
+          "rag-6de2861f53c8ba52"
+        ]
+      },
+      {
+        "field": "reaction_description",
+        "option": "疑似蕁麻疹",
+        "mapping": {
+          "findings": [
+            "allergies_hives_drug_reactions_stings__allergic_reaction__urticaria",
+            "allergies_hives_drug_reactions_stings__anaphylaxis__urticaria",
+            "allergies_hives_drug_reactions_stings__urticaria__wheals",
+            "allergies_hives_drug_reactions_stings__angioedema__urticaria",
+            "allergies_hives_drug_reactions_stings__insect_sting_reaction__urticaria"
+          ]
+        },
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__allergic_reaction",
+          "allergies_hives_drug_reactions_stings__anaphylaxis",
+          "allergies_hives_drug_reactions_stings__urticaria",
+          "allergies_hives_drug_reactions_stings__angioedema",
+          "allergies_hives_drug_reactions_stings__insect_sting_reaction"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3",
+          "rag-4e13e8a1e7bc931c",
+          "rag-f09c5253c7a82445",
+          "rag-cbc9566e14825ddc",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-b8db23959a8e357b",
+          "rag-ef4dd319c3603b3b",
+          "rag-6de2861f53c8ba52",
+          "rag-2e9735844f456ab6",
+          "rag-5bb6be615f7d4044"
+        ]
+      },
+      {
+        "field": "observed_symptoms",
+        "option": "臉、眼睛、嘴唇、舌頭或喉嚨的腫脹",
+        "mapping": {
+          "findings": [
+            "allergies_hives_drug_reactions_stings__allergic_reaction__facial_swelling",
+            "allergies_hives_drug_reactions_stings__anaphylaxis__angioedema",
+            "allergies_hives_drug_reactions_stings__urticaria__angioedema",
+            "allergies_hives_drug_reactions_stings__angioedema__swelling_of_face_eyes_lips_tongue_or_throat",
+            "allergies_hives_drug_reactions_stings__insect_sting_reaction__angioedema"
+          ]
+        },
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__allergic_reaction",
+          "allergies_hives_drug_reactions_stings__anaphylaxis",
+          "allergies_hives_drug_reactions_stings__urticaria",
+          "allergies_hives_drug_reactions_stings__angioedema",
+          "allergies_hives_drug_reactions_stings__insect_sting_reaction"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3",
+          "rag-4e13e8a1e7bc931c",
+          "rag-f09c5253c7a82445",
+          "rag-cbc9566e14825ddc",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-b8db23959a8e357b",
+          "rag-d65b78cc091f2d5e",
+          "rag-ef4dd319c3603b3b",
+          "rag-6de2861f53c8ba52",
+          "rag-2e9735844f456ab6",
+          "rag-5bb6be615f7d4044"
+        ]
+      },
+      {
+        "field": "observed_symptoms",
+        "option": "感到呼吸困難、喘鳴或呼吸急促",
+        "mapping": {
+          "findings": [
+            "allergies_hives_drug_reactions_stings__anaphylaxis__dyspnea",
+            "allergies_hives_drug_reactions_stings__insect_sting_reaction__respiratory_symptoms"
+          ]
+        },
+        "disease_ids": [
+          "allergies_hives_drug_reactions_stings__anaphylaxis",
+          "allergies_hives_drug_reactions_stings__insect_sting_reaction"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-2e9735844f456ab6"
+        ]
+      },
+      {
+        "field": "observed_symptoms",
+        "option": "噁心、嘔吐、腹瀉或腹痛",
+        "mapping": {
+          "findings": [
+            "allergies_hives_drug_reactions_stings__anaphylaxis__gastrointestinal_symptoms",
+            "allergies_hives_drug_reactions_stings__insect_sting_reaction__gastrointestinal_symptoms"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-4e13e8a1e7bc931c",
+          "rag-f09c5253c7a82445",
+          "rag-cbc9566e14825ddc",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-5bb6be615f7d4044",
+          "rag-2e9735844f456ab6",
+          "rag-d2a7b97441b44e49",
+          "rag-a17a88cf643fd7db"
+        ]
+      },
+      {
+        "field": "observed_symptoms",
+        "option": "感到頭暈、暈眩或心跳加速或不規則",
+        "mapping": {
+          "findings": [
+            "allergies_hives_drug_reactions_stings__anaphylaxis__dizziness_or_tachycardia",
+            "allergies_hives_drug_reactions_stings__insect_sting_reaction__cardiovascular_symptoms"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-4e13e8a1e7bc931c",
+          "rag-f09c5253c7a82445",
+          "rag-cbc9566e14825ddc",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-5bb6be615f7d4044",
+          "rag-2e9735844f456ab6",
+          "rag-d2a7b97441b44e49",
+          "rag-a17a88cf643fd7db"
+        ]
+      },
+      {
+        "field": "observed_symptoms",
+        "option": "發燒、發冷或整體不適的感覺",
+        "mapping": {
+          "findings": [
+            "allergies_hives_drug_reactions_stings__insect_sting_reaction__constitutional_symptoms"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-5bb6be615f7d4044",
+          "rag-2e9735844f456ab6",
+          "rag-d2a7b97441b44e49",
+          "rag-a17a88cf643fd7db"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "allergies_hives_drug_reactions_stings__allergic_reaction",
+        "name": "Allergic Reaction",
+        "must_not_miss": false,
+        "retrieval_query": "Allergic Reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "allergies_hives_drug_reactions_stings__allergic_reaction__urticaria",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-5bcac9eab5404341",
+              "rag-f535f7d2452b0d38",
+              "rag-0ec6cf320b130122",
+              "rag-8c9545124d6662f3"
+            ]
+          },
+          {
+            "fact": "allergies_hives_drug_reactions_stings__allergic_reaction__angioedema",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-5bcac9eab5404341",
+              "rag-f535f7d2452b0d38",
+              "rag-0ec6cf320b130122",
+              "rag-8c9545124d6662f3"
+            ]
+          },
+          {
+            "fact": "allergies_hives_drug_reactions_stings__allergic_reaction__skin_redness",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f535f7d2452b0d38"
+            ]
+          },
+          {
+            "fact": "allergies_hives_drug_reactions_stings__allergic_reaction__systemic_reaction",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-5bcac9eab5404341",
+              "rag-f535f7d2452b0d38",
+              "rag-0ec6cf320b130122",
+              "rag-8c9545124d6662f3"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3"
+        ]
+      },
+      {
+        "id": "allergies_hives_drug_reactions_stings__urticaria",
+        "name": "Urticaria",
+        "must_not_miss": false,
+        "retrieval_query": "Urticaria diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "allergies_hives_drug_reactions_stings__urticaria__wheals",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-b8db23959a8e357b"
+            ]
+          },
+          {
+            "fact": "allergies_hives_drug_reactions_stings__urticaria__angioedema",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-b8db23959a8e357b"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-b8db23959a8e357b",
+          "rag-d65b78cc091f2d5e"
+        ]
+      },
+      {
+        "id": "allergies_hives_drug_reactions_stings__angioedema",
+        "name": "Angioedema",
+        "must_not_miss": false,
+        "retrieval_query": "Angioedema diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "allergies_hives_drug_reactions_stings__angioedema__swelling_of_face_eyes_lips_tongue_or_throat",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-5bcac9eab5404341",
+              "rag-f09c5253c7a82445",
+              "rag-ef4dd319c3603b3b",
+              "rag-6de2861f53c8ba52"
+            ]
+          },
+          {
+            "fact": "allergies_hives_drug_reactions_stings__angioedema__urticaria",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-5bcac9eab5404341",
+              "rag-f09c5253c7a82445",
+              "rag-ef4dd319c3603b3b",
+              "rag-6de2861f53c8ba52"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f09c5253c7a82445",
+          "rag-ef4dd319c3603b3b",
+          "rag-6de2861f53c8ba52"
+        ]
+      },
+      {
+        "id": "allergies_hives_drug_reactions_stings__insect_sting_reaction",
+        "name": "Insect Sting Reaction",
+        "must_not_miss": true,
+        "retrieval_query": "Insect Sting Reaction diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [
+          "experimental_allergies_hives_drug_reactions_stings__insect_sting_reaction__anaphylaxis_symptoms"
+        ],
+        "clues": [
+          {
+            "fact": "allergies_hives_drug_reactions_stings__insect_sting_reaction__systemic_reaction",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-5bb6be615f7d4044",
+              "rag-2e9735844f456ab6",
+              "rag-d2a7b97441b44e49",
+              "rag-a17a88cf643fd7db"
+            ]
+          },
+          {
+            "fact": "allergies_hives_drug_reactions_stings__insect_sting_reaction__angioedema",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-2e9735844f456ab6",
+              "rag-5bb6be615f7d4044"
+            ]
+          },
+          {
+            "fact": "allergies_hives_drug_reactions_stings__insect_sting_reaction__respiratory_symptoms",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-2e9735844f456ab6"
+            ]
+          },
+          {
+            "fact": "allergies_hives_drug_reactions_stings__insect_sting_reaction__urticaria",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-2e9735844f456ab6",
+              "rag-5bb6be615f7d4044"
+            ]
+          },
+          {
+            "fact": "allergies_hives_drug_reactions_stings__insect_sting_reaction__systemic_reaction",
+            "status": "absent",
+            "direction": "oppose",
+            "weight": 1,
+            "source_ids": [
+              "rag-5bb6be615f7d4044",
+              "rag-2e9735844f456ab6",
+              "rag-d2a7b97441b44e49",
+              "rag-a17a88cf643fd7db"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-5bb6be615f7d4044",
+          "rag-2e9735844f456ab6",
+          "rag-d2a7b97441b44e49",
+          "rag-a17a88cf643fd7db"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_allergies_hives_drug_reactions_stings__allergic_reaction__anaphylaxis_breathing",
+        "label": "Anaphylaxis signs: breathing difficulty",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "allergies_hives_drug_reactions_stings"
+          ],
+          "any_findings": [
+            "severe_breathing"
+          ]
+        },
+        "possible_conditions": [
+          "Anaphylaxis"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3"
+        ]
+      },
+      {
+        "code": "experimental_allergies_hives_drug_reactions_stings__allergic_reaction__anaphylaxis_angioedema",
+        "label": "Anaphylaxis signs: facial or throat swelling",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "allergies_hives_drug_reactions_stings"
+          ],
+          "any_findings": [
+            "allergies_hives_drug_reactions_stings__allergic_reaction__facial_swelling"
+          ]
+        },
+        "possible_conditions": [
+          "Anaphylaxis"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3"
+        ]
+      },
+      {
+        "code": "experimental_allergies_hives_drug_reactions_stings__allergic_reaction__anaphylaxis_systemic",
+        "label": "Anaphylaxis signs: systemic symptoms",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "allergies_hives_drug_reactions_stings"
+          ],
+          "any_findings": [
+            "dizziness_unspecified",
+            "tachycardia",
+            "nausea",
+            "vomiting"
+          ]
+        },
+        "possible_conditions": [
+          "Anaphylaxis"
+        ],
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3"
+        ]
+      },
+      {
+        "code": "experimental_allergies_hives_drug_reactions_stings__anaphylaxis__respiratory_distress",
+        "label": "Signs of anaphylaxis: respiratory distress",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "allergies_hives_drug_reactions_stings"
+          ],
+          "any_findings": [
+            "allergies_hives_drug_reactions_stings__anaphylaxis__dyspnea",
+            "allergies_hives_drug_reactions_stings__anaphylaxis__angioedema"
+          ]
+        },
+        "possible_conditions": [
+          "Anaphylaxis"
+        ],
+        "source_ids": [
+          "rag-4e13e8a1e7bc931c",
+          "rag-f09c5253c7a82445",
+          "rag-cbc9566e14825ddc",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "code": "experimental_allergies_hives_drug_reactions_stings__urticaria__laryngeal_angioedema",
+        "label": "Potential laryngeal angioedema",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "allergies_hives_drug_reactions_stings"
+          ],
+          "any_findings": [
+            "allergies_hives_drug_reactions_stings__urticaria__angioedema"
+          ]
+        },
+        "possible_conditions": [
+          "Laryngeal angioedema"
+        ],
+        "source_ids": [
+          "rag-d65b78cc091f2d5e"
+        ]
+      },
+      {
+        "code": "experimental_allergies_hives_drug_reactions_stings__insect_sting_reaction__anaphylaxis_symptoms",
+        "label": "疑似過敏性休克的症狀",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "allergies_hives_drug_reactions_stings"
+          ],
+          "any_findings": [
+            "allergies_hives_drug_reactions_stings__insect_sting_reaction__respiratory_symptoms",
+            "allergies_hives_drug_reactions_stings__insect_sting_reaction__angioedema",
+            "allergies_hives_drug_reactions_stings__insect_sting_reaction__cardiovascular_symptoms"
+          ]
+        },
+        "possible_conditions": [
+          "Anaphylaxis"
+        ],
+        "source_ids": [
+          "rag-5bb6be615f7d4044",
+          "rag-2e9735844f456ab6",
+          "rag-d2a7b97441b44e49",
+          "rag-a17a88cf643fd7db"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Map the questionnaire option '感到呼吸困難、喘鳴或呼吸急促' to a fact.",
+        "reason": "This option maps directly to the existing global fact code 'severe_breathing' or 'dyspnea' and does not require a new, route-specific fact."
+      },
+      {
+        "requirement": "Map the questionnaire option '噁心、嘔吐、腹瀉或腹痛' to a fact.",
+        "reason": "These options map directly to existing global fact codes 'nausea', 'vomiting', 'diarrhea', and 'symptom_abdominal_pain' and do not require new, route-specific facts."
+      },
+      {
+        "requirement": "Map the questionnaire option '感到頭暈、暈眩或心跳加速或不規則' to a fact.",
+        "reason": "These options map directly to existing global fact codes 'dizziness_unspecified', 'tachycardia', and 'palpitations' and do not require new, route-specific facts."
+      },
+      {
+        "requirement": "Map the questionnaire option '發燒、發冷或整體不適的感覺' to a fact.",
+        "reason": "This option maps directly to the existing global fact code 'fever' and does not require a new, route-specific fact."
+      },
+      {
+        "requirement": "Create a fact for nausea, vomiting, diarrhea, or abdominal pain.",
+        "reason": "The provided RAG sources do not explicitly mention gastrointestinal symptoms in the context of anaphylaxis."
+      },
+      {
+        "requirement": "Create a fact for dizziness, lightheadedness, or rapid/irregular heartbeat.",
+        "reason": "The provided RAG sources mention syncope and palpitations as red flags in a general context, but do not specifically link dizziness or tachycardia to anaphylaxis within the supplied text."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Differentiate between acute urticaria and exacerbations of atopic dermatitis.",
+        "reason": "The provided RAG sources mention both conditions but do not offer specific differentiating features suitable for a layperson questionnaire."
+      },
+      {
+        "requirement": "Determine if the skin reaction is IgE-mediated.",
+        "reason": "This requires clinical testing (e.g., IgE levels) which is outside the scope of a symptom-based questionnaire."
+      },
+      {
+        "requirement": "Assess for specific red flag symptoms associated with Atopic Dermatitis.",
+        "reason": "The provided RAG sources for Atopic Dermatitis do not contain specific red flag symptoms for this condition."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The fact for 'skin_itching' was created based on strong implication from the questionnaire and common clinical knowledge of allergic reactions, but it lacks a direct supporting citation from the provided RAG sources.",
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[3], fact_proposals[4], fact_proposals[5], fact_proposals[6], semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[4], semantic_options[5]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f535f7d2452b0d38",
+          "rag-0ec6cf320b130122",
+          "rag-8c9545124d6662f3"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The model created facts for GI symptoms and dizziness/tachycardia without direct supporting evidence in the provided RAG sources for anaphylaxis. These are clinically relevant to anaphylaxis but are not directly traceable to the supplied text for this specific condition. They have been included as fact proposals but are not cited in the profile or safety rules to maintain traceability.",
+        "source_ids": [
+          "rag-4e13e8a1e7bc931c",
+          "rag-f09c5253c7a82445",
+          "rag-cbc9566e14825ddc",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-4e13e8a1e7bc931c"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[2], fact_proposals[3], fact_proposals[4], fact_proposals[5], fact_proposals[6], semantic_options[0], semantic_options[1], semantic_options[3], semantic_options[4], semantic_options[5], safety_proposals[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-4e13e8a1e7bc931c",
+          "rag-f09c5253c7a82445",
+          "rag-cbc9566e14825ddc",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-b8db23959a8e357b"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[3], semantic_options[4], profiles[0], profiles[0].clues[0], profiles[0].clues[1]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f09c5253c7a82445",
+          "rag-ef4dd319c3603b3b",
+          "rag-6de2861f53c8ba52"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The discovery of Atopic Dermatitis is based on its mention as a manifestation of food allergies. The provided RAG sources offer limited detail on the specific clinical presentation of atopic dermatitis itself, focusing more on its association with allergies. The proposed profile is therefore based on limited evidence.",
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f09c5253c7a82445",
+          "rag-2e500c65fbc8a43c",
+          "rag-28abfcd69cd04aba"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f09c5253c7a82445",
+          "rag-2e500c65fbc8a43c",
+          "rag-28abfcd69cd04aba"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], profiles[0], profiles[0].clues[0], profiles[0].clues[1], review_notes[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f09c5253c7a82445",
+          "rag-2e500c65fbc8a43c",
+          "rag-28abfcd69cd04aba"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The questionnaire captures key symptoms of systemic allergic reactions and anaphylaxis (breathing difficulty, swelling, dizziness) which aligns with the red flags identified in the source material. This allows for appropriate risk stratification.",
+        "source_ids": [
+          "rag-5bb6be615f7d4044",
+          "rag-2e9735844f456ab6",
+          "rag-d2a7b97441b44e49",
+          "rag-a17a88cf643fd7db"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[2], fact_proposals[4], fact_proposals[5], fact_proposals[6], semantic_options[0], semantic_options[3], semantic_options[4], semantic_options[5], safety_proposals[0], profiles[0], profiles[0].clues[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-5bb6be615f7d4044",
+          "rag-2e9735844f456ab6",
+          "rag-d2a7b97441b44e49",
+          "rag-a17a88cf643fd7db"
+        ]
+      }
+    ]
+  }
+}

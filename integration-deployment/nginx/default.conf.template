@@ -1,9 +1,41 @@
 log_format privacy '$remote_addr [$time_local] "$request_method $uri $server_protocol" '
                    '$status $body_bytes_sent request_id=$request_id';
 
+resolver 127.0.0.11 valid=10s ipv6=off;
+
 upstream medical_backend {
-    server backend:8000;
+    zone medical_backend 64k;
+    server backend:8000 resolve;
     keepalive 16;
+}
+
+# Loopback-published development API. Docker Compose binds this listener only
+# to host 127.0.0.1, so the development Vue app can use the containerized
+# backend without exposing FastAPI or weakening the public TLS listeners.
+server {
+    listen 8000;
+    server_name _;
+    client_max_body_size 12m;
+    access_log /var/log/nginx/development-access.log privacy;
+
+    location /v1/ {
+        proxy_pass http://medical_backend/v1/;
+        proxy_http_version 1.1;
+        proxy_set_header Host 127.0.0.1:8000;
+        proxy_set_header X-Real-IP 127.0.0.1;
+        proxy_set_header X-Forwarded-For 127.0.0.1;
+        proxy_set_header X-Forwarded-Proto http;
+        proxy_set_header X-Request-ID $request_id;
+        proxy_connect_timeout 10s;
+        proxy_send_timeout ${AVATAR_UPSTREAM_TIMEOUT};
+        proxy_read_timeout ${AVATAR_UPSTREAM_TIMEOUT};
+        proxy_request_buffering off;
+        proxy_buffering off;
+    }
+
+    location / {
+        return 404;
+    }
 }
 
 server {
@@ -60,7 +92,7 @@ server {
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-For $remote_addr;
         proxy_set_header X-Forwarded-Proto https;
         proxy_set_header X-Request-ID $request_id;
         proxy_connect_timeout 10s;
@@ -76,7 +108,7 @@ server {
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-For $remote_addr;
         proxy_set_header X-Forwarded-Proto https;
         proxy_set_header X-Request-ID $request_id;
         proxy_connect_timeout 10s;
@@ -111,7 +143,7 @@ server {
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-For $remote_addr;
         proxy_set_header X-Forwarded-Proto https;
         proxy_set_header X-Request-ID $request_id;
         proxy_connect_timeout 10s;

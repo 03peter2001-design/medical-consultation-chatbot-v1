@@ -1,0 +1,1624 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "eye_problems",
+  "label": "眼睛問題",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "33fb319ca42b6e2e46be68a9eee56baae193c7b0f172cd9596a821bbbb4fdfdf",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"eye problems eye problem differential diagnosis diseases clinical presentation symptoms history\",\"Orbital Compartment Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"eye problems eye problem red flags emergency warning signs urgent referral rule out\",\"Conjunctivitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Dry Eye Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Herpes Zoster Ophthalmicus diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Orbital Cellulitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "ef05dd6a6958ec4f25b71b3674ce35e76a9393653290d7735a98922dfc86e2f1"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "696efb4e46cc191e551bca2b4d9dea69c344babe6a664c98695dc96625b5f192",
+    "generated_at": "2026-08-10T04:04:45+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-4cae719e5b4139e0",
+      "chunk_id": "87a181a0b00717e2b480_5",
+      "title": "Acute Conjunctivitis (Pink Eye): Overview, Clinical Evaluation, Bacterial Conjunctivitis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/797874-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.36,
+      "excerpt": "Keratoconjunctivitis Clinical Evaluation In classic presentations, patients complain of eyelids sticking together on waking. They may describe itching and burning or a gritty, foreign-body sensation. Pus sliding across the eye may distort vision, although visual acuity is normal. Photophobia is minimal. Family members with similar complaints typically present with conjunctivitis from an infectious cause. A history of a recent upper respiratory infection (URI) is typically associated with a viral cause. In any patient with ocular complaints, perform a complete physical examination of the eye,",
+      "text_sha256": "089db1494dc9411598e1c8e57950e572e8967bb1ee24cf73fd9f910fbb65e636"
+    },
+    {
+      "id": "rag-5696c5f72b79ba31",
+      "chunk_id": "0d46b40beab510bc09b2_3",
+      "title": "Dry Eye Disease (Keratoconjunctivitis Sicca): Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1210417-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3627,
+      "excerpt": "with SS (non-SS KCS). Signs and symptoms While diagnosis of DED does not require for any specific symptom to be present, the following are the most common complaints associated with dry eye disease : Foreign-body, burning, itching, gritty or sandy sensation Hyperemia Mucoid discharge Ocular irritation Excessive tearing (secondary to reflex secretion) Photophobia Blurry vision that may improve with blinkingJ See Clinical Presentation for more detail. Diagnosis Studies that may be used for diagnosis include the following : Vital staining of corneal and conjunctival epithelium with fluorescein,",
+      "text_sha256": "df850f87fd04334a3bf2533240c083e53ed6268651a8684db017a4b421bc7d45"
+    },
+    {
+      "id": "rag-1adbb26c6857d6ae",
+      "chunk_id": "a1ee184b297277b0a132_9",
+      "title": "Acute Orbital Compartment Syndrome: Background, Anatomy, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/799528-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "eye_problems__orbital_compartment_syndrome"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history",
+        "Orbital Compartment Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3704,
+      "excerpt": "serious and 3% as blinding. All of the latter resulted from optic nerve injury, retinal detachment, or corneal-scleral rupture. Other studies have found AOCS to occur in less than 0.1% of all cases of facial trauma and in 3.6% of patients with diagnosed orbital trauma. Prognosis Acute orbital compartment syndrome with visual acuity loss is associated with a poor prognosis. Permanent blindness occurs if effective therapy is not initiated promptly. AOCS due to retrobulbar hematoma is the most common cause of blindness associated with facial trauma. Emergent decompressive surgery may be",
+      "text_sha256": "6d075272bd02f8c7d40d9aa808adf510a1465a6e7a51d0d0dd275ee45809f62d"
+    },
+    {
+      "id": "rag-5272bf37b4996b11",
+      "chunk_id": "a1ee184b297277b0a132_10",
+      "title": "Acute Orbital Compartment Syndrome: Background, Anatomy, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/799528-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4055,
+      "excerpt": "blindness associated with facial trauma. Emergent decompressive surgery may be sight-saving in patients with severe symptoms. Significant evidence shows that long-term outcomes correlate with time to intervention in patients with severe AOCS. Half of patients presenting with decreased visual acuity due to retrobulbar hematoma experience immediate resolution of symptoms with emergent decompression. Irreversible visual loss can be expected with retinal ischemia that lasts longer than 120 minutes, although some patients may experience partial recovery with decompression outside this window.",
+      "text_sha256": "1257140b29ca41d624fbdacb0d8fe1caf34ef929faebfba35977e51ce8fb04d5"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "common",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "eye_problems__conjunctivitis",
+        "eye_problems__dry_eye_disease",
+        "eye_problems__orbital_compartment_syndrome",
+        "eye_problems__herpes_zoster_ophthalmicus"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history",
+        "eye problems eye problem red flags emergency warning signs urgent referral rule out",
+        "Conjunctivitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Dry Eye Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Orbital Compartment Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Herpes Zoster Ophthalmicus diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3977,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-ffc04298df227587",
+      "chunk_id": "536871af6462d18d854b_2",
+      "title": "Ischemic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916852-overview",
+      "routes": [
+        "safety",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "eye_problems__stroke"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history",
+        "Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3772,
+      "excerpt": "neurologic deficit or any alteration in level of consciousness. Common stroke signs and symptoms include the following: Abrupt onset of hemiparesis, monoparesis, or (rarely) quadriparesis Hemisensory deficits Monocular or binocular visual loss Visual field deficits Diplopia Dysarthria Facial droop Ataxia Vertigo (rarely in isolation) Nystagmus Aphasia Sudden decrease in level of consciousness Although such symptoms can occur alone, they are more likely to occur in combination. No historical feature distinguishes ischemic from hemorrhagic stroke, although nausea, vomiting, headache, and sudden",
+      "text_sha256": "08c3fc70520a54c0cfbb79c8c6a6cb6799bd65cec892fd371b3de9cf705a3f55"
+    },
+    {
+      "id": "rag-d28ebb49bb7c15d4",
+      "chunk_id": "0b4e124e43266b2d82b6_21",
+      "title": "Neurological Sequelae of Infectious Endocarditis: Infective Endocarditis and the CNS, Etiology of CNS Sequelae, Epidemiology of CNS Sequelae",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165712-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4979,
+      "excerpt": "metastatic brain disease, herpes simplex encephalitis, orbital cellulitis, and carotid disease and stroke should also be considered in the differential diagnosis. Diagnosis of CNS Sequelae Cerebrospinal fluid examination In the Massachusetts General Hospital series of 218 patients, 33 had meningeal symptoms (15%). Of patients with CNS involvement from infective endocarditis, one third had completely normal cerebrospinal fluid (CSF), one fourth had a slightly abnormal CSF but an aseptic culture, and one fourth had frankly purulent CSF. Noteworthy as well is that one sixth had hemorrhagic fluid.",
+      "text_sha256": "f98e813835d89c8700502e851754fc84e41fef6ea7d4ce08932f1a8db9173930"
+    },
+    {
+      "id": "rag-ccf1e7b73ae6413c",
+      "chunk_id": "4896d83f97abe6f575d4_56",
+      "title": "Ocular Manifestations of HIV Infection: Overview, Adnexal Manifestations, Anterior Segment Manifestations",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1216172-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5043,
+      "excerpt": "include the following: · Eyelids: ptosis, edema, hemorrhagic necrosis · Cornea: pseudodendritic keratitis, stromal keratitis, disciform keratitis, neurotrophic keratitis · Iris/trabecular meshwork: iritis, iris atrophy, trabeculitis · Episclera/sclera: episcleritis/scleritis · Retina/choroid: necrotizing or non-necrotizing retinitis, vascular occlusion, choroiditis Neurologic complications of HZO may include optic neuritis, vasculitis, encephalitis, external ocular muscle palsies, acute neuralgia, and postherpetic neuralgia. Herpes simplex virus Primary ocular HSV infection often presents as",
+      "text_sha256": "493109ae4dcfbaa5ee8bcc98404ea0023bc025dfe35a8acc9686f4778a90c9c0"
+    },
+    {
+      "id": "rag-96a90437160454ff",
+      "chunk_id": "60a8e9fb259d62f055c2_43",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "eye problems eye problem red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5457,
+      "excerpt": "(cTn), whether conventional or high sensitivity (hs), exclusively for these purposes. The main clinical outcome of interest after initial emergency department (ED) evaluation of patients with suspected ACS is 30-day MACE. MACE includes MI, death, target lesion revascularization, or death. In 2018, The American College of Emergency Physicians (ACEP) updated its level C recommendations regarding testing strategies for ruling out non-ST-elevation MI (NSTEMI) in lower risk patients to include the use of the HEART score and conventional or high-sensitivity cardiac troponins (hs-cTn) as follows: In",
+      "text_sha256": "4828c8d733507191a7786f8b1f2baf9a4c8185d49b0cb05028c18c2b64ce27ff"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "headache",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__conjunctivitis"
+      ],
+      "retrieval_queries": [
+        "Conjunctivitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4324,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-3c645fecdbea7be7",
+      "chunk_id": "87a181a0b00717e2b480_11",
+      "title": "Acute Conjunctivitis (Pink Eye): Overview, Clinical Evaluation, Bacterial Conjunctivitis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/797874-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__conjunctivitis"
+      ],
+      "retrieval_queries": [
+        "Conjunctivitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.422,
+      "excerpt": "conjunctiva. If present, the likely diagnosis is EKC. Be aware that herpes simplex and chlamydia also cause follicular conjunctivitis and preauricular adenopathy. Preauricular adenopathy is common in EKC and herpes, whereas chemosis is variable. The conjunctival discharge amount is moderate, stringy, or sparse, with a thin and seropurulent quality. There is moderate or marked conjunctival injection. Allergic Conjunctivitis Allergic conjunctivitis is characterized by acute or subacute onset, no pain, and no exposure history. Pruritus is extremely common and the hallmark symptom of this",
+      "text_sha256": "3b51d0e757fbb6b998b4249d91f08a0736bce82dfa447d83fe1de92b81b6f0f2"
+    },
+    {
+      "id": "rag-5d1e142cb6c5f680",
+      "chunk_id": "87a181a0b00717e2b480_9",
+      "title": "Acute Conjunctivitis (Pink Eye): Overview, Clinical Evaluation, Bacterial Conjunctivitis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/797874-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__conjunctivitis"
+      ],
+      "retrieval_queries": [
+        "Conjunctivitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4329,
+      "excerpt": "boggy conjunctiva) is common. The conjunctival discharge is copious, thick, and purulent, and the conjunctival injection is moderate or marked. Chlamydial conjunctivitis Chlamydial conjunctivitis is characterized by chronic onset, minimal pain level, occasional pruritus, and a history of sexually transmitted disease (STD). This condition tends to be chronic with exacerbation and remission. Occasional preauricular adenopathy is present, but chemosis is rare. The conjunctival discharge amount is minimal with a seropurulent quality. There is moderate conjunctival injection. Viral Conjunctivitis",
+      "text_sha256": "3427165f0d452d2acf0b4037dae81ba0ffb697dfaa1eb089ccc70525a9815b38"
+    },
+    {
+      "id": "rag-c293d75317ea346a",
+      "chunk_id": "0d46b40beab510bc09b2_8",
+      "title": "Dry Eye Disease (Keratoconjunctivitis Sicca): Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1210417-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__dry_eye_disease"
+      ],
+      "retrieval_queries": [
+        "Dry Eye Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5067,
+      "excerpt": "topical mucin secretagogue (not approved in the United States) Cholinergic nasal spray such as varenicline nasal spray Topical hyaluronic acid, which also is approved in Japan Autologous or umbilical cord serum Amniotic membrane extract eye drops Eye-platelet rich plasma (E-PRP) drops Systemic immunosuppressants Various other pharmacologic agents are currently being investigated, including oral lactoferrin, topical lubricin, topical lacritin, and topical thymosin t. In-office procedures Several in-office procedures are available for the treatment of dry eye disease, including the following :",
+      "text_sha256": "6b3b0359a07f0a3e1c9077db5179170bc9dd414c9f1e413eeb061e24bbe398a3"
+    },
+    {
+      "id": "rag-11670883bb9d0d30",
+      "chunk_id": "791b392395fdb02a4e02_40",
+      "title": "Leptospirosis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/220563-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__dry_eye_disease"
+      ],
+      "retrieval_queries": [
+        "Dry Eye Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5184,
+      "excerpt": "Weil disease, knowledge of the species type does not necessarily help predict disease severity. Particular serovars may be associated with specific clinical manifestations. For example, a characteristic pretibial erythematous rash is seen in patients with L autumnalis infection, and gastrointestinal symptoms predominate in patients infected with L grippotyphosa. Nevertheless, any leptospiral serovar can lead to the signs and symptoms seen with this disease. For example, jaundice occurs in 83% of patients with L icterohaemorrhagiae infection and in 30% of patients infected with L pomona.",
+      "text_sha256": "bb35617180d365781ea65ba40e4aeddc49cd14798f1bf4025f66a05c576a1779"
+    },
+    {
+      "id": "rag-763798fcd2f3ac66",
+      "chunk_id": "0d46b40beab510bc09b2_15",
+      "title": "Dry Eye Disease (Keratoconjunctivitis Sicca): Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1210417-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__dry_eye_disease"
+      ],
+      "retrieval_queries": [
+        "Dry Eye Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5208,
+      "excerpt": "The common denominator is a decrease in androgens, from either reduced ovarian function (in postmenopausal women) or increased levels of the sex hormone binding globulin (in women who are pregnant or are taking birth control pills). Meibomian gland dysfunction is a key component of evaporative dry eye disease, with a growing awareness among clinicians of the key role played by surface lipids. In Lemp et al s cohort of 224 subjects with dry eye disease, 86% demonstrated signs of meibomian gland dysfunction based on an objective, composite, disease severity scale. The proportion of subjects",
+      "text_sha256": "ee0ab637d749682faacab1c172afc013e6a803b6ce191eab5306326cea31f90e"
+    },
+    {
+      "id": "rag-7e1627bc3b2ca7be",
+      "chunk_id": "7d35dcd92c14b0fa5437_13",
+      "title": "Orbital Infections: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/784888-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__orbital_compartment_syndrome"
+      ],
+      "retrieval_queries": [
+        "Orbital Compartment Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4061,
+      "excerpt": "cellulitis and sometimes can be differentiated from orbital cellulitis by the occurrence of the orbital apex syndrome. This syndrome is a collection of signs and symptoms consistent with organized infection in the posterior orbit (specifically, compression of the superior orbital fissure), and it is highly suggestive of group IV or V disease. Signs include unilateral ptosis, proptosis, visual loss, internal and external ophthalmoplegia (ie, palsy of the pupillary and extraocular muscles), and CN V1 (forehead) anesthesia. Orbital abscess may or may not progress to cavernous sinus thrombosis.",
+      "text_sha256": "7f4fdbd1e61b2bd558153f8323386e2efee76478958c0880de8c02d0531463d8"
+    },
+    {
+      "id": "rag-c0dc480ee3390791",
+      "chunk_id": "7d35dcd92c14b0fa5437_9",
+      "title": "Orbital Infections: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/784888-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__orbital_compartment_syndrome"
+      ],
+      "retrieval_queries": [
+        "Orbital Compartment Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4752,
+      "excerpt": "an infection of the soft tissue of the orbit without abscess formation. It is a well-known complication of paranasal sinusitis, as well as periodontal abscesses, nasolacrimal infections, trauma, postsurgical infections, and rhabdomyosarcomas. Patients with this infection may develop orbital signs and symptoms (eg, chemosis, visual loss), and they often have more systemic toxicity than patients with preseptal cellulitis. Direct orbit CT scan has increased in its sensitivity over the years for diagnosing this entity. Most cases will show edema with or without microabscesses. Orbital cellulitis",
+      "text_sha256": "45c569afde4aa495e5237ff25525b115a427a0157fe6ccc646acff090f4df9e5"
+    },
+    {
+      "id": "rag-e5ea3eafe991e33a",
+      "chunk_id": "fb667a66b0c052e9418e_2",
+      "title": "Hemorrhagic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916662-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__stroke"
+      ],
+      "retrieval_queries": [
+        "Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3963,
+      "excerpt": "Puzzles slideshow to help recognize diagnostic clues in vertigo cases. Signs and symptoms Patients with intracerebral bleeds are more likely than those with ischemic stroke to have headache, altered mental status, seizures, nausea and vomiting, and/or marked hypertension. Even so, none of these findings reliably distinguishes between hemorrhagic and ischemic stroke. Focal neurologic deficits The type of deficit depends on the area of brain involved. If the dominant (usually the left) hemisphere is involved, a syndrome consisting of the following may result: Right hemiparesis Right hemisensory",
+      "text_sha256": "d46a05c09019859b4bb142e4b7ab6e3eab8771922c2987f776b61d11724c2bfa"
+    },
+    {
+      "id": "rag-ae1f46fdf3eef001",
+      "chunk_id": "53fc3e4f98765d889be9_4",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__stroke"
+      ],
+      "retrieval_queries": [
+        "Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4223,
+      "excerpt": "disability. An estimated 80-85% of strokes are ischemic (either thrombosis or embolism), whereas 15-20% of strokes are hemorrhagic. Stroke syndromes can present along a wide spectrum of disease from transient ischemic attacks with complete resolution of symptoms to large intracranial hemorrhages with uncal or tonsillar herniation. Rapid evaluation and neuroimaging is standard of care for all patients with suspected strokes and guides the decision to administer thrombolytics, intra-arterial intervention, or medical management. Also see Ischemic Stroke in Emergency Medicine and Hemorrhagic",
+      "text_sha256": "a180011f6fbf0d9ab6f47dfed467deb49bf88d1928675e433dfef69024406d94"
+    },
+    {
+      "id": "rag-c11a2103e40596fa",
+      "chunk_id": "c3ac65c4ac2f328bf4e4_1",
+      "title": "Neuroimaging in Neurocysticercosis: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1168784-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__stroke"
+      ],
+      "retrieval_queries": [
+        "Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4247,
+      "excerpt": "is associated with clinical manifestations such as seizures, headache, and focal neurological deficits, and may lead to long-term neurological sequelae such as epilepsy, hydrocephalus, and dementia. The pleomorphism of NC makes its diagnosis impossible on clinical grounds alone. An accurate diagnosis is possible only after suspicion on epidemiologic grounds, proper interpretation of clinical data, and synthesis of findings on neuroimaging studies specific immunologic tests on the cerebrospinal fluid (CSF). Biology Humans are the only known host to harbor the adult cestode parasite, Taenia",
+      "text_sha256": "12c0822d631284eb661059f36827e76af0801c89a1c2136bdfd59a506e9c8297"
+    },
+    {
+      "id": "rag-e8140091dbf39606",
+      "chunk_id": "096741c48a02ca808898_1",
+      "title": "Herpes Zoster Oticus: Overview, Pathophysiology, Clinical Manifestations",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1952189-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__herpes_zoster_ophthalmicus"
+      ],
+      "retrieval_queries": [
+        "Herpes Zoster Ophthalmicus diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3905,
+      "excerpt": "may include%aring impairment, vertigo, severe facial pain, and)nnitus. Below is an illustration of msay Hunt syndrome.J Herpes zoster oticus. Image courtesy of Manolette Roque, MD, Ophthalmic Consultants Philippines Co, EYE REPUBLIC Ophthalmology Clinic. Ramsay Hunt syndrome accounts for up to 12% of all facial paralyses, and generally causes more severe symptoms and has a worse prognosis than Bell palsy. Return-to-baseline neurologic function is predicted partially by the severity of paralysis. In several studies, only 10-22% of individuals with significant facial paralysis had complete",
+      "text_sha256": "c6bfbc3ccb63f61944201f5acbb953e159800c3a94185df4087d5c17b0ee8097"
+    },
+    {
+      "id": "rag-03fdde54b0f29f67",
+      "chunk_id": "096741c48a02ca808898_5",
+      "title": "Herpes Zoster Oticus: Overview, Pathophysiology, Clinical Manifestations",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1952189-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__herpes_zoster_ophthalmicus"
+      ],
+      "retrieval_queries": [
+        "Herpes Zoster Ophthalmicus diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4481,
+      "excerpt": "burning blisters in and around the ear, on the face, in the mouth, and/or on the tongueJ Herpes zoster oticus. Image courtesy of Manolette Roque, MD, Ophthalmic Consultants Philippines Co, EYE REPUBLIC Ophthalmology Clinic. Vertigo, nausea, vomiting Hearing loss, hyperacusis, tinnitus Eye pain, lacrimation Onset of pain may precede the rash by several hours or days. Also, in patients with Ramsay Hunt syndrome, vesicles may appear before, during, or after facial palsy (zoster sine herpete). When asked, patients may recall a distant history, perhaps in childhood, of chickenpox (varicella). A",
+      "text_sha256": "f0719b98cbe2da5a42c81f3787104f943123ea20c608eeaf049b6e407a767e58"
+    },
+    {
+      "id": "rag-bf832a8eae210f99",
+      "chunk_id": "eb5b0b28cb447b33821a_14",
+      "title": "B Virus (Macacine Herpesvirus 1, Herpes B): Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/235360-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__herpes_zoster_ophthalmicus"
+      ],
+      "retrieval_queries": [
+        "Herpes Zoster Ophthalmicus diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5211,
+      "excerpt": "symptoms progress centrally to produce global CNS pathology, including meningitis and encephalitis, cranial nerve palsies, and brain stem impairment. Systemic symptoms with fevers, rigors, conjunctivitis, sinusitis, and myalgias occur and may be the only manifestation in some cases. At least one case in which disease occurred years after exposure has been reported, suggesting that herpes B virus might be able to become latent and reactivate in humans. Self-limited aseptic meningitis has been reported, but almost all cases produce substantial morbidity and mortality. Epidemiology Frequency",
+      "text_sha256": "f9b05da53808cded12a24516d2edf9e542d8f52f67cbfb2201391aea241ee932"
+    },
+    {
+      "id": "rag-eab8b5d3ffaaf12a",
+      "chunk_id": "8180322f2e2a0415d2af_4",
+      "title": "Cysticercosis in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/781845-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__orbital_cellulitis"
+      ],
+      "retrieval_queries": [
+        "Orbital Cellulitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4993,
+      "excerpt": "locations are skin, skeletal muscle, heart, eye, and the central nervous system (CNS). Involvement of the CNS leads to the most important manifestation of the disease, neurocysticercosis (NCC). Symptomatology of neurocysticercosis (NCC) ranges from completely asymptomatic to severe disease and death. Symptoms largely depend on the presence of pericystic inflammation, the absence of which will usually manifest as asymptomatic disease. Lack of perilesional inflammation is seen with both \"active\" healthy parasites, which are able to evade host immunity (an adaptive feat that may be abetted by the",
+      "text_sha256": "e52b7644a37568d16e4d030f708a4d4f19ce327179d09d53a6efab7a73dd1062"
+    },
+    {
+      "id": "rag-1886138bf63decc0",
+      "chunk_id": "5038c2c2522a60cb47cd_17",
+      "title": "Echinococcosis Hydatid Cyst: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/216432-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__orbital_cellulitis"
+      ],
+      "retrieval_queries": [
+        "Orbital Cellulitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.511,
+      "excerpt": "cases, due to the lack of official notification systems in many countries. Even countries that do have notification systems often do not collect data on CE. When they have reported cases, uneven reporting occurred in different regions of countries. Moreover, the groups most at risk for CE are usually underserved by medical services. Recently, epidemiological studies carried out with ultrasound have clarified that the disease is severely underreported. Furthermore, the EuropeanRegistry for Cystic Echinococcosis (ERCE) has gathered a number of cases superior to those present in the ECDC",
+      "text_sha256": "4ef2b8149865ef3be20c9a8c4c82220503be271f1934b123f7b1ec60fb6a045e"
+    },
+    {
+      "id": "rag-daa102c5a2537f3d",
+      "chunk_id": "8180322f2e2a0415d2af_0",
+      "title": "Cysticercosis in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/781845-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__orbital_cellulitis"
+      ],
+      "retrieval_queries": [
+        "Orbital Cellulitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5279,
+      "excerpt": "Overview Background Cysticercosis is a systemic illness caused by dissemination of the larval form of the pork tapeworm, Taenia solium. Encystment of larvae can occur in almost any tissue. Involvement of the central nervous system (CNS), known as neurocysticercosis (NCC), is the most clinically important manifestation of the disease and may present with dramatic findings. Moreover, neurocysticercosis is the most common helminthic infection of the CNS. urocysticercosis is a major cause of seizure disorder in parts of the developing world, and its incidence is increasing within developed",
+      "text_sha256": "9dc4c11da30f60766ba0085ad036a55042b7af8580dbb0aa682fc3cf375067c6"
+    },
+    {
+      "id": "rag-a9b7c79c8b168d0d",
+      "chunk_id": "f31f7a9f25319cc03fe0_3",
+      "title": "Diverticulitis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/173388-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "eye_problems__orbital_cellulitis"
+      ],
+      "retrieval_queries": [
+        "Orbital Cellulitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5378,
+      "excerpt": "vaginal discharge See Presentation for more detail. Diagnosis of diverticulitis The diagnosis of acute diverticulitis can usually be made on the basis of the history and physical examination findings, but laboratory tests may be of help when the diagnosis is in question, as follows: The white blood cell count may show leukocytosis and a left shift, but it may be normal in immunocompromised, elderly, or less severely ill patients. A hemoglobin level is important in patients who report hematochezia. Electrolyte assays may be helpful in the patient who is vomiting or has diarrhea. Assess renal",
+      "text_sha256": "ede3bd8c45e7db2093fdf718a477b76af074019f8213e54594b26ebb65d465f3"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "eye_problems__conjunctivitis",
+      "name": "Conjunctivitis",
+      "retrieval_query": "Conjunctivitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-4cae719e5b4139e0"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-5bcac9eab5404341",
+        "rag-3c645fecdbea7be7",
+        "rag-5d1e142cb6c5f680"
+      ]
+    },
+    {
+      "id": "eye_problems__dry_eye_disease",
+      "name": "Dry Eye Disease",
+      "retrieval_query": "Dry Eye Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-5696c5f72b79ba31"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-c293d75317ea346a",
+        "rag-11670883bb9d0d30",
+        "rag-763798fcd2f3ac66"
+      ]
+    },
+    {
+      "id": "eye_problems__orbital_compartment_syndrome",
+      "name": "Orbital Compartment Syndrome",
+      "retrieval_query": "Orbital Compartment Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-1adbb26c6857d6ae",
+        "rag-5272bf37b4996b11"
+      ],
+      "disease_rag_source_ids": [
+        "rag-1adbb26c6857d6ae",
+        "rag-f09c5253c7a82445",
+        "rag-7e1627bc3b2ca7be",
+        "rag-c0dc480ee3390791"
+      ]
+    },
+    {
+      "id": "eye_problems__stroke",
+      "name": "Stroke",
+      "retrieval_query": "Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-ffc04298df227587"
+      ],
+      "disease_rag_source_ids": [
+        "rag-ffc04298df227587",
+        "rag-e5ea3eafe991e33a",
+        "rag-ae1f46fdf3eef001",
+        "rag-c11a2103e40596fa"
+      ]
+    },
+    {
+      "id": "eye_problems__herpes_zoster_ophthalmicus",
+      "name": "Herpes Zoster Ophthalmicus",
+      "retrieval_query": "Herpes Zoster Ophthalmicus diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-ccf1e7b73ae6413c"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-e8140091dbf39606",
+        "rag-03fdde54b0f29f67",
+        "rag-bf832a8eae210f99"
+      ]
+    },
+    {
+      "id": "eye_problems__orbital_cellulitis",
+      "name": "Orbital Cellulitis",
+      "retrieval_query": "Orbital Cellulitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-d28ebb49bb7c15d4"
+      ],
+      "disease_rag_source_ids": [
+        "rag-eab8b5d3ffaaf12a",
+        "rag-1886138bf63decc0",
+        "rag-daa102c5a2537f3d",
+        "rag-a9b7c79c8b168d0d"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "eye_problems",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-5bcac9eab5404341",
+        "rag-3c645fecdbea7be7",
+        "rag-5d1e142cb6c5f680",
+        "rag-c293d75317ea346a",
+        "rag-11670883bb9d0d30",
+        "rag-763798fcd2f3ac66",
+        "rag-1adbb26c6857d6ae",
+        "rag-7e1627bc3b2ca7be",
+        "rag-c0dc480ee3390791",
+        "rag-ffc04298df227587",
+        "rag-e8140091dbf39606",
+        "rag-03fdde54b0f29f67",
+        "rag-bf832a8eae210f99",
+        "rag-eab8b5d3ffaaf12a",
+        "rag-1886138bf63decc0",
+        "rag-daa102c5a2537f3d",
+        "rag-a9b7c79c8b168d0d"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "eye_problems__conjunctivitis__discharge",
+        "description": "眼睛有分泌物。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "eye_problems__conjunctivitis"
+        ],
+        "source_ids": [
+          "rag-3c645fecdbea7be7",
+          "rag-5d1e142cb6c5f680"
+        ]
+      },
+      {
+        "code": "eye_problems__conjunctivitis__redness",
+        "description": "眼睛紅腫。",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "eye_problems__conjunctivitis"
+        ],
+        "source_ids": [
+          "rag-3c645fecdbea7be7",
+          "rag-5d1e142cb6c5f680"
+        ]
+      },
+      {
+        "code": "eye_problems__conjunctivitis__recent_uri",
+        "description": "近期有上呼吸道感染。",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "eye_problems__conjunctivitis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3c645fecdbea7be7",
+          "rag-5d1e142cb6c5f680"
+        ]
+      },
+      {
+        "code": "eye_problems__dry_eye_disease__burning_sensation",
+        "description": "眼睛有灼熱感。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "eye_problems__dry_eye_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c293d75317ea346a",
+          "rag-11670883bb9d0d30",
+          "rag-763798fcd2f3ac66"
+        ]
+      },
+      {
+        "code": "eye_problems__dry_eye_disease__mucoid_discharge",
+        "description": "眼睛有黏液狀分泌物。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "eye_problems__dry_eye_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c293d75317ea346a",
+          "rag-11670883bb9d0d30",
+          "rag-763798fcd2f3ac66"
+        ]
+      },
+      {
+        "code": "eye_problems__dry_eye_disease__blurry_vision_improves_with_blinking",
+        "description": "視力模糊，但眨眼後可能改善。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "eye_problems__dry_eye_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c293d75317ea346a",
+          "rag-11670883bb9d0d30",
+          "rag-763798fcd2f3ac66"
+        ]
+      },
+      {
+        "code": "eye_problems__orbital_compartment_syndrome__recent_facial_trauma",
+        "description": "近期臉部外傷。",
+        "kind": "history",
+        "safety_candidate": true,
+        "disease_ids": [
+          "eye_problems__orbital_compartment_syndrome"
+        ],
+        "source_ids": [
+          "rag-1adbb26c6857d6ae"
+        ]
+      },
+      {
+        "code": "eye_problems__stroke__monocular_or_binocular_visual_loss",
+        "description": "單眼或雙眼視力喪失。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "eye_problems__stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "code": "eye_problems__stroke__diplopia",
+        "description": "複視或看見重影。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "eye_problems__stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "code": "eye_problems__stroke__headache",
+        "description": "頭痛。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "eye_problems__stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a"
+        ]
+      },
+      {
+        "code": "eye_problems__stroke__nausea_or_vomiting",
+        "description": "噁心或嘔吐。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "eye_problems__stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a"
+        ]
+      },
+      {
+        "code": "eye_problems__stroke__onset_sudden",
+        "description": "症狀突然發作。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "eye_problems__stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "code": "eye_problems__herpes_zoster_ophthalmicus__facial_rash",
+        "description": "臉上有皮疹、瘀斑、水泡或是其他皮膚異常。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [
+          "eye_problems__herpes_zoster_ophthalmicus"
+        ],
+        "source_ids": [
+          "rag-03fdde54b0f29f67"
+        ]
+      },
+      {
+        "code": "eye_problems__herpes_zoster_ophthalmicus__eye_pain",
+        "description": "眼睛疼痛。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "eye_problems__herpes_zoster_ophthalmicus"
+        ],
+        "source_ids": [
+          "rag-03fdde54b0f29f67"
+        ]
+      },
+      {
+        "code": "eye_problems__herpes_zoster_ophthalmicus__focal_neurologic_deficits",
+        "description": "局部神經功能缺損，例如複視。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "eye_problems__herpes_zoster_ophthalmicus"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "eye_problems__herpes_zoster_ophthalmicus__headache",
+        "description": "頭痛。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "eye_problems__herpes_zoster_ophthalmicus"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "eye_problems__herpes_zoster_ophthalmicus__nausea_vomiting",
+        "description": "噁心或嘔吐。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "eye_problems__herpes_zoster_ophthalmicus"
+        ],
+        "source_ids": [
+          "rag-03fdde54b0f29f67"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "associated_symptoms",
+        "option": "眼睛有分泌物",
+        "mapping": {
+          "findings": [
+            "eye_problems__conjunctivitis__discharge",
+            "eye_problems__dry_eye_disease__mucoid_discharge"
+          ]
+        },
+        "disease_ids": [
+          "eye_problems__conjunctivitis",
+          "eye_problems__dry_eye_disease"
+        ],
+        "source_ids": [
+          "rag-3c645fecdbea7be7",
+          "rag-5d1e142cb6c5f680",
+          "rag-f09c5253c7a82445",
+          "rag-c293d75317ea346a",
+          "rag-11670883bb9d0d30",
+          "rag-763798fcd2f3ac66"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "眼睛紅腫",
+        "mapping": {
+          "findings": [
+            "eye_problems__conjunctivitis__redness"
+          ]
+        },
+        "disease_ids": [
+          "eye_problems__conjunctivitis"
+        ],
+        "source_ids": [
+          "rag-3c645fecdbea7be7",
+          "rag-5d1e142cb6c5f680"
+        ]
+      },
+      {
+        "field": "precipitating_events",
+        "option": "感染",
+        "mapping": {
+          "findings": [
+            "eye_problems__conjunctivitis__recent_uri"
+          ]
+        },
+        "disease_ids": [
+          "eye_problems__conjunctivitis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3c645fecdbea7be7",
+          "rag-5d1e142cb6c5f680"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "眼睛疼痛",
+        "mapping": {
+          "findings": [
+            "eye_problems__dry_eye_disease__burning_sensation",
+            "eye_problems__herpes_zoster_ophthalmicus__eye_pain"
+          ]
+        },
+        "disease_ids": [
+          "eye_problems__dry_eye_disease",
+          "eye_problems__herpes_zoster_ophthalmicus"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c293d75317ea346a",
+          "rag-11670883bb9d0d30",
+          "rag-763798fcd2f3ac66",
+          "rag-03fdde54b0f29f67"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "視力模糊",
+        "mapping": {
+          "findings": [
+            "eye_problems__dry_eye_disease__blurry_vision_improves_with_blinking"
+          ]
+        },
+        "disease_ids": [
+          "eye_problems__dry_eye_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c293d75317ea346a",
+          "rag-11670883bb9d0d30",
+          "rag-763798fcd2f3ac66"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "對光特別敏感，感到畏光",
+        "mapping": {
+          "findings": [
+            "photophobia"
+          ]
+        },
+        "disease_ids": [
+          "eye_problems__dry_eye_disease"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c293d75317ea346a",
+          "rag-11670883bb9d0d30",
+          "rag-763798fcd2f3ac66"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "視力減退",
+        "mapping": {
+          "findings": [
+            "vision_loss",
+            "eye_problems__stroke__monocular_or_binocular_visual_loss"
+          ]
+        },
+        "disease_ids": [
+          "eye_problems__orbital_compartment_syndrome",
+          "eye_problems__stroke"
+        ],
+        "source_ids": [
+          "rag-1adbb26c6857d6ae",
+          "rag-f09c5253c7a82445",
+          "rag-7e1627bc3b2ca7be",
+          "rag-c0dc480ee3390791",
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "複視",
+        "mapping": {
+          "findings": [
+            "diplopia",
+            "eye_problems__stroke__diplopia",
+            "eye_problems__herpes_zoster_ophthalmicus__focal_neurologic_deficits"
+          ]
+        },
+        "disease_ids": [
+          "eye_problems__orbital_compartment_syndrome",
+          "eye_problems__stroke",
+          "eye_problems__herpes_zoster_ophthalmicus"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "field": "precipitating_events",
+        "option": "外傷",
+        "mapping": {
+          "findings": [
+            "eye_problems__orbital_compartment_syndrome__recent_facial_trauma"
+          ]
+        },
+        "disease_ids": [
+          "eye_problems__orbital_compartment_syndrome"
+        ],
+        "source_ids": [
+          "rag-1adbb26c6857d6ae",
+          "rag-c0dc480ee3390791"
+        ]
+      },
+      {
+        "field": "symptom_onset_pattern",
+        "option": "突然發作",
+        "mapping": {
+          "findings": [
+            "eye_problems__stroke__onset_sudden"
+          ]
+        },
+        "disease_ids": [
+          "eye_problems__stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "頭痛",
+        "mapping": {
+          "findings": [
+            "eye_problems__stroke__headache",
+            "eye_problems__herpes_zoster_ophthalmicus__headache"
+          ]
+        },
+        "disease_ids": [
+          "eye_problems__stroke",
+          "eye_problems__herpes_zoster_ophthalmicus"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "噁心或嘔吐",
+        "mapping": {
+          "findings": [
+            "eye_problems__stroke__nausea_or_vomiting",
+            "eye_problems__herpes_zoster_ophthalmicus__nausea_vomiting"
+          ]
+        },
+        "disease_ids": [
+          "eye_problems__stroke",
+          "eye_problems__herpes_zoster_ophthalmicus"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a",
+          "rag-03fdde54b0f29f67"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "臉上有皮疹、瘀斑、水泡或是其他皮膚異常",
+        "mapping": {
+          "findings": [
+            "eye_problems__herpes_zoster_ophthalmicus__facial_rash"
+          ]
+        },
+        "disease_ids": [
+          "eye_problems__herpes_zoster_ophthalmicus"
+        ],
+        "source_ids": [
+          "rag-03fdde54b0f29f67"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "eye_problems__conjunctivitis",
+        "name": "Conjunctivitis",
+        "must_not_miss": false,
+        "retrieval_query": "Conjunctivitis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "eye_problems__conjunctivitis__discharge",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-3c645fecdbea7be7",
+              "rag-5d1e142cb6c5f680"
+            ]
+          },
+          {
+            "fact": "eye_problems__conjunctivitis__redness",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-3c645fecdbea7be7",
+              "rag-5d1e142cb6c5f680"
+            ]
+          },
+          {
+            "fact": "eye_problems__conjunctivitis__recent_uri",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-5bcac9eab5404341",
+              "rag-3c645fecdbea7be7",
+              "rag-5d1e142cb6c5f680"
+            ]
+          },
+          {
+            "fact": "vision_loss",
+            "status": "absent",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-5bcac9eab5404341",
+              "rag-3c645fecdbea7be7",
+              "rag-5d1e142cb6c5f680"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3c645fecdbea7be7",
+          "rag-5d1e142cb6c5f680"
+        ]
+      },
+      {
+        "id": "eye_problems__dry_eye_disease",
+        "name": "Dry Eye Disease",
+        "must_not_miss": false,
+        "retrieval_query": "Dry Eye Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "eye_problems__dry_eye_disease__burning_sensation",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-c293d75317ea346a",
+              "rag-11670883bb9d0d30",
+              "rag-763798fcd2f3ac66"
+            ]
+          },
+          {
+            "fact": "eye_problems__dry_eye_disease__blurry_vision_improves_with_blinking",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-c293d75317ea346a",
+              "rag-11670883bb9d0d30",
+              "rag-763798fcd2f3ac66"
+            ]
+          },
+          {
+            "fact": "photophobia",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-c293d75317ea346a",
+              "rag-11670883bb9d0d30",
+              "rag-763798fcd2f3ac66"
+            ]
+          },
+          {
+            "fact": "eye_problems__dry_eye_disease__mucoid_discharge",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-c293d75317ea346a",
+              "rag-11670883bb9d0d30",
+              "rag-763798fcd2f3ac66"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c293d75317ea346a",
+          "rag-11670883bb9d0d30",
+          "rag-763798fcd2f3ac66"
+        ]
+      },
+      {
+        "id": "eye_problems__orbital_compartment_syndrome",
+        "name": "Orbital Compartment Syndrome",
+        "must_not_miss": true,
+        "retrieval_query": "Orbital Compartment Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [
+          "experimental_eye_problems__orbital_compartment_syndrome__vision_loss_with_trauma"
+        ],
+        "clues": [
+          {
+            "fact": "eye_problems__orbital_compartment_syndrome__recent_facial_trauma",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-1adbb26c6857d6ae"
+            ]
+          },
+          {
+            "fact": "vision_loss",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-1adbb26c6857d6ae",
+              "rag-f09c5253c7a82445",
+              "rag-7e1627bc3b2ca7be",
+              "rag-c0dc480ee3390791"
+            ]
+          },
+          {
+            "fact": "diplopia",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          },
+          {
+            "fact": "fever",
+            "status": "absent",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-1adbb26c6857d6ae",
+              "rag-f09c5253c7a82445",
+              "rag-7e1627bc3b2ca7be",
+              "rag-c0dc480ee3390791"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-1adbb26c6857d6ae",
+          "rag-f09c5253c7a82445",
+          "rag-7e1627bc3b2ca7be",
+          "rag-c0dc480ee3390791"
+        ]
+      },
+      {
+        "id": "eye_problems__herpes_zoster_ophthalmicus",
+        "name": "Herpes Zoster Ophthalmicus",
+        "must_not_miss": true,
+        "retrieval_query": "Herpes Zoster Ophthalmicus diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [
+          "experimental_eye_problems__herpes_zoster_ophthalmicus__rash_and_eye_symptoms"
+        ],
+        "clues": [
+          {
+            "fact": "eye_problems__herpes_zoster_ophthalmicus__facial_rash",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-03fdde54b0f29f67"
+            ]
+          },
+          {
+            "fact": "eye_problems__herpes_zoster_ophthalmicus__eye_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-03fdde54b0f29f67"
+            ]
+          },
+          {
+            "fact": "eye_problems__herpes_zoster_ophthalmicus__headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          },
+          {
+            "fact": "eye_problems__herpes_zoster_ophthalmicus__focal_neurologic_deficits",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          },
+          {
+            "fact": "eye_problems__herpes_zoster_ophthalmicus__nausea_vomiting",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-03fdde54b0f29f67"
+            ]
+          },
+          {
+            "fact": "eye_problems__herpes_zoster_ophthalmicus__facial_rash",
+            "status": "absent",
+            "direction": "oppose",
+            "weight": 3,
+            "source_ids": [
+              "rag-03fdde54b0f29f67"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-e8140091dbf39606",
+          "rag-03fdde54b0f29f67",
+          "rag-bf832a8eae210f99"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_eye_problems__conjunctivitis__diplopia_red_flag",
+        "label": "複視",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "eye_problems"
+          ],
+          "any_findings": [
+            "diplopia"
+          ]
+        },
+        "possible_conditions": [
+          "Neurologic condition"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_eye_problems__orbital_compartment_syndrome__vision_loss_with_trauma",
+        "label": "Recent trauma with vision loss",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "eye_problems"
+          ],
+          "all_findings": [
+            "eye_problems__orbital_compartment_syndrome__recent_facial_trauma",
+            "vision_loss"
+          ]
+        },
+        "possible_conditions": [
+          "Orbital Compartment Syndrome"
+        ],
+        "source_ids": [
+          "rag-1adbb26c6857d6ae"
+        ]
+      },
+      {
+        "code": "experimental_eye_problems__herpes_zoster_ophthalmicus__rash_and_eye_symptoms",
+        "label": "Possible Herpes Zoster Ophthalmicus",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "eye_problems"
+          ],
+          "any_findings": [
+            "eye_problems__herpes_zoster_ophthalmicus__facial_rash"
+          ]
+        },
+        "possible_conditions": [
+          "Herpes Zoster Ophthalmicus"
+        ],
+        "source_ids": [
+          "rag-03fdde54b0f29f67"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Map the symptom 'itching' to a questionnaire option.",
+        "reason": "The questionnaire does not include a specific option for 'itching' (搔癢)."
+      },
+      {
+        "requirement": "Map the symptom 'gritty/foreign-body sensation' to a questionnaire option.",
+        "reason": "The questionnaire does not include a specific option for 'gritty/foreign-body sensation' (沙礫感/異物感)."
+      },
+      {
+        "requirement": "Differentiate between viral, bacterial, allergic, and chlamydial conjunctivitis subtypes.",
+        "reason": "The provided RAG sources and questionnaire data are insufficient to reliably differentiate between the specific etiologies of conjunctivitis, which often requires clinical examination findings not captured here (e.g., type of discharge, presence of follicles/papillae, preauricular adenopathy)."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Specific physical exam findings for Orbital Compartment Syndrome (e.g., ptosis, pupillary palsy, CN V1 anesthesia).",
+        "reason": "The system cannot perform a physical examination to assess for these specific signs."
+      },
+      {
+        "requirement": "Specific time window for intervention (e.g., within 120 minutes of retinal ischemia).",
+        "reason": "The system cannot perform time-based calculations or determine the exact onset of ischemia, which is a clinical diagnosis."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Develop a clinical profile for Orbital Cellulitis.",
+        "reason": "The provided RAG sources for Orbital Cellulitis (rag-eab8b5d3ffaaf12a, rag-1886138bf63decc0, rag-daa102c5a2537f3d, rag-a9b7c79c8b168d0d) do not contain any relevant information about its signs, symptoms, or diagnostic features. The content is about other conditions like cysticercosis and echinococcosis."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3c645fecdbea7be7",
+          "rag-5d1e142cb6c5f680"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[2], fact_proposals[3], fact_proposals[4], fact_proposals[6], semantic_options[2], profiles[0], profiles[0].clues[2], profiles[0].clues[3], profiles[0].clues[4], profiles[0].clues[6], profiles[0].clues[7]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3c645fecdbea7be7",
+          "rag-5d1e142cb6c5f680"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c293d75317ea346a",
+          "rag-11670883bb9d0d30",
+          "rag-763798fcd2f3ac66"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], fact_proposals[4], fact_proposals[5], semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[3], profiles[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c293d75317ea346a",
+          "rag-11670883bb9d0d30",
+          "rag-763798fcd2f3ac66"
+        ]
+      },
+      {
+        "severity": "critical",
+        "note": "Orbital Compartment Syndrome is a sight-threatening emergency. The proposed safety rule is critical to catch the combination of trauma and vision loss, which is a classic presentation. The evidence strongly supports that delays in treatment lead to permanent blindness.",
+        "source_ids": [
+          "rag-1adbb26c6857d6ae",
+          "rag-f09c5253c7a82445",
+          "rag-7e1627bc3b2ca7be",
+          "rag-c0dc480ee3390791"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The questionnaire does not currently ask about proptosis (eye bulging) or ophthalmoplegia (difficulty moving the eye), which are key signs of Orbital Compartment Syndrome. Consider adding questions to screen for these symptoms to improve detection.",
+        "source_ids": [
+          "rag-7e1627bc3b2ca7be"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-7e1627bc3b2ca7be",
+          "rag-c0dc480ee3390791"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, semantic_options[0], profiles[0], profiles[0].clues[1], profiles[0].clues[5], review_notes[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-1adbb26c6857d6ae",
+          "rag-f09c5253c7a82445",
+          "rag-7e1627bc3b2ca7be",
+          "rag-c0dc480ee3390791"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-e8140091dbf39606",
+          "rag-03fdde54b0f29f67",
+          "rag-bf832a8eae210f99"
+        ]
+      },
+      {
+        "severity": "critical",
+        "note": "The RAG sources retrieved for the disease 'Orbital Cellulitis' are entirely irrelevant to the condition. The sources discuss cysticercosis, echinococcosis, and diverticulitis. This indicates a severe failure in the retrieval process for this disease query. No clinical artifacts can be generated for Orbital Cellulitis based on this evidence.",
+        "source_ids": [
+          "rag-eab8b5d3ffaaf12a",
+          "rag-1886138bf63decc0",
+          "rag-daa102c5a2537f3d",
+          "rag-a9b7c79c8b168d0d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-eab8b5d3ffaaf12a",
+          "rag-1886138bf63decc0",
+          "rag-daa102c5a2537f3d",
+          "rag-a9b7c79c8b168d0d"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,1347 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "gynecological_issues",
+  "label": "婦科問題",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "87aa9b4f5fb33ac5a1cdd2a6e94f2864e849cb308112ae60599f09412d4807ed",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history\",\"Dysmenorrhea diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Pelvic inflammatory disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"gynecological issues gynecological red flags emergency warning signs urgent referral rule out\",\"Endometriosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Adenomyosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Urinary tract infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "be326eaae7435cbf732a391a596014e8de0253b4ba964bcf298aed09e040bd17"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "b9b1d96c5554dff09de3495f403aa1177f6a8a33b5b4a71218236375b50c6d15",
+    "generated_at": "2026-08-10T04:07:36+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-f5e1e00c1829f30d",
+      "chunk_id": "9aeedc640c68352d7494_37",
+      "title": "Dysmenorrhea: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/253812-overview",
+      "routes": [
+        "abdomen",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "gynecological_issues__dysmenorrhea"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history",
+        "Dysmenorrhea diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.413,
+      "excerpt": "accordingly, diagnosis is difficult. Definitive diagnosis is typically accomplished by means of transvaginal ultrasonography or magnetic resonance imaging (MRI). When the latter is used, the key finding is a thickened junctional zone (JZ line) that is, the border between myometrium and endometrium. One paper showed that adenomyosis should be in the differential diagnosis when a patient is treated for presumptive endometriosis and has chronic persistent pain. Intrauterine contraceptive device IUCDs (IUDs) may cause bladder or uterine perforation. The sooner a patient has a uterine perforation",
+      "text_sha256": "b41e67ad043ef0ecacb7e5671de11422c0854e7a473b5c54d8b9387c9652b649"
+    },
+    {
+      "id": "rag-0224558d008f5bcb",
+      "chunk_id": "2a896961ed57d0483825_3",
+      "title": "Hyperglucagonemia (Glucagonoma Syndrome): Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/121575-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4559,
+      "excerpt": "normochromic normocytic, although macrocytic anemia has been described in some patients. nous thrombosiss thought to occur in as many as 30% of patients with glucagonoma syndrome.J Diagnosis is aided by the typical skin appearance of patients with NME and by the evaluation of a skin biopsy. Glucagon should be tested by RIA of a fasting plasma sample./rmones that may be elevated in glucagonoma syndrome include insulin, VIP, gastrin, pancreatic polypeptide, 5-HT, calcitonin, adrenocorticotropic hormone, and adrenocorticotropic hormone (ACTH).n glucagonoma syndrome, glucagon levels are well in",
+      "text_sha256": "cbd4db7d89cb5de2b086a92e87a6bbbd6009e502ba2446a90f9c62c7e78c51a8"
+    },
+    {
+      "id": "rag-f3faa0ec1e3b4d47",
+      "chunk_id": "aa487a13953bac9fe331_1",
+      "title": "Pelvic Inflammatory Disease: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/256448-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "gynecological_issues__pelvic_inflammatory_disease"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history",
+        "Pelvic inflammatory disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3548,
+      "excerpt": "transmitted disease (STD). Signs and symptoms of pelvic inflammatory disease The diagnosis of acute PID is primarily based on historical and clinical findings. Clinical manifestations of PID vary widely. Many patients exhibit few or no symptoms, whereas others have acute, serious illness. The most common presenting complaint is lower abdominal pain. Many women report an abnormal vaginal discharge. (See Presentation.) Diagnosis of pelvic inflammatory disease The differential diagnosis includes appendicitis, cervicitis, urinary tract infection, endometriosis, ovarian torsion, and adnexal tumors.",
+      "text_sha256": "ab3a505dc39be5b0fb2fff4d31c517a1e310d8de29acce89cde5193b5ac706a4"
+    },
+    {
+      "id": "rag-e1144a8990f72a66",
+      "chunk_id": "9aeedc640c68352d7494_39",
+      "title": "Dysmenorrhea: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/253812-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4568,
+      "excerpt": "dysphoric disorder Besides dysmenorrhea, patients with premenstrual dysphoric disorder (formerly premenstrual syndrome) may have bloating, body aches, migraine headaches, breast tenderness, and emotional complaints. The effects of these symptoms are occasionally debilitating. Aside from possible vaginal brownish discharge or bleeding, pelvic examination findings are normal. It is the emergency physician s responsibility to ensure adequate analgesia and appropriate follow-up with a gynecologist. Epidemiology United States statistics Dysmenorrhea may affect more than 50% of menstruating women,",
+      "text_sha256": "bb63510b8350971d2228ebae08b7761a42c85ad97062900917d877d7e33f0df7"
+    },
+    {
+      "id": "rag-1d3f048a40e712fd",
+      "chunk_id": "fb961f7e1c8b575b2ec5_2",
+      "title": "Hypogammaglobulinemia: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/136471-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4598,
+      "excerpt": "A detailed clinical history should emphasize the following: Reason for lab draw that defined the abnormality Symptoms (especially infections) Age of onset Family history Site of infections Type of microorganisms Recurrent infections Gastrointestinal symptoms Musculoskeletal symptoms Autoimmune and collagen vascular diseases Physical findings will vary by etiology, but primary hypogammaglobulinemia (associated with a primary immune deficiency) may include the following: Growth retardation Abnormalities of lymphoid tissue and organs (eg, a paucity of tonsillar tissue, adenoids, and peripheral",
+      "text_sha256": "ab891bcda27d7a883d0b123b5247a35b050b1a6eafe7573b51d1970df8792d59"
+    },
+    {
+      "id": "rag-8b9ab8ada128e5ae",
+      "chunk_id": "818eca5072b6ba4dd12a_3",
+      "title": "Focal Segmental Glomerulosclerosis: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/245915-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4504,
+      "excerpt": "insufficiency ) However, some patients may be asymptomatic. See Presentation for more detail. Diagnosis Although clinical features are suggestive, a diagnosis of FSGS is established only by histopathology findings. Detailed medical history and pertnent laboratory tests are essential to distnguish between primary (idiopathic) and secondary forms of FSGS. n massively obese patients, FSGS, mostlys a diagnosis of exclusion. Examination of patients with FSGS may include the following findings: Leg edema Ascites Pleural effusion Abdominal pain: Common in children; may be symptom of peritonitis",
+      "text_sha256": "659ed990b335202f9d60a9fd23de1d33221a3d563a8a94db70487c478ba28849"
+    },
+    {
+      "id": "rag-ac671dc6a838934a",
+      "chunk_id": "f6c8905a3254558b14b7_12",
+      "title": "Median Neuropathy: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1141168-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4646,
+      "excerpt": "to data from the 1980s, the prevalence of electrophysiologically confirmed symptomatic CTS is about 3% among women and 2% among men. A cross-sectional survey reported in 2001 calculated the lowest possible prevalence of symptomatic CTS in the general US population as 3.72%. Among residents of Olmsted County, Minnesota, the adjusted annual rates of medically diagnosed CTS increased from 258/100,000 in 1981-1985 to 424/100,000 in 2000-2005. For this last period included in the study, the incidence in women was 542/100,000 and in men was 303/100,000. Generally, the most marked increases in CTS",
+      "text_sha256": "2b7c5cda7210957a40eca34883951a740475eada9c5660c1c191d63a20f76e34"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "common",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "gynecological_issues__dysmenorrhea",
+        "gynecological_issues__endometriosis",
+        "gynecological_issues__adenomyosis"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological differential diagnosis diseases clinical presentation symptoms history",
+        "gynecological issues gynecological red flags emergency warning signs urgent referral rule out",
+        "Dysmenorrhea diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Endometriosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Adenomyosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4365,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-cad1d6cea568461d",
+      "chunk_id": "013e43e6534e2929231d_22",
+      "title": "CA 125: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087557-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5616,
+      "excerpt": "tumor marker recommended for clinical use in the diagnosis and management of ovarian cancer. There are 5 main indications in which the determination of CA 125 levels is recommended. Table 1 summarizes the recommendations from different societies in both Europe and the United States. Table 1. Recommendations for CA 125 Testing in Ovarian Cancer by Different Expert Groups (Open Table in a new window) NCCN NIH NACB EGTM ESMO Early detection in hereditary cancer syndromes Yes None Differential diagnosis of pelvic mass Yes None Monitoring response to therapy Yes None Yes Detection of recurrence Yes",
+      "text_sha256": "e55757a67a3049a26503cb9bab9c430e8de2a791d893142d47097184aee9d1e2"
+    },
+    {
+      "id": "rag-a6d1f75d3dc4177f",
+      "chunk_id": "013e43e6534e2929231d_2",
+      "title": "CA 125: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087557-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5619,
+      "excerpt": "detected stage. The degree of elevation has also been shown to correlate with tumor burden and International Federation of Obstetrics and Gynecologic (FIGO) pathologic stage. However, owing to the lack of sensitivity and specificity, elevations in single or sequential CA 125 levels alone are not recommended for ovarian cancer screening or in the initial diagnosis of ovarian cancer. CA 125 levels may also be elevated in other malignancies, as well as in benign and physiologic conditions. Malignant conditions associated with elevated CA 125 levels include the following: Epithelial ovarian",
+      "text_sha256": "ac0d686d0938883879b97e06100805463972fc8d42b3b844bbeca7cd8016d8ac"
+    },
+    {
+      "id": "rag-a76f161a6be269a2",
+      "chunk_id": "2d52e0b25b95aa71cedd_7",
+      "title": "Early Pregnancy Loss in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795085-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "gynecological_issues__endometriosis"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological red flags emergency warning signs urgent referral rule out",
+        "Endometriosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5208,
+      "excerpt": "usually have subsided. Ultrasonography reveals a vacant uterus. Diagnosis may be confirmed by observation of the aborted fetus with the complete placenta, although caution is recommended in making this diagnosis without ultrasonography because it can be difficult to determine if the miscarriage is complete. Etiology Causes of first- and second-trimester miscarriage Embryonic abnormalities Embryonic abnormalities account for 80-90% of rst-trimester miscarriages. Note the following: Chromosomal abnormalities are the most common cause of spontaneous miscarriage. More than 90% of cytogenic and",
+      "text_sha256": "e418143c55f0e41d9be572c2d83ec881b8de022dcf3551223c4286e115393f57"
+    },
+    {
+      "id": "rag-56a8c3f553c2afd3",
+      "chunk_id": "3046d06c862cf3a8d792_28",
+      "title": "Emergent Management of Ectopic Pregnancy: Practice Essentials, Ultrasonography, Other Diagnostic Imaging Modalities",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/796451-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5866,
+      "excerpt": "shock Urinalysis to eliminate urinary tract infection as a cause of pelvic pain Blood type and Rh factor, if transfusion is required or if RhoGAM will be provided for Rh-negative patients with vaginal bleeding Other Tests Dilation and curettage Dilation and curettage (D&C) can be used to rule out ectopic pregnancy by determining the presence of chorionic villi. The obvious drawback to its frequent use is that a certain number of normal intrauterine pregnancies (IUPs) will be aborted. It may be an option in the further workup of PUL when the pregnancy is undesired. Culdocentesis Culdocentesis",
+      "text_sha256": "54b534a6b192e81465f25aa5c3c1ddcd7d3d1d7bcd430c3c5ee67f21e64a44d5"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5885,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    },
+    {
+      "id": "rag-8356ec010ed3ff6f",
+      "chunk_id": "87996f6a71b53073e20c_3",
+      "title": "Acute Hypopituitarism: Overview, Diagnostic Considerations, Hormone Deficiency Symptoms",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767828-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "gynecological issues gynecological red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.593,
+      "excerpt": "rate. The setting is not uncommon in which an emergency physician is evaluating a patient with complaints of weakness, fatigue, or altered mental status without a clear diagnosis. Subtle, but still abnormal, vital signs, such as slightly reduced blood pressure or heart rate, may be the only initial clues to suggest a pituitary deficiency rather than a relatively benign etiology. Emergency physicians frequently provide care to patients at risk of developing hypopituitarism. Risk factors include, but are not limited to, TBI, cocaine use, subarachnoid hemorrhage, and postpartum hypotension (a",
+      "text_sha256": "66493d5f742848008b29c1bb6e2ef99b7317d22019ad008feed96fe38c63f932"
+    },
+    {
+      "id": "rag-9deab9f70e8a586b",
+      "chunk_id": "164cc724f2b9fd145f51_5",
+      "title": "Chronic Pelvic Pain in Men: Practice Essentials, Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/437745-overview",
+      "routes": [
+        "abdomen",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "gynecological_issues__pelvic_inflammatory_disease"
+      ],
+      "retrieval_queries": [
+        "Pelvic inflammatory disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4191,
+      "excerpt": "includes recommendations for the treatment of CPPS (see Guidelines). Etiology Chronic pelvic pain syndrome (CPPS) in the male is actually not a syndrome, in that it is not a discrete, narrowly defined constellation of consistent symptoms and objective findings ultimately traceable to a single, known etiology. Rather, CPPS in the male is a catch-all category of convenience into which physicians arbitrarily group the heterogeneous admixture of cases in male patients that meet the following three criteria: Patients have a variety of long-standing symptoms, a significant number of which relate to",
+      "text_sha256": "236ab1618e0bcf0d4a66548cdc91c1d36e9ee7f4097fc22fe764bd717201e888"
+    },
+    {
+      "id": "rag-fe021416c194febb",
+      "chunk_id": "164cc724f2b9fd145f51_7",
+      "title": "Chronic Pelvic Pain in Men: Practice Essentials, Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/437745-overview",
+      "routes": [
+        "abdomen",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "gynecological_issues__pelvic_inflammatory_disease"
+      ],
+      "retrieval_queries": [
+        "Pelvic inflammatory disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4364,
+      "excerpt": "the causes of CPPS remain unknown, the condition’s symptoms seem to arise from the interaction between psychological factors and immune, neurologic, and endocrine system dysfunction. The number of WBCs (pus cells) found in the prostatic fluid under microscopic examination—long considered the hallmark of this disease process—does not correlate with the degree of pain or with other symptoms experienced by patients with CPPS. Histologic signs of inflammation were found in only one third of all patients diagnosed with CPPS who underwent prostatic biopsy, according to Pontari and Ruggieri’s report,",
+      "text_sha256": "a529746e6d3839bb0f2770bd9989d90dbd0aacd45957e8139938c5a6a1291d75"
+    },
+    {
+      "id": "rag-eb037e73dbf72d4e",
+      "chunk_id": "ad1ba37a75d2bf17e98b_17",
+      "title": "Dermatologic Manifestations of Necrotizing Fasciitis: Overview, Types of Necrotizing Fasciitis, Clinical Evaluation",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1054438-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "gynecological_issues__pelvic_inflammatory_disease"
+      ],
+      "retrieval_queries": [
+        "Pelvic inflammatory disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4508,
+      "excerpt": "diagnosis. Other conditions that should be considered when evaluating a patient with suspected necrotizing fasciitis include the following: Acute Febrile Neutrophilic Dermatosis Acute Hemorrhagic Edema of Infancy Cellulitis Erythema Induratum (Nodular Vasculitis) Postsurgical pyoderma gangrenosum Purpura fulminans",
+      "text_sha256": "8f6a34de4b01d9549f20443cdf0baf583f7f0aef410ca95252d763b121f02b98"
+    },
+    {
+      "id": "rag-1f8a3e4e051ef592",
+      "chunk_id": "9aeedc640c68352d7494_24",
+      "title": "Dysmenorrhea: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/253812-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "gynecological_issues__dysmenorrhea"
+      ],
+      "retrieval_queries": [
+        "Dysmenorrhea diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4699,
+      "excerpt": "after menses; if chronic, it can lead to dysmenorrhea. The most common causative pathogens are Chlamydia trachomatis and Neisseria gonorrhoeae, though PID also can be caused by other organisms, such as Gardnerella vaginalis, anaerobes, and gram-negative rods. Previously, the diagnosis of PID, though primarily clinical, was based on the presence of 3 major criteria (abdominal pain, adnexal pain, and cervical motion tenderness), and 1 minor criterion (fever, vaginal discharge, leukocytosis, positive cervical cultures, gram-negative stain, intracellular diplococci, or white blood cells [WBCs] on",
+      "text_sha256": "6643bf588edd4c65848b70402a64bad16c5b17694f0a14e877413b82ec66cf81"
+    },
+    {
+      "id": "rag-fac29dab4a80564b",
+      "chunk_id": "689b3d55803f83765ad0_12",
+      "title": "Dysbarism: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769902-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "gynecological_issues__dysmenorrhea"
+      ],
+      "retrieval_queries": [
+        "Dysmenorrhea diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4557,
+      "excerpt": "or vomiting during or shortly after a decompression dive or a dive near the no-decompression limits should be presumed to have inner-ear DCS. Any symptom that occurs after diving (from minutes to days) should be presumed to be related to diving. Other symptoms of DCS include paresis, paralysis, paresthesia, joint pain, dyspnea, and rash. For more information on this topic, please see the article on Decompression Sickness. Pulmonary As an individual descends, the lungs decrease in size according to the Boyle law. This is true only if the diver is holding his or her breath. When former",
+      "text_sha256": "a8c1c52fe6058fa90d6456e35b4591e75154e5bbf5487cf3ef027a1224816a6b"
+    },
+    {
+      "id": "rag-d28ebb49bb7c15d4",
+      "chunk_id": "0b4e124e43266b2d82b6_21",
+      "title": "Neurological Sequelae of Infectious Endocarditis: Infective Endocarditis and the CNS, Etiology of CNS Sequelae, Epidemiology of CNS Sequelae",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165712-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "gynecological_issues__endometriosis"
+      ],
+      "retrieval_queries": [
+        "Endometriosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5144,
+      "excerpt": "metastatic brain disease, herpes simplex encephalitis, orbital cellulitis, and carotid disease and stroke should also be considered in the differential diagnosis. Diagnosis of CNS Sequelae Cerebrospinal fluid examination In the Massachusetts General Hospital series of 218 patients, 33 had meningeal symptoms (15%). Of patients with CNS involvement from infective endocarditis, one third had completely normal cerebrospinal fluid (CSF), one fourth had a slightly abnormal CSF but an aseptic culture, and one fourth had frankly purulent CSF. Noteworthy as well is that one sixth had hemorrhagic fluid.",
+      "text_sha256": "f98e813835d89c8700502e851754fc84e41fef6ea7d4ce08932f1a8db9173930"
+    },
+    {
+      "id": "rag-ad2ef823caaa5882",
+      "chunk_id": "e5ccd0d7956552a90d63_3",
+      "title": "Emergent Treatment of Endometriosis: Background, Laboratory Studies, Imaging Studies",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795771-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "gynecological_issues__endometriosis"
+      ],
+      "retrieval_queries": [
+        "Endometriosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.51,
+      "excerpt": "and urine culture should be sent if urinary tract infection (UTI) is in the differential diagnosis. Cervical Gram stain and cultures should be considered, because sexually transmitted diseases (STDs) can also cause pelvic pain and infertility. Beta human chorionic gonadotropin (HCG) can rule out pregnancy and its complications. Imaging Studies Radiography Routine radiographs are not recommended unless other disease entities requiring these studies are in the differential diagnosis. Ultrasonography Endometriosis can be assessed by either transvaginal ultrasonography or endorectal",
+      "text_sha256": "2c4bc85313afaca59a1fbce0de2ff30f7911537c5fde3985c5a7db7e93c87ea8"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "gynecological_issues__adenomyosis"
+      ],
+      "retrieval_queries": [
+        "Adenomyosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4045,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-3a72d4c38d9a0bb7",
+      "chunk_id": "9f7eb5027998a34eb6c2_8",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "gynecological_issues__adenomyosis"
+      ],
+      "retrieval_queries": [
+        "Adenomyosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4069,
+      "excerpt": "conduction defects are truly diagnostic only when they coincide with symptoms Loop recorders have a higher diagnostic yield than Holter monitor evaluation, with a marginal cost savings Ambulatory monitoring appears to have a higher negative than positive diagnostic yield Other diagnostic tests and procedures include the following: Head-up tilt-table test - Useful for confirming autonomic dysfunction and can generally be safely arranged on an outpatient basis Electroencephalography (EEG) - Can be performed at the discretion of a neurologist if seizure is considered a likely alternative",
+      "text_sha256": "bce92127a34f3c0ce64d226f3f059473b46561d6c8d76961f1c0a09f5b6874fc"
+    },
+    {
+      "id": "rag-168505cd54e57296",
+      "chunk_id": "c073c38d1231a0946898_2",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "gynecological_issues__adenomyosis"
+      ],
+      "retrieval_queries": [
+        "Adenomyosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.475,
+      "excerpt": "after all studies reveal no etiology or there is no apparent cause. Classic trigeminal neuralgia includes all cases without established etiology after investigation, as well as those with potential microvascular compression of the fifth cranial nerve. In symptomatic trigeminal neuralgia, the pain syndrome is secondary to tumor, multiple sclerosis, or other structural abnormalities. Diagnosis According to the International Classification of Headache Disorders (ICHD), specific crtieria have been developed to diagnose TN. (ey are as follows: A. At least three attacks of unilateral facial pain",
+      "text_sha256": "5273cd18dbfdad1b48e12db8975d5572ba1e419917141194219a5f8335049eb9"
+    },
+    {
+      "id": "rag-3697ea6f89d68fd5",
+      "chunk_id": "5f385aa936e8b9c4d48d_4",
+      "title": "Hemolytic Uremic Syndrome in Emergency Medicine: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779218-overview",
+      "routes": [
+        "abdomen",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "gynecological_issues__urinary_tract_infection"
+      ],
+      "retrieval_queries": [
+        "Urinary tract infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4444,
+      "excerpt": "seizures, or altered mental status) Diarrhea may improve as the other HUS signs and symptoms beginJ Atypical HUS does not typically begin with a gastrointestinal illness. Patients with pneumococcal HUS may have had`recent respiratory illness. Clinical manifestations of atypical HUS are similar to those of typical HUS, although neurologic involvement is more common. See Presentation. HUS is primarily a clinical diagnosis coupled with consistent laboratory findings, including the following: Microangiopathic hemolytic anemia, with a hemoglobin level that is typically less than 8 g/dLJ",
+      "text_sha256": "8794e56e32229d991eb34ce0ebf51c81b6fdd260c654a355f24fd9e8a874c4d9"
+    },
+    {
+      "id": "rag-d65b78cc091f2d5e",
+      "chunk_id": "525d2d2f1773793663e6_33",
+      "title": "Emergency Care of Urticaria: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1956597-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "gynecological_issues__urinary_tract_infection"
+      ],
+      "retrieval_queries": [
+        "Urinary tract infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4286,
+      "excerpt": "Skin for evidence of bacterial or fungal infection Differential Diagnosis The differential diagnosis includes the following: Allergic Contact Dermatitis Atopic Dermatitis Drug Eruptions Erythema Multiforme Henoch-Schonlein Purpura (Anaphylactoid Purpura) Insect Bites Mastocytosis Pityriasis Rosea Scabies Urticarial Vasculitis Sweet syndrome Other problems to consider include the following: Neurodermatitis Eczema Urticaria pigmentosa Potential diagnostic pitfalls include the following: Missing the diagnosis of life-threatening laryngeal angioedema in a patient presenting with the primary",
+      "text_sha256": "89f2bc61d13f795e3e8ca97a61c4c166adc2f1337d62517645da7c2e6e3eed6e"
+    },
+    {
+      "id": "rag-9545dfbf60a6154b",
+      "chunk_id": "2cf2b5608b381af04fa2_4",
+      "title": "Acute Sinusitis: Practice Essentials, Background, Anatomy",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/232670-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "gynecological_issues__urinary_tract_infection"
+      ],
+      "retrieval_queries": [
+        "Urinary tract infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4505,
+      "excerpt": "Facial erythema Diagnosis Acute sinusitis is a clinical diagnosis. However, the evaluation might include the following laboratory tests : Nasal cytology Nasal-sinus biopsy Tests for immunodeficiency, cystic fibrosis, or ciliary dysfunction Nasal cytology examinations may be useful to elucidate the following entities: Allergic rhinitis Eosinophilia Nasal polyposis Aspirin sensitivity Tests for immunodeficiency are indicated if history findings indicate recurrent infection; they include the following: Immunoglobulin studies HIV serology Cultures are not routinely obtained in the evaluation of",
+      "text_sha256": "b615c23e11471f2ef01b007649cd88170dd62242c1fac30bb79a738b837cb6ab"
+    },
+    {
+      "id": "rag-a2cc9fd5cd7ca515",
+      "chunk_id": "bae259a0e986883337ec_10",
+      "title": "Urinary Tract Infections (UTI) in Diabetes Mellitus: Overview, Renal Emphysema, Emphysematous Cystitis",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2040207-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "gynecological_issues__urinary_tract_infection"
+      ],
+      "retrieval_queries": [
+        "Urinary tract infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4475,
+      "excerpt": "and vomiting, and abdominal pain. The most common symptoms of ephysematous cystitis are frequency, urgency,abdominal pain, and dysuria. Gross hematuria and pneumaturia are occasionally observed. Leukocytosis and pyuria are observed in most patients. along with, azotemia and hyperglycemia are present. Abdominal imaging may reveal gas outlining the renal pelvis and in the ureters; air in the bladder wall or lumen. Renal ultrasonography may detect diffuse thickening of the bladder wall and echogenicity. CT scans may documentgas in the bladder wall with extension into the lumen. Blebs of the",
+      "text_sha256": "fd14ce95e9dba22365671747d38de2d02311328b321f1a37b5ef8898898174ed"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "gynecological_issues__pelvic_inflammatory_disease",
+      "name": "Pelvic inflammatory disease",
+      "retrieval_query": "Pelvic inflammatory disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-f3faa0ec1e3b4d47"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f3faa0ec1e3b4d47",
+        "rag-9deab9f70e8a586b",
+        "rag-fe021416c194febb",
+        "rag-eb037e73dbf72d4e"
+      ]
+    },
+    {
+      "id": "gynecological_issues__dysmenorrhea",
+      "name": "Dysmenorrhea",
+      "retrieval_query": "Dysmenorrhea diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-e1144a8990f72a66"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f5e1e00c1829f30d",
+        "rag-f09c5253c7a82445",
+        "rag-1f8a3e4e051ef592",
+        "rag-fac29dab4a80564b"
+      ]
+    },
+    {
+      "id": "gynecological_issues__endometriosis",
+      "name": "Endometriosis",
+      "retrieval_query": "Endometriosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-f3faa0ec1e3b4d47",
+        "rag-f5e1e00c1829f30d"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-a76f161a6be269a2",
+        "rag-d28ebb49bb7c15d4",
+        "rag-ad2ef823caaa5882"
+      ]
+    },
+    {
+      "id": "gynecological_issues__adenomyosis",
+      "name": "Adenomyosis",
+      "retrieval_query": "Adenomyosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-f5e1e00c1829f30d"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-5bcac9eab5404341",
+        "rag-3a72d4c38d9a0bb7",
+        "rag-168505cd54e57296"
+      ]
+    },
+    {
+      "id": "gynecological_issues__urinary_tract_infection",
+      "name": "Urinary tract infection",
+      "retrieval_query": "Urinary tract infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-f3faa0ec1e3b4d47"
+      ],
+      "disease_rag_source_ids": [
+        "rag-3697ea6f89d68fd5",
+        "rag-d65b78cc091f2d5e",
+        "rag-9545dfbf60a6154b",
+        "rag-a2cc9fd5cd7ca515"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "gynecological_issues",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": "abdomen",
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-f3faa0ec1e3b4d47",
+        "rag-f5e1e00c1829f30d",
+        "rag-f09c5253c7a82445",
+        "rag-1f8a3e4e051ef592",
+        "rag-fac29dab4a80564b",
+        "rag-a76f161a6be269a2",
+        "rag-d28ebb49bb7c15d4",
+        "rag-ad2ef823caaa5882",
+        "rag-5bcac9eab5404341",
+        "rag-3a72d4c38d9a0bb7",
+        "rag-168505cd54e57296",
+        "rag-3697ea6f89d68fd5",
+        "rag-d65b78cc091f2d5e",
+        "rag-9545dfbf60a6154b",
+        "rag-a2cc9fd5cd7ca515"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "gynecological_issues__pelvic_inflammatory_disease__lower_abdominal_pain",
+        "description": "Pain in the lower abdomen.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "gynecological_issues__pelvic_inflammatory_disease"
+        ],
+        "source_ids": [
+          "rag-f3faa0ec1e3b4d47"
+        ]
+      },
+      {
+        "code": "gynecological_issues__pelvic_inflammatory_disease__abnormal_vaginal_discharge",
+        "description": "Abnormal discharge from the vagina.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "gynecological_issues__pelvic_inflammatory_disease"
+        ],
+        "source_ids": [
+          "rag-f3faa0ec1e3b4d47"
+        ]
+      },
+      {
+        "code": "gynecological_issues__dysmenorrhea__pelvic_pain",
+        "description": "下腹部或骨盆區疼痛。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "gynecological_issues__dysmenorrhea"
+        ],
+        "source_ids": [
+          "rag-1f8a3e4e051ef592"
+        ]
+      },
+      {
+        "code": "gynecological_issues__dysmenorrhea__vaginal_discharge",
+        "description": "陰道有分泌物。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "gynecological_issues__dysmenorrhea"
+        ],
+        "source_ids": [
+          "rag-f5e1e00c1829f30d",
+          "rag-f09c5253c7a82445",
+          "rag-1f8a3e4e051ef592",
+          "rag-fac29dab4a80564b"
+        ]
+      },
+      {
+        "code": "gynecological_issues__dysmenorrhea__fever",
+        "description": "發燒。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "gynecological_issues__dysmenorrhea"
+        ],
+        "source_ids": [
+          "rag-1f8a3e4e051ef592"
+        ]
+      },
+      {
+        "code": "gynecological_issues__dysmenorrhea__nausea_or_vomiting",
+        "description": "噁心或嘔吐。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "gynecological_issues__dysmenorrhea"
+        ],
+        "source_ids": [
+          "rag-fac29dab4a80564b"
+        ]
+      },
+      {
+        "code": "gynecological_issues__endometriosis__chronic_pelvic_pain",
+        "description": "持續性骨盆腔疼痛。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "gynecological_issues__endometriosis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-a76f161a6be269a2",
+          "rag-d28ebb49bb7c15d4",
+          "rag-ad2ef823caaa5882"
+        ]
+      },
+      {
+        "code": "gynecological_issues__adenomyosis__chronic_persistent_pain",
+        "description": "Chronic persistent pain, particularly when endometriosis is suspected but treatment is ineffective.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "gynecological_issues__adenomyosis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "code": "gynecological_issues__urinary_tract_infection__dysuria",
+        "description": "排尿時感到疼痛或灼熱感。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "gynecological_issues__urinary_tract_infection"
+        ],
+        "source_ids": [
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      },
+      {
+        "code": "gynecological_issues__urinary_tract_infection__urinary_frequency",
+        "description": "感覺需要比平常更頻繁地排尿。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "gynecological_issues__urinary_tract_infection"
+        ],
+        "source_ids": [
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      },
+      {
+        "code": "gynecological_issues__urinary_tract_infection__urinary_urgency",
+        "description": "突然產生強烈且急迫的排尿需求。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "gynecological_issues__urinary_tract_infection"
+        ],
+        "source_ids": [
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "symptom_location",
+        "option": "下腹部",
+        "mapping": {
+          "findings": [
+            "gynecological_issues__pelvic_inflammatory_disease__lower_abdominal_pain",
+            "gynecological_issues__dysmenorrhea__pelvic_pain"
+          ]
+        },
+        "disease_ids": [
+          "gynecological_issues__pelvic_inflammatory_disease",
+          "gynecological_issues__dysmenorrhea"
+        ],
+        "source_ids": [
+          "rag-f3faa0ec1e3b4d47",
+          "rag-1f8a3e4e051ef592"
+        ]
+      },
+      {
+        "field": "symptom_description",
+        "option": "感覺有分泌物",
+        "mapping": {
+          "findings": [
+            "gynecological_issues__pelvic_inflammatory_disease__abnormal_vaginal_discharge",
+            "gynecological_issues__dysmenorrhea__vaginal_discharge"
+          ]
+        },
+        "disease_ids": [
+          "gynecological_issues__pelvic_inflammatory_disease",
+          "gynecological_issues__dysmenorrhea"
+        ],
+        "source_ids": [
+          "rag-f3faa0ec1e3b4d47",
+          "rag-f5e1e00c1829f30d",
+          "rag-f09c5253c7a82445",
+          "rag-1f8a3e4e051ef592",
+          "rag-fac29dab4a80564b"
+        ]
+      },
+      {
+        "field": "symptom_location",
+        "option": "骨盆區",
+        "mapping": {
+          "findings": [
+            "gynecological_issues__dysmenorrhea__pelvic_pain",
+            "gynecological_issues__endometriosis__chronic_pelvic_pain"
+          ]
+        },
+        "disease_ids": [
+          "gynecological_issues__dysmenorrhea",
+          "gynecological_issues__endometriosis"
+        ],
+        "source_ids": [
+          "rag-f5e1e00c1829f30d",
+          "rag-f09c5253c7a82445",
+          "rag-1f8a3e4e051ef592",
+          "rag-fac29dab4a80564b",
+          "rag-ad2ef823caaa5882"
+        ]
+      },
+      {
+        "field": "symptom_description",
+        "option": "疼痛",
+        "mapping": {
+          "findings": [
+            "gynecological_issues__dysmenorrhea__pelvic_pain",
+            "gynecological_issues__endometriosis__chronic_pelvic_pain",
+            "gynecological_issues__adenomyosis__chronic_persistent_pain"
+          ]
+        },
+        "disease_ids": [
+          "gynecological_issues__dysmenorrhea",
+          "gynecological_issues__endometriosis",
+          "gynecological_issues__adenomyosis"
+        ],
+        "source_ids": [
+          "rag-1f8a3e4e051ef592",
+          "rag-f09c5253c7a82445",
+          "rag-a76f161a6be269a2",
+          "rag-d28ebb49bb7c15d4",
+          "rag-ad2ef823caaa5882",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "發燒或畏寒",
+        "mapping": {
+          "findings": [
+            "gynecological_issues__dysmenorrhea__fever"
+          ]
+        },
+        "disease_ids": [
+          "gynecological_issues__dysmenorrhea"
+        ],
+        "source_ids": [
+          "rag-1f8a3e4e051ef592"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "感到噁心或嘔吐",
+        "mapping": {
+          "findings": [
+            "gynecological_issues__dysmenorrhea__nausea_or_vomiting"
+          ]
+        },
+        "disease_ids": [
+          "gynecological_issues__dysmenorrhea"
+        ],
+        "source_ids": [
+          "rag-fac29dab4a80564b"
+        ]
+      },
+      {
+        "field": "symptom_frequency",
+        "option": "持續性",
+        "mapping": {
+          "course": "continuous",
+          "findings": [
+            "gynecological_issues__adenomyosis__chronic_persistent_pain"
+          ]
+        },
+        "disease_ids": [
+          "gynecological_issues__adenomyosis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "感到排尿困難、頻尿、尿急或尿液顏色或氣味改變",
+        "mapping": {
+          "findings": [
+            "gynecological_issues__urinary_tract_infection__dysuria",
+            "gynecological_issues__urinary_tract_infection__urinary_frequency",
+            "gynecological_issues__urinary_tract_infection__urinary_urgency"
+          ]
+        },
+        "disease_ids": [
+          "gynecological_issues__urinary_tract_infection"
+        ],
+        "source_ids": [
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "gynecological_issues__pelvic_inflammatory_disease",
+        "name": "Pelvic inflammatory disease",
+        "must_not_miss": false,
+        "retrieval_query": "Pelvic inflammatory disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "gynecological_issues__pelvic_inflammatory_disease__lower_abdominal_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f3faa0ec1e3b4d47"
+            ]
+          },
+          {
+            "fact": "gynecological_issues__pelvic_inflammatory_disease__abnormal_vaginal_discharge",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f3faa0ec1e3b4d47"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f3faa0ec1e3b4d47"
+        ]
+      },
+      {
+        "id": "gynecological_issues__dysmenorrhea",
+        "name": "Dysmenorrhea",
+        "must_not_miss": false,
+        "retrieval_query": "Dysmenorrhea diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "gynecological_issues__dysmenorrhea__pelvic_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f5e1e00c1829f30d",
+              "rag-f09c5253c7a82445",
+              "rag-1f8a3e4e051ef592",
+              "rag-fac29dab4a80564b"
+            ]
+          },
+          {
+            "fact": "gynecological_issues__dysmenorrhea__vaginal_discharge",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f5e1e00c1829f30d",
+              "rag-f09c5253c7a82445",
+              "rag-1f8a3e4e051ef592",
+              "rag-fac29dab4a80564b"
+            ]
+          },
+          {
+            "fact": "gynecological_issues__dysmenorrhea__fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-1f8a3e4e051ef592"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f5e1e00c1829f30d",
+          "rag-f09c5253c7a82445",
+          "rag-1f8a3e4e051ef592",
+          "rag-fac29dab4a80564b"
+        ]
+      },
+      {
+        "id": "gynecological_issues__endometriosis",
+        "name": "Endometriosis",
+        "must_not_miss": false,
+        "retrieval_query": "Endometriosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "gynecological_issues__endometriosis__chronic_pelvic_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-a76f161a6be269a2",
+              "rag-d28ebb49bb7c15d4",
+              "rag-ad2ef823caaa5882"
+            ]
+          },
+          {
+            "fact": "fever",
+            "status": "absent",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-ad2ef823caaa5882"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-a76f161a6be269a2",
+          "rag-d28ebb49bb7c15d4",
+          "rag-ad2ef823caaa5882"
+        ]
+      },
+      {
+        "id": "gynecological_issues__adenomyosis",
+        "name": "Adenomyosis",
+        "must_not_miss": false,
+        "retrieval_query": "Adenomyosis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "gynecological_issues__adenomyosis__chronic_persistent_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-5bcac9eab5404341",
+              "rag-3a72d4c38d9a0bb7",
+              "rag-168505cd54e57296"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "id": "gynecological_issues__urinary_tract_infection",
+        "name": "Urinary tract infection",
+        "must_not_miss": false,
+        "retrieval_query": "Urinary tract infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "gynecological_issues__urinary_tract_infection__dysuria",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-a2cc9fd5cd7ca515"
+            ]
+          },
+          {
+            "fact": "gynecological_issues__urinary_tract_infection__urinary_frequency",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-a2cc9fd5cd7ca515"
+            ]
+          },
+          {
+            "fact": "gynecological_issues__urinary_tract_infection__urinary_urgency",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-a2cc9fd5cd7ca515"
+            ]
+          },
+          {
+            "fact": "lower_abdominal_pain",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-a2cc9fd5cd7ca515"
+            ]
+          },
+          {
+            "fact": "fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-a2cc9fd5cd7ca515"
+            ]
+          },
+          {
+            "fact": "nausea",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-a2cc9fd5cd7ca515"
+            ]
+          },
+          {
+            "fact": "vomiting",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-a2cc9fd5cd7ca515"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      }
+    ],
+    "safety_proposals": [],
+    "unsupported_requirements": [
+      {
+        "requirement": "Detailed differential diagnosis for Pelvic Inflammatory Disease (e.g., appendicitis, cervicitis, UTI, endometriosis, ovarian torsion).",
+        "reason": "The provided RAG sources list differential diagnoses but do not contain sufficient detail on their specific signs and symptoms to create distinct clinical profiles or rule-out clues."
+      },
+      {
+        "requirement": "Specific red flags or criteria for urgent care referral for Pelvic Inflammatory Disease.",
+        "reason": "The provided RAG sources mention that some patients can have acute, serious illness but do not specify the red flag symptoms (e.g., high fever, severe pain, signs of sepsis) that would warrant an immediate escalation in care."
+      },
+      {
+        "requirement": "Create safety rules for red flag symptoms associated with gynecological issues.",
+        "reason": "The provided RAG sources mention red flags like exertional onset, chest pain, dyspnea, severe headache, and focal neurologic deficits in the context of syncope, not specifically for dysmenorrhea. There is insufficient evidence to create specific, actionable safety rules for the gynecological_issues route based on the supplied text."
+      },
+      {
+        "requirement": "Detailed red flag symptoms for endometriosis (e.g., exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria).",
+        "reason": "The source document lists these as general red flags for syncope, not specifically for endometriosis. Applying them directly to endometriosis without more specific evidence would be an over-interpretation."
+      },
+      {
+        "requirement": "Specific diagnostic criteria for endometriosis based on imaging (e.g., thickened junctional zone on MRI).",
+        "reason": "This level of detail is related to definitive diagnostic procedures and is beyond the scope of a symptom-based questionnaire for initial triage."
+      },
+      {
+        "requirement": "Rule out logic for pregnancy complications.",
+        "reason": "While the questionnaire asks about pregnancy status and the RAG sources mention ruling out pregnancy, the provided text does not contain sufficient detail to build specific, safe logic for differentiating various pregnancy complications (e.g., ectopic vs. miscarriage)."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Detailed diagnostic criteria for Adenomyosis.",
+        "reason": "The provided RAG sources mention diagnostic methods like transvaginal ultrasonography and MRI but do not detail the specific clinical symptom criteria for diagnosis."
+      },
+      {
+        "requirement": "Specific red flag symptoms for Adenomyosis.",
+        "reason": "The provided RAG sources do not contain specific red flag symptoms directly associated with Adenomyosis. One source lists general red flags for syncope, which is not a primary symptom of Adenomyosis based on the available text."
+      },
+      {
+        "requirement": "Common symptoms of Adenomyosis such as heavy menstrual bleeding or an enlarged uterus.",
+        "reason": "The provided RAG sources focus on chronic persistent pain as a symptom but do not mention other classic symptoms of Adenomyosis."
+      },
+      {
+        "requirement": "Detect specific laboratory findings for Urinary Tract Infection (e.g., leukocytosis, pyuria, azotemia, hyperglycemia).",
+        "reason": "The system cannot process laboratory results."
+      },
+      {
+        "requirement": "Detect specific imaging findings for Urinary Tract Infection (e.g., gas in bladder wall, renal emphysema).",
+        "reason": "The system cannot interpret imaging reports."
+      },
+      {
+        "requirement": "Differentiate between typical and atypical Hemolytic Uremic Syndrome (HUS) or pneumococcal HUS.",
+        "reason": "The provided RAG sources mention HUS but do not establish it as a primary differential for the gynecological route, and the system lacks the capability for such complex differential diagnosis based on the available inputs."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The profile for Dysmenorrhea is based on symptoms commonly associated with pelvic inflammatory disease (PID), which can cause secondary dysmenorrhea. The sources discuss PID in the differential diagnosis of dysmenorrhea.",
+        "source_ids": [
+          "rag-1f8a3e4e051ef592"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[1], semantic_options[1], semantic_options[3], profiles[0].clues[0], profiles[0].clues[1]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f5e1e00c1829f30d",
+          "rag-f09c5253c7a82445",
+          "rag-1f8a3e4e051ef592",
+          "rag-fac29dab4a80564b"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-ad2ef823caaa5882"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], semantic_options[1], profiles[0], profiles[0].clues[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-a76f161a6be269a2",
+          "rag-d28ebb49bb7c15d4",
+          "rag-ad2ef823caaa5882"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The evidence for Adenomyosis is based on a single source (rag-f5e1e00c1829f30d) and only mentions 'chronic persistent pain' in the context of a differential diagnosis for endometriosis. This is a very weak signal. The profile should be considered provisional and requires more comprehensive evidence.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], semantic_options[0], semantic_options[1], profiles[0], profiles[0].clues[0], review_notes[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-168505cd54e57296"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The discovered disease 'Urinary tract infection' is a common differential for lower abdominal and pelvic symptoms in women, making it a relevant addition to the 'gynecological_issues' route. The proposed facts and semantic mappings align with the provided RAG source.",
+        "source_ids": [
+          "rag-3697ea6f89d68fd5",
+          "rag-d65b78cc091f2d5e",
+          "rag-9545dfbf60a6154b",
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, review_notes[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-3697ea6f89d68fd5",
+          "rag-d65b78cc091f2d5e",
+          "rag-9545dfbf60a6154b",
+          "rag-a2cc9fd5cd7ca515"
+        ]
+      }
+    ]
+  }
+}

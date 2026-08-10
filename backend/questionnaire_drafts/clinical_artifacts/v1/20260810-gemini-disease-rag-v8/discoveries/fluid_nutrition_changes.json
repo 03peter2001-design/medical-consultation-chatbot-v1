@@ -1,0 +1,341 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "fluid_nutrition_changes",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "40e5b60087a2c3ed4a2b3c89a0d0ca4ac78793133900a08db8b29ba11aa524f6",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history",
+      "fluid nutrition changes fluid nutrition red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "abb6cf5a943e948c3d55b663e5fa0c4c9895ea0c1bde9a2041a67a37507ec5c9"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "669ab7cdb4cc65d30bfe53731485a0736aff57ad370d5c988fa2a6017d0f8c21",
+    "generated_at": "2026-08-10T04:05:05+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-f34dac00f7f605ae",
+      "chunk_id": "87996f6a71b53073e20c_18",
+      "title": "Acute Hypopituitarism: Overview, Diagnostic Considerations, Hormone Deficiency Symptoms",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767828-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3405,
+      "excerpt": "If fluid intake matches fluid output, serum sodium and osmolality may remain normal. Central diabetes insipidus is caused by a decrease in ADH secretion, in contrast to nephrogenic diabetes insipidus, in which the kidney is ADH resistant. Oxytocin deficiency Deficiency in oxytocin is characterized by a decrease in milk ejection during lactation. Interestingly, women with known oxytocin deficiency undergo normal labor and delivery despite the lack of hormone. One of the initial clues to the presence of Sheehan syndrome should be the lack of lactation secondary to oxytocin deficiency. Imaging",
+      "text_sha256": "1e2cd32c32bd8cd3788a37f22b1dd6be028e57d025eed9404e78d8ebe1802d0a"
+    },
+    {
+      "id": "rag-a0a3983d9ce778ae",
+      "chunk_id": "bcb31ce1c7a861eb7bb9_16",
+      "title": "Hypocitraturia: Practice Essentials, Importance of Citrate, Risk Factors in Hypocitraturia",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/444968-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4027,
+      "excerpt": "syndrome results in fluid loss and intestinal alkali loss. Patients with chronic diarrhea and inflammatory bowel disease frequently have hypocitraturia due to bicarbonate loss from the intestinal tract. Hypocitraturia caused by RTA or chronic diarrheal syndrome is associated with other metabolic abnormalities (eg, hypercalciuria, hyperuricosuria) or may occur alone. In chronic diarrheal syndrome, other risk factors for stone formation often are present (eg, low urinary volume, hyperoxaluria, hypomagnesuria, low urinary pH). Thiazide diuretic or acetazolamide therapy Thiazide therapy may induce",
+      "text_sha256": "dbcd6473e540b5f6274e5dce57d10063e3997f9316e4de574f1ae49f73673c4b"
+    },
+    {
+      "id": "rag-e0252c5d56df5562",
+      "chunk_id": "7bf6fe05bdcc5c4370b8_21",
+      "title": "WDHA Syndrome: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/183189-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4188,
+      "excerpt": "tubular nephropathy Dehydration Non anion gap metabolic acidosis Perianal skin irritation from severe diarrhea Poor quality of life from severe diarrhea Clinical Presentation",
+      "text_sha256": "9e0c03712e7dd78fd186aea4b9e728dddfc4cfd8bd0bf87355cc1c9039d13873"
+    },
+    {
+      "id": "rag-269161b5f0aa9e5e",
+      "chunk_id": "7bf6fe05bdcc5c4370b8_0",
+      "title": "WDHA Syndrome: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/183189-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4424,
+      "excerpt": "Overview Background The syndrome of watery diarrhea, hypokalemia, and achlorhydria (ie, WDHA syndrome) is a rare condition characterized by severe, watery diarrhea resulting from the oversecretion of vasoactive intestinal peptide (VIP) from non beta pancreatic islet cells. Patients usually have elevated VIP levels and have a history of frequent hospitalizations for dehydration and/or hypokalemia. Because this condition resembles cholera, Matsumoto et al suggested the alternative term pancreatic cholera. (See Etiology, Presentation, Treatment, and Medication.) A small percentage of patients",
+      "text_sha256": "d8ed0c06b47c48b7bddd6cc82e3bc01f444312701d30f01344e6fdb98826f4d6"
+    },
+    {
+      "id": "rag-466e564bdc3353f3",
+      "chunk_id": "a9b2d72df127beb59ec9_3",
+      "title": "Cerebrospinal Fluid Analysis: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2093316-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4609,
+      "excerpt": "include (but are not limited to) the following: Infectious diseases (eg, encephalitis, meningitis) Intracranial/subarachnoid hemorrhage Inflammatory or autoimmune diseases (eg, multiple sclerosis, Guillain-Barre syndrome, meningeal sarcoidosis) Primary or metastatic central nervous system (CNS) malignancies Conditions associated with changes in the appearance of CSF Under normal circumstances, CSF samples are clear and colorless, appearing similar to water. Xanthochromia is the term used for any kind of discoloration of CSF. Multiple conditions are associated with xanthochromia, including the",
+      "text_sha256": "423e4b984fe22af887ab3de2831f073c51c51b081f17bd35074d148e72d1158c"
+    },
+    {
+      "id": "rag-72133dae1737420b",
+      "chunk_id": "5cd8a0287a40de3695ff_20",
+      "title": "Pericardial Fluid Analysis: Reference Range, Interpretation, Background",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2123066-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4889,
+      "excerpt": "method to the systemic approach to the diagnosis of pericardial effusion. Elevation of B-type natriuretic peptide (BNP) levels in pericardial fluid is noted in patients with postmyocardial infarction, reflecting the stretching of ventricular cardiomyocytes after an injury to the myocardium. No statistical association is noted between elevated pericardial BNP levels and left ventricular systolic function. Other considerations The accuracy and diagnostic value of biochemical and cell count analysis of pericardial effusions in distinguishing the various etiology of the effusion is lacking. A",
+      "text_sha256": "38eaa0226717885296b024ecb68b2ffcccb6d17b3e55669ac778e2932cfb2ab4"
+    },
+    {
+      "id": "rag-a7dd2b4d54cb0698",
+      "chunk_id": "2a896961ed57d0483825_2",
+      "title": "Hyperglucagonemia (Glucagonoma Syndrome): Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/121575-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5223,
+      "excerpt": "complications, pancreatitis, trauma, burns, infection and sepsis, myocardial infarction, increased cortisol levels, increased catecholamine or growth hormone levels, renal failure, and hepatic cirrhosis. The most common clinical features of glucagonoma syndrome are weight loss, necrolytic migratory erythema (NME), and diabetes. The diabetes mellitus associated with glucagonoma syndrome tends to be mild and usually can be controlled with diet and/or oral hypoglycemic agents.9pically, the associated anemia is normochromic normocytic, although macrocytic anemia has been described in some",
+      "text_sha256": "015ff5332e50ea0bb39ce37af3915d3a687ff65555dc15a6c905b355bff9f336"
+    },
+    {
+      "id": "rag-a01d320d40e24277",
+      "chunk_id": "5cd8a0287a40de3695ff_13",
+      "title": "Pericardial Fluid Analysis: Reference Range, Interpretation, Background",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2123066-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5252,
+      "excerpt": "results. The use of tumor marker measurement in pericardial fluid may be helpful in cytologically negative pericardial fluid. The interpretation of these tumor marker levels is similar to that in serum. Malignant pericardial effusion is associated with high levels of tumor markers. However, low levels of these markers do not exclude neoplastic involvement of the pericardial membrane. The cut-off of these markers in pericardial fluid is not yet clear at this point. Moreover, different types of cancer can have different tumor markers. Various tumor markers have been tested, such as",
+      "text_sha256": "7fe7c1bfc2eee290df7e93de86f4d1a6fa355043662a9f6b9e62363fb199c79a"
+    },
+    {
+      "id": "rag-ea0d576135625da4",
+      "chunk_id": "5cd8a0287a40de3695ff_25",
+      "title": "Pericardial Fluid Analysis: Reference Range, Interpretation, Background",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2123066-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5561,
+      "excerpt": "of pericardial fluid resemble an exudate if Light et al’s criteria is applied (namely LDH and total protein levels), other factors in the composition of the fluid (ratio of small soluble molecules) suggest transudate. Therefore, Light et al’s criteria is unlikely to be applicable in the evaluation of pericardial fluid composition. Abnormal accumulation of pericardial fluid can be secondary to obstruction of fluid drainage, injury or insult to the pericardium, infection, malignancy, systemic or autoimmune processes, drugs, or procedures. Numerous cases are idiopathic. The etiology of",
+      "text_sha256": "4f8db6167fb483b030a26b5c1585faa5a931e7b965e6f1e314a6c982288e3f4d"
+    },
+    {
+      "id": "rag-786d5c82e1d5b2b7",
+      "chunk_id": "533df8c4e1c8cc2bd460_5",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5589,
+      "excerpt": "of inducing a systemic reaction Patch testing: Appears promising, but additional studies are needed and it is not recommended for routine practice Diet-related diagnostic measures may be helpful, as follows: Diet diary Elimination diet (may be used for diagnostic as well as therapeutic purposes) Food challenge confirmation of food allergy (may be open; single-blind; or double-blind, placebo-controlled) See Workup for more detail. Management There are currently no curative therapies for food allergy. The only proven treatment is strict dietarylimination of the offending food allergen. A",
+      "text_sha256": "eb4efdbe7c771eeb55882e804a15a15fa64a4f10c193f2088ada256c405d92b6"
+    },
+    {
+      "id": "rag-db1f97d8adf4b525",
+      "chunk_id": "2352ce71ea4316a34407_0",
+      "title": "Beta-Hydroxybutyrate: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087381-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5616,
+      "excerpt": "Reference Range The reference range is less than 0.4-0.5 mmol/L. Levels of more than 1 mmol/L require further action, whereas levels of more than 3 mmol/L require immediate medical review. Interpretation Elevated serum β-hydroxybutyrate levels can be observed in various conditions associated with metabolic substrate use disorders, insulin deficiency, and altered redox status, including the following : Diabetic ketoacidosis: Ketone body production is stimulated by dehydration and insulin deficiency. Levels are usually more than 3 mmol/L. Alcoholic ketoacidosis: Ketone body production is",
+      "text_sha256": "db94424336c082b008a4ac485b56cd36416d110e9af6ea1272612bc6bf7739f5"
+    },
+    {
+      "id": "rag-9bfcf8ccb350ee0c",
+      "chunk_id": "a9b2d72df127beb59ec9_9",
+      "title": "Cerebrospinal Fluid Analysis: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2093316-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5864,
+      "excerpt": "greater risk for morbidity and mortality, due to a missed diagnosis. Bilirubin evaluation in CSF (and serum) is the most effective biomarker to be considered for evaluation of potential subarachnoid hemorrhage. However, a traumatic tap concurrent with subarachnoid hemorrhage can be confusing to interpret. A traumatic tap introduces red cells into the CSF, but this contamination clears as the collection proceeds from tubes 1 to 4. In a traumatic tap, bilirubin is not produced, given that bilirubin production is an in vivo process. Spectrophotometric evaluation of CSF can provide additional",
+      "text_sha256": "007ff0f070189654549463ecfa74a09fc8885b2037d668faa008d24ed9f8c135"
+    },
+    {
+      "id": "rag-89360c5ff566f5c4",
+      "chunk_id": "60a8e9fb259d62f055c2_72",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "fluid nutrition changes fluid nutrition red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5979,
+      "excerpt": "who develop flash pulmonary edema, as the symptoms and signs may develop before the rise in levels occurs. Markers of Cardiac Inflammation C-reactive protein (CRP) CRP, a nonspecific marker of inflammation, is considered to be directly involved in coronary plaque atherogenesis. Extensive studies beginning in the early 1990s showed that an elevated CRP level independently predicted adverse cardiac events at the primary and secondary prevention levels. Data indicate that CRP is a useful prognostic indicator in patients with acute coronary syndrome (ACS), as elevated CRP levels are independent",
+      "text_sha256": "3e4a960d7dfeb49d60fdf7e13af6636383de2c4c5cade9394e12e0906b553269"
+    }
+  ],
+  "discovery": {
+    "route": "fluid_nutrition_changes",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "fluid_nutrition_changes__dehydration",
+        "name": "Dehydration",
+        "rationale": "The questionnaire addresses key symptoms of dehydration such as decreased urine output, dry mouth, and dry skin. The provided evidence mentions dehydration as a clinical feature in WDHA syndrome, which involves severe watery diarrhea, and also in diabetic ketoacidosis.",
+        "source_ids": [
+          "rag-e0252c5d56df5562",
+          "rag-db1f97d8adf4b525"
+        ]
+      },
+      {
+        "id": "fluid_nutrition_changes__diabetes_insipidus",
+        "name": "Diabetes Insipidus",
+        "rationale": "The questionnaire asks about increased urine output and thirst, which are hallmark symptoms of diabetes insipidus. The provided evidence describes central diabetes insipidus as being caused by a decrease in ADH secretion, leading to these symptoms.",
+        "source_ids": [
+          "rag-f34dac00f7f605ae"
+        ]
+      },
+      {
+        "id": "fluid_nutrition_changes__diabetic_ketoacidosis",
+        "name": "Diabetic Ketoacidosis",
+        "rationale": "The questionnaire asks about symptoms like thirst, frequent urination, nausea, vomiting, and fatigue, as well as a history of diabetes. The provided evidence states that diabetic ketoacidosis is stimulated by dehydration and insulin deficiency.",
+        "source_ids": [
+          "rag-db1f97d8adf4b525"
+        ]
+      },
+      {
+        "id": "fluid_nutrition_changes__glucagonoma_syndrome",
+        "name": "Glucagonoma Syndrome",
+        "rationale": "The questionnaire inquires about unexplained weight changes and digestive symptoms. The provided evidence indicates that the most common clinical features of glucagonoma syndrome are weight loss and diabetes, which can manifest with symptoms like thirst and frequent urination.",
+        "source_ids": [
+          "rag-a7dd2b4d54cb0698"
+        ]
+      },
+      {
+        "id": "fluid_nutrition_changes__wdha_syndrome",
+        "name": "WDHA Syndrome",
+        "rationale": "This syndrome, also known as pancreatic cholera, is characterized by severe watery diarrhea, which is a key symptom explored in the questionnaire. The provided evidence notes that patients often have a history of frequent hospitalizations for dehydration.",
+        "source_ids": [
+          "rag-269161b5f0aa9e5e"
+        ]
+      },
+      {
+        "id": "fluid_nutrition_changes__chronic_diarrhea",
+        "name": "Chronic Diarrhea",
+        "rationale": "The questionnaire explicitly asks about diarrhea. The provided evidence discusses chronic diarrheal syndrome as a condition that results in fluid loss and can lead to hypocitraturia and other metabolic abnormalities.",
+        "source_ids": [
+          "rag-a0a3983d9ce778ae"
+        ]
+      }
+    ],
+    "review_notes": []
+  }
+}

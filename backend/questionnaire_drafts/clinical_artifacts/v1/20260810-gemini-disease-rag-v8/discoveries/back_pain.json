@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "back_pain",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "1d8a2e9c602da6c04bb9f96674508ed1cccc36c056948b1b39bf65360d04e981",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "back pain back pain differential diagnosis diseases clinical presentation symptoms history",
+      "back pain back pain red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "f5ac0985a94317cc919ed58baa4f8a40b6aaadd088e816b70135825c437c8f4d"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "cb1833acd18694ac7973fb4e903bf4b08fc3f42deb8b054bc51c235964eae0ff",
+    "generated_at": "2026-08-10T03:55:46+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-87846466cc8091f4",
+      "chunk_id": "74ab9de94000c37ef9b4_1",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "back pain back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3169,
+      "excerpt": "a%rniated nucleus pulposust multiple levels, one of the causes of low back pain. Magnetic resonance image of the lumbar spine. This image demonstrates a herniated nucleus pulposus at multiple levels. See ck Pain: Find the Cause, Watch for the Comeback, a Critical Images slideshow, to help diagnose and manage this common problem. Low back pain reportedly occurs at least once in 85% of adults younger than 50 years, and 15-20% of Americans have at least one episode of back pain per year. Of these patients, only 20% can be given a precise pathoanatomic diagnosis. Low back pain affects men and",
+      "text_sha256": "48e38edd6e096614f0fc76a6decaab812fce77aa920893c37f6206b6f8247188"
+    },
+    {
+      "id": "rag-7f0a0f4a5a402b2f",
+      "chunk_id": "74ab9de94000c37ef9b4_11",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "back pain back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3257,
+      "excerpt": "caudal sac. The classic presentation is bilateral sciatica, with lower extremity bowel or bladder dysfunction present in 90% of patients. Urinary retention is initially observed and followed by overflow incontinence. Perineal or perianal anesthesia is present in 60-80% of patients. Musculoskeletal pain syndromes Musculoskeletal pain syndromes that produce low back pain include myofascial pain syndromes and fibromyalgia. Myofascial pain is characterized by pain and tenderness over localized areas (trigger points), loss of range of motion in the involved muscle groups, and pain radiating in a",
+      "text_sha256": "5e8b0e4bddf178f04369b3d2139c4b28bf31da607287cda7de719fbb83462798"
+    },
+    {
+      "id": "rag-2e06058fcff327f6",
+      "chunk_id": "53b354e14520b0f0479f_3",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "back pain back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4368,
+      "excerpt": "characterized by a continuing (spontaneous and/or evoked) regional pain that is seemingly disproportionate in time or degree to the usual course of any known trauma or other lesion. The pain is regional (not in a specific nerve territory or dermatome) and usually has a distal predominance of abnormal sensory, motor, sudomotor, vasomotor, and/or trophic findings. The syndrome shows variable progression over time. Schwartzman stated that a common mechanism may be injury to central or peripheral neural tissue. Roberts proposed that sympathetic pain results from tonic activity in myelinated",
+      "text_sha256": "dee01c8dbefb642cc24e011d6414c1d6b17e04916638837cb18bf5eedd8e6837"
+    },
+    {
+      "id": "rag-966ae6ad156bee23",
+      "chunk_id": "6cd5c8412c6ef4421f61_8",
+      "title": "Abdominal Pain in Elderly Persons: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/776663-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "back pain back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4709,
+      "excerpt": "Gastroenteritis (Stomach Flu), Constipation dults), and Blood in the Urine. Pathophysiology Abdominal pain may be the presenting symptom in a wide range of diseases in elderly patients. Note that elderly patients with intra-abdominal pathology are more likely to present with symptoms other than abdominal pain, such as fever, fatigue, chest pain, or altered mental status. Biliary tract disease Biliary tract disease includes symptomatic cholelithiasis, choledocholithiasis, calculus and acalculous cholecystitis, and ascending cholangitis. In some studies, biliary tract disease is the most common",
+      "text_sha256": "b750575466259d1cbf9236bb2b18fca5c73c80702e52e82634b417449026bc3a"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "back pain back pain differential diagnosis diseases clinical presentation symptoms history",
+        "back pain back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4313,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-7a2c3a6670bcbe21",
+      "chunk_id": "77deb79ba058e8b1d0d2_0",
+      "title": "Retropharyngeal Abscess: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764421-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "back pain back pain differential diagnosis diseases clinical presentation symptoms history",
+        "back pain back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5575,
+      "excerpt": "Overview Practice Essentials Retropharyngeal abscess (RPA) produces the symptoms of sore throat, fever, neck stiffness, and stridor. A occurs less commonly today than in the past because of the widespread use of antibiotics for suppurative upper respiratory infections. The incidence of RPA in the United States is rising, however. Once almost exclusively a disease of children, RPAs observed with increasing frequency in adults. It poses a diagnostic challenge for the emergency physician because of its infrequent occurrence and variable presentation. mergency department (ED) management of",
+      "text_sha256": "8c1b52d380b234550efe88ec862872b4a2afb2a7f335bf9b1ed0576c276a9165"
+    },
+    {
+      "id": "rag-c45f111ad36ff7c4",
+      "chunk_id": "6bf3610cae447cfa658b_1",
+      "title": "Hypophosphatemia in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767955-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "back pain back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5963,
+      "excerpt": "is the most common symptom suggesting hypophosphatemia and may involve any muscular system to any extent. Other symptoms include the following: Diplopia Dysarthria Dysphagia Symptoms of respiratory insufficiency or myocardial depression may indicate hypophosphatemia. Neurologic symptoms may range from simple paresthesias to profound alterations in mental status. See Presentation for more detail. Diagnosis 9pophosphatemia Laboratory studies Hypophosphatemia is defined as mild (2-2.5 mg/dL), moderate (1-2 mg/dL), or severe (< 1 mg/dL).bnormalities in serum magnesium, calcium, and potassium",
+      "text_sha256": "091eb6dafa0e57aab855c5c76e928572ad6ff8466d6a7a63513e46ed6f4bee8e"
+    },
+    {
+      "id": "rag-2dcf5e11b2eac290",
+      "chunk_id": "53b354e14520b0f0479f_8",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "back pain back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5297,
+      "excerpt": "with an identifiable nerve injury, many are not. Even \"microtrauma\" as might occur with an immunization may be responsible. The upper extremities are more likely to be involved than the lower. Entities that have led to RSDS include the following: Head injury Stroke Polio Amyotrophic lateral sclerosis (ALS) Myocardial infarction Polymyalgia rheumatica Operative procedures (eg, carpal tunnel release) Brachial plexopathy Cast/splint immobilization Minor extremity injury Prolonged bedrest A retrospective epidemiologic analysis of CRPS patients compared to patients with other pain disorders found",
+      "text_sha256": "dff131061a4f6ee0e0fae46403a4db768ffbf78d3bd8472e31967eb2865e7b0c"
+    },
+    {
+      "id": "rag-94cb843c606e3756",
+      "chunk_id": "b756911235fb6bdef18f_20",
+      "title": "Cardiac Tests: Practice Essentials, Overview, Exercise Tolerance Test",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811577-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "back pain back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5999,
+      "excerpt": "who underwent both exercise tolerance testing and coronary angiography by the American College of Cardiology and American Heart Association (ACC/AHA) showed a mean sensitivity of 68% and mean specificity of 77%. Despite the low sensitivity when compared to angiography results, the purpose of stress testing in the context of the emergency department (ED) evaluation of chest pain is not to rule out CAD but to be used as short-term prognostic tool to aid the safe disposition of patients. The 2014 AHA/ACC guidelines for the management of non-ST-elevation myocardial infarction (NSTEMI) and acute",
+      "text_sha256": "f428721fb0a8f0d9327a88c1e1402a229cae37662f00429752d6f3f857313ab5"
+    }
+  ],
+  "discovery": {
+    "route": "back_pain",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "back_pain__mechanical_back_pain",
+        "name": "Mechanical Back Pain",
+        "rationale": "The questionnaire focuses on characteristics of back pain such as onset, location, radiation, and aggravating/relieving factors, which are key to diagnosing mechanical back pain. This is a very common condition, with one source stating that 15-20% of Americans experience it annually.",
+        "source_ids": [
+          "rag-87846466cc8091f4"
+        ]
+      },
+      {
+        "id": "back_pain__herniated_nucleus_pulposus",
+        "name": "Herniated Disc",
+        "rationale": "The questionnaire asks about leg numbness, tingling, or weakness, which are classic symptoms of nerve root compression. A herniated nucleus pulposus is a common cause of this and is explicitly mentioned as a cause of low back pain in the provided evidence.",
+        "source_ids": [
+          "rag-87846466cc8091f4"
+        ]
+      },
+      {
+        "id": "back_pain__cauda_equina_syndrome",
+        "name": "Cauda Equina Syndrome",
+        "rationale": "The questionnaire specifically screens for red flag symptoms such as difficulty with urination or defecation (incontinence or retention) and leg weakness. These are hallmark signs of cauda equina syndrome, a serious neurological condition mentioned in the source material.",
+        "source_ids": [
+          "rag-7f0a0f4a5a402b2f"
+        ]
+      },
+      {
+        "id": "back_pain__myofascial_pain_syndrome",
+        "name": "Myofascial Pain Syndrome",
+        "rationale": "The questionnaire asks about the presence of a point of tenderness ('trigger points'). This is a key feature of myofascial pain syndromes, which are cited as a musculoskeletal cause of low back pain.",
+        "source_ids": [
+          "rag-7f0a0f4a5a402b2f"
+        ]
+      },
+      {
+        "id": "back_pain__urinary_tract_infection",
+        "name": "Urinary Tract Infection",
+        "rationale": "The questionnaire includes 'painful urination or blood in urine' as an associated symptom. These symptoms, along with back pain (often flank pain) and fever/chills, can indicate a urinary tract infection, particularly if it has ascended to the kidneys (pyelonephritis).",
+        "source_ids": [
+          "rag-966ae6ad156bee23"
+        ]
+      },
+      {
+        "id": "back_pain__shingles",
+        "name": "Herpes Zoster",
+        "rationale": "The questionnaire asks about 'blisters on the skin near the painful area'. This is a characteristic sign of Herpes Zoster (shingles), which can present as a unilateral, dermatomal band of pain that may precede the classic vesicular rash.",
+        "source_ids": [
+          "rag-2dcf5e11b2eac290",
+          "rag-2e06058fcff327f6",
+          "rag-7a2c3a6670bcbe21",
+          "rag-7f0a0f4a5a402b2f",
+          "rag-87846466cc8091f4",
+          "rag-94cb843c606e3756",
+          "rag-966ae6ad156bee23",
+          "rag-c45f111ad36ff7c4",
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The questionnaire effectively screens for several red flag symptoms associated with back pain, including neurological deficits (cauda equina syndrome), infection (fever/chills), and potential referred pain from other organ systems (chest pain, abdominal pain).",
+        "source_ids": [
+          "rag-7f0a0f4a5a402b2f",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope discovery citations with the complete route RAG evidence pack for: diseases[5]. These citations remain unverified.",
+        "source_ids": [
+          "rag-2dcf5e11b2eac290",
+          "rag-2e06058fcff327f6",
+          "rag-7a2c3a6670bcbe21",
+          "rag-7f0a0f4a5a402b2f",
+          "rag-87846466cc8091f4",
+          "rag-94cb843c606e3756",
+          "rag-966ae6ad156bee23",
+          "rag-c45f111ad36ff7c4",
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ]
+  }
+}

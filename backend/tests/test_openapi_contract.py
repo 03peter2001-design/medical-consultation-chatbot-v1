@@ -32,6 +32,7 @@ EXPECTED_OPERATIONS = {
     ("GET", "/v1/health"),
     ("POST", "/v1/transcribe"),
     ("GET", "/v1/avatar/status"),
+    ("POST", "/v1/avatar/warmup"),
     ("POST", "/v1/avatar/speak"),
     ("POST", "/v1/invitations"),
     ("POST", "/v1/invitations/exchange"),

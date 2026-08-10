@@ -50,6 +50,7 @@ watchEffect(() => {
         ref="videoElement"
         autoplay
         playsinline
+        muted
         :class="{ visible: avatar.videoStream.value }"
       />
       <img
@@ -62,17 +63,25 @@ watchEffect(() => {
       <video
         v-if="avatar.isLocal.value && avatar.videoUrl.value"
         :src="avatar.videoUrl.value"
-        autoplay
         playsinline
+        muted
         controls
+        preload="metadata"
         class="visible"
-        @play="avatar.onPlaybackStart"
-        @pause="avatar.onPlaybackEnd"
-        @ended="avatar.onPlaybackEnd"
-        @error="avatar.onPlaybackError"
       />
       <div class="wave-overlay" :class="{ visible: avatar.talking.value }">
         <span /><span /><span /><span /><span />
+      </div>
+      <div
+        v-if="avatar.isConnecting.value && !avatar.talking.value"
+        class="model-loading-overlay"
+        role="status"
+        aria-live="polite"
+      >
+        <span class="model-spinner" aria-hidden="true" />
+        <strong>模型載入／生成中</strong>
+        <span>{{ avatar.status.value }}</span>
+        <small>第一次啟用可能需要較長時間，請保持此頁開啟。</small>
       </div>
       <button
         class="drawer-close"
@@ -95,6 +104,18 @@ watchEffect(() => {
         >
           <option value="local">本地（CosyVoice3 + MuseTalk）</option>
           <option value="did">D-ID 雲端 Avatar</option>
+        </select>
+      </label>
+
+      <label v-if="avatar.isLocal.value">
+        <span>醫生說話語言</span>
+        <select
+          :value="avatar.language.value"
+          :disabled="avatar.isConnecting.value"
+          @change="avatar.setLanguage($event.target.value)"
+        >
+          <option value="mandarin">國語</option>
+          <option value="minnan">閩南語</option>
         </select>
       </label>
 
@@ -282,8 +303,48 @@ watchEffect(() => {
   animation-delay: 0.4s;
 }
 
+.model-loading-overlay {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px;
+  background: rgb(17 42 59 / 78%);
+  color: white;
+  text-align: center;
+}
+
+.model-loading-overlay strong {
+  font-size: 16px;
+}
+
+.model-loading-overlay > span:not(.model-spinner) {
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.model-loading-overlay small {
+  color: rgb(255 255 255 / 78%);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.model-spinner {
+  width: 34px;
+  height: 34px;
+  border: 3px solid rgb(255 255 255 / 32%);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: model-spin 0.8s linear infinite;
+}
+
 .drawer-close {
   position: absolute;
+  z-index: 3;
   top: 12px;
   right: 12px;
   display: grid;
@@ -421,6 +482,19 @@ watchEffect(() => {
 @keyframes wave {
   50% {
     transform: scaleY(0.3);
+  }
+}
+
+@keyframes model-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .model-spinner {
+    animation: none;
+    border-color: white;
   }
 }
 

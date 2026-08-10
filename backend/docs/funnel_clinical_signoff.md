@@ -138,8 +138,15 @@ fact」直接等同於「不會被問」。其中也包含「沒有」等可能�
 
 - **跨領域疾病競爭**：下壁心肌梗塞以上腹痛表現時，`abdomen` 疾病表沒有 ACS 這個
   profile，所以不會被列入鑑別。這需要在疾病表內容處理，不是引擎能補的。
-- **49 條新問卷產不出任何 clinical fact**：它們的選項沒有 `semantic_options`，因此
-  只能靠自由文字經語意抽取產生證據。要讓這些路由真正進入漏斗，需要逐份補對應。
+- **49 條新問卷仍未接入 runtime facts**：疾病名稱導向 Gemini＋RAG pipeline 已在
+  `questionnaire_drafts/clinical_artifacts/v1/20260810-gemini-disease-rag-v8/` 產生
+  provisional overlay（431 fact proposals、344 個 exact-choice semantic mappings、
+  118 profiles、82 Safety candidates），但不會回填 active questionnaire。Manifest
+  仍列 45 個 profile 缺口、16 條無 Safety 路徑、6 條 evidence insufficient、8 個
+  critical review notes，以及大量 citation evidence-pack 修補／不可達 fact 裁切；
+  因此固定 `runtime_eligible=false`、`clinical_review_ready=false`。上線前仍需逐 route
+  臨床審查、gold cases、跨 artifact composite signoff 與原子 publisher，不能使用現有
+  questionnaire-only promoter。
 - **`safety_rules.json` 的 `route_keywords` 已是死設定**：關鍵字的唯一真實來源已改為
   `domain/questionnaire_routes.json`，但驗證器仍要求它與 `supported_routes` 一致。
 - **多主訴共用同一份輪數預算**：目前為各路由 budget 相加，若認為多主訴病人應更早轉交

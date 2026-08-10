@@ -5,7 +5,7 @@ RAG 查詢服務與 FHIR／SNOMED 整合所在位置。
 
 ## 服務版本
 
-目前版本：**v1.3.0（2026-08-09）**。
+目前版本：**v1.6.0（2026-08-10）**。
 
 此版本號是依 `devlog/2026-07-27.md` 至 `devlog/2026-08-07.md` 回溯整理的
 後端服務文件基線，目前沒有對應的 Git tag 或獨立 release；它也不表示其中的
@@ -18,6 +18,52 @@ RAG 查詢服務與 FHIR／SNOMED 整合所在位置。
 - RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
 - Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
   revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v1.6.0 (2026-08-10)
+
+- 新增兩階段、可續跑的 provisional AMIE clinical-artifact pipeline：Gemini 先依
+  問卷與初始 RAG 提出標準英文疾病名稱，再以每個疾病名稱分別查詢 RAG，最後逐疾病
+  產生 ClinicalFact、exact-choice 語意映射、疾病 profile 與 Safety 候選。
+- 嚴格 validator 要求「疾病名稱 → retrieval query → chunk → fact／semantic／clue」
+  引用閉合；本機 compiler 只做可稽核的 citation evidence-pack 回填、code namespace
+  重命名及移除無 choice option 可達的 fact，不自行創造臨床條件、權重或緊急規則。
+- 完成 `20260810-gemini-disease-rag-v8` 的 49/49 隔離草稿：163 個疾病候選、431 個
+  fact、344 個 choice 語意映射、118 個 profile 與 82 個 Safety 候選。Manifest 同時
+  標示 45 個 profile 缺口、16 條無 Safety 路徑、6 條 evidence insufficient 與 8 個
+  critical review notes，因此 `clinical_review_ready=false`、`runtime_eligible=false`。
+- 產物只寫入 `questionnaire_drafts/clinical_artifacts/`，不修改 active questionnaire、
+  Safety 或 disease data；病患 runtime 仍僅啟用 chest／headache／abdomen。模型輸出
+  仍為 unverified provisional，沒有 clinical signoff 或 promotion 能力。
+- 新增 7 項離線單元測試，涵蓋疾病名導向 retrieval、跨 artifact 引用、candidate
+  runtime 隔離、citation 限縮修補、不可達 fact 裁切、code 引用同步及 urgent
+  fail-closed stub；131 項 AMIE／問卷聚焦測試、Ruff／format、OpenAPI drift 與兩份
+  frontend metadata drift check 通過。完整 backend suite 共 370 項、368 項通過；2 項
+  仍只因未掛載外部 `D:\ehis\eHIS` C# 原始碼而 error。
+
+### v1.5.0 (2026-08-10)
+
+- 將病患問診的 AMIE／legacy 開場、返回上一題、輸入錯誤、section 轉場、一般完成、
+  儘早就醫、人工轉交、重入完成問診，以及流程產生的摘要／轉交報告模板，集中到
+  `questionnaire_data/ui/patient_messages.json`；`patient.py` 不再內嵌 `reply` 字串。
+- 新增 `domain.patient_messages` 嚴格 loader：固定 schema／locale／完整 key 集合，並
+  驗證每個模板的 placeholder 名稱；缺漏、未知文案或參數漂移會明確失敗，不會靜默
+  回退成程式內預設文字。
+- Safety／ClinicalFact 規則、LLM system prompt、audit reason 與 HTTP 例外仍保留在
+  原負責模組，避免可編輯話術檔改變臨床決策、稽核語意或安全邊界。
+- 43 項聚焦問卷、文案 schema、輸入驗證、返回上一題與 triage tests，以及本次檔案
+  Ruff／format checks 通過。完整 backend suite 共 369 項，367 項通過；2 項仍只因
+  未掛載外部 `D:\ehis\eHIS` C# 原始碼而 error，沒有本專案 assertion failure。
+
+### v1.4.0 (2026-08-10)
+
+- `/v1/avatar/speak` 新增向後相容的 `language` 欄位，允許 `mandarin`（預設）或
+  `minnan`，並由私有 Avatar client 原樣傳給本機 CosyVoice3 服務。
+- 新增受病患 session 保護的 `/v1/avatar/warmup`；啟用 Avatar 時依序預載
+  Breeze ASR、CosyVoice3、MuseTalk／VAE 與嘴型音訊 encoder，任一模型載入失敗
+  會以 503 明確拒絕啟用。
+- Breeze ASR 新增可重複呼叫的 warm-up，已載入時不重建 pipeline；OpenAPI、後端
+  client、route inventory 與授權 action 一併更新。
+- 聚焦 backend tests、Ruff、OpenAPI export／drift 與 Docker GPU warm-up 驗證通過。
 
 ### v1.3.0 (2026-08-09)
 
@@ -234,7 +280,7 @@ Groq Key 可由 [Groq Console](https://console.groq.com/keys) 申請。
 | `AMIE_DEBUG_TRACE=true` | 測試時顯示去除疾病票數與排名後的決策摘要 |
 | `ASR_PROVIDER=breeze` | 使用本機 `MediaTek-Research/Breeze-ASR-26` 辨識錄音 |
 | `BREEZE_ASR_DEVICE=auto` | 有 CUDA 時使用 GPU/FP16，否則使用 CPU/FP32 |
-| `BREEZE_ASR_RELEASE_GPU_AFTER_TRANSCRIBE=true` | 每次 CUDA 辨識後卸載模型，讓同卡 Avatar 使用顯存 |
+| `BREEZE_ASR_RELEASE_GPU_AFTER_TRANSCRIBE=false` | 保留 CUDA pipeline；整合部署在啟用 Avatar 時預載並重用 |
 | `BREEZE_ASR_MODEL` | 覆寫 Hugging Face 模型 ID 或本機模型目錄 |
 | `ASR_MAX_AUDIO_SECONDS` | 後端接受的單次錄音上限，預設 120 秒 |
 | `ASR_MIN_AUDIO_RMS` | 靜音／過小音量門檻，預設 0.001，避免將靜音幻覺成病人回答 |
@@ -270,8 +316,8 @@ Gemini 或 Groq。系統需要 `ffmpeg`；Ubuntu/WSL 可先安裝：
 sudo apt-get install ffmpeg
 ```
 
-模型採延遲載入，第一次辨識會從 Hugging Face 下載約 6 GB 權重並
-花較長時間。之後同一後端 process 會重用模型。本專案的 RTX 5060 Ti /
+模型預設可延遲載入；啟用本機 Avatar 時，`/v1/avatar/warmup` 會先載入約
+6 GB 權重，之後同一後端 process 會重用模型。本專案的 RTX 5060 Ti /
 CUDA 12.8 開發機可安裝與參考專案相同的 wheel：
 
 ```bash
@@ -282,10 +328,10 @@ venv/bin/python -m pip install --index-url https://download.pytorch.org/whl/cu12
 
 `BREEZE_ASR_DEVICE=auto` 會自動選擇 GPU/FP16，否則回退 CPU/FP32；
 部署機已確定有 GPU 時建議設為 `cuda`，未正確傳入 GPU 時會明確失敗，
-避免不小心用 CPU 推論。同一張 16 GB GPU 還要執行 Avatar 時，整合部署會設
-`BREEZE_ASR_RELEASE_GPU_AFTER_TRANSCRIBE=true`，在 inference lock 內完成辨識後
-卸載 pipeline 並清除 CUDA cache；下一段錄音因此需要重新載入模型。CPU 模式不
-受此設定影響。需要回退原有雲端辨識時設為 `ASR_PROVIDER=llm`。
+避免不小心用 CPU 推論。整合部署在已驗證的 16 GB RTX 5060 Ti 設定
+`BREEZE_ASR_RELEASE_GPU_AFTER_TRANSCRIBE=false`，讓 ASR 與 Avatar 模型常駐；
+其他 GPU 必須先量測顯存，容量不足時可改回 `true`，以重新載入延遲換取顯存。
+CPU 模式不受此設定影響。需要回退原有雲端辨識時設為 `ASR_PROVIDER=llm`。
 
 瀏覽器端最長錄音 60 秒，辨識結果只會回填輸入框；病人需先確認或
 修正文字才會送出問診答案。
@@ -293,8 +339,9 @@ venv/bin/python -m pip install --index-url https://download.pytorch.org/whl/cu12
 ### 本地語音與 Avatar
 
 整合部署會以 `Fun-CosyVoice3-0.5B-2512` 合成 AI 回覆，再由 MuseTalk 1.5
-依指定醫師圖產生唇形 MP4。模型服務沒有發布 host port；`/v1/avatar/status`
-與 `/v1/avatar/speak` 都沿用病患 session 驗證。完整安裝、聲線替換與 GPU
+依指定醫師圖產生唇形 MP4。模型服務不對 LAN 或公網發布；integration 開發設定
+僅綁 host loopback。`/v1/avatar/status`、`/v1/avatar/warmup` 與
+`/v1/avatar/speak` 都沿用病患 session 驗證。完整安裝、聲線替換與 GPU
 調校說明見 [../avatar-service/README.md](../avatar-service/README.md)。
 
 ## 啟動與 API

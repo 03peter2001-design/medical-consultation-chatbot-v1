@@ -1,0 +1,317 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "low_back_pain",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "4d32d72767de1867fdfedf216efddb0d704feb61d2974a9505286ccd370e8c1d",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "low back pain low back pain differential diagnosis diseases clinical presentation symptoms history",
+      "low back pain low back pain red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "d5b6ee589799f79d26759d8bd87c15ac49f18daad34fcad4cf773a18d096c329"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "42106aea0c40b4adea5d890868627dd5606397e795aa0c5cff9777052d9b4922",
+    "generated_at": "2026-08-10T04:09:38+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-87846466cc8091f4",
+      "chunk_id": "74ab9de94000c37ef9b4_1",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3287,
+      "excerpt": "a%rniated nucleus pulposust multiple levels, one of the causes of low back pain. Magnetic resonance image of the lumbar spine. This image demonstrates a herniated nucleus pulposus at multiple levels. See ck Pain: Find the Cause, Watch for the Comeback, a Critical Images slideshow, to help diagnose and manage this common problem. Low back pain reportedly occurs at least once in 85% of adults younger than 50 years, and 15-20% of Americans have at least one episode of back pain per year. Of these patients, only 20% can be given a precise pathoanatomic diagnosis. Low back pain affects men and",
+      "text_sha256": "48e38edd6e096614f0fc76a6decaab812fce77aa920893c37f6206b6f8247188"
+    },
+    {
+      "id": "rag-7f0a0f4a5a402b2f",
+      "chunk_id": "74ab9de94000c37ef9b4_11",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3349,
+      "excerpt": "caudal sac. The classic presentation is bilateral sciatica, with lower extremity bowel or bladder dysfunction present in 90% of patients. Urinary retention is initially observed and followed by overflow incontinence. Perineal or perianal anesthesia is present in 60-80% of patients. Musculoskeletal pain syndromes Musculoskeletal pain syndromes that produce low back pain include myofascial pain syndromes and fibromyalgia. Myofascial pain is characterized by pain and tenderness over localized areas (trigger points), loss of range of motion in the involved muscle groups, and pain radiating in a",
+      "text_sha256": "5e8b0e4bddf178f04369b3d2139c4b28bf31da607287cda7de719fbb83462798"
+    },
+    {
+      "id": "rag-2e06058fcff327f6",
+      "chunk_id": "53b354e14520b0f0479f_3",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4395,
+      "excerpt": "characterized by a continuing (spontaneous and/or evoked) regional pain that is seemingly disproportionate in time or degree to the usual course of any known trauma or other lesion. The pain is regional (not in a specific nerve territory or dermatome) and usually has a distal predominance of abnormal sensory, motor, sudomotor, vasomotor, and/or trophic findings. The syndrome shows variable progression over time. Schwartzman stated that a common mechanism may be injury to central or peripheral neural tissue. Roberts proposed that sympathetic pain results from tonic activity in myelinated",
+      "text_sha256": "dee01c8dbefb642cc24e011d6414c1d6b17e04916638837cb18bf5eedd8e6837"
+    },
+    {
+      "id": "rag-966ae6ad156bee23",
+      "chunk_id": "6cd5c8412c6ef4421f61_8",
+      "title": "Abdominal Pain in Elderly Persons: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/776663-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4677,
+      "excerpt": "Gastroenteritis (Stomach Flu), Constipation dults), and Blood in the Urine. Pathophysiology Abdominal pain may be the presenting symptom in a wide range of diseases in elderly patients. Note that elderly patients with intra-abdominal pathology are more likely to present with symptoms other than abdominal pain, such as fever, fatigue, chest pain, or altered mental status. Biliary tract disease Biliary tract disease includes symptomatic cholelithiasis, choledocholithiasis, calculus and acalculous cholecystitis, and ascending cholangitis. In some studies, biliary tract disease is the most common",
+      "text_sha256": "b750575466259d1cbf9236bb2b18fca5c73c80702e52e82634b417449026bc3a"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain differential diagnosis diseases clinical presentation symptoms history",
+        "low back pain low back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4108,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-a3b9af055380ca54",
+      "chunk_id": "2ec7db6c11d8ff900b3f_21",
+      "title": "Hyperventilation Syndrome: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/807277-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5356,
+      "excerpt": "a 3.5-year average follow-up period, 67% of the patients had made subsequent ED visits for chest pain, and 40% of the patients had been readmitted to rule out myocardial infarction (MI). Clearly, HVS not only causes severe and genuine discomfort for the patient but also accounts for considerable medical expense through the process of excluding more serious disorders. That patients with HVS appear ill tends to prompt further esoteric testing, which is inevitably nondiagnostic. The chronicity of the condition often causes different physicians to repeat these diagnostic investigations.",
+      "text_sha256": "4da5d973557e720fd8db8e0be7c098d7c2373a38817167f52abc6d22ae9ff6f9"
+    },
+    {
+      "id": "rag-683544f4e158c9bb",
+      "chunk_id": "74ab9de94000c37ef9b4_12",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4757,
+      "excerpt": "loss of range of motion in the involved muscle groups, and pain radiating in a characteristic distribution but restricted to a peripheral nerve. Relief of pain is often reported when the involved muscle group is stretched. Fibromyalgia results in pain and tenderness on palpation of 11 of 18 trigger points, one of which is the low back area, as classified by the American College of Rheumatology. Generalized stiffness, fatigue, and muscle ache are reported. Other skeletal causes Other skeletal causes of low back pain include osteomyelitis, sacroiliitis, and malignancy. Osteomyelitis results from",
+      "text_sha256": "42cc0bb3a0e96ef3be649807a9cd9fcf797c5c41064119372535534265b64293"
+    },
+    {
+      "id": "rag-94a8e6edb9127701",
+      "chunk_id": "53b354e14520b0f0479f_1",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4805,
+      "excerpt": "phantom limb pain during his time as a military surgeon and his experiences with limb amputations. (ysicians throughout the world have described similar syndromes over the centuries and CRPS has held many names, even just within the English language.JCRPS, an entity formally called reflex sympathetic dystrophy (RSD), has readily identifiable signs and symptoms and is treatable if recognized early; however, the syndrome may become disabling if unrecognized. mergency medicine physicians may be the first to see the syndrome and their actions can vastly improve the quality of life and",
+      "text_sha256": "052206cb83a26a39421944480659ffd9843f01b3616c922b01641af1d18910e0"
+    },
+    {
+      "id": "rag-9f3c1d558a704b29",
+      "chunk_id": "74ab9de94000c37ef9b4_7",
+      "title": "Mechanical Back Pain: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822462-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.492,
+      "excerpt": "poorly localized, and without paresthesia. Impingement is associated with a positive straight leg raising sign (ie, shooting pain down ipsilateral leg with leg raising), while irritation is not. Neurologic deficits and pain radiation below the knee are rarely seen in irritation alone and are most commonly found with impingement. The cause of impingement syndrome is most commonly herniated discs, but it may also be caused by spinal stenosis, spinal degeneration, or cauda equina syndrome. Herniated discs are produced as spinal discs degenerate. After growing thinner, the nucleus pulposus",
+      "text_sha256": "1ee778cf17828afb20d3c42286044631e057233240c5dd5cc1c457b628664ed0"
+    },
+    {
+      "id": "rag-94cb843c606e3756",
+      "chunk_id": "b756911235fb6bdef18f_20",
+      "title": "Cardiac Tests: Practice Essentials, Overview, Exercise Tolerance Test",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811577-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5794,
+      "excerpt": "who underwent both exercise tolerance testing and coronary angiography by the American College of Cardiology and American Heart Association (ACC/AHA) showed a mean sensitivity of 68% and mean specificity of 77%. Despite the low sensitivity when compared to angiography results, the purpose of stress testing in the context of the emergency department (ED) evaluation of chest pain is not to rule out CAD but to be used as short-term prognostic tool to aid the safe disposition of patients. The 2014 AHA/ACC guidelines for the management of non-ST-elevation myocardial infarction (NSTEMI) and acute",
+      "text_sha256": "f428721fb0a8f0d9327a88c1e1402a229cae37662f00429752d6f3f857313ab5"
+    },
+    {
+      "id": "rag-1a14728db5654797",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "low back pain low back pain red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5925,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the",
+      "text_sha256": "a012e90799aaae112f8e2f59bf68f6b84cb309ef80df02b30b572ab01eb67b32"
+    }
+  ],
+  "discovery": {
+    "route": "low_back_pain",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "low_back_pain__mechanical_back_pain",
+        "name": "Mechanical Back Pain",
+        "rationale": "This is the most common cause of low back pain. The questionnaire explores onset, aggravating/relieving factors (like activity and rest), and precipitating events (trauma, exercise), which are characteristic of mechanical etiologies. RAG sources confirm that 85% of adults experience low back pain, and it is often musculoskeletal in origin.",
+        "source_ids": [
+          "rag-87846466cc8091f4",
+          "rag-7f0a0f4a5a402b2f"
+        ]
+      },
+      {
+        "id": "low_back_pain__herniated_disc",
+        "name": "Herniated Disc",
+        "rationale": "This is a specific cause of mechanical back pain, often involving nerve root impingement. The questionnaire asks about pain radiation, which is a key feature. The RAG sources explicitly mention herniated nucleus pulposus as a cause of low back pain and nerve impingement syndrome.",
+        "source_ids": [
+          "rag-87846466cc8091f4",
+          "rag-9f3c1d558a704b29"
+        ]
+      },
+      {
+        "id": "low_back_pain__pyelonephritis",
+        "name": "Pyelonephritis",
+        "rationale": "The questionnaire specifically asks about associated symptoms like fever, chills, and urinary symptoms (dysuria, frequency, urgency, hematuria), as well as a history of urinary tract infections. These are classic signs of an upper urinary tract infection like pyelonephritis, which presents with flank/low back pain.",
+        "source_ids": [
+          "rag-966ae6ad156bee23"
+        ]
+      },
+      {
+        "id": "low_back_pain__nephrolithiasis",
+        "name": "Nephrolithiasis",
+        "rationale": "The questionnaire screens for a history of kidney stones and asks about urinary symptoms such as hematuria and changes in urine color. It also inquires about pain radiating to the groin, which is a classic presentation for kidney stones.",
+        "source_ids": [
+          "rag-966ae6ad156bee23"
+        ]
+      },
+      {
+        "id": "low_back_pain__cauda_equina_syndrome",
+        "name": "Cauda Equina Syndrome",
+        "rationale": "This is a neurological emergency that can cause low back pain. The RAG sources describe its classic presentation including bilateral sciatica and bowel/bladder dysfunction. The questionnaire's inquiry about urinary difficulties ('排尿困難') is a critical screening question for this condition.",
+        "source_ids": [
+          "rag-7f0a0f4a5a402b2f",
+          "rag-9f3c1d558a704b29"
+        ]
+      },
+      {
+        "id": "low_back_pain__osteomyelitis",
+        "name": "Osteomyelitis",
+        "rationale": "The questionnaire asks about precipitating events like a possible infection and associated symptoms such as fever or chills. One of the RAG sources lists osteomyelitis as a skeletal cause of low back pain, making it a relevant differential, especially with systemic signs of infection.",
+        "source_ids": [
+          "rag-683544f4e158c9bb"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "The questionnaire includes screening for chest pain and palpitations. While less common, cardiac causes like myocardial infarction can sometimes present with back pain. This should be considered a red flag symptom.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-1a14728db5654797"
+        ]
+      }
+    ]
+  }
+}

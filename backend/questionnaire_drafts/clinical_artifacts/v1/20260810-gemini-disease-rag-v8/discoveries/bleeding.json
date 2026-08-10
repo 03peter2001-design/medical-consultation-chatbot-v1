@@ -1,0 +1,365 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "bleeding",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "75aabb783d153dd23e25f8e8006524218974c385700a28ec7885150c5f087bf7",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history",
+      "bleeding bleeding red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "75a0ad9ce76e8cf34df9f162efa13e425cf74a544e8904d48edc5933542c6692"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "dbfd151f3cb23222b498674ed812c4a2932826cac6246ccf948acfad4e8501e7",
+    "generated_at": "2026-08-10T03:57:47+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-02b622cf0e22d994",
+      "chunk_id": "40949ab525cdb33ba040_4",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4383,
+      "excerpt": "by hemorrhage from both nares, and by visualization of blood draining in the posterior pharynx. Differential Diagnosis The differential diagnosis includes the following: Barotrauma Disseminated Intravascular Coagulation Endometriosis Foreign Bodies, Nose Hemophilia, Type A Hemophilia, Type B Osler-Weber-Rendu syndrome Rhinitis Plant Poisoning, Glycosides - Coumarin Sinusitis Toxicity, Cocaine Toxicity, Nonsteroidal Anti-inflammatory Agents Toxicity, Rodenticide Toxicity, Salicylate Toxicity, Warfarin and Superwarfarins von Willebrand Disease Diagnostic Considerations Other problems to be",
+      "text_sha256": "7fb71c7de80704fe1be64c3cae7c04a246ddeb7d5647ec8fe71d4107e8974654"
+    },
+    {
+      "id": "rag-0d8f017eda52e6bd",
+      "chunk_id": "cd383ba748c90a04ca49_4",
+      "title": "Hemorrhagic Shock Management in the ED: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827930-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4497,
+      "excerpt": "settings. (e fourth edition of the guideline on management of major bleeding and coagulopathy following trauma by the pan-European Multidisciplinary Task Force for Advanced Bleeding Care in Trauma provides treatment guidelines, ncluding the following: Early imaging (ultrasonography or contrast-enhanced CT) should be used for detection of free fluid in patients with suspected torso trauma. CT assessment should be provided for hemodynamically stable patients. Low initial Hb should be considered an indicator for severe bleeding associated with coagulopathy. Repeated Hb measurements should be used",
+      "text_sha256": "41780d1fda7e4fe4fd21b139f74fe080af257354c6e8af42e3f89f953059b78d"
+    },
+    {
+      "id": "rag-3eb6bf860b011987",
+      "chunk_id": "40949ab525cdb33ba040_1",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4033,
+      "excerpt": "bleeding or hemodynamic instability should take precedence over obtaining a lengthy history. Note the duration, severity of the hemorrhage, and the side of initial bleeding. Inquire about previous epistaxis, hypertension, hepatic or other systemic disease, family history, easy bruising, or prolonged bleeding after minor surgical procedures. Recurrent episodes of epistaxis, even if self-limited, should raise suspicion for significant nasal pathology. Use of medications, especially aspirin, nonsteroidal anti-inflammatory drugs (NSAIDs), warfarin, heparin, ticlopidine, and dipyridamole should be",
+      "text_sha256": "5b71384bbeffbf9b26ecd893e4d85cf9105981285d8216825ecb8a4bc2b1f02f"
+    },
+    {
+      "id": "rag-378bcc384b22f898",
+      "chunk_id": "e32b83da386bc9ec8e0c_2",
+      "title": "Hemorrhoids: Background, Anatomy, Etiology and Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/775407-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.437,
+      "excerpt": "treatment. Consequently, the true prevalence of pathologic hemorrhoids is not known. In addition, although hemorrhoids are responsible for a large portion of anorectal complaints, it is important to rule out more serious conditions, such as other causes of gastrointestinal (GI) bleeding, before reflexively attributing symptoms to hemorrhoids. In a study of 198 physicians from different specialties, Grucela et al found the rate of correct identification for seven common, benign anal pathologic conditions (including anal abscess, fissure, and fistula; prolapsed internal hemorrhoid; thrombosed",
+      "text_sha256": "d08855ad51d361685dc9b438519c45eb4cb4802c2b3194cfbda67018651c5243"
+    },
+    {
+      "id": "rag-5c8cb0c3bcaa80b9",
+      "chunk_id": "8440d93890b7b8e00423_5",
+      "title": "Hyperviscosity Syndrome: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/780258-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4984,
+      "excerpt": "thrombocytosis Myelodysplastic disorders Confusion and mental status changes result from the increased viscosity of the blood and decreased cerebral blood flow. This sludging leads to segmental dilatation of retinal veins and retinal hemorrhages. Mucosal bleeding may occur from prolonged bleeding time caused by myeloma proteins interfering with platelet function. Cardiopulmonary symptoms such as shortness of breath, hypoxemia, acute respiratory failure, and hypotension also result from this sludging of blood and decreased microvascular circulation. Clinical sequelae of HVS can include",
+      "text_sha256": "14d8da0fbd561be673df64051001be462cab6afee4b98a3091980aa0553ef06f"
+    },
+    {
+      "id": "rag-ae49bb8e756ca148",
+      "chunk_id": "75136b210e6d1c77f8de_73",
+      "title": "Laboratory Diagnostics and Testing Guidance for COVID-19: Laboratory Studies, Specimen Selection, Collection, and Transport, Nucleic Acid Detection",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500138-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5,
+      "excerpt": "elevated in the majority of patients; erythrocyte sedimentation rate (ESR); and interleukin 6 (IL-6). Coagulopathy resulting in high fibrinogen, D-dimer, partial thromboplastin time (PTT), prothrombin time (PT), and factor VIII levels has been observed in MIS-C patients experiencing moderate to severe symptoms. Ferritin is also elevated in MIS-C, being higher in 55-76% of patients. With the rapid spread of SARS-CoV-2, reports have emerged of MIS in adult patients (MIS-A) as well. Since there have been only a limited number of reported cases, however, the epidemiology, comorbidities, and",
+      "text_sha256": "54044c1f6e158394622307edcd72e91c8337a76bb620407edc58823cb807803d"
+    },
+    {
+      "id": "rag-6a15cd9535cc4eb8",
+      "chunk_id": "8f30f29fd95f1109d358_73",
+      "title": "Laboratory Diagnostics and Testing Guidance for COVID-19: Laboratory Studies, Specimen Selection, Collection, and Transport, Nucleic Acid Detection",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2500138-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5,
+      "excerpt": "elevated in the majority of patients; erythrocyte sedimentation rate (ESR); and interleukin 6 (IL-6). Coagulopathy resulting in high fibrinogen, D-dimer, partial thromboplastin time (PTT), prothrombin time (PT), and factor VIII levels has been observed in MIS-C patients experiencing moderate to severe symptoms. Ferritin is also elevated in MIS-C, being higher in 55-76% of patients. With the rapid spread of SARS-CoV-2, reports have emerged of MIS in adult patients (MIS-A) as well. Since there have been only a limited number of reported cases, however, the epidemiology, comorbidities, and",
+      "text_sha256": "54044c1f6e158394622307edcd72e91c8337a76bb620407edc58823cb807803d"
+    },
+    {
+      "id": "rag-a4dbf54aa235a5ef",
+      "chunk_id": "e1fe0660ecbe5789652f_8",
+      "title": "Deep Venous Thrombosis (DVT): Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1911303-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.463,
+      "excerpt": "while on anticoagulation Active bleeding complications requiring termination of anticoagulation therapy See Treatment and Medication for more detail. Background Deep venous thrombosis (DVT) and pulmonary embolism (PE) are manifestations of a single disease entity, namely, venous thromboembolism (VTE). The earliest known reference to peripheral venous disease is found on the Eber papyrus, which dates from 1550 BC and documents the potentially fatal hemorrhage that may ensue from surgery on varicose veins. In 1644, Schenk first observed venous thrombosis when he described an occlusion in the",
+      "text_sha256": "e31d219e01ec79eb69763ba3fa5c40b4c30e129cd7b22f66d0e94bf080a89616"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5294,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-829d7ceea3e1f318",
+      "chunk_id": "b30b031f37648f2fe152_42",
+      "title": "Acute Anemia: Practice Essentials, Etiology, Clinical Presentation",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/780334-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5796,
+      "excerpt": "GI bleeds, but it is rarely useful in the acute setting. Tagged RBC studies or angiography may be more useful for the localization of massive ongoing lower GI bleeding. Diagnostic peritoneal lavage (DPL) has been supplanted by ultrasonography and computed tomography (CT) and is rarely indicated. Culdocentesis is rarely indicated but may have a role in some situations. Perform this test for a pregnant patient with acute anemia and hemodynamic instability when pelvic ultrasonography is not available. Bleeding from an ectopic pregnancy appears as nonclotting blood. False-positive results may",
+      "text_sha256": "68e25a1c010900510fe4f0f817c1cd4358619e4395c0976cca418391f5082d3b"
+    },
+    {
+      "id": "rag-ea1e2ea025f6c94a",
+      "chunk_id": "4f2ea830bb1fd8b5b6f9_2",
+      "title": "Direct Antiglobulin Test: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2105623-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5609,
+      "excerpt": "cephalosporins, fludarabine). A negative antiglobulin test can result in the following cases: Hemolytic anemias caused by intrinsic red cell defect (eg, hemoglobinopathies or G6PD) Collection and Panels See the list below: Specimen: Blood anticoagulated with EDTA Container: Lavender or red-top vacuum tube All samples must be sent in a sealed, leak-proof container marked with a biohazard sticker to comply with Occupational Safety and Health Administration (OSHA) safety standards. Background Clinical features of hemolysis help to differentiate the hemolytic anemia from other anemias. Clinical",
+      "text_sha256": "9c4470cfff6d35ba92c1f3774ec81ed8b249341ea9eed288ce2c28335afd264b"
+    },
+    {
+      "id": "rag-dd071d428feab779",
+      "chunk_id": "5e63425327f98ba541a6_11",
+      "title": "Abnormal (Dysfunctional) Uterine Bleeding in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795587-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5865,
+      "excerpt": "suppression leading to abnormal uterine bleeding due to disruption along the hypothalamus-pituitary-ovarian pathway. Bleeding disturbances are common with combination oral contraceptive pills as well as progestin-only methods of birth control. However, the incidence of bleeding decreases significantly with time. Therefore, only counseling and reassurance are required during the early months of use. Contraceptive intrauterine devices (IUDs) can cause variable vaginal bleeding for the first few cycles after placement and intermittent spotting subsequently. The progesterone impregnated IUD",
+      "text_sha256": "25040d175c4529183ed058a6d14160a5f870d4227d1bab039becaf6f419d249a"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5704,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    }
+  ],
+  "discovery": {
+    "route": "bleeding",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "bleeding__epistaxis",
+        "name": "Epistaxis",
+        "rationale": "The questionnaire asks about the location of bleeding, with 'nose' being an option. Epistaxis (nosebleed) is a common cause of bleeding and is discussed as a primary condition in the provided evidence.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-3eb6bf860b011987"
+        ]
+      },
+      {
+        "id": "bleeding__gastrointestinal_bleeding",
+        "name": "Gastrointestinal Bleeding",
+        "rationale": "The questionnaire asks about bleeding from the digestive tract. The evidence mentions that it's important to rule out serious causes of gastrointestinal (GI) bleeding, such as in the context of hemorrhoids, and also discusses methods for localizing massive ongoing lower GI bleeding.",
+        "source_ids": [
+          "rag-378bcc384b22f898",
+          "rag-829d7ceea3e1f318"
+        ]
+      },
+      {
+        "id": "bleeding__abnormal_uterine_bleeding",
+        "name": "Abnormal Uterine Bleeding",
+        "rationale": "The questionnaire includes 'vagina' as a potential bleeding location. The provided evidence specifically discusses abnormal uterine bleeding, including causes related to contraception, which is a common reason for this presentation.",
+        "source_ids": [
+          "rag-dd071d428feab779"
+        ]
+      },
+      {
+        "id": "bleeding__hemophilia",
+        "name": "Hemophilia",
+        "rationale": "The questionnaire asks about a history of chronic illnesses, specifically including hemophilia. The evidence lists both Hemophilia A and B in the differential diagnosis for bleeding conditions like epistaxis, indicating it's a relevant underlying cause to consider.",
+        "source_ids": [
+          "rag-02b622cf0e22d994"
+        ]
+      },
+      {
+        "id": "bleeding__coagulopathy",
+        "name": "Coagulopathy",
+        "rationale": "The questionnaire asks about medication history (anticoagulants) and chronic illnesses (liver disease), both of which can lead to coagulopathy. The evidence mentions coagulopathy in the context of trauma, medication toxicity (e.g., warfarin), and systemic diseases, making it a key underlying mechanism for bleeding.",
+        "source_ids": [
+          "rag-0d8f017eda52e6bd",
+          "rag-ae49bb8e756ca148",
+          "rag-6a15cd9535cc4eb8",
+          "rag-3eb6bf860b011987"
+        ]
+      },
+      {
+        "id": "bleeding__hemorrhagic_shock",
+        "name": "Hemorrhagic Shock",
+        "rationale": "The questionnaire asks about associated symptoms like dizziness, weakness, and shortness of breath (喘), which are signs of hemodynamic instability. Hemorrhagic shock is a critical condition resulting from severe bleeding, and the evidence details its management and the importance of assessing for hemodynamic stability.",
+        "source_ids": [
+          "rag-0d8f017eda52e6bd"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "The questionnaire asks about symptoms like dizziness, weakness, and shortness of breath (喘), which can be signs of significant blood loss and hemodynamic instability. Evidence highlights that severe bleeding or hemodynamic instability should take precedence over a lengthy history.",
+        "source_ids": [
+          "rag-3eb6bf860b011987",
+          "rag-0d8f017eda52e6bd"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The questionnaire correctly inquires about the use of antiplatelet or anticoagulant medications (e.g., aspirin, NSAIDs, warfarin), which is a critical part of the history for a patient with bleeding as noted in the evidence.",
+        "source_ids": [
+          "rag-3eb6bf860b011987"
+        ]
+      }
+    ]
+  }
+}

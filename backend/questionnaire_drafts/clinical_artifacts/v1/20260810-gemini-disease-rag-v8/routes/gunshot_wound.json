@@ -1,0 +1,607 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "gunshot_wound",
+  "label": "槍傷",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "9a12f4a402bab2d65d993f5d907bbf2ed59a48566c5df26118464f4f4ecc0c74",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"gunshot wound gunshot differential diagnosis diseases clinical presentation symptoms history\",\"gunshot wound gunshot red flags emergency warning signs urgent referral rule out\"]",
+    "rag_corpus_hash": "6759cd23da83e5bf7a4d10862f4a66ebd4d836a9674aa9abce2460f6faf897e7"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "4ac2bb11dd92879d2e6e63b21a79c2d9fb502201ba0bef3e6f703edbacd064e7",
+    "generated_at": "2026-08-10T04:24:31+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "gunshot wound gunshot differential diagnosis diseases clinical presentation symptoms history",
+        "gunshot wound gunshot red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4834,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-20c3d11522f78aaa",
+      "chunk_id": "11996c158911670ee976_13",
+      "title": "Diaphragmatic Injury Management in the Emergency Department: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822999-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gunshot wound gunshot differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4395,
+      "excerpt": "from knife wounds. Typically, the wounds are small, although occasionally a shotgun blast or an impalement causes a large defect. Epidemiology Traumatic diaphragmatic rupture (TDR) is uncommon, with the incidence ranging from 1% to 8% in blunt trauma patients. Left-sided diaphragmatic injuries account for 60-70% of cases. These injuries are most commonly accompanied by injuries to the stomach, colon, and spleen. ght-sided injuries represent 30-40% and require higher energy (ie, high-speed motor vehicle collisions). They generally involve the liver or colon. lateral injuries are extremely rare,",
+      "text_sha256": "29c69bfddf90905f541894d986ef6dd5e9531062a7451e49814e36b5322ee828"
+    },
+    {
+      "id": "rag-4cc355121404eb13",
+      "chunk_id": "709d501e5392c47ae3b5_20",
+      "title": "Lyme Disease: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/330178-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gunshot wound gunshot differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4574,
+      "excerpt": "list of clinical manifestations. The recognition that the patients in the United States had erythema migrans and the initial antibiotic responsiveness of the cutaneous manifestations that had been described in the 1950s in the European literature was confirmed. This led to the recognition that Lyme arthritis was one manifestation of the same tick-borne condition known in Europe. After Willy Burgdorfer, MD, discovered a borrelial organism in Ixodes ticks, it was recovered from patients with clinical Lyme disease, confirming Borrelia as the causative agent. This led to the development of",
+      "text_sha256": "10d5fad5bf7b692ff16fa1f0e46e1d26713b60a22ba12a73fd9bf19ae786e87d"
+    },
+    {
+      "id": "rag-fe756aba1891d250",
+      "chunk_id": "c5497a37eb254ad4be2e_9",
+      "title": "Myocardial Rupture: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/156455-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gunshot wound gunshot differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4622,
+      "excerpt": "the pericardial wound is obliterated) or intrathoracic hemorrhage. Pericardial tamponade is more common with stab wounds, whereas hypovolemic shock is more frequently associated with gunshot wounds. Myocardial abscesses accompanying infective endocarditis may rupture transmurally, resulting in VSD or pericardial tamponade (pyohemopericardium). Such abscesses are observed most commonly in the setting of Staphylococcus aureus endocarditis involving prosthetic valves in the aortic position. Rarely, myocardial necrosis due to acute myocarditis, tuberculosis, or sarcoidosis may result in myocardial",
+      "text_sha256": "b18f8f50d6c9f12d555b5baefe464f3532fbf8a7b0153b7069cf080a242f502a"
+    },
+    {
+      "id": "rag-b75b8b4221aed1eb",
+      "chunk_id": "709d501e5392c47ae3b5_2",
+      "title": "Lyme Disease: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/330178-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gunshot wound gunshot differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4716,
+      "excerpt": "or multiple lesions) Headache Fever Tender adenopathy (regional or generalized) Conjunctivitis (uncommon, never prominent) Carditis (usually manifests as heart block) Meningismus as a sign of aseptic meningitis Cranioneuropathy, especially cranial nerve VII and Bell palsy (peripheral seventh nerve palsy with decreased unilateral function, including the forehead) In patients with late disease, the typical physical finding is arthritis. Arthritis is located mostly in large joints, especially the knee. Warmth, swelling from effusion, and limited range of motion help distinguish arthritis from",
+      "text_sha256": "5979a52ffbe290c6ad41e6673f483c0ff00a97d293d0476cdff0c06528cc4bf6"
+    },
+    {
+      "id": "rag-02b622cf0e22d994",
+      "chunk_id": "40949ab525cdb33ba040_4",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gunshot wound gunshot differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4904,
+      "excerpt": "by hemorrhage from both nares, and by visualization of blood draining in the posterior pharynx. Differential Diagnosis The differential diagnosis includes the following: Barotrauma Disseminated Intravascular Coagulation Endometriosis Foreign Bodies, Nose Hemophilia, Type A Hemophilia, Type B Osler-Weber-Rendu syndrome Rhinitis Plant Poisoning, Glycosides - Coumarin Sinusitis Toxicity, Cocaine Toxicity, Nonsteroidal Anti-inflammatory Agents Toxicity, Rodenticide Toxicity, Salicylate Toxicity, Warfarin and Superwarfarins von Willebrand Disease Diagnostic Considerations Other problems to be",
+      "text_sha256": "7fb71c7de80704fe1be64c3cae7c04a246ddeb7d5647ec8fe71d4107e8974654"
+    },
+    {
+      "id": "rag-cc9c51c7b3a51385",
+      "chunk_id": "c78be2121e6d4a51472a_9",
+      "title": "Blast Injuries: Practice Essentials, Background, Frequency",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822587-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gunshot wound gunshot differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4863,
+      "excerpt": "symptoms Abnormal findings on chest auscultation Visible external signs of thoracic trauma If significant abdominal pain is present, consider an immediate abdominal radiographic series (flat and upright films) or abdominal CT to detect pneumoperitoneum from enteric rupture. Intestinal barotrauma is more common with underwater injuries than air blast injuries. Focused abdominal sonography for trauma (FAST) is a potentially useful tool for rapidly screening patients, especially in the setting of multiple seriously injured victims. A positive FAST examination in an unstable patient is an",
+      "text_sha256": "bceced98b4934a85ad8012aa24a9ae6b99c10a3363dae2ac23caa690e9ed63b3"
+    },
+    {
+      "id": "rag-2a77934242f0e69d",
+      "chunk_id": "791b392395fdb02a4e02_4",
+      "title": "Leptospirosis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/220563-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "gunshot wound gunshot differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4972,
+      "excerpt": "Courtesy of the Centers for Disease Control and Prevention (CDC), Rob Weyant. Signs and symptoms Leptospirosis ranges in severity from no symptoms to a mild illness suggesting a viral infection to a multisystemic syndrome with unique features. It is characterized by sudden onset of the following: Fever (38-40°C) Rigors Headache, retro-orbital pain, photophobia Muscle pain localized to the calf and lumbar areas Conjunctival suffusion Dry cough Nausea and vomiting, diarrhea More severe disease manifests as icteric leptospirosis, also known as Weil disease, with the following features: Icterus or",
+      "text_sha256": "f4003fe51828aa03dd3bc9aef69c8fe05e0d2a60538f5383a227ba13923a5d9a"
+    }
+  ],
+  "disease_candidates": [],
+  "proposal": {
+    "route": "gunshot_wound",
+    "evidence_status": "sufficient",
+    "route_review": {
+      "recommended_disposition": "urgent",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-fe756aba1891d250"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "gunshot_wound__wound_location_head",
+        "description": "槍傷位於頭部。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "code": "gunshot_wound__wound_location_chest",
+        "description": "槍傷位於胸部。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "code": "gunshot_wound__wound_location_abdomen",
+        "description": "槍傷位於腹部。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "code": "gunshot_wound__active_bleeding",
+        "description": "槍傷處正在出血。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "code": "gunshot_wound__heavy_bleeding",
+        "description": "槍傷處大量出血。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "code": "gunshot_wound__altered_consciousness",
+        "description": "出現意識改變、頭暈或昏厥。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "code": "gunshot_wound__abnormal_breathing",
+        "description": "出現呼吸異常。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "code": "gunshot_wound__signs_of_shock",
+        "description": "出現休克症狀。",
+        "kind": "finding",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "location_of_wound",
+        "option": "頭",
+        "mapping": {
+          "findings": [
+            "gunshot_wound__wound_location_head"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "field": "location_of_wound",
+        "option": "胸",
+        "mapping": {
+          "findings": [
+            "gunshot_wound__wound_location_chest"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "field": "location_of_wound",
+        "option": "腹",
+        "mapping": {
+          "findings": [
+            "gunshot_wound__wound_location_abdomen"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "field": "active_bleeding",
+        "option": "是",
+        "mapping": {
+          "findings": [
+            "gunshot_wound__active_bleeding"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "field": "bleeding_amount",
+        "option": "大量",
+        "mapping": {
+          "findings": [
+            "gunshot_wound__heavy_bleeding"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "意識改變、頭暈或昏厥",
+        "mapping": {
+          "findings": [
+            "gunshot_wound__altered_consciousness"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "呼吸異常",
+        "mapping": {
+          "findings": [
+            "gunshot_wound__abnormal_breathing"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      },
+      {
+        "field": "signs_of_shock",
+        "option": "是",
+        "mapping": {
+          "findings": [
+            "gunshot_wound__signs_of_shock"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      }
+    ],
+    "profile_status": "not_applicable",
+    "profiles": [],
+    "safety_proposals": [
+      {
+        "code": "experimental_gunshot_wound__critical_location",
+        "label": "槍傷位於頭部、胸部或腹部",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "gunshot_wound"
+          ],
+          "any_findings": [
+            "gunshot_wound__wound_location_head",
+            "gunshot_wound__wound_location_chest",
+            "gunshot_wound__wound_location_abdomen"
+          ]
+        },
+        "possible_conditions": [
+          "Traumatic Brain Injury",
+          "Intrathoracic Injury",
+          "Intra-abdominal Injury"
+        ],
+        "source_ids": [
+          "rag-fe756aba1891d250",
+          "rag-20c3d11522f78aaa"
+        ]
+      },
+      {
+        "code": "experimental_gunshot_wound__hemorrhagic_shock",
+        "label": "槍傷伴隨活動性出血、大量出血或休克跡象",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "gunshot_wound"
+          ],
+          "any_findings": [
+            "gunshot_wound__active_bleeding",
+            "gunshot_wound__heavy_bleeding",
+            "gunshot_wound__signs_of_shock"
+          ]
+        },
+        "possible_conditions": [
+          "Hemorrhagic Shock"
+        ],
+        "source_ids": [
+          "rag-fe756aba1891d250"
+        ]
+      },
+      {
+        "code": "experimental_gunshot_wound__systemic_compromise",
+        "label": "槍傷伴隨意識改變或呼吸異常",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "gunshot_wound"
+          ],
+          "any_findings": [
+            "gunshot_wound__altered_consciousness",
+            "gunshot_wound__abnormal_breathing"
+          ]
+        },
+        "possible_conditions": [
+          "Hypovolemic Shock",
+          "Tension Pneumothorax",
+          "Traumatic Brain Injury"
+        ],
+        "source_ids": [
+          "rag-fe756aba1891d250",
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ],
+    "unsupported_requirements": [],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "This route is correctly categorized as 'urgent' due to the life-threatening nature of gunshot wounds. The proposed safety rules appropriately capture high-risk scenarios such as critical wound locations (head, chest, abdomen), signs of significant blood loss (active or heavy bleeding), and systemic compromise (altered consciousness, abnormal breathing). These rules are well-supported by the general medical knowledge that gunshot wounds can cause severe hemorrhage and organ damage.",
+        "source_ids": [
+          "rag-fe756aba1891d250"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], fact_proposals[4], fact_proposals[5], fact_proposals[6], fact_proposals[7], semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[3]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-20c3d11522f78aaa",
+          "rag-4cc355121404eb13",
+          "rag-fe756aba1891d250",
+          "rag-b75b8b4221aed1eb",
+          "rag-02b622cf0e22d994",
+          "rag-cc9c51c7b3a51385",
+          "rag-2a77934242f0e69d"
+        ]
+      }
+    ]
+  }
+}

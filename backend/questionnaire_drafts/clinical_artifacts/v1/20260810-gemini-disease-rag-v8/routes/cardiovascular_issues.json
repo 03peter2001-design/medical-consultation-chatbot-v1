@@ -1,0 +1,743 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "cardiovascular_issues",
+  "label": "心血管問題",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "51a3eb2c5fdc2cf9efc4f52200e98f2c4dfdd35b6fdb2de5a45ed20693253bf8",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"cardiovascular issues cardiovascular differential diagnosis diseases clinical presentation symptoms history\",\"Acute Coronary Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Hypertensive Heart Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"cardiovascular issues cardiovascular red flags emergency warning signs urgent referral rule out\",\"Cardioembolic Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "b75446500c10aa00463ffd049d9257f190e2ad33bd0c8e933ad79ccdcaf90d94"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "236eeaabd385d8e8fe64c49835406282357c87b2d02153b41778d1f848403eb5",
+    "generated_at": "2026-08-10T04:00:39+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-d93fb7a4b41d4836",
+      "chunk_id": "29a8db87cd2aa8fb48b6_12",
+      "title": "Acute Coronary Syndrome: Practice Essentials, Background, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1910735-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "cardiovascular_issues__acute_coronary_syndrome",
+        "cardiovascular_issues__hypertensive_heart_disease"
+      ],
+      "retrieval_queries": [
+        "cardiovascular issues cardiovascular differential diagnosis diseases clinical presentation symptoms history",
+        "Acute Coronary Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Hypertensive Heart Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2844,
+      "excerpt": "markers of myocardial necrosis in addition to at least 1 of the following (See Workup.): Ischemic symptoms Development of pathologic Q waves on electrocardiogram (ECG) Significant ST-segment-T wave (ST-T) changes or new left bundle branch block (LBBB) Imaging evidence of new loss of viable myocardium or new regional wall motion abnormality Introcoronary thrombus identified by angiography or autopsy The terms transmural and nontransmural (subendocardial) myocardial infarction are no longer used because ECG findings in patients with this condition are not closely correlated with pathologic",
+      "text_sha256": "cbfa46d6f68c22394cfc0ef81b7cd1aafb9c495013ca6c235af08ea8b7333778"
+    },
+    {
+      "id": "rag-b4c3735a3edc9535",
+      "chunk_id": "66b33c95b2ca1af9c721_44",
+      "title": "Hypertensive Heart Disease: Overview, Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/162449-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "cardiovascular issues cardiovascular differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3508,
+      "excerpt": "and ophthalmologic system Central nervous system (CNS) examination findings are usually unremarkable unless the patient has had previous cerebrovascular accidents with residual deficit. CNS changes may also be seen in patients who present with hypertensive emergency. Examination of the fundi may reveal evidence of hypertensive retinopathy, the severity of which depends on the duration and severity of the patient's hypertension, or earlier signs of hypertension, such as arteriovenous nicking. Staging of Hypertension Although hypertensive heart disease typically is not described in various",
+      "text_sha256": "72a55f8dd6c3f6a7dc024fac212489fdf7ce80676cdde9c8015a957ff15d95a2"
+    },
+    {
+      "id": "rag-80aa6ad45ea04af3",
+      "chunk_id": "0b4e124e43266b2d82b6_20",
+      "title": "Neurological Sequelae of Infectious Endocarditis: Infective Endocarditis and the CNS, Etiology of CNS Sequelae, Epidemiology of CNS Sequelae",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165712-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "cardiovascular issues cardiovascular differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4459,
+      "excerpt": "focal neurologic signs. Presumably, the transient nature (resolution) results from the disintegration and dislodgement of small emboli. Other conditions to consider in the differential diagnosis include the following: Aphasia Cardioembolic Stroke Cerebellar Hemorrhage Cerebral Aneurysms Cerebral Venous Thrombosis Complex Partial Seizures Lacunar Syndromes Primary CNS Lymphoma Spinal Epidural Abscess Subarachnoid Hemorrhage Depression, psychosis, aseptic meningitis, cavernous sinus syndromes, dissection syndromes, metastatic brain disease, herpes simplex encephalitis, orbital cellulitis, and",
+      "text_sha256": "fb338b461b87e6f7a7bd0014be98b96fa4d2fb470d5b90a9bff0775f0b6c9841"
+    },
+    {
+      "id": "rag-1d3d90d85d843b24",
+      "chunk_id": "53fc3e4f98765d889be9_19",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "cardiovascular issues cardiovascular differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4471,
+      "excerpt": "malformation, thromboembolic/hemorrhagic stroke, veno-occlusive disease, and vasospasm. Relative contraindications include hypotension, severe hypertension, coagulopathy, renal insufficiency, congestive heart failure, and sensitivity to iodinated contrast material. Patients should be stabilized, and tenuous conditions should be corrected prior to study. Conventional radiography Due to the advancements and accessibility of imaging technology, conventional radiography generally does not serve a role in the evaluation of the patient with acute head injury unless CT and MRI are unavailable. In",
+      "text_sha256": "142428e891c01675252948ca0626d9f0fd8378569a05552fda8f4c576dcdd171"
+    },
+    {
+      "id": "rag-3074fafca96e9376",
+      "chunk_id": "53fc3e4f98765d889be9_15",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "cardiovascular issues cardiovascular differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4489,
+      "excerpt": "encephalitis, headache, mental status change, hydrocephalus, ischemic disease and infarction, suspected pituitary dysfunction, inflammation or infection of the brain or meninges or their complications, demyelination and dysmyelination disorders, vascular malformations, and arterial or venous/dural sinus abnormalities. Patients who have cardiac pacemakers, ferromagnetic intracranial aneurysm clips, and certain ferromagnetic foreign bodies or electronic devices or implants should not undergo MRI. The routine MRI protocol varies considerably based on strength of the unit's field, machine",
+      "text_sha256": "efd6bcf781abb9e97e13fb806d50dc265fab9d450d001ad3cde9e6629777e105"
+    },
+    {
+      "id": "rag-2c67bcc527a798e9",
+      "chunk_id": "60a8e9fb259d62f055c2_5",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "cardiovascular issues cardiovascular red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3697,
+      "excerpt": "primary angioplasty. Treatment should not be delayed to wait for cardiac marker results, especially because the sensitivity is low in the first 6 hours after symptom onset. ACC/American Heart Association (AHA) guidelines recommend immediate reperfusion therapy for qualifying patients with ST-segment elevation MI (STEMI), without waiting for cardiac marker results. Go to Myocardial Infarction and Complications of Myocardial Infarction for more complete information on these topics. Markers of Myocardial Necrosis and Ischemia Cardiac troponins (cTn) The troponins are regulatory proteins found in",
+      "text_sha256": "0fa0199e6fc561cce30b711f45dac07320b5670d5665302ff523658655cfb8cd"
+    },
+    {
+      "id": "rag-58c5f2eb5f52fa45",
+      "chunk_id": "60a8e9fb259d62f055c2_0",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "cardiovascular_issues__acute_coronary_syndrome",
+        "cardiovascular_issues__cardioembolic_stroke"
+      ],
+      "retrieval_queries": [
+        "Acute Coronary Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Cardioembolic Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3936,
+      "excerpt": "Definition and Efficacy Cardiac markers are used for the diagnosis and risk stratification of patients with chest pain and suspected acute coronary syndrome (ACS) and for management and prognosis in patients with acute heart failure, pulmonary embolism, and other disease states. Cardiac markers can be classified into those that signify myocardial necrosis (creatine kinase-MB [CK-MB] action, myoglobin and cardiac troponins), those that indicate myocardial ischemia (ischemia modified albumin), those that suggest myocardial stress (natriuretic peptides), and those markers of inflammation and",
+      "text_sha256": "c564cd463bc767d0045ffeed533c42106a4178019d2d50b9493d2ef7680c7c71"
+    },
+    {
+      "id": "rag-928675c57d12f3f7",
+      "chunk_id": "dfda69efc9dedf0465fb_1",
+      "title": "Wellens Syndrome: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1512230-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "cardiovascular_issues__acute_coronary_syndrome"
+      ],
+      "retrieval_queries": [
+        "Acute Coronary Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3963,
+      "excerpt": "Wellens syndrome is also referred to as LAD coronary T-wave syndrome. Syndrome criteria include the following: Characteristic T-wave changes History of anginal chest pain Normal or minimally elevated cardiac enzyme levels ECG without Q waves, without significant ST-segment elevation, and with normal precordial R-wave progression Recognition of this ECG abnormality is of paramount importance because this syndrome represents a preinfarction stage of coronary artery disease (CAD) that often progresses to a devastating anterior wall MI. Pathophysiology Wellens syndrome represents critical stenosis",
+      "text_sha256": "93ff4d51c713fc3a5fe2a2926544d0b49e0e9c7186b908d6b12a3df3bfdcf60d"
+    },
+    {
+      "id": "rag-4e27107dd22b5aa1",
+      "chunk_id": "66b33c95b2ca1af9c721_8",
+      "title": "Hypertensive Heart Disease: Overview, Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/162449-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "cardiovascular_issues__hypertensive_heart_disease"
+      ],
+      "retrieval_queries": [
+        "Hypertensive Heart Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3527,
+      "excerpt": "The prevalence of LVH based on electrocardiogram (ECG) findings, which are not a sensitive marker at the time of diagnosis of hypertension, is variable. Studies have shown a direct relationship between the level and duration of elevated BP and LVH. LVH, defined as an increase in the mass of the left ventricle, is caused by the response of myocytes to various stimuli accompanying elevated BP. Myocyte hypertrophy can occur as a compensatory response to increased afterload. Mechanical and neurohormonal stimuli accompanying hypertension can lead to activation of myocardial cell growth, gene",
+      "text_sha256": "8d72d624bcd702a3c3ada80e3209a382744987799e08e4927fd78c53c0657fb1"
+    },
+    {
+      "id": "rag-2d410220876a082d",
+      "chunk_id": "66b33c95b2ca1af9c721_35",
+      "title": "Hypertensive Heart Disease: Overview, Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/162449-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "cardiovascular_issues__hypertensive_heart_disease"
+      ],
+      "retrieval_queries": [
+        "Hypertensive Heart Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3581,
+      "excerpt": "Ischemic electrocardiographic (ECG) changes may be found in individuals presenting with hypertensive crisis in whom no significant coronary atherosclerosis is detectable by coronary angiography. Acute coronary symptoms can be precipitated by a ruptured atherosclerotic plaque; they can also result from an acute and severe rise in BP that leads to a sudden increase in transmural pressure without a change in stability of the plaque. Cardiac arrhythmias Irregular or abnormal heart rhythms can cause a variety of symptoms, including the following: Palpitations Near or total syncope Precipitation of",
+      "text_sha256": "c62903aaa9aa98edaf4b38a72727a84213c7b5841dab6d5b4bea24536b8dc54a"
+    },
+    {
+      "id": "rag-2b331fa66c2216f0",
+      "chunk_id": "60a8e9fb259d62f055c2_20",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "cardiovascular_issues__hypertensive_heart_disease"
+      ],
+      "retrieval_queries": [
+        "Hypertensive Heart Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4211,
+      "excerpt": "Additionally, the introduction of hs-cTnssays into practice necessitates serial measurements to differentiate a number of previously mentioned)sease states(at cause myocardial injury. Of note, the 99th percentile upper reference limit has been shown to differ between men and women when measured with high-sensitivity assays. To optimize use of the assay in the emergency department (ED), it is important to be familiar with the particular troponin assay available in the individual laboratory and to know whether the cutoff is set at the 10% CV level or at the 99th percentile upper reference limit.",
+      "text_sha256": "d3b3115d86ae7bdca4dc321d840a149e3985c6dfe04b31878a7c263b2dddbdbb"
+    },
+    {
+      "id": "rag-ffc04298df227587",
+      "chunk_id": "536871af6462d18d854b_2",
+      "title": "Ischemic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916852-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "cardiovascular_issues__cardioembolic_stroke"
+      ],
+      "retrieval_queries": [
+        "Cardioembolic Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4214,
+      "excerpt": "neurologic deficit or any alteration in level of consciousness. Common stroke signs and symptoms include the following: Abrupt onset of hemiparesis, monoparesis, or (rarely) quadriparesis Hemisensory deficits Monocular or binocular visual loss Visual field deficits Diplopia Dysarthria Facial droop Ataxia Vertigo (rarely in isolation) Nystagmus Aphasia Sudden decrease in level of consciousness Although such symptoms can occur alone, they are more likely to occur in combination. No historical feature distinguishes ischemic from hemorrhagic stroke, although nausea, vomiting, headache, and sudden",
+      "text_sha256": "08c3fc70520a54c0cfbb79c8c6a6cb6799bd65cec892fd371b3de9cf705a3f55"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "cardiovascular_issues__cardioembolic_stroke"
+      ],
+      "retrieval_queries": [
+        "Cardioembolic Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4402,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-e5ea3eafe991e33a",
+      "chunk_id": "fb667a66b0c052e9418e_2",
+      "title": "Hemorrhagic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916662-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "cardiovascular_issues__cardioembolic_stroke"
+      ],
+      "retrieval_queries": [
+        "Cardioembolic Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4361,
+      "excerpt": "Puzzles slideshow to help recognize diagnostic clues in vertigo cases. Signs and symptoms Patients with intracerebral bleeds are more likely than those with ischemic stroke to have headache, altered mental status, seizures, nausea and vomiting, and/or marked hypertension. Even so, none of these findings reliably distinguishes between hemorrhagic and ischemic stroke. Focal neurologic deficits The type of deficit depends on the area of brain involved. If the dominant (usually the left) hemisphere is involved, a syndrome consisting of the following may result: Right hemiparesis Right hemisensory",
+      "text_sha256": "d46a05c09019859b4bb142e4b7ab6e3eab8771922c2987f776b61d11724c2bfa"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "cardiovascular_issues__acute_coronary_syndrome",
+      "name": "Acute Coronary Syndrome",
+      "retrieval_query": "Acute Coronary Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-d93fb7a4b41d4836"
+      ],
+      "disease_rag_source_ids": [
+        "rag-d93fb7a4b41d4836",
+        "rag-58c5f2eb5f52fa45",
+        "rag-928675c57d12f3f7"
+      ]
+    },
+    {
+      "id": "cardiovascular_issues__hypertensive_heart_disease",
+      "name": "Hypertensive Heart Disease",
+      "retrieval_query": "Hypertensive Heart Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-b4c3735a3edc9535"
+      ],
+      "disease_rag_source_ids": [
+        "rag-d93fb7a4b41d4836",
+        "rag-4e27107dd22b5aa1",
+        "rag-2d410220876a082d",
+        "rag-2b331fa66c2216f0"
+      ]
+    },
+    {
+      "id": "cardiovascular_issues__cardioembolic_stroke",
+      "name": "Cardioembolic Stroke",
+      "retrieval_query": "Cardioembolic Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-80aa6ad45ea04af3"
+      ],
+      "disease_rag_source_ids": [
+        "rag-58c5f2eb5f52fa45",
+        "rag-ffc04298df227587",
+        "rag-f09c5253c7a82445",
+        "rag-e5ea3eafe991e33a"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "cardiovascular_issues",
+    "evidence_status": "sufficient",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": "chest",
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-d93fb7a4b41d4836",
+        "rag-2d410220876a082d",
+        "rag-58c5f2eb5f52fa45",
+        "rag-ffc04298df227587",
+        "rag-f09c5253c7a82445",
+        "rag-e5ea3eafe991e33a"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "cardiovascular_issues__acute_coronary_syndrome__ischemic_symptoms",
+        "description": "Ischemic symptoms, such as anginal chest pain.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "cardiovascular_issues__acute_coronary_syndrome"
+        ],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-928675c57d12f3f7"
+        ]
+      },
+      {
+        "code": "cardiovascular_issues__hypertensive_heart_disease__arrhythmia",
+        "description": "Irregular or abnormal heart rhythms.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "cardiovascular_issues__hypertensive_heart_disease"
+        ],
+        "source_ids": [
+          "rag-2d410220876a082d"
+        ]
+      },
+      {
+        "code": "cardiovascular_issues__hypertensive_heart_disease__syncope_or_near_syncope",
+        "description": "Near or total syncope (fainting).",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "cardiovascular_issues__hypertensive_heart_disease"
+        ],
+        "source_ids": [
+          "rag-2d410220876a082d"
+        ]
+      },
+      {
+        "code": "cardiovascular_issues__cardioembolic_stroke__ataxia_or_vertigo",
+        "description": "Ataxia (impaired coordination or balance) or vertigo (a spinning sensation).",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "cardiovascular_issues__cardioembolic_stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "cardiovascular_issues__cardioembolic_stroke__nausea_or_vomiting",
+        "description": "Nausea or vomiting, which can be associated with stroke.",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "cardiovascular_issues__cardioembolic_stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "presenting_symptoms",
+        "option": "胸痛",
+        "mapping": {
+          "findings": [
+            "cardiovascular_issues__acute_coronary_syndrome__ischemic_symptoms"
+          ]
+        },
+        "disease_ids": [
+          "cardiovascular_issues__acute_coronary_syndrome"
+        ],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-928675c57d12f3f7"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "感到心跳不規則或加快",
+        "mapping": {
+          "findings": [
+            "palpitations",
+            "cardiovascular_issues__hypertensive_heart_disease__arrhythmia"
+          ]
+        },
+        "disease_ids": [
+          "cardiovascular_issues__hypertensive_heart_disease"
+        ],
+        "source_ids": [
+          "rag-2d410220876a082d"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "昏厥快暈倒或頭暈",
+        "mapping": {
+          "findings": [
+            "cardiovascular_issues__hypertensive_heart_disease__syncope_or_near_syncope",
+            "cardiovascular_issues__cardioembolic_stroke__ataxia_or_vertigo"
+          ]
+        },
+        "disease_ids": [
+          "cardiovascular_issues__hypertensive_heart_disease",
+          "cardiovascular_issues__cardioembolic_stroke"
+        ],
+        "source_ids": [
+          "rag-2d410220876a082d",
+          "rag-ffc04298df227587"
+        ]
+      },
+      {
+        "field": "presenting_symptoms",
+        "option": "心悸",
+        "mapping": {
+          "findings": [
+            "palpitations"
+          ]
+        },
+        "disease_ids": [
+          "cardiovascular_issues__hypertensive_heart_disease"
+        ],
+        "source_ids": [
+          "rag-2d410220876a082d"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "感到噁心或嘔吐",
+        "mapping": {
+          "findings": [
+            "cardiovascular_issues__cardioembolic_stroke__nausea_or_vomiting"
+          ]
+        },
+        "disease_ids": [
+          "cardiovascular_issues__cardioembolic_stroke"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "cardiovascular_issues__acute_coronary_syndrome",
+        "name": "Acute Coronary Syndrome",
+        "must_not_miss": true,
+        "retrieval_query": "Acute Coronary Syndrome diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [
+          "experimental_cardiovascular_issues__acute_coronary_syndrome__suspected_acs"
+        ],
+        "clues": [
+          {
+            "fact": "cardiovascular_issues__acute_coronary_syndrome__ischemic_symptoms",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-d93fb7a4b41d4836",
+              "rag-928675c57d12f3f7"
+            ]
+          },
+          {
+            "fact": "chest_pressure",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-d93fb7a4b41d4836",
+              "rag-928675c57d12f3f7"
+            ]
+          },
+          {
+            "fact": "pain_radiates_back",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-d93fb7a4b41d4836"
+            ]
+          },
+          {
+            "fact": "dyspnea",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-d93fb7a4b41d4836"
+            ]
+          },
+          {
+            "fact": "diaphoresis",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-d93fb7a4b41d4836"
+            ]
+          },
+          {
+            "fact": "nausea",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-d93fb7a4b41d4836"
+            ]
+          },
+          {
+            "fact": "vomiting",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-d93fb7a4b41d4836"
+            ]
+          },
+          {
+            "fact": "pleuritic_pain",
+            "status": "present",
+            "direction": "oppose",
+            "weight": 1,
+            "source_ids": [
+              "rag-d93fb7a4b41d4836"
+            ]
+          },
+          {
+            "fact": "reproducible_tenderness",
+            "status": "present",
+            "direction": "oppose",
+            "weight": 1,
+            "source_ids": [
+              "rag-d93fb7a4b41d4836"
+            ]
+          },
+          {
+            "fact": "pleuritic_pain",
+            "status": "absent",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-d93fb7a4b41d4836"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-58c5f2eb5f52fa45",
+          "rag-928675c57d12f3f7"
+        ]
+      },
+      {
+        "id": "cardiovascular_issues__hypertensive_heart_disease",
+        "name": "Hypertensive Heart Disease",
+        "must_not_miss": false,
+        "retrieval_query": "Hypertensive Heart Disease diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "palpitations",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-2d410220876a082d"
+            ]
+          },
+          {
+            "fact": "cardiovascular_issues__hypertensive_heart_disease__syncope_or_near_syncope",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-2d410220876a082d"
+            ]
+          },
+          {
+            "fact": "cardiovascular_issues__hypertensive_heart_disease__arrhythmia",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-2d410220876a082d"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-2d410220876a082d"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_cardiovascular_issues__acute_coronary_syndrome__suspected_acs",
+        "label": "Suspected Acute Coronary Syndrome",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "cardiovascular_issues"
+          ],
+          "any_findings": [
+            "cardiovascular_issues__acute_coronary_syndrome__ischemic_symptoms"
+          ]
+        },
+        "possible_conditions": [
+          "Acute Coronary Syndrome"
+        ],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-928675c57d12f3f7"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "ECG findings (e.g., Q waves, ST-segment changes, LBBB)",
+        "reason": "The model cannot interpret ECG results or other diagnostic tests. This is outside the scope of a symptom checker."
+      },
+      {
+        "requirement": "Cardiac enzyme levels (e.g., troponins, CK-MB)",
+        "reason": "The model cannot process or interpret laboratory results. This is outside the scope of a symptom checker."
+      },
+      {
+        "requirement": "Imaging evidence (e.g., new loss of viable myocardium or new regional wall motion abnormality)",
+        "reason": "The model cannot interpret imaging study results. This is outside the scope of a symptom checker."
+      },
+      {
+        "requirement": "Detailed diagnostic criteria for Hypertensive Heart Disease, including specific ECG findings (e.g., LVH), imaging evidence, or biomarker levels.",
+        "reason": "The provided RAG sources mention these elements (LVH, ECG changes, wall motion abnormalities, troponin) but do not provide specific, actionable thresholds or criteria suitable for a lay-person questionnaire. This level of detail requires clinical evaluation and diagnostic testing."
+      },
+      {
+        "requirement": "Criteria related to hypertensive emergency or crisis.",
+        "reason": "The sources mention hypertensive emergency/crisis but do not provide specific blood pressure thresholds or a constellation of symptoms that can be reliably used to define it in this context. This requires clinical measurement and assessment."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-f09c5253c7a82445",
+          "rag-e5ea3eafe991e33a"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-58c5f2eb5f52fa45",
+          "rag-ffc04298df227587",
+          "rag-f09c5253c7a82445",
+          "rag-e5ea3eafe991e33a"
+        ]
+      }
+    ]
+  }
+}

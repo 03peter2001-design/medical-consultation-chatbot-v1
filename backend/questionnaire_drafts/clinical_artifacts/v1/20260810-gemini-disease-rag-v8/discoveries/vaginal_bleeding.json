@@ -1,0 +1,344 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "vaginal_bleeding",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "17d0c766c8a21810a61aa713a00020f27d7f81f3e30ce952d51abaa6235680b0",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history",
+      "vaginal bleeding vaginal bleeding red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "deae1c858f1a96846f09280bc85b027fd3788e3e4f1c3ebee788c574599e9b88"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "df1c108704c654f7b2d01f095a6e1d0e14a039a0fb4ad5199aadc6ce50f52665",
+    "generated_at": "2026-08-10T04:22:43+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-09fadaa505574fd5",
+      "chunk_id": "5e63425327f98ba541a6_8",
+      "title": "Abnormal (Dysfunctional) Uterine Bleeding in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795587-overview",
+      "routes": [
+        "abdomen",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history",
+        "vaginal bleeding vaginal bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.3899,
+      "excerpt": "shing disease, liver disease,)abetes mellitus, and adrenal and other endocrine disorders, can present as abnormal uterine bleeding. Pregnancy and pregnancy-related conditions may be associated with vaginal bleeding. Trauma to the cervix, vulva, or vagina may cause abnormal bleeding. Carcinomas of the vagina, cervix, uterus, and ovaries must always be considered in patients with the appropriate history and physical examination findings. Endometrial cancer is associated with obesity, diabetes mellitus, anovulatory cycles, nulliparity, and age older than 35 years. Other causes of abnormal uterine",
+      "text_sha256": "697483a9ed98b31987dfad4849a9547cec92dc1db55346f0e784c3655ca2efca"
+    },
+    {
+      "id": "rag-02b622cf0e22d994",
+      "chunk_id": "40949ab525cdb33ba040_4",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4072,
+      "excerpt": "by hemorrhage from both nares, and by visualization of blood draining in the posterior pharynx. Differential Diagnosis The differential diagnosis includes the following: Barotrauma Disseminated Intravascular Coagulation Endometriosis Foreign Bodies, Nose Hemophilia, Type A Hemophilia, Type B Osler-Weber-Rendu syndrome Rhinitis Plant Poisoning, Glycosides - Coumarin Sinusitis Toxicity, Cocaine Toxicity, Nonsteroidal Anti-inflammatory Agents Toxicity, Rodenticide Toxicity, Salicylate Toxicity, Warfarin and Superwarfarins von Willebrand Disease Diagnostic Considerations Other problems to be",
+      "text_sha256": "7fb71c7de80704fe1be64c3cae7c04a246ddeb7d5647ec8fe71d4107e8974654"
+    },
+    {
+      "id": "rag-ad2cc7a25af94fb5",
+      "chunk_id": "ee8d4d37fa236396b2a1_2",
+      "title": "Vaginitis: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/257141-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3934,
+      "excerpt": "vaginitis from other infectious and noninfectious causes of symptoms. All women presenting with abnormal vaginal discharge should have a careful pelvic examination. Condition-specific tests (ie, colposcopy and cervical biopsies) are indicated for suspected cervical cancer. Studies that may be performed in cases of suspected vaginitis include saline wet mount, the so-called whiff test, pH testing, culture, nucleic acid amplification testing, and a number of other second-line tests (see Presentation, DDx, and Workup). Treatment of vaginitis varies by cause and is directed at the relevant",
+      "text_sha256": "faf8da5499a7a6159d2a7ca6d44c0fa924dd846bf35495548d866bb54a0eb041"
+    },
+    {
+      "id": "rag-e5f9a4cb929922ca",
+      "chunk_id": "65da82849c2adcb4ac1c_4",
+      "title": "Abruptio Placentae: Practice Essentials, Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/252810-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4786,
+      "excerpt": "BP and heart rate No coagulopathy No fetal distress Class 2 characteristics include the following: No vaginal bleeding to moderate vaginal bleeding Moderate to severe uterine tenderness with possible tetanic contractions Maternal tachycardia with orthostatic changes in BP and heart rate Fetal distress Hypofibrinogenemia (ie, 50-250 mg/dL) Class 3 characteristics include the following: No vaginal bleeding to heavy vaginal bleeding Very painful tetanic uterus Maternal shock Hypofibrinogenemia (ie, < 150 mg/dL) Coagulopathy Fetal death Go tomergent Management of Abruptio Placentae r more",
+      "text_sha256": "59ed68910e6599f0c8f8d89e58d0ab633345357809748fb81d5c9ef976070f88"
+    },
+    {
+      "id": "rag-a5d0b3a279433a00",
+      "chunk_id": "5e63425327f98ba541a6_13",
+      "title": "Abnormal (Dysfunctional) Uterine Bleeding in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795587-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3971,
+      "excerpt": "closure. Niches in cesarean scars are also potential causes of abnormal uterine bleeding. In a prospective study from The Netherlands, investigators found a 64.5% prevalence of niche via gel instillation sonohysterography (GIS)n women 6-12 weeks postcesarean section. They noted that postmenstrual spotting was more prevalent in women with a niche and in those with a residual myometrial thickness of less than 50% of the adjacent myometrium. Epidemiology United States statistics Abnormal uterine bleeding is one of the most often encountered gynecologic problems. An estimated 5% of women aged",
+      "text_sha256": "a95ac6bb3ccecf4695e5952813fc6492cba459bf799136d21885f8a9a164ccdf"
+    },
+    {
+      "id": "rag-3eb6bf860b011987",
+      "chunk_id": "40949ab525cdb33ba040_1",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4889,
+      "excerpt": "bleeding or hemodynamic instability should take precedence over obtaining a lengthy history. Note the duration, severity of the hemorrhage, and the side of initial bleeding. Inquire about previous epistaxis, hypertension, hepatic or other systemic disease, family history, easy bruising, or prolonged bleeding after minor surgical procedures. Recurrent episodes of epistaxis, even if self-limited, should raise suspicion for significant nasal pathology. Use of medications, especially aspirin, nonsteroidal anti-inflammatory drugs (NSAIDs), warfarin, heparin, ticlopidine, and dipyridamole should be",
+      "text_sha256": "5b71384bbeffbf9b26ecd893e4d85cf9105981285d8216825ecb8a4bc2b1f02f"
+    },
+    {
+      "id": "rag-dd19638dc52c97d6",
+      "chunk_id": "e1fe0660ecbe5789652f_1",
+      "title": "Deep Venous Thrombosis (DVT): Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1911303-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.489,
+      "excerpt": "symptom Leg pain - Occurs in 50% of patients but is nonspecific Tenderness - Occurs in 75% of patients Warmth or erythema of the skin over the area of thrombosis Clinical symptoms of PE as the primary manifestation As many as 46% with patients with classic symptoms have negative venograms, and as many as 50% of those with image-documented venous thrombosis lack specific symptoms. No single physical finding or combination of symptoms and signs is sufficiently accurate to establish the diagnosis of DVT, but physical findings in DVT may include the following: Calf pain on dorsiflexion of the foot",
+      "text_sha256": "8fcd60760452dfff5159f9b74ef539e1c93f6f1b818fbf67cee54ddb0d23b0df"
+    },
+    {
+      "id": "rag-be16df4594cf7d67",
+      "chunk_id": "1b88713e27be6bbfd3ac_6",
+      "title": "Abortion Complications: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795001-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding differential diagnosis diseases clinical presentation symptoms history",
+        "vaginal bleeding vaginal bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4792,
+      "excerpt": "is bleeding. Failure to aggressively treat vaginal bleeding, even if it seems minimal: Stabilize the patient with 2 large-bore IVs and with oxygen. Closely monitor vital signs. Failure to diagnose uterine perforation may lead to life-threatening complications: In postabortion patients with abdominal pain beyond the pelvic area, suspect perforation and evaluate with kidney, ureter, and bladder (KUB)/upright radiographs, pelvic ultrasonography, or CT. Consult a gynecologist and, if suspicion is high, insist on laparoscopy. Failure to diagnose ectopic pregnancy: The chance of a missed ectopic",
+      "text_sha256": "944d93f107703f7683b78d2be8f007e44d2cf8ae17588bb795d2f590949108a5"
+    },
+    {
+      "id": "rag-56a8c3f553c2afd3",
+      "chunk_id": "3046d06c862cf3a8d792_28",
+      "title": "Emergent Management of Ectopic Pregnancy: Practice Essentials, Ultrasonography, Other Diagnostic Imaging Modalities",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/796451-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5843,
+      "excerpt": "shock Urinalysis to eliminate urinary tract infection as a cause of pelvic pain Blood type and Rh factor, if transfusion is required or if RhoGAM will be provided for Rh-negative patients with vaginal bleeding Other Tests Dilation and curettage Dilation and curettage (D&C) can be used to rule out ectopic pregnancy by determining the presence of chorionic villi. The obvious drawback to its frequent use is that a certain number of normal intrauterine pregnancies (IUPs) will be aborted. It may be an option in the further workup of PUL when the pregnancy is undesired. Culdocentesis Culdocentesis",
+      "text_sha256": "54b534a6b192e81465f25aa5c3c1ddcd7d3d1d7bcd430c3c5ee67f21e64a44d5"
+    },
+    {
+      "id": "rag-dd071d428feab779",
+      "chunk_id": "5e63425327f98ba541a6_11",
+      "title": "Abnormal (Dysfunctional) Uterine Bleeding in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795587-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5667,
+      "excerpt": "suppression leading to abnormal uterine bleeding due to disruption along the hypothalamus-pituitary-ovarian pathway. Bleeding disturbances are common with combination oral contraceptive pills as well as progestin-only methods of birth control. However, the incidence of bleeding decreases significantly with time. Therefore, only counseling and reassurance are required during the early months of use. Contraceptive intrauterine devices (IUDs) can cause variable vaginal bleeding for the first few cycles after placement and intermittent spotting subsequently. The progesterone impregnated IUD",
+      "text_sha256": "25040d175c4529183ed058a6d14160a5f870d4227d1bab039becaf6f419d249a"
+    },
+    {
+      "id": "rag-97b2b60d547a7302",
+      "chunk_id": "9aeedc640c68352d7494_4",
+      "title": "Dysmenorrhea: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/253812-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5748,
+      "excerpt": "of the vaginal vault Inspection of the cervix Bimanual examination See Presentation for more detail. Diagnosis No tests are specific to the diagnosis of primary dysmenorrhea. The following laboratory studies may be performed to identify or exclude organic causes of secondary dysmenorrhea: Complete blood count with differential Gonococcal and chlamydial cultures, enzyme immunoassay, and DNA probe testing Quantitative human chorionic gonadotropin level Erythrocyte sedimentation rate Urinalysis Stool guaiac If pelvic pathology is suspected, the following imaging studies may be considered:",
+      "text_sha256": "1db89f13bc7f852de1b3e27f6df1c79da2b61fbc332bf0abd32232ee70fc49b2"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "vaginal bleeding vaginal bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5924,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    }
+  ],
+  "discovery": {
+    "route": "vaginal_bleeding",
+    "evidence_status": "sufficient",
+    "diseases": [
+      {
+        "id": "vaginal_bleeding__ectopic_pregnancy",
+        "name": "Ectopic Pregnancy",
+        "rationale": "The questionnaire asks about pregnancy status and abdominal pain. Ectopic pregnancy is a critical consideration for vaginal bleeding, especially when accompanied by pain, and failure to diagnose it can have severe consequences. Source rag-be16df4594cf7d67 explicitly mentions the risk of a missed ectopic pregnancy in patients with vaginal bleeding.",
+        "source_ids": [
+          "rag-be16df4594cf7d67"
+        ]
+      },
+      {
+        "id": "vaginal_bleeding__uterine_fibroids",
+        "name": "Uterine Fibroids",
+        "rationale": "The questionnaire specifically asks if the user has been diagnosed with uterine fibroids. This suggests it is a common cause of abnormal uterine bleeding.",
+        "source_ids": [
+          "rag-09fadaa505574fd5"
+        ]
+      },
+      {
+        "id": "vaginal_bleeding__endometrial_cancer",
+        "name": "Endometrial Cancer",
+        "rationale": "The provided evidence states that carcinomas of the uterus must always be considered in patients with abnormal uterine bleeding and appropriate history. Endometrial cancer is specifically mentioned as a potential cause.",
+        "source_ids": [
+          "rag-09fadaa505574fd5"
+        ]
+      },
+      {
+        "id": "vaginal_bleeding__placental_abruption",
+        "name": "Placental Abruption",
+        "rationale": "For patients who are pregnant, placental abruption is a serious cause of vaginal bleeding, which can range from none to heavy, and may be associated with uterine tenderness or pain. The questionnaire assesses pregnancy status and abdominal pain, making this a relevant differential.",
+        "source_ids": [
+          "rag-e5f9a4cb929922ca"
+        ]
+      },
+      {
+        "id": "vaginal_bleeding__vaginitis",
+        "name": "Vaginitis",
+        "rationale": "Vaginitis is an infectious or noninfectious condition that can present with abnormal vaginal discharge, which may be interpreted as bleeding by the patient. The evidence suggests considering it in the differential for abnormal vaginal symptoms.",
+        "source_ids": [
+          "rag-ad2cc7a25af94fb5"
+        ]
+      },
+      {
+        "id": "vaginal_bleeding__dysfunctional_uterine_bleeding",
+        "name": "Dysfunctional Uterine Bleeding",
+        "rationale": "This is a broad category for abnormal uterine bleeding not caused by structural or systemic disease. The evidence mentions that bleeding disturbances are common with contraceptive use (like IUDs or oral contraceptives) and can be related to disruptions in the hypothalamus-pituitary-ovarian pathway.",
+        "source_ids": [
+          "rag-dd071d428feab779"
+        ]
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "critical",
+        "note": "Vaginal bleeding in a pregnant patient is a potential emergency. Ectopic pregnancy and placental abruption must be considered. Failure to diagnose uterine perforation or ectopic pregnancy can lead to life-threatening complications.",
+        "source_ids": [
+          "rag-be16df4594cf7d67",
+          "rag-e5f9a4cb929922ca",
+          "rag-56a8c3f553c2afd3"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Carcinomas of the vagina, cervix, uterus, and ovaries must always be considered as a cause of abnormal bleeding, particularly in patients with relevant risk factors.",
+        "source_ids": [
+          "rag-09fadaa505574fd5"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,1309 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "weakness",
+  "label": "無力虛弱",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "1cff9d48c513944f5062209d4298710851ab428bf4d47f0602a6cbfc5aa5a79a",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"weakness weakness differential diagnosis diseases clinical presentation symptoms history\",\"Heart Failure diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"weakness weakness red flags emergency warning signs urgent referral rule out\",\"Vitamin B6 Deficiency diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Hypopituitarism diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Peripheral Neuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "92336d0ef10fa701c71001aad2f94055f6210dfaf80a25459c5a3e0d9c9ba491"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "24928068f86668b79d2094d6b573230148cc7a346a1f3d8460f515f0898d1220",
+    "generated_at": "2026-08-10T04:20:56+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-22a1ffa4afb4901f",
+      "chunk_id": "4d6cbe4e1c12469911bd_15",
+      "title": "Heart Failure: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/163062-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "weakness__heart_failure"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history",
+        "Heart Failure diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3398,
+      "excerpt": "additional disease-staging terminology to characterize the syndrome of heart failure as a continuum, as follows : \"At risk for HF\" for stage A: Applied to asymptomatic patients with risk factors such as diabetes or hypertension but no known cardiac changes \"Pre-HF\" for stage B: Adds cardiac structural changes or elevated natriuretic peptides, still in the absence of symptoms \"Symptomatic HF\" for stage C: Structural disease with current or previous symptoms \"Advanced HF\" for stage D: Characterized by severe debilitating symptoms or repeated hospitalizations even with guideline-directed medical",
+      "text_sha256": "cbc61cde99662b0af29fa6278469a5db4321ca454d18f12587f65aa2d1262f2e"
+    },
+    {
+      "id": "rag-5f400608c51ca1d6",
+      "chunk_id": "fb961f7e1c8b575b2ec5_10",
+      "title": "Hypogammaglobulinemia: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/136471-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4411,
+      "excerpt": "can be associated with a primary immune deficiency, be part of a multi-systemic syndrome, or be secondary to other disorders. Several codes in the International Classification of Diseases, 9th edition (ICD-9) relate to disorders in which hypogammaglobulinemia is a primary feature. These include deficiencies of humoral immunity, which is coded 279.0. The common clinical feature of severe hypogammaglobulinemia is a predisposition toward infections that normally are defended against by antibody responses. These include but are not limited to reptococcus pneumoniae and Haemophilus influenzae",
+      "text_sha256": "0bc67451f0e179a210345fafac160e26d47a57ea1657036389e7d22b7d2c679b"
+    },
+    {
+      "id": "rag-dbda7c0d463e359a",
+      "chunk_id": "4d6cbe4e1c12469911bd_12",
+      "title": "Heart Failure: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/163062-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "weakness__heart_failure"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history",
+        "Heart Failure diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3071,
+      "excerpt": "congestion). Signs and symptoms of heart failure include tachycardia and manifestations of venous congestion (eg, edema) and low cardiac output (eg, fatigue). Breathlessness is a cardinal symptom of left ventricular (LV) failure that may manifest with progressively increasing severity. Heart failure can be classified according to a variety of factors (see Heart Failure Criteria, Classification, and Staging). The New York Heart Association (NYHA) classification for heart failure comprises four classes, based on the relationship between symptoms and the amount of effort required to provoke them,",
+      "text_sha256": "4bd23cfaccb51e340dbd78e014457ed9a90af1718713d0e2f527eda2a409d4f8"
+    },
+    {
+      "id": "rag-38134c3248cf44bc",
+      "chunk_id": "1c397c2658dff3862c56_10",
+      "title": "Vitamin B6: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2088627-overview",
+      "routes": [
+        "headache",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "weakness__vitamin_b6_deficiency"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history",
+        "weakness weakness red flags emergency warning signs urgent referral rule out",
+        "Vitamin B6 Deficiency diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2234,
+      "excerpt": "PLP analysis is indicated for the following: Evaluation of suspected vitamin B6 deficiency Diagnosis of hypophosphatasia Other manifestations of vitamin B6 deficiency may include the following: Scaling of the skin Severe gingivitis Cheilosis Stomatitis Irritability Weakness Dizziness Diarrhea Considerations Manifestations of vitamin B6 toxicity may include tachypnea and/or the following neurologic effects: Sensory neuropathy (eg, burning pains, paresthesias, perioral numbness) Progressive sensory ataxia Impaired proprioception Impaired vibration sense Diminished tendon reflexes",
+      "text_sha256": "e1f94e7106ac2afce3155e9c065f1f80415ffe1f9c2d03ebbdcd05a3e9b491e3"
+    },
+    {
+      "id": "rag-ddf0c10539eaee7b",
+      "chunk_id": "cb1baa74d2a5845bf3e2_2",
+      "title": "Vertebral Artery Dissection: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/761451-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4461,
+      "excerpt": "also have been reported. Many patients present only at the onset of neurologic symptoms. When neurologic dysfunction does occur, patients most commonly report symptoms attributable to lateral medullary dysfunction (ie, Wallenberg syndrome). Patient history may include the following: Ipsilateral facial dysesthesia (pain and numbness) - Most common symptom Dysarthria or hoarseness (cranial nerves [CN] IX and X) Contralateral loss of pain and temperature sensation in the trunk and limbs Ipsilateral loss of taste (nucleus and tractus solitarius) Hiccups Vertigo Nausea and vomiting Diplopia or",
+      "text_sha256": "e7fd6d1894682005c18fb08a99e7bad910e3c3c948701c708eb78c8f15cd13f3"
+    },
+    {
+      "id": "rag-399fee887cf27b3c",
+      "chunk_id": "e2c72cc25f09f98c22a0_7",
+      "title": "HIV-Associated Distal Painful Sensorimotor Polyneuropathy: Overview, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1167783-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.457,
+      "excerpt": "and intestinal function Physical findings include: Panmodal distal sensory loss Mild distal weakness Hyporeflexia or areflexia Symmetric presentation Autonomic signs (often can be elicited by careful evaluation) Differential Diagnosis The differential diagnosis of distal painful sensorimotor polyneuropathy includes: Acute Inflammatory Demyelinating Polyradiculoneuropathy Chronic Inflammatory Demyelinating Polyradiculoneuropathy Diabetic Neuropathy HIV-Associated Multiple Mononeuropathies Nutritional Neuropathy Toxic Neuropathy Uremic Neuropathy Vitamin B-12 Associated Neurological Diseases",
+      "text_sha256": "83abf917a132967008f669a53e696b83f9f4fb6d0777dc452eec71f4922f1bdb"
+    },
+    {
+      "id": "rag-8356ec010ed3ff6f",
+      "chunk_id": "87996f6a71b53073e20c_3",
+      "title": "Acute Hypopituitarism: Overview, Diagnostic Considerations, Hormone Deficiency Symptoms",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767828-overview",
+      "routes": [
+        "safety",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "weakness__hypopituitarism"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history",
+        "weakness weakness red flags emergency warning signs urgent referral rule out",
+        "Hypopituitarism diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3747,
+      "excerpt": "rate. The setting is not uncommon in which an emergency physician is evaluating a patient with complaints of weakness, fatigue, or altered mental status without a clear diagnosis. Subtle, but still abnormal, vital signs, such as slightly reduced blood pressure or heart rate, may be the only initial clues to suggest a pituitary deficiency rather than a relatively benign etiology. Emergency physicians frequently provide care to patients at risk of developing hypopituitarism. Risk factors include, but are not limited to, TBI, cocaine use, subarachnoid hemorrhage, and postpartum hypotension (a",
+      "text_sha256": "66493d5f742848008b29c1bb6e2ef99b7317d22019ad008feed96fe38c63f932"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "common",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "weakness__peripheral_neuropathy",
+        "weakness__hypopituitarism",
+        "weakness__infection"
+      ],
+      "retrieval_queries": [
+        "weakness weakness differential diagnosis diseases clinical presentation symptoms history",
+        "weakness weakness red flags emergency warning signs urgent referral rule out",
+        "Peripheral Neuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Hypopituitarism diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3973,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-09f5bf5fd5fee52e",
+      "chunk_id": "596cdd4cd1ee540afa22_6",
+      "title": "Rheumatoid Factor: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087091-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "weakness weakness red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5709,
+      "excerpt": "low-titer RF positivity can occur in the inflammatory disease sarcoidosis, while abnormally high RF levels can exist in the presence of leukemia, multiple myeloma, and other cancers. RF is also observed in 1-5% of healthy individuals. Thus, RF is not considered specific for RA. RF results may also be positive in patients without RA who have the following conditions: Systemic lupus erythematosus Polymyositis Tuberculosis Syphilis Viral hepatitis Infectious mononucleosis Influenza Indications/Applications RA is a chronic, autoimmune, peripheral polyarthropathy of unknown etiogenesis. The",
+      "text_sha256": "2eadd44adccf6efe29f4a66500aab40dd3eff0d527d50cbae803ba97fa4956d7"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "weakness weakness red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5272,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    },
+    {
+      "id": "rag-5dde9f8fb228c3bd",
+      "chunk_id": "60a8e9fb259d62f055c2_64",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "weakness__heart_failure"
+      ],
+      "retrieval_queries": [
+        "Heart Failure diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3435,
+      "excerpt": "of heart failure. Data from guidelines and studies Based on level A evidence from guidelines for the management of heart failure by the American College of Cardiology, American Heart Association, and the Heart Failure Society of America (ACC/AHA/HFSA), early measurement of BNP levels is recommended to support medical decision making in the diagnosis of acute heart failure, especially if there is clinical uncertainty, and to assess disease severity in chronic heart failure. Although the authors noted that serial BNP or NT-proBNP measurements have not been shown to improve meaningful outcomes",
+      "text_sha256": "2dc6aa83c156983195ae8d9d0d928f9d2d7443978984473f16b8f1d6e4d13119"
+    },
+    {
+      "id": "rag-ffc04298df227587",
+      "chunk_id": "536871af6462d18d854b_2",
+      "title": "Ischemic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916852-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "weakness__stroke"
+      ],
+      "retrieval_queries": [
+        "Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3772,
+      "excerpt": "neurologic deficit or any alteration in level of consciousness. Common stroke signs and symptoms include the following: Abrupt onset of hemiparesis, monoparesis, or (rarely) quadriparesis Hemisensory deficits Monocular or binocular visual loss Visual field deficits Diplopia Dysarthria Facial droop Ataxia Vertigo (rarely in isolation) Nystagmus Aphasia Sudden decrease in level of consciousness Although such symptoms can occur alone, they are more likely to occur in combination. No historical feature distinguishes ischemic from hemorrhagic stroke, although nausea, vomiting, headache, and sudden",
+      "text_sha256": "08c3fc70520a54c0cfbb79c8c6a6cb6799bd65cec892fd371b3de9cf705a3f55"
+    },
+    {
+      "id": "rag-e5ea3eafe991e33a",
+      "chunk_id": "fb667a66b0c052e9418e_2",
+      "title": "Hemorrhagic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916662-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "weakness__stroke"
+      ],
+      "retrieval_queries": [
+        "Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3963,
+      "excerpt": "Puzzles slideshow to help recognize diagnostic clues in vertigo cases. Signs and symptoms Patients with intracerebral bleeds are more likely than those with ischemic stroke to have headache, altered mental status, seizures, nausea and vomiting, and/or marked hypertension. Even so, none of these findings reliably distinguishes between hemorrhagic and ischemic stroke. Focal neurologic deficits The type of deficit depends on the area of brain involved. If the dominant (usually the left) hemisphere is involved, a syndrome consisting of the following may result: Right hemiparesis Right hemisensory",
+      "text_sha256": "d46a05c09019859b4bb142e4b7ab6e3eab8771922c2987f776b61d11724c2bfa"
+    },
+    {
+      "id": "rag-ae1f46fdf3eef001",
+      "chunk_id": "53fc3e4f98765d889be9_4",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "weakness__stroke"
+      ],
+      "retrieval_queries": [
+        "Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4223,
+      "excerpt": "disability. An estimated 80-85% of strokes are ischemic (either thrombosis or embolism), whereas 15-20% of strokes are hemorrhagic. Stroke syndromes can present along a wide spectrum of disease from transient ischemic attacks with complete resolution of symptoms to large intracranial hemorrhages with uncal or tonsillar herniation. Rapid evaluation and neuroimaging is standard of care for all patients with suspected strokes and guides the decision to administer thrombolytics, intra-arterial intervention, or medical management. Also see Ischemic Stroke in Emergency Medicine and Hemorrhagic",
+      "text_sha256": "a180011f6fbf0d9ab6f47dfed467deb49bf88d1928675e433dfef69024406d94"
+    },
+    {
+      "id": "rag-c11a2103e40596fa",
+      "chunk_id": "c3ac65c4ac2f328bf4e4_1",
+      "title": "Neuroimaging in Neurocysticercosis: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1168784-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "weakness__stroke",
+        "weakness__peripheral_neuropathy"
+      ],
+      "retrieval_queries": [
+        "Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Peripheral Neuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3372,
+      "excerpt": "is associated with clinical manifestations such as seizures, headache, and focal neurological deficits, and may lead to long-term neurological sequelae such as epilepsy, hydrocephalus, and dementia. The pleomorphism of NC makes its diagnosis impossible on clinical grounds alone. An accurate diagnosis is possible only after suspicion on epidemiologic grounds, proper interpretation of clinical data, and synthesis of findings on neuroimaging studies specific immunologic tests on the cerebrospinal fluid (CSF). Biology Humans are the only known host to harbor the adult cestode parasite, Taenia",
+      "text_sha256": "12c0822d631284eb661059f36827e76af0801c89a1c2136bdfd59a506e9c8297"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "headache",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "weakness__peripheral_neuropathy"
+      ],
+      "retrieval_queries": [
+        "Peripheral Neuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3858,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-ff175cd271f88014",
+      "chunk_id": "6abb4726efd0e023f805_11",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "weakness__peripheral_neuropathy"
+      ],
+      "retrieval_queries": [
+        "Peripheral Neuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3785,
+      "excerpt": "with predominantly sensory symptoms, those with a distal symmetric disorder (DADS), those with multifocal sensorimotor neuropathy or sensorimotor mononeuropathy multiplex with prominent conduction block (also known as Lewis-Sumner neuropathy), and those with CIDP with associated CNS demyelination or with other systemic disorders. The following disorders are considered distinct from CIDP because they have specific pathophysiologic features and respond to treatments differently than do patients with CIDP: Demyelinating neuropathies associated with immunoglobulin M (IgM) paraproteins, including",
+      "text_sha256": "9bcc687a6e728f319204b3de3fc10d7168b581aebb57ba68bafb0dddb461ee00"
+    },
+    {
+      "id": "rag-424824307f04a9b2",
+      "chunk_id": "3ac4b5dd65eac6134854_24",
+      "title": "Dermatologic Manifestations of Vitamin A Deficiency: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1104441-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "weakness__vitamin_b6_deficiency"
+      ],
+      "retrieval_queries": [
+        "Vitamin B6 Deficiency diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.367,
+      "excerpt": "A include those with liver disease that causes abnormal or decreased storage of vitamin A. Patients receiving total parenteral nutrition can also show signs and symptoms of avitaminosis A secondary to loss of vitamin A with prolonged use. Avitaminosis A is a problem wherever the combination of vitamin A and protein deficiency exists. In developed countries, VAD is a rare condition. However, it is a problem of enormous magnitude worldwide, particularly in the underdeveloped regions of Asia, where the diet often consists of little more than rice. Avitaminosis A is fairly well controlled in much",
+      "text_sha256": "57dc573f22d050c5f5f3765145f35261c42a24e562571f16684a108c79196226"
+    },
+    {
+      "id": "rag-4343f2b13be17427",
+      "chunk_id": "3ac4b5dd65eac6134854_19",
+      "title": "Dermatologic Manifestations of Vitamin A Deficiency: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1104441-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "weakness__vitamin_b6_deficiency"
+      ],
+      "retrieval_queries": [
+        "Vitamin B6 Deficiency diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3834,
+      "excerpt": "severity of infections. Thus, low plasma vitamin A levels may compromise immune function by impairing epithelial integrity and by depressing lymphocyte numbers, and, although the capacity of immune cells may still be normal, the overall immune response is depressed. Vitamin A has essentially 2 roles in ocular metabolism. First, in the retina, vitamin A serves as a precursor to the photosensitive visual pigments that participate in the initiation of neural impulses from the photoreceptors. Second, it is necessary for conjunctival epithelial cell ribonucleic acid (RNA) and glycoprotein",
+      "text_sha256": "be504ad973739f41c75c9f3986a41d39d81ae98884d530b73fad6757a16e0a5a"
+    },
+    {
+      "id": "rag-d787436ca0bf7434",
+      "chunk_id": "5c3913e529bc6c5906e6_0",
+      "title": "Vitamin A Deficiency: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/126004-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "weakness__vitamin_b6_deficiency"
+      ],
+      "retrieval_queries": [
+        "Vitamin B6 Deficiency diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4088,
+      "excerpt": "Overview Practice Essentials Deficiency of vitamin A is found among malnourished, elderly, and chronically sick populations in the United States, but it is more prevalent in developing countries. Signs and symptoms of tamin A deficiency Subclinical forms of vitamin A deficiency (VAD) may not cause any symptoms, but the risk of respiratory and diarrheal infections is increased, the growth rate is reduced, and bone development is slowed.bnormal visual adaptation to darkness, dry skin, dry hair, broken fingernails, and decreased resistance to infections are among the first signs of VAD. See",
+      "text_sha256": "1907c381cb0cdaaaa14c4c476a5ea3925a4218ab948fb0c2ef91be93c050e58f"
+    },
+    {
+      "id": "rag-18f04b5069cffd05",
+      "chunk_id": "99c2174bb4c698913cb0_14",
+      "title": "Hypoparathyroidism in Emergency Medicine: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767744-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "weakness__hypopituitarism"
+      ],
+      "retrieval_queries": [
+        "Hypopituitarism diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.446,
+      "excerpt": "sensorineural deafness and renal disease [HDR syndrome (Barakat syndrome)]) Tooth malformation Intellectual disability (with HDR syndrome [Barakat syndrome]) Hypothyroidism Cardiomyopathy Parkinsonian symptoms Ossification of paravertebral ligaments Adhesive capsulitis Clinical Presentation",
+      "text_sha256": "7a98259f836489b375a21128dd2460879c7e5e07c3a5c62f19760448520839f4"
+    },
+    {
+      "id": "rag-c45f111ad36ff7c4",
+      "chunk_id": "6bf3610cae447cfa658b_1",
+      "title": "Hypophosphatemia in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767955-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "weakness__hypopituitarism"
+      ],
+      "retrieval_queries": [
+        "Hypopituitarism diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4056,
+      "excerpt": "is the most common symptom suggesting hypophosphatemia and may involve any muscular system to any extent. Other symptoms include the following: Diplopia Dysarthria Dysphagia Symptoms of respiratory insufficiency or myocardial depression may indicate hypophosphatemia. Neurologic symptoms may range from simple paresthesias to profound alterations in mental status. See Presentation for more detail. Diagnosis 9pophosphatemia Laboratory studies Hypophosphatemia is defined as mild (2-2.5 mg/dL), moderate (1-2 mg/dL), or severe (< 1 mg/dL).bnormalities in serum magnesium, calcium, and potassium",
+      "text_sha256": "091eb6dafa0e57aab855c5c76e928572ad6ff8466d6a7a63513e46ed6f4bee8e"
+    },
+    {
+      "id": "rag-df30ee352c228b98",
+      "chunk_id": "a663d18c5f77da4d66fd_26",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "weakness__infection"
+      ],
+      "retrieval_queries": [
+        "Infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4678,
+      "excerpt": "specific meningeal signs, such as the Kernig or Brudzinski sign, may not be present. A hemorrhagic rash is classically described as resulting from overwhelming systemic bacterial infection due to meningococcemia but may be due to other (usually serious) infections. The presence of petechiae or purpura in febrile children indicates the need for prompt evaluation and therapy. Clinical observation scales have been developed to aid in the determination of the degree of illness. Clinical observation by house staff and seasoned clinicians has produced inconsistent results over the reliability and",
+      "text_sha256": "b03f8637294b3e707e6947f97f5ce6c6972647fa1b7817bd9b5c591b70b9bcf1"
+    },
+    {
+      "id": "rag-47d02d2df5d6263a",
+      "chunk_id": "8c0fd3de343713eb7a55_43",
+      "title": "Vaccinia: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/231773-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "weakness__infection"
+      ],
+      "retrieval_queries": [
+        "Infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4937,
+      "excerpt": "by those receiving vaccinia vaccine is a constellation of symptoms called acute vaccinia syndrome. This is characterized by fever, headache, myalgias, and fatigue. Research suggests that a person's risk of developing fever following inoculation with vaccinia vaccine may to some extent be predicted by genetic analysis. Mortality due to generalized vaccinia or erythematous rash has not been reported. Differences in human morbidity and mortality associated with newer forms of vaccinia vaccine are not yet established. However, studies evaluating certain later generations of vaccinia vaccine may be",
+      "text_sha256": "be4bc357b5ba43548d85dcccc14cb79ab3e6842932dc17eaf0fd7a09fb6ff49d"
+    },
+    {
+      "id": "rag-bcbb563b4c3d5099",
+      "chunk_id": "0ea09dc2a01d498032ed_7",
+      "title": "Mediterranean Spotted Fever (Boutonneuse Fever): Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/221240-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "weakness__infection"
+      ],
+      "retrieval_queries": [
+        "Infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4738,
+      "excerpt": "isolated lymphadenopathy is the only symptom. R conorii infection should be considered in patients with isolated lymphadenopathy who live in or have traveled to an endemic area, even when other more specific features are not present. In this setting, care should be taken to examine the area distal to the lymphadenopathy for an inoculation eschar, which, if present, can help support the diagnosis. Although MSF is usually a mild disease, severe complications including neurologic involvement does occur in 6-10% of cases. Neurologic manifestations can result in a delayed diagnosis and appropriate",
+      "text_sha256": "b21bb80283510ba7b468e22993af591f010341c4666b4746bc55a929dd3f86f1"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "weakness__heart_failure",
+      "name": "Heart Failure",
+      "retrieval_query": "Heart Failure diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-dbda7c0d463e359a"
+      ],
+      "disease_rag_source_ids": [
+        "rag-22a1ffa4afb4901f",
+        "rag-dbda7c0d463e359a",
+        "rag-5dde9f8fb228c3bd"
+      ]
+    },
+    {
+      "id": "weakness__stroke",
+      "name": "Stroke",
+      "retrieval_query": "Stroke diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-ddf0c10539eaee7b"
+      ],
+      "disease_rag_source_ids": [
+        "rag-ffc04298df227587",
+        "rag-e5ea3eafe991e33a",
+        "rag-ae1f46fdf3eef001",
+        "rag-c11a2103e40596fa"
+      ]
+    },
+    {
+      "id": "weakness__peripheral_neuropathy",
+      "name": "Peripheral Neuropathy",
+      "retrieval_query": "Peripheral Neuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-399fee887cf27b3c"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-c11a2103e40596fa",
+        "rag-5bcac9eab5404341",
+        "rag-ff175cd271f88014"
+      ]
+    },
+    {
+      "id": "weakness__vitamin_b6_deficiency",
+      "name": "Vitamin B6 Deficiency",
+      "retrieval_query": "Vitamin B6 Deficiency diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-38134c3248cf44bc"
+      ],
+      "disease_rag_source_ids": [
+        "rag-38134c3248cf44bc",
+        "rag-424824307f04a9b2",
+        "rag-4343f2b13be17427",
+        "rag-d787436ca0bf7434"
+      ]
+    },
+    {
+      "id": "weakness__hypopituitarism",
+      "name": "Hypopituitarism",
+      "retrieval_query": "Hypopituitarism diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-8356ec010ed3ff6f"
+      ],
+      "disease_rag_source_ids": [
+        "rag-8356ec010ed3ff6f",
+        "rag-f09c5253c7a82445",
+        "rag-18f04b5069cffd05",
+        "rag-c45f111ad36ff7c4"
+      ]
+    },
+    {
+      "id": "weakness__infection",
+      "name": "Infection",
+      "retrieval_query": "Infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-5f400608c51ca1d6"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-df30ee352c228b98",
+        "rag-47d02d2df5d6263a",
+        "rag-bcbb563b4c3d5099"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "weakness",
+    "evidence_status": "sufficient",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-dbda7c0d463e359a",
+        "rag-ffc04298df227587",
+        "rag-e5ea3eafe991e33a",
+        "rag-5bcac9eab5404341",
+        "rag-ff175cd271f88014",
+        "rag-38134c3248cf44bc",
+        "rag-8356ec010ed3ff6f",
+        "rag-47d02d2df5d6263a",
+        "rag-df30ee352c228b98"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "weakness__heart_failure__fatigue",
+        "description": "疲勞感。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "weakness__heart_failure"
+        ],
+        "source_ids": [
+          "rag-dbda7c0d463e359a"
+        ]
+      },
+      {
+        "code": "weakness__heart_failure__breathlessness",
+        "description": "呼吸困難。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "weakness__heart_failure"
+        ],
+        "source_ids": [
+          "rag-dbda7c0d463e359a"
+        ]
+      },
+      {
+        "code": "weakness__peripheral_neuropathy__distal_weakness",
+        "description": "Weakness primarily affecting the distal limbs (hands or feet).",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "weakness__peripheral_neuropathy"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "code": "weakness__vitamin_b6_deficiency__dizziness",
+        "description": "頭暈。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "weakness__vitamin_b6_deficiency"
+        ],
+        "source_ids": [
+          "rag-38134c3248cf44bc"
+        ]
+      },
+      {
+        "code": "weakness__vitamin_b6_deficiency__diarrhea",
+        "description": "腹瀉。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "weakness__vitamin_b6_deficiency"
+        ],
+        "source_ids": [
+          "rag-38134c3248cf44bc"
+        ]
+      },
+      {
+        "code": "weakness__hypopituitarism__fatigue",
+        "description": "感到疲勞。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "weakness__hypopituitarism"
+        ],
+        "source_ids": [
+          "rag-8356ec010ed3ff6f"
+        ]
+      },
+      {
+        "code": "weakness__infection__fatigue",
+        "description": "全身疲勞或倦怠感。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "weakness__infection"
+        ],
+        "source_ids": [
+          "rag-47d02d2df5d6263a"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "location_of_weakness",
+        "option": "全身無力",
+        "mapping": {
+          "findings": [
+            "weakness__heart_failure__fatigue",
+            "focal_neurologic_symptom",
+            "weakness__hypopituitarism__fatigue",
+            "weakness__infection__fatigue"
+          ]
+        },
+        "disease_ids": [
+          "weakness__heart_failure",
+          "weakness__vitamin_b6_deficiency",
+          "weakness__hypopituitarism",
+          "weakness__infection"
+        ],
+        "source_ids": [
+          "rag-dbda7c0d463e359a",
+          "rag-38134c3248cf44bc",
+          "rag-8356ec010ed3ff6f",
+          "rag-47d02d2df5d6263a"
+        ]
+      },
+      {
+        "field": "generalized_weakness_symptoms",
+        "option": "胸痛，胸悶或是喘",
+        "mapping": {
+          "findings": [
+            "weakness__heart_failure__breathlessness",
+            "symptom_chest_pain",
+            "dyspnea",
+            "chest_pressure"
+          ]
+        },
+        "disease_ids": [
+          "weakness__heart_failure"
+        ],
+        "source_ids": [
+          "rag-dbda7c0d463e359a",
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a",
+          "rag-ae1f46fdf3eef001",
+          "rag-c11a2103e40596fa",
+          "rag-8356ec010ed3ff6f",
+          "rag-f09c5253c7a82445",
+          "rag-18f04b5069cffd05",
+          "rag-c45f111ad36ff7c4"
+        ]
+      },
+      {
+        "field": "location_of_weakness",
+        "option": "半側身體無力",
+        "mapping": {
+          "findings": [
+            "focal_weakness"
+          ]
+        },
+        "disease_ids": [
+          "weakness__stroke",
+          "weakness__peripheral_neuropathy"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a",
+          "rag-c11a2103e40596fa",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "field": "generalized_weakness_symptoms",
+        "option": "頭暈",
+        "mapping": {
+          "findings": [
+            "dizziness_unspecified",
+            "weakness__vitamin_b6_deficiency__dizziness"
+          ]
+        },
+        "disease_ids": [
+          "weakness__stroke",
+          "weakness__vitamin_b6_deficiency"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-38134c3248cf44bc",
+          "rag-8356ec010ed3ff6f",
+          "rag-f09c5253c7a82445",
+          "rag-18f04b5069cffd05",
+          "rag-c45f111ad36ff7c4"
+        ]
+      },
+      {
+        "field": "generalized_weakness_symptoms",
+        "option": "發燒",
+        "mapping": {
+          "findings": [
+            "fever"
+          ]
+        },
+        "disease_ids": [
+          "weakness__infection"
+        ],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a",
+          "rag-ae1f46fdf3eef001",
+          "rag-c11a2103e40596fa",
+          "rag-8356ec010ed3ff6f",
+          "rag-f09c5253c7a82445",
+          "rag-18f04b5069cffd05",
+          "rag-c45f111ad36ff7c4",
+          "rag-47d02d2df5d6263a",
+          "rag-df30ee352c228b98"
+        ]
+      },
+      {
+        "field": "generalized_weakness_symptoms",
+        "option": "咳嗽，有痰，流鼻水",
+        "mapping": {
+          "findings": [
+            "cough_sputum"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a",
+          "rag-ae1f46fdf3eef001",
+          "rag-c11a2103e40596fa",
+          "rag-8356ec010ed3ff6f",
+          "rag-f09c5253c7a82445",
+          "rag-18f04b5069cffd05",
+          "rag-c45f111ad36ff7c4"
+        ]
+      },
+      {
+        "field": "generalized_weakness_symptoms",
+        "option": "腹痛，上吐下瀉",
+        "mapping": {
+          "findings": [
+            "symptom_abdominal_pain",
+            "vomiting",
+            "diarrhea",
+            "weakness__vitamin_b6_deficiency__diarrhea"
+          ]
+        },
+        "disease_ids": [
+          "weakness__stroke",
+          "weakness__vitamin_b6_deficiency"
+        ],
+        "source_ids": [
+          "rag-e5ea3eafe991e33a",
+          "rag-38134c3248cf44bc",
+          "rag-8356ec010ed3ff6f",
+          "rag-f09c5253c7a82445",
+          "rag-18f04b5069cffd05",
+          "rag-c45f111ad36ff7c4"
+        ]
+      },
+      {
+        "field": "location_of_weakness",
+        "option": "手臂無力",
+        "mapping": {
+          "findings": [
+            "weakness__peripheral_neuropathy__distal_weakness"
+          ]
+        },
+        "disease_ids": [
+          "weakness__peripheral_neuropathy"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "field": "location_of_weakness",
+        "option": "腳無力",
+        "mapping": {
+          "findings": [
+            "weakness__peripheral_neuropathy__distal_weakness"
+          ]
+        },
+        "disease_ids": [
+          "weakness__peripheral_neuropathy"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "weakness__heart_failure",
+        "name": "Heart Failure",
+        "must_not_miss": false,
+        "retrieval_query": "Heart Failure diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "weakness__heart_failure__fatigue",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-dbda7c0d463e359a"
+            ]
+          },
+          {
+            "fact": "weakness__heart_failure__breathlessness",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-dbda7c0d463e359a"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-dbda7c0d463e359a"
+        ]
+      },
+      {
+        "id": "weakness__peripheral_neuropathy",
+        "name": "Peripheral Neuropathy",
+        "must_not_miss": false,
+        "retrieval_query": "Peripheral Neuropathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "weakness__peripheral_neuropathy__distal_weakness",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-c11a2103e40596fa",
+              "rag-5bcac9eab5404341",
+              "rag-ff175cd271f88014"
+            ]
+          },
+          {
+            "fact": "focal_weakness",
+            "status": "present",
+            "direction": "oppose",
+            "weight": 1,
+            "source_ids": [
+              "rag-ff175cd271f88014"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "id": "weakness__vitamin_b6_deficiency",
+        "name": "Vitamin B6 Deficiency",
+        "must_not_miss": false,
+        "retrieval_query": "Vitamin B6 Deficiency diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "focal_neurologic_symptom",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-38134c3248cf44bc"
+            ]
+          },
+          {
+            "fact": "weakness__vitamin_b6_deficiency__dizziness",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-38134c3248cf44bc"
+            ]
+          },
+          {
+            "fact": "weakness__vitamin_b6_deficiency__diarrhea",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-38134c3248cf44bc"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-38134c3248cf44bc"
+        ]
+      },
+      {
+        "id": "weakness__hypopituitarism",
+        "name": "Hypopituitarism",
+        "must_not_miss": false,
+        "retrieval_query": "Hypopituitarism diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "weakness__hypopituitarism__fatigue",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-8356ec010ed3ff6f"
+            ]
+          },
+          {
+            "fact": "focal_weakness",
+            "status": "absent",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-f09c5253c7a82445"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-8356ec010ed3ff6f",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "id": "weakness__infection",
+        "name": "Infection",
+        "must_not_miss": false,
+        "retrieval_query": "Infection diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "weakness__infection__fatigue",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-47d02d2df5d6263a"
+            ]
+          },
+          {
+            "fact": "fever",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-47d02d2df5d6263a",
+              "rag-df30ee352c228b98"
+            ]
+          },
+          {
+            "fact": "symptom_headache",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-47d02d2df5d6263a"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-47d02d2df5d6263a",
+          "rag-df30ee352c228b98"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_weakness__peripheral_neuropathy__focal_neurologic_deficits",
+        "label": "Weakness with other focal neurologic deficits",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "weakness"
+          ],
+          "any_findings": [
+            "focal_weakness",
+            "diplopia",
+            "gait_unsteadiness",
+            "speech_difficulty"
+          ]
+        },
+        "possible_conditions": [
+          "Stroke",
+          "Neurocysticercosis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Create safety rules for Heart Failure.",
+        "reason": "The provided RAG sources describe symptoms like breathlessness and fatigue but do not contain specific red flag criteria, thresholds, or combinations of symptoms that would warrant an immediate urgent disposition based on this evidence alone."
+      },
+      {
+        "requirement": "Differentiate stages of Heart Failure (e.g., NYHA classes).",
+        "reason": "The provided RAG sources mention staging systems (NYHA, ACC/AHA) but do not provide sufficient detail on the specific symptom criteria for each stage to implement in a questionnaire logic."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Differentiate between ischemic and hemorrhagic stroke.",
+        "reason": "The provided RAG sources state that historical features alone cannot reliably distinguish between ischemic and hemorrhagic stroke (rag-ffc04298df227587, rag-e5ea3eafe991e33a). This differentiation requires neuroimaging."
+      },
+      {
+        "requirement": "Assess for specific stroke syndromes like Wallenberg syndrome.",
+        "reason": "The model cannot perform complex neurological examinations or synthesize specific patterns of deficits (e.g., ipsilateral vs. contralateral symptoms) required to diagnose specific stroke syndromes mentioned in the RAG sources (rag-ddf0c10539eaee7b)."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create fact codes for specific sensory symptoms like numbness or tingling from the text field 'limb_weakness_symptoms'.",
+        "reason": "The system cannot reliably parse specific symptoms from free-text fields. A new fact code for generic sensory symptoms has been proposed instead."
+      },
+      {
+        "requirement": "Differentiate between various subtypes of peripheral neuropathy (e.g., DADS, Lewis-Sumner neuropathy).",
+        "reason": "The provided RAG sources mention various subtypes but do not provide sufficient detail on distinguishing clinical features suitable for a patient-facing questionnaire."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create facts for other symptoms of Vitamin B6 deficiency mentioned in the RAG source, such as 'Scaling of the skin', 'Severe gingivitis', 'Cheilosis', 'Stomatitis', and 'Irritability'.",
+        "reason": "The current questionnaire does not ask about skin, mouth, or mood symptoms, so these facts cannot be mapped to any user-selectable options."
+      },
+      {
+        "requirement": "Create facts for symptoms of Vitamin B6 toxicity, such as 'tachypnea', 'sensory neuropathy', 'paresthesias', 'perioral numbness', 'progressive sensory ataxia', 'impaired proprioception', 'impaired vibration sense', and 'diminished tendon reflexes'.",
+        "reason": "These are signs of toxicity, not deficiency, and are largely technical findings from a physical exam which are beyond the scope of a patient-facing questionnaire."
+      },
+      {
+        "requirement": "Detect specific vital sign abnormalities (e.g., slightly reduced blood pressure or heart rate) associated with Hypopituitarism.",
+        "reason": "The model cannot process specific numeric vital sign values or ranges. This requires clinical measurement and interpretation."
+      },
+      {
+        "requirement": "Detect specific laboratory abnormalities (e.g., hypophosphatemia, abnormal magnesium, calcium, potassium) associated with Hypopituitarism.",
+        "reason": "The model cannot process laboratory test results. This requires clinical testing and interpretation."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Create specific safety rules for neurologic involvement in Mediterranean Spotted Fever.",
+        "reason": "The provided RAG source mentions neurologic involvement as a severe complication but does not detail the specific neurologic manifestations to create actionable rules."
+      },
+      {
+        "requirement": "Create specific safety rules for red flags associated with syncope.",
+        "reason": "The provided RAG source lists red flags for syncope (e.g., exertional onset, chest pain, focal neurologic deficits), but these are not directly tied to the primary complaint of weakness and would require a different context or route for appropriate implementation."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-dbda7c0d463e359a"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The profile for Stroke has been created as a 'must_not_miss' condition due to the high acuity and potential for severe disability associated with this diagnosis. The safety rule is designed to capture the classic sudden onset of focal neurological deficits.",
+        "source_ids": [
+          "rag-ae1f46fdf3eef001"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: semantic_options[2], semantic_options[3], semantic_options[5], profiles[0].clues[8]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-ffc04298df227587",
+          "rag-e5ea3eafe991e33a",
+          "rag-ae1f46fdf3eef001",
+          "rag-c11a2103e40596fa"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The fact 'focal_weakness' is used to oppose Peripheral Neuropathy based on sources emphasizing symmetric presentation. However, some variants can be multifocal or asymmetric, so this is a simplification for a screening context.",
+        "source_ids": [
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-5bcac9eab5404341",
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[1], fact_proposals[2], semantic_options[0], semantic_options[1], profiles[0], profiles[0].clues[0], profiles[0].clues[2]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The provided RAG sources for Vitamin B6 Deficiency (rag-424824307f04a9b2, rag-4343f2b13be17427, rag-d787436ca0bf7434) are about Vitamin A deficiency, not Vitamin B6. The only relevant source is rag-38134c3248cf44bc. The profile and facts for Vitamin B6 Deficiency are based solely on this single source.",
+        "source_ids": [
+          "rag-38134c3248cf44bc",
+          "rag-424824307f04a9b2",
+          "rag-4343f2b13be17427",
+          "rag-d787436ca0bf7434"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-8356ec010ed3ff6f",
+          "rag-c45f111ad36ff7c4",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: semantic_options[1], semantic_options[2], semantic_options[3], semantic_options[4], semantic_options[5]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-8356ec010ed3ff6f",
+          "rag-f09c5253c7a82445",
+          "rag-18f04b5069cffd05",
+          "rag-c45f111ad36ff7c4"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-47d02d2df5d6263a",
+          "rag-df30ee352c228b98"
+        ]
+      }
+    ]
+  }
+}

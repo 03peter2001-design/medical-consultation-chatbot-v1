@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "laceration",
+  "label": "撕裂傷",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "88cdab597e94e0a153e35ef39b2cd5ee19df603bc14a0be012a3204e3efd6552",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"laceration laceration differential diagnosis diseases clinical presentation symptoms history\",\"laceration laceration red flags emergency warning signs urgent referral rule out\"]",
+    "rag_corpus_hash": "a830ecfc106ba123bc21965f0dd467325c85ad215c417ff5877112ef9085b803"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "3c6ee57d5c15b34c05c164adcf5237a7d83abbbd72886c6ff138177e8ad058bd",
+    "generated_at": "2026-08-10T04:09:27+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-d353a4932ca7f2bb",
+      "chunk_id": "be353e430656d56e4a36_28",
+      "title": "Turf Toe: Practice Essentials, Anatomy, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1236962-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "laceration laceration differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4359,
+      "excerpt": "At final follow-up, all patients had a negative Lachman test. None of the patients developed major complications or required revision surgery. At present, the incidence of persistent symptoms and late-onset sequelae requires further understanding. In the literature, the incidence of persistent symptoms has been as high as 50% after 5 years. Although acutely based injuries to the plantar plate and surrounding structures are better defined today, less information is available regarding the management of chronic or late diagnosed injuries. Above all, turf toe clearly represents a significant",
+      "text_sha256": "a1879159ea5a3e83c897e7ee52b496d76be22fcdca5ed61ec5a23ea89aa87b0f"
+    },
+    {
+      "id": "rag-4d0ae07b2ef9d1cd",
+      "chunk_id": "aa11461a199a6bb61230_7",
+      "title": "Anal Fistulas and Fissures: Background, Pathophysiology and Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/776150-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "laceration laceration differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4632,
+      "excerpt": "bowel disease, particularly Crohn disease. The incidence of fissures in Crohn disease is 30-50%. Perianal activity often parallels abdominal disease activity, but it may occasionally be the primary site of active disease. Anal fistulas can also be associated with diverticulitis, foreign-body reactions, actinomycosis, chlamydia, lymphogranuloma venereum (LGV), syphilis, tuberculosis, radiation exposure, and HIV disease. Approximately 30% of patients with HIV disease develop anorectal abscesses and fistulas. Anal fistulas are classified into the following four general types: Intersphincteric:",
+      "text_sha256": "3716b5c97743133d53fc3a1c0ccf15fb233fd4a1d3ed3f5d5ec6139565fbe598"
+    },
+    {
+      "id": "rag-9eb0e43b0d1a29b0",
+      "chunk_id": "4d07a571dd8fc318526e_3",
+      "title": "Urinary Tract Infection (UTI) and Cystitis (Bladder Infection) in Females: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/233101-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "laceration laceration differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4775,
+      "excerpt": "to infection. Signs and symptoms Symptoms and signs of UTI in adults are as follows: Dysuria Urinary urgency and frequency A sensation of bladder fullness or lower abdominal discomfort Suprapubic tenderness Flank pain and costovertebral angle tenderness (may be present in cystitis but suggest upper UTI) Bloody urine Fevers, chills, and malaise (may be noted in patients with cystitis, but more frequently associated with upper UTI) See Clinical Presentation for more detail. Diagnosis Diagnostic studies for UTI consist of dipstick, urinalysis, and culture. No imaging studies are indicated in the",
+      "text_sha256": "737cab1db7772b20016ea4aa8169e363e34ac1ace709ab6aadd104402ae691e2"
+    },
+    {
+      "id": "rag-23bfe2d2025adc80",
+      "chunk_id": "aa11461a199a6bb61230_0",
+      "title": "Anal Fistulas and Fissures: Background, Pathophysiology and Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/776150-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "laceration laceration differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4843,
+      "excerpt": "Overview Background An anal fissure is a superficial linear tear in the anoderm that is distal to the dentate line. Anal fissures are often associated with local trauma such as the passage of hard stools or anal trauma, but can also be due to secondary causes such as inflammatory bowel disease. Anal fissures are among the most common anorectal disorders in the pediatric population. Adults are also affected, although it is thought to be underreported in the adult population. Fissures are defined as acute if present for less than 8 weeks, and they are defined as chronic if present for more than",
+      "text_sha256": "c97f2b6a486fe06e51b025de02bfbca483be46cbf0688489b99074ad09f7d053"
+    },
+    {
+      "id": "rag-d28ebb49bb7c15d4",
+      "chunk_id": "0b4e124e43266b2d82b6_21",
+      "title": "Neurological Sequelae of Infectious Endocarditis: Infective Endocarditis and the CNS, Etiology of CNS Sequelae, Epidemiology of CNS Sequelae",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165712-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "laceration laceration differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5499,
+      "excerpt": "metastatic brain disease, herpes simplex encephalitis, orbital cellulitis, and carotid disease and stroke should also be considered in the differential diagnosis. Diagnosis of CNS Sequelae Cerebrospinal fluid examination In the Massachusetts General Hospital series of 218 patients, 33 had meningeal symptoms (15%). Of patients with CNS involvement from infective endocarditis, one third had completely normal cerebrospinal fluid (CSF), one fourth had a slightly abnormal CSF but an aseptic culture, and one fourth had frankly purulent CSF. Noteworthy as well is that one sixth had hemorrhagic fluid.",
+      "text_sha256": "f98e813835d89c8700502e851754fc84e41fef6ea7d4ce08932f1a8db9173930"
+    },
+    {
+      "id": "rag-9dec2337e6ed2419",
+      "chunk_id": "8d6e2449a8364432e44d_15",
+      "title": "Esophageal Rupture and Tears in Emergency Medicine: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/775165-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "laceration laceration differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5507,
+      "excerpt": "difficulty in making the diagnosis, followed by iatrogenic (19%) and traumatic perforations (7%). Cervical perforations portend a lower mortality compared with abdominal and thoracic perforations due to containment of potential contamination by tight fascial attachments and mechanisms, which may make injury more obvious. Treatment delays and misdiagnosis of the condition contribute significantly to higher rates of morbidity and mortality. Diagnostic errors are prevalent, and esophageal ruptures can be confused with equally serious conditions such as acute myocardial infarction, perforated",
+      "text_sha256": "85cfb4765728bc0b9925f5dfce31d0b410470aef106915a8486590144206c3a2"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "laceration laceration differential diagnosis diseases clinical presentation symptoms history",
+        "laceration laceration red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5547,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-8f3681ecdd464c42",
+      "chunk_id": "9aeedc640c68352d7494_29",
+      "title": "Dysmenorrhea: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/253812-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "laceration laceration differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5637,
+      "excerpt": "medical therapy fails or if peritoneal signs are found on examination, surgical drainage is indicated. Infertility is almost always a complication of tubo-ovarian abscess. The most feared complication, however, is rupture, which can lead to septic shock and death; this is a true surgical emergency. Ovarian torsion Ovarian torsion involves twisting of the adnexal structures, which leads to ischemia and ultimately necrosis if the process is not reversed in time. In a nonpregnant woman, it is almost always caused by an abnormality in the ovary, such as a cyst or a tumor. Torsion can occur in",
+      "text_sha256": "7e95bfdd6703ba98f5850e0af64d63518fb4a608b618b14d433561c839382863"
+    }
+  ],
+  "disease_candidates": [],
+  "proposal": {
+    "route": "laceration",
+    "evidence_status": "insufficient",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-d353a4932ca7f2bb"
+      ]
+    },
+    "fact_proposals": [],
+    "semantic_options": [],
+    "profile_status": "insufficient_evidence",
+    "profiles": [],
+    "safety_proposals": [],
+    "unsupported_requirements": [],
+    "review_notes": []
+  }
+}

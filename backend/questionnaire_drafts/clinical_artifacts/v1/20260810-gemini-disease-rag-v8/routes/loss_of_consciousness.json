@@ -1,0 +1,433 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "loss_of_consciousness",
+  "label": "失去意識",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "77f1949a6b722cc5f3162cd1a6ac50192190f67ca947d1b9aa2f7979dc53bb19",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"loss of consciousness unconscious differential diagnosis diseases clinical presentation symptoms history\",\"loss of consciousness unconscious red flags emergency warning signs urgent referral rule out\"]",
+    "rag_corpus_hash": "01802c7e4b044d9e1042e3b199c82b3b9f80a3f0874dcf959b881d0dade3665e"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "6b62e7b80bfa77bd881fa4ea5fa1f62ac44a2bebb530e719cbb01c4f90e7f8fc",
+    "generated_at": "2026-08-10T04:08:28+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest",
+        "safety",
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "loss of consciousness unconscious differential diagnosis diseases clinical presentation symptoms history",
+        "loss of consciousness unconscious red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4306,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-c11a2103e40596fa",
+      "chunk_id": "c3ac65c4ac2f328bf4e4_1",
+      "title": "Neuroimaging in Neurocysticercosis: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1168784-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "loss of consciousness unconscious differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.358,
+      "excerpt": "is associated with clinical manifestations such as seizures, headache, and focal neurological deficits, and may lead to long-term neurological sequelae such as epilepsy, hydrocephalus, and dementia. The pleomorphism of NC makes its diagnosis impossible on clinical grounds alone. An accurate diagnosis is possible only after suspicion on epidemiologic grounds, proper interpretation of clinical data, and synthesis of findings on neuroimaging studies specific immunologic tests on the cerebrospinal fluid (CSF). Biology Humans are the only known host to harbor the adult cestode parasite, Taenia",
+      "text_sha256": "12c0822d631284eb661059f36827e76af0801c89a1c2136bdfd59a506e9c8297"
+    },
+    {
+      "id": "rag-d1bc752827795cad",
+      "chunk_id": "dde91349b90002a67a04_14",
+      "title": "Factitious Disorder Imposed on Another (Munchausen by proxy): Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/295258-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "loss of consciousness unconscious differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3927,
+      "excerpt": "disabled person), the principal diagnosis is malingering. However, in many cases of FDIA, there is tangible gain that appears to be secondary to the non-tangible gain. FDIA and malingering are not mutually exclusive. Most of the symptoms in known and documented cases are physical complaints; feigning of behavioral symptoms appears to occur to a lesser extent. However, the full range of presentations is essentially unlimited. Physical presentations commonly include vomiting, diarrhea, respiratory arrest, asthma, seizure, recurrent conjunctivitis, clumsiness, syncope, fever, infection, bleeding,",
+      "text_sha256": "06df57f0e93ed86975fc7a205eeb6f8b963465e59df8246e641381247fa106c9"
+    },
+    {
+      "id": "rag-f99d64407f543f8a",
+      "chunk_id": "5bf6eca333740b475546_17",
+      "title": "Distributive Shock: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/168689-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "loss of consciousness unconscious differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3796,
+      "excerpt": "and 12-month follow-up, as many as 79% and 71% of patients have cognitive impairment. About one third main severely impaired. Clinical Presentation",
+      "text_sha256": "268b3264dde5e12bacb75da544157a6170ac43f8a42ee5643399be434650b332"
+    },
+    {
+      "id": "rag-3a72d4c38d9a0bb7",
+      "chunk_id": "9f7eb5027998a34eb6c2_8",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "loss of consciousness unconscious differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3984,
+      "excerpt": "conduction defects are truly diagnostic only when they coincide with symptoms Loop recorders have a higher diagnostic yield than Holter monitor evaluation, with a marginal cost savings Ambulatory monitoring appears to have a higher negative than positive diagnostic yield Other diagnostic tests and procedures include the following: Head-up tilt-table test - Useful for confirming autonomic dysfunction and can generally be safely arranged on an outpatient basis Electroencephalography (EEG) - Can be performed at the discretion of a neurologist if seizure is considered a likely alternative",
+      "text_sha256": "bce92127a34f3c0ce64d226f3f059473b46561d6c8d76961f1c0a09f5b6874fc"
+    },
+    {
+      "id": "rag-98b9d9748316152f",
+      "chunk_id": "0cb86a21a8c0222b5892_7",
+      "title": "LSD Toxicity: Practice Essentials, Background, Pathophysiology and Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1011615-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "loss of consciousness unconscious differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3923,
+      "excerpt": "medical condition and are not better accounted for by another mental disorder Perceptual symptoms include the following : Geometric hallucinations Perception of movement in peripheral visual fields Flashes of colorJ Intensified colors Trails of images of moving objects Postitive afterimages Halos around objects Macropsia and micropsia See Presentation for more detail. Diagnosis Although LSD toxicity is diagnosed primarily by way of history and physical examination, LSD can be detected by radioimmunoassay. levels from 1.5-5.5 ng/mL may be found within 24 hours after the patient has taken a",
+      "text_sha256": "99521935825cf5c50e8c617467579d4d6c2778364148a102041b52159b95cf82"
+    },
+    {
+      "id": "rag-a394352415d0560a",
+      "chunk_id": "0e015057c60c6e6987b9_47",
+      "title": "Decompression Sickness: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769717-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "loss of consciousness unconscious differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4133,
+      "excerpt": "that there are no concomitant spinal or central neurologic symptoms or signs (see the next section on type II DCS for details). Type II decompression sickness The following characterizes type II DCS: (1) pulmonary symptoms, (2) hypovolemic shock, or (3) nervous system involvement. Pain occurs in only about 30% of cases. Because of the anatomic complexity of the central and peripheral nervous systems, signs and symptoms are variable and diverse. Symptom onset is usually immediate but may occur up to 36 hours later. Nervous system The spinal cord is the most common site affected by type II DCS;",
+      "text_sha256": "a748e780fa2a573050defcbbf2fab5726aca55f2026cd743ec1d608d37da88d8"
+    },
+    {
+      "id": "rag-a12557ba582b4ba2",
+      "chunk_id": "53fc3e4f98765d889be9_35",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "loss of consciousness unconscious differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4079,
+      "excerpt": "and deceleration. Detection is often associated with changes in the lobar white matter, brainstem, and corpus callosum with ovoid or elongated regions of decreased density. Patients usually present with severe impairment of consciousness from the moment of impact. MRI (FLAIR or T2 weighted) is most useful in defining the extent of axonal shearing and nonhemorrhagic injury. CT results are often negative, but acute areas of petechial hemorrhage have been seen in early stages. Diffuse axonal injury (DAI) is one of the most common injuries resulting in long-term severe disability and vegetative",
+      "text_sha256": "b2764593526aaab324b9dfb9d1c4c9d5b91cf01c1870cd621d260d4f9f81b067"
+    },
+    {
+      "id": "rag-1f754e9f85910066",
+      "chunk_id": "2b6eb94497953c8a6426_13",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "loss of consciousness unconscious red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5462,
+      "excerpt": "unconscious, family, friends, or prehospital personnel can be questioned). Other history findings may include the following: Recent noncompliance with medications History of central nervous system (CNS) pathology (stroke, neoplasms, recent surgery) History of systemic neoplasms, infections, metabolic disorders, or toxic ingestions Recent trauma or fall Alcohol abuse Recent travel or immigration to the United States Pregnancy Focal symptoms (partial seizure activity) that then progressed to a generalized seizure Physical examination A generalized seizure is recognizable at the bedside when",
+      "text_sha256": "fd4372dfb400601e922c7ab565bfae9da493bc65453502b3422b083a97baa01f"
+    },
+    {
+      "id": "rag-78f2efcd11b59682",
+      "chunk_id": "28f7e65d945fb55cb0ed_7",
+      "title": "Ammonia: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2054408-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "loss of consciousness unconscious red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5528,
+      "excerpt": "of coma of unknown origin. Indications for the test in newborns include the following: Irritability Vomiting Lethargy Seizures in the first few days following birth Indications for the test in children in whom Reye syndrome is suspected include the following: Irritability Vomiting Lethargy Seizures following a viral illness Infection Cold Indications for the test in adults include the following: Mental changes Sleepiness Coma An acute change for the worse in patients with liver disease TPN use (hyperalimentation) Causes of problems in metabolizing/breaking down ammonia include the following:",
+      "text_sha256": "34e23db63a7fdbc64556fbf51e11e372d522ef89acf636eabe104b7195ee6131"
+    },
+    {
+      "id": "rag-570956182d540bf5",
+      "chunk_id": "3dbcc9bc705bc4597668_22",
+      "title": "Sudden Infant Death Syndrome: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/804412-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "loss of consciousness unconscious red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5535,
+      "excerpt": "The unavailability of a universally accepted classification scheme poses challenges for researchers, clinicians, and aggrieved families. It has been suggested that the pathogenesis of SIDS involves a persistence of fetal reflex responses into early infancy, during which enhanced inhibitory and depressed excitatory cardiorespiratory reflex responses to local stressors are present, leading to sudden death during sleep in otherwise normal-appearing infants. The defects in these critical life-sustaining neural pathways likely arise during fetal development and, in some cases, are further",
+      "text_sha256": "ec1508645fa78f1e8f5df9ec49ccf6665ccd3af8f02a37b4cc20fc3ea23ea380"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "loss of consciousness unconscious red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.518,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    },
+    {
+      "id": "rag-52e79a8a75270a34",
+      "chunk_id": "2728ac1c66bdd9708757_1",
+      "title": "Delirium, Dementia, and Amnesia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793247-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "loss of consciousness unconscious red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5352,
+      "excerpt": "injury (eg, trauma, stroke, chronic dementing process), brain ischemia, severe physiologic/psychological stressors (including prolonged sensory deprivation, \"ICU psychosis\", sleep deprivation), encephalitis and sepsis. Pathophysiology Altered mental status can be divided into 2 major subgroups: acute (delirium or acute confusional state) and chronic (dementia). A third entity, encephalopathy (subacute organically based brain dysfunction), denotes a gray zone between these extremes; its early course may fluctuate and/or resolve, but it is often persistent and progressive. The final common",
+      "text_sha256": "1b80e71a2c7e8f74b669673310f7a610c6d21dd1ce62382ab0410872b8a2d558"
+    }
+  ],
+  "disease_candidates": [],
+  "proposal": {
+    "route": "loss_of_consciousness",
+    "evidence_status": "sufficient",
+    "route_review": {
+      "recommended_disposition": "urgent",
+      "recommended_clinical_domain": "headache",
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-1f754e9f85910066",
+        "rag-a12557ba582b4ba2"
+      ]
+    },
+    "fact_proposals": [],
+    "semantic_options": [],
+    "profile_status": "not_applicable",
+    "profiles": [],
+    "safety_proposals": [
+      {
+        "code": "experimental_loss_of_consciousness__red_flag_symptoms",
+        "label": "失去意識伴隨胸痛、呼吸困難、嚴重頭痛或局部神經症狀",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "loss_of_consciousness"
+          ],
+          "any_findings": [
+            "symptom_chest_pain",
+            "dyspnea",
+            "severe_breathing",
+            "symptom_headache",
+            "focal_neurologic_symptom",
+            "focal_weakness",
+            "diplopia",
+            "speech_difficulty"
+          ]
+        },
+        "possible_conditions": [
+          "Serious cardiac or neurological event"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_loss_of_consciousness__exertional_onset",
+        "label": "失去意識發生在體力活動期間",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "loss_of_consciousness"
+          ],
+          "any_findings": [
+            "exertional_trigger"
+          ]
+        },
+        "possible_conditions": [
+          "Cardiac syncope"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_loss_of_consciousness__recent_head_trauma",
+        "label": "近期頭部外傷後失去意識",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "loss_of_consciousness"
+          ],
+          "any_findings": [
+            "recent_head_trauma"
+          ]
+        },
+        "possible_conditions": [
+          "Intracranial injury"
+        ],
+        "source_ids": [
+          "rag-1f754e9f85910066",
+          "rag-a12557ba582b4ba2"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Create a fact for urinary incontinence after loss of consciousness.",
+        "reason": "The provided RAG sources do not mention urinary incontinence in the context of loss of consciousness, syncope, or seizure."
+      },
+      {
+        "requirement": "Create a fact for family history of cardiac disease.",
+        "reason": "The provided RAG sources mention obtaining a family history of cardiac disease, but do not contain sufficient detail to define a specific fact code beyond the existing personal history facts."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-d1bc752827795cad",
+          "rag-78f2efcd11b59682",
+          "rag-c11a2103e40596fa",
+          "rag-f99d64407f543f8a",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-98b9d9748316152f",
+          "rag-a394352415d0560a",
+          "rag-a12557ba582b4ba2",
+          "rag-1f754e9f85910066",
+          "rag-570956182d540bf5",
+          "rag-62f530bca02a29ef",
+          "rag-52e79a8a75270a34"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[3]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-c11a2103e40596fa",
+          "rag-d1bc752827795cad",
+          "rag-f99d64407f543f8a",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-98b9d9748316152f",
+          "rag-a394352415d0560a",
+          "rag-a12557ba582b4ba2",
+          "rag-1f754e9f85910066",
+          "rag-78f2efcd11b59682",
+          "rag-570956182d540bf5",
+          "rag-62f530bca02a29ef",
+          "rag-52e79a8a75270a34"
+        ]
+      }
+    ]
+  }
+}

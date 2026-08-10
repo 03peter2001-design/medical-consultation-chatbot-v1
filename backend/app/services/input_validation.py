@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 
 from domain.body_pain_regions import serialize_pain_locations
+from domain.patient_messages import patient_message
 from domain.questionnaires import parse_birth_date
 
 OTHER_PREFIX = "其他："
@@ -89,22 +90,22 @@ def validate_question_answer(
 ) -> str | None:
     """Return an error message when a structured UI answer is invalid."""
     if _is_invalid_answer(answer):
-        return "請輸入內容後再送出。"
+        return patient_message("validation.empty")
 
     field = question.get("base_field", question.get("field", ""))
     kind = question.get("kind", "text")
     if field == "location" and pain_location_ids:
         return None
     if kind == "choice" and not _choice_answer_is_valid(question, answer):
-        return "選項格式不正確，請使用畫面提供的選項重新回答。"
+        return patient_message("validation.choice")
     if kind == "date" and parse_birth_date(answer) is None:
-        return "日期格式不正確或超出合理範圍，請重新選擇。"
+        return patient_message("validation.date")
     if kind == "duration":
         is_quick_option = answer in question.get("quick_options", [])
         has_duration_parts = _duration_parts(question, answer) is not None
         is_explicit_other = question.get("allow_other") and not re.match(r"^\d", answer)
         if not (is_quick_option or has_duration_parts or is_explicit_other):
-            return "時間格式不正確，請輸入數字並選擇單位。"
+            return patient_message("validation.duration")
     return None
 
 

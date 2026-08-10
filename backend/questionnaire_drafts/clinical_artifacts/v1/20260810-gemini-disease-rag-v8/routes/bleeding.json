@@ -1,0 +1,1627 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "bleeding",
+  "label": "出血",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "75aabb783d153dd23e25f8e8006524218974c385700a28ec7885150c5f087bf7",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"bleeding bleeding differential diagnosis diseases clinical presentation symptoms history\",\"Epistaxis diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Abnormal Uterine Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Hemophilia diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"bleeding bleeding red flags emergency warning signs urgent referral rule out\",\"Gastrointestinal Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Coagulopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Hemorrhagic Shock diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "4bf0216899e566a5b922636e8d5fe2196b34bcc91414eeb863ca837b1aeee0b4"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "8d1502cf4df13979e238d704b3263c6d9c5b11962ee471242a188ea4d5a19467",
+    "generated_at": "2026-08-10T04:00:33+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-02b622cf0e22d994",
+      "chunk_id": "40949ab525cdb33ba040_4",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "chest",
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "bleeding__epistaxis",
+        "bleeding__abnormal_uterine_bleeding",
+        "bleeding__hemophilia"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history",
+        "Epistaxis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Abnormal Uterine Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Hemophilia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4362,
+      "excerpt": "by hemorrhage from both nares, and by visualization of blood draining in the posterior pharynx. Differential Diagnosis The differential diagnosis includes the following: Barotrauma Disseminated Intravascular Coagulation Endometriosis Foreign Bodies, Nose Hemophilia, Type A Hemophilia, Type B Osler-Weber-Rendu syndrome Rhinitis Plant Poisoning, Glycosides - Coumarin Sinusitis Toxicity, Cocaine Toxicity, Nonsteroidal Anti-inflammatory Agents Toxicity, Rodenticide Toxicity, Salicylate Toxicity, Warfarin and Superwarfarins von Willebrand Disease Diagnostic Considerations Other problems to be",
+      "text_sha256": "7fb71c7de80704fe1be64c3cae7c04a246ddeb7d5647ec8fe71d4107e8974654"
+    },
+    {
+      "id": "rag-0d8f017eda52e6bd",
+      "chunk_id": "cd383ba748c90a04ca49_4",
+      "title": "Hemorrhagic Shock Management in the ED: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827930-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4497,
+      "excerpt": "settings. (e fourth edition of the guideline on management of major bleeding and coagulopathy following trauma by the pan-European Multidisciplinary Task Force for Advanced Bleeding Care in Trauma provides treatment guidelines, ncluding the following: Early imaging (ultrasonography or contrast-enhanced CT) should be used for detection of free fluid in patients with suspected torso trauma. CT assessment should be provided for hemodynamically stable patients. Low initial Hb should be considered an indicator for severe bleeding associated with coagulopathy. Repeated Hb measurements should be used",
+      "text_sha256": "41780d1fda7e4fe4fd21b139f74fe080af257354c6e8af42e3f89f953059b78d"
+    },
+    {
+      "id": "rag-3eb6bf860b011987",
+      "chunk_id": "40949ab525cdb33ba040_1",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4033,
+      "excerpt": "bleeding or hemodynamic instability should take precedence over obtaining a lengthy history. Note the duration, severity of the hemorrhage, and the side of initial bleeding. Inquire about previous epistaxis, hypertension, hepatic or other systemic disease, family history, easy bruising, or prolonged bleeding after minor surgical procedures. Recurrent episodes of epistaxis, even if self-limited, should raise suspicion for significant nasal pathology. Use of medications, especially aspirin, nonsteroidal anti-inflammatory drugs (NSAIDs), warfarin, heparin, ticlopidine, and dipyridamole should be",
+      "text_sha256": "5b71384bbeffbf9b26ecd893e4d85cf9105981285d8216825ecb8a4bc2b1f02f"
+    },
+    {
+      "id": "rag-378bcc384b22f898",
+      "chunk_id": "e32b83da386bc9ec8e0c_2",
+      "title": "Hemorrhoids: Background, Anatomy, Etiology and Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/775407-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.437,
+      "excerpt": "treatment. Consequently, the true prevalence of pathologic hemorrhoids is not known. In addition, although hemorrhoids are responsible for a large portion of anorectal complaints, it is important to rule out more serious conditions, such as other causes of gastrointestinal (GI) bleeding, before reflexively attributing symptoms to hemorrhoids. In a study of 198 physicians from different specialties, Grucela et al found the rate of correct identification for seven common, benign anal pathologic conditions (including anal abscess, fissure, and fistula; prolapsed internal hemorrhoid; thrombosed",
+      "text_sha256": "d08855ad51d361685dc9b438519c45eb4cb4802c2b3194cfbda67018651c5243"
+    },
+    {
+      "id": "rag-5c8cb0c3bcaa80b9",
+      "chunk_id": "8440d93890b7b8e00423_5",
+      "title": "Hyperviscosity Syndrome: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/780258-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4984,
+      "excerpt": "thrombocytosis Myelodysplastic disorders Confusion and mental status changes result from the increased viscosity of the blood and decreased cerebral blood flow. This sludging leads to segmental dilatation of retinal veins and retinal hemorrhages. Mucosal bleeding may occur from prolonged bleeding time caused by myeloma proteins interfering with platelet function. Cardiopulmonary symptoms such as shortness of breath, hypoxemia, acute respiratory failure, and hypotension also result from this sludging of blood and decreased microvascular circulation. Clinical sequelae of HVS can include",
+      "text_sha256": "14d8da0fbd561be673df64051001be462cab6afee4b98a3091980aa0553ef06f"
+    },
+    {
+      "id": "rag-ae49bb8e756ca148",
+      "chunk_id": "75136b210e6d1c77f8de_73",
+      "title": "Laboratory Diagnostics and Testing Guidance for COVID-19: Laboratory Studies, Specimen Selection, Collection, and Transport, Nucleic Acid Detection",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500138-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5,
+      "excerpt": "elevated in the majority of patients; erythrocyte sedimentation rate (ESR); and interleukin 6 (IL-6). Coagulopathy resulting in high fibrinogen, D-dimer, partial thromboplastin time (PTT), prothrombin time (PT), and factor VIII levels has been observed in MIS-C patients experiencing moderate to severe symptoms. Ferritin is also elevated in MIS-C, being higher in 55-76% of patients. With the rapid spread of SARS-CoV-2, reports have emerged of MIS in adult patients (MIS-A) as well. Since there have been only a limited number of reported cases, however, the epidemiology, comorbidities, and",
+      "text_sha256": "54044c1f6e158394622307edcd72e91c8337a76bb620407edc58823cb807803d"
+    },
+    {
+      "id": "rag-6a15cd9535cc4eb8",
+      "chunk_id": "8f30f29fd95f1109d358_73",
+      "title": "Laboratory Diagnostics and Testing Guidance for COVID-19: Laboratory Studies, Specimen Selection, Collection, and Transport, Nucleic Acid Detection",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2500138-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5,
+      "excerpt": "elevated in the majority of patients; erythrocyte sedimentation rate (ESR); and interleukin 6 (IL-6). Coagulopathy resulting in high fibrinogen, D-dimer, partial thromboplastin time (PTT), prothrombin time (PT), and factor VIII levels has been observed in MIS-C patients experiencing moderate to severe symptoms. Ferritin is also elevated in MIS-C, being higher in 55-76% of patients. With the rapid spread of SARS-CoV-2, reports have emerged of MIS in adult patients (MIS-A) as well. Since there have been only a limited number of reported cases, however, the epidemiology, comorbidities, and",
+      "text_sha256": "54044c1f6e158394622307edcd72e91c8337a76bb620407edc58823cb807803d"
+    },
+    {
+      "id": "rag-a4dbf54aa235a5ef",
+      "chunk_id": "e1fe0660ecbe5789652f_8",
+      "title": "Deep Venous Thrombosis (DVT): Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1911303-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.463,
+      "excerpt": "while on anticoagulation Active bleeding complications requiring termination of anticoagulation therapy See Treatment and Medication for more detail. Background Deep venous thrombosis (DVT) and pulmonary embolism (PE) are manifestations of a single disease entity, namely, venous thromboembolism (VTE). The earliest known reference to peripheral venous disease is found on the Eber papyrus, which dates from 1550 BC and documents the potentially fatal hemorrhage that may ensue from surgery on varicose veins. In 1644, Schenk first observed venous thrombosis when he described an occlusion in the",
+      "text_sha256": "e31d219e01ec79eb69763ba3fa5c40b4c30e129cd7b22f66d0e94bf080a89616"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "common",
+        "safety",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_safety",
+        "bleeding__epistaxis",
+        "bleeding__gastrointestinal_bleeding",
+        "bleeding__abnormal_uterine_bleeding",
+        "bleeding__hemophilia",
+        "bleeding__coagulopathy",
+        "bleeding__hemorrhagic_shock"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding red flags emergency warning signs urgent referral rule out",
+        "Epistaxis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Gastrointestinal Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Abnormal Uterine Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Hemophilia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Coagulopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Hemorrhagic Shock diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3623,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-829d7ceea3e1f318",
+      "chunk_id": "b30b031f37648f2fe152_42",
+      "title": "Acute Anemia: Practice Essentials, Etiology, Clinical Presentation",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/780334-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5796,
+      "excerpt": "GI bleeds, but it is rarely useful in the acute setting. Tagged RBC studies or angiography may be more useful for the localization of massive ongoing lower GI bleeding. Diagnostic peritoneal lavage (DPL) has been supplanted by ultrasonography and computed tomography (CT) and is rarely indicated. Culdocentesis is rarely indicated but may have a role in some situations. Perform this test for a pregnant patient with acute anemia and hemodynamic instability when pelvic ultrasonography is not available. Bleeding from an ectopic pregnancy appears as nonclotting blood. False-positive results may",
+      "text_sha256": "68e25a1c010900510fe4f0f817c1cd4358619e4395c0976cca418391f5082d3b"
+    },
+    {
+      "id": "rag-ea1e2ea025f6c94a",
+      "chunk_id": "4f2ea830bb1fd8b5b6f9_2",
+      "title": "Direct Antiglobulin Test: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2105623-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5609,
+      "excerpt": "cephalosporins, fludarabine). A negative antiglobulin test can result in the following cases: Hemolytic anemias caused by intrinsic red cell defect (eg, hemoglobinopathies or G6PD) Collection and Panels See the list below: Specimen: Blood anticoagulated with EDTA Container: Lavender or red-top vacuum tube All samples must be sent in a sealed, leak-proof container marked with a biohazard sticker to comply with Occupational Safety and Health Administration (OSHA) safety standards. Background Clinical features of hemolysis help to differentiate the hemolytic anemia from other anemias. Clinical",
+      "text_sha256": "9c4470cfff6d35ba92c1f3774ec81ed8b249341ea9eed288ce2c28335afd264b"
+    },
+    {
+      "id": "rag-dd071d428feab779",
+      "chunk_id": "5e63425327f98ba541a6_11",
+      "title": "Abnormal (Dysfunctional) Uterine Bleeding in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795587-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5865,
+      "excerpt": "suppression leading to abnormal uterine bleeding due to disruption along the hypothalamus-pituitary-ovarian pathway. Bleeding disturbances are common with combination oral contraceptive pills as well as progestin-only methods of birth control. However, the incidence of bleeding decreases significantly with time. Therefore, only counseling and reassurance are required during the early months of use. Contraceptive intrauterine devices (IUDs) can cause variable vaginal bleeding for the first few cycles after placement and intermittent spotting subsequently. The progesterone impregnated IUD",
+      "text_sha256": "25040d175c4529183ed058a6d14160a5f870d4227d1bab039becaf6f419d249a"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "bleeding bleeding red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5704,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "headache",
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "bleeding__epistaxis",
+        "bleeding__coagulopathy"
+      ],
+      "retrieval_queries": [
+        "Epistaxis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "Coagulopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3968,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-ae8961b13de36f7d",
+      "chunk_id": "40949ab525cdb33ba040_27",
+      "title": "Acute Epistaxis: Overview, Clinical Presentation, Differential Diagnosis",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/764719-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "bleeding__epistaxis"
+      ],
+      "retrieval_queries": [
+        "Epistaxis diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4366,
+      "excerpt": "and increases the risk of sinusitis or toxic shock syndrome. Tumors or other serious pathology are infrequent causes of epistaxis. However, all patients who present with epistaxis should have follow-up care arranged with an otolaryngologist for a complete nasopharyngeal examination. Recurrent unilateral epistaxis should particularly raise concern for neoplasm. Consider placing patients on a broad-spectrum antibiotic (eg, a penicillin or first-generation cephalosporin) to cover all likely pathogens in the context of the clinical setting. Oral analgesics should also be prescribed. Pain control",
+      "text_sha256": "38e1629bccae61dba9f65251f6c23ffdd91272916ab0da41cdf2b52693f111e1"
+    },
+    {
+      "id": "rag-959c78934f94cdc4",
+      "chunk_id": "159c85afc492cf2ae51c_1",
+      "title": "Roseola Infantum in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/803804-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "bleeding__gastrointestinal_bleeding"
+      ],
+      "retrieval_queries": [
+        "Gastrointestinal Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5298,
+      "excerpt": "day febrile illness (characteristically >39.5 ) associated with respiratory or gastrointestinal symptomatology. In one prospective cohort, 93% of newly acquired infections were symptomatic, with fever, fussiness, diarrhea, and rash as the most distinguishing features. Newly recognized clinical manifestations of HHV-6 infection include hepatitis, encephalitis, myocarditis, hemophagocytic syndrome, and an adult mononucleosislike illness. The virus persists and may reactivate, primarily in immunocompromised hosts. Reactivation manifestations may present as fever, rash, pneumonia, hepatitis, bone",
+      "text_sha256": "f0f7563ce05ba78dfce1021fb63cea8ceaa73ea122c7ac84954fd0d680539f6c"
+    },
+    {
+      "id": "rag-0c048cd7f7d40129",
+      "chunk_id": "d380ffc75e88a30abfdd_1",
+      "title": "Peptic Ulcer Disease: Background, Anatomy, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/181753-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "bleeding__gastrointestinal_bleeding"
+      ],
+      "retrieval_queries": [
+        "Gastrointestinal Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4482,
+      "excerpt": "clinical findings are few and nonspecific. Alarm features\" that warrant prompt gastroenterology referral include bleeding, anemia, early satiety, unexplained weight loss, progressive dysphagia or odynophagia, recurrent vomiting, and a family history of gastrointestinal (GI) cancer. Patients with perforated peptic ulcer disease usually present with a sudden onset of severe, sharp abdominal pain. (See Presentation.) In most patients with uncomplicated peptic ulcer disease, routine laboratory tests usually are not helpful; instead, documentation of peptic ulcer disease depends on radiographic and",
+      "text_sha256": "ffff2562a4d559a95a495ce5561498d1423c9559fe944e433fa606686b634e90"
+    },
+    {
+      "id": "rag-673ca2595da29953",
+      "chunk_id": "67f94523e6850cb7f365_3",
+      "title": "Acute Gastritis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/175909-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "bleeding__gastrointestinal_bleeding"
+      ],
+      "retrieval_queries": [
+        "Gastrointestinal Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4777,
+      "excerpt": "symptoms. Fever, chills, and hiccups also may be present. The diagnosis of acute gastritis may be suspected from the patient's history and can be confirmed histologically by biopsy specimens taken at endoscopy. See related CME at Evaluation of Acute Abdominal Pain Reviewed. Pathophysiology Acute gastritis has a number of causes, including certain drugs; alcohol; bile; ischemia; bacterial, viral, and fungal infections; acute stress (shock); radiation; allergy and food poisoning; and direct trauma. The common mechanism of injury is an imbalance between the aggressive and the defensive factors",
+      "text_sha256": "b058373d070d5000d3dbb177386d88dc203c5d22e4624c9224db3b40fe3911e2"
+    },
+    {
+      "id": "rag-09fadaa505574fd5",
+      "chunk_id": "5e63425327f98ba541a6_8",
+      "title": "Abnormal (Dysfunctional) Uterine Bleeding in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795587-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "bleeding__abnormal_uterine_bleeding"
+      ],
+      "retrieval_queries": [
+        "Abnormal Uterine Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.443,
+      "excerpt": "shing disease, liver disease,)abetes mellitus, and adrenal and other endocrine disorders, can present as abnormal uterine bleeding. Pregnancy and pregnancy-related conditions may be associated with vaginal bleeding. Trauma to the cervix, vulva, or vagina may cause abnormal bleeding. Carcinomas of the vagina, cervix, uterus, and ovaries must always be considered in patients with the appropriate history and physical examination findings. Endometrial cancer is associated with obesity, diabetes mellitus, anovulatory cycles, nulliparity, and age older than 35 years. Other causes of abnormal uterine",
+      "text_sha256": "697483a9ed98b31987dfad4849a9547cec92dc1db55346f0e784c3655ca2efca"
+    },
+    {
+      "id": "rag-375c4c2cba7249a7",
+      "chunk_id": "5e63425327f98ba541a6_5",
+      "title": "Abnormal (Dysfunctional) Uterine Bleeding in Emergency Medicine: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/795587-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "bleeding__abnormal_uterine_bleeding"
+      ],
+      "retrieval_queries": [
+        "Abnormal Uterine Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4524,
+      "excerpt": "after pregnancy, medications, iatrogenic causes, genital tract pathology, malignancy, and systemic disease have been ruled out by appropriate investigations. Approximately 90% of dysfunctional uterine bleeding cases result from anovulation, and 10% of cases occur with ovulatory cycles. Anovulatory dysfunctional uterine bleeding results from a disturbance of the normal hypothalamic-pituitary-ovarian axis and is particularly common at the extremes of the reproductive years. When ovulation does not occur, no progesterone is produced to stabilize the endometrium; thus, proliferative endometrium",
+      "text_sha256": "49a39682262ddb2cd0b3000c248044ddef03fde6e90f5902adeafbc6b189aa1f"
+    },
+    {
+      "id": "rag-3424602f9c965022",
+      "chunk_id": "a742c3686546c8f2ecf3_7",
+      "title": "Multiple Organ Dysfunction Syndrome in Sepsis: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/169640-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "bleeding__hemophilia"
+      ],
+      "retrieval_queries": [
+        "Hemophilia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4682,
+      "excerpt": "dysregulated host response to infection. Organ dysfunction is represented by an increase in the Sequential [sepsis-related] Organ Failure Assessment (SOFA) score of 2 points or more, which is associated with an in-hospital mortality greater than 10%. Septic shock is defined as a subset of sepsis in which profound circulatory, cellular, and metabolic abnormalities are associated with a greater risk of mortality than with sepsis alone. Patients with septic shock can be clinically identified by a vasopressor requirement to maintain a mean arterial pressure of 65 mm Hg or greater and serum lactate",
+      "text_sha256": "777d9821bdb4aafab8f72e303b93ce169df0cb0106e388ef2e573f44da3bf3cd"
+    },
+    {
+      "id": "rag-3697ea6f89d68fd5",
+      "chunk_id": "5f385aa936e8b9c4d48d_4",
+      "title": "Hemolytic Uremic Syndrome in Emergency Medicine: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779218-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "bleeding__hemophilia"
+      ],
+      "retrieval_queries": [
+        "Hemophilia diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4529,
+      "excerpt": "seizures, or altered mental status) Diarrhea may improve as the other HUS signs and symptoms beginJ Atypical HUS does not typically begin with a gastrointestinal illness. Patients with pneumococcal HUS may have had`recent respiratory illness. Clinical manifestations of atypical HUS are similar to those of typical HUS, although neurologic involvement is more common. See Presentation. HUS is primarily a clinical diagnosis coupled with consistent laboratory findings, including the following: Microangiopathic hemolytic anemia, with a hemoglobin level that is typically less than 8 g/dLJ",
+      "text_sha256": "8794e56e32229d991eb34ce0ebf51c81b6fdd260c654a355f24fd9e8a874c4d9"
+    },
+    {
+      "id": "rag-ff175cd271f88014",
+      "chunk_id": "6abb4726efd0e023f805_11",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "bleeding__coagulopathy"
+      ],
+      "retrieval_queries": [
+        "Coagulopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4286,
+      "excerpt": "with predominantly sensory symptoms, those with a distal symmetric disorder (DADS), those with multifocal sensorimotor neuropathy or sensorimotor mononeuropathy multiplex with prominent conduction block (also known as Lewis-Sumner neuropathy), and those with CIDP with associated CNS demyelination or with other systemic disorders. The following disorders are considered distinct from CIDP because they have specific pathophysiologic features and respond to treatments differently than do patients with CIDP: Demyelinating neuropathies associated with immunoglobulin M (IgM) paraproteins, including",
+      "text_sha256": "9bcc687a6e728f319204b3de3fc10d7168b581aebb57ba68bafb0dddb461ee00"
+    },
+    {
+      "id": "rag-3a72d4c38d9a0bb7",
+      "chunk_id": "9f7eb5027998a34eb6c2_8",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "bleeding__coagulopathy"
+      ],
+      "retrieval_queries": [
+        "Coagulopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4151,
+      "excerpt": "conduction defects are truly diagnostic only when they coincide with symptoms Loop recorders have a higher diagnostic yield than Holter monitor evaluation, with a marginal cost savings Ambulatory monitoring appears to have a higher negative than positive diagnostic yield Other diagnostic tests and procedures include the following: Head-up tilt-table test - Useful for confirming autonomic dysfunction and can generally be safely arranged on an outpatient basis Electroencephalography (EEG) - Can be performed at the discretion of a neurologist if seizure is considered a likely alternative",
+      "text_sha256": "bce92127a34f3c0ce64d226f3f059473b46561d6c8d76961f1c0a09f5b6874fc"
+    },
+    {
+      "id": "rag-ad79e1246e2a7f0b",
+      "chunk_id": "53fc3e4f98765d889be9_31",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "bleeding__hemorrhagic_shock"
+      ],
+      "retrieval_queries": [
+        "Hemorrhagic Shock diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4607,
+      "excerpt": "is often due to cortical contusion, dilution from a focal collection, or intraventricular hemorrhage due to delayed presentation. Catheter angiography is usually indicated on an emergency basis to identify cerebral aneurysms and to define their anatomy prior to surgical intervention (see the second image below). The prognosis for patients with subarachnoid hemorrhage is variable depending on the extent of injury. Traumatic subarachnoid hemorrhage is common and often associated with other injuries affecting outcome. Subarachnoid hemorrhage - Emergency neuroradiology. Axial CT scan at the level",
+      "text_sha256": "11b2429faf969ad8805a999d70fd7d3313e37e2644db90dcb78db8bddc81ab0a"
+    },
+    {
+      "id": "rag-0231454fb1d74728",
+      "chunk_id": "cd383ba748c90a04ca49_7",
+      "title": "Hemorrhagic Shock Management in the ED: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827930-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "bleeding__hemorrhagic_shock"
+      ],
+      "retrieval_queries": [
+        "Hemorrhagic Shock diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4547,
+      "excerpt": "hemorrhage include initial peripheral and mesenteric vasoconstriction to shunt blood to the central circulation. This is augmented by progressive tachycardia. Invasive monitoring may reveal an increased cardiac index, increased oxygen delivery (ie, DO2), and increased oxygen consumption (ie, VO2) by tissues. Lactate levels, acid-base status, and other markers may provide useful indicators of physiologic status. Age, medications, and comorbid factors all may affect a patient's response to hemorrhagic shock. Acute hemorrhage produces distinct physiologic responses depending on the magnitude and",
+      "text_sha256": "67694596ebe5612f59ef380c7ca1af295d12cd56780cec3e5b26cc2264c63b9c"
+    },
+    {
+      "id": "rag-aeb9620a4b3d2a2f",
+      "chunk_id": "b30b031f37648f2fe152_18",
+      "title": "Acute Anemia: Practice Essentials, Etiology, Clinical Presentation",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/780334-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "bleeding__hemorrhagic_shock"
+      ],
+      "retrieval_queries": [
+        "Hemorrhagic Shock diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4614,
+      "excerpt": "as clinically indicated. In early hemorrhagic shock, capillary refill time may increase and the skin may feel cool to the touch. With progressive shock, the skin is cold to the touch, and it appears pale and mottled. Flank ecchymosis (Grey-Turner sign) suggests retroperitoneal hemorrhage, whereas umbilical ecchymosis (Cullen sign) suggests intraperitoneal or retroperitoneal bleeding. Both are rare findings in acute states. Patients with jaundice may have liver disease, hemoglobinopathies, or other forms of hemolysis. Purpura and petechiae suggest platelet disorders, and hemarthrosis may be due",
+      "text_sha256": "e1204719c559c2ce6b0fcfd8dee3e624bdb45b59ebe62f4b93a52c31d16eac43"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "bleeding__epistaxis",
+      "name": "Epistaxis",
+      "retrieval_query": "Epistaxis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-02b622cf0e22d994",
+        "rag-3eb6bf860b011987"
+      ],
+      "disease_rag_source_ids": [
+        "rag-02b622cf0e22d994",
+        "rag-f09c5253c7a82445",
+        "rag-5bcac9eab5404341",
+        "rag-ae8961b13de36f7d"
+      ]
+    },
+    {
+      "id": "bleeding__gastrointestinal_bleeding",
+      "name": "Gastrointestinal Bleeding",
+      "retrieval_query": "Gastrointestinal Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-378bcc384b22f898",
+        "rag-829d7ceea3e1f318"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-959c78934f94cdc4",
+        "rag-0c048cd7f7d40129",
+        "rag-673ca2595da29953"
+      ]
+    },
+    {
+      "id": "bleeding__abnormal_uterine_bleeding",
+      "name": "Abnormal Uterine Bleeding",
+      "retrieval_query": "Abnormal Uterine Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-dd071d428feab779"
+      ],
+      "disease_rag_source_ids": [
+        "rag-02b622cf0e22d994",
+        "rag-f09c5253c7a82445",
+        "rag-09fadaa505574fd5",
+        "rag-375c4c2cba7249a7"
+      ]
+    },
+    {
+      "id": "bleeding__hemophilia",
+      "name": "Hemophilia",
+      "retrieval_query": "Hemophilia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-02b622cf0e22d994"
+      ],
+      "disease_rag_source_ids": [
+        "rag-02b622cf0e22d994",
+        "rag-f09c5253c7a82445",
+        "rag-3424602f9c965022",
+        "rag-3697ea6f89d68fd5"
+      ]
+    },
+    {
+      "id": "bleeding__coagulopathy",
+      "name": "Coagulopathy",
+      "retrieval_query": "Coagulopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-0d8f017eda52e6bd",
+        "rag-ae49bb8e756ca148",
+        "rag-6a15cd9535cc4eb8",
+        "rag-3eb6bf860b011987"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-5bcac9eab5404341",
+        "rag-ff175cd271f88014",
+        "rag-3a72d4c38d9a0bb7"
+      ]
+    },
+    {
+      "id": "bleeding__hemorrhagic_shock",
+      "name": "Hemorrhagic Shock",
+      "retrieval_query": "Hemorrhagic Shock diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-0d8f017eda52e6bd"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-ad79e1246e2a7f0b",
+        "rag-0231454fb1d74728",
+        "rag-aeb9620a4b3d2a2f"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "bleeding",
+    "evidence_status": "limited",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-02b622cf0e22d994",
+        "rag-f09c5253c7a82445",
+        "rag-5bcac9eab5404341",
+        "rag-ae8961b13de36f7d",
+        "rag-959c78934f94cdc4",
+        "rag-0c048cd7f7d40129",
+        "rag-673ca2595da29953",
+        "rag-09fadaa505574fd5",
+        "rag-ff175cd271f88014",
+        "rag-3a72d4c38d9a0bb7",
+        "rag-ad79e1246e2a7f0b",
+        "rag-0231454fb1d74728",
+        "rag-aeb9620a4b3d2a2f"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "bleeding__epistaxis__unilateral_epistaxis",
+        "description": "Nosebleeds that occur on one side.",
+        "kind": "finding",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bleeding__epistaxis"
+        ],
+        "source_ids": [
+          "rag-ae8961b13de36f7d"
+        ]
+      },
+      {
+        "code": "bleeding__epistaxis__hemophilia_history",
+        "description": "History of hemophilia.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bleeding__epistaxis"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994"
+        ]
+      },
+      {
+        "code": "bleeding__epistaxis__liver_disease_history",
+        "description": "History of liver disease.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bleeding__epistaxis"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ae8961b13de36f7d"
+        ]
+      },
+      {
+        "code": "bleeding__epistaxis__anticoagulant_or_antiplatelet_use",
+        "description": "Use of anticoagulant or antiplatelet medications such as warfarin, heparin, ticlopidine, or dipyridamole.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bleeding__epistaxis"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ae8961b13de36f7d"
+        ]
+      },
+      {
+        "code": "bleeding__epistaxis__experimental_bleeding_epistaxis_dizziness",
+        "description": "Dizziness associated with bleeding.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "bleeding__epistaxis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "bleeding__epistaxis__experimental_bleeding_epistaxis_dyspnea",
+        "description": "Difficulty breathing associated with bleeding.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "bleeding__epistaxis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "bleeding__abnormal_uterine_bleeding__systemic_disease_history",
+        "description": "History of systemic diseases such as Cushing disease, liver disease, diabetes mellitus, or adrenal disorders, which can present as abnormal uterine bleeding.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bleeding__abnormal_uterine_bleeding"
+        ],
+        "source_ids": [
+          "rag-09fadaa505574fd5"
+        ]
+      },
+      {
+        "code": "bleeding__abnormal_uterine_bleeding__genital_cancer_history",
+        "description": "History of carcinoma of the vagina, cervix, uterus, or ovaries.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bleeding__abnormal_uterine_bleeding"
+        ],
+        "source_ids": [
+          "rag-09fadaa505574fd5"
+        ]
+      },
+      {
+        "code": "bleeding__hemophilia__history_of_hemophilia",
+        "description": "患者有血友病史。",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bleeding__hemophilia"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994"
+        ]
+      },
+      {
+        "code": "bleeding__coagulopathy__dyspnea",
+        "description": "Difficulty breathing or shortness of breath.",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [
+          "bleeding__coagulopathy"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "bleeding__coagulopathy__history_of_liver_disease",
+        "description": "History of liver disease.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bleeding__coagulopathy"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "code": "bleeding__coagulopathy__family_history_of_bleeding_disorder",
+        "description": "Family history of bleeding disorders.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bleeding__coagulopathy"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "code": "bleeding__coagulopathy__anticoagulant_or_antiplatelet_use",
+        "description": "Use of medications such as aspirin, nonsteroidal anti-inflammatory drugs (NSAIDs), warfarin, or heparin.",
+        "kind": "history",
+        "safety_candidate": false,
+        "disease_ids": [
+          "bleeding__coagulopathy"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "bleeding_location",
+        "option": "鼻子",
+        "mapping": {
+          "findings": [
+            "bleeding__epistaxis__unilateral_epistaxis"
+          ]
+        },
+        "disease_ids": [
+          "bleeding__epistaxis"
+        ],
+        "source_ids": [
+          "rag-ae8961b13de36f7d"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "頭暈",
+        "mapping": {
+          "findings": [
+            "bleeding__epistaxis__experimental_bleeding_epistaxis_dizziness",
+            "dizziness_unspecified"
+          ]
+        },
+        "disease_ids": [
+          "bleeding__epistaxis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-959c78934f94cdc4",
+          "rag-0c048cd7f7d40129",
+          "rag-673ca2595da29953",
+          "rag-ad79e1246e2a7f0b",
+          "rag-0231454fb1d74728",
+          "rag-aeb9620a4b3d2a2f"
+        ]
+      },
+      {
+        "field": "associated_symptoms",
+        "option": "喘",
+        "mapping": {
+          "findings": [
+            "bleeding__epistaxis__experimental_bleeding_epistaxis_dyspnea",
+            "dyspnea",
+            "bleeding__coagulopathy__dyspnea"
+          ]
+        },
+        "disease_ids": [
+          "bleeding__epistaxis",
+          "bleeding__gastrointestinal_bleeding",
+          "bleeding__coagulopathy"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ad79e1246e2a7f0b",
+          "rag-0231454fb1d74728",
+          "rag-aeb9620a4b3d2a2f"
+        ]
+      },
+      {
+        "field": "medication_history",
+        "option": "是",
+        "mapping": {
+          "findings": [
+            "bleeding__epistaxis__anticoagulant_or_antiplatelet_use",
+            "anticoagulant_use",
+            "bleeding__coagulopathy__anticoagulant_or_antiplatelet_use"
+          ]
+        },
+        "disease_ids": [
+          "bleeding__epistaxis",
+          "bleeding__coagulopathy"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ae8961b13de36f7d",
+          "rag-959c78934f94cdc4",
+          "rag-0c048cd7f7d40129",
+          "rag-673ca2595da29953",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-ad79e1246e2a7f0b",
+          "rag-0231454fb1d74728",
+          "rag-aeb9620a4b3d2a2f"
+        ]
+      },
+      {
+        "field": "chronic_illness_history",
+        "option": "肝病",
+        "mapping": {
+          "findings": [
+            "bleeding__epistaxis__liver_disease_history",
+            "bleeding__abnormal_uterine_bleeding__systemic_disease_history",
+            "bleeding__coagulopathy__history_of_liver_disease"
+          ]
+        },
+        "disease_ids": [
+          "bleeding__epistaxis",
+          "bleeding__abnormal_uterine_bleeding",
+          "bleeding__coagulopathy"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ae8961b13de36f7d",
+          "rag-09fadaa505574fd5",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "field": "chronic_illness_history",
+        "option": "血友病",
+        "mapping": {
+          "findings": [
+            "bleeding__epistaxis__hemophilia_history",
+            "bleeding__hemophilia__history_of_hemophilia",
+            "bleeding__coagulopathy__family_history_of_bleeding_disorder"
+          ]
+        },
+        "disease_ids": [
+          "bleeding__epistaxis",
+          "bleeding__hemophilia",
+          "bleeding__coagulopathy"
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "field": "onset_pattern",
+        "option": "突然發作",
+        "mapping": {
+          "onset": "sudden"
+        },
+        "disease_ids": [
+          "bleeding__gastrointestinal_bleeding"
+        ],
+        "source_ids": [
+          "rag-0c048cd7f7d40129",
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-ad79e1246e2a7f0b",
+          "rag-0231454fb1d74728",
+          "rag-aeb9620a4b3d2a2f"
+        ]
+      },
+      {
+        "field": "bleeding_location",
+        "option": "消化道",
+        "mapping": {
+          "findings": [
+            "major_bleeding"
+          ]
+        },
+        "disease_ids": [
+          "bleeding__gastrointestinal_bleeding"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-959c78934f94cdc4",
+          "rag-0c048cd7f7d40129",
+          "rag-673ca2595da29953"
+        ]
+      },
+      {
+        "field": "chronic_illness_history",
+        "option": "癌症",
+        "mapping": {
+          "findings": [
+            "cancer_history",
+            "bleeding__abnormal_uterine_bleeding__genital_cancer_history"
+          ]
+        },
+        "disease_ids": [
+          "bleeding__gastrointestinal_bleeding",
+          "bleeding__abnormal_uterine_bleeding"
+        ],
+        "source_ids": [
+          "rag-0c048cd7f7d40129",
+          "rag-09fadaa505574fd5",
+          "rag-f09c5253c7a82445",
+          "rag-ad79e1246e2a7f0b",
+          "rag-0231454fb1d74728",
+          "rag-aeb9620a4b3d2a2f"
+        ]
+      },
+      {
+        "field": "bleeding_location",
+        "option": "陰道",
+        "mapping": {
+          "findings": [
+            "vaginal_bleeding"
+          ]
+        },
+        "disease_ids": [
+          "bleeding__abnormal_uterine_bleeding"
+        ],
+        "source_ids": [
+          "rag-09fadaa505574fd5"
+        ]
+      },
+      {
+        "field": "onset_pattern",
+        "option": "逐漸出現",
+        "mapping": {
+          "onset": "gradual"
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7",
+          "rag-ad79e1246e2a7f0b",
+          "rag-0231454fb1d74728",
+          "rag-aeb9620a4b3d2a2f"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "bleeding__epistaxis",
+        "name": "Epistaxis",
+        "must_not_miss": false,
+        "retrieval_query": "Epistaxis diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "bleeding__epistaxis__unilateral_epistaxis",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-ae8961b13de36f7d"
+            ]
+          },
+          {
+            "fact": "bleeding__epistaxis__anticoagulant_or_antiplatelet_use",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-02b622cf0e22d994",
+              "rag-f09c5253c7a82445",
+              "rag-5bcac9eab5404341",
+              "rag-ae8961b13de36f7d"
+            ]
+          },
+          {
+            "fact": "bleeding__epistaxis__liver_disease_history",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-02b622cf0e22d994",
+              "rag-f09c5253c7a82445",
+              "rag-5bcac9eab5404341",
+              "rag-ae8961b13de36f7d"
+            ]
+          },
+          {
+            "fact": "bleeding__epistaxis__hemophilia_history",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-02b622cf0e22d994"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ae8961b13de36f7d"
+        ]
+      },
+      {
+        "id": "bleeding__gastrointestinal_bleeding",
+        "name": "Gastrointestinal Bleeding",
+        "must_not_miss": false,
+        "retrieval_query": "Gastrointestinal Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "major_bleeding",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-959c78934f94cdc4",
+              "rag-0c048cd7f7d40129",
+              "rag-673ca2595da29953"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-959c78934f94cdc4",
+          "rag-0c048cd7f7d40129",
+          "rag-673ca2595da29953"
+        ]
+      },
+      {
+        "id": "bleeding__abnormal_uterine_bleeding",
+        "name": "Abnormal Uterine Bleeding",
+        "must_not_miss": false,
+        "retrieval_query": "Abnormal Uterine Bleeding diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "vaginal_bleeding",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-09fadaa505574fd5"
+            ]
+          },
+          {
+            "fact": "bleeding__abnormal_uterine_bleeding__systemic_disease_history",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-09fadaa505574fd5"
+            ]
+          },
+          {
+            "fact": "cancer_history",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-09fadaa505574fd5"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-09fadaa505574fd5",
+          "rag-375c4c2cba7249a7"
+        ]
+      },
+      {
+        "id": "bleeding__hemophilia",
+        "name": "Hemophilia",
+        "must_not_miss": false,
+        "retrieval_query": "Hemophilia diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "bleeding__hemophilia__history_of_hemophilia",
+            "status": "present",
+            "direction": "support",
+            "weight": 3,
+            "source_ids": [
+              "rag-02b622cf0e22d994"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-02b622cf0e22d994"
+        ]
+      },
+      {
+        "id": "bleeding__coagulopathy",
+        "name": "Coagulopathy",
+        "must_not_miss": false,
+        "retrieval_query": "Coagulopathy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "bleeding__coagulopathy__history_of_liver_disease",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-5bcac9eab5404341",
+              "rag-ff175cd271f88014",
+              "rag-3a72d4c38d9a0bb7"
+            ]
+          },
+          {
+            "fact": "bleeding__coagulopathy__anticoagulant_or_antiplatelet_use",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-5bcac9eab5404341",
+              "rag-ff175cd271f88014",
+              "rag-3a72d4c38d9a0bb7"
+            ]
+          },
+          {
+            "fact": "bleeding__coagulopathy__family_history_of_bleeding_disorder",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-f09c5253c7a82445",
+              "rag-5bcac9eab5404341",
+              "rag-ff175cd271f88014",
+              "rag-3a72d4c38d9a0bb7"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_bleeding__epistaxis__red_flags",
+        "label": "Bleeding with signs of significant blood loss or instability",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "bleeding"
+          ],
+          "any_findings": [
+            "bleeding__epistaxis__experimental_bleeding_epistaxis_dizziness",
+            "bleeding__epistaxis__experimental_bleeding_epistaxis_dyspnea"
+          ]
+        },
+        "possible_conditions": [
+          "Hemorrhagic shock",
+          "Severe Epistaxis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_bleeding__gastrointestinal_bleeding__hemodynamic_instability",
+        "label": "Bleeding with signs of hemodynamic instability",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "bleeding"
+          ],
+          "any_findings": [
+            "syncope",
+            "dyspnea"
+          ]
+        },
+        "possible_conditions": [
+          "Hemorrhagic Shock"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "code": "experimental_bleeding__abnormal_uterine_bleeding__syncope_red_flags",
+        "label": "Bleeding with signs of significant blood loss or neurological symptoms",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "bleeding"
+          ],
+          "any_findings": [
+            "syncope",
+            "symptom_chest_pain",
+            "dyspnea",
+            "palpitations",
+            "symptom_headache",
+            "focal_neurologic_symptom",
+            "diplopia",
+            "speech_difficulty"
+          ]
+        },
+        "possible_conditions": [
+          "Hemorrhagic Shock",
+          "Abnormal Uterine Bleeding"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Determine if bleeding is from anterior or posterior source.",
+        "reason": "This requires a physical examination which is beyond the scope of a digital questionnaire."
+      },
+      {
+        "requirement": "Assess for hemodynamic instability using vital signs.",
+        "reason": "The system cannot measure vital signs like blood pressure or heart rate."
+      },
+      {
+        "requirement": "Inquire about specific medication names and dosages (e.g., aspirin, warfarin).",
+        "reason": "The current questionnaire only asks about medication categories (anticoagulants/antiplatelets) and does not support free-text entry for specific drug names or dosages."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Differentiate between upper and lower GI bleeding based on stool color (melena vs. hematochezia) or vomit appearance (hematemesis, coffee-ground).",
+        "reason": "The provided questionnaire and RAG sources do not contain specific details about stool or vomit characteristics to make this distinction."
+      },
+      {
+        "requirement": "Assess for signs of shock such as tachycardia, hypotension, or altered mental status.",
+        "reason": "The provided questionnaire does not ask about vital signs or specific signs of shock beyond general dizziness or weakness."
+      },
+      {
+        "requirement": "Quantify the amount of blood loss.",
+        "reason": "The questionnaire does not ask for an estimation of blood loss volume, which is a key factor in assessing severity."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Determine specific types of medications (e.g., OCPs, IUDs, specific anticoagulants) causing bleeding.",
+        "reason": "The questionnaire asks about anticoagulant use generally but does not differentiate specific drug types or other medications like hormonal contraceptives mentioned in the RAG sources."
+      },
+      {
+        "requirement": "Assess for signs of hemodynamic instability (e.g., orthostatic hypotension, tachycardia).",
+        "reason": "The model cannot perform a physical examination or measure vital signs, which are critical for assessing hemodynamic status in a bleeding patient."
+      },
+      {
+        "requirement": "Quantify the amount of blood loss.",
+        "reason": "The model cannot reliably quantify blood loss from user descriptions, which is a key factor in assessing the severity of abnormal uterine bleeding."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Detailed signs and symptoms of Hemophilia (e.g., joint bleeding, muscle hematomas, prolonged bleeding after procedures).",
+        "reason": "The provided RAG sources only list Hemophilia in a differential diagnosis for epistaxis and do not describe its specific clinical features."
+      },
+      {
+        "requirement": "Red flags or emergency conditions specifically associated with Hemophilia.",
+        "reason": "The provided RAG sources do not contain information on red flags or emergency presentations for Hemophilia."
+      },
+      {
+        "requirement": "Differentiate between types of coagulopathy (e.g., inherited vs. acquired).",
+        "reason": "The provided RAG sources do not contain sufficient detail to create distinct clinical profiles or rules for different subtypes of coagulopathy."
+      },
+      {
+        "requirement": "Incorporate specific laboratory values (e.g., Hb, PT, PTT, D-dimer) into the logic.",
+        "reason": "The model cannot process or interpret specific numerical laboratory results, which are mentioned as diagnostic indicators in the source material."
+      },
+      {
+        "requirement": "Incorporate physical exam findings (e.g., hemodynamic instability, results of imaging).",
+        "reason": "The model cannot perform physical examinations or interpret imaging results, which are key components of diagnosis mentioned in the source material."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Specific vital sign thresholds (e.g., for tachycardia) or lab values (e.g., hemoglobin, lactate) for diagnosing or staging hemorrhagic shock.",
+        "reason": "The provided RAG sources mention these concepts (e.g., 'progressive tachycardia', 'Lactate levels') but do not provide specific numerical thresholds suitable for automated logic."
+      },
+      {
+        "requirement": "Logic based on physical examination findings like capillary refill time, skin mottling, Grey-Turner sign, or Cullen sign.",
+        "reason": "These are physical examination findings that cannot be elicited through a patient-reported questionnaire."
+      },
+      {
+        "requirement": "Logic based on imaging results (ultrasound, CT).",
+        "reason": "Imaging results are not available in the context of this questionnaire-based interaction."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "The term 'dizziness' from the questionnaire is mapped to a red flag symptom. Clinical review is needed to ensure this general term is an appropriate trigger for an urgent alert, as the source document does not explicitly link unspecified dizziness to epistaxis emergencies, but rather lists it as a general red flag for syncope which can be caused by hemorrhage.",
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The profile for Epistaxis is based on historical factors and the location of bleeding. It does not include physical exam findings like visualization of the bleeding source, which are key for diagnosis.",
+        "source_ids": [
+          "rag-02b622cf0e22d994"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "Local compiler mechanically namespaced generated codes and updated all internal references; no clinical values or conditions were changed.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ae8961b13de36f7d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ae8961b13de36f7d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[4], fact_proposals[5], fact_proposals[6], semantic_options[3], semantic_options[4], profiles[0], profiles[0].clues[1], profiles[0].clues[2], profiles[0].clues[3]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-02b622cf0e22d994",
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ae8961b13de36f7d"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The term 'Gastrointestinal Bleeding' is very broad. The profile and clues are based on general alarm features from sources discussing peptic ulcer disease and other conditions. Further differentiation would require more specific questions (e.g., about stool color, abdominal pain location, vomiting characteristics) which are not present in the current questionnaire.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-959c78934f94cdc4",
+          "rag-0c048cd7f7d40129",
+          "rag-673ca2595da29953"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The safety rule for hemodynamic instability is based on general red flags for syncope, which can be associated with significant bleeding. It is an indirect indicator.",
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-0c048cd7f7d40129",
+          "rag-959c78934f94cdc4"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, semantic_options[1], semantic_options[2], semantic_options[4], profiles[0], profiles[0].clues[0], review_notes[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-959c78934f94cdc4",
+          "rag-0c048cd7f7d40129",
+          "rag-673ca2595da29953"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The profile for Abnormal Uterine Bleeding is based on risk factors and historical elements from the RAG sources. The diagnosis often requires ruling out other causes, which is beyond the scope of this model. The proposed clues are associative rather than definitive.",
+        "source_ids": [
+          "rag-09fadaa505574fd5",
+          "rag-375c4c2cba7249a7"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The safety proposal is derived from general red flags for syncope, which can be associated with significant bleeding. It is not specific to abnormal uterine bleeding but is relevant for any patient presenting with bleeding and these associated symptoms.",
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-09fadaa505574fd5",
+          "rag-375c4c2cba7249a7"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The evidence for Hemophilia is very weak, derived only from its inclusion in a differential diagnosis list within a single source. The generated profile is minimal and relies solely on a direct history question. Further evidence is needed to build a clinically useful profile.",
+        "source_ids": [
+          "rag-02b622cf0e22d994"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The profile for Coagulopathy is based on historical factors and associated symptoms mentioned in the sources. The term 'coagulopathy' itself is broad, and the sources discuss it in various contexts (trauma, systemic disease). The clues are generalized from this context.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "The source rag-f09c5253c7a82445 lists several red flag symptoms in the context of syncope. These symptoms (dyspnea, focal neurologic deficits) are being cautiously repurposed as safety flags for bleeding, as they can indicate severe underlying conditions that might also present with bleeding or coagulopathy. This association requires clinical validation.",
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[3], fact_proposals[4], fact_proposals[5], semantic_options[0], semantic_options[1], semantic_options[3], semantic_options[4], semantic_options[5], profiles[0], profiles[0].clues[0], profiles[0].clues[1]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bcac9eab5404341",
+          "rag-ff175cd271f88014",
+          "rag-3a72d4c38d9a0bb7"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-aeb9620a4b3d2a2f",
+          "rag-0231454fb1d74728",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[3], semantic_options[4], semantic_options[5], profiles[0], profiles[0].clues[0]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-ad79e1246e2a7f0b",
+          "rag-0231454fb1d74728",
+          "rag-aeb9620a4b3d2a2f"
+        ]
+      }
+    ]
+  }
+}

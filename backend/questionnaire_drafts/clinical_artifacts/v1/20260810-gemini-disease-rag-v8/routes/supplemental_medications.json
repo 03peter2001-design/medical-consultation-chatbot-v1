@@ -1,0 +1,668 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "supplemental_medications",
+  "label": "補充藥物",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "5d5c201636b61337b0e51a3e0feb1213315bd78f32a7635e85cbeb2707382a02",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"supplemental medications supplement differential diagnosis diseases clinical presentation symptoms history\",\"supplemental medications supplement red flags emergency warning signs urgent referral rule out\",\"Food allergy diagnostic features signs symptoms differential diagnosis red flags emergency rule out\",\"Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out\"]",
+    "rag_corpus_hash": "564416d31ffc349f8373c62dedc1f82d82984aeeacfc4a44fa051c043571d198"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "d93c1ee9dbca3f82f6040e0343632802a24e59f71dff7fa69f262f980da23846",
+    "generated_at": "2026-08-10T04:21:55+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety",
+        "supplemental_medications__food_allergy"
+      ],
+      "retrieval_queries": [
+        "supplemental medications supplement differential diagnosis diseases clinical presentation symptoms history",
+        "supplemental medications supplement red flags emergency warning signs urgent referral rule out",
+        "Food allergy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3521,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-1d3d90d85d843b24",
+      "chunk_id": "53fc3e4f98765d889be9_19",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "routes": [
+        "headache",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "supplemental medications supplement differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4436,
+      "excerpt": "malformation, thromboembolic/hemorrhagic stroke, veno-occlusive disease, and vasospasm. Relative contraindications include hypotension, severe hypertension, coagulopathy, renal insufficiency, congestive heart failure, and sensitivity to iodinated contrast material. Patients should be stabilized, and tenuous conditions should be corrected prior to study. Conventional radiography Due to the advancements and accessibility of imaging technology, conventional radiography generally does not serve a role in the evaluation of the patient with acute head injury unless CT and MRI are unavailable. In",
+      "text_sha256": "142428e891c01675252948ca0626d9f0fd8378569a05552fda8f4c576dcdd171"
+    },
+    {
+      "id": "rag-9804fff08e42d54f",
+      "chunk_id": "6abb4726efd0e023f805_17",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "supplemental medications supplement differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4325,
+      "excerpt": "recovery from their relapses, and close to 90% of patients respond to initial immunosuppressive therapy. Some patients do not respond to the usual treatments and accumulate significant disability. Some patients have only a short treatment effect and become treatment dependent. A useful way of understanding the clinical status of patients is to use the CIDP activity status (CDAS). This approach has been useful for both clinical research and for clinical practice. Clinical Presentation",
+      "text_sha256": "441c476783fe0d26669c7e2fd8d958dcf976e611ee5ee344f7e3b9d9d8f911a5"
+    },
+    {
+      "id": "rag-83d4ba7514c06a47",
+      "chunk_id": "2caa64d4f6479c047b53_8",
+      "title": "Monoclonal Gammopathies of Undetermined Significance (MGUS): Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/204297-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "supplemental medications supplement differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4187,
+      "excerpt": "throughout the remainder of a patient's life. This observation suggests that the second event responsible for progression is a random event and not cumulative. In patients with symptomatic MM, the development of a newonoclonal2otein following therapy is associated with better outcomes. A study by Mullikin et al in patients with biclonal mmopathy ndetermined gnificance found that the rate of progression was similar to that seen in MGUS with oneonoclonal2otein, suggesting that multipleonoclonal2oteins do not clinically impact one another. Of the 393 patients in the study, six progressed to",
+      "text_sha256": "6c9bbe3a3ca9d6abe73df838ef17503f17e0a9f523b9a20c72839619451d2ccb"
+    },
+    {
+      "id": "rag-fe2c619db19b8f8d",
+      "chunk_id": "c2fe2cb9045703583e9f_2",
+      "title": "Conversion Disorder in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/805361-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "supplemental medications supplement differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4326,
+      "excerpt": "or known pathological mechanism (after appropriate medical evaluation). NB: nscious/intentional production of physical symptoms is classified as ctitious disorder malingering. Though classified with somatic symptom/somatoform disorders in DSM-III through DSM-5-TR, conversion disorder is classified as a dissociative disorder in ICD-10, keeping its long association with hysteria (Dissociative Disorders in DSM). Clinical descriptions of conversion disorder date to almost 4000 years ago; the Egyptians attributed symptoms to a \"wandering uterus.\" In the 19th century, Paul Briquet described the",
+      "text_sha256": "9f1b3dd395445f75b03a1fb0a8b21191733659ec47e9bfe7f1eecbd0f3fb1fea"
+    },
+    {
+      "id": "rag-39a0dc8b9af4a4d3",
+      "chunk_id": "78ee57b2ce4d6b654c9e_3",
+      "title": "Antineutrophil Cytoplasmic Autoantibody, Cytoplasmic (c-ANCA): Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2086572-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "supplemental medications supplement differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4698,
+      "excerpt": "GPA. In patients with limited disease, with an atypical presentation, or without the full spectrum of GPA manifestations, the sensitivity drops to 60-70%. For further details about classifying disease severity and presentation, see the topic Wegener Granulomatosis. In patients with positive c-ANCA, the level of titer elevation is a poor indicator of disease activity. Patients currently in remission may have persistent, several-fold elevations in c-ANCA titer; most of these patients do not develop a relapse in the future. Conversely, patients with rapidly declining titers may have persistent",
+      "text_sha256": "1796fd422f89fbf5fde353202faaf65e553c3a975c1cc40dd7c86a03209ca4c2"
+    },
+    {
+      "id": "rag-ff175cd271f88014",
+      "chunk_id": "6abb4726efd0e023f805_11",
+      "title": "Chronic Inflammatory Demyelinating Polyradiculoneuropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1172965-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "supplemental_medications__syncope"
+      ],
+      "retrieval_queries": [
+        "supplemental medications supplement differential diagnosis diseases clinical presentation symptoms history",
+        "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4466,
+      "excerpt": "with predominantly sensory symptoms, those with a distal symmetric disorder (DADS), those with multifocal sensorimotor neuropathy or sensorimotor mononeuropathy multiplex with prominent conduction block (also known as Lewis-Sumner neuropathy), and those with CIDP with associated CNS demyelination or with other systemic disorders. The following disorders are considered distinct from CIDP because they have specific pathophysiologic features and respond to treatments differently than do patients with CIDP: Demyelinating neuropathies associated with immunoglobulin M (IgM) paraproteins, including",
+      "text_sha256": "9bcc687a6e728f319204b3de3fc10d7168b581aebb57ba68bafb0dddb461ee00"
+    },
+    {
+      "id": "rag-cb3fa4e3a441df1f",
+      "chunk_id": "6e91495982ecfba39d3d_6",
+      "title": "Histoplasmosis: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/299054-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "supplemental medications supplement differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4699,
+      "excerpt": "< 1 month indicate acute disease; symptoms 1-3 months indicate subacute disease; symptoms >3 months indicate chronic disease Acute syndromes: Pneumonia, disseminated disease in immunocompromised persons Chronic syndromes: Cavitary pulmonary lung disease, calcified lymph nodes, mediastinal fibrosis Physical examination: Uncommon findings include erythema nodosum and erythema multiforme CBC count: Thrombocytopenia in disseminated disease Serology: Useful in testing immunocompetent individuals with acute or subacute disease. Antigen testing: Useful in testing infiltrative or chronic disease in",
+      "text_sha256": "7005331c10225fef64efa561ff1ea700607aac10baf03744d7a3644725fe5359"
+    },
+    {
+      "id": "rag-3c3b846e96a04622",
+      "chunk_id": "4e93ade1759d99abb7d6_2",
+      "title": "Procainamide Level: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2090328-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "supplemental medications supplement red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5401,
+      "excerpt": "are typically checked before the administration of the second dose. Toxicity may occur when levels of either or the combination of both are too high (see Reference Range). Signs and symptoms of toxicity include confusion, dizziness, drowsiness, decreased urination, nausea, vomiting, hypotension, tachycardia, and arrhythmias. Collection and Panels See the list below: Specimen: Blood Container: Red-top tube Minimum: 0.4 mL Method: Routine venipuncture Background Description Procainamide hydrochloride is a class 1a antiarrhythmic that is used to treat a wide variety of ventricular and atrial",
+      "text_sha256": "988b0982d4f0bb747b1ac85adc421a77a8445bc8c1262c5cbb0126684c5d0ef2"
+    },
+    {
+      "id": "rag-3a01ae2e52d02ccd",
+      "chunk_id": "533df8c4e1c8cc2bd460_4",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "supplemental medications supplement red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5629,
+      "excerpt": "testing: Positive results primarily denote sensitization and may not confirm clinical allergy; specific laboratory tests for some food hypersensitivities are not available Basophil histamine-release assays: These are limited primarily to research settings Skin testing includes the following approaches: Prick testing: This is the most common screening test for food allergy; negative predictive accuracy exceeds positive predictive accuracy (>90% vs < 50%) Intradermal testing: Generally avoided, because of the risk of inducing a systemic reaction Patch testing: Appears promising, but additional",
+      "text_sha256": "ab9c0cc6990510f768f7977a8202aaa662a2878cc3cf5ccf03771044afcfb5a5"
+    },
+    {
+      "id": "rag-786d5c82e1d5b2b7",
+      "chunk_id": "533df8c4e1c8cc2bd460_5",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "supplemental medications supplement red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5702,
+      "excerpt": "of inducing a systemic reaction Patch testing: Appears promising, but additional studies are needed and it is not recommended for routine practice Diet-related diagnostic measures may be helpful, as follows: Diet diary Elimination diet (may be used for diagnostic as well as therapeutic purposes) Food challenge confirmation of food allergy (may be open; single-blind; or double-blind, placebo-controlled) See Workup for more detail. Management There are currently no curative therapies for food allergy. The only proven treatment is strict dietarylimination of the offending food allergen. A",
+      "text_sha256": "eb4efdbe7c771eeb55882e804a15a15fa64a4f10c193f2088ada256c405d92b6"
+    },
+    {
+      "id": "rag-62f530bca02a29ef",
+      "chunk_id": "60a8e9fb259d62f055c2_48",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "supplemental medications supplement red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5204,
+      "excerpt": "the diagnosis of ACS. All of the above recommendations are cited with level A evidence. Few studies on the \"time to positivity\" have been performed, but serial samples that become positive in the 12- to 24-hour window are considered unlikely, unless the patient has ongoing symptoms of ischemia after admission. Although acute MI can therefore be ruled out in patients with negative serial marker results through the 6- to 9-hour period after presentation regardless of clinical suspicion, MACE is another consideration for higher risk patients. Troponins in Therapeutic Management of ACS Clinical",
+      "text_sha256": "fe75318dfa9c8a900fd3df2cc0dc2ee0b49b7575e25c92d69ca3afebb27ce7b2"
+    },
+    {
+      "id": "rag-80a1512617e77243",
+      "chunk_id": "533df8c4e1c8cc2bd460_14",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "supplemental_medications__food_allergy"
+      ],
+      "retrieval_queries": [
+        "Food allergy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.2877,
+      "excerpt": "most common clinical manifestations of an allergic reaction to a food or food additive. Symptoms range from acute urticaria (most common) to flushing to angioedema to exacerbations of atopic dermatitis. Food allergy is rarely the cause of chronic urticaria or angioedema. Atopic dermatitis Controversy surrounds the role of food allergy in the pathogenesis of atopic dermatitis. Studies show that among patients with moderate chronic atopic dermatitis, 35-40% have IgE-mediated food allergy. Food-specific IgE-mediated and cellular mechanisms appear responsible for chronic eczematous inflammation.",
+      "text_sha256": "844a1bbac3426efe4bf1acffd9503ea80bb65946263bb74b9cf52519fd6ce260"
+    },
+    {
+      "id": "rag-5be620d58c45ca6e",
+      "chunk_id": "533df8c4e1c8cc2bd460_32",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "supplemental_medications__food_allergy"
+      ],
+      "retrieval_queries": [
+        "Food allergy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.3073,
+      "excerpt": "symptoms observed during acute allergic reactions to food. Cell-mediated responses Cell-mediated responses to food allergens may also mediate allergic responses, particularly in disorders with delayed or chronic symptoms. For example, food protein induced enterocolitis syndrome (FPIES), a gastrointestinal food allergy, appears to be mediated by T-cell elaboration of the cytokine tumor necrosis factor (TNF)-alpha. Persons with atopic dermatitis that flares with ingestion of milk have been noted to have T cells that, in vitro, express the homing receptor cutaneous lymphocyte antigen, which is",
+      "text_sha256": "7aec97cabeff35fa00c9e708c16359dec1a36b386d7970e24095fb615d4b6b7d"
+    },
+    {
+      "id": "rag-5bb6be615f7d4044",
+      "chunk_id": "5f0c535325053b5addec_8",
+      "title": "Tick-Borne Diseases: Overview, Biology and Life Cycle of Ticks, Guidelines on the Diagnosis and Management of Tickborne Rickettsial Diseases",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/786652-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "supplemental_medications__food_allergy"
+      ],
+      "retrieval_queries": [
+        "Food allergy diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5215,
+      "excerpt": "suspected cases of AGS were identified in the United States. Places where the lone star tick is found are most affected. Cases predominantly occur in counties within the southern, midwestern, and mid-Atlantic regions. The primary management of mammalian meat allergy is avoidance of mammalian meat. The allergy can cause symptoms ranging from urticaria to angioedema and anaphylaxis. Delayed anaphylactic shock has also been reported to occur 4-6 hours after consumption of red meat. These symptoms are treated in the usual manner. Oral antihistamines are recommended for patients who remain",
+      "text_sha256": "9a799da850ee0b0204e66a0471a8199aa92fea7b19b1c914e3d4bd413c39103e"
+    },
+    {
+      "id": "rag-5bcac9eab5404341",
+      "chunk_id": "02c458d32706ee25af87_15",
+      "title": "Acrodermatitis Chronica Atrophicans: Practice Essentials, Pathophysiology and Etiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1051695-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "supplemental_medications__syncope"
+      ],
+      "retrieval_queries": [
+        "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.4859,
+      "excerpt": "clinical and neurophysiologic examinations in patients with ACA-associated polyneuropathy often show a sensory polyneuropathy. Neuropathy symptoms (typically pain, paresthesia or both) are evident in one half of patients with ACA. One of the authors’ patients had paresis of the brachial plexus. Marked abnormality of the vibratory threshold is a common finding. Patients with localized or asymmetric neuropathy seem to have changes more often found in the extremities with, rather than without, visible acrodermatitis chronica atrophicans lesions. Abnormalities in cerebrospinal fluid seldom have",
+      "text_sha256": "44869275c56f74929cdbd20aeb7c902962efab5d0df75a0e044661d5de920719"
+    },
+    {
+      "id": "rag-9569f87b2d38b7d4",
+      "chunk_id": "53b354e14520b0f0479f_7",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "supplemental_medications__syncope"
+      ],
+      "retrieval_queries": [
+        "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5162,
+      "excerpt": "This complex syndrome has been further classified into two subtypes:J Type I: No evidence of peripheral nerve injury (formerly reflex sympathetic dystrophy)J Type II: Peripheral nerve injury present (formerly causalgia )J Epidemiology Frequency CRPS occurs in approximately 1 15% of peripheral nerve injury cases. Schwartzman states that CRPS usually occurs secondary to fractures, sprains, and trivial soft tissue injury. The incidence after fractures and contusions ranges from 10% to 30%. While some cases are associated with an identifiable nerve injury, many are not. Even \"microtrauma\" as might",
+      "text_sha256": "f92854d983ca7db67bc2172e7aa263a6e48ca5fce7aa1fad47b16359cb9a44c5"
+    },
+    {
+      "id": "rag-d71a0a73f65f79a2",
+      "chunk_id": "c073c38d1231a0946898_1",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "routes": [
+        "headache"
+      ],
+      "retrieval_scopes": [
+        "supplemental_medications__syncope"
+      ],
+      "retrieval_queries": [
+        "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out"
+      ],
+      "distance": 0.5168,
+      "excerpt": "alternative diagnoses. Signs of dysfunction of other cranial neruves or other neurologic abnormality exclude the diagnosis of classic trigeminal neuralgia and suggest that pain may be secondary to a structural lesion. The International Association for the Study of Pain (IASP) classifies TN into three categories. Classical TN is described as vascular compression that causes anatomical changes in the trigeminal nerve root. Next, secondary TN is due to an underlying neurologic disease. Third, idiopathic TN, is diagnosed after all studies reveal no etiology or there is no apparent cause. Classic",
+      "text_sha256": "ce29c6daab7ff6fd5cd95a131c5c0f906c846e7d275efa50d3ee5c72823e1ba8"
+    }
+  ],
+  "disease_candidates": [
+    {
+      "id": "supplemental_medications__food_allergy",
+      "name": "Food allergy",
+      "retrieval_query": "Food allergy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-3a01ae2e52d02ccd",
+        "rag-786d5c82e1d5b2b7"
+      ],
+      "disease_rag_source_ids": [
+        "rag-f09c5253c7a82445",
+        "rag-80a1512617e77243",
+        "rag-5be620d58c45ca6e",
+        "rag-5bb6be615f7d4044"
+      ]
+    },
+    {
+      "id": "supplemental_medications__syncope",
+      "name": "Syncope",
+      "retrieval_query": "Syncope diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+      "discovery_source_ids": [
+        "rag-f09c5253c7a82445"
+      ],
+      "disease_rag_source_ids": [
+        "rag-ff175cd271f88014",
+        "rag-5bcac9eab5404341",
+        "rag-9569f87b2d38b7d4",
+        "rag-d71a0a73f65f79a2"
+      ]
+    }
+  ],
+  "proposal": {
+    "route": "supplemental_medications",
+    "evidence_status": "sufficient",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-80a1512617e77243",
+        "rag-5be620d58c45ca6e",
+        "rag-5bb6be615f7d4044",
+        "rag-ff175cd271f88014",
+        "rag-5bcac9eab5404341",
+        "rag-9569f87b2d38b7d4",
+        "rag-d71a0a73f65f79a2"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "supplemental_medications__food_allergy__urticaria",
+        "description": "急性蕁麻疹 (Acute urticaria)",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "supplemental_medications__food_allergy"
+        ],
+        "source_ids": [
+          "rag-80a1512617e77243",
+          "rag-5bb6be615f7d4044"
+        ]
+      },
+      {
+        "code": "supplemental_medications__food_allergy__atopic_dermatitis_exacerbation",
+        "description": "異位性皮膚炎惡化 (Exacerbation of atopic dermatitis)",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [
+          "supplemental_medications__food_allergy"
+        ],
+        "source_ids": [
+          "rag-80a1512617e77243",
+          "rag-5be620d58c45ca6e"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "medication_side_effects",
+        "option": "皮疹或過敏反應",
+        "mapping": {
+          "findings": [
+            "supplemental_medications__food_allergy__urticaria",
+            "supplemental_medications__food_allergy__atopic_dermatitis_exacerbation"
+          ]
+        },
+        "disease_ids": [
+          "supplemental_medications__food_allergy"
+        ],
+        "source_ids": [
+          "rag-80a1512617e77243"
+        ]
+      },
+      {
+        "field": "medication_side_effects",
+        "option": "頭暈",
+        "mapping": {
+          "findings": [
+            "dizziness_unspecified"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "field": "medication_side_effects",
+        "option": "噁心",
+        "mapping": {
+          "findings": [
+            "nausea"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "field": "medication_side_effects",
+        "option": "嘔吐",
+        "mapping": {
+          "findings": [
+            "vomiting"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "field": "medication_side_effects",
+        "option": "頭痛",
+        "mapping": {
+          "findings": [
+            "symptom_headache"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      }
+    ],
+    "profile_status": "proposed",
+    "profiles": [
+      {
+        "id": "supplemental_medications__food_allergy",
+        "name": "Food allergy",
+        "must_not_miss": false,
+        "retrieval_query": "Food allergy diagnostic features signs symptoms differential diagnosis red flags emergency rule out",
+        "safety_rule_codes": [],
+        "clues": [
+          {
+            "fact": "supplemental_medications__food_allergy__urticaria",
+            "status": "present",
+            "direction": "support",
+            "weight": 2,
+            "source_ids": [
+              "rag-80a1512617e77243"
+            ]
+          },
+          {
+            "fact": "supplemental_medications__food_allergy__atopic_dermatitis_exacerbation",
+            "status": "present",
+            "direction": "support",
+            "weight": 1,
+            "source_ids": [
+              "rag-80a1512617e77243"
+            ]
+          }
+        ],
+        "source_ids": [
+          "rag-80a1512617e77243",
+          "rag-5be620d58c45ca6e",
+          "rag-5bb6be615f7d4044"
+        ]
+      }
+    ],
+    "safety_proposals": [
+      {
+        "code": "experimental_supplemental_medications__food_allergy__anaphylaxis_red_flags",
+        "label": "Possible anaphylaxis",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "supplemental_medications"
+          ],
+          "any_findings": [
+            "severe_breathing",
+            "syncope",
+            "altered_consciousness"
+          ]
+        },
+        "possible_conditions": [
+          "Anaphylaxis"
+        ],
+        "source_ids": [
+          "rag-f09c5253c7a82445",
+          "rag-5bb6be615f7d4044"
+        ]
+      }
+    ],
+    "unsupported_requirements": [
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      },
+      {
+        "requirement": "Detailed physical examination findings for syncope workup.",
+        "reason": "The AI cannot perform a physical examination, which is required for syncope assessment (e.g., vital signs, neurologic exam)."
+      },
+      {
+        "requirement": "Glucose level measurement.",
+        "reason": "The AI cannot perform laboratory tests like a rapid glucose level check, which is part of the syncope workup."
+      },
+      {
+        "requirement": "Detailed witness accounts of a syncopal event.",
+        "reason": "The AI interacts only with the user and cannot obtain information from third-party witnesses."
+      },
+      {
+        "requirement": "Use free-text-only proposed facts in disease scoring",
+        "reason": "The current draft compiler only permits facts reachable from exact choice options; text/date/duration extraction needs a separate engine contract."
+      }
+    ],
+    "review_notes": [
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-80a1512617e77243",
+          "rag-5bb6be615f7d4044"
+        ]
+      },
+      {
+        "severity": "info",
+        "note": "The discovery of 'Syncope' is based on the potential for medication side effects like dizziness, which is a common but non-specific symptom. The proposed safety rule is designed to catch high-risk features if the user's 'dizziness' is actually presyncope or related to a more serious underlying condition.",
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler removed proposed facts and dependent clues that no exact choice option can produce; the content remains available only as an unsupported review requirement.",
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: route_review, fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], fact_proposals[4], fact_proposals[5], fact_proposals[6], semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[3]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-ff175cd271f88014",
+          "rag-5bcac9eab5404341",
+          "rag-9569f87b2d38b7d4",
+          "rag-d71a0a73f65f79a2"
+        ]
+      }
+    ]
+  }
+}

@@ -11,6 +11,7 @@ from amie.models import ChiefComplaintAssessment
 from amie.rule_config import load_safety_rules
 from app.models import ChatRequest
 from app.services.input_validation import prefill_gender_is_valid
+from domain.patient_messages import patient_message
 from domain.questionnaires import (
     CHIEF_QUESTIONNAIRE,
     DISEASE_ROUTES,
@@ -142,19 +143,21 @@ def section_transition_reply(
     if previous_section == current["section"]:
         return prompt
     if current["section"] == "basic":
-        return f"主訴已記錄。接下來填寫基本資料。\n\n{prompt}"
+        return patient_message("section.basic", prompt=prompt)
     if current["section"] == "history":
         if basic_fields.issubset(prefilled_fields):
-            return f"主訴已記錄，基本資料已從病歷帶入。接下來補充尚未取得的病史。\n\n{prompt}"
-        return f"基本資料完成。接下來了解一般病史。\n\n{prompt}"
+            return patient_message("section.history_prefilled_basic", prompt=prompt)
+        return patient_message("section.history", prompt=prompt)
     if current["section"] == "disease":
+        route_label = ROUTE_LABELS.get(route) or patient_message("label.symptom")
         if basic_fields.issubset(prefilled_fields):
-            imported = "基本資料與病史" if history_fields.issubset(prefilled_fields) else "基本資料"
-            return (
-                f"已從病歷帶入{imported}。接下來進入"
-                f"{ROUTE_LABELS.get(route, '症狀')}問卷。\n\n{prompt}"
+            message_key = (
+                "section.disease_prefilled_all"
+                if history_fields.issubset(prefilled_fields)
+                else "section.disease_prefilled_basic"
             )
-        return f"病史資料完成。接下來進入{ROUTE_LABELS.get(route, '症狀')}問卷。\n\n{prompt}"
+            return patient_message(message_key, route_label=route_label, prompt=prompt)
+        return patient_message("section.disease", route_label=route_label, prompt=prompt)
     return prompt
 
 

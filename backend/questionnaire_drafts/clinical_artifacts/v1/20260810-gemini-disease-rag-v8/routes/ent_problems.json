@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "ent_problems",
+  "label": "耳鼻喉問題",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "b87898c0f267a870a2f729dfa80d66851d14723f80c9e6fd8cfb8c2d5a7dcf8c",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"ent problems ENT differential diagnosis diseases clinical presentation symptoms history\",\"ent problems ENT red flags emergency warning signs urgent referral rule out\"]",
+    "rag_corpus_hash": "40e6224c971f820ebf9265f9a45707ff59213f2895c9d0ddbc804f152a631cb1"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "3c6ee57d5c15b34c05c164adcf5237a7d83abbbd72886c6ff138177e8ad058bd",
+    "generated_at": "2026-08-10T04:03:40+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-1a14728db5654797",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "ent problems ENT differential diagnosis diseases clinical presentation symptoms history",
+        "ent problems ENT red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4318,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the",
+      "text_sha256": "a012e90799aaae112f8e2f59bf68f6b84cb309ef80df02b30b572ab01eb67b32"
+    },
+    {
+      "id": "rag-5890fc17bd639be6",
+      "chunk_id": "0b4e124e43266b2d82b6_19",
+      "title": "Neurological Sequelae of Infectious Endocarditis: Infective Endocarditis and the CNS, Etiology of CNS Sequelae, Epidemiology of CNS Sequelae",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1165712-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "ent problems ENT differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4258,
+      "excerpt": "In one series, 38 major embolic events occurred in 37 patients. Thirty of these 37 patients died (81% mortality). Differential Diagnosis for CNS Sequelae Cancer patients who appear to have reactive or behavioral (psychiatric) symptoms actually may have organic embolic disease. If fever, seizures, and/or DIC are present in a patient with cancer, culture-negative bacterial endocarditis may be misdiagnosed as psychiatric disease. A presentation like that of a transient ischemic attack (TIA) can occur with fluctuating focal neurologic signs. Presumably, the transient nature (resolution) results",
+      "text_sha256": "8d81d962e163c1d207f445c8674620f88b149f41eeaad708a0000baca5f7401c"
+    },
+    {
+      "id": "rag-bc4a14c5cf183bce",
+      "chunk_id": "5f212422f14dd458221a_7",
+      "title": "Drug-Induced Lupus Erythematosus: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1065086-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "ent problems ENT differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4339,
+      "excerpt": "may be prominent. Most patients with DILE have 1 or more clinical symptoms of SLE, such as arthralgias, lymphadenopathy, rash, and fever, and have had no prior history of autoimmune disease. However, certain manifestations typical in persons with SLE are not usually observed in persons with DILE. No specific criteria establish the diagnosis of DILE, and excluding underlying autoimmune disease is not a simple process. DILE is typically diagnosed by a process of elimination to rule out SLE (see Differentials). Symptoms of DILE usually clear within weeks of stopping the culprit drug. Generally,",
+      "text_sha256": "973d5b7b20f706de0e94fde200c2e13364e76a16ecc4906e57f04b41ffce17ce"
+    },
+    {
+      "id": "rag-16c70b64bc6fbd53",
+      "chunk_id": "0ce0a437aa65b2c45f03_14",
+      "title": "Hypersensitivity Nephropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/244009-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "ent problems ENT differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4569,
+      "excerpt": "The presentation of acute interstitial nephritis in the course of these diseases may be in conjunction with an exacerbation of the systemic symptoms or as an isolated entity. Often, what is described as idiopathic acute interstitial nephritis may prove to be little more than the initial symptoms of one of these systemic diseases. Glomerular Kidney biopsies from patients with glomerulopathies often reveal tubulointerstitial nephritis. Some authors feel that the important contribution of tubulointerstitial disease to the development of end-stage renal disease warrants adding glomerulonephritis",
+      "text_sha256": "362949d80de79500ed6f3644db7373bddfb3a8267279afd4cd7f5a0873500921"
+    },
+    {
+      "id": "rag-928675c57d12f3f7",
+      "chunk_id": "dfda69efc9dedf0465fb_1",
+      "title": "Wellens Syndrome: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1512230-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "ent problems ENT differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4364,
+      "excerpt": "Wellens syndrome is also referred to as LAD coronary T-wave syndrome. Syndrome criteria include the following: Characteristic T-wave changes History of anginal chest pain Normal or minimally elevated cardiac enzyme levels ECG without Q waves, without significant ST-segment elevation, and with normal precordial R-wave progression Recognition of this ECG abnormality is of paramount importance because this syndrome represents a preinfarction stage of coronary artery disease (CAD) that often progresses to a devastating anterior wall MI. Pathophysiology Wellens syndrome represents critical stenosis",
+      "text_sha256": "93ff4d51c713fc3a5fe2a2926544d0b49e0e9c7186b908d6b12a3df3bfdcf60d"
+    },
+    {
+      "id": "rag-0c048cd7f7d40129",
+      "chunk_id": "d380ffc75e88a30abfdd_1",
+      "title": "Peptic Ulcer Disease: Background, Anatomy, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/181753-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "ent problems ENT differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4598,
+      "excerpt": "clinical findings are few and nonspecific. Alarm features\" that warrant prompt gastroenterology referral include bleeding, anemia, early satiety, unexplained weight loss, progressive dysphagia or odynophagia, recurrent vomiting, and a family history of gastrointestinal (GI) cancer. Patients with perforated peptic ulcer disease usually present with a sudden onset of severe, sharp abdominal pain. (See Presentation.) In most patients with uncomplicated peptic ulcer disease, routine laboratory tests usually are not helpful; instead, documentation of peptic ulcer disease depends on radiographic and",
+      "text_sha256": "ffff2562a4d559a95a495ce5561498d1423c9559fe944e433fa606686b634e90"
+    },
+    {
+      "id": "rag-d09a4b27cfe22dca",
+      "chunk_id": "b210924ae976b30c8d37_49",
+      "title": "Ventricular Fibrillation: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/158712-overview",
+      "routes": [
+        "chest"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "ent problems ENT differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4386,
+      "excerpt": "auras or stimulation, and vigorous physical activity. Symptoms usually begin in childhood or adolescence. Schwartz et al have suggested diagnostic criteria for LQTS in the absence of genetic testing (see Table 1, below). Table 1. Long QT syndrome diagnostic criteria (Open Table in a new window) Category Criteria Points Electrocardiographic Findings Corrected QT interval e480 ms 3 460-479 ms 2 450-459 ms (in males) 1 Torsade de pointes 2 T wave alternans 1 Notched T waves in three leads 1 Low heart rate for age (resting rate below second percentile 0.5 Clinical History Syncope With stress 2",
+      "text_sha256": "e6d7800f450b41fe6055d8ed1ae0d4da0709a1f7f3ba7702edf01349046f5f9b"
+    },
+    {
+      "id": "rag-3b76c329a7f1fceb",
+      "chunk_id": "0ce0a437aa65b2c45f03_2",
+      "title": "Hypersensitivity Nephropathy: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/244009-overview",
+      "routes": [
+        "abdomen"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "ent problems ENT differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.4723,
+      "excerpt": "countries. The signs and symptoms of DI-AIN are variable and often not specific; thus, kidney biopsy is required to make a firm diagnosis. The classic presentation, mostly induced by antibiotics and accompanied by evident hypersensitivity manifestations (skin rash, eosinophilia, fever) has been largely replaced by oligosymptomatic presentations that require a higher index of suspicion. (e incidence of DI-AIN appears to be increasing particularly in the elderly, in whom kidney biopsy is underused and identification of the offending agent may be complicated by polypharmacy. Because rapid drug",
+      "text_sha256": "42b574ea6e1d9bf60bb266ba6eff4c27034f3f7d0a5c8f76f7324dcede2d0958"
+    },
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "ent problems ENT red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5755,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    }
+  ],
+  "disease_candidates": [],
+  "proposal": {
+    "route": "ent_problems",
+    "evidence_status": "insufficient",
+    "route_review": {
+      "recommended_disposition": "questionnaire",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-1a14728db5654797"
+      ]
+    },
+    "fact_proposals": [],
+    "semantic_options": [],
+    "profile_status": "insufficient_evidence",
+    "profiles": [],
+    "safety_proposals": [],
+    "unsupported_requirements": [],
+    "review_notes": []
+  }
+}

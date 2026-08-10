@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_disease_name_discovery",
+  "route": "burns",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "4b49154fb358044e043e97a4589afb183b3a5288dcd0806d0ac6ab6a2562cb41",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_queries": [
+      "burns burn differential diagnosis diseases clinical presentation symptoms history",
+      "burns burn red flags emergency warning signs urgent referral rule out"
+    ],
+    "rag_corpus_hash": "39126717a19b22f098f2340f84c463c1c4e63205dd8cd6a3492dd2241256edc4"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 5000,
+    "prompt_sha256": "d820ea934b78b42d60a62ceccaca0b904fa6cd960f15a0877ff52b175642cb49",
+    "generated_at": "2026-08-10T03:56:49+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-f09c5253c7a82445",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "routes": [
+        "common",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery",
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "burns burn differential diagnosis diseases clinical presentation symptoms history",
+        "burns burn red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4795,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid",
+      "text_sha256": "04842cdfe3c419bca7a831dc0c7b55c99b419d6943fcd52f10a2234e9c6d5084"
+    },
+    {
+      "id": "rag-11670883bb9d0d30",
+      "chunk_id": "791b392395fdb02a4e02_40",
+      "title": "Leptospirosis: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/220563-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "burns burn differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5143,
+      "excerpt": "Weil disease, knowledge of the species type does not necessarily help predict disease severity. Particular serovars may be associated with specific clinical manifestations. For example, a characteristic pretibial erythematous rash is seen in patients with L autumnalis infection, and gastrointestinal symptoms predominate in patients infected with L grippotyphosa. Nevertheless, any leptospiral serovar can lead to the signs and symptoms seen with this disease. For example, jaundice occurs in 83% of patients with L icterohaemorrhagiae infection and in 30% of patients infected with L pomona.",
+      "text_sha256": "bb35617180d365781ea65ba40e4aeddc49cd14798f1bf4025f66a05c576a1779"
+    },
+    {
+      "id": "rag-b8903d24e6cf005d",
+      "chunk_id": "75b4ab526b54e2bdd30e_2",
+      "title": "Porphobilinogen: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2088383-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "burns burn differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5361,
+      "excerpt": "the reference range effectively rules out porphyria as a cause of the patient’s symptoms. However, patients with a distant history that suggests porphyria may have porphobilinogen levels within the reference range, particularly if they have had prolonged disease latency. These patients may be evaluated further with enzyme activity measurements or gene analysis. Collection and Panels Urinary porphobilinogen (PBG) is ideally measured during an acute porphyric attack as a random spot test. Twenty-four–hour levels may also be obtained. The sample should be collected with a urinalysis container or",
+      "text_sha256": "6b59728705c2148dc21c9a8fe385b6b5d80cae93da8fc36e593af7f1f0fdf0d7"
+    },
+    {
+      "id": "rag-e1144a8990f72a66",
+      "chunk_id": "9aeedc640c68352d7494_39",
+      "title": "Dysmenorrhea: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/253812-overview",
+      "routes": [
+        "common"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "burns burn differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.5596,
+      "excerpt": "dysphoric disorder Besides dysmenorrhea, patients with premenstrual dysphoric disorder (formerly premenstrual syndrome) may have bloating, body aches, migraine headaches, breast tenderness, and emotional complaints. The effects of these symptoms are occasionally debilitating. Aside from possible vaginal brownish discharge or bleeding, pelvic examination findings are normal. It is the emergency physician s responsibility to ensure adequate analgesia and appropriate follow-up with a gynecologist. Epidemiology United States statistics Dysmenorrhea may affect more than 50% of menstruating women,",
+      "text_sha256": "bb63510b8350971d2228ebae08b7761a42c85ad97062900917d877d7e33f0df7"
+    },
+    {
+      "id": "rag-bf0f5a7b31409ddd",
+      "chunk_id": "2282c43bb99705270704_10",
+      "title": "Burn Wound Infections: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/213595-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "burns burn differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3856,
+      "excerpt": "manifestations of septic shock, and death. Early surgical debridement and skin grafting, use of topical and systemic antimicrobials, and enhanced infection-control practices have led to the replacement of beta-hemolytic streptococci with S aureus and gram-negative bacteria such as P aeruginosa, Klebsiella pneumoniae, and A baumannii as major pathogens in burn wound infections. In burns older than 7 days, biofilm may be detected in the ulcerated areas of the wounds. As biofilm formation is associated with chronicity of the wound, bacterial colonization is easier to eradicate in the first few",
+      "text_sha256": "54fe74593dc5bed73fc401a107ea096cffe4d64553e2dbb5b71614066b4152e1"
+    },
+    {
+      "id": "rag-788d6686758d236a",
+      "chunk_id": "29a8db87cd2aa8fb48b6_2",
+      "title": "Acute Coronary Syndrome: Practice Essentials, Background, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1910735-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "burns burn differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.556,
+      "excerpt": "with ACS include the following: Palpitations Pain, which is usually described as pressure, squeezing, or a burning sensation across the precordium and may radiate to the neck, shoulder, jaw, back, upper abdomen, or either arm Exertional dyspnea that resolves with pain or rest Diaphoresis from sympathetic discharge Nausea from vagal stimulation Decreased exercise tolerance Physical findings can range from normal to any of the following: Hypotension: Indicates ventricular dysfunction due to myocardial ischemia, myocardial infarction (MI), or acute valvular dysfunction Hypertension: May",
+      "text_sha256": "69aea7712d05fcb0a1e0bd45c7ed1a2692ae851f0e153905b983bcc29d7d68b0"
+    },
+    {
+      "id": "rag-58c5f2eb5f52fa45",
+      "chunk_id": "60a8e9fb259d62f055c2_0",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "burns burn red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.5983,
+      "excerpt": "Definition and Efficacy Cardiac markers are used for the diagnosis and risk stratification of patients with chest pain and suspected acute coronary syndrome (ACS) and for management and prognosis in patients with acute heart failure, pulmonary embolism, and other disease states. Cardiac markers can be classified into those that signify myocardial necrosis (creatine kinase-MB [CK-MB] action, myoglobin and cardiac troponins), those that indicate myocardial ischemia (ischemia modified albumin), those that suggest myocardial stress (natriuretic peptides), and those markers of inflammation and",
+      "text_sha256": "c564cd463bc767d0045ffeed533c42106a4178019d2d50b9493d2ef7680c7c71"
+    }
+  ],
+  "discovery": {
+    "route": "burns",
+    "evidence_status": "sufficient",
+    "diseases": [],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "The disposition for this route is 'handoff'. Per instructions, no diseases are proposed for routes with urgent or handoff dispositions, as these require safety review rather than differential diagnosis generation.",
+        "source_ids": [
+          "rag-11670883bb9d0d30",
+          "rag-58c5f2eb5f52fa45",
+          "rag-788d6686758d236a",
+          "rag-b8903d24e6cf005d",
+          "rag-bf0f5a7b31409ddd",
+          "rag-e1144a8990f72a66",
+          "rag-f09c5253c7a82445"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope discovery citations with the complete route RAG evidence pack for: review_notes[0]. These citations remain unverified.",
+        "source_ids": [
+          "rag-11670883bb9d0d30",
+          "rag-58c5f2eb5f52fa45",
+          "rag-788d6686758d236a",
+          "rag-b8903d24e6cf005d",
+          "rag-bf0f5a7b31409ddd",
+          "rag-e1144a8990f72a66",
+          "rag-f09c5253c7a82445"
+        ]
+      }
+    ]
+  }
+}

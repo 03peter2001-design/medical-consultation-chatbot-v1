@@ -33,6 +33,26 @@ class _FakeTorch:
 
 
 class SpeechTranscriberTests(unittest.TestCase):
+    def test_warmup_loads_breeze_once_before_first_recording(self):
+        pipeline_calls = []
+
+        def pipeline_factory(**kwargs):
+            pipeline_calls.append(kwargs)
+            return lambda _samples: {"text": "聽到了"}
+
+        service = SpeechTranscriber(
+            env={"ASR_PROVIDER": "breeze", "BREEZE_ASR_DEVICE": "cuda"},
+            pipeline_factory=pipeline_factory,
+            torch_module=_FakeTorch(cuda_available=True),
+            audio_decoder=lambda _audio, **_kwargs: np.ones(10, dtype=np.float32),
+        )
+
+        status = service.warmup()
+        self.assertTrue(status["loaded"])
+        self.assertEqual(status["device"], "cuda:0")
+        service.warmup()
+        self.assertEqual(len(pipeline_calls), 1)
+
     def test_breeze_pipeline_is_lazy_and_reused_on_cpu(self):
         pipeline_calls = []
         inference_calls = []

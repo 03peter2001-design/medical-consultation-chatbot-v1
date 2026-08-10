@@ -1,0 +1,413 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "amie_route_draft",
+  "route": "cardiac_arrest",
+  "label": "心臟驟停",
+  "lifecycle": {
+    "status": "model_generated_provisional",
+    "executable": false
+  },
+  "inputs": {
+    "questionnaire_sha256": "6624c0bab4cbd84118aa20bdd9096ea104afab514d36d8f61d0da672e2da87a1",
+    "route_catalog_sha256": "d3bcc6006d221e167224da75f9b4515c201f5c9e016ecb9813fe098b3109a5ef",
+    "base_safety_sha256": "a12cf1ca52f961fd607e862a5f0068ec1c86027ac36507fb44961baefd4a6b10",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "rag_query": "[\"cardiac arrest cardiac arrest differential diagnosis diseases clinical presentation symptoms history\",\"cardiac arrest cardiac arrest red flags emergency warning signs urgent referral rule out\"]",
+    "rag_corpus_hash": "a2d58037d1e5b710f56e5db6d43423d2aabfdc8cf74fe1540adfa28e89c4a83b"
+  },
+  "generation": {
+    "pipeline_version": "amie-route-drafts-v8",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "temperature": 0,
+    "max_output_tokens": 24000,
+    "prompt_sha256": "369def3b4a7e37449b461009f8001f8cd66477a21e7532161cd567700bf05454",
+    "generated_at": "2026-08-10T04:02:15+00:00"
+  },
+  "sources": [
+    {
+      "id": "rag-d93fb7a4b41d4836",
+      "chunk_id": "29a8db87cd2aa8fb48b6_12",
+      "title": "Acute Coronary Syndrome: Practice Essentials, Background, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1910735-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "cardiac arrest cardiac arrest differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3422,
+      "excerpt": "markers of myocardial necrosis in addition to at least 1 of the following (See Workup.): Ischemic symptoms Development of pathologic Q waves on electrocardiogram (ECG) Significant ST-segment-T wave (ST-T) changes or new left bundle branch block (LBBB) Imaging evidence of new loss of viable myocardium or new regional wall motion abnormality Introcoronary thrombus identified by angiography or autopsy The terms transmural and nontransmural (subendocardial) myocardial infarction are no longer used because ECG findings in patients with this condition are not closely correlated with pathologic",
+      "text_sha256": "cbfa46d6f68c22394cfc0ef81b7cd1aafb9c495013ca6c235af08ea8b7333778"
+    },
+    {
+      "id": "rag-0be74f0b211dcb31",
+      "chunk_id": "5ce830abdc459bc019fc_3",
+      "title": "Acute Pericarditis: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/156951-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "cardiac arrest cardiac arrest differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.3838,
+      "excerpt": "sarcoidosis, cardiovascular procedures, and trauma See Presentation for more detail. Diagnosis Initial evaluation includes a clinical history and physical examination, ECG, echocardiography, chest radiography, and lab studies. ECG can be diagnostic in acute pericarditis and typically shows diffuse ST elevation. The ratio of the amplitude of ST segment to the amplitude of the T wave in leads I, V4, V5, and V6 on electrocardiogram can be used to differentiate acute pericarditis (AP) from early repolarization (ER) and early repolarization of left ventricular hypertrophy (ERLVH), according to a",
+      "text_sha256": "182999905c6d75bed64f094a70c4c3c2194432bc27aa01f52a24a4f23cef8ab1"
+    },
+    {
+      "id": "rag-6eefbba13e6fc01d",
+      "chunk_id": "60a8e9fb259d62f055c2_45",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_discovery"
+      ],
+      "retrieval_queries": [
+        "cardiac arrest cardiac arrest differential diagnosis diseases clinical presentation symptoms history"
+      ],
+      "distance": 0.385,
+      "excerpt": "suspected acute non ST-elevation ACS who are determined to be low risk based on validated accelerated diagnostic pathways that include a nonischemic ECG result and negative serial high-sensitivity troponin testing results both at presentation and at 2 hours can predict a low rate of 30-day MACE, allowing for an accelerated discharge pathway from the ED. A 2021 prospective, multicenter study comprising 1452 patients suggests that a HEART score without the troponin measurement (ie, HEAR score) of less than 2 is a safe and reliable workup strategy to exclude NSTEMI, with a very low risk of MACE",
+      "text_sha256": "e12d29c80c19a2363c71c6937bbbcdcd92be46a6291aad099993b46c40286102"
+    },
+    {
+      "id": "rag-96a90437160454ff",
+      "chunk_id": "60a8e9fb259d62f055c2_43",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "routes": [
+        "chest",
+        "safety"
+      ],
+      "retrieval_scopes": [
+        "route_safety"
+      ],
+      "retrieval_queries": [
+        "cardiac arrest cardiac arrest red flags emergency warning signs urgent referral rule out"
+      ],
+      "distance": 0.4192,
+      "excerpt": "(cTn), whether conventional or high sensitivity (hs), exclusively for these purposes. The main clinical outcome of interest after initial emergency department (ED) evaluation of patients with suspected ACS is 30-day MACE. MACE includes MI, death, target lesion revascularization, or death. In 2018, The American College of Emergency Physicians (ACEP) updated its level C recommendations regarding testing strategies for ruling out non-ST-elevation MI (NSTEMI) in lower risk patients to include the use of the HEART score and conventional or high-sensitivity cardiac troponins (hs-cTn) as follows: In",
+      "text_sha256": "4828c8d733507191a7786f8b1f2baf9a4c8185d49b0cb05028c18c2b64ce27ff"
+    }
+  ],
+  "disease_candidates": [],
+  "proposal": {
+    "route": "cardiac_arrest",
+    "evidence_status": "sufficient",
+    "route_review": {
+      "recommended_disposition": "urgent",
+      "recommended_clinical_domain": null,
+      "rationale": "Local reducer selected the safest disposition from independently validated Gemini disease drafts; qualified clinical review is required.",
+      "source_ids": [
+        "rag-96a90437160454ff"
+      ]
+    },
+    "fact_proposals": [
+      {
+        "code": "cardiac_arrest__loss_of_consciousness",
+        "description": "失去意識。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "code": "cardiac_arrest__cpr_or_aed_used",
+        "description": "已接受心肺復甦術 (CPR) 或使用自動體外心臟去顫器 (AED)。",
+        "kind": "context",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "code": "cardiac_arrest__preceding_chest_pain",
+        "description": "心臟驟停前有胸痛。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "code": "cardiac_arrest__preceding_dyspnea",
+        "description": "心臟驟停前有呼吸困難。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "code": "cardiac_arrest__preceding_syncope_or_dizziness",
+        "description": "心臟驟停前有頭暈或昏厥。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "code": "cardiac_arrest__preceding_palpitations",
+        "description": "心臟驟停前有心跳加速或心跳不規則。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "code": "cardiac_arrest__preceding_diaphoresis",
+        "description": "心臟驟停前有出冷汗。",
+        "kind": "symptom",
+        "safety_candidate": true,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "code": "cardiac_arrest__preceding_nausea_or_vomiting",
+        "description": "心臟驟停前有噁心或嘔吐。",
+        "kind": "symptom",
+        "safety_candidate": false,
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      }
+    ],
+    "semantic_options": [
+      {
+        "field": "loss_of_consciousness",
+        "option": "是",
+        "mapping": {
+          "findings": [
+            "cardiac_arrest__loss_of_consciousness"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "field": "cpr_or_aed_used",
+        "option": "是",
+        "mapping": {
+          "findings": [
+            "cardiac_arrest__cpr_or_aed_used"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "field": "preceding_symptoms",
+        "option": "胸痛",
+        "mapping": {
+          "findings": [
+            "cardiac_arrest__preceding_chest_pain"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "field": "preceding_symptoms",
+        "option": "呼吸困難",
+        "mapping": {
+          "findings": [
+            "cardiac_arrest__preceding_dyspnea"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "field": "preceding_symptoms",
+        "option": "頭暈或昏厥",
+        "mapping": {
+          "findings": [
+            "cardiac_arrest__preceding_syncope_or_dizziness"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "field": "preceding_symptoms",
+        "option": "心跳加速或心跳不規則",
+        "mapping": {
+          "findings": [
+            "cardiac_arrest__preceding_palpitations"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "field": "preceding_symptoms",
+        "option": "出冷汗",
+        "mapping": {
+          "findings": [
+            "cardiac_arrest__preceding_diaphoresis"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "field": "preceding_symptoms",
+        "option": "噁心或嘔吐",
+        "mapping": {
+          "findings": [
+            "cardiac_arrest__preceding_nausea_or_vomiting"
+          ]
+        },
+        "disease_ids": [],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      }
+    ],
+    "profile_status": "not_applicable",
+    "profiles": [],
+    "safety_proposals": [
+      {
+        "code": "experimental_cardiac_arrest__urgent_cardiac_arrest",
+        "label": "心臟驟停",
+        "level": "urgent",
+        "kind": "structured",
+        "terms": [],
+        "when": {
+          "primary_in": [
+            "cardiac_arrest"
+          ]
+        },
+        "possible_conditions": [
+          "Cardiac Arrest"
+        ],
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      }
+    ],
+    "unsupported_requirements": [],
+    "review_notes": [
+      {
+        "severity": "info",
+        "note": "This route is for a confirmed cardiac arrest, which is a critical medical emergency. The primary purpose of the questionnaire is to gather contextual information for emergency responders. The disposition is correctly set to urgent and should not be changed.",
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      },
+      {
+        "severity": "warning",
+        "note": "Local compiler replaced missing, duplicate, or out-of-scope citations with the complete single-disease RAG evidence pack for: fact_proposals[0], fact_proposals[1], fact_proposals[2], fact_proposals[3], fact_proposals[4], fact_proposals[5], fact_proposals[6], fact_proposals[7], semantic_options[0], semantic_options[1], semantic_options[2], semantic_options[3]. Every repaired citation remains unverified and requires source-level review.",
+        "source_ids": [
+          "rag-d93fb7a4b41d4836",
+          "rag-0be74f0b211dcb31",
+          "rag-6eefbba13e6fc01d",
+          "rag-96a90437160454ff"
+        ]
+      }
+    ]
+  }
+}

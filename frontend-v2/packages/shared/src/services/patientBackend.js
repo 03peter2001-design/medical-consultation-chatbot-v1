@@ -21,6 +21,25 @@ async function request(path, options = {}) {
   return data
 }
 
+async function requestVideo(path, options = {}) {
+  const response = await fetch(`${backendUrl}${path}`, {
+    ...options,
+    credentials: 'include',
+  })
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}))
+    const error = new Error(data.detail || data.message || `HTTP ${response.status}`)
+    error.status = response.status
+    throw error
+  }
+  return {
+    blob: await response.blob(),
+    speechModel: response.headers.get('X-Speech-Model') || '',
+    animationModel: response.headers.get('X-Animation-Model') || '',
+    cacheHit: response.headers.get('X-Avatar-Cache') === 'hit',
+  }
+}
+
 function jsonOptions(body) {
   return {
     method: 'POST',
@@ -56,12 +75,20 @@ export const patientApi = {
     formData.append('audio', audioBlob, 'audio.webm')
     return request(apiPath('/transcribe'), { method: 'POST', body: formData })
   },
+  avatarStatus: () => request(apiPath('/avatar/status')),
+  speakAvatar: (text, options = {}) =>
+    requestVideo(apiPath('/avatar/speak'), {
+      ...jsonOptions({ text }),
+      signal: options.signal,
+    }),
 }
 
 export const api = {
   patientChat: patientApi.chat,
   patientBack: patientApi.back,
   transcribe: patientApi.transcribe,
+  avatarStatus: patientApi.avatarStatus,
+  speakAvatar: patientApi.speakAvatar,
 }
 
 export function connectionError(error) {

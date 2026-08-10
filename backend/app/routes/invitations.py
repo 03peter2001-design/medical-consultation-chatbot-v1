@@ -98,7 +98,7 @@ def exchange_invitation(payload: InvitationExchangeRequest, response: Response):
     try:
         result = runtime.consultation_repository.exchange_invitation(payload.token)
     except ValueError as error:
-        raise HTTPException(status_code=409, detail=str(error)) from error
+        raise HTTPException(status_code=409, detail="Invitation has already been used") from error
     if result is None:
         raise HTTPException(status_code=404, detail="Invitation is invalid or expired")
     response.set_cookie(

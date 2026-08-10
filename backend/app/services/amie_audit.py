@@ -3,6 +3,73 @@
 from __future__ import annotations
 
 
+def interview_length_profile(session: dict) -> dict:
+    """Summarise where an interview spent its turns.
+
+    Interview length is dominated by the shared basic/history sections, which are
+    identical for every route and are exactly what a record prefill can remove.
+    Measuring that split is the only way to tell whether a long interview needs a
+    better funnel or better record integration, so it is recorded per session.
+
+    Only field names, section names and counts are kept. No answer, free text or
+    clinical value enters this summary.
+    """
+    prefilled = set(session.get("prefilled_fields") or [])
+    answered = {
+        str((trace.get("question") or {}).get("field") or "")
+        for trace in session.get("transcript") or []
+    }
+    answered.discard("")
+
+    by_section: dict[str, dict[str, int]] = {}
+    for item in session.get("questionnaire") or []:
+        field = str(item.get("field") or "")
+        # ``reason`` is the chief complaint that opens every interview, so it is
+        # never a candidate for prefill or for being skipped.
+        if not field or field == "reason":
+            continue
+        bucket = by_section.setdefault(
+            str(item.get("section") or ""),
+            {"total": 0, "asked": 0, "prefilled": 0},
+        )
+        bucket["total"] += 1
+        if field in prefilled:
+            bucket["prefilled"] += 1
+        elif field in answered:
+            bucket["asked"] += 1
+
+    total = sum(bucket["total"] for bucket in by_section.values())
+    asked = sum(bucket["asked"] for bucket in by_section.values())
+    from_record = sum(bucket["prefilled"] for bucket in by_section.values())
+    return {
+        "turns": int(session.get("turn_count") or 0),
+        "questions_total": total,
+        "asked": asked,
+        "prefilled": from_record,
+        # Neither asked nor prefilled: the funnel stopped early or a condition
+        # excluded the question.
+        "unasked": total - asked - from_record,
+        "prefill_coverage": round(from_record / total, 4) if total else 0.0,
+        "by_section": by_section,
+    }
+
+
+def _refresh_interview_length(session: dict) -> None:
+    """Recompute the profile once the current turn is in the transcript.
+
+    ``save_amie_state`` runs before the trace is appended, and the manual trace
+    paths never call it at all, so both append helpers refresh the count instead
+    of leaving it one turn behind.
+    """
+    profile = interview_length_profile(session)
+    state = session.get("amie_state")
+    if isinstance(state, dict):
+        state["interview_length"] = profile
+    stored = (session.get("data") or {}).get("_amie")
+    if isinstance(stored, dict):
+        stored["interview_length"] = profile
+
+
 def save_amie_state(session: dict, result) -> None:
     state = {
         "triage_level": result.triage_level,
@@ -15,6 +82,7 @@ def save_amie_state(session: dict, result) -> None:
         "rag_sources": result.rag_sources,
         "red_flags": result.red_flags,
         "model_error": result.model_error,
+        "interview_length": interview_length_profile(session),
     }
     session["amie_state"] = state
     session["data"]["_amie"] = {key: value for key, value in state.items() if key != "model_error"}
@@ -119,6 +187,7 @@ def append_amie_trace(
     }
     session.setdefault("transcript", []).append(trace)
     session["data"]["_amie_trace"] = list(session["transcript"])
+    _refresh_interview_length(session)
 
 
 def append_manual_amie_trace(
@@ -173,3 +242,4 @@ def append_manual_amie_trace(
     }
     session.setdefault("transcript", []).append(trace)
     session["data"]["_amie_trace"] = list(session["transcript"])
+    _refresh_interview_length(session)

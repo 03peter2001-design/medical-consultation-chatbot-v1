@@ -7,10 +7,10 @@ FastAPI's worker threads and keeps the repository easy to replace later.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
-import hashlib
 import secrets
 import sqlite3
 import time
@@ -362,13 +362,9 @@ class ConsultationRepository:
             for row in connection.execute("PRAGMA table_info(patient_sessions)").fetchall()
         }
         if "runtime_state_json" not in patient_session_columns:
-            connection.execute(
-                "ALTER TABLE patient_sessions ADD COLUMN runtime_state_json TEXT"
-            )
+            connection.execute("ALTER TABLE patient_sessions ADD COLUMN runtime_state_json TEXT")
         if "runtime_updated_at" not in patient_session_columns:
-            connection.execute(
-                "ALTER TABLE patient_sessions ADD COLUMN runtime_updated_at TEXT"
-            )
+            connection.execute("ALTER TABLE patient_sessions ADD COLUMN runtime_updated_at TEXT")
         connection.execute(
             """
             CREATE TABLE IF NOT EXISTS audit_events (
@@ -585,7 +581,7 @@ class ConsultationRepository:
         for _ in range(64):
             queue_number = self._queue_number()
             try:
-                with self._connect() as connection:
+                with closing(self._connect()) as connection, connection:
                     connection.execute("BEGIN IMMEDIATE")
                     display_number = self._allocate_display_number(
                         connection,
@@ -672,7 +668,7 @@ class ConsultationRepository:
             raise ValueError("queue_number must contain exactly five digits")
         data_json = self._serialize_data(record.get("data", {}))
         now, consultation_date = self._creation_times()
-        with self._connect() as connection:
+        with closing(self._connect()) as connection, connection:
             connection.execute(
                 """
                 INSERT INTO consultations (
@@ -739,7 +735,7 @@ class ConsultationRepository:
         institution_id: str | None = None,
     ) -> dict[str, Any] | None:
         consultation_date, registration_number = self._parse_consultation_id(consultation_id)
-        with self._connect() as connection:
+        with closing(self._connect()) as connection, connection:
             row = connection.execute(
                 """
                 SELECT
@@ -789,7 +785,7 @@ class ConsultationRepository:
                 self.consultation_id(consultation_date, normalized),
                 institution_id=institution_id,
             )
-        with self._connect() as connection:
+        with closing(self._connect()) as connection, connection:
             rows = connection.execute(
                 """
                 SELECT consultation_date, display_number
@@ -873,7 +869,7 @@ class ConsultationRepository:
         where_sql = f"WHERE {' AND '.join(clauses)}" if clauses else ""
         where_params = tuple(params)
 
-        with self._connect() as connection:
+        with closing(self._connect()) as connection, connection:
             rows = connection.execute(
                 f"""
                 SELECT
@@ -957,7 +953,7 @@ class ConsultationRepository:
         )
         now = _utc_now()
         consultation_date, registration_number = self._parse_consultation_id(consultation_id)
-        with self._connect() as connection:
+        with closing(self._connect()) as connection, connection:
             cursor = connection.execute(
                 """
                 UPDATE consultations
@@ -989,7 +985,7 @@ class ConsultationRepository:
             raise ValueError("generated report must not be empty")
         now = _utc_now()
         consultation_date, registration_number = self._parse_consultation_id(consultation_id)
-        with self._connect() as connection:
+        with closing(self._connect()) as connection, connection:
             cursor = connection.execute(
                 """
                 UPDATE consultations
@@ -1020,7 +1016,7 @@ class ConsultationRepository:
         normalized_error = error.strip()[:1000] or None
         now = _utc_now()
         consultation_date, registration_number = self._parse_consultation_id(consultation_id)
-        with self._connect() as connection:
+        with closing(self._connect()) as connection, connection:
             cursor = connection.execute(
                 """
                 UPDATE consultations
@@ -1042,7 +1038,7 @@ class ConsultationRepository:
     def delete(self, consultation_id: str) -> bool:
         """Permanently delete exactly one date-qualified consultation."""
         consultation_date, registration_number = self._parse_consultation_id(consultation_id)
-        with self._connect() as connection:
+        with closing(self._connect()) as connection, connection:
             cursor = connection.execute(
                 """
                 DELETE FROM consultations
@@ -1053,7 +1049,7 @@ class ConsultationRepository:
         return cursor.rowcount == 1
 
     def count(self) -> int:
-        with self._connect() as connection:
+        with closing(self._connect()) as connection, connection:
             row = connection.execute("SELECT count(*) AS total FROM consultations").fetchone()
         return int(row["total"])
 
@@ -1408,7 +1404,7 @@ class ConsultationRepository:
     ) -> dict[str, Any] | None:
         """Restore bounded JSON state for the exact active patient session."""
         now = _utc_now()
-        with closing(self._connect()) as connection:
+        with closing(self._connect()) as connection, connection:
             row = connection.execute(
                 """
                 SELECT ps.runtime_state_json

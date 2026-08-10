@@ -1,0 +1,353 @@
+{
+  "schema_version": 1,
+  "id": "diabetes_questionnaire",
+  "label": "糖尿病問題",
+  "source_order": 12,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "diabetes_type"
+    ],
+    "priority_fields": [
+      "recent_glycemic_events"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "diabetes_diagnosis_duration",
+      "prompt": "您被診斷患有糖尿病多少年了？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您被診斷患有糖尿病多少年了？"
+      ]
+    },
+    {
+      "field": "diabetes_type",
+      "prompt": "您知道你患的是1型糖尿病 2型糖尿病 妊娠糖尿病還是其他糖尿病類型？ *",
+      "kind": "choice",
+      "options": [
+        "1型糖尿病",
+        "2型糖尿病",
+        "妊娠糖尿病",
+        "其他糖尿病類型"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您知道你患的是1型糖尿病 2型糖尿病  妊娠糖尿病還是其他糖尿病類型？ *"
+      ]
+    },
+    {
+      "field": "diabetes_related_symptoms",
+      "prompt": "您是否有以下糖尿病相關症狀？ 請將以下有出現的糖尿病相關症狀描述給我聽 若以下皆無 可說明是否有其他糖尿病相關症狀",
+      "kind": "choice",
+      "options": [
+        "血糖水平異常波動",
+        "頻繁口渴",
+        "頻繁排尿",
+        "不明原因的體重減輕",
+        "極度疲倦或乏力",
+        "視力模糊",
+        "傷口癒合緩慢",
+        "手腳麻木或刺痛"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有以下糖尿病相關症狀？ 請將以下有出現的糖尿病相關症狀描述給我聽 若以下皆無 可說明是否有其他糖尿病相關症狀",
+        "血糖水平異常波動",
+        "頻繁口渴",
+        "頻繁排尿",
+        "不明原因的體重減輕",
+        "極度疲倦或乏力",
+        "視力模糊",
+        "傷口癒合緩慢",
+        "手腳麻木或刺痛"
+      ]
+    },
+    {
+      "field": "recent_glycemic_events",
+      "prompt": "最近是否有發生過低血糖或高血糖事件？ 若有 請進一步說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "最近是否有發生過低血糖或高血糖事件？ 若有 請進一步說明"
+      ]
+    },
+    {
+      "field": "medication_usage",
+      "prompt": "您是否在使用胰島素或其他降糖藥物？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否在使用胰島素或其他降糖藥物？"
+      ]
+    },
+    {
+      "field": "diet_and_exercise_status",
+      "prompt": "您最近的飲食和運動情況如何？ 是否飲食控制良好 或 定期運動",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您最近的飲食和運動情況如何？ 是否飲食控制良好 或 定期運動"
+      ]
+    },
+    {
+      "field": "diabetes_complications_description",
+      "prompt": "您是否有糖尿病併發症？若有 請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有糖尿病併發症？若有 請讓我知道"
+      ]
+    },
+    {
+      "field": "recent_health_problems",
+      "prompt": "您最近是否有以下健康問題？ 請將以下有出現的健康問題描述給我聽 若以下皆無 可說明是否有其他健康問題",
+      "kind": "choice",
+      "options": [
+        "視力問題",
+        "腎臟問題",
+        "神經損傷",
+        "心臟病",
+        "高血壓",
+        "足部問題"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您最近是否有以下健康問題？ 請將以下有出現的健康問題描述給我聽 若以下皆無 可說明是否有其他健康問題",
+        "視力問題",
+        "腎臟問題",
+        "神經損傷",
+        "心臟病",
+        "高血壓",
+        "足部問題"
+      ]
+    },
+    {
+      "field": "blood_sugar_monitoring_results",
+      "prompt": "您是否有定期檢查血糖和糖化血紅蛋白 (HbA1c) ？ 若有 請描述最近一次血糖和糖化血紅蛋白狀態的檢查結果",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有定期檢查血糖和糖化血紅蛋白 (HbA1c) ？ 若有 請描述最近一次血糖和糖化血紅蛋白狀態的檢查結果"
+      ]
+    },
+    {
+      "field": "recent_stress_or_life_changes",
+      "prompt": "是否有最近的壓力或其他生活變化？ 若有 請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有最近的壓力或其他生活變化？ 若有 請讓我知道"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "info",
+      "note": "RAG 文獻提及第一型與第二型糖尿病，與問卷中的糖尿病分類相關，可供審查參考。",
+      "source_ids": [
+        "rag-0ba08919556c",
+        "rag-5b6e2b5d6f7e"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "info",
+      "note": "RAG 文獻提及血糖與胰島素檢測，與問卷中的血糖監測問題相關，可供審查參考。",
+      "source_ids": [
+        "rag-8f1615091344",
+        "rag-caada5a2099d"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-8f1615091344",
+      "title": "Insulin: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2089224-overview",
+      "route": "common",
+      "chunk_id": "41b085922049bec01938_21",
+      "distance": 0.4458,
+      "excerpt": "conditions are associated with increased insulin secretion? Which conditions are associated with decreased insulin excretion? Which conditions are associated with beta-cell destruction caused by decreased insulin levels? How are samples collected for insulin testing and what methods are used for analysis? What instructions should be given to patients prior to insulin testing? What is the biosynthesis of insulin? What is the function of insulin? What is insulin secretion? When is insulin testing indicated? Which factors can falsely elevate insulin levels? Which factors can falsely decrease"
+    },
+    {
+      "id": "rag-caada5a2099d",
+      "title": "Glucose: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087913-overview",
+      "route": "common",
+      "chunk_id": "9c012b23f75eca162ac8_17",
+      "distance": 0.4514,
+      "excerpt": "What are the reference ranges of glucose by assay type? What is glucose? How is glucose measured? What causes variation in blood glucose, and what is the relationship between glucose metabolism and coagulation factors?"
+    },
+    {
+      "id": "rag-0ba08919556c",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "common",
+      "chunk_id": "bb1164c188b2fc1e1591_7",
+      "distance": 0.4663,
+      "excerpt": "Sickle cell disease Type 2 diabetes mellitus The following are underlying conditions that may represent an increased risk of severe COVID-19: Asthma (moderate to severe) Cerebrovascular disease Cystic fibrosis Immunocompromised state due to blood or bone marrow transplant, immunodeficiencies, HIV infection, corticosteroid use (or other medications that weaken the immune system) Neurologic conditions (eg, dementia) Liver disease Pregnancy Pulmonary fibrosis Smoking Thalassemia Type 1 diabetes mellitus People who live in a nursing home or long-term care facility are also at a higher risk of"
+    },
+    {
+      "id": "rag-5b6e2b5d6f7e",
+      "title": "Insulin: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2089224-overview",
+      "route": "common",
+      "chunk_id": "41b085922049bec01938_15",
+      "distance": 0.4858,
+      "excerpt": "differentiate type 1 from type 2 diabetes. Considerations Insulin levels may be falsely elevated by the following: Amino acid (leucine, arginine, and lysine) Steroid Insulin secretagogue (sulfonylurea and glinide) Estrogen Beta2 agonist Insulin levels may be falsely decreased by the following: Acarbose, metformin, octreotide, and beta-blocker Hemolysis (insulin-degrading enzyme in red blood cell released) Hemodialysis Insulin Sensitivity Insulin levels can also be used to assess insulin resistance versus sensitivity. In insulin resistance, the ability of cells to respond to the action of"
+    },
+    {
+      "id": "rag-1d3d3891f923",
+      "title": "Diagnostic Influenza Tests: Reference Range, Interpretation, Collection and Diagnostic Methods",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2053517-overview",
+      "route": "common",
+      "chunk_id": "9938149389dea7f1fe21_27",
+      "distance": 0.5292,
+      "excerpt": "than rapid antigen tests. Questions & Answers Overview What are diagnostic influenza tests? How are diagnostic influenza tests interpreted? How are diagnostic influenza tests performed? What are the types of diagnostic influenza tests? When are diagnostic influenza tests indicated? What are the sensitivity and specificity of diagnostic influenza tests?"
+    },
+    {
+      "id": "rag-6fd3c1ec9cee",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "route": "safety",
+      "chunk_id": "60a8e9fb259d62f055c2_82",
+      "distance": 0.5102,
+      "excerpt": "and what do they indicate? How are Interleukin (IL) cardiac markers characterized and what do they indicate?"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "a83b1d509c61df23378d58f0a40d4b3981fedfdc1c5f0c8b7479f6800eb44a95",
+    "rag_corpus_hash": "cf4a0034b96ec982a93bec826a4f4e5bf3a0a0bf5abc97ce6499eed671a98274",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:04:16+00:00"
+  }
+}

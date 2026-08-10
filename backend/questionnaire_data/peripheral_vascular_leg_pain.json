@@ -1,0 +1,341 @@
+{
+  "id": "peripheral_vascular_leg_pain",
+  "label": "週邊血管 腿痛",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 36,
+    "source_sha256": "0f2e8af79d6a69f4c5b3dd7d85ac5329193dc7dea418ff62bbca3f58efbf5f90",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "pain_location"
+    ],
+    "priority_fields": [
+      "chest_pain",
+      "leg_swelling",
+      "affected_area_temperature",
+      "leg_skin_color_change"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 17,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "pain_onset_time",
+      "prompt": "疼痛何時開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_location",
+      "prompt": "疼痛的具體位置在小腿、大腿還是腳？ *",
+      "kind": "choice",
+      "options": [
+        "小腿",
+        "大腿",
+        "腳"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_character",
+      "prompt": "疼痛是怎麼個痛法？ 比如痙攣、酸痛、刺痛還是抽痛",
+      "kind": "choice",
+      "options": [
+        "痙攣",
+        "酸痛",
+        "刺痛",
+        "抽痛"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_timing",
+      "prompt": "疼痛是持續性的還是間歇性的",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_aggravating_factors",
+      "prompt": "什麼情況會讓疼痛加重？比如走路、站立、躺下、彎腰還是某些姿勢",
+      "kind": "choice",
+      "options": [
+        "走路",
+        "站立",
+        "躺下",
+        "彎腰",
+        "某些姿勢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_relieving_factors",
+      "prompt": "什麼情況會讓疼痛緩解？比如止痛藥、休息或是抬腿",
+      "kind": "choice",
+      "options": [
+        "止痛藥",
+        "休息",
+        "抬腿"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "previous_similar_pain",
+      "prompt": "以前是否有過類似的疼痛？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "leg_swelling",
+      "prompt": "腿部是否有腫脹？ 如果有腫脹是單側或是雙側？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "swelling_location",
+      "prompt": "如果腿部有腫脹，腫脹範圍是在大腿、小腿或是腳",
+      "kind": "choice",
+      "options": [
+        "大腿",
+        "小腿",
+        "腳"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "affected_area_temperature",
+      "prompt": "受影響區域是否發燙或是冰冷？",
+      "kind": "choice",
+      "options": [
+        "發燙",
+        "冰冷"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "leg_skin_color_change",
+      "prompt": "腿部皮膚的顏色有何變化？比如蒼白、發紺或是發紅",
+      "kind": "choice",
+      "options": [
+        "蒼白",
+        "發紺",
+        "發紅"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "blisters_in_pain_area",
+      "prompt": "疼痛區域是否有水泡？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "non_healing_ulcers_or_wounds",
+      "prompt": "腿部是否有難以癒合的潰瘍或傷口？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "fever_or_chills",
+      "prompt": "是否有發燒或畏寒？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "diagnosed_conditions",
+      "prompt": "是否有被診斷過以下疾病？請將以下有被診斷過的疾病說出來讓我知道",
+      "kind": "choice",
+      "options": [
+        "糖尿病",
+        "高血壓",
+        "心臟病",
+        "周邊動脈疾病",
+        "深靜脈血栓",
+        "靜脈曲張"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "chest_pain",
+      "prompt": "有沒有胸痛？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

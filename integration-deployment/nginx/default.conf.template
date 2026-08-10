@@ -27,12 +27,20 @@ server {
     add_header X-Content-Type-Options nosniff always;
     add_header Referrer-Policy no-referrer always;
     add_header Permissions-Policy "camera=(), geolocation=(), microphone=(self)" always;
-    add_header Content-Security-Policy "default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data: blob:; media-src 'self' blob:; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'" always;
+    # Local mode expands the suffix to empty. The deployment script permits
+    # only the exact D-ID HTTPS/WSS origins when provider `did` is selected.
+    # The D-ID SDK is locally bundled, so script-src always remains self-only.
+    add_header Content-Security-Policy "default-src 'self'; base-uri 'self'; connect-src 'self'${AVATAR_CSP_CONNECT_SRC_SUFFIX}; font-src 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data: blob:; media-src 'self' blob:; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'" always;
 
     location = /healthz {
         access_log off;
         default_type text/plain;
         return 200 "ok\n";
+    }
+
+    location = /avatar/doctor.png {
+        access_log off;
+        alias /usr/share/nginx/avatar-doctor.png;
     }
 
     # Do not publish clinician endpoints or invitation creation on the patient
@@ -43,6 +51,22 @@ server {
 
     location = /api/v1/invitations {
         return 404;
+    }
+
+    # Local TTS + lip-sync generation can take longer than a chat request on
+    # its first model load. Authentication is still enforced by FastAPI.
+    location = /api/v1/avatar/speak {
+        proxy_pass http://medical_backend/v1/avatar/speak;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Request-ID $request_id;
+        proxy_connect_timeout 10s;
+        proxy_send_timeout ${AVATAR_UPSTREAM_TIMEOUT};
+        proxy_read_timeout ${AVATAR_UPSTREAM_TIMEOUT};
+        proxy_buffering off;
     }
 
     # Backend authentication remains authoritative. The public gateway exposes

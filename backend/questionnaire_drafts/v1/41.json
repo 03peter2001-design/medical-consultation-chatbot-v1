@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "id": "stroke",
+  "label": "中風",
+  "source_order": 41,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "symptom_onset_time",
+      "current_fast_symptoms"
+    ],
+    "priority_fields": [
+      "symptom_onset_time",
+      "current_fast_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 6,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "symptom_onset_time",
+      "prompt": "症狀是什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是什麼時候開始的？ *"
+      ]
+    },
+    {
+      "field": "current_fast_symptoms",
+      "prompt": "現在是否有嘴角歪斜、說話困難或手腳麻木無力的症狀",
+      "kind": "choice",
+      "options": [
+        "嘴角歪斜",
+        "說話困難",
+        "手腳麻木無力"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "現在是否有嘴角歪斜、說話困難或手腳麻木無力的症狀 *"
+      ]
+    },
+    {
+      "field": "affected_body_parts",
+      "prompt": "受影響的部位是臉、上肢、下肢還是單側身體？",
+      "kind": "choice",
+      "options": [
+        "臉",
+        "上肢",
+        "下肢",
+        "單側身體"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "受影響的部位是臉、上肢、下肢還是單側身體？"
+      ]
+    },
+    {
+      "field": "symptom_progression",
+      "prompt": "症狀自開始以來有好轉嗎？ 還是時好時壞",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀自開始以來有好轉嗎？ 還是時好時壞"
+      ]
+    },
+    {
+      "field": "previous_similar_symptoms",
+      "prompt": "以前是否有過類似的症狀？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "以前是否有過類似的症狀？"
+      ]
+    },
+    {
+      "field": "chest_pain",
+      "prompt": "有沒有胸痛？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "有沒有胸痛？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "中風是緊急醫療狀況。若使用者回報嘴角歪斜、說話困難或單側無力等急性症狀，應優先引導至緊急醫療流程，而非繼續填寫問卷。",
+      "source_ids": [
+        "rag-c75eb29d9661",
+        "rag-065872a06c3f"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-c75eb29d9661",
+      "title": "Ischemic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916852-overview",
+      "route": "headache",
+      "chunk_id": "536871af6462d18d854b_2",
+      "distance": 0.4109,
+      "excerpt": "neurologic deficit or any alteration in level of consciousness. Common stroke signs and symptoms include the following: Abrupt onset of hemiparesis, monoparesis, or (rarely) quadriparesis Hemisensory deficits Monocular or binocular visual loss Visual field deficits Diplopia Dysarthria Facial droop Ataxia Vertigo (rarely in isolation) Nystagmus Aphasia Sudden decrease in level of consciousness Although such symptoms can occur alone, they are more likely to occur in combination. No historical feature distinguishes ischemic from hemorrhagic stroke, although nausea, vomiting, headache, and sudden"
+    },
+    {
+      "id": "rag-65b16e084fa2",
+      "title": "Trichinosis (Trichinellosis): Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230490-overview",
+      "route": "headache",
+      "chunk_id": "18637b5c7017fc509666_17",
+      "distance": 0.4211,
+      "excerpt": "Those with mild symptoms improve in 2-3 weeks. Symptoms associated with heavy infections may persist for 2-3 months. Factors that may affect morbidity include the quantity of larvae ingested, the species of Trichinella (most notably T spiralis), and the immune status of the host. Patients succumb to exhaustion, pneumonia, pulmonary embolism, encephalitis, or cardiac failure and/or arrhythmia. Death from trichinosis usually occurs in 4-8 weeks but may occur as early as in 2-3 weeks. Race Although Trichinella infections may be related to cultural differences in food cooking and storing methods"
+    },
+    {
+      "id": "rag-065872a06c3f",
+      "title": "Hemorrhagic Stroke: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1916662-overview",
+      "route": "headache",
+      "chunk_id": "fb667a66b0c052e9418e_2",
+      "distance": 0.4311,
+      "excerpt": "Puzzles slideshow to help recognize diagnostic clues in vertigo cases. Signs and symptoms Patients with intracerebral bleeds are more likely than those with ischemic stroke to have headache, altered mental status, seizures, nausea and vomiting, and/or marked hypertension. Even so, none of these findings reliably distinguishes between hemorrhagic and ischemic stroke. Focal neurologic deficits The type of deficit depends on the area of brain involved. If the dominant (usually the left) hemisphere is involved, a syndrome consisting of the following may result: Right hemiparesis Right hemisensory"
+    },
+    {
+      "id": "rag-7619661f37e2",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "headache",
+      "chunk_id": "53fc3e4f98765d889be9_5",
+      "distance": 0.4564,
+      "excerpt": "management. Also see Ischemic Stroke in Emergency Medicine and Hemorrhagic Stroke. Clinical Presentation History See the list below: Age, comorbidities Head trauma Motor vehicle collision Fall/jump from height Assault Penetrating injury Loss of consciousness Headache Changes in vision Changes in strength or sensation Coordination or balance problems Loss of executive function or cognition Seizure Coagulation disorders or therapy Intoxication; history of substance abuse Previous neurosurgery Physical See the list below: Altered mental status; unresponsiveness; deficits in Glasgow Coma Scale"
+    },
+    {
+      "id": "rag-ae9e3e9c1bce",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "route": "headache",
+      "chunk_id": "c073c38d1231a0946898_3",
+      "distance": 0.4316,
+      "excerpt": "TN. (ey are as follows: A. At least three attacks of unilateral facial pain fulfilling criteria B and C B. Occurring in one or more divisions of the trigeminal nerve, with no radiation beyond the trigeminal distribution C. Pain has at least three of the following four characteristics:J recurring in paroxysmal attacks lasting from a fraction of a second to 2 min severe intensity electric shock-like, shooting, stabbing or sharp in quality precipitated by innocuous stimuli to the affected side of the face D. No clinically evident neurological deficit E. No alternative diagnosis Pathophysiology"
+    },
+    {
+      "id": "rag-1aad73b8067d",
+      "title": "Brain Neoplasms: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/779664-overview",
+      "route": "headache",
+      "chunk_id": "8b43a6610b35f683aaa4_2",
+      "distance": 0.4334,
+      "excerpt": "intraventricular tumor suddenly occludes the third ventricle. Manifestations may be nonspecific and include the following: Headache Altered mental status Ataxia Nausea Vomiting Weakness Gait disturbance CNS neoplasms also may manifest as follows: Focal seizures Fixed visual changes Speech deficits Focal sensory abnormalities Headache associated with intracranial neoplasms have the following characteristics: Often is a late complaint Usually not an isolated finding The worst symptom in only one half of patients Usually nonspecific and resembles tension-type headaches In patients with"
+    },
+    {
+      "id": "rag-cd4d398b4553",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "route": "headache",
+      "chunk_id": "c073c38d1231a0946898_5",
+      "distance": 0.436,
+      "excerpt": "small arteries or veins compressing the facial nerve. In about 85% of cases, no lesion is identified, even after extensive investigations, and the etiology is labeled idiopathic (classic) by default. Aneurysms, tumors, chronic meningeal inflammation, or other lesions may irritate trigeminal nerve roots along the pons, causing symptomatic trigeminal neuralgia. Uncommonly, an area of demyelination from multiple sclerosis may be the precipitant. Lesions of the entry zone of the trigeminal roots within the pons may cause a similar pain syndrome. An area of demyelination is shown in the image"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "safety",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.3709,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "efe96e8f4be419b46d190aa752a12f4dc5a25c9d3adf7f3294a5aa64c19104be",
+    "rag_corpus_hash": "383faccfe248a141113e11a0c8cadc3b355edda32e83e2a679bebe9eca36d367",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:05:08+00:00"
+  }
+}

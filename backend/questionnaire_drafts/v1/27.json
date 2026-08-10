@@ -1,0 +1,304 @@
+{
+  "schema_version": 1,
+  "id": "accidental_ingestion",
+  "label": "意外吞食",
+  "source_order": 27,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "ingestion_time",
+      "ingested_substance",
+      "ingested_amount"
+    ],
+    "priority_fields": [
+      "current_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 7,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "ingestion_time",
+      "prompt": "什麼時候誤食的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼時候誤食的？"
+      ]
+    },
+    {
+      "field": "ingested_substance",
+      "prompt": "你服用了什麼物質？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你服用了什麼物質？"
+      ]
+    },
+    {
+      "field": "has_container_or_label",
+      "prompt": "你有容器或標籤嗎？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你有容器或標籤嗎？"
+      ]
+    },
+    {
+      "field": "ingested_amount",
+      "prompt": "你誤食了多少量？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你誤食了多少量？"
+      ]
+    },
+    {
+      "field": "substance_form",
+      "prompt": "這種物質是固體、液體還是氣體？",
+      "kind": "choice",
+      "options": [
+        "固體",
+        "液體",
+        "氣體"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "這種物質是固體、液體還是氣體？"
+      ]
+    },
+    {
+      "field": "ingestion_intent",
+      "prompt": "誤食是意外還是故意的？",
+      "kind": "choice",
+      "options": [
+        "意外",
+        "故意"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "誤食是意外還是故意的？"
+      ]
+    },
+    {
+      "field": "current_symptoms",
+      "prompt": "你現在是否有下面症狀？請將有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "噁心、嘔吐、腹瀉或腹痛",
+        "呼吸困難、咳嗽或喘鳴",
+        "胸痛、心悸或心跳加速",
+        "口腔、喉嚨或皮膚有灼熱感或刺激感"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你現在是否有下面症狀？請將有出現的症狀描述給我聽",
+        "噁心、嘔吐、腹瀉或腹痛",
+        "呼吸困難、咳嗽或喘鳴",
+        "胸痛、心悸或心跳加速",
+        "口腔、喉嚨或皮膚有灼熱感或刺激感"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "若患者有呼吸困難、胸痛、心悸或意識不清等嚴重症狀，可能為急性中毒或過敏性休克，應優先啟動緊急醫療流程，而非僅填寫問卷。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-c213cde023e1"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "warning",
+      "note": "若懷疑為故意服用，需評估患者的精神狀態與自殺風險。問卷僅為初步資料收集，應由專業人員進行後續評估。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4418,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-c213cde023e1",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "route": "common",
+      "chunk_id": "533df8c4e1c8cc2bd460_3",
+      "distance": 0.424,
+      "excerpt": "All observed symptoms and each one s severity Duration of the reaction Treatment provided and clinical response to treatment Most recent reaction Physical examination findings are most useful for the following: Assessing nutritional status, growth parameters, and signs of other allergic disease Helping to rule out other conditions that may mimic food allergy See Clinical Presentation for more detail. Diagnosis Laboratory studies that may be helpful include the following: Specific immunoglobulin E (IgE) antibody testing: Positive results primarily denote sensitization and may not confirm"
+    },
+    {
+      "id": "rag-1d3d3891f923",
+      "title": "Diagnostic Influenza Tests: Reference Range, Interpretation, Collection and Diagnostic Methods",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2053517-overview",
+      "route": "common",
+      "chunk_id": "9938149389dea7f1fe21_27",
+      "distance": 0.5238,
+      "excerpt": "than rapid antigen tests. Questions & Answers Overview What are diagnostic influenza tests? How are diagnostic influenza tests interpreted? How are diagnostic influenza tests performed? What are the types of diagnostic influenza tests? When are diagnostic influenza tests indicated? What are the sensitivity and specificity of diagnostic influenza tests?"
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.4343,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-f4a04057f1f5",
+      "title": "Factor V Assay: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2085248-overview",
+      "route": "common",
+      "chunk_id": "5627db1307bccf2243b5_11",
+      "distance": 0.5315,
+      "excerpt": "factor V assay? Which panel includes a factor V assay? What is factor V? When is a factor V assay indicated? What is the difference between factor V Leiden and factor V? What are the limitations of a factor V assay?"
+    },
+    {
+      "id": "rag-9005e3b63c6a",
+      "title": "Serum Protein Electrophoresis: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087113-overview",
+      "route": "common",
+      "chunk_id": "cc23c1f5f70665a63f35_21",
+      "distance": 0.5381,
+      "excerpt": "(SPEP)? Which factors affect the accuracy of serum protein electrophoresis (SPEP) results? How are specimens collected for serum protein electrophoresis (SPEP)? How are proteins classified in serum protein electrophoresis (SPEP)? What is serum protein electrophoresis (SPEP)? When is serum protein electrophoresis (SPEP) indicated?"
+    },
+    {
+      "id": "rag-90c7898b0b12",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "route": "common",
+      "chunk_id": "533df8c4e1c8cc2bd460_14",
+      "distance": 0.4799,
+      "excerpt": "most common clinical manifestations of an allergic reaction to a food or food additive. Symptoms range from acute urticaria (most common) to flushing to angioedema to exacerbations of atopic dermatitis. Food allergy is rarely the cause of chronic urticaria or angioedema. Atopic dermatitis Controversy surrounds the role of food allergy in the pathogenesis of atopic dermatitis. Studies show that among patients with moderate chronic atopic dermatitis, 35-40% have IgE-mediated food allergy. Food-specific IgE-mediated and cellular mechanisms appear responsible for chronic eczematous inflammation."
+    },
+    {
+      "id": "rag-0fbee16404b9",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "route": "safety",
+      "chunk_id": "60a8e9fb259d62f055c2_79",
+      "distance": 0.5717,
+      "excerpt": "Overview What are cardiac markers? What is the efficacy of cardiac markers? Where are troponin cardiac markers found and what reference ranges are used in troponin assays? How is creatine kinase-MB (CK-MB) used as a cardiac marker? How is myoglobin used as a cardiac marker? How are ischemia modified albumin (IMA) cardiac markers characterized and what do they indicate? What is the role of troponin cardiac markers in the diagnosis of myocardial infarction (MI)? How does the sensitivity, specificity, and precision of cardiac troponin assays vary? How is the creatine kinase-MB (CK-MB) relative"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "e6fa7e84700c88ee176a05489a14bb680c88c7c64b615fc2d258b0c703a27fd6",
+    "rag_corpus_hash": "d8180159218db0e696ce396918cb0962daeabeeded43cc5c29664e2731b08cee",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:06:09+00:00"
+  }
+}

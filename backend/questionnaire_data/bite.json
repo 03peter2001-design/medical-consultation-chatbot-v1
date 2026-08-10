@@ -1,0 +1,167 @@
+{
+  "id": "bite",
+  "label": "咬傷",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 5,
+    "source_sha256": "ceac572b96c028e58f4474c8599e18aa836af5c0bb3225c41be71d249e9d153f",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "bite_time",
+      "bite_source_animal"
+    ],
+    "priority_fields": [
+      "systemic_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 7,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "bite_time",
+      "prompt": "什麼時候被咬的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "bite_source_animal",
+      "prompt": "你知道是什麼動物或昆蟲咬你的？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "bite_location",
+      "prompt": "你在哪裡被咬傷的？是在台灣或是國外？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "initial_reaction",
+      "prompt": "被咬後的最初反應是什麼？",
+      "kind": "choice",
+      "options": [
+        "腫脹",
+        "紅腫",
+        "即時疼痛"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "local_symptom_changes",
+      "prompt": "請幫我觀察被咬傷的區域是否出現以下變化並將有出現的變化描述給我聽",
+      "kind": "choice",
+      "options": [
+        "紅腫加劇",
+        "皮疹擴散",
+        "腫脹",
+        "麻木",
+        "水泡"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "systemic_symptoms",
+      "prompt": "請幫我觀察是否有其他相關症狀並將有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "發燒或發冷畏寒",
+        "咬傷周圍或身體其他部位有腫脹",
+        "咬傷處有紅腫、皮疹或是水泡",
+        "呼吸困難、呼吸急促或喘鳴",
+        "噁心、嘔吐或腹痛",
+        "頭痛、頭暈、無力或麻木",
+        "出現蕁麻疹、癢、或臉部、嘴唇、舌頭腫脹"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "tetanus_vaccination_status",
+      "prompt": "五年內是否接受過破傷風類毒素的注射？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

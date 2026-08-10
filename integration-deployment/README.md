@@ -4,6 +4,41 @@ This directory contains a deployment blueprint only. Nothing here overwrites
 `C:\Deploy\eHIS`, starts IIS, or starts Ubuntu services until an administrator
 explicitly runs the scripts.
 
+## Service version
+
+目前文件基線為 **integration deployment bundle v1.0.0**（截至 2026-08-07）。
+這是依 `devlog/` 回溯整理的部署文件版本，用來標示安全整合藍圖、雙前端與
+GPU／Avatar 部署能力的共同基線；repository 目前沒有與此版本對應的 Git tag，
+也不表示任何院所環境已完成正式上線驗收。
+
+### v1.0.0（截至 2026-08-07）
+
+- **2026-08-06 — 安全邊界與雙前端部署基線**
+  - 後端整合 RS256 JWT、scope、一次性病患邀請、Secure／HttpOnly session、
+    institution／encounter isolation、安全稽核與明確 CORS allowlist；正式環境可
+    停用未版本化 API aliases。
+  - 建立 `frontend-v2` doctor／patient 分離部署：醫師端位於 `/ai-consult/`，
+    由 UCC bootstrap 取得短效記憶體 token；病患端以 fragment invitation token
+    交換 HttpOnly session，且不包含醫師 router 或 API client。
+  - 新增 Ubuntu Docker Compose／Nginx 唯一入口、私有 FastAPI port、UCC 與病患
+    listener／路由隔離、IIS `/ai-api` reverse proxy、doctor CSP 與 PowerShell
+    build／安裝腳本。
+  - 新增 Ubuntu deploy、SQLite online backup／確認式 restore 與靜態設定驗證；
+    文件涵蓋 TLS、憑證、firewall、單 worker、WAL、金鑰權限與驗收程序。
+- **2026-08-07 — GPU、ASR、Avatar 與部署前驗證**
+  - 部署藍圖納入 Breeze-ASR-26、私有 CosyVoice3 + MuseTalk 1.5 Avatar service，
+    以及可切換的 D-ID browser provider；Avatar service 不發布 host port。
+  - backend／Avatar image 與 Compose 加入 CUDA 12.8、NVIDIA GPU reservation、
+    Hugging Face／模型／影片 volumes，以及各階段模型卸載與 VRAM 釋放設定，供
+    單張 16 GB GPU 的循序錄音→辨識→影片流程使用。
+  - Nginx 加入 Avatar 長 timeout、固定醫師圖片路徑與 provider-specific CSP；
+    local mode 維持 self-only，D-ID mode 僅增加必要 HTTPS／WSS endpoints。
+  - Ubuntu deployment script 僅讀取三個 browser build 設定，不 source server
+    secrets 或輸出值；部署前驗證新增 CUDA、ASR／Avatar invariants、敏感資料與
+    ignore 檢查。
+  - loopback auth bypass 仍預設關閉，且只接受直接 TCP peer 為 loopback；正式
+    UCC principal 持續強制 tenant isolation。
+
 ## Architecture
 
 ```text
@@ -14,6 +49,7 @@ Patient browser -> https://patient.example/ (patient static build)
                 -> /api/v1/* -> Nginx -> FastAPI
 
 FastAPI -> one Docker-internal port, one worker, SQLite WAL named volume
+FastAPI -> private avatar service -> local CosyVoice3 -> local MuseTalk 1.5
 ```
 
 FastAPI has no published host port. Patient traffic and UCC traffic both pass
@@ -26,9 +62,12 @@ The public patient listener returns 404 for `/api/v1/doctor/*` and for the UCC
 invitation-creation endpoint. FastAPI JWT/scope enforcement remains the final
 authorization boundary; the Nginx blocks are defense in depth.
 
-The backend alone joins a separate outbound-only Docker bridge so it can reach
-the configured LLM/FHIR providers. No host port is published on that network.
-Restrict outbound DNS/IPs at the host firewall when provider endpoints are fixed.
+The backend and avatar service join a separate, unpublished Docker bridge. The
+backend uses it for the configured LLM/FHIR providers; the avatar service uses
+it to download model weights during setup. Neither service publishes a host
+port. Avatar inference is local after the weights are cached in the
+`avatar-models` Docker volume. Restrict outbound DNS/IPs at the host firewall
+when provider endpoints are fixed.
 
 ## 1. Ubuntu preparation and deployment
 
@@ -64,10 +103,98 @@ curl --fail https://ai-api.internal.example:8443/v1/health   # from IIS host onl
 docker compose ps
 ```
 
+### Breeze ASR GPU
+
+The backend image uses the CUDA 12.8 PyTorch wheel and Compose reserves one
+NVIDIA GPU. On the Ubuntu host, install NVIDIA Container Toolkit before the
+first deployment, then configure Docker and restart the daemon. Restarting
+Docker can interrupt running containers, so schedule this step accordingly:
+
+```sh
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
+nvidia-smi
+docker run --rm --gpus all nvidia/cuda:12.8.1-base-ubuntu22.04 nvidia-smi
+```
+
+Set `ASR_PROVIDER=breeze` and `BREEZE_ASR_DEVICE=cuda` in `.env`. After the
+first transcription, `GET /v1/health` should report
+`speech_transcription.loaded` as `false` again when
+`BREEZE_ASR_RELEASE_GPU_AFTER_TRANSCRIBE=true`; this is expected because the
+CUDA pipeline is unloaded before the following chat/avatar request. During
+inference it temporarily reports `device: cuda:0`. The mounted
+`HF_MODEL_CACHE_PATH` is writable because Breeze-ASR-26 downloads roughly 6 GB
+of model files on first use. Disabling the release option reduces subsequent
+ASR latency but is unsafe when Avatar shares a 16 GB GPU.
+
 The gateway logs method and path only: query strings, Referer headers, request
 bodies, invitation tokens, and clinical content are deliberately omitted.
 Uvicorn access logging is disabled; security events remain in the application
 audit table. Central log collectors must apply the same PII/token redaction.
+
+### Local CosyVoice3 + MuseTalk Avatar
+
+Set `AVATAR_PROVIDER=local` to use `FunAudioLLM/Fun-CosyVoice3-0.5B-2512` for
+speech and MuseTalk 1.5 for lip sync, based on `pic/dr training pc.png`.
+Pre-download the checkpoints before accepting patient traffic:
+
+```sh
+docker compose build avatar
+docker compose run --rm avatar python3.10 -m app.download_models
+docker compose up -d avatar
+docker compose ps avatar
+docker compose exec avatar python3.10 -c \
+  "import json,urllib.request; print(json.load(urllib.request.urlopen('http://127.0.0.1:8090/health')))"
+```
+
+The health output must show `status: ok`, `device: cuda:0`, and
+`models_downloaded: true`. This deployment enables
+`AVATAR_RELEASE_GPU_AFTER_RENDER=true`: after CosyVoice has written the WAV it
+is unloaded before MuseTalk starts, and all remaining Avatar models are
+unloaded after the MP4 completes. This returns VRAM to the lazy-loaded Breeze
+ASR, but every uncached sentence pays model reload latency. A cached sentence
+serves its existing MP4 without loading either model. While an uncached render
+is active, health may temporarily show `speech_loaded` or `animation_loaded` as
+`true`; both return to `false` afterward. Generated MP4 files are capped by
+count and stored in `avatar-cache`; do not treat that volume as a clinical
+record.
+
+The paired Breeze and Avatar release settings prevent the normal sequential
+flow (recording → transcription → response video) from leaving either model
+resident when the other starts. They do not serialize truly simultaneous ASR
+and Avatar requests from different users; on a multi-user installation, lower
+`MUSETALK_BATCH_SIZE` and enforce admission control or dedicate separate GPUs
+after measuring concurrent peak memory.
+
+The bundled CosyVoice sample is only a bootstrap voice. Before clinical use,
+mount a short consented reference recording as described in
+[`../avatar-service/README.md`](../avatar-service/README.md). Obtain explicit
+permission for both the source portrait and voice, and label the experience as
+AI-generated.
+
+### D-ID Avatar provider
+
+Set `AVATAR_PROVIDER=did` and provide `DID_CLIENT_KEY` plus `DID_AGENT_ID` in
+`integration-deployment/.env` to retain the D-ID browser client. The Ubuntu
+deployment script reads only these three settings and injects them into the
+patient Vite build as `VITE_*` values; it never prints their values or sources
+the server credential file. Re-run the deployment script whenever the provider
+or D-ID settings change because they are compiled into the static patient
+bundle.
+
+All Vite environment values are public to anyone who can load or inspect the
+patient JavaScript. `DID_CLIENT_KEY` must therefore be a credential explicitly
+intended by D-ID for browser/client distribution. Do not place a reusable D-ID
+API secret here; supporting a server secret requires a backend proxy instead.
+The gateway serves a prebuilt bind-mounted `frontend-v2` dist, so these values
+are intentionally not passed as Docker Compose build arguments.
+
+The patient Content Security Policy is provider-specific. Local mode keeps both
+`connect-src` and `script-src` restricted to `'self'`. The deployment script
+adds only `https://*.d-id.com` and `wss://*.d-id.com` to `connect-src` for D-ID;
+the SDK is bundled locally, so no third-party script origin is allowed. A manual
+`docker compose up` defaults to the strict local policy. Use the deployment
+script for a D-ID release so the validated provider and CSP cannot drift apart.
 
 ## 2. UCC doctor frontend
 

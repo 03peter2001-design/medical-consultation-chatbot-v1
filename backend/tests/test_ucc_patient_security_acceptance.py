@@ -1,6 +1,5 @@
 import asyncio
 import gc
-import inspect
 import os
 import sqlite3
 import tempfile
@@ -26,8 +25,7 @@ from app import runtime
 from app.models import ChatRequest, InvitationCreateRequest, InvitationExchangeRequest
 from app.routes import doctor, invitations, patient, system
 from app.security import UccPrincipal, authenticate_ucc, require_scopes
-from infrastructure.consultation_repository import ConsultationRepository, SCHEMA_VERSION
-
+from infrastructure.consultation_repository import SCHEMA_VERSION, ConsultationRepository
 
 ROOT = Path(__file__).resolve().parents[2]
 EHIS = Path(r"D:\ehis\eHIS")
@@ -39,9 +37,7 @@ def _request() -> Request:
 
 def _route(router, path: str, method: str):
     return next(
-        route
-        for route in router.routes
-        if route.path == path and method.upper() in route.methods
+        route for route in router.routes if route.path == path and method.upper() in route.methods
     )
 
 
@@ -60,9 +56,11 @@ class UccJwtAcceptanceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
-        cls.public_pem = cls.private_key.public_key().public_bytes(
-            Encoding.PEM, PublicFormat.SubjectPublicKeyInfo
-        ).decode("ascii")
+        cls.public_pem = (
+            cls.private_key.public_key()
+            .public_bytes(Encoding.PEM, PublicFormat.SubjectPublicKeyInfo)
+            .decode("ascii")
+        )
         cls.private_pem = cls.private_key.private_bytes(
             Encoding.PEM, PrivateFormat.PKCS8, NoEncryption()
         ).decode("ascii")
@@ -162,7 +160,9 @@ class InvitationAndSessionAcceptanceTests(unittest.TestCase):
         gc.collect()
         self.temp_directory.cleanup()
 
-    def _invite(self, institution="hospital-a", patient_sno="patient-1", reg_sno="visit-1", **kwargs):
+    def _invite(
+        self, institution="hospital-a", patient_sno="patient-1", reg_sno="visit-1", **kwargs
+    ):
         return self.repository.create_invitation(
             institution_id=institution,
             patient_sno=patient_sno,
@@ -189,7 +189,9 @@ class InvitationAndSessionAcceptanceTests(unittest.TestCase):
 
         session_expiry = datetime.fromisoformat(exchanged["expires_at"])
         self.assertGreaterEqual(session_expiry, before + timedelta(hours=8) - timedelta(seconds=2))
-        self.assertLessEqual(session_expiry, datetime.now(timezone.utc) + timedelta(hours=8, seconds=2))
+        self.assertLessEqual(
+            session_expiry, datetime.now(timezone.utc) + timedelta(hours=8, seconds=2)
+        )
 
         with closing(sqlite3.connect(self.database_path)) as connection:
             invitations_rows = connection.execute(
@@ -199,8 +201,7 @@ class InvitationAndSessionAcceptanceTests(unittest.TestCase):
                 "SELECT session_token_hash FROM patient_sessions"
             ).fetchone()[0]
             audit_actions = [
-                row[0]
-                for row in connection.execute("SELECT action FROM audit_events ORDER BY id")
+                row[0] for row in connection.execute("SELECT action FROM audit_events ORDER BY id")
             ]
         self.assertNotIn(old["token"], {row[0] for row in invitations_rows})
         self.assertNotEqual(patient_token_hash, exchanged["session_token"])
@@ -268,8 +269,9 @@ class InvitationAndSessionAcceptanceTests(unittest.TestCase):
     def test_exchange_sets_secure_httponly_samesite_cookie_and_session_restores(self):
         invitation = self._invite()
         response = Response()
-        with patch.object(runtime, "consultation_repository", self.repository), patch.dict(
-            os.environ, {"PATIENT_COOKIE_SECURE": "true"}, clear=False
+        with (
+            patch.object(runtime, "consultation_repository", self.repository),
+            patch.dict(os.environ, {"PATIENT_COOKIE_SECURE": "true"}, clear=False),
         ):
             payload = InvitationExchangeRequest(token=invitation["token"])
             result = invitations.exchange_invitation(payload, response)
@@ -293,13 +295,17 @@ class InvitationAndSessionAcceptanceTests(unittest.TestCase):
             patient_prefill={"name": "attacker name"},
         )
         isolated_sessions = {}
-        with patch.object(patient, "INTERVIEW_ENGINE", "legacy"), patch.object(
-            patient, "sessions", isolated_sessions
-        ), patch.object(patient, "current_patient_session", return_value=bound):
+        with (
+            patch.object(patient, "INTERVIEW_ENGINE", "legacy"),
+            patch.object(patient, "sessions", isolated_sessions),
+            patch.object(patient, "current_patient_session", return_value=bound),
+        ):
             result = asyncio.run(patient.chat(request, BackgroundTasks()))
         self.assertEqual(result["session_id"], bound["interview_session_id"])
         self.assertNotIn("attacker-selected-session", isolated_sessions)
-        self.assertEqual(isolated_sessions[bound["interview_session_id"]]["data"]["name"], "patient-a")
+        self.assertEqual(
+            isolated_sessions[bound["interview_session_id"]]["data"]["name"], "patient-a"
+        )
 
     def test_patient_interview_restores_after_restart_beyond_thirty_minutes(self):
         invitation = self._invite(patient_sno="patient-a")
@@ -307,12 +313,11 @@ class InvitationAndSessionAcceptanceTests(unittest.TestCase):
         bound = self.repository.get_patient_session(exchange["session_token"])
         isolated_sessions = {}
 
-        with patch.object(patient, "INTERVIEW_ENGINE", "legacy"), patch.object(
-            patient, "sessions", isolated_sessions
-        ), patch.object(
-            patient, "consultation_repository", self.repository
-        ), patch.object(
-            patient, "current_patient_session", return_value=bound
+        with (
+            patch.object(patient, "INTERVIEW_ENGINE", "legacy"),
+            patch.object(patient, "sessions", isolated_sessions),
+            patch.object(patient, "consultation_repository", self.repository),
+            patch.object(patient, "current_patient_session", return_value=bound),
         ):
             started = asyncio.run(
                 patient.chat(ChatRequest(session_id="ignored"), BackgroundTasks())
@@ -322,9 +327,7 @@ class InvitationAndSessionAcceptanceTests(unittest.TestCase):
             persisted = self.repository.load_patient_runtime_state(
                 **patient._patient_runtime_binding(bound)
             )
-            persisted["ts"] = (
-                datetime.now(timezone.utc) - timedelta(minutes=31)
-            ).timestamp()
+            persisted["ts"] = (datetime.now(timezone.utc) - timedelta(minutes=31)).timestamp()
             self.assertTrue(
                 self.repository.save_patient_runtime_state(
                     **patient._patient_runtime_binding(bound),
@@ -334,9 +337,7 @@ class InvitationAndSessionAcceptanceTests(unittest.TestCase):
 
             # Simulate a new process: its in-memory runtime has no interview.
             isolated_sessions.clear()
-            with patch.object(
-                patient, "_assess_chief_complaint", return_value=("headache", [])
-            ):
+            with patch.object(patient, "_assess_chief_complaint", return_value=("headache", [])):
                 continued = asyncio.run(
                     patient.chat(
                         ChatRequest(session_id="attacker", message="headache"),
@@ -350,9 +351,7 @@ class InvitationAndSessionAcceptanceTests(unittest.TestCase):
             "headache",
         )
         reopened = ConsultationRepository(self.database_path)
-        durable = reopened.load_patient_runtime_state(
-            **patient._patient_runtime_binding(bound)
-        )
+        durable = reopened.load_patient_runtime_state(**patient._patient_runtime_binding(bound))
         self.assertEqual(durable["data"]["reason"], "headache")
 
     def test_runtime_state_is_patient_bound_bounded_and_expires_with_eight_hour_session(self):
@@ -361,9 +360,7 @@ class InvitationAndSessionAcceptanceTests(unittest.TestCase):
         bound = self.repository.get_patient_session(exchange["session_token"])
         binding = patient._patient_runtime_binding(bound)
         state = {"session_id": bound["interview_session_id"], "data": {}}
-        self.assertTrue(
-            self.repository.save_patient_runtime_state(**binding, state=state)
-        )
+        self.assertTrue(self.repository.save_patient_runtime_state(**binding, state=state))
         self.assertIsNone(
             self.repository.load_patient_runtime_state(
                 **{**binding, "patient_sno": "another-patient"}
@@ -432,23 +429,23 @@ class SchemaAndRouteAcceptanceTests(unittest.TestCase):
                         "SELECT name FROM sqlite_master WHERE type='table'"
                     )
                 }
-                columns = {
-                    row[1] for row in connection.execute("PRAGMA table_info(consultations)")
-                }
+                columns = {row[1] for row in connection.execute("PRAGMA table_info(consultations)")}
                 patient_session_columns = {
                     row[1] for row in connection.execute("PRAGMA table_info(patient_sessions)")
                 }
-                foreign_keys = connection.execute("PRAGMA foreign_key_list(patient_sessions)").fetchall()
+                foreign_keys = connection.execute(
+                    "PRAGMA foreign_key_list(patient_sessions)"
+                ).fetchall()
             self.assertEqual(version, SCHEMA_VERSION, 7)
             self.assertEqual(journal.casefold(), "wal")
             self.assertTrue({"invitations", "patient_sessions", "audit_events"} <= tables)
             self.assertTrue(
                 {"invitation_id", "institution_id", "patient_sno", "reg_sno"} <= columns
             )
+            self.assertTrue({"runtime_state_json", "runtime_updated_at"} <= patient_session_columns)
             self.assertTrue(
-                {"runtime_state_json", "runtime_updated_at"} <= patient_session_columns
+                any(row[2] == "invitations" and row[3] == "invite_id" for row in foreign_keys)
             )
-            self.assertTrue(any(row[2] == "invitations" and row[3] == "invite_id" for row in foreign_keys))
 
     def test_patient_doctor_transcribe_and_rule_route_scopes(self):
         self.assertEqual(
@@ -461,9 +458,7 @@ class SchemaAndRouteAcceptanceTests(unittest.TestCase):
             ),
             {"consultation:read", "consultation:delete"},
         )
-        ordinary_doctor = UccPrincipal(
-            "doctor", "hospital-a", frozenset({"consultation:read"}), {}
-        )
+        ordinary_doctor = UccPrincipal("doctor", "hospital-a", frozenset({"consultation:read"}), {})
         with self.assertRaises(HTTPException) as denied:
             require_scopes("consultation:delete")(principal=ordinary_doctor)
         self.assertEqual(denied.exception.status_code, 403)
@@ -490,7 +485,9 @@ class SchemaAndRouteAcceptanceTests(unittest.TestCase):
             "require_patient_session",
             {
                 dependency.call.__name__
-                for dependency in _route(system.router, "/transcribe", "POST").dependant.dependencies
+                for dependency in _route(
+                    system.router, "/transcribe", "POST"
+                ).dependant.dependencies
             },
         )
 
@@ -498,9 +495,7 @@ class SchemaAndRouteAcceptanceTests(unittest.TestCase):
         source = (ROOT / "backend" / "app" / "factory.py").read_text(encoding="utf-8")
         self.assertIn('os.getenv("CORS_ALLOWED_ORIGINS", "")', source)
         self.assertNotIn('allow_origins=["*"]', source.replace(" ", ""))
-        env_example = (ROOT / "integration-deployment" / ".env.example").read_text(
-            encoding="utf-8"
-        )
+        env_example = (ROOT / "integration-deployment" / ".env.example").read_text(encoding="utf-8")
         self.assertIn("ENABLE_UNVERSIONED_ALIASES=false", env_example)
         self.assertIn("CORS_ALLOWED_ORIGINS=", env_example)
         compose = (ROOT / "integration-deployment" / "docker-compose.yml").read_text(
@@ -531,15 +526,15 @@ class SchemaAndRouteAcceptanceTests(unittest.TestCase):
 
 class EhisStaticContractTests(unittest.TestCase):
     def test_controller_enforces_menu_encounter_csrf_and_expected_contract(self):
-        controller = (EHIS / "Controllers" / "AiConsultController.cs").read_text(
-            encoding="utf-8"
-        )
+        controller = (EHIS / "Controllers" / "AiConsultController.cs").read_text(encoding="utf-8")
         self.assertIn("[ValidateAntiForgeryToken]", controller)
         self.assertGreaterEqual(controller.count('HasMenuPermission("Index")'), 3)
         self.assertGreaterEqual(controller.count("GetAccessibleEncounterAsync"), 2)
         self.assertIn('HasMenuPermission("RuleCenter")', controller)
         self.assertIn('new[] { "invite:create" }', controller)
-        doctor_scopes = controller.split("private static readonly string[] DoctorScopes", 1)[1].split("};", 1)[0]
+        doctor_scopes = controller.split("private static readonly string[] DoctorScopes", 1)[
+            1
+        ].split("};", 1)[0]
         self.assertNotIn('"invite:create"', doctor_scopes)
         self.assertIn('"doctor"', controller)
         self.assertIn('"ucc_service"', controller)
@@ -600,7 +595,7 @@ class EhisStaticContractTests(unittest.TestCase):
         self.assertIn('new Uri(baseBuilder.Uri, "v1/invitations")', gateway)
         for origin_component in ("endpoint.Scheme", "endpoint.Host", "endpoint.Port"):
             self.assertIn(origin_component, gateway)
-        self.assertIn("AuthenticationHeaderValue(\"Bearer\", serviceToken)", gateway)
+        self.assertIn('AuthenticationHeaderValue("Bearer", serviceToken)', gateway)
 
         startup = (EHIS / "Startup.cs").read_text(encoding="utf-8")
         self.assertIn("AllowAutoRedirect = false", startup)

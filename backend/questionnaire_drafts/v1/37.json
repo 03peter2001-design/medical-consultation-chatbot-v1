@@ -1,0 +1,385 @@
+{
+  "schema_version": 1,
+  "id": "psychosocial_issues",
+  "label": "精神 社會問題",
+  "source_order": 37,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "suicidal_or_self_harm_thoughts"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 11,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "primary_psychosocial_conditions",
+      "prompt": "您主要面臨的精神或社會狀況是什麼？ 請將以下你有面臨的狀況或是其他問題說出來讓我了解",
+      "kind": "choice",
+      "options": [
+        "焦慮",
+        "抑鬱",
+        "壓力過大",
+        "失眠",
+        "人際關係問題",
+        "家庭問題",
+        "工作壓力"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您主要面臨的精神或社會狀況是什麼？ 請將以下你有面臨的狀況或是其他問題說出來讓我了解",
+        "焦慮",
+        "抑鬱",
+        "壓力過大",
+        "失眠",
+        "人際關係問題",
+        "家庭問題",
+        "工作壓力"
+      ]
+    },
+    {
+      "field": "problem_duration",
+      "prompt": "這個問題已經持續了多久？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "這個問題已經持續了多久？"
+      ]
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "您是否有以下任何症狀？ 請將以下你有的症狀或是其他症狀說出來讓我知道",
+      "kind": "choice",
+      "options": [
+        "持續的悲傷或空虛感",
+        "對日常活動失去興趣或樂趣",
+        "易怒或煩躁",
+        "感到無助或無價值",
+        "食欲或體重顯著變化",
+        "睡眠問題（失眠或過度睡眠）",
+        "注意力集中困難",
+        "經常疲倦或無精打采",
+        "無明顯原因身體不適（如頭痛、消化問題）"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有以下任何症狀？ 請將以下你有的症狀或是其他症狀說出來讓我知道",
+        "持續的悲傷或空虛感",
+        "對日常活動失去興趣或樂趣",
+        "易怒或煩躁",
+        "感到無助或無價值",
+        "食欲或體重顯著變化",
+        "睡眠問題（失眠或過度睡眠）",
+        "注意力集中困難",
+        "經常疲倦或無精打采",
+        "無明顯原因身體不適（如頭痛、消化問題）"
+      ]
+    },
+    {
+      "field": "suicidal_or_self_harm_thoughts",
+      "prompt": "您是否有自殺或自殘的念頭？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有自殺或自殘的念頭？"
+      ]
+    },
+    {
+      "field": "sought_psychological_counseling",
+      "prompt": "您是否有尋求過心理諮詢或治療？ 若有請描述",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有尋求過心理諮詢或治療？ 若有請描述"
+      ]
+    },
+    {
+      "field": "medication_for_psychosocial_issues",
+      "prompt": "您是否有使用任何藥物來治療精神或社會問題？ 若有請描述使用的藥物",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有使用任何藥物來治療精神或社會問題？ 若有請描述使用的藥物"
+      ]
+    },
+    {
+      "field": "support_system",
+      "prompt": "您週遭是否有像家人、朋友、同事、支援小組或其他支持系統？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您週遭是否有像家人、朋友、同事、支援小組或其他支持系統？"
+      ]
+    },
+    {
+      "field": "major_life_changes_or_stressors",
+      "prompt": "您的生活中是否有重大的變化或壓力源？ 若有請描述讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您的生活中是否有重大的變化或壓力源？ 若有請描述讓我知道"
+      ]
+    },
+    {
+      "field": "chronic_illnesses_or_health_problems",
+      "prompt": "您是否有任何慢性疾病或其他健康問題？ 若有請描述讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有任何慢性疾病或其他健康問題？ 若有請描述讓我知道"
+      ]
+    },
+    {
+      "field": "past_mental_health_history",
+      "prompt": "您是否有過去的精神健康問題病史？ 若有請描述讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有過去的精神健康問題病史？ 若有請描述讓我知道"
+      ]
+    },
+    {
+      "field": "additional_information",
+      "prompt": "是否有其他需要補充的情況或問題？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有其他需要補充的情況或問題？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "若 suicidal_or_self_harm_thoughts 回答為「是」，應立即啟動緊急安全協議，而非繼續一般問卷流程。此為高風險警訊，需立即由專業人員介入。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-e0bcef352b95"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4227,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-fe2c1ff9913b",
+      "title": "Substance-Induced Mood Disorder: Overview, Substances Linked to Depression or Mania, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/286885-overview",
+      "route": "safety",
+      "chunk_id": "df1dc70d4685bf4948c8_13",
+      "distance": 0.5037,
+      "excerpt": "as depressive symptoms. A 2013 meta-analysis described lower rates of depression in individuals treated with beta blockers as compared to placebo. Calcium channel blockers Clonidine An early study of clonidine in the treatment of hypertension reported treatment-emergent depression in three of 28 patients, two of which had a history of recurrent depression. One instance of hypomania was also reported in a patient with a history of depression and psychosis. Digoxin A small prospective study linked digoxin treatment with increased risk of depression following myocardial infarction. Digoxin has"
+    },
+    {
+      "id": "rag-e0bcef352b95",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "common",
+      "chunk_id": "bb1164c188b2fc1e1591_6",
+      "distance": 0.5045,
+      "excerpt": "Emergency medical attention should be sought if the patient develops trouble breathing, persistent pain or chest pressure, new confusion, inability to awaken or to stay awake, or bluish lips or face. Who is at risk for severe coronavirus disease 2019 (COVID-19)? Risk factors for severe COVID-19, regardless of age, include the following: Chronic kidney disease COPD Immunocompromised state due to solid organ transplant Obesity (BMI ≥30) Serious heart conditions (eg, heart failure, coronary artery disease, cardiomyopathies) Sickle cell disease Type 2 diabetes mellitus The following are underlying"
+    },
+    {
+      "id": "rag-7ef049929997",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "route": "common",
+      "chunk_id": "2b6eb94497953c8a6426_13",
+      "distance": 0.4995,
+      "excerpt": "unconscious, family, friends, or prehospital personnel can be questioned). Other history findings may include the following: Recent noncompliance with medications History of central nervous system (CNS) pathology (stroke, neoplasms, recent surgery) History of systemic neoplasms, infections, metabolic disorders, or toxic ingestions Recent trauma or fall Alcohol abuse Recent travel or immigration to the United States Pregnancy Focal symptoms (partial seizure activity) that then progressed to a generalized seizure Physical examination A generalized seizure is recognizable at the bedside when"
+    },
+    {
+      "id": "rag-0ba08919556c",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "common",
+      "chunk_id": "bb1164c188b2fc1e1591_7",
+      "distance": 0.5191,
+      "excerpt": "Sickle cell disease Type 2 diabetes mellitus The following are underlying conditions that may represent an increased risk of severe COVID-19: Asthma (moderate to severe) Cerebrovascular disease Cystic fibrosis Immunocompromised state due to blood or bone marrow transplant, immunodeficiencies, HIV infection, corticosteroid use (or other medications that weaken the immune system) Neurologic conditions (eg, dementia) Liver disease Pregnancy Pulmonary fibrosis Smoking Thalassemia Type 1 diabetes mellitus People who live in a nursing home or long-term care facility are also at a higher risk of"
+    },
+    {
+      "id": "rag-ef2d7d50973a",
+      "title": "Substance-Induced Mood Disorder: Overview, Substances Linked to Depression or Mania, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/286885-overview",
+      "route": "common",
+      "chunk_id": "df1dc70d4685bf4948c8_9",
+      "distance": 0.5126,
+      "excerpt": "of depression in this population (20% 45%) raises important questions about IFN tolerability/toxicity. Patients with hepatitis C and a previous history of psychiatric illness (and more specifically depression) before IFN treatment are at an even a greater risk for developing IFN-induced depression. Different types of IFN may have different risk profiles. In a prospective study of 96 patients treated with different types of IFN, the highest incidence of depression was reported with IFN-alpha n1, the lowest incidence with IFN-alpha n3, and the most severe depression and the highest rate of"
+    },
+    {
+      "id": "rag-bc95b80d4049",
+      "title": "Hypertensive Emergencies: Uncontrolled Blood Pressure, Management of Hypertensive Emergencies",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1952052-overview",
+      "route": "common",
+      "chunk_id": "9ba3bdd8c1367b8de718_44",
+      "distance": 0.5382,
+      "excerpt": "emergency? How common are hypertensive emergencies in the US? What is the role of the history and the physical exam in hypertensive emergencies? What are the most common clinical presentations of hypertensive emergencies? What causes hypertensive emergencies in pregnancy? What are the essential elements of evaluating a patient&#39;s hypertension history in hypertensive emergencies? Which symptoms of hypertensive emergencies may indicate end-organ damage? What should be evaluated in the physical exam of hypertensive emergency? Which symptoms are associated with a hypertensive emergency? Which"
+    },
+    {
+      "id": "rag-6a8588ffc76c",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "route": "common",
+      "chunk_id": "a663d18c5f77da4d66fd_25",
+      "distance": 0.5329,
+      "excerpt": "level. Toxicity is defined as a clinical syndrome with the following: lethargy with (1) poor perfusion as evidenced by delayed capillary refill or (2) cyanosis or other signs of respiratory distress. Cold hands and feet, limb pain, and pale or mottled skin are considered \"red flag\" manifestations of septicemia. The presence or absence of meningeal signs is documented in older children. Clinicians should bear in mind that in some infants and younger children (perhaps younger than 12-15 months) who develop meningitis, specific meningeal signs, such as the Kernig or Brudzinski sign, may not be"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "17a2bf0d41be47499f7ea16c1123bba07b57abc811f7bb0991113a8d67ffbd92",
+    "rag_corpus_hash": "8fe35f0d560d67ff29ce5c8f10e23d59864d96351fe3a9dc12247b452c21127f",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:03:12+00:00"
+  }
+}

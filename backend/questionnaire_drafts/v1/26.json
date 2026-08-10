@@ -1,0 +1,547 @@
+{
+  "schema_version": 1,
+  "id": "infection",
+  "label": "感染",
+  "source_order": 26,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "symptom_onset_time",
+      "symptom_onset_pattern"
+    ],
+    "priority_fields": [
+      "respiratory_symptoms",
+      "has_headache"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 19,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "symptom_onset_time",
+      "prompt": "症狀是什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是什麼時候開始的？ *"
+      ]
+    },
+    {
+      "field": "symptom_onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然發作還是逐漸出現的？ *"
+      ]
+    },
+    {
+      "field": "symptom_location",
+      "prompt": "症狀位於局部特定區域還是全身性？",
+      "kind": "choice",
+      "options": [
+        "局部特定區域",
+        "全身性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀位於局部特定區域還是全身性？"
+      ]
+    },
+    {
+      "field": "symptom_persistence",
+      "prompt": "症狀是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是持續性的還是間歇性的？"
+      ]
+    },
+    {
+      "field": "symptom_trigger_event",
+      "prompt": "症狀開始前是否有特定事件或活動？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀開始前是否有特定事件或活動？"
+      ]
+    },
+    {
+      "field": "fever_or_chills",
+      "prompt": "你有沒有發燒或寒顫？",
+      "kind": "choice",
+      "options": [
+        "發燒",
+        "寒顫"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你有沒有發燒或寒顫？"
+      ]
+    },
+    {
+      "field": "has_pain",
+      "prompt": "你是否身上有部位感到疼痛？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你是否身上有部位感到疼痛？"
+      ]
+    },
+    {
+      "field": "pain_location",
+      "prompt": "疼痛的位置在頭頸部 頭皮 四肢 還是全身呢？",
+      "kind": "choice",
+      "options": [
+        "頭頸部",
+        "頭皮",
+        "四肢",
+        "全身"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛的位置在頭頸部 頭皮 四肢 還是全身呢？"
+      ]
+    },
+    {
+      "field": "pain_area_swelling_or_redness",
+      "prompt": "疼痛的區域是否有腫脹或是紅腫？",
+      "kind": "choice",
+      "options": [
+        "腫脹",
+        "紅腫"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛的區域是否有腫脹或是紅腫？"
+      ]
+    },
+    {
+      "field": "affected_area_discharge",
+      "prompt": "受影響的區域是否有分泌物？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "受影響的區域是否有分泌物？"
+      ]
+    },
+    {
+      "field": "respiratory_symptoms",
+      "prompt": "你有沒有咳嗽、呼吸困難或胸痛？",
+      "kind": "choice",
+      "options": [
+        "咳嗽",
+        "呼吸困難",
+        "胸痛"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你有沒有咳嗽、呼吸困難或胸痛？"
+      ]
+    },
+    {
+      "field": "gastrointestinal_symptoms",
+      "prompt": "你是否感到惡心、嘔吐、腹瀉或腹痛？",
+      "kind": "choice",
+      "options": [
+        "惡心",
+        "嘔吐",
+        "腹瀉",
+        "腹痛"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你是否感到惡心、嘔吐、腹瀉或腹痛？"
+      ]
+    },
+    {
+      "field": "has_headache",
+      "prompt": "你是否感到頭痛？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你是否感到頭痛？"
+      ]
+    },
+    {
+      "field": "urinary_symptoms",
+      "prompt": "是否感到排尿疼痛或困難、尿液中有血或尿液顏色改變？",
+      "kind": "choice",
+      "options": [
+        "排尿疼痛或困難",
+        "尿液中有血",
+        "尿液顏色改變"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否感到排尿疼痛或困難、尿液中有血或尿液顏色改變？"
+      ]
+    },
+    {
+      "field": "skin_lesions",
+      "prompt": "是否有局部紅腫？水泡？出血點？瘀血？或是焦痂？",
+      "kind": "choice",
+      "options": [
+        "局部紅腫",
+        "水泡",
+        "出血點",
+        "瘀血",
+        "焦痂"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有局部紅腫？水泡？出血點？瘀血？或是焦痂？"
+      ]
+    },
+    {
+      "field": "recent_surgery_or_invasive_procedure",
+      "prompt": "最近是否接受過手術或侵入性治療？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "最近是否接受過手術或侵入性治療？"
+      ]
+    },
+    {
+      "field": "recent_travel_history",
+      "prompt": "最近是否有旅行史？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "最近是否有旅行史？"
+      ]
+    },
+    {
+      "field": "close_contacts_with_similar_symptoms",
+      "prompt": "是否有親近的人跟你一樣有類似的症狀？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有親近的人跟你一樣有類似的症狀？"
+      ]
+    },
+    {
+      "field": "occupation",
+      "prompt": "你的職業是什麼？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你的職業是什麼？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "RAG 文獻指出，胸痛、呼吸困難、嚴重頭痛等症狀可能是感染相關的警訊症狀，建議優先詢問。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-bc88dc73fd6a"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.4242,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-1bdd2eeb05c9",
+      "title": "Histoplasmosis: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/299054-overview",
+      "route": "common",
+      "chunk_id": "6e91495982ecfba39d3d_6",
+      "distance": 0.443,
+      "excerpt": "< 1 month indicate acute disease; symptoms 1-3 months indicate subacute disease; symptoms >3 months indicate chronic disease Acute syndromes: Pneumonia, disseminated disease in immunocompromised persons Chronic syndromes: Cavitary pulmonary lung disease, calcified lymph nodes, mediastinal fibrosis Physical examination: Uncommon findings include erythema nodosum and erythema multiforme CBC count: Thrombocytopenia in disseminated disease Serology: Useful in testing immunocompetent individuals with acute or subacute disease. Antigen testing: Useful in testing infiltrative or chronic disease in"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4362,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-65b16e084fa2",
+      "title": "Trichinosis (Trichinellosis): Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230490-overview",
+      "route": "safety",
+      "chunk_id": "18637b5c7017fc509666_17",
+      "distance": 0.3995,
+      "excerpt": "Those with mild symptoms improve in 2-3 weeks. Symptoms associated with heavy infections may persist for 2-3 months. Factors that may affect morbidity include the quantity of larvae ingested, the species of Trichinella (most notably T spiralis), and the immune status of the host. Patients succumb to exhaustion, pneumonia, pulmonary embolism, encephalitis, or cardiac failure and/or arrhythmia. Death from trichinosis usually occurs in 4-8 weeks but may occur as early as in 2-3 weeks. Race Although Trichinella infections may be related to cultural differences in food cooking and storing methods"
+    },
+    {
+      "id": "rag-569f6fbd3582",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_15",
+      "distance": 0.5216,
+      "excerpt": "because the infection is not nationally reportable and many infections are asymptomatic. Prevalence is also thought to be underestimated owing to the low sensitivity of the commonly used wet mount technique. Research in high-risk populations shows that the prevalence of trichomoniasis varies widely across the United States. In STI clinics, the prevalence of T vaginalis infection ranges from 15%-54%. In 2 samples of female prison inmates, the prevalence was on the higher end of that range, between 31.2% and 46.9%. In US men, trichomoniasis accounts for 10%-21% of urethritis cases not"
+    },
+    {
+      "id": "rag-1c2d5666ef34",
+      "title": "Trigonitis: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/438185-overview",
+      "route": "common",
+      "chunk_id": "7c959a69d50ebc8da140_11",
+      "distance": 0.4784,
+      "excerpt": "understanding of this elusive disease process. Epidemiology The frequency of trigonitis differs in various reports, but the literature consistently shows that trigonitis occurs almost exclusively in women of childbearing age. Nonkeratinizing squamous metaplasia of the bladder neck and trigone can be seen in 50-70% of premenopausal women and is considered a normal variant. In a study by Wiener et al that examined 100 grossly normal bladders at autopsy, 46% of premenopausal and postmenopausal women were to found to have squamous metaplasia; in comparison, only 7% of men were found to have"
+    },
+    {
+      "id": "rag-bc88dc73fd6a",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "safety",
+      "chunk_id": "bb1164c188b2fc1e1591_20",
+      "distance": 0.5401,
+      "excerpt": "electrocardiographic (ECG) changes, or cardiomegaly. It is reasonable to triage patients with COVID-19 according to the presence of underlying cardiovascular, diabetic, respiratory, renal, oncologic, and other chronic diseases for prioritized treatment. Providers are cautioned that classic symptoms and presentation of acute myocardial infarction may be overshadowed in the context of COVID-19, resulting in underdiagnosis. Which drugs are effective for the treatment of coronavirus disease 2019 (COVID-19)? With the exception of remdesivir, no drugs or biologics have been proven to be effective"
+    },
+    {
+      "id": "rag-f9198f40a96f",
+      "title": "Bacterial Sepsis: Practice Essentials, Background, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/234587-overview",
+      "route": "safety",
+      "chunk_id": "44d1aa0c5fcc4c290c39_29",
+      "distance": 0.5017,
+      "excerpt": "febrile syndromes: Babesiosis, rickettsial diseases, lyme disease, typhus, or typhoid fever, among others, with multiorgan involvement, specific travel and epidemiologic exposures, and associated rashes or other symptoms There are numerous noninfectious causes of fever and organ dysfunction that can mimic sepsis : Alcohol/drug withdrawal Postoperative fever (48 hours postoperatively) Transfusion reaction Drug fever Allergic reaction Cerebral infarction/hemorrhage Adrenal insufficiency/adrenal hemorrhage Myocardial infarction Pancreatitis Acalculous cholecystitis Ischemic bowel Aspiration"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "9ccb1eedacfdb7b84fbd2862767e047d3636bb3b75b595fb023cc6863a9e256e",
+    "rag_corpus_hash": "6068d6d1f41a557e506b79f9a6513d8827b87d1540032ed55775f6ead38aebe5",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:05:44+00:00"
+  }
+}

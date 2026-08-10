@@ -4,8 +4,39 @@
 NPM package dependency closure。新的 clone 不需要額外的 HAPI Starter checkout，
 安裝 packages 時也不依賴線上 FHIR package registry。
 
-本機 Compose 使用 HAPI FHIR 8.8.0 與 PostgreSQL 16。完整 SNOMED CT 與 LOINC
-不包含於 TW Core dependencies，必須由部署者另行合法取得。
+本機 Compose 使用 HAPI FHIR image `v8.8.0-1` 與 PostgreSQL `16-alpine`。完整
+SNOMED CT 與 LOINC 不包含於 TW Core dependencies，必須由部署者另行合法取得。
+
+## 外部元件版本矩陣
+
+下表是截至 2026-07-29 依 `devlog/` 與目前部署設定回溯整理的文件基線。這些是
+上游 image、FHIR package 或安裝工具版本，**不是本專案服務的 SemVer**；
+repository 目前也沒有為此矩陣建立對應 Git tag。
+
+| 外部元件 | 目前設定版本 | 用途／來源 |
+| --- | --- | --- |
+| HAPI FHIR R4 Server | `v8.8.0-1` | Compose image `hapiproject/hapi:v8.8.0-1` |
+| PostgreSQL | `16-alpine` | Compose image `postgres:16-alpine`；此為會隨上游更新 patch 的 floating tag，不是精確 immutable version |
+| TW Core IG | `1.0.0` | FHIR NPM package `tw.gov.mohw.twcore#1.0.0` |
+| SNOMED installer／HAPI CLI | `8.8.0` | installer image 與匯入用 HAPI CLI 基線；SNOMED CT RF2 release 另由部署者依法取得 |
+
+### 回溯更新內容
+
+- **2026-07-28 — TW Core 參考基線**
+  - 加入 TW Core 1.0.0 必要定義／ValueSet 與 FHIR 術語參考領域邏輯，並以合成
+    FHIR 案例驗證開發流程。
+  - 明確將本機 FHIR／術語用途定位為開發與測試基礎，完整 SNOMED CT／LOINC
+    內容不隨 TW Core package 散布。
+- **2026-07-29 — 可重現套件與 SNOMED CT 本機整合**
+  - 建立 TW Core 完整 dependency closure 與 `packages.lock.json`，保存安裝順序、
+    精確版本、license、archive 路徑及 SHA-256，安裝前先驗證 manifest 與 hash。
+  - 新增合法授權 SNOMED CT International RF2 的本機 installer；驗證 Snapshot
+    結構、HAPI CLI 版本與 SHA-256 後，以
+    `CodeSystem/$upload-external-code-system` 匯入並等待 `$validate-code` 成功。
+  - 由 RF2 Snapshot 建立唯讀 SQLite FTS 索引供英文術語搜尋；純數字 concept ID
+    仍由後端代理 HAPI `CodeSystem/$lookup`。
+  - 建立固定疾病表 SNOMED CT coding registry，允許複合疾病方向含多個 coding，
+    並在新舊病例載入時補上已驗證編碼；代碼驗證不等同完成臨床審查。
 
 ## Reproducibility
 

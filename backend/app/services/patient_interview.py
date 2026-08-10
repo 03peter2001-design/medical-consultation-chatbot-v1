@@ -1,5 +1,6 @@
 """Session and questionnaire preparation helpers for patient interviews."""
 
+import re
 import time
 
 from amie.clinical_facts import (
@@ -10,26 +11,73 @@ from amie.models import ChiefComplaintAssessment
 from amie.rule_config import load_safety_rules
 from app.models import ChatRequest
 from app.services.input_validation import prefill_gender_is_valid
-from domain.questionnaires import CHIEF_QUESTIONNAIRE, ROUTE_LABELS, parse_birth_date
+from domain.questionnaires import (
+    CHIEF_QUESTIONNAIRE,
+    DISEASE_ROUTES,
+    ROUTE_KEYWORDS,
+    ROUTE_LABELS,
+    parse_birth_date,
+)
 from domain.terminology_reference import filter_supported_codings
 
-ROUTE_KEYWORDS = load_safety_rules()["route_keywords"]
-SUPPORTED_PATIENT_ROUTES = frozenset(ROUTE_KEYWORDS)
+SUPPORTED_PATIENT_ROUTES = frozenset(DISEASE_ROUTES)
 URGENT_CONDITION_CANDIDATES = load_safety_rules()["urgent_condition_candidates"]
+
+
+def _keyword_matches(text: str, keyword: str) -> bool:
+    normalized = text.casefold()
+    token = keyword.casefold()
+    if token.isascii() and any(character.isalpha() for character in token):
+        starts = (
+            match.start()
+            for match in re.finditer(
+                rf"(?<![a-z0-9]){re.escape(token)}(?![a-z0-9])",
+                normalized,
+            )
+        )
+    else:
+        starts = (match.start() for match in re.finditer(re.escape(token), normalized))
+    for start in starts:
+        prefix = normalized[max(0, start - 8) : start]
+        if not re.search(r"(?:沒有|否認|不是|並未|未曾)\s*$", prefix):
+            return True
+    return False
 
 
 def route_keyword_hits(text: str) -> dict[str, bool]:
     return {
-        route: any(keyword in text for keyword in keywords)
+        route: any(_keyword_matches(text, keyword) for keyword in keywords)
         for route, keywords in ROUTE_KEYWORDS.items()
     }
 
 
 def local_complaint_route(text: str) -> str | None:
-    """Return a route only when deterministic keywords are unambiguous."""
-    hits = route_keyword_hits(text)
-    matched = [route for route, is_match in hits.items() if is_match]
-    return matched[0] if len(matched) == 1 else None
+    """Return one route only when matched concepts are not independently ambiguous."""
+    matches = {
+        route: [keyword for keyword in keywords if _keyword_matches(text, keyword)]
+        for route, keywords in ROUTE_KEYWORDS.items()
+    }
+    matches = {route: values for route, values in matches.items() if values}
+    if len(matches) <= 1:
+        return next(iter(matches), None)
+
+    # A generic token such as「無力」must not make「半身無力」ambiguous with
+    # the more specific stroke route. Independent concepts (e.g. 頭痛＋腹痛)
+    # remain ambiguous so the semantic extractor can retain both routes.
+    remaining = []
+    for route, values in matches.items():
+        dominated = all(
+            any(
+                value.casefold() in other.casefold() and len(other) > len(value)
+                for other_route, other_values in matches.items()
+                if other_route != route
+                for other in other_values
+            )
+            for value in values
+        )
+        if not dominated:
+            remaining.append(route)
+    return remaining[0] if len(remaining) == 1 else None
 
 
 def urgent_possible_conditions(session: dict) -> list[str]:

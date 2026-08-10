@@ -1,0 +1,205 @@
+{
+  "id": "trauma",
+  "label": "創傷",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 46,
+    "source_sha256": "22f37f3271e111cbd1837941d6a2fa9c3f5725923e234f799f4016d3e1011c72",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "injury_time",
+      "injury_location"
+    ],
+    "priority_fields": [
+      "loss_of_consciousness",
+      "active_bleeding",
+      "post_injury_neurological_symptoms",
+      "limb_sensory_motor_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "injury_time",
+      "prompt": "什麼時候受傷的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "injury_mechanism",
+      "prompt": "如何受傷的？ 比如跌倒、車禍、暈眩或是其他身體不適導致的",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "loss_of_consciousness",
+      "prompt": "受傷期間或之後你是否失去過意識？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "post_injury_neurological_symptoms",
+      "prompt": "受傷後是否出現頭痛、頭暈或噁心想吐？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "injury_type",
+      "prompt": "你的傷勢是挫傷、擦傷、撕裂傷或是切割傷",
+      "kind": "choice",
+      "options": [
+        "挫傷",
+        "擦傷",
+        "撕裂傷",
+        "切割傷"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "injury_location",
+      "prompt": "受傷位於你身體的頭頸部、胸部、腹部、背部還是四肢？",
+      "kind": "choice",
+      "options": [
+        "頭頸部",
+        "胸部",
+        "腹部",
+        "背部",
+        "四肢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "limb_symptoms",
+      "prompt": "是否有四肢的疼痛、腫脹或變形？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "active_bleeding",
+      "prompt": "是否有部位正在出血？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "limb_sensory_motor_symptoms",
+      "prompt": "是否四肢感到麻木、刺痛或無力？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "anticoagulant_medication",
+      "prompt": "目前是否服用抗血小板藥物或是抗凝血藥？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

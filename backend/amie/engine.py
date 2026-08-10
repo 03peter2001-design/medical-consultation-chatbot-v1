@@ -9,6 +9,7 @@ from typing import Any, TypedDict
 from langgraph.graph import END, START, StateGraph
 
 from domain.questionnaires import (
+    DISEASE_ROUTES,
     condition_matches,
     filter_question_by_context,
     load_questionnaire_policy,
@@ -19,6 +20,7 @@ from .chief_complaint import (
     build_fhir_risk_profile,
 )
 from .clinical_facts import (
+    fact_conflicts,
     facts_from_assessment,
     facts_from_legacy_data,
     filter_question_by_known_facts,
@@ -29,6 +31,7 @@ from .disease_profiles import (
     attach_safety_conditions,
     build_candidate_frontier,
     funnel_question_score,
+    question_fact_codes,
     question_utility,
     score_diseases,
 )
@@ -38,10 +41,9 @@ from .models import (
     ChiefFinding,
     EvidenceValue,
 )
-from .rule_config import supported_routes
 from .safety import detect_red_flags, detect_structured_red_flags
 
-SUPPORTED_ROUTES = supported_routes()
+SUPPORTED_ROUTES = frozenset(DISEASE_ROUTES)
 
 
 class AMIEGraphState(TypedDict, total=False):
@@ -95,20 +97,23 @@ class AMIEEngine:
         max_turns: int | None = None,
     ):
         self.llm = llm_client
-        policy_default = max(
-            load_questionnaire_policy(route)["max_turns"] for route in SUPPORTED_ROUTES
-        )
         configured_max_turns = os.getenv("AMIE_MAX_TURNS")
-        self.max_turns = max_turns or (
-            _bounded_int(
-                configured_max_turns,
-                default=policy_default,
-                low=1,
-                high=100,
+        # ``None`` means "derive the cap from the session". A route policy only
+        # budgets its own disease section, so no single constant fits every
+        # combination of selected routes; an unusable override falls back to
+        # the derived budget rather than to an arbitrary constant.
+        override = max_turns
+        if override is None and configured_max_turns is not None:
+            override = (
+                _bounded_int(
+                    configured_max_turns,
+                    default=0,
+                    low=0,
+                    high=100,
+                )
+                or None
             )
-            if configured_max_turns is not None
-            else policy_default
-        )
+        self.max_turns = override
         self.chief_extractor = ChiefComplaintExtractor(llm_client)
         self.graph = self._build_graph()
 
@@ -138,6 +143,25 @@ class AMIEEngine:
         if state.get("action") == "handoff":
             return "handoff"
         return "routine"
+
+    @staticmethod
+    def _session_routes(state: AMIEGraphState) -> list[str]:
+        """Return every evidenced route, primary first.
+
+        ``state["route"]`` is whichever question was just answered, so it flips
+        between disease tables in a multi-complaint session. Anything that must
+        stay stable across a session reads the session's own routes instead.
+        """
+        data = state.get("data", {})
+        ordered = [data.get("type"), *data.get("types", []), state.get("route")]
+        return list(
+            dict.fromkeys(route for route in ordered if route in SUPPORTED_ROUTES),
+        )
+
+    @staticmethod
+    def _primary_route(state: AMIEGraphState) -> str:
+        routes = AMIEEngine._session_routes(state)
+        return routes[0] if routes else str(state.get("route") or "")
 
     @staticmethod
     def _question_for_field(
@@ -290,14 +314,20 @@ class AMIEEngine:
         ) -> EvidenceValue:
             return newer if newer.value != "unknown" else older
 
-        findings = {(item.code, item.status): item for item in [*base.findings, *delta.findings]}
-        negated = {
-            (item.code, item.status): item
+        # One code has one current state. Keep contradictions in the dedicated
+        # audit trail, but do not leave an older positive active after the
+        # patient explicitly denies it (or vice versa).
+        finding_by_code = {
+            item.code: item
             for item in [
+                *base.findings,
                 *base.negated_findings,
+                *delta.findings,
                 *delta.negated_findings,
             ]
         }
+        findings = [item for item in finding_by_code.values() if item.status == "present"]
+        negated = [item for item in finding_by_code.values() if item.status == "absent"]
         primary = (
             delta.primary_symptom
             if delta.primary_symptom != "unknown"
@@ -336,8 +366,8 @@ class AMIEEngine:
                 delta.is_new_or_changed,
                 base.is_new_or_changed,
             ),
-            findings=list(findings.values()),
-            negated_findings=list(negated.values()),
+            findings=findings,
+            negated_findings=negated,
             route_candidates=list(
                 dict.fromkeys(
                     [
@@ -427,11 +457,18 @@ class AMIEEngine:
         )
 
     def _safety_node(self, state: AMIEGraphState) -> dict[str, Any]:
-        new_flags = detect_red_flags(
-            state.get("route"),
-            state.get("answer", ""),
-            state.get("data", {}),
-        )
+        # Route-specific red flags must follow the session, not the question
+        # that happens to be on screen, or a chest rule stops firing as soon as
+        # the interview moves onto the abdominal questions.
+        new_flags = [
+            flag
+            for route in self._session_routes(state) or [state.get("route")]
+            for flag in detect_red_flags(
+                route,
+                state.get("answer", ""),
+                state.get("data", {}),
+            )
+        ]
         existing = list(state.get("red_flags", []))
         seen = {flag.get("code") for flag in existing}
         flags = [
@@ -442,7 +479,7 @@ class AMIEEngine:
             data = dict(state.get("data", {}))
             clinical_facts = list(state.get("clinical_facts", data.get("_clinical_facts", [])))
             assessment = attach_safety_conditions(
-                state.get("route", ""),
+                self._primary_route(state),
                 flags,
                 facts=clinical_facts,
             )
@@ -507,7 +544,7 @@ class AMIEEngine:
 
         assessment = self._merge_safety_assessment(
             data,
-            state.get("route", ""),
+            self._primary_route(state),
             delta,
         )
         risk_profile = build_fhir_risk_profile(data)
@@ -530,20 +567,29 @@ class AMIEEngine:
             )
         )
         data["_semantic_safety_state"] = assessment.as_dict()
-        clinical_facts = merge_facts(
-            state.get("clinical_facts", data.get("_clinical_facts", [])),
-            facts_from_assessment(
-                delta,
-                turn=state.get("turn_count", 0),
-                source=(
-                    "structured_option"
-                    if structured_answer
-                    else "chief_semantic_extraction"
-                    if reused_chief_extraction
-                    else "semantic_extraction"
-                ),
+        previous_facts = state.get("clinical_facts", data.get("_clinical_facts", []))
+        # A picked option answers one route's question, so its facts are scoped
+        # to that route. Free text names no route reliably, so it stays unscoped
+        # and keeps applying everywhere.
+        incoming_facts = facts_from_assessment(
+            delta,
+            turn=state.get("turn_count", 0),
+            source=(
+                "structured_option"
+                if structured_answer
+                else "chief_semantic_extraction"
+                if reused_chief_extraction
+                else "semantic_extraction"
             ),
+            route=(str((current_question or {}).get("route") or "") if structured_answer else ""),
         )
+        conflicts = [
+            *data.get("_fact_conflicts", []),
+            *fact_conflicts(previous_facts, incoming_facts),
+        ]
+        if conflicts:
+            data["_fact_conflicts"] = conflicts
+        clinical_facts = merge_facts(previous_facts, incoming_facts)
         data["_clinical_facts"] = clinical_facts
         if not semantic_flags:
             return {
@@ -553,7 +599,7 @@ class AMIEEngine:
                 "clinical_facts": clinical_facts,
             }
         disease_assessment = attach_safety_conditions(
-            state.get("route", ""),
+            self._primary_route(state),
             semantic_flags,
             facts=clinical_facts,
         )
@@ -608,21 +654,30 @@ class AMIEEngine:
             facts_from_legacy_data(data),
         )
         data["_clinical_facts"] = clinical_facts
-        route = state.get("route", "")
-        policy = load_questionnaire_policy(route)
-        use_disease_vote = policy["selection_strategy"] == "disease_vote"
-        scoring_error = ""
-        assessment: dict[str, Any] = {}
-        if use_disease_vote:
+        route = self._primary_route(state)
+        session_routes = self._session_routes(state) or [route]
+        policies = {
+            selected_route: load_questionnaire_policy(selected_route)
+            for selected_route in session_routes
+        }
+        disease_vote_routes = [
+            selected_route
+            for selected_route in session_routes
+            if policies[selected_route]["selection_strategy"] == "disease_vote"
+        ]
+        fixed_order_routes = set(session_routes) - set(disease_vote_routes)
+        scoring_errors: dict[str, str] = {}
+        assessments_by_route: dict[str, dict[str, Any]] = {}
+        for scoring_route in disease_vote_routes:
             try:
-                assessment = score_diseases(
+                assessments_by_route[scoring_route] = score_diseases(
                     clinical_facts,
-                    route=route,
+                    route=scoring_route,
                     computed_from="live",
                 )
             except Exception as error:
-                scoring_error = f"{type(error).__name__}: {_trim(error, 200)}"
-                assessment = {
+                scoring_errors[scoring_route] = f"{type(error).__name__}: {_trim(error, 200)}"
+                assessments_by_route[scoring_route] = {
                     "schema_version": 1,
                     "method": "unit_vote_v1",
                     "status": "unavailable",
@@ -631,40 +686,59 @@ class AMIEEngine:
                     "ranked": [],
                     "must_not_miss": [],
                 }
+
+        scoring_error = "; ".join(
+            f"{scoring_route}: {error}" for scoring_route, error in scoring_errors.items()
+        )
+        assessment: dict[str, Any] = {}
+        if route in assessments_by_route:
+            assessment = assessments_by_route[route]
         if assessment:
             data["_disease_assessment"] = assessment
+        if assessments_by_route:
+            data["_disease_assessments_by_route"] = assessments_by_route
 
         required_missing = self._required_missing(
             data,
             state.get("questionnaire", []),
             clinical_facts,
         )
-        priority_fields = tuple(policy["priority_fields"])
         utilities: dict[str, int] = {}
-        if use_disease_vote and not scoring_error:
-            utilities = {
-                item["field"]: question_utility(
-                    item,
-                    assessment,
-                    route=route,
+        if not scoring_error:
+            for item in candidates:
+                item_route = str(item.get("route") or route)
+                item_assessment = assessments_by_route.get(item_route)
+                utilities[item["field"]] = (
+                    question_utility(
+                        item,
+                        item_assessment,
+                        route=item_route,
+                    )
+                    if item_assessment is not None
+                    else 0
                 )
-                for item in candidates
-            }
 
         selected = None
         selection_phase = ""
         selection_tier = ""
         candidate_frontier: list[dict[str, Any]] = []
         selected_funnel_score: dict[str, Any] = {}
-        if use_disease_vote and not scoring_error:
-            frontier = build_candidate_frontier(
-                assessment,
-                vote_margin=policy["frontier_vote_margin"],
-                max_candidates=policy["frontier_max_candidates"],
+        frontiers_by_route = {
+            scoring_route: build_candidate_frontier(
+                assessments_by_route[scoring_route],
+                vote_margin=policies[scoring_route]["frontier_vote_margin"],
+                max_candidates=policies[scoring_route]["frontier_max_candidates"],
             )
-            selection_phase = frontier["phase"]
-            candidate_frontier = frontier["candidates"]
-            priority_candidates = [item for item in candidates if item["field"] in priority_fields]
+            for scoring_route in disease_vote_routes
+            if scoring_route not in scoring_errors
+        }
+        if not scoring_error:
+            priority_candidates = [
+                item
+                for item in candidates
+                if item.get("base_field", item["field"])
+                in policies[str(item.get("route") or route)]["priority_fields"]
+            ]
             required_fields = set(required_missing)
             required_candidates = [item for item in candidates if item["field"] in required_fields]
             if priority_candidates:
@@ -677,21 +751,38 @@ class AMIEEngine:
                 eligible = candidates
                 selection_tier = "general"
 
-            funnel_scores = {
-                item["field"]: funnel_question_score(
-                    item,
-                    frontier,
-                    route=route,
-                )
-                for item in eligible
+            empty_score = {
+                "discrimination_score": 0,
+                "confirmation_score": 0,
+                "refutation_score": 0,
+                "target_fact_codes": [],
             }
+            funnel_scores: dict[str, dict[str, Any]] = {}
+            for item in eligible:
+                item_route = str(item.get("route") or route)
+                frontier = frontiers_by_route.get(item_route)
+                funnel_scores[item["field"]] = (
+                    funnel_question_score(
+                        item,
+                        frontier,
+                        route=item_route,
+                    )
+                    if frontier is not None
+                    else dict(empty_score)
+                )
 
             def selection_key(item: dict[str, Any]) -> tuple[int, int, int, int]:
                 score = funnel_scores[item["field"]]
-                if selection_phase == "confirm":
+                item_route = str(item.get("route") or route)
+                item_phase = frontiers_by_route.get(item_route, {}).get("phase", "")
+                if item_phase == "confirm":
+                    # Once the frontier collapses to one candidate, asking what
+                    # would support it is premature closure. Look for what would
+                    # knock it down first; if nothing can, the leader survives on
+                    # evidence rather than on the order we happened to ask in.
                     ordered = (
-                        score["confirmation_score"],
                         score["refutation_score"],
+                        score["confirmation_score"],
                         score["discrimination_score"],
                     )
                 else:
@@ -704,23 +795,61 @@ class AMIEEngine:
 
             selected = max(eligible, key=selection_key)
             selected_funnel_score = funnel_scores[selected["field"]]
-        elif not use_disease_vote:
-            selected = candidates[0]
+            selected_route = str(selected.get("route") or route)
+            selected_frontier = frontiers_by_route.get(selected_route, {})
+            selection_phase = str(selected_frontier.get("phase", ""))
+            candidate_frontier = list(selected_frontier.get("candidates", []))
 
-        top = assessment.get("top", [])
-        coverage_ready = bool(top) and all(
-            item["coverage"] >= policy["coverage_threshold"] for item in top
+        route_completion: dict[str, dict[str, Any]] = {}
+        must_not_miss_gaps_by_route: dict[str, list[str]] = {}
+        for scoring_route in disease_vote_routes:
+            route_assessment = assessments_by_route[scoring_route]
+            route_policy = policies[scoring_route]
+            route_candidates = [item for item in candidates if item.get("route") == scoring_route]
+            top = route_assessment.get("top", [])
+            coverage_ready = bool(top) and all(
+                item["coverage"] >= route_policy["coverage_threshold"] for item in top
+            )
+            no_score_changing_question = not any(
+                utilities.get(item["field"], 0) for item in route_candidates
+            )
+            askable_fact_codes: set[str] = set()
+            for item in route_candidates:
+                askable_fact_codes |= question_fact_codes(item)
+            must_not_miss_gap = sorted(
+                {
+                    code
+                    for item in route_assessment.get("must_not_miss", [])
+                    for code in item.get("missing_facts", [])
+                    if code in askable_fact_codes
+                }
+            )
+            must_not_miss_gaps_by_route[scoring_route] = must_not_miss_gap
+            route_completion[scoring_route] = {
+                "coverage_ready": coverage_ready,
+                "no_score_changing_question": no_score_changing_question,
+                "must_not_miss_gap": must_not_miss_gap,
+                "ready": not must_not_miss_gap and (coverage_ready or no_score_changing_question),
+            }
+
+        fixed_order_remaining = [
+            item for item in candidates if str(item.get("route") or route) in fixed_order_routes
+        ]
+        all_disease_routes_ready = all(item["ready"] for item in route_completion.values())
+        must_not_miss_gap = sorted(
+            {code for gaps in must_not_miss_gaps_by_route.values() for code in gaps}
         )
-        no_score_changing_question = not any(utilities.values())
+        coverage_ready = bool(route_completion) and all(
+            item["coverage_ready"] for item in route_completion.values()
+        )
+        no_score_changing_question = bool(route_completion) and all(
+            item["no_score_changing_question"] for item in route_completion.values()
+        )
         can_complete = (
             not scoring_error
             and not required_missing
-            and (
-                not use_disease_vote
-                and not candidates
-                or use_disease_vote
-                and (coverage_ready or no_score_changing_question)
-            )
+            and not fixed_order_remaining
+            and all_disease_routes_ready
         )
         action = "handoff" if scoring_error else "complete" if can_complete else "ask"
         next_field = selected["field"] if action == "ask" and selected else None
@@ -731,13 +860,19 @@ class AMIEEngine:
             if coverage_ready and can_complete
             else "最低必要資料已完成，剩餘問題不會改變目前疾病票數。"
             if no_score_changing_question and can_complete
+            else "不能漏診疾病仍有可追問的線索未評估，尚不可結束。"
+            if must_not_miss_gap
             else "在 Safety 優先題中依目前疾病標籤漏斗選擇下一題。"
             if selection_tier == "safety_priority"
             else "在最低必要欄位中依目前疾病標籤漏斗選擇下一題。"
             if selection_tier == "required"
             else "依目前疾病標籤漏斗選擇下一題。"
-            if use_disease_vote
-            else "非胸痛路由依核准問卷固定順序追問。"
+            if disease_vote_routes
+            else "固定順序問卷先詢問安全優先欄位。"
+            if selection_tier == "safety_priority"
+            else "固定順序問卷先完成必要欄位。"
+            if selection_tier == "required"
+            else "依核准問卷固定順序追問。"
         )
         decision = {
             "action": action,
@@ -759,6 +894,19 @@ class AMIEEngine:
             "scoring_method": assessment.get("method", ""),
             "selection_phase": selection_phase,
             "selection_tier": selection_tier,
+            "must_not_miss_gap": must_not_miss_gap,
+            "must_not_miss_gaps_by_route": must_not_miss_gaps_by_route,
+            "route_completion": route_completion,
+            "disease_assessment_routes": {
+                scoring_route: {
+                    "status": item.get("status", ""),
+                    "method": item.get("method", ""),
+                    "profile_version": item.get("profile_version", ""),
+                    "top_ids": [entry.get("id") for entry in item.get("top", [])],
+                }
+                for scoring_route, item in assessments_by_route.items()
+            },
+            "fact_conflicts": list(data.get("_fact_conflicts", [])),
             "candidate_frontier": candidate_frontier,
             "target_fact_codes": selected_funnel_score.get("target_fact_codes", []),
             "funnel_score": {
@@ -781,6 +929,17 @@ class AMIEEngine:
                     }
                     for item in assessment.get("top", [])
                 ],
+                "disease_votes_by_route": {
+                    scoring_route: [
+                        {
+                            "id": item["id"],
+                            "net_votes": item["net_votes"],
+                            "coverage": item["coverage"],
+                        }
+                        for item in route_assessment.get("top", [])
+                    ]
+                    for scoring_route, route_assessment in assessments_by_route.items()
+                },
                 "audit_reason": reason,
             }
         )
@@ -839,7 +998,7 @@ class AMIEEngine:
                 ),
             }
 
-        if state.get("turn_count", 0) >= self.max_turns:
+        if state.get("turn_count", 0) >= (self.max_turns or self._session_turn_budget(state)):
             return {
                 "action": "handoff",
                 "next_question": None,
@@ -869,6 +1028,28 @@ class AMIEEngine:
             "next_question": selected,
             "acknowledgement": _trim(decision.get("acknowledgement"), 120),
         }
+
+    @staticmethod
+    def _session_turn_budget(state: AMIEGraphState) -> int:
+        """Bound one session without cutting an approved questionnaire short.
+
+        ``policy.max_turns`` budgets a single route's disease section, so the
+        session budget is the shared chief/basic/history questions plus every
+        selected route's own budget. The questionnaire length is a floor, since
+        a cap below it would make the route impossible to finish.
+        """
+        questionnaire = state.get("questionnaire", [])
+        shared_questions = sum(
+            1
+            for item in questionnaire
+            if item.get("section") != "disease" and item.get("field") != "reason"
+        )
+        data = state.get("data", {})
+        routes = [
+            route for route in data.get("types", [data.get("type")]) if route in SUPPORTED_ROUTES
+        ]
+        route_budget = sum(load_questionnaire_policy(route)["max_turns"] for route in routes)
+        return min(100, max(shared_questions + route_budget, len(questionnaire)))
 
     def _remaining_questions(
         self,
@@ -913,6 +1094,11 @@ class AMIEEngine:
         shared_required = set().union(*required_by_route.values())
         missing: list[str] = []
         for item in questionnaire:
+            # A required field behind an unmet condition is not askable, so it
+            # must not block completion. This has to mirror the same gate used
+            # by ``_remaining_questions``.
+            if not condition_matches(item, data):
+                continue
             item = filter_question_by_context(item, data)
             field = item["field"]
             base_field = item.get("base_field", field)

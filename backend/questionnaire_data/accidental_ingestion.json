@@ -1,0 +1,162 @@
+{
+  "id": "accidental_ingestion",
+  "label": "意外吞食",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 27,
+    "source_sha256": "e6fa7e84700c88ee176a05489a14bb680c88c7c64b615fc2d258b0c703a27fd6",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "ingestion_time",
+      "ingested_substance",
+      "ingested_amount"
+    ],
+    "priority_fields": [
+      "current_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 7,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "ingestion_time",
+      "prompt": "什麼時候誤食的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "ingested_substance",
+      "prompt": "你服用了什麼物質？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "has_container_or_label",
+      "prompt": "你有容器或標籤嗎？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "ingested_amount",
+      "prompt": "你誤食了多少量？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "substance_form",
+      "prompt": "這種物質是固體、液體還是氣體？",
+      "kind": "choice",
+      "options": [
+        "固體",
+        "液體",
+        "氣體"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "ingestion_intent",
+      "prompt": "誤食是意外還是故意的？",
+      "kind": "choice",
+      "options": [
+        "意外",
+        "故意"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "current_symptoms",
+      "prompt": "你現在是否有下面症狀？請將有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "噁心、嘔吐、腹瀉或腹痛",
+        "呼吸困難、咳嗽或喘鳴",
+        "胸痛、心悸或心跳加速",
+        "口腔、喉嚨或皮膚有灼熱感或刺激感"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

@@ -1,0 +1,189 @@
+{
+  "id": "cardiac_arrest",
+  "label": "心臟驟停",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 8,
+    "source_sha256": "ecd2d5f2a02523640c8e96aa1c149e2ec2c82f2e86bf29072a4e75576bd9d5aa",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "onset_time",
+      "loss_of_consciousness",
+      "cpr_or_aed_used",
+      "preceding_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 9,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "family_member_responder_notice",
+      "prompt": "我建議可以請家人或陪同監護人回答下列問題",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "onset_time",
+      "prompt": "什麼時候發生心臟驟停？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "preceding_symptoms",
+      "prompt": "心臟驟停前，病人是否有以下症狀？ 請將以下有出現的症狀描述給我聽 若以下皆無可補充其他症狀",
+      "kind": "choice",
+      "options": [
+        "胸痛",
+        "呼吸困難",
+        "頭暈或昏厥",
+        "心跳加速或心跳不規則",
+        "出冷汗",
+        "噁心或嘔吐"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "loss_of_consciousness",
+      "prompt": "病人在發生心臟驟停時是否有失去意識？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "cpr_or_aed_used",
+      "prompt": "病人是否有接受過心肺復甦術 (CPR) 或使用過自動體外心臟去顫器 (AED)？ 若有 請務必讓我知道",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "cardiac_history",
+      "prompt": "病人是否有心臟病史或其他相關病史？ 若有 請務必讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "medications",
+      "prompt": "病人是否有服用任何藥物？ 若有 請務必讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "chronic_diseases",
+      "prompt": "請將病人有的慢性疾病描述給我聽 比如高血壓 糖尿病 或 高膽固醇 也可補充其他慢性疾病",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "recent_activity_or_stress",
+      "prompt": "病人是否有近期的身體活動或壓力過大情況？ 若有 請描述給我聽",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

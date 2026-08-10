@@ -1,0 +1,317 @@
+{
+  "schema_version": 1,
+  "routes": {
+    "chest": {
+      "label": "胸痛",
+      "keywords": ["胸痛", "胸悶", "胸口痛", "chest pain", "chest tightness"],
+      "disposition": "questionnaire",
+      "clinical_domain": "chest"
+    },
+    "headache": {
+      "label": "頭痛",
+      "keywords": ["頭痛", "頭疼", "偏頭痛", "headache", "migraine"],
+      "disposition": "questionnaire",
+      "clinical_domain": "headache"
+    },
+    "allergies_hives_drug_reactions_stings": {
+      "label": "過敏、蕁麻疹、藥物反應、螯傷",
+      "keywords": ["過敏", "蕁麻疹", "藥物反應", "蜂螫", "螯傷", "allergy", "hives"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "back_pain": {
+      "label": "背痛",
+      "keywords": ["背痛", "背部痛", "上背痛", "back pain"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "bite": {
+      "label": "咬傷",
+      "keywords": ["咬傷", "被咬", "動物咬", "人咬", "bite"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "body_ache": {
+      "label": "身體酸痛",
+      "keywords": ["身體酸痛", "全身酸痛", "肌肉酸痛", "body ache"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "burns": {
+      "label": "燒傷",
+      "keywords": ["燒傷", "燙傷", "灼傷", "化學灼傷", "burn"],
+      "disposition": "handoff",
+      "clinical_domain": null
+    },
+    "cardiac_arrest": {
+      "label": "心臟驟停",
+      "keywords": ["心臟驟停", "心跳停止", "停止呼吸", "無呼吸", "cardiac arrest"],
+      "disposition": "urgent",
+      "clinical_domain": null
+    },
+    "cardiovascular_issues": {
+      "label": "心血管問題",
+      "keywords": ["心血管問題", "心律不整", "心悸", "心跳不規則", "cardiovascular"],
+      "disposition": "questionnaire",
+      "clinical_domain": "chest"
+    },
+    "seizure_epilepsy": {
+      "label": "抽搐、癲癇",
+      "keywords": ["抽搐", "癲癇", "痙攣", "seizure", "epilepsy"],
+      "disposition": "questionnaire",
+      "clinical_domain": "headache"
+    },
+    "toothache": {
+      "label": "牙痛",
+      "keywords": ["牙痛", "牙齒痛", "齒痛", "toothache"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "diabetes_questionnaire": {
+      "label": "糖尿病問題",
+      "keywords": ["糖尿病問題", "血糖問題", "高血糖", "低血糖", "diabetes"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "dizziness": {
+      "label": "暈眩",
+      "keywords": ["頭暈", "暈眩", "眩暈", "天旋地轉", "dizziness", "vertigo"],
+      "disposition": "questionnaire",
+      "clinical_domain": "headache"
+    },
+    "ent_problems": {
+      "label": "耳鼻喉問題",
+      "keywords": ["耳鼻喉問題", "耳痛", "耳鳴", "鼻塞", "流鼻血", "喉嚨痛", "ENT"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "eye_problems": {
+      "label": "眼睛問題",
+      "keywords": ["眼睛問題", "眼睛痛", "眼痛", "眼睛紅", "eye problem"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "fall": {
+      "label": "跌倒",
+      "keywords": ["跌倒", "摔倒", "跌了一跤", "fall"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "fever": {
+      "label": "發燒",
+      "keywords": ["發燒", "發熱", "高燒", "fever"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "low_back_pain": {
+      "label": "腰痛",
+      "keywords": ["腰痛", "下背痛", "腰痠", "low back pain"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "fluid_nutrition_changes": {
+      "label": "液體／營養改變",
+      "keywords": ["食慾改變", "喝水變少", "進食變少", "營養改變", "fluid nutrition"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "foreign_body": {
+      "label": "異物",
+      "keywords": ["異物", "卡東西", "東西卡住", "foreign body"],
+      "disposition": "handoff",
+      "clinical_domain": null
+    },
+    "genitourinary_system_problems": {
+      "label": "泌尿生殖系統問題",
+      "keywords": ["泌尿問題", "排尿問題", "小便困難", "尿痛", "頻尿", "生殖系統問題", "genitourinary"],
+      "disposition": "questionnaire",
+      "clinical_domain": "abdomen"
+    },
+    "gunshot_wound": {
+      "label": "槍傷",
+      "keywords": ["槍傷", "中槍", "gunshot"],
+      "disposition": "urgent",
+      "clinical_domain": null
+    },
+    "gynecological_issues": {
+      "label": "婦科問題",
+      "keywords": ["婦科問題", "月經問題", "經期不規則", "陰道分泌物", "gynecological"],
+      "disposition": "questionnaire",
+      "clinical_domain": "abdomen"
+    },
+    "bleeding": {
+      "label": "出血",
+      "keywords": ["出血", "流血", "止不住血", "bleeding"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "industrial_machinery_accident": {
+      "label": "工業機械事故",
+      "keywords": ["工業機械事故", "機械夾傷", "機器捲入", "industrial machinery"],
+      "disposition": "handoff",
+      "clinical_domain": null
+    },
+    "infection": {
+      "label": "感染",
+      "keywords": ["感染", "化膿", "傷口發炎", "infection"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "accidental_ingestion": {
+      "label": "意外吞食",
+      "keywords": ["意外吞食", "誤食", "誤吞", "吞了藥", "poisoning", "accidental ingestion"],
+      "disposition": "handoff",
+      "clinical_domain": null
+    },
+    "laceration": {
+      "label": "撕裂傷",
+      "keywords": ["撕裂傷", "割傷", "裂傷", "laceration"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "supplemental_medications": {
+      "label": "補充藥物",
+      "keywords": ["補充藥物", "保健品", "營養補充品", "草藥", "supplement"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "neck_pain": {
+      "label": "頸部疼痛",
+      "keywords": ["頸部疼痛", "脖子痛", "頸痛", "neck pain"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "needlestick_injury": {
+      "label": "針刺傷",
+      "keywords": ["針刺傷", "被針扎", "針扎", "needlestick"],
+      "disposition": "handoff",
+      "clinical_domain": null
+    },
+    "neurological_issues": {
+      "label": "神經系統問題",
+      "keywords": ["神經系統問題", "麻木", "感覺異常", "神經問題", "neurological"],
+      "disposition": "questionnaire",
+      "clinical_domain": "headache"
+    },
+    "obstetric_issues": {
+      "label": "產科問題",
+      "keywords": ["產科問題", "懷孕不適", "孕婦不適", "宮縮", "破水", "obstetric"],
+      "disposition": "handoff",
+      "clinical_domain": "abdomen"
+    },
+    "orthopedics_external_injury": {
+      "label": "骨科外傷",
+      "keywords": ["骨科外傷", "骨頭受傷", "疑似骨折", "關節受傷", "orthopedic injury"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "intentional_drug_overdose": {
+      "label": "蓄意藥物過量",
+      "keywords": ["蓄意藥物過量", "故意吞藥", "吃藥自殺", "藥物過量", "overdose"],
+      "disposition": "urgent",
+      "clinical_domain": null
+    },
+    "peripheral_vascular_leg_pain": {
+      "label": "周邊血管／腿痛",
+      "keywords": ["腿痛", "小腿痛", "腿腫", "周邊血管", "leg pain", "peripheral vascular"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "psychosocial_issues": {
+      "label": "心理／社會問題",
+      "keywords": ["心理問題", "精神問題", "社會問題", "情緒困擾", "psychosocial"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "respiratory_issues": {
+      "label": "呼吸問題",
+      "keywords": ["呼吸問題", "呼吸困難", "喘", "氣喘", "呼吸急促", "respiratory"],
+      "disposition": "questionnaire",
+      "clinical_domain": "chest"
+    },
+    "skin_problem_trauma": {
+      "label": "皮膚問題／外傷",
+      "keywords": ["皮膚問題", "皮膚外傷", "皮疹", "皮膚傷口", "skin problem"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "stab_wound": {
+      "label": "刺傷",
+      "keywords": ["刺傷", "刀刺傷", "被刺", "stab wound"],
+      "disposition": "urgent",
+      "clinical_domain": null
+    },
+    "stroke": {
+      "label": "中風",
+      "keywords": ["中風", "嘴歪", "臉歪", "半身無力", "口齒不清", "stroke"],
+      "disposition": "urgent",
+      "clinical_domain": "headache"
+    },
+    "substance_abuse": {
+      "label": "物質使用問題",
+      "keywords": ["物質濫用", "藥物濫用", "毒品", "成癮", "substance abuse"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "syncope": {
+      "label": "昏倒／暈厥",
+      "keywords": ["昏倒", "暈厥", "暈倒", "syncope"],
+      "disposition": "questionnaire",
+      "clinical_domain": "chest"
+    },
+    "body_temperature_related": {
+      "label": "體溫相關問題",
+      "keywords": ["體溫過低", "失溫", "中暑", "熱衰竭", "體溫問題", "hypothermia", "heatstroke"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "motor_vehicle_accident_injury": {
+      "label": "交通事故傷害",
+      "keywords": ["交通事故", "車禍", "撞車", "機車事故", "motor vehicle accident"],
+      "disposition": "handoff",
+      "clinical_domain": null
+    },
+    "trauma": {
+      "label": "創傷",
+      "keywords": ["創傷", "嚴重外傷", "多處外傷", "trauma"],
+      "disposition": "handoff",
+      "clinical_domain": null
+    },
+    "loss_of_consciousness": {
+      "label": "失去意識",
+      "keywords": ["失去意識", "沒有意識", "叫不醒", "不省人事", "unconscious"],
+      "disposition": "urgent",
+      "clinical_domain": "headache"
+    },
+    "weakness": {
+      "label": "無力／虛弱",
+      "keywords": ["無力", "虛弱", "全身無力", "weakness"],
+      "disposition": "questionnaire",
+      "clinical_domain": null
+    },
+    "vaginal_bleeding": {
+      "label": "陰道出血",
+      "keywords": ["陰道出血", "非經期出血", "懷孕出血", "vaginal bleeding"],
+      "disposition": "questionnaire",
+      "clinical_domain": "abdomen"
+    },
+    "assault_and_rape": {
+      "label": "攻擊／性暴力",
+      "keywords": ["被攻擊", "遭攻擊", "性侵", "強暴", "性暴力", "assault", "rape"],
+      "disposition": "handoff",
+      "clinical_domain": null
+    },
+    "abdomen": {
+      "label": "腹痛",
+      "keywords": ["腹痛", "肚子痛", "胃痛", "腹部疼痛", "abdominal pain", "stomachache"],
+      "disposition": "questionnaire",
+      "clinical_domain": "abdomen"
+    },
+    "severe_dehydration": {
+      "label": "嚴重脫水",
+      "keywords": ["嚴重脫水", "脫水", "喝不下水", "dehydration"],
+      "disposition": "handoff",
+      "clinical_domain": null
+    }
+  }
+}

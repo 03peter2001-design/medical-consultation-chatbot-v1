@@ -2,16 +2,21 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Response, UploadFile
+from starlette.concurrency import run_in_threadpool
 
 from app import runtime
 from app.contracts import (
+    AvatarSpeechRequest,
+    AvatarStatusResponse,
     HealthResponse,
     TranscriptionResponse,
     error_responses,
 )
 from app.security import current_patient_session, require_patient_session
 from app.services.security_audit import audit_patient, safe_log
+from infrastructure.asr import ASRUnavailableError, AudioDecodeError
+from infrastructure.avatar import AvatarUnavailableError
 
 router = APIRouter(tags=["system"])
 
@@ -47,13 +52,14 @@ def health():
                 "model": "",
             },
         ),
+        "speech_transcription": runtime.asr_service.status(),
     }
 
 
 @router.post(
     "/transcribe",
     response_model=TranscriptionResponse,
-    responses=error_responses(400, 413, 422, 500),
+    responses=error_responses(400, 413, 422, 500, 503),
     summary="Transcribe a Traditional Chinese medical audio recording",
     dependencies=[Depends(require_patient_session)],
 )
@@ -65,6 +71,8 @@ async def transcribe(audio: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="請上傳音訊檔案")
 
     audio_bytes = await audio.read()
+    if not audio_bytes:
+        raise HTTPException(status_code=422, detail="錄音內容是空的")
     if len(audio_bytes) > 10 * 1024 * 1024:
         if patient_session is not None:
             audit_patient("patient.transcribe", "denied", patient_session)
@@ -74,22 +82,88 @@ async def transcribe(audio: UploadFile = File(...)):
         )
 
     try:
-        raw_text = runtime.llm_client.transcribe(
+        transcription = await run_in_threadpool(
+            runtime.asr_service.transcribe,
             audio_bytes=audio_bytes,
             filename=audio.filename or "audio.webm",
             mime_type=audio.content_type,
             prompt=WHISPER_PROMPT,
         )
-        transcript = str(raw_text or "").strip()
         if patient_session is not None:
             audit_patient("patient.transcribe", "success", patient_session)
         safe_log("patient.transcribe", "success")
-        return {"text": transcript}
+        return transcription
+    except AudioDecodeError as error:
+        if patient_session is not None:
+            audit_patient("patient.transcribe", "denied", patient_session)
+        safe_log("patient.transcribe", "invalid_audio", error=error)
+        raise HTTPException(status_code=422, detail="音訊格式無法辨識") from error
+    except ASRUnavailableError as error:
+        if patient_session is not None:
+            audit_patient("patient.transcribe", "failure", patient_session)
+        safe_log("patient.transcribe", "unavailable", error=error)
+        raise HTTPException(
+            status_code=503,
+            detail="語音辨識服務尚未就緒，請稍後再試或改用文字輸入",
+        ) from error
     except Exception as error:
         if patient_session is not None:
             audit_patient("patient.transcribe", "failure", patient_session)
         safe_log("patient.transcribe", "failure", error=error)
         raise HTTPException(
             status_code=500,
-            detail=f"語音辨識失敗：{error}",
+            detail="語音辨識失敗，請重試或改用文字輸入",
         ) from error
+
+
+@router.get(
+    "/avatar/status",
+    response_model=AvatarStatusResponse,
+    responses=error_responses(401),
+    summary="Check the private local avatar service",
+    dependencies=[Depends(require_patient_session)],
+)
+async def avatar_status():
+    return await run_in_threadpool(runtime.avatar_client.status)
+
+
+@router.post(
+    "/avatar/speak",
+    response_class=Response,
+    responses={
+        **error_responses(401, 422, 500, 503),
+        200: {
+            "content": {"video/mp4": {}},
+            "description": "Locally generated talking-head MP4 video.",
+        },
+    },
+    summary="Render local CosyVoice3 speech as a MuseTalk avatar video",
+    dependencies=[Depends(require_patient_session)],
+)
+async def avatar_speak(payload: AvatarSpeechRequest):
+    patient_session = current_patient_session()
+    try:
+        video = await run_in_threadpool(runtime.avatar_client.render, payload.text)
+        if patient_session is not None:
+            audit_patient("patient.avatar.speak", "success", patient_session)
+        safe_log("patient.avatar.speak", "success")
+        return Response(
+            content=video.content,
+            media_type=video.content_type,
+            headers={
+                "Cache-Control": "private, no-store",
+                "X-Speech-Model": video.speech_model,
+                "X-Animation-Model": video.animation_model,
+                "X-Avatar-Cache": "hit" if video.cache_hit else "miss",
+            },
+        )
+    except AvatarUnavailableError as error:
+        if patient_session is not None:
+            audit_patient("patient.avatar.speak", "failure", patient_session)
+        safe_log("patient.avatar.speak", "unavailable", error=error)
+        raise HTTPException(status_code=503, detail="Avatar 服務目前無法使用") from error
+    except Exception as error:
+        if patient_session is not None:
+            audit_patient("patient.avatar.speak", "failure", patient_session)
+        safe_log("patient.avatar.speak", "failure", error=error)
+        raise HTTPException(status_code=500, detail="Avatar 影片產生失敗") from error

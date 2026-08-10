@@ -1,0 +1,312 @@
+{
+  "schema_version": 1,
+  "id": "intentional_drug_overdose",
+  "label": "蓄意藥物過量",
+  "source_order": 35,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "substance_taken",
+      "amount_of_substance_taken",
+      "time_of_ingestion"
+    ],
+    "priority_fields": [
+      "mental_state",
+      "current_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 8,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "substance_taken",
+      "prompt": "你服用了什麼物質？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你服用了什麼物質？"
+      ]
+    },
+    {
+      "field": "has_container_or_label",
+      "prompt": "你有容器或標籤嗎？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你有容器或標籤嗎？"
+      ]
+    },
+    {
+      "field": "amount_of_substance_taken",
+      "prompt": "你服用了多少這種物質？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你服用了多少這種物質？"
+      ]
+    },
+    {
+      "field": "time_of_ingestion",
+      "prompt": "你是什麼時候服用這種物質的",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你是什麼時候服用這種物質的"
+      ]
+    },
+    {
+      "field": "ingestion_intent",
+      "prompt": "這次服用是故意的還是誤食嗎？",
+      "kind": "choice",
+      "options": [
+        "故意的",
+        "誤食"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "這次服用是故意的還是誤食嗎？"
+      ]
+    },
+    {
+      "field": "triggering_event",
+      "prompt": "是否有導致服用的具體原因或事件？ 比如自傷",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有導致服用的具體原因或事件？ 比如自傷"
+      ]
+    },
+    {
+      "field": "current_symptoms",
+      "prompt": "你現在有什麼症狀？比如頭暈、呼吸困難心悸、心律不整或胸痛",
+      "kind": "choice",
+      "options": [
+        "頭暈",
+        "呼吸困難",
+        "心悸",
+        "心律不整",
+        "胸痛"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你現在有什麼症狀？比如頭暈、呼吸困難心悸、心律不整或胸痛"
+      ]
+    },
+    {
+      "field": "mental_state",
+      "prompt": "是否感到焦慮、抑鬱或有自殺的想法？",
+      "kind": "choice",
+      "options": [
+        "焦慮",
+        "抑鬱",
+        "有自殺的想法"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否感到焦慮、抑鬱或有自殺的想法？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "蓄意藥物過量是醫療緊急情況。若患者有自殺想法、呼吸困難、胸痛、心悸或意識混亂，應立即尋求緊急醫療協助，而非僅填寫問卷。應優先啟動緊急應變或 Safety 流程。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-e4105fe1e83b"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.3941,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-f4a04057f1f5",
+      "title": "Factor V Assay: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2085248-overview",
+      "route": "common",
+      "chunk_id": "5627db1307bccf2243b5_11",
+      "distance": 0.5277,
+      "excerpt": "factor V assay? Which panel includes a factor V assay? What is factor V? When is a factor V assay indicated? What is the difference between factor V Leiden and factor V? What are the limitations of a factor V assay?"
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.4404,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-1d3d3891f923",
+      "title": "Diagnostic Influenza Tests: Reference Range, Interpretation, Collection and Diagnostic Methods",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2053517-overview",
+      "route": "common",
+      "chunk_id": "9938149389dea7f1fe21_27",
+      "distance": 0.5289,
+      "excerpt": "than rapid antigen tests. Questions & Answers Overview What are diagnostic influenza tests? How are diagnostic influenza tests interpreted? How are diagnostic influenza tests performed? What are the types of diagnostic influenza tests? When are diagnostic influenza tests indicated? What are the sensitivity and specificity of diagnostic influenza tests?"
+    },
+    {
+      "id": "rag-e4105fe1e83b",
+      "title": "Procainamide Level: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2090328-overview",
+      "route": "common",
+      "chunk_id": "4e93ade1759d99abb7d6_2",
+      "distance": 0.4699,
+      "excerpt": "are typically checked before the administration of the second dose. Toxicity may occur when levels of either or the combination of both are too high (see Reference Range). Signs and symptoms of toxicity include confusion, dizziness, drowsiness, decreased urination, nausea, vomiting, hypotension, tachycardia, and arrhythmias. Collection and Panels See the list below: Specimen: Blood Container: Red-top tube Minimum: 0.4 mL Method: Routine venipuncture Background Description Procainamide hydrochloride is a class 1a antiarrhythmic that is used to treat a wide variety of ventricular and atrial"
+    },
+    {
+      "id": "rag-3a54d09466a8",
+      "title": "Glucagon: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2089114-overview",
+      "route": "common",
+      "chunk_id": "9fabdfa72917c928253b_16",
+      "distance": 0.5438,
+      "excerpt": "What are the glucagon reference ranges? How are glucagon results interpreted? What are glucagonomas? What are requirements for the collection and transport of glucagon? What are requirements for glucagon stability? What are the metabolic actions of glucagon?"
+    },
+    {
+      "id": "rag-0ddcaaabd981",
+      "title": "Triiodothyronine: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2089598-overview",
+      "route": "common",
+      "chunk_id": "db5d21435125369652e8_3",
+      "distance": 0.4948,
+      "excerpt": "procedure Assessment of the signs and symptoms of thyroid disease Noting the use of medications, if any Advice for overnight fasting prior to collection Interpretation, counseling, treatment, monitoring, and follow-up by the referring physician All laboratories may not be equipped to perform thyroid testing, and samples may be sent to a reference laboratory in such cases, where specialized equipment is available. In general, thyroid hormones are not measured in isolation. A thyroid panel consists of essentially the baseline fT3, fT4, and thyroid-stimulating hormone (TSH). For future review,"
+    },
+    {
+      "id": "rag-8f1615091344",
+      "title": "Insulin: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2089224-overview",
+      "route": "common",
+      "chunk_id": "41b085922049bec01938_21",
+      "distance": 0.5574,
+      "excerpt": "conditions are associated with increased insulin secretion? Which conditions are associated with decreased insulin excretion? Which conditions are associated with beta-cell destruction caused by decreased insulin levels? How are samples collected for insulin testing and what methods are used for analysis? What instructions should be given to patients prior to insulin testing? What is the biosynthesis of insulin? What is the function of insulin? What is insulin secretion? When is insulin testing indicated? Which factors can falsely elevate insulin levels? Which factors can falsely decrease"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "bae9ddfa73640f26a589002821b41ddd6b0fe6237dce795efac2373cf8536127",
+    "rag_corpus_hash": "84ab3ac4c17ad83f6b38e27d62daab8b9f2d3bab1f65fce9a8053bdf019716bb",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:01:06+00:00"
+  }
+}

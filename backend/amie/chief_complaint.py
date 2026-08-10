@@ -7,7 +7,12 @@ import re
 from functools import lru_cache
 from typing import Any, cast
 
-from domain.questionnaires import DISEASE_ROUTES, load_questionnaire_category
+from domain.questionnaires import (
+    DISEASE_ROUTES,
+    ROUTE_KEYWORDS,
+    ROUTE_LABELS,
+    load_questionnaire_category,
+)
 
 from .models import (
     ChiefComplaintAssessment,
@@ -18,7 +23,7 @@ from .models import (
     SymptomAssessment,
     SymptomEvidence,
 )
-from .rule_config import finding_codes, load_safety_rules, supported_routes
+from .rule_config import finding_codes, load_safety_rules
 
 _DIRECT_IDENTIFIER = re.compile(
     r"\b(?:[A-Z][12]\d{8}|\d{8,12})\b",
@@ -382,9 +387,9 @@ def validate_assessment(
 ) -> ChiefComplaintAssessment:
     """Discard every model claim that is not grounded in the raw text."""
     rules = load_safety_rules()
-    allowed_routes = supported_routes()
+    allowed_routes = set(DISEASE_ROUTES)
     symptom_definitions = rules["semantic_extraction"]["symptom_definitions"]
-    route_keywords = rules["route_keywords"]
+    route_keywords = ROUTE_KEYWORDS
     symptoms = _validated_symptoms(
         text,
         assessment.symptoms,
@@ -643,7 +648,17 @@ class ChiefComplaintExtractor:
     @staticmethod
     def _prompt(text: str) -> str:
         rules = load_safety_rules()
-        route_values = "、".join([*rules["supported_routes"], "other", "unknown"])
+        route_values = "、".join([*DISEASE_ROUTES, "other", "unknown"])
+        route_guidance = json.dumps(
+            {
+                route: {
+                    "label": ROUTE_LABELS[route],
+                    "keywords": list(ROUTE_KEYWORDS[route]),
+                }
+                for route in DISEASE_ROUTES
+            },
+            ensure_ascii=False,
+        )
         finding_values = "、".join(rules["finding_codes"])
         example_finding = rules["finding_codes"][0]
         semantic = rules["semantic_extraction"]
@@ -677,13 +692,11 @@ class ChiefComplaintExtractor:
         )
         matched_routes = [
             route
-            for route, keywords in rules["route_keywords"].items()
-            if any(keyword in text for keyword in keywords)
+            for route, keywords in ROUTE_KEYWORDS.items()
+            if any(keyword.casefold() in text.casefold() for keyword in keywords)
         ]
         questionnaire_catalog = json.dumps(
-            _questionnaire_answer_catalog(
-                matched_routes if len(matched_routes) == 1 else DISEASE_ROUTES
-            ),
+            _questionnaire_answer_catalog(matched_routes if len(matched_routes) == 1 else []),
             ensure_ascii=False,
         )
         return f"""
@@ -716,10 +729,9 @@ class ChiefComplaintExtractor:
 13. 有多個症狀時，symptom_assessments要為每個症狀分別整理onset_time、
    onset、course、duration、嚴重程度、是否新發或改變及相關finding；
    不可把一個症狀的時間資訊套用到另一個症狀。
-14. 只有 headache、chest_pain、chest_tightness、abdominal_pain 可以啟動
-   對應的症狀問卷。頭暈、頭部外傷、視覺異常、噁心或嘔吐若沒有上述症狀，
-   不得輸出 headache、chest 或 abdomen route；它們只能記錄為finding或
-   非路由症狀。
+14. route 必須由病人原文中直接描述的主訴支持，並依下方路由目錄選擇。
+   不可把伴隨症狀或推測診斷轉成另一個 route。例如只有頭暈、頭部外傷、
+   視覺異常、噁心或嘔吐時，不得推測為 headache。
 15. questionnaire_answers記錄病人原文已回答的核准問卷資訊。route、field
    及value必須使用下方目錄中的原值；evidence必須逐字取自病人原文。
    沒有回答的欄位不可輸出，也不可自行創造答案。multiple=true的題目中，
@@ -746,6 +758,9 @@ duration定義：
 
 finding定義：
 {finding_guidance}
+
+問卷路由目錄：
+{route_guidance}
 
 可預填的問卷資訊目錄：
 {questionnaire_catalog}
@@ -802,7 +817,7 @@ def prioritized_routes(
     """Rank evidenced symptom routes while retaining every supported route."""
     if not assessment:
         return []
-    allowed_routes = supported_routes()
+    allowed_routes = set(DISEASE_ROUTES)
     candidates = [
         route
         for route in assessment.route_candidates
@@ -864,7 +879,7 @@ def preferred_route(
     ranked = prioritized_routes(assessment, risk_profile)
     if assessment.symptom_assessments and ranked:
         return ranked[0]
-    allowed_routes = supported_routes()
+    allowed_routes = set(DISEASE_ROUTES)
     if assessment.primary_symptom in {*allowed_routes, "other"} and assessment.primary_evidence:
         return assessment.primary_symptom
     supported = [

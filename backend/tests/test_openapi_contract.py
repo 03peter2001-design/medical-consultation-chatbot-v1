@@ -31,6 +31,11 @@ from scripts.export_openapi import DEFAULT_OUTPUT, rendered_openapi
 EXPECTED_OPERATIONS = {
     ("GET", "/v1/health"),
     ("POST", "/v1/transcribe"),
+    ("GET", "/v1/avatar/status"),
+    ("POST", "/v1/avatar/speak"),
+    ("POST", "/v1/invitations"),
+    ("POST", "/v1/invitations/exchange"),
+    ("GET", "/v1/patient/session"),
     ("POST", "/v1/chat"),
     ("GET", "/v1/doctor/rules"),
     ("GET", "/v1/doctor/terminology/snomed"),
@@ -71,8 +76,12 @@ class OpenApiContractTests(unittest.TestCase):
                 self.assertTrue(operation.get("summary"))
                 self.assertTrue(operation.get("tags"))
                 response = operation["responses"]["200"]
-                schema = response["content"]["application/json"]["schema"]
-                self.assertTrue(schema.get("$ref"), operation["operationId"])
+                content = response["content"]
+                if operation["operationId"] == "avatar_speak_v1_avatar_speak_post":
+                    self.assertEqual(set(content), {"video/mp4"})
+                else:
+                    schema = content["application/json"]["schema"]
+                    self.assertTrue(schema.get("$ref"), operation["operationId"])
         self.assertEqual(len(operation_ids), len(set(operation_ids)))
 
     def test_load_patient_documents_cross_date_registration_ambiguity(self):
@@ -94,7 +103,7 @@ class OpenApiContractTests(unittest.TestCase):
             )
 
         self.assertEqual(raised.exception.status_code, 422)
-        self.assertIn("ASCII YYYY-MM-DD", raised.exception.detail)
+        self.assertEqual(raised.exception.detail, "病例識別資料格式不正確")
 
     def test_legacy_aliases_remain_runtime_only(self):
         self.assertNotIn("/health", self.schema["paths"])

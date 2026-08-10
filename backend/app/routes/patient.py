@@ -1,7 +1,9 @@
 """Patient questionnaire and AMIE interview endpoints."""
 
-from copy import deepcopy
+import asyncio
 import time
+from copy import deepcopy
+from weakref import WeakValueDictionary
 
 from fastapi import (
     APIRouter,
@@ -27,7 +29,6 @@ from amie.disease_profiles import attach_safety_conditions
 from amie.models import ChiefComplaintAssessment
 from app.contracts import PatientChatResponse, error_responses
 from app.models import ChatRequest, PatientPrefill
-from app.security import current_patient_session, require_patient_session
 from app.runtime import (
     AMIE_DEBUG_TRACE,
     INTERVIEW_ENGINE,
@@ -37,6 +38,7 @@ from app.runtime import (
     llm_client,
     sessions,
 )
+from app.security import current_patient_session, require_patient_session
 from app.services.amie_audit import (
     append_amie_trace as _append_amie_trace,
 )
@@ -46,6 +48,10 @@ from app.services.amie_audit import (
 from app.services.amie_audit import (
     save_amie_state as _save_amie_state,
 )
+from app.services.async_clinical_io import (
+    ClinicalOperationTimeout,
+    run_clinical_io,
+)
 from app.services.clinical_summary import build_summary
 from app.services.consultation_reporting import (
     process_background_summaries,
@@ -54,7 +60,6 @@ from app.services.input_validation import (
     store_question_answer,
     validate_question_answer,
 )
-from app.services.security_audit import audit_patient, safe_log
 from app.services.patient_interview import (
     ROUTE_KEYWORDS,
     SUPPORTED_PATIENT_ROUTES,
@@ -85,6 +90,7 @@ from app.services.patient_interview import (
 from app.services.patient_interview import (
     urgent_possible_conditions as _urgent_possible_conditions,
 )
+from app.services.security_audit import audit_patient, safe_log
 from domain.questionnaires import (
     CHIEF_QUESTIONNAIRE,
     ROUTE_LABELS,
@@ -93,6 +99,7 @@ from domain.questionnaires import (
     filter_question_by_context,
     next_question_index,
     progress_meta,
+    questionnaire_disposition,
     questionnaire_meta,
 )
 from domain.questionnaires import (
@@ -100,6 +107,7 @@ from domain.questionnaires import (
 )
 
 router = APIRouter(tags=["patient"])
+_patient_chat_locks: WeakValueDictionary[str, asyncio.Lock] = WeakValueDictionary()
 
 _HISTORY_LIMIT = 16
 
@@ -138,9 +146,7 @@ def _restore_previous_question(session: dict) -> dict:
 
     snapshot = history.pop()
     integration = session.get("_integration")
-    transcript = session.get("transcript", [])[
-        : snapshot.pop("_transcript_length", 0)
-    ]
+    transcript = session.get("transcript", [])[: snapshot.pop("_transcript_length", 0)]
     session.clear()
     session.update(snapshot)
     session["_history"] = history
@@ -185,7 +191,7 @@ def classify_complaint(text: str) -> str:
                 {"role": "user", "content": text},
             ],
             temperature=0,
-            max_tokens=5,
+            max_tokens=32,
         )
         route = result.strip().lower().strip("`'\".。 ")
         if route in {*ROUTE_KEYWORDS, "other"}:
@@ -564,6 +570,66 @@ def _get_amie_engine() -> AMIEEngine:
     return _amie_engine_instance
 
 
+async def _governed_route_entry(
+    session: dict,
+    *,
+    route: str,
+    user_input: str,
+    user_display: str | None,
+    background_tasks: BackgroundTasks,
+) -> dict | None:
+    """Apply urgent/manual-entry governance before any long questionnaire."""
+    disposition = questionnaire_disposition(route)
+    if disposition == "questionnaire":
+        return None
+
+    label = ROUTE_LABELS[route]
+    flag = {
+        "code": f"route_entry_{disposition}_{route}",
+        "label": label,
+        "scope": "route_entry",
+        "route": route,
+        "possible_conditions": [],
+    }
+    if disposition == "urgent":
+        return await _complete_urgent_chief_complaint(
+            session,
+            user_input=user_input,
+            route=route,
+            red_flags=[flag],
+            background_tasks=background_tasks,
+        )
+
+    session["amie_state"] = {
+        "red_flags": [flag],
+        "knowledge_gaps": [f"{label}需由醫療人員即時評估"],
+    }
+    session["turn_count"] = session.get("turn_count", 0) + 1
+    _append_manual_amie_trace(
+        session,
+        current_question=CHIEF_QUESTIONNAIRE[0],
+        answer=user_input,
+        action="handoff",
+        reason=f"{label}屬時效或處置敏感主訴，依路由治理停止自動問卷並轉交。",
+        source="route_disposition",
+        red_flags=[flag],
+    )
+    return await _handoff_amie_consultation(
+        session,
+        reason=f"{label}需要由現場醫療人員即時確認處置與檢查順序",
+        user_display=user_display,
+    )
+
+
+def _governed_entry_route(routes: list[str]) -> str | None:
+    """Prefer urgent over handoff when several evidenced complaints coexist."""
+    for disposition in ("urgent", "handoff"):
+        for route in routes:
+            if questionnaire_disposition(route) == disposition:
+                return route
+    return None
+
+
 async def _handoff_amie_consultation(
     session: dict,
     *,
@@ -664,10 +730,14 @@ async def _chat_amie(
         pain_location_ids=req.pain_location_ids,
     )
     if field == "reason":
-        route, chief_flags = _assess_chief_complaint(
-            user_input,
-            data,
-        )
+        try:
+            route, chief_flags = await run_clinical_io(
+                _assess_chief_complaint,
+                user_input,
+                data,
+            )
+        except ClinicalOperationTimeout:
+            route, chief_flags = "safety_unavailable", []
         if chief_flags:
             return await _complete_urgent_chief_complaint(
                 session,
@@ -711,18 +781,30 @@ async def _chat_amie(
                 answer=user_input,
                 action="handoff",
                 reason=(
-                    f"主訴被分類為 {route or 'unknown'}，不在目前核准的"
-                    "胸痛、頭痛或腹痛問卷範圍，因此轉交醫療人員。"
+                    f"主訴被分類為 {route or 'unknown'}，無法對應已核准的"
+                    "問卷路由，因此轉交醫療人員。"
                 ),
                 source="route_guard",
             )
             return await _handoff_amie_consultation(
                 session,
-                reason="主訴不在目前支援的胸痛、頭痛或腹痛路由",
+                reason="主訴無法對應目前支援的問卷路由",
                 user_display=user_display,
             )
         routes = _complaint_routes(data, route)
         data["types"] = routes
+        governed_route = _governed_entry_route(routes)
+        if governed_route:
+            data["type"] = governed_route
+            governed_response = await _governed_route_entry(
+                session,
+                route=governed_route,
+                user_input=user_input,
+                user_display=user_display,
+                background_tasks=background_tasks,
+            )
+            if governed_response is not None:
+                return governed_response
         questionnaire = build_questionnaire(routes)
         _apply_chief_questionnaire_prefills(data, questionnaire)
         questionnaire = [
@@ -742,16 +824,24 @@ async def _chat_amie(
 
     session["turn_count"] += 1
 
-    result = _get_amie_engine().run_turn(
-        route=current.get("route") or data.get("type", ""),
-        answer=user_input,
-        current_field=field,
-        data=data,
-        questionnaire=questionnaire,
-        prefilled_fields=set(session.get("prefilled_fields", [])),
-        turn_count=session["turn_count"],
-        previous_state=session.get("amie_state"),
-    )
+    try:
+        result = await run_clinical_io(
+            _get_amie_engine().run_turn,
+            route=current.get("route") or data.get("type", ""),
+            answer=user_input,
+            current_field=field,
+            data=data,
+            questionnaire=questionnaire,
+            prefilled_fields=set(session.get("prefilled_fields", [])),
+            turn_count=session["turn_count"],
+            previous_state=session.get("amie_state"),
+        )
+    except ClinicalOperationTimeout:
+        return await _handoff_amie_consultation(
+            session,
+            reason="語意問診處理逾時，無法安全完成本次自動問診",
+            user_display=user_display,
+        )
     session["data"] = result.data
     data = session["data"]
     session["triage_level"] = result.triage_level
@@ -914,10 +1004,14 @@ async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
     )
 
     if field == "reason":
-        route, chief_flags = _assess_chief_complaint(
-            user_input,
-            data,
-        )
+        try:
+            route, chief_flags = await run_clinical_io(
+                _assess_chief_complaint,
+                user_input,
+                data,
+            )
+        except ClinicalOperationTimeout:
+            route, chief_flags = "safety_unavailable", []
         if chief_flags:
             return await _complete_urgent_chief_complaint(
                 session,
@@ -942,14 +1036,26 @@ async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
             return _question_payload(
                 session,
                 reply=(
-                    "了解，您描述的症狀目前不在胸痛／頭痛／腹痛問診"
-                    "範圍內，建議直接由現場護理師或醫師進一步分流。"
+                    "了解，您描述的症狀目前無法對應已核准的問卷路由，"
+                    "建議直接由現場護理師或醫師進一步分流。"
                 ),
                 user_display=user_display,
                 completed=True,
             )
         routes = _complaint_routes(data, route)
         data["types"] = routes
+        governed_route = _governed_entry_route(routes)
+        if governed_route:
+            data["type"] = governed_route
+            governed_response = await _governed_route_entry(
+                session,
+                route=governed_route,
+                user_input=user_input,
+                user_display=user_display,
+                background_tasks=background_tasks,
+            )
+            if governed_response is not None:
+                return governed_response
         questionnaire = build_questionnaire(routes)
         _apply_chief_questionnaire_prefills(data, questionnaire)
         questionnaire = [
@@ -1006,16 +1112,11 @@ def _patient_runtime_binding(patient_session: dict) -> dict[str, str]:
     }
 
 
-@router.post(
-    "/chat",
-    response_model=PatientChatResponse,
-    responses=error_responses(422, 500, 503),
-    summary="Advance or start a patient pre-consultation interview",
-    dependencies=[Depends(require_patient_session)],
-)
-async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
-    """Restore and durably save the cookie-bound patient interview."""
-    patient_session = current_patient_session()
+async def _chat_serialized(
+    req: ChatRequest,
+    background_tasks: BackgroundTasks,
+    patient_session: dict | None,
+):
     if patient_session is None:
         # Kept for direct unit calls; HTTP requests always install the required
         # cookie-backed patient session dependency above.
@@ -1047,3 +1148,21 @@ async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
                 **binding,
                 state=state,
             )
+
+
+@router.post(
+    "/chat",
+    response_model=PatientChatResponse,
+    responses=error_responses(422, 500, 503),
+    summary="Advance or start a patient pre-consultation interview",
+    dependencies=[Depends(require_patient_session)],
+)
+async def chat(req: ChatRequest, background_tasks: BackgroundTasks):
+    """Serialize, restore, and durably save one patient interview."""
+    patient_session = current_patient_session()
+    lock_id = (
+        patient_session["interview_session_id"] if patient_session is not None else req.session_id
+    )
+    lock = _patient_chat_locks.setdefault(lock_id, asyncio.Lock())
+    async with lock:
+        return await _chat_serialized(req, background_tasks, patient_session)

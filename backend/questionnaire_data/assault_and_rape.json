@@ -1,0 +1,250 @@
+{
+  "id": "assault_and_rape",
+  "label": "攻擊 強暴",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 50,
+    "source_sha256": "994f497033ad0cee96c24d2e2b19b919bd505bea57daa4671180973c2e4cf94a",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "other_symptoms",
+      "bleeding_details",
+      "injury_location"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 12,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "event_time",
+      "prompt": "事件發生的時間？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "event_location",
+      "prompt": "事件發生的地點是在家中 公共場所 工作場所 還是其他地方",
+      "kind": "choice",
+      "options": [
+        "家中",
+        "公共場所",
+        "工作場所",
+        "其他地方"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "event_nature",
+      "prompt": "事件的性質是身體攻擊 性攻擊 強暴還是其他性質",
+      "kind": "choice",
+      "options": [
+        "身體攻擊",
+        "性攻擊",
+        "強暴",
+        "其他性質"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "injury_location",
+      "prompt": "病人的傷害部位是在頭部 臉部 胸部 腹部 四肢 生殖器 還是其他地方",
+      "kind": "choice",
+      "options": [
+        "頭部",
+        "臉部",
+        "胸部",
+        "腹部",
+        "四肢",
+        "生殖器",
+        "其他地方"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "injury_type",
+      "prompt": "受到的傷害是撞擊傷 切割傷 瘀傷 骨折還是其他傷害類型？",
+      "kind": "choice",
+      "options": [
+        "撞擊傷",
+        "切割傷",
+        "瘀傷",
+        "骨折",
+        "其他傷害類型"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "bleeding_details",
+      "prompt": "是否有出血？若有 請說明出血部位與出血量",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "other_symptoms",
+      "prompt": "是否有以下其他症狀？ 請將以下有出現的症狀或是其他症狀描述讓我知道",
+      "kind": "choice",
+      "options": [
+        "疼痛",
+        "頭暈或昏厥",
+        "呼吸困難",
+        "無力或麻木",
+        "意識模糊"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "first_aid_measures",
+      "prompt": "事件後是否已經進行了急救措施？若有 請進一步說明所採取的措施",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "psychological_support_needed",
+      "prompt": "是否需要心理支持或諮詢？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "authorities_notified",
+      "prompt": "是否已經報警或通知相關機構？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "medical_history",
+      "prompt": "是否有其他慢性疾病或正在服用的藥物？ 若有 請進一步說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "additional_information",
+      "prompt": "是否有其他需要補充的情況或問題？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

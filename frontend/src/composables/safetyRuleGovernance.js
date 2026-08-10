@@ -1,4 +1,4 @@
-import { computed, ref, watch } from 'vue'
+import { computed, onScopeDispose, ref, watch } from 'vue'
 
 import { api } from '../services/backend.js'
 import {
@@ -37,6 +37,15 @@ export function nonemptySafetyLines(value) {
     .filter(Boolean)
 }
 
+export function selectedSafetyFeatures(rule) {
+  return rule.featureSelections?.[rule.featureMode] || []
+}
+
+export function hiddenSafetyFeatures(rule, visibleCodes) {
+  const visible = visibleCodes instanceof Set ? visibleCodes : new Set(visibleCodes)
+  return selectedSafetyFeatures(rule).filter((code) => !visible.has(code))
+}
+
 export function cloneSafetyGroups(groups) {
   return JSON.parse(JSON.stringify(groups || [])).map((group) => ({
     ...group,
@@ -44,7 +53,7 @@ export function cloneSafetyGroups(groups) {
     conditionsText: group.possible_conditions.join('\n'),
     rules: group.rules.map((rule) => {
       const when = rule.when || {}
-      const featureMode = when.all_findings
+      const featureMode = Object.hasOwn(when, 'all_findings')
         ? 'all_findings'
         : 'any_findings'
       const otherConditions = Object.fromEntries(
@@ -56,7 +65,10 @@ export function cloneSafetyGroups(groups) {
         ...rule,
         termsText: (rule.terms || []).join('\n'),
         featureMode,
-        selectedFeatures: [...(when[featureMode] || [])],
+        featureSelections: {
+          all_findings: [...(when.all_findings || [])],
+          any_findings: [...(when.any_findings || [])],
+        },
         conditionText: JSON.stringify(
           rule.kind === 'structured'
             ? otherConditions
@@ -90,8 +102,9 @@ export function buildSafetyRule(rule) {
   if (rule.kind === 'structured') {
     delete parsed.any_findings
     delete parsed.all_findings
-    if (rule.selectedFeatures.length) {
-      parsed[rule.featureMode] = [...new Set(rule.selectedFeatures)]
+    for (const mode of ['all_findings', 'any_findings']) {
+      const selected = rule.featureSelections?.[mode] || []
+      if (selected.length) parsed[mode] = [...new Set(selected)]
     }
     result.when = parsed
   } else {
@@ -169,6 +182,15 @@ export function useSafetyRuleGovernance(props, emit) {
   const validationError = ref('')
   const error = ref('')
   const success = ref('')
+  let assistantRequestSequence = 0
+  let assistantAbortController = null
+
+  function invalidateAssistantRequest() {
+    assistantRequestSequence += 1
+    assistantAbortController?.abort()
+    assistantAbortController = null
+    assistantBusy.value = false
+  }
 
   function ensureActiveGroup() {
     if (
@@ -267,9 +289,12 @@ export function useSafetyRuleGovernance(props, emit) {
   }
 
   function selectGroup(groupId) {
+    invalidateAssistantRequest()
     activeGroupId.value = groupId
     featureSearch.value = ''
     activeFeatureCategory.value = 'all'
+    assistantHistory.value = []
+    assistantMessage.value = ''
     error.value = ''
   }
 
@@ -292,6 +317,7 @@ export function useSafetyRuleGovernance(props, emit) {
   }
 
   function cancelEdit() {
+    invalidateAssistantRequest()
     drafts.value = cloneSafetyGroups(props.rulebook.safety_groups)
     editing.value = false
     resetDraftState()
@@ -310,6 +336,10 @@ export function useSafetyRuleGovernance(props, emit) {
       return
     }
     assistantBusy.value = true
+    const requestId = ++assistantRequestSequence
+    const requestedGroupId = activeGroup.value.original_label
+    const controller = new AbortController()
+    assistantAbortController = controller
     error.value = ''
     assistantHistory.value.push({ role: 'user', content: message })
     assistantMessage.value = ''
@@ -322,19 +352,34 @@ export function useSafetyRuleGovernance(props, emit) {
           history: assistantHistory.value.slice(0, -1),
         },
         props.adminToken,
+        controller.signal,
       )
+      if (
+        requestId !== assistantRequestSequence ||
+        !editing.value ||
+        activeGroupId.value !== requestedGroupId
+      ) {
+        return
+      }
       drafts.value = cloneSafetyGroups(result.safety_groups)
       assistantHistory.value.push({
         role: 'assistant',
         content: `${result.reply}（僅套用至草稿，尚未儲存）`,
       })
     } catch (requestError) {
-      assistantHistory.value.pop()
-      error.value = requestError.message
+      if (requestId === assistantRequestSequence) {
+        assistantHistory.value.pop()
+        if (requestError.name !== 'AbortError') error.value = requestError.message
+      }
     } finally {
-      assistantBusy.value = false
+      if (requestId === assistantRequestSequence) {
+        assistantAbortController = null
+        assistantBusy.value = false
+      }
     }
   }
+
+  onScopeDispose(invalidateAssistantRequest)
 
   async function saveRules() {
     if (saving.value) return

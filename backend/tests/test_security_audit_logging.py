@@ -1,10 +1,10 @@
 from __future__ import annotations
 
+import gc
+import os
 import sqlite3
 import tempfile
 import unittest
-import os
-import gc
 from contextlib import closing
 from pathlib import Path
 from unittest.mock import patch
@@ -108,8 +108,7 @@ class SecurityAuditLoggingTests(unittest.TestCase):
         rows = self._audit_rows()
         actions = {row[2] for row in rows}
         self.assertTrue(
-            {"doctor.consultation.list", "patient.session.restore", "patient.chat"}
-            <= actions
+            {"doctor.consultation.list", "patient.session.restore", "patient.chat"} <= actions
         )
         serialized = repr(rows)
         self.assertNotIn("patient-session-secret", serialized)

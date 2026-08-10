@@ -3,25 +3,67 @@ const runtimeLocation =
     ? { search: '', protocol: 'http:', hostname: '127.0.0.1' }
     : window.location
 
+function parseBoolean(value, fallback = false) {
+  if (value == null || value === '') return fallback
+  return ['1', 'true', 'yes', 'on'].includes(String(value).toLowerCase())
+}
+
+function allowedOrigins(value) {
+  return new Set(
+    String(value || '')
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .flatMap((item) => {
+        try {
+          return [new URL(item).origin]
+        } catch {
+          return []
+        }
+      }),
+  )
+}
+
+function allowedQueryUrl(requested, allowlist) {
+  if (!requested) return ''
+  const candidate = /^https?:\/\//i.test(requested)
+    ? requested
+    : `http://${requested}`
+  try {
+    const url = new URL(candidate)
+    if (
+      ['http:', 'https:'].includes(url.protocol) &&
+      allowedOrigins(allowlist).has(url.origin)
+    ) {
+      return url.toString().replace(/\/+$/, '')
+    }
+  } catch {
+    // Invalid or untrusted query overrides fall through to configured defaults.
+  }
+  return ''
+}
+
 export function resolveBackendUrl(
   locationLike = runtimeLocation,
   configuredBaseUrl = import.meta.env?.VITE_BACKEND_BASE_URL,
+  {
+    developmentMode = import.meta.env?.DEV === true,
+    queryOverrideEnabled = import.meta.env
+      ?.VITE_ENABLE_BACKEND_QUERY_OVERRIDE,
+    queryOverrideOrigins = import.meta.env
+      ?.VITE_BACKEND_QUERY_OVERRIDE_ORIGINS,
+  } = {},
 ) {
   const params = new URLSearchParams(locationLike.search || '')
-  const override = params.get('backend')?.trim()
+  const queryOverridesAllowed =
+    developmentMode && parseBoolean(queryOverrideEnabled)
 
-  if (override) {
-    const candidate = /^https?:\/\//i.test(override)
-      ? override
-      : `http://${override}`
-    try {
-      const url = new URL(candidate)
-      if (url.protocol === 'http:' || url.protocol === 'https:') {
-        return url.toString().replace(/\/+$/, '')
-      }
-    } catch {
-      console.warn('忽略無效的 backend 網址參數：', override)
-    }
+  if (queryOverridesAllowed) {
+    const override = allowedQueryUrl(
+      params.get('backend')?.trim(),
+      queryOverrideOrigins,
+    )
+    if (override) return override
   }
 
   const configured = configuredBaseUrl?.trim()
@@ -39,18 +81,47 @@ export function resolveBackendUrl(
     }
   }
 
-  const requestedPort = params.get('backendPort')?.trim()
-  const backendPort =
-    /^\d{1,5}$/.test(requestedPort || '') && Number(requestedPort) <= 65535
-      ? requestedPort
-      : import.meta.env?.VITE_BACKEND_PORT || '8000'
   const protocol = locationLike.protocol === 'https:' ? 'https:' : 'http:'
   const hostname = locationLike.hostname || '127.0.0.1'
+  const requestedPort = queryOverridesAllowed
+    ? params.get('backendPort')?.trim()
+    : ''
+  if (
+    /^\d{1,5}$/.test(requestedPort || '') &&
+    Number(requestedPort) <= 65535
+  ) {
+    const override = allowedQueryUrl(
+      `${protocol}//${hostname}:${requestedPort}`,
+      queryOverrideOrigins,
+    )
+    if (override) return override
+  }
+  const backendPort = import.meta.env?.VITE_BACKEND_PORT || '8000'
   return `${protocol}//${hostname}:${backendPort}`
 }
 
 export const backendUrl = resolveBackendUrl()
 export const apiVersionPrefix = '/v1'
+
+export function credentialsForBackendUrl(
+  baseUrl,
+  locationLike = runtimeLocation,
+) {
+  const pageOrigin =
+    locationLike.origin ||
+    `${locationLike.protocol === 'https:' ? 'https:' : 'http:'}//${
+      locationLike.hostname || '127.0.0.1'
+    }${locationLike.port ? `:${locationLike.port}` : ''}`
+  try {
+    return new URL(baseUrl, pageOrigin).origin === new URL(pageOrigin).origin
+      ? 'include'
+      : 'omit'
+  } catch {
+    return 'omit'
+  }
+}
+
+const backendCredentials = credentialsForBackendUrl(backendUrl)
 
 function apiPath(path) {
   return `${apiVersionPrefix}${path}`
@@ -110,12 +181,32 @@ export function snomedSearchPath({
 }
 
 async function request(path, options = {}) {
-  const response = await fetch(`${backendUrl}${path}`, options)
+  const response = await fetch(`${backendUrl}${path}`, {
+    ...options,
+    credentials: backendCredentials,
+  })
   const data = await response.json().catch(() => ({}))
   if (!response.ok) {
     throw new Error(formatApiErrorDetail(data.detail, response.status))
   }
   return data
+}
+
+async function requestVideo(path, options = {}) {
+  const response = await fetch(`${backendUrl}${path}`, {
+    ...options,
+    credentials: backendCredentials,
+  })
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}))
+    throw new Error(formatApiErrorDetail(data.detail, response.status))
+  }
+  return {
+    blob: await response.blob(),
+    speechModel: response.headers.get('X-Speech-Model') || '',
+    animationModel: response.headers.get('X-Animation-Model') || '',
+    cacheHit: response.headers.get('X-Avatar-Cache') === 'hit',
+  }
 }
 
 export function formatApiErrorDetail(detail, status) {
@@ -139,6 +230,18 @@ export function formatApiErrorDetail(detail, status) {
     if (messages.length) return messages.join('；')
   }
   return `HTTP ${status}`
+}
+
+export function audioUploadFilename(mimeType = '') {
+  const normalized = mimeType.split(';', 1)[0].toLowerCase()
+  const extension = {
+    'audio/mp4': 'm4a',
+    'audio/mpeg': 'mp3',
+    'audio/ogg': 'ogg',
+    'audio/wav': 'wav',
+    'audio/x-wav': 'wav',
+  }[normalized] || 'webm'
+  return `audio.${extension}`
 }
 
 function jsonOptions(method, body) {
@@ -183,12 +286,22 @@ export const api = {
     ),
   transcribe: (audioBlob) => {
     const formData = new FormData()
-    formData.append('audio', audioBlob, 'audio.webm')
+    formData.append(
+      'audio',
+      audioBlob,
+      audioUploadFilename(audioBlob.type),
+    )
     return request(apiPath('/transcribe'), {
       method: 'POST',
       body: formData,
     })
   },
+  avatarStatus: () => request(apiPath('/avatar/status')),
+  speakAvatar: (text, options = {}) =>
+    requestVideo(
+      apiPath('/avatar/speak'),
+      { ...jsonOptions('POST', { text }), signal: options.signal },
+    ),
   loadPatient: (consultationId, sessionId) =>
     request(
       apiPath('/doctor/load_patient'),
@@ -221,9 +334,10 @@ export const api = {
       method: 'POST',
       headers: { 'X-Rule-Admin-Token': adminToken },
     }),
-  suggestRuleEdits: (payload, adminToken) =>
+  suggestRuleEdits: (payload, adminToken, signal) =>
     request(ruleAssistantPath, {
       ...jsonOptions('POST', payload),
+      signal,
       headers: {
         'Content-Type': 'application/json',
         'X-Rule-Admin-Token': adminToken,

@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "id": "fever",
+  "label": "發燒",
+  "source_order": 17,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "fever_onset",
+      "fever_pattern"
+    ],
+    "priority_fields": [
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 7,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "fever_onset",
+      "prompt": "發燒是何時開始的？ *",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "發燒是何時開始的？ *"
+      ]
+    },
+    {
+      "field": "fever_pattern",
+      "prompt": "發燒是持續性的還是間歇性的？ *",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "發燒是持續性的還是間歇性的？ *"
+      ]
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "除了發燒，還有其他症狀嗎？請將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "畏寒或是全身倦怠",
+        "咳嗽、呼吸困難、喉嚨痛、鼻塞或流鼻涕",
+        "噁心、嘔吐、腹痛或腹瀉",
+        "排尿困難、尿頻或尿急、尿液顏色改變",
+        "頭痛或是頸部僵硬",
+        "皮疹、紅斑、皮膚瘙癢、水泡、焦痂、出血點、或腫脹",
+        "關節痛或肌肉痛",
+        "胸痛、心悸或心跳加速"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "除了發燒，還有其他症狀嗎？請將以下有出現的症狀描述給我聽",
+        "畏寒或是全身倦怠",
+        "咳嗽、呼吸困難、喉嚨痛、鼻塞或流鼻涕",
+        "噁心、嘔吐、腹痛或腹瀉",
+        "排尿困難、尿頻或尿急、尿液顏色改變",
+        "頭痛或是頸部僵硬",
+        "皮疹、紅斑、皮膚瘙癢、水泡、焦痂、出血點、或腫脹",
+        "關節痛或肌肉痛",
+        "胸痛、心悸或心跳加速"
+      ]
+    },
+    {
+      "field": "exposure_history",
+      "prompt": "發燒開始前是否有旅行 接觸過病人 動物 或其他可能的感染源？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "發燒開始前是否有旅行 接觸過病人 動物 或其他可能的感染源？"
+      ]
+    },
+    {
+      "field": "recent_procedures",
+      "prompt": "最近是否接受過手術或侵入性治療，包含心導管、針灸等？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "最近是否接受過手術或侵入性治療，包含心導管、針灸等？"
+      ]
+    },
+    {
+      "field": "occupation",
+      "prompt": "另外想詢問你目前的職業是什麼",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "另外想詢問你目前的職業是什麼"
+      ]
+    },
+    {
+      "field": "occupational_exposure",
+      "prompt": "是否有可能暴露於感染源、化學品或其他危險因素的環境中？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有可能暴露於感染源、化學品或其他危險因素的環境中？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "RAG 文獻指出，發燒伴隨的特定症狀，如頸部僵硬、呼吸困難、胸痛、意識改變（如嗜睡）等，可能是嚴重疾病（如腦膜炎、敗血症）的警訊，應優先詢問。",
+      "source_ids": [
+        "rag-6a8588ffc76c",
+        "rag-d4cb3cb8cf26",
+        "rag-3921568e573d"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-6a8588ffc76c",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "route": "common",
+      "chunk_id": "a663d18c5f77da4d66fd_25",
+      "distance": 0.4644,
+      "excerpt": "level. Toxicity is defined as a clinical syndrome with the following: lethargy with (1) poor perfusion as evidenced by delayed capillary refill or (2) cyanosis or other signs of respiratory distress. Cold hands and feet, limb pain, and pale or mottled skin are considered \"red flag\" manifestations of septicemia. The presence or absence of meningeal signs is documented in older children. Clinicians should bear in mind that in some infants and younger children (perhaps younger than 12-15 months) who develop meningitis, specific meningeal signs, such as the Kernig or Brudzinski sign, may not be"
+    },
+    {
+      "id": "rag-8aa48d72ae49",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "route": "common",
+      "chunk_id": "a663d18c5f77da4d66fd_9",
+      "distance": 0.4859,
+      "excerpt": "patterns such as irritability, lethargy, or apnea History of neglect or abuse Documented fever at home, the duration of any fever, and the last treatment (if any) for the fever Environmental factors, such as being in the heat for a long time during the summer and being overdressed during the winter, may indicate a risk for hyperthermia. The neonate (birth to 28 days) The history of the neonate is explored for possible symptoms of poor feeding, vomiting, poor social interaction, changes in the quality of crying, and possible apneic episodes. Any of these findings are reasons to consider serious"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4839,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-65b16e084fa2",
+      "title": "Trichinosis (Trichinellosis): Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230490-overview",
+      "route": "safety",
+      "chunk_id": "18637b5c7017fc509666_17",
+      "distance": 0.4626,
+      "excerpt": "Those with mild symptoms improve in 2-3 weeks. Symptoms associated with heavy infections may persist for 2-3 months. Factors that may affect morbidity include the quantity of larvae ingested, the species of Trichinella (most notably T spiralis), and the immune status of the host. Patients succumb to exhaustion, pneumonia, pulmonary embolism, encephalitis, or cardiac failure and/or arrhythmia. Death from trichinosis usually occurs in 4-8 weeks but may occur as early as in 2-3 weeks. Race Although Trichinella infections may be related to cultural differences in food cooking and storing methods"
+    },
+    {
+      "id": "rag-d40c42cd4a98",
+      "title": "Diagnostics for Coronavirus Disease 2019 (COVID-19) Patients: What is the incubation period for coronavirus disease 2019 (COVID-19)?, What is the range of illness severity of patients with coronavirus",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500119-overview",
+      "route": "safety",
+      "chunk_id": "1a58575bd82cfe94cf09_18",
+      "distance": 0.4776,
+      "excerpt": "Sepsis and septic shock Cardiac injury Cardiomyopathy Arrhythmia Sudden cardiac death Acute kidney injury Liver dysfunction Multiorgan failure Thromboembolism Gastrointestinal bleeding Critical illness polyneuropathy/myopathy Are patients with coronavirus disease 2019 (COVID-19) at risk for hypercoagulability? Some patients with coronavirus 2019 (COVID-19) may develop signs of a hypercoagulable state and be at increased risk for venous and arterial thrombosis of large and small vessels. The pathogenesis for COVID-19-associated hypercoagulability remains unknown. However, hypoxia and systemic"
+    },
+    {
+      "id": "rag-3921568e573d",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "safety",
+      "chunk_id": "bb1164c188b2fc1e1591_3",
+      "distance": 0.5137,
+      "excerpt": "be associated with respiratory failure, shock, or multiorgan system dysfunction. Complications may include pneumonia, hypoxemic respiratory failure/acute respiratory distress syndrome (ARDS), sepsis and septic shock, cardiomyopathy and arrhythmia, acute kidney injury (AKI), and complications of prolonged hospitalization, including secondary bacterial infections, thromboembolism, gastrointestinal (GI) bleeding, and polyneuropathy/myopathy. How is mild coronavirus disease 2019 (COVID-19) managed? Patient counseling Patients with mild coronavirus disease 2019 (COVID-19) should be counseled"
+    },
+    {
+      "id": "rag-04d05153821c",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "route": "safety",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "distance": 0.5202,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "bca97ab828a9da9804b7d25aad4f63e48c2469f39d6a3bf9710b9c52154e8410",
+    "rag_corpus_hash": "849f4a13ae6f64d93d57987d43fcfb722df959d6f7102f4de61e3f1e2035564a",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:05:36+00:00"
+  }
+}

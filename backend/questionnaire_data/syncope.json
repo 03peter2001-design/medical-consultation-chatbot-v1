@@ -1,0 +1,216 @@
+{
+  "id": "syncope",
+  "label": "昏倒 暈厥",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 43,
+    "source_sha256": "2f5e2012f26516fdfa6680bb2f574c64a8b79813c881a7bdb101742dd05f5dbf",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "preceding_symptoms",
+      "post_fainting_symptoms",
+      "injury_during_fainting"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "when_fainted",
+      "prompt": "什麼時候昏倒的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "episode_frequency",
+      "prompt": "這是第一次發作還是有過多次發作？",
+      "kind": "choice",
+      "options": [
+        "第一次發作",
+        "有過多次發作"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "duration_of_unconsciousness",
+      "prompt": "昏倒多久才清醒？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "preceding_triggers",
+      "prompt": "昏倒前是否有特定的誘因？ 比如快速站起來、情緒壓力、疼痛或脫水",
+      "kind": "choice",
+      "options": [
+        "快速站起來",
+        "情緒壓力",
+        "疼痛",
+        "脫水"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "preceding_symptoms",
+      "prompt": "昏倒前你是否有任何症狀？ 比如頭暈、胸痛、噁心、冒冷汗或是出現視力變化",
+      "kind": "choice",
+      "options": [
+        "頭暈",
+        "胸痛",
+        "噁心",
+        "冒冷汗",
+        "出現視力變化"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "position_when_fainting",
+      "prompt": "昏倒時你處於什麼站姿坐姿還是趟姿？",
+      "kind": "choice",
+      "options": [
+        "站姿",
+        "坐姿",
+        "趟姿"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "recovery_state",
+      "prompt": "發作後你多快恢復？ 比如醒來後很快恢復平常神智狀態還是混亂一陣子後才恢復",
+      "kind": "choice",
+      "options": [
+        "醒來後很快恢復平常神智狀態",
+        "混亂一陣子後才恢復"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "injury_during_fainting",
+      "prompt": "昏倒的時候是否受傷（例如，頭部外傷、骨折）？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "post_fainting_symptoms",
+      "prompt": "昏倒後，目前是否有任何症狀？比如說話困難、大小便失禁、手腳無力或手腳麻木",
+      "kind": "choice",
+      "options": [
+        "說話困難",
+        "大小便失禁",
+        "手腳無力",
+        "手腳麻木"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "observed_seizure_like_movements",
+      "prompt": "有人觀察到類似癲癇發作的動作（例如，顫抖、抽搐、眼睛上吊）嗎？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

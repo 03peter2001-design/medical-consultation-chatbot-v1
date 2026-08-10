@@ -6,17 +6,14 @@ from app.services.clinical_summary import (
     build_summary,
     clinical_patient_data,
 )
+from domain.questionnaires import ALL_ROUTE_LABELS
 
 
 def build_report_prompt(data: dict) -> str:
-    consultation_type = data.get("type", "chest")
+    consultation_type = data.get("type", "other")
     report_data = clinical_patient_data(data)
     summary = build_summary(report_data, include_identity=False)
-    chief_label = {
-        "chest": "胸痛",
-        "headache": "頭痛",
-        "abdomen": "腹痛",
-    }.get(consultation_type, "胸痛")
+    chief_label = ALL_ROUTE_LABELS.get(consultation_type, "其他不適")
 
     return f"""
 你是醫療預問診的病史整理助手，只能把既有資料整理成摘要。
@@ -26,8 +23,8 @@ def build_report_prompt(data: dict) -> str:
 {summary}
 
 請將資料整理成一段供醫師快速閱讀的病史摘要，依序交代：
-性別與年齡、{chief_label}主訴、發作時間、位置、性質、加重或緩解因素、
-重要伴隨症狀，以及與判斷有關的既往病史、用藥和過敏史。
+性別與年齡、{chief_label}主訴、發作或事件經過、已回答的重要問卷資訊，
+以及與判斷有關的既往病史、用藥和過敏史。
 
 限制：
 - 使用繁體中文，語氣專業、簡單、直接

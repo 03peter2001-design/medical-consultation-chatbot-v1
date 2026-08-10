@@ -1,0 +1,158 @@
+{
+  "id": "fever",
+  "label": "發燒",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 17,
+    "source_sha256": "bca97ab828a9da9804b7d25aad4f63e48c2469f39d6a3bf9710b9c52154e8410",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "fever_onset",
+      "fever_pattern"
+    ],
+    "priority_fields": [
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 7,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "fever_onset",
+      "prompt": "發燒是何時開始的？ *",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "fever_pattern",
+      "prompt": "發燒是持續性的還是間歇性的？ *",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "除了發燒，還有其他症狀嗎？請將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "畏寒或是全身倦怠",
+        "咳嗽、呼吸困難、喉嚨痛、鼻塞或流鼻涕",
+        "噁心、嘔吐、腹痛或腹瀉",
+        "排尿困難、尿頻或尿急、尿液顏色改變",
+        "頭痛或是頸部僵硬",
+        "皮疹、紅斑、皮膚瘙癢、水泡、焦痂、出血點、或腫脹",
+        "關節痛或肌肉痛",
+        "胸痛、心悸或心跳加速"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "exposure_history",
+      "prompt": "發燒開始前是否有旅行 接觸過病人 動物 或其他可能的感染源？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "recent_procedures",
+      "prompt": "最近是否接受過手術或侵入性治療，包含心導管、針灸等？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "occupation",
+      "prompt": "另外想詢問你目前的職業是什麼",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "occupational_exposure",
+      "prompt": "是否有可能暴露於感染源、化學品或其他危險因素的環境中？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

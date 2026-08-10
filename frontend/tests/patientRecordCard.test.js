@@ -15,6 +15,7 @@ test('structured EMR summary is prominent and directly follows the complaint', (
   assert.ok(complaintIndex >= 0)
   assert.ok(summaryIndex > complaintIndex)
   assert.ok(nextDashboardSectionIndex > summaryIndex)
+  assert.match(component, /<small>結構化病歷重點<\/small>/)
   assert.match(component, /<h3 id="emr-summary-title">病歷摘要 EMR<\/h3>/)
   assert.equal(component.match(/record\.report/g)?.length, 1)
 })

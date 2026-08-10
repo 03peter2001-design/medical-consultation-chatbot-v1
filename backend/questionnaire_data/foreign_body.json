@@ -1,0 +1,155 @@
+{
+  "id": "foreign_body",
+  "label": "異物",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 20,
+    "source_sha256": "5b01f687b3ff33590786e3f3c990a7f2a1078872e8d4a21a76b1f74a181dc6aa",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "onset_time"
+    ],
+    "priority_fields": [
+      "symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 6,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_time",
+      "prompt": "什麼時候開始有異物感？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "location",
+      "prompt": "異物感位於哪裡？比方說 眼睛 耳朵 喉嚨 鼻子 或皮膚",
+      "kind": "choice",
+      "options": [
+        "眼睛",
+        "耳朵",
+        "喉嚨",
+        "鼻子",
+        "皮膚"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "size",
+      "prompt": "你能描述一下異物的大小嗎？ 是否小於2毫米 2至5毫米 或是超過5毫米以上呢",
+      "kind": "choice",
+      "options": [
+        "小於2毫米",
+        "2至5毫米",
+        "超過5毫米以上"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "sharpness",
+      "prompt": "你能描述一下異物是否有尖銳處嗎",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "material",
+      "prompt": "異物是什麼材料製成的？ 金屬 木頭 還是塑膠",
+      "kind": "choice",
+      "options": [
+        "金屬",
+        "木頭",
+        "塑膠"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptoms",
+      "prompt": "你有哪些症狀？ 請將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "疼痛",
+        "腫脹",
+        "出血",
+        "呼吸困難、咳嗽或喘鳴",
+        "噁心、嘔吐、腹痛或吞嚥困難",
+        "視力變化、疼痛或分泌物",
+        "紅腫、發熱、化膿"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

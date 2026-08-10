@@ -2,6 +2,7 @@
 .agents
 .codex
 .build-state
+.rag-cache
 **/.env
 **/.venv
 **/venv
@@ -17,6 +18,9 @@ backend/clean_docs
 backend/data
 backend/terminology/snomed
 frontend/dist
+frontend-v2/apps/*/dist
+integration-deployment
 docs
 devlog
 pic
+!pic/dr training pc.png

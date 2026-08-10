@@ -1,0 +1,363 @@
+{
+  "schema_version": 1,
+  "id": "chest_pain_questionnaire",
+  "label": "胸痛",
+  "source_order": 1,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": "chest",
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "onset_time",
+      "onset_pattern",
+      "character",
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 9,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_time",
+      "prompt": "胸痛從什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "胸痛從什麼時候開始的？"
+      ]
+    },
+    {
+      "field": "onset_pattern",
+      "prompt": "胸痛是突然發作還是逐漸發作？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸發作"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "胸痛是突然發作還是逐漸發作？"
+      ]
+    },
+    {
+      "field": "location",
+      "prompt": "胸痛的位置在哪裡？",
+      "kind": "choice",
+      "options": [
+        "左邊",
+        "右邊",
+        "正中間",
+        "兩側都有"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "胸痛的位置在哪裡？左邊 右邊 正中間 還是兩側都有呢"
+      ]
+    },
+    {
+      "field": "radiation",
+      "prompt": "胸痛的位置是否會移動？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "胸痛的位置是否會移動？"
+      ]
+    },
+    {
+      "field": "tenderness",
+      "prompt": "是否有觸痛點？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有觸痛點？"
+      ]
+    },
+    {
+      "field": "character",
+      "prompt": "你會如何描述這種疼痛？",
+      "kind": "choice",
+      "options": [
+        "刺痛",
+        "鈍痛",
+        "感覺有重物壓迫"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你會如何描述這種疼痛？例如 刺痛 鈍痛 還是感覺有重物壓迫呢"
+      ]
+    },
+    {
+      "field": "aggravating_factors",
+      "prompt": "你有觀察到哪些情況會使疼痛加重嗎？",
+      "kind": "choice",
+      "options": [
+        "深呼吸",
+        "耗費體力的活動",
+        "感到有壓力的時候"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你有觀察到哪些情況會使疼痛加重嗎？比方說 深呼吸 耗費體力的活動或感到有壓力的時候"
+      ]
+    },
+    {
+      "field": "relieving_factors",
+      "prompt": "你有觀察到什麼情況能緩解疼痛？",
+      "kind": "choice",
+      "options": [
+        "休息",
+        "用藥",
+        "坐姿",
+        "按摩疼痛部位"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你有觀察到什麼情況能緩解疼痛？比方說休息 用藥 坐姿 或按摩疼痛部位的時候"
+      ]
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "請幫我觀察是否出現以下症狀並將有出現的症狀念給我聽",
+      "kind": "choice",
+      "options": [
+        "感到呼吸急促",
+        "冒冷汗",
+        "感到噁心或已經嘔吐",
+        "有昏厥要暈倒或頭暈的經歷",
+        "感到心跳加速或心跳不規則",
+        "咳嗽有痰",
+        "肚子痛"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請幫我觀察是否出現以下症狀並將有出現的症狀念給我聽",
+        "感到呼吸急促",
+        "冒冷汗",
+        "感到噁心或已經嘔吐",
+        "有昏厥要暈倒或頭暈的經歷",
+        "感到心跳加速或心跳不規則",
+        "咳嗽有痰",
+        "肚子痛"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "胸痛可能為急性冠狀動脈症候群 (ACS) 或心肌梗塞 (MI) 等危急心臟疾病的症狀，特別是當疼痛劇烈、持續、伴隨呼吸急促、冒冷汗或昏厥時。這類情況應優先考慮緊急醫療流程，而非僅依賴問卷。",
+      "source_ids": [
+        "rag-04d05153821c",
+        "rag-f88b0b8f1f72",
+        "rag-2c86e27ec7aa"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "warning",
+      "note": "昏厥 (syncope) 或頭暈是需要特別注意的警訊症狀，可能與心因性問題相關。應詳細詢問事件經過與相關病史。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-04d05153821c",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "route": "chest",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "distance": 0.4277,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the"
+    },
+    {
+      "id": "rag-f88b0b8f1f72",
+      "title": "Acute Coronary Syndrome: Practice Essentials, Background, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1910735-overview",
+      "route": "chest",
+      "chunk_id": "29a8db87cd2aa8fb48b6_1",
+      "distance": 0.3917,
+      "excerpt": "for triaging patients with chest pain. ACS = ACS; ASA = aspirin; EKG = ECG; MI = myocardial infarction; Rx = treat; STEMI = ST-elevation myocardial infarction. Courtesy of Wu et al (1999). See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Atherosclerosis is the primary cause of ACS, with most cases occurring from the disruption of a previously nonsevere lesion. Complaints reported by patients with ACS include the following: Palpitations Pain, which is usually described"
+    },
+    {
+      "id": "rag-b0932cf7b727",
+      "title": "Acute Pericarditis: Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/156951-overview",
+      "route": "chest",
+      "chunk_id": "5ce830abdc459bc019fc_1",
+      "distance": 0.4228,
+      "excerpt": "approximately 3 months after acute pericardial illness. The patient remained symptom free despite continued T-wave inversion. Signs and symptoms Chest pain is the cardinal symptom of pericarditis, usually precordial or retrosternal with referral to the trapezius ridge, neck, left shoulder, or arm. Common associated signs and symptoms include low-grade intermittent fever, dyspnea/tachypnea (a frequent complaint and may be severe, with myocarditis, pericarditis, and cardiac tamponade), cough, and dysphagia. In tuberculous pericarditis, fever, night sweats, and weight loss are commonly noted"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "chest",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4135,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-2c86e27ec7aa",
+      "title": "Unstable Angina: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/159383-overview",
+      "route": "safety",
+      "chunk_id": "ed4b664e50a4e7cca9ab_8",
+      "distance": 0.477,
+      "excerpt": "the following: Cardiac catheterization Revascularization See Treatment and Medication for more detail. Background Chest pain is a nonspecific symptom that can have cardiac or noncardiac causes (see DDx). Unstable angina belongs to the spectrum of clinical presentations referred to collectively as acute coronary syndromes (ACSs), which range from ST-segment elevation myocardial infarction (STEMI) to non-STEMI (NSTEMI). Unstable angina is considered to be an ACS in which there is myocardial ischemia without detectable myocardial necrosis (ie, cardiac biomarkers of myocardial necrosis such as"
+    },
+    {
+      "id": "rag-483847047375",
+      "title": "Blast Injuries: Practice Essentials, Background, Frequency",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822587-overview",
+      "route": "chest",
+      "chunk_id": "c78be2121e6d4a51472a_9",
+      "distance": 0.5054,
+      "excerpt": "symptoms Abnormal findings on chest auscultation Visible external signs of thoracic trauma If significant abdominal pain is present, consider an immediate abdominal radiographic series (flat and upright films) or abdominal CT to detect pneumoperitoneum from enteric rupture. Intestinal barotrauma is more common with underwater injuries than air blast injuries. Focused abdominal sonography for trauma (FAST) is a potentially useful tool for rapidly screening patients, especially in the setting of multiple seriously injured victims. A positive FAST examination in an unstable patient is an"
+    },
+    {
+      "id": "rag-cedf3d4b8706",
+      "title": "Angina Pectoris: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/150215-overview",
+      "route": "chest",
+      "chunk_id": "db0a2dcac20c676b7a29_3",
+      "distance": 0.5428,
+      "excerpt": "of chest wall origin See Clinical Presentation for more detail. Diagnosis Diagnostic studies that may be employed include the following: Chest radiography: Usually normal in angina pectoris but may show cardiomegaly in patients with previous MI, ischemic cardiomyopathy, pericardial effusion, or acute pulmonary edema Graded exercise stress testing: This is the most widely used test for the evaluation of patients presenting with chest pain and can be performed alone and in conjunction with echocardiography or myocardial perfusion scintigraphy Coronary artery calcium (CAC) scoring by fast CT: The"
+    },
+    {
+      "id": "rag-4137cf775234",
+      "title": "Cardiac Tamponade: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/152083-overview",
+      "route": "safety",
+      "chunk_id": "7b286c7856c8e243850d_12",
+      "distance": 0.581,
+      "excerpt": "septal defect (ASD) closure, left atrial appendage occlusion Trauma to the chest Cardiovascular surgery - Postoperative pericarditis Postmyocardial infarction - Free wall ventricular rupture, Dressler syndrome Connective tissue diseases - Systemic lupus erythematosus, rheumatoid arthritis, dermatomyositis Radiation therapy to the chest, radiofrequency ablation Iatrogenic - After sternal biopsy, transvenous pacemaker lead implantation, pericardiocentesis, or central line insertion Uremia Anticoagulation treatment Idiopathic pericarditis Complication of surgery at the esophagogastric junction -"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "757e2de3cb86781d409c3d20ea8a54746d9114c34c59cd3591c34b9055d0573d",
+    "rag_corpus_hash": "007883d002d5f3af1399eb0e7fc5100b2053ace7beb16fdf635129fd511f0bff",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:00:34+00:00"
+  }
+}

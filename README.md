@@ -27,9 +27,43 @@ AI 輔助預問診系統。病患可用文字或語音完成胸痛、頭痛或�
                 → 本機 embedding／Chroma 檢索 → LLM 整理來源片段
 ```
 
+## 服務版本
+
+下表是依 `devlog/` 回溯整理的「目前文件基線版本」，並不代表過去已建立
+同名 Git tag 或已完成正式臨床發布。各服務 README 在對應版本下保留按日期
+整理的詳細更新內容；未來發布時再依 SemVer 分別遞增，不強制所有服務
+使用相同版本號。
+
+| 服務／可部署產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
+| --- | --- | --- | --- | --- |
+| Backend API（含 Breeze ASR） | `1.3.0` | 2026-08-09 | 問診長度觀測值（section 題數／預填覆蓋率）、批次化提案量測工具，以及未接線選項與一般病史可被略過的欠債基準線 | [backend/README.md](backend/README.md#服務版本) |
+| 開發版 Vue frontend | `1.2.0` | 2026-08-09 | Safety 條件無損 round-trip、hidden selection 提示與過期助理請求取消 | [frontend/README.md](frontend/README.md#服務版本) |
+| 正式部署 Doctor frontend | `2.1.0` | 2026-08-09 | 候選問卷路由與欄位標籤可讀化，保留歷史病例顯示能力 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
+| 正式部署 Patient frontend | `2.0.1` | 2026-08-09 | FHIR query override fail-closed 與本次症狀／既往病史分類修正 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
+| Local Avatar service | `1.0.0` | 2026-08-07 | CosyVoice3 語音、MuseTalk 1.5 唇形、GPU 記憶體釋放、快取與靜態 fallback | [avatar-service/README.md](avatar-service/README.md#服務版本) |
+| SMART on FHIR sandbox app | `1.0.0` | 2026-08-05 | SMART OAuth launch、FHIR 預填、同源 API proxy、合成病人 seed 與本機驗證 | [smart-app/README.md](smart-app/README.md#服務版本) |
+| Integration deployment bundle | `1.0.0` | 2026-08-07 | IIS／Nginx 邊界、doctor／patient 分流、SQLite 備份還原、GPU ASR／Avatar 部署 | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
+
+`frontend-v2/packages/shared` 是 doctor／patient 共用程式庫，不是獨立服務；
+`smart-deployment/` 是 SMART sandbox 的 proxy 設定，跟隨 SMART app
+`1.0.0` 基線維護。Doctor app 與 Patient app 目前分別為 `2.1.0`、`2.0.1`。
+HAPI FHIR、PostgreSQL、TW Core 與 SNOMED installer 是外部或
+建置元件，使用各自上游版本；目前矩陣與更新說明見
+[FHIR／術語服務](backend/terminology/README.md#外部元件版本矩陣)。
+
+服務 SemVer 與下列版本維持獨立，避免將部署版本誤當成臨床內容核准或
+資料相容保證：
+
+- API contract major（例如 `/v1`）
+- SQLite `user_version`
+- RAG index version
+- Safety／ClinicalFact／疾病表 revision
+- 問卷與來源資料 schema version
+- 模型、FHIR Implementation Guide 與 SNOMED CT 來源版本
+
 ## 快速開始
 
-需求：Git、Bash、Python 3.12+、Node.js 18+；FHIR／SMART 流程另需 Docker 與
+需求：Git、Bash、Python 3.12+、Node.js 18+、ffmpeg；FHIR／SMART 流程另需 Docker 與
 Docker Compose v2。Windows 建議使用 WSL2。
 
 ```bash
@@ -109,8 +143,8 @@ npm run dev
 
 ## Code review 待辦（尚未完成）
 
-以下是專案整體 code review 建立的待辦清單。所有項目在符合「完成條件」並留下
-自動化驗證證據前，均維持未勾選。
+以下是專案整體 code review 建立的追蹤清單。未勾選項目仍須符合「完成條件」並
+留下自動化驗證證據；已勾選項目保留原始問題與完成證據，避免之後回歸。
 
 ### Critical
 
@@ -121,25 +155,31 @@ npm run dev
   - **主要檔案／元件**：`backend/amie/rules/safety_rules.json`、`backend/amie/safety.py`、`backend/amie/chief_complaint.py`、`backend/app/routes/patient.py`、Safety 規則治理與黃金測試集。
   - **完成條件**：建立不綁定 chest／headache／abdomen 的通用急症 catalog；補齊吐血／嘔血等明確出血表述及必要同義詞、否定與組合條件；無論最後 route 為何皆先執行通用 Safety；加入「我胸悶。吐血」、單獨危險症狀、同義改寫、否定句及易混淆反例的回歸測試，並經醫療專業人員審核後才能標記完成。
 
-- [ ] **為醫師 API 建立完整的身分驗證、授權與 CORS 邊界**
+- [x] **為醫師 API 建立完整的身分驗證、授權與 CORS 邊界**
   - **問題**：醫師病例查詢、讀取、刪除、聊天與部分規則中心 API 未完整驗證醫師身分與資源權限，後端同時允許任意 CORS origin。
   - **影響**：未授權使用者可能存取或刪除病歷；過度寬鬆的跨網域設定會擴大 PHI 外洩與管理操作被濫用的風險。
   - **主要檔案／元件**：`backend/app/factory.py`、`backend/app/routes/doctor.py`、醫師端 API client 與部署環境設定。
   - **完成條件**：所有醫師路由預設拒絕匿名請求、依角色與資源範圍授權；CORS 僅允許明確清單，且通過未登入、跨角色、跨來源與正常流程整合測試。
+  - **完成證據（2026-08-09 review）**：doctor router 已統一套用 UCC scope dependency，consultation repository 查詢依 institution／encounter 隔離；CORS 只有設定明確 `CORS_ALLOWED_ORIGINS` 時才啟用。完整後端測試中相關 authentication、scope、tenant 與 invitation acceptance tests 通過。
 
-- [ ] **關閉可藉 URL query 更改 backend／FHIR 端點的資料外送通道**
+- [x] **關閉可藉 URL query 更改 backend／FHIR 端點的資料外送通道**
   - **問題**：`?backend=` 與 `?fhir=` 可將瀏覽器的 API 目的地改為任意 HTTP(S) 主機。
   - **影響**：惡意連結可能誘使用者將病歷、身分資料或規則管理 token 傳送至攻擊者端點。
   - **主要檔案／元件**：`frontend/src/services/backend.js`、`frontend/src/services/fhir.js`、`frontend/src/services/smart.js`、SMART／FHIR proxy 設定。
   - **完成條件**：正式環境完全忽略 query override；開發模式若保留此功能，必須明確啟用並限定 allowlist；自動化測試證明 PHI 與授權 header 不會送往任意網域。
+  - **完成證據（2026-08-09）**：production／預設忽略 backend、backendPort、FHIR 與 direct-FHIR query；開發覆寫同時需要 build-time flag 與 exact-origin allowlist，跨 origin backend 一律不帶 cookie。開發版與 `frontend-v2` shared FHIR regression tests 覆蓋惡意 origin、同源 proxy 與 production 關閉行為。
 
 ### High
 
-- [ ] **讓已發布的 Safety 規則即時對所有問診工作者生效**
+- [x] **讓已發布的 Safety 規則即時對所有問診工作者生效**
   - **問題**：部分 Safety 設定在 module import 時載入，規則中心發布新版後可能仍需重啟 process。
   - **影響**：管理畫面顯示的 revision 可能與實際執行分流不一致，使新增的危險警訊沒有即時保護病人。
   - **主要檔案／元件**：`backend/app/services/patient_interview.py`、`backend/amie/rule_config.py`、`backend/amie/engine.py`、規則發布服務。
   - **完成條件**：發布後不需重啟即可在新問診中觀察新 revision，且多 worker 整合測試證明每個 worker 使用相同版本。
+  - **完成證據（2026-08-09）**：Safety loader 以原子檔案的 device／inode／size／mtime
+    signature 選擇 cache；publisher replace 後，各 worker 下一次讀取會自動驗證並載入新
+    revision。spawn 的雙 worker regression test 證明兩個既有 process 都能由同一份舊
+    version 切換至新 version，無需呼叫 process-local `cache_clear` 或重啟。
 
 - [ ] **將治理後的規則設定與 revision 持久化**
   - **問題**：Safety、ClinicalFact 與疾病表治理結果以容器內 JSON 為主，重建或水平擴展後可能與 audit revision 失去一致性。
@@ -153,11 +193,15 @@ npm run dev
   - **主要檔案／元件**：`backend/app/runtime.py`、`backend/app/routes/patient.py`、`backend/app/routes/doctor.py`、`backend/app/models.py`。
   - **完成條件**：由 server 產生高熵且不可枚舉的 ID，將狀態放入共用且有 TTL 的 store；通過 session fixation／碰撞、過期、重啟與多 worker 測試。
 
-- [ ] **以「看診日期＋掛號編號」保留可溯源歷史**
+- [x] **以「看診日期＋掛號編號」保留可溯源歷史**
   - **問題**：掛號編號每日重用，而讀取、寫入或刪除流程若只用編號辨識，無法穩定指向單一歷史病例。
   - **影響**：醫師可能看到錯誤病人、將摘要寫到別筆病例，或刪除同號但不同日的紀錄。
   - **主要檔案／元件**：`backend/infrastructure/consultation_repository.py`、`backend/app/routes/doctor.py`、`frontend/src/views/DoctorView.vue`、`frontend/src/services/clinicalRecord.js`。
   - **完成條件**：編號即掛號編號；緊急掛號每日從 `000` 起、一般掛號每日從 `10000` 起；不使用 UUID 或獨立永久病例 ID，病例唯一鍵為 `consultation_date + registration_number`；醫師端可用日期＋掛號編號看見並精確開啟例如「昨日的 001」及其病人，且跨日同號的查詢、摘要寫入與刪除測試不會操作錯誤紀錄。
+  - **完成證據（2026-08-09 review）**：repository 已以
+    `consultation_date + display_number` unique index 與 `YYYY-MM-DD:NNN/NNNNN`
+    composite ID 實作；跨日 sequence、同號歧義拒絕、報告更新與刪除隔離測試通過。
+    Doctor UI 的開啟與刪除操作使用 composite ID，畫面同時顯示日期及掛號編號。
 
 - [ ] **以跨 process 交易保護規則發布與 audit**
   - **問題**：發布 lock 僅在單一 process 內生效，設定檔、revision 與 audit 的寫入不是一個跨 process 原子交易。
@@ -165,11 +209,14 @@ npm run dev
   - **主要檔案／元件**：`backend/app/services/rule_management_support/publisher.py`、`backend/app/services/rule_management_support/common.py`、持久化儲存與 audit 目錄。
   - **完成條件**：採用跨 process lock 或資料庫交易，將 expected revision 檢查、config 更新與 audit 視為單一交易；並行發布與中途失敗測試證明不會出現部分寫入。
 
-- [ ] **無損保留 Safety 條件的 `all_findings` 與 `any_findings`**
+- [x] **無損保留 Safety 條件的 `all_findings` 與 `any_findings`**
   - **問題**：當同一規則同時含有 `all_findings` 與 `any_findings` 時，前端 draft model 只保留其中一組，存檔 round-trip 會遺失資料。
   - **影響**：醫師即使沒有刻意修改該條件，重新發布也可改變 Safety 觸發邏輯，導致漏報或過度警示。
   - **主要檔案／元件**：`frontend/src/composables/safetyRuleGovernance.js`、`frontend/src/components/safety-governance/SafetyImplementationEditor.vue`、`backend/app/models.py`。
   - **完成條件**：前端 model 可同時表達、編輯與序列化兩組條件；以同時含兩組的 fixture 完成 load → edit/no-op → publish round-trip 測試，且後端執行語意不變。
+  - **完成證據（2026-08-09）**：editor draft 現分別保存兩組 finding selection，切換
+    operator 不會刪除另一組；round-trip fixture 同時載入兩組、修改其中一組並驗證發布
+    payload 仍保留兩者。Backend 原有 structured evaluator 依序以 AND／OR 語意計算兩組。
 
 ### Medium
 
@@ -185,17 +232,26 @@ npm run dev
   - **主要檔案／元件**：`backend/app/routes/patient.py`、`backend/app/services/consultation_service.py`、`backend/app/services/consultation_reporting.py`、`backend/infrastructure/consultation_repository.py`。
   - **完成條件**：任務與 retry state 持久化，支援冪等重試、死信／人工重跑與逾時監測；在摘要生成中止 process 後，整合測試可自動完成或明確標記可處理失敗。
 
-- [ ] **避免在 async route 內同步等待 LLM**
+- [x] **避免在 async route 內同步等待 LLM**
   - **問題**：部分 `async` FastAPI 路由直接呼叫同步 LLM client。
   - **影響**：慢速或卡住的 model request 會阻塞 event loop，拖慢其他病人問診和醫師請求。
   - **主要檔案／元件**：`backend/app/routes/patient.py`、`backend/app/routes/doctor.py`、`backend/infrastructure/llm.py`。
   - **完成條件**：改用真正 async client 或有界限的 thread／job queue，加入 timeout、cancellation 與 concurrency limit；並行慢速 LLM 測試證明 health check 與無關 API 仍可在預期時間內回應。
+  - **完成證據（2026-08-09）**：病患 chief extraction／AMIE turn 與醫師聊天的同步模型
+    工作改由 bounded clinical worker 執行，預設最多 4 個、45 秒 timeout；逾時採病患
+    handoff 或醫師端穩定 503；同一病患 interview 的 request 另以 per-session async lock
+    序列化。測試覆蓋 event-loop responsiveness、health endpoint、timeout、並行容量上限
+    及同 session 競態。
 
-- [ ] **對外統一錯誤格式，不回傳內部 exception 原文**
+- [x] **對外統一錯誤格式，不回傳內部 exception 原文**
   - **問題**：部分 API 將 `str(error)` 直接放入 HTTP response。
   - **影響**：回應可暴露內部服務地址、查詢細節、檔案路徑或第三方錯誤內容，並讓前端難以穩定處理錯誤。
   - **主要檔案／元件**：`backend/app/routes/doctor.py`、`backend/app/routes/system.py`、`backend/app/services/rag.py`、全域 exception handler。
   - **完成條件**：client 僅收到穩定 error code、安全文案與 correlation ID，完整 exception 僅出現在受保護 log；以敏感錯誤字串的測試證明 response 不會洩漏原文。
+  - **完成證據（2026-08-09）**：HTTP、request validation 與未處理 exception 統一加入
+    `error_code`、`correlation_id` 及相同 response headers；validation 不再反射 rejected
+    input，服務錯誤改用安全文案。受保護 log 只記 correlation、path 與 exception type，
+    不記可能含 PHI／credential 的 exception 原文；敏感連線字串 regression test 通過。
 
 - [ ] **加強 prompt trust boundary 與 injection 防護**
   - **問題**：病人原話、FHIR 內容與 RAG 片段被嵌入 prompt，但不可信資料與系統指令的邊界不夠完整。
@@ -203,17 +259,24 @@ npm run dev
   - **主要檔案／元件**：`backend/app/prompts/doctor.py`、`backend/app/prompts/report.py`、`backend/app/services/consultation_reporting.py`、`backend/knowledge/translation.py`。
   - **完成條件**：不可信內容以明確結構與欄位傳入、不可覆寫 system policy，輸出通過 schema／允許清單驗證；prompt injection regression suite 覆蓋病人、FHIR 與 RAG 來源。
 
-- [ ] **確實關閉每個 SQLite connection**
+- [x] **確實關閉每個 SQLite connection**
   - **問題**：`sqlite3.Connection` 的 context manager 只處理 commit／rollback，不保證關閉 connection；現有 repository 因此出現 `ResourceWarning`。
   - **影響**：長時間執行可累積 file descriptor、lock 與記憶體資源，增加 SQLite busy／locked 與作業系統資源耗盡風險。
   - **主要檔案／元件**：`backend/infrastructure/consultation_repository.py`、其他直接使用 `sqlite3.connect` 的後端模組。
   - **完成條件**：所有 connection 在成功與 exception 路徑均確實 `close`；重複 repository 操作測試在啟用 `ResourceWarning` 為 error 時通過，並不留下額外開啟的檔案描述元。
+  - **完成證據（2026-08-09）**：repository 所有短連線皆以 `closing(connection)` 包覆，
+    並保留 SQLite context 的 commit／rollback 語意；tracking regression test 驗證查詢成功
+    與 synthetic SQL exception 後都會呼叫 `close`，完整 repository suite 通過。
 
 - [ ] **修正 Safety 編輯器的 hidden selection 與非同步取消 race**
   - **問題**：過濾後隱藏的已選特徵可能仍被發布；使用者取消編輯或切換群組後，較早的規則助理 request 仍可回寫新狀態。
   - **影響**：醫師在畫面上看不到實際將發布的完整條件，或已放棄的 AI 草稿之後又出現，導致誤發布 Safety 邏輯。
   - **主要檔案／元件**：`frontend/src/composables/safetyRuleGovernance.js`、`frontend/src/components/safety-governance/SafetyImplementationEditor.vue`、`frontend/src/components/safety-governance/SafetyDraftAssistant.vue`。
   - **完成條件**：編輯器始終顯示已選但不符當前過濾的數量並可一次清除；取消、切群組或 unmount 會 abort／忽略舊 request；component 測試覆蓋 out-of-order response 與 hidden selection 發布預覽。
+  - **進度（2026-08-09）**：已顯示兩組 operator 的選取數量、目前 filter 隱藏數量及
+    一次清除操作；切群組、取消或 scope dispose 會 abort 並以 sequence guard 忽略舊
+    response，純函式／composable regression 與 production build 通過。尚缺 Vue mount
+    component test，因此依原完成條件維持未勾選。
 
 ### Quality／測試與 CI
 

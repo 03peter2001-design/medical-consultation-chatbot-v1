@@ -1,0 +1,115 @@
+{
+  "id": "toothache",
+  "label": "牙痛",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 11,
+    "source_sha256": "55d33be1f52cce54b361ab4983d35284d659cd424a9c681a00dddfdc0f4d5c28",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "pain_start_time",
+      "previous_similar_pain"
+    ],
+    "priority_fields": [
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 4,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "pain_start_time",
+      "prompt": "牙齒疼痛什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_radiation",
+      "prompt": "疼痛是否會牽連到其他部位？ 比方說下巴 耳朵或脖子",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "previous_similar_pain",
+      "prompt": "你以前有過類似的牙痛嗎？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "是否有以下症狀 請將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "牙齦、臉部或脖子腫脹",
+        "發燒或是畏寒",
+        "牙齦有像是膿的分泌物",
+        "張口困難或咀嚼困難",
+        "臉或口腔有麻木或刺痛感",
+        "有心臟病史或是現在感到胸痛或心悸",
+        "最近有呼吸道感染、喉嚨痛或吞嚥困難"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

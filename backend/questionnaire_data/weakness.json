@@ -1,0 +1,126 @@
+{
+  "id": "weakness",
+  "label": "無力虛弱",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 48,
+    "source_sha256": "4bfba5c068ee0204266896c3764889f5d6d40fe4ee3c0cad9211409300082dc7",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "location_of_weakness",
+      "generalized_weakness_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 5,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_of_weakness",
+      "prompt": "什麼時候開始覺得無力 ？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "location_of_weakness",
+      "prompt": "是全身無力、手臂無力、腳無力還是半側身體無力？",
+      "kind": "choice",
+      "options": [
+        "全身無力",
+        "手臂無力",
+        "腳無力",
+        "半側身體無力"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "weakness_related_to_pain",
+      "prompt": "是因為身體有部位疼痛，或是因為活動時會引發疼痛不敢使力？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "limb_weakness_symptoms",
+      "prompt": "如果是手腳無力，除了沒有力氣外，是否感到麻木或刺痛？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "generalized_weakness_symptoms",
+      "prompt": "如果是全身無力，還有其他症狀嗎？請將以下有出現的症狀描述讓我知道",
+      "kind": "choice",
+      "options": [
+        "頭暈",
+        "發燒",
+        "咳嗽，有痰，流鼻水",
+        "腹痛，上吐下瀉",
+        "頻尿，小便疼痛",
+        "胸痛，胸悶或是喘"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

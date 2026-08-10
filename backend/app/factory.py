@@ -5,6 +5,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.errors import install_error_handlers
 from app.routes.doctor import router as doctor_router
 from app.routes.invitations import router as invitation_router
 from app.routes.patient import router as patient_router
@@ -41,6 +42,7 @@ def create_app() -> FastAPI:
         ),
         openapi_tags=OPENAPI_TAGS,
     )
+    install_error_handlers(app)
     allowed_origins = [
         origin.strip()
         for origin in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
@@ -53,6 +55,11 @@ def create_app() -> FastAPI:
             allow_credentials=True,
             allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             allow_headers=["Authorization", "Content-Type"],
+            expose_headers=[
+                "X-Speech-Model",
+                "X-Animation-Model",
+                "X-Avatar-Cache",
+            ],
         )
     app.include_router(system_router, prefix=API_V1_PREFIX)
     app.include_router(patient_router, prefix=API_V1_PREFIX)

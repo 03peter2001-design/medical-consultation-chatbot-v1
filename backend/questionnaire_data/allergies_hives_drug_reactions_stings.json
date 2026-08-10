@@ -1,0 +1,152 @@
+{
+  "id": "allergies_hives_drug_reactions_stings",
+  "label": "過敏 蕁麻疹 藥物反應 螯傷",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 3,
+    "source_sha256": "cfa33d7ecc99023d5051687bc62bb278df1290ef2cdc9a50c2a6c4bee96ea04a",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "reaction_start_time",
+      "reaction_scope"
+    ],
+    "priority_fields": [
+      "observed_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 6,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "reaction_start_time",
+      "prompt": "反應什麼時候開始的 *",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "reaction_location",
+      "prompt": "反應發生在身體的哪個部位？",
+      "kind": "choice",
+      "options": [
+        "眼睛",
+        "嘴唇",
+        "其他地方"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "reaction_scope",
+      "prompt": "反應是局部還是全身性？ *",
+      "kind": "choice",
+      "options": [
+        "局部",
+        "全身性"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "reaction_description",
+      "prompt": "你如何描述這種反應？",
+      "kind": "choice",
+      "options": [
+        "紅",
+        "癢",
+        "腫",
+        "疑似蕁麻疹"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "reaction_progression",
+      "prompt": "你覺得目前反應有沒有擴散？還是時好時壞的？",
+      "kind": "choice",
+      "options": [
+        "擴散",
+        "時好時壞"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "observed_symptoms",
+      "prompt": "請幫我觀察是否出現以下症狀並將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "感到呼吸困難、喘鳴或呼吸急促",
+        "噁心、嘔吐、腹瀉或腹痛",
+        "感到頭暈、暈眩或心跳加速或不規則",
+        "發燒、發冷或整體不適的感覺",
+        "臉、眼睛、嘴唇、舌頭或喉嚨的腫脹"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

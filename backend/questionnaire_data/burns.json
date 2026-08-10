@@ -1,0 +1,210 @@
+{
+  "id": "burns",
+  "label": "燒傷",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 7,
+    "source_sha256": "f004323894373b62bbbed6ac85764f8e16f966928e3e8cb8aebf94b6910afe20",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "burn_onset",
+      "burn_cause",
+      "burn_location"
+    ],
+    "priority_fields": [
+      "respiratory_symptoms",
+      "cardiac_symptoms",
+      "burn_cause",
+      "burn_location"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 9,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "burn_onset",
+      "prompt": "燒傷什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "burn_cause",
+      "prompt": "燒傷是怎麼發生的？",
+      "kind": "choice",
+      "options": [
+        "火災",
+        "熱液體",
+        "化學物質",
+        "電擊造成的"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "burn_location",
+      "prompt": "燒傷的位置在哪裡？",
+      "kind": "choice",
+      "options": [
+        "臉部",
+        "頭頸部",
+        "軀幹",
+        "四肢",
+        "生殖器附近"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "burn_appearance",
+      "prompt": "燒傷部位看起來怎麼樣？",
+      "kind": "choice",
+      "options": [
+        "紅腫",
+        "水泡",
+        "焦黑"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "burn_first_aid_water",
+      "prompt": "燒傷後有沒有沖水３０分鐘以上？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "respiratory_symptoms",
+      "prompt": "你有沒有呼吸困難、咳嗽或聲音嘶啞的情況？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "eye_symptoms",
+      "prompt": "眼睛是否受到影響或是出現紅腫？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "cardiac_symptoms",
+      "prompt": "是否感到胸痛，心悸或是心律不整？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "neurological_symptoms",
+      "prompt": "是否感到頭暈，頭痛或是噁心想吐？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

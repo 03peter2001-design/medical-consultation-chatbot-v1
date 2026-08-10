@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "id": "respiratory_issues",
+  "label": "呼吸問題",
+  "source_order": 38,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "chronic_respiratory_disease_history"
+    ],
+    "priority_fields": [
+      "symptoms_list"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 7,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "symptom_onset_time",
+      "prompt": "呼吸道症狀是什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "呼吸道症狀是什麼時候開始的？"
+      ]
+    },
+    {
+      "field": "symptom_onset_pattern",
+      "prompt": "是突然發生還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發生",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然發生還是逐漸出現的？"
+      ]
+    },
+    {
+      "field": "symptoms_list",
+      "prompt": "你有哪些症狀？ 請將以下你有的症狀描述出來讓我知道",
+      "kind": "choice",
+      "options": [
+        "呼吸急促",
+        "咳嗽",
+        "喘",
+        "胸痛",
+        "咳血",
+        "有痰",
+        "發燒",
+        "畏寒",
+        "下肢水腫"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你有哪些症狀？ 請將以下你有的症狀描述出來讓我知道",
+        "呼吸急促",
+        "咳嗽",
+        "喘",
+        "胸痛",
+        "咳血",
+        "有痰",
+        "發燒",
+        "畏寒",
+        "下肢水腫"
+      ]
+    },
+    {
+      "field": "symptom_duration_pattern",
+      "prompt": "症狀是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是持續性的還是間歇性的？"
+      ]
+    },
+    {
+      "field": "previous_similar_episodes",
+      "prompt": "以前是否有過類似的發作？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "以前是否有過類似的發作？"
+      ]
+    },
+    {
+      "field": "chronic_respiratory_disease_history",
+      "prompt": "你有沒有哮喘、慢性阻塞性肺病或是慢性支氣管炎類似的慢性呼吸系統疾病 *",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你有沒有哮喘、慢性阻塞性肺病或是慢性支氣管炎類似的慢性呼吸系統疾病 *"
+      ]
+    },
+    {
+      "field": "cardiovascular_disease_history",
+      "prompt": "你有沒有心臟衰竭或冠心病類似的心血管疾病？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你有沒有心臟衰竭或冠心病類似的心血管疾病？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "RAG 文獻指出，胸痛、呼吸急促 (dyspnea) 為潛在的警訊症狀 (red flag symptoms)，應優先詢問。咳血 (hemoptysis) 亦可能與肺栓塞等嚴重疾病相關。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-c83aa2895d16"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-36d2605d94dc",
+      "title": "Aspiration Pneumonitis and Pneumonia: Overview of Aspiration Pneumonia, Predisposing Conditions for Aspiration Pneumonia, Pathophysiology of Aspiration Pneumonia",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/296198-overview",
+      "route": "chest",
+      "chunk_id": "28cc3005c1cb1fa7c3b3_28",
+      "distance": 0.45,
+      "excerpt": "studies obtained should be guided by the patient’s clinical presentation (see Presentation of Aspiration Pneumonia). Patients with signs or symptoms of sepsis or septic shock require further laboratory testing than those with uncomplicated aspiration syndromes. Differentials When evaluating a patient with suspected aspiration pneumonia, other considerations include necrotizing pneumonia, bronchopleural fistula, lung carcinoma, lung abscess, mycoses, and hypersensitivity pneumonitis. In children, bronchiolitis, croup or laryngotracheobronchitis, epiglottitis, asthma, reactive airway disease,"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "chest",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4092,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-0fb7a556859d",
+      "title": "Aspiration Pneumonitis and Pneumonia: Overview of Aspiration Pneumonia, Predisposing Conditions for Aspiration Pneumonia, Pathophysiology of Aspiration Pneumonia",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/296198-overview",
+      "route": "chest",
+      "chunk_id": "28cc3005c1cb1fa7c3b3_75",
+      "distance": 0.3883,
+      "excerpt": "What are the symptoms of bacterial aspiration pneumonia? What are the symptoms and physical findings of hospital-acquired (nosocomial) aspiration pneumonia? How is aspiration pneumonia diagnosed? What is the role of arterial blood gas (ABG) analysis in the diagnosis of aspiration pneumonia? When is mixed venous gas measurement indicated in suspected aspiration pneumonia? What is the role of a basic metabolic panel in the evaluation of suspected aspiration pneumonia? Is a CBC count useful in the evaluation of suspected aspiration pneumonia? Is a sputum culture and Gram stain useful in the"
+    },
+    {
+      "id": "rag-8876810f0aaf",
+      "title": "Acute Respiratory Distress Syndrome (ARDS): Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/165139-overview",
+      "route": "chest",
+      "chunk_id": "1904346231affe6d7124_29",
+      "distance": 0.4379,
+      "excerpt": "the Lung Disease and Respiratory Health Center, the Procedures Center, and the Infections Center, as well as Acute Respiratory Distress Syndrome, Bronchoscopy, and Severe Acute Respiratory Syndrome (SARS). Clinical Presentation"
+    },
+    {
+      "id": "rag-e1d1f5028c03",
+      "title": "Ventilator Management: Introduction to Ventilator Management, Modes of Mechanical Ventilation, Methods of Ventilatory Support",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810126-overview",
+      "route": "chest",
+      "chunk_id": "e531d6d16a304b596598_95",
+      "distance": 0.4245,
+      "excerpt": "syndrome (ARDS)? What are the initial ventilation strategies in congestive heart failure? What are the initial ventilator settings in traumatic brain injury? What are ventilation-related recommendations and suggestions for adults with COVID-19? What are the potential complications in mechanically ventilated patient and which are common? Which diagnoses should be considered and excluded in patients undergoing mechanical ventilation? What do mechanical ventilatory peak and plateau pressures indicate regarding complications in the emergency department (ED)? What triggers a low exhaled volume"
+    },
+    {
+      "id": "rag-8342b111cd52",
+      "title": "Emergent Management of Myasthenia Gravis: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793136-overview",
+      "route": "chest",
+      "chunk_id": "784c8d29442d7a8772b7_20",
+      "distance": 0.4604,
+      "excerpt": "in respiratory distress may be experiencing a myasthenic crisis or a cholinergic crisis. Before these possibilities can be differentiated, ensuring adequate ventilation and oxygenation is important. Patients with myasthenic crisis can develop apnea very suddenly, and they must be observed closely. Evidence of respiratory failure may be noted through ABG determination, pulmonary function tests, or pulse oximetry. Airway maneuvers Open the airway by suctioning secretions after positioning the jaw and tongue. Administer high-flow oxygen, and measure oxygen saturation by pulse oximetry. If"
+    },
+    {
+      "id": "rag-c83aa2895d16",
+      "title": "Pulmonary Embolism (PE): Practice Essentials, Background, Anatomy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/300901-overview",
+      "route": "safety",
+      "chunk_id": "b69f8e098974a1a4019d_3",
+      "distance": 0.4648,
+      "excerpt": "collapse to gradually progressive dyspnea. The diagnosis of pulmonary embolism should be suspected in patients with respiratory symptoms unexplained by an alternative diagnosis. Patients with pulmonary embolism may present with atypical symptoms, such as the following: Seizures Syncope Abdominal pain Fever Productive cough Wheezing Decreasing level of consciousness New onset of atrial fibrillation Hemoptysis Flank pain Delirium (in elderly patients) See Clinical Presentation for more detail. Diagnosis Evidence-based literature supports the practice of using clinical scoring systems to"
+    },
+    {
+      "id": "rag-ab6e8f213a7f",
+      "title": "Pediatric Acute Respiratory Distress Syndrome: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/803573-overview",
+      "route": "safety",
+      "chunk_id": "909559be848ecc7f0f79_39",
+      "distance": 0.4864,
+      "excerpt": "decreased air entry on the side of the air leak, an increased percussion note on the same side, and tracheal deviation away from the affected side in a tension pneumothorax. Heart sounds may be muffled, and signs of decreased cardiac output may be observed with a tension pneumothorax. Clinicians must also maintain a high index of suspicion for tension pneumothoraces as a cause for acute onset of decreased cardiac output. VILI is an entity receiving attention with the publication of landmark trials suggesting that a kinder, gentler form of mechanical ventilation improves outcomes in ARDS. VILI"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "075a4249fd21fb44e4f7ccd7ce3a088bfb05de6cc8301a421b4a7d62a852dab1",
+    "rag_corpus_hash": "8ad3c824227cf760ce7add2577c5133d3875987ef28936b0e356609f092475c3",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:03:25+00:00"
+  }
+}

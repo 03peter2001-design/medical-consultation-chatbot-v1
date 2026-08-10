@@ -3,7 +3,10 @@ import { computed } from 'vue'
 
 import { getPainMapPreset } from '../data/bodyPainRegions.js'
 import { buildClinicalRecord } from '../services/clinicalRecord.js'
-import { splitStructuredNote } from '../services/structuredNote.js'
+import {
+  formatEmrSummary,
+  splitStructuredNote,
+} from '../services/structuredNote.js'
 import BodyPainMap from './BodyPainMap.vue'
 import ClinicalEvidence from '../doctor/components/ClinicalEvidence.vue'
 
@@ -13,7 +16,11 @@ const props = defineProps({
 
 const clinical = computed(() => buildClinicalRecord(props.record))
 const emrSummary = computed(
-  () => splitStructuredNote(props.record.structured_note).emrSummary,
+  () =>
+    formatEmrSummary(
+      props.record,
+      splitStructuredNote(props.record.structured_note).emrSummary,
+    ),
 )
 const painMapPreset = computed(() => getPainMapPreset(props.record.type))
 const painLocationIds = computed(() =>

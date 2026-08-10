@@ -12,11 +12,20 @@ from pathlib import Path
 from typing import Any
 
 QUESTIONNAIRE_DATA_DIR = Path(__file__).resolve().parents[1] / "questionnaire_data"
+ROUTE_CATALOG_PATH = Path(__file__).with_name("questionnaire_routes.json")
+LEGACY_RUNTIME_ROUTES = frozenset({"chest", "headache", "abdomen"})
+APPROVED_REVIEW_STATUS = "clinically_approved"
+PROVISIONAL_REVIEW_STATUS = "source_structured_provisional"
 
 
-def _discover_questionnaire_categories() -> tuple[frozenset[str], tuple[str, ...]]:
+def _discover_questionnaire_categories() -> tuple[
+    frozenset[str],
+    tuple[str, ...],
+    tuple[str, ...],
+]:
     categories: set[str] = set()
     disease_routes: list[str] = []
+    candidate_routes: list[str] = []
     for path in sorted(QUESTIONNAIRE_DATA_DIR.glob("*.json")):
         try:
             document = json.loads(path.read_text(encoding="utf-8"))
@@ -28,14 +37,79 @@ def _discover_questionnaire_categories() -> tuple[frozenset[str], tuple[str, ...
         category = path.stem
         categories.add(category)
         if document.get("section") == "disease":
-            disease_routes.append(category)
+            review_status = document.get("review_status")
+            if review_status == APPROVED_REVIEW_STATUS or (
+                review_status is None and category in LEGACY_RUNTIME_ROUTES
+            ):
+                disease_routes.append(category)
+            else:
+                candidate_routes.append(category)
     if not categories or not disease_routes:
         raise RuntimeError("questionnaire_data 缺少問卷分類或疾病路由")
-    return frozenset(categories), tuple(disease_routes)
+    if not LEGACY_RUNTIME_ROUTES.issubset(disease_routes):
+        raise RuntimeError(
+            "既有核准問卷不可從執行期消失；"
+            f"missing={sorted(LEGACY_RUNTIME_ROUTES - set(disease_routes))}"
+        )
+    return frozenset(categories), tuple(disease_routes), tuple(candidate_routes)
 
 
-QUESTIONNAIRE_CATEGORIES, DISEASE_ROUTES = _discover_questionnaire_categories()
+QUESTIONNAIRE_CATEGORIES, DISEASE_ROUTES, CANDIDATE_DISEASE_ROUTES = (
+    _discover_questionnaire_categories()
+)
+ALL_DISEASE_ROUTES = tuple(sorted({*DISEASE_ROUTES, *CANDIDATE_DISEASE_ROUTES}))
 ALLOWED_INPUT_KINDS = {"text", "choice", "date", "duration"}
+
+
+def _load_route_catalog() -> dict[str, dict[str, Any]]:
+    try:
+        document = json.loads(ROUTE_CATALOG_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"無法讀取問卷路由目錄：{ROUTE_CATALOG_PATH}") from exc
+    routes = document.get("routes") if isinstance(document, dict) else None
+    if (
+        not isinstance(document, dict)
+        or document.get("schema_version") != 1
+        or not isinstance(routes, dict)
+    ):
+        raise ValueError("questionnaire_routes.json 格式不正確")
+    if set(routes) != set(ALL_DISEASE_ROUTES):
+        missing = sorted(set(ALL_DISEASE_ROUTES) - set(routes))
+        extra = sorted(set(routes) - set(ALL_DISEASE_ROUTES))
+        raise ValueError(f"問卷路由目錄不同步；missing={missing}, extra={extra}")
+    for route, item in routes.items():
+        if not isinstance(item, dict) or set(item) != {
+            "label",
+            "keywords",
+            "disposition",
+            "clinical_domain",
+        }:
+            raise ValueError(f"問卷路由 {route} 格式不正確")
+        if not isinstance(item["label"], str) or not item["label"].strip():
+            raise ValueError(f"問卷路由 {route}.label 不正確")
+        if (
+            not isinstance(item["keywords"], list)
+            or not item["keywords"]
+            or any(not isinstance(value, str) or not value.strip() for value in item["keywords"])
+        ):
+            raise ValueError(f"問卷路由 {route}.keywords 不正確")
+        if item["disposition"] not in {"questionnaire", "handoff", "urgent"}:
+            raise ValueError(f"問卷路由 {route}.disposition 不正確")
+        # A route's clinical domain decides whose red-flag rules and disease
+        # table apply to it, so it may only name a route that owns one.
+        if item["clinical_domain"] is not None and item["clinical_domain"] not in {
+            "chest",
+            "headache",
+            "abdomen",
+        }:
+            raise ValueError(f"問卷路由 {route}.clinical_domain 不正確")
+    return routes
+
+
+ALL_ROUTE_CATALOG = _load_route_catalog()
+ROUTE_CATALOG = {route: ALL_ROUTE_CATALOG[route] for route in DISEASE_ROUTES}
+CANDIDATE_ROUTE_CATALOG = {route: ALL_ROUTE_CATALOG[route] for route in CANDIDATE_DISEASE_ROUTES}
+ALL_ROUTE_LABELS = {route: item["label"] for route, item in ALL_ROUTE_CATALOG.items()}
 
 SECTION_LABELS = {
     "chief": "主訴",
@@ -44,11 +118,10 @@ SECTION_LABELS = {
     "disease": "症狀問卷",
 }
 
-ROUTE_LABELS = {
-    "chest": "胸痛",
-    "headache": "頭痛",
-    "abdomen": "腹痛",
-}
+ROUTE_LABELS = {route: ALL_ROUTE_LABELS[route] for route in DISEASE_ROUTES}
+ROUTE_KEYWORDS = {route: tuple(item["keywords"]) for route, item in ROUTE_CATALOG.items()}
+ROUTE_DISPOSITIONS = {route: item["disposition"] for route, item in ROUTE_CATALOG.items()}
+ROUTE_CLINICAL_DOMAINS = {route: item["clinical_domain"] for route, item in ROUTE_CATALOG.items()}
 
 _QUESTION_DEFAULTS = {
     "options": [],
@@ -245,7 +318,50 @@ def load_questionnaire_category(
     fields = [item["field"] for item in questions]
     if len(fields) != len(set(fields)):
         raise ValueError(f"{path.name} 不可有重複 field")
+    known_context_fields = {
+        "name",
+        "gender",
+        "birth_date",
+        "age",
+        "blood_type",
+        "smoke",
+        "chronic",
+        "past_meds",
+        "current_meds",
+        "allergy",
+    }
+    available_fields = set(known_context_fields)
+    for item in questions:
+        references = []
+        if item.get("condition"):
+            references.append(item["condition"]["field"])
+        references.extend(
+            condition["field"] for condition in item.get("option_conditions", {}).values()
+        )
+        unknown_references = set(references) - available_fields
+        if unknown_references:
+            raise ValueError(
+                f"{path.name} 的 {item['field']} 引用尚不存在欄位：{sorted(unknown_references)}"
+            )
+        available_fields.add(item["field"])
     return questions
+
+
+def clinical_domain(route: str | None) -> str | None:
+    """Return the disease-table domain a route belongs to, if any.
+
+    The three original routes own a disease table and a set of route-specific
+    red-flag rules. Later routes describe the same anatomy under a different
+    complaint word, so they borrow that domain instead of silently losing both.
+    """
+    return ROUTE_CLINICAL_DOMAINS.get(route or "")
+
+
+def questionnaire_disposition(route: str) -> str:
+    """Return the governed entry action for an evidenced questionnaire route."""
+    if route not in ROUTE_DISPOSITIONS:
+        raise ValueError(f"不支援的問卷路由：{route}")
+    return ROUTE_DISPOSITIONS[route]
 
 
 @lru_cache(maxsize=len(DISEASE_ROUTES))

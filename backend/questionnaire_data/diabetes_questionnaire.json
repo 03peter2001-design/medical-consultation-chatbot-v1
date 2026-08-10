@@ -1,0 +1,211 @@
+{
+  "id": "diabetes_questionnaire",
+  "label": "糖尿病問題",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 12,
+    "source_sha256": "a83b1d509c61df23378d58f0a40d4b3981fedfdc1c5f0c8b7479f6800eb44a95",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "diabetes_type"
+    ],
+    "priority_fields": [
+      "recent_glycemic_events"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "diabetes_diagnosis_duration",
+      "prompt": "您被診斷患有糖尿病多少年了？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "diabetes_type",
+      "prompt": "您知道你患的是1型糖尿病 2型糖尿病 妊娠糖尿病還是其他糖尿病類型？ *",
+      "kind": "choice",
+      "options": [
+        "1型糖尿病",
+        "2型糖尿病",
+        "妊娠糖尿病",
+        "其他糖尿病類型"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "diabetes_related_symptoms",
+      "prompt": "您是否有以下糖尿病相關症狀？ 請將以下有出現的糖尿病相關症狀描述給我聽 若以下皆無 可說明是否有其他糖尿病相關症狀",
+      "kind": "choice",
+      "options": [
+        "血糖水平異常波動",
+        "頻繁口渴",
+        "頻繁排尿",
+        "不明原因的體重減輕",
+        "極度疲倦或乏力",
+        "視力模糊",
+        "傷口癒合緩慢",
+        "手腳麻木或刺痛"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "recent_glycemic_events",
+      "prompt": "最近是否有發生過低血糖或高血糖事件？ 若有 請進一步說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "medication_usage",
+      "prompt": "您是否在使用胰島素或其他降糖藥物？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "diet_and_exercise_status",
+      "prompt": "您最近的飲食和運動情況如何？ 是否飲食控制良好 或 定期運動",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "diabetes_complications_description",
+      "prompt": "您是否有糖尿病併發症？若有 請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "recent_health_problems",
+      "prompt": "您最近是否有以下健康問題？ 請將以下有出現的健康問題描述給我聽 若以下皆無 可說明是否有其他健康問題",
+      "kind": "choice",
+      "options": [
+        "視力問題",
+        "腎臟問題",
+        "神經損傷",
+        "心臟病",
+        "高血壓",
+        "足部問題"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "blood_sugar_monitoring_results",
+      "prompt": "您是否有定期檢查血糖和糖化血紅蛋白 (HbA1c) ？ 若有 請描述最近一次血糖和糖化血紅蛋白狀態的檢查結果",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "recent_stress_or_life_changes",
+      "prompt": "是否有最近的壓力或其他生活變化？ 若有 請讓我知道",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

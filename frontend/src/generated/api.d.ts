@@ -4,6 +4,40 @@
  */
 
 export interface paths {
+    "/v1/avatar/speak": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Render local CosyVoice3 speech as a MuseTalk avatar video */
+        post: operations["avatar_speak_v1_avatar_speak_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/avatar/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Check the private local avatar service */
+        get: operations["avatar_status_v1_avatar_status_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/chat": {
         parameters: {
             query?: never;
@@ -15,7 +49,7 @@ export interface paths {
         put?: never;
         /**
          * Advance or start a patient pre-consultation interview
-         * @description Restore and durably save the cookie-bound patient interview.
+         * @description Serialize, restore, and durably save one patient interview.
          */
         post: operations["chat_v1_chat_post"];
         delete?: never;
@@ -344,6 +378,24 @@ export interface components {
              */
             role: "user" | "assistant";
         };
+        /** AvatarSpeechRequest */
+        AvatarSpeechRequest: {
+            /** Text */
+            text: string;
+        };
+        /** AvatarStatusResponse */
+        AvatarStatusResponse: {
+            /** Animation Model */
+            animation_model: string;
+            /** Available */
+            available: boolean;
+            /** Device */
+            device: string;
+            /** Enabled */
+            enabled: boolean;
+            /** Speech Model */
+            speech_model: string;
+        };
         /** Body_transcribe_v1_transcribe_post */
         Body_transcribe_v1_transcribe_post: {
             /** Audio */
@@ -530,8 +582,12 @@ export interface components {
          * @description FastAPI HTTP and validation error envelope.
          */
         ErrorResponse: {
+            /** Correlation Id */
+            correlation_id: string;
             /** Detail */
             detail: string | components["schemas"]["ValidationIssue"][];
+            /** Error Code */
+            error_code: string;
         };
         /** EvidenceSource */
         EvidenceSource: {
@@ -619,6 +675,7 @@ export interface components {
             rag_query_translation: components["schemas"]["RagQueryTranslationStatus"];
             /** Sessions */
             sessions: number;
+            speech_transcription: components["schemas"]["SpeechTranscriptionStatus"];
             /**
              * Status
              * @constant
@@ -1066,6 +1123,20 @@ export interface components {
             /** Total */
             total: number;
         };
+        /** SpeechTranscriptionStatus */
+        SpeechTranscriptionStatus: {
+            /** Device */
+            device: string;
+            /** Loaded */
+            loaded: boolean;
+            /** Model */
+            model: string;
+            /**
+             * Provider
+             * @enum {string}
+             */
+            provider: "breeze" | "llm";
+        };
         /** StatusResponse */
         StatusResponse: {
             /**
@@ -1076,6 +1147,15 @@ export interface components {
         };
         /** TranscriptionResponse */
         TranscriptionResponse: {
+            /** Latency Seconds */
+            latency_seconds: number;
+            /** Model */
+            model: string;
+            /**
+             * Provider
+             * @enum {string}
+             */
+            provider: "breeze" | "llm";
             /** Text */
             text: string;
         };
@@ -1128,6 +1208,108 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    avatar_speak_v1_avatar_speak_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                ai_patient_session?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AvatarSpeechRequest"];
+            };
+        };
+        responses: {
+            /** @description Locally generated talking-head MP4 video. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "video/mp4": unknown;
+                };
+            };
+            /** @description Authentication is required or has expired. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Request validation or domain validation failed. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description An internal dependency or model operation failed. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description A required configured service is unavailable. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    avatar_status_v1_avatar_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                ai_patient_session?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AvatarStatusResponse"];
+                };
+            };
+            /** @description Authentication is required or has expired. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     chat_v1_chat_post: {
         parameters: {
             query?: never;
@@ -2002,6 +2184,15 @@ export interface operations {
             };
             /** @description An internal dependency or model operation failed. */
             500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description A required configured service is unavailable. */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };

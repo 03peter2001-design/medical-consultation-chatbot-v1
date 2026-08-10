@@ -1,0 +1,363 @@
+{
+  "schema_version": 1,
+  "id": "syncope",
+  "label": "昏倒 暈厥",
+  "source_order": 43,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "preceding_symptoms",
+      "post_fainting_symptoms",
+      "injury_during_fainting"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "when_fainted",
+      "prompt": "什麼時候昏倒的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼時候昏倒的？"
+      ]
+    },
+    {
+      "field": "episode_frequency",
+      "prompt": "這是第一次發作還是有過多次發作？",
+      "kind": "choice",
+      "options": [
+        "第一次發作",
+        "有過多次發作"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "這是第一次發作還是有過多次發作？"
+      ]
+    },
+    {
+      "field": "duration_of_unconsciousness",
+      "prompt": "昏倒多久才清醒？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "昏倒多久才清醒？"
+      ]
+    },
+    {
+      "field": "preceding_triggers",
+      "prompt": "昏倒前是否有特定的誘因？ 比如快速站起來、情緒壓力、疼痛或脫水",
+      "kind": "choice",
+      "options": [
+        "快速站起來",
+        "情緒壓力",
+        "疼痛",
+        "脫水"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "昏倒前是否有特定的誘因？ 比如快速站起來、情緒壓力、疼痛或脫水"
+      ]
+    },
+    {
+      "field": "preceding_symptoms",
+      "prompt": "昏倒前你是否有任何症狀？ 比如頭暈、胸痛、噁心、冒冷汗或是出現視力變化",
+      "kind": "choice",
+      "options": [
+        "頭暈",
+        "胸痛",
+        "噁心",
+        "冒冷汗",
+        "出現視力變化"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "昏倒前你是否有任何症狀？ 比如頭暈、胸痛、噁心、冒冷汗或是出現視力變化"
+      ]
+    },
+    {
+      "field": "position_when_fainting",
+      "prompt": "昏倒時你處於什麼站姿坐姿還是趟姿？",
+      "kind": "choice",
+      "options": [
+        "站姿",
+        "坐姿",
+        "趟姿"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "昏倒時你處於什麼站姿坐姿還是趟姿？"
+      ]
+    },
+    {
+      "field": "recovery_state",
+      "prompt": "發作後你多快恢復？ 比如醒來後很快恢復平常神智狀態還是混亂一陣子後才恢復",
+      "kind": "choice",
+      "options": [
+        "醒來後很快恢復平常神智狀態",
+        "混亂一陣子後才恢復"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "發作後你多快恢復？ 比如醒來後很快恢復平常神智狀態還是混亂一陣子後才恢復"
+      ]
+    },
+    {
+      "field": "injury_during_fainting",
+      "prompt": "昏倒的時候是否受傷（例如，頭部外傷、骨折）？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "昏倒的時候是否受傷（例如，頭部外傷、骨折）？"
+      ]
+    },
+    {
+      "field": "post_fainting_symptoms",
+      "prompt": "昏倒後，目前是否有任何症狀？比如說話困難、大小便失禁、手腳無力或手腳麻木",
+      "kind": "choice",
+      "options": [
+        "說話困難",
+        "大小便失禁",
+        "手腳無力",
+        "手腳麻木"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "昏倒後，目前是否有任何症狀？比如說話困難、大小便失禁、手腳無力或手腳麻木"
+      ]
+    },
+    {
+      "field": "observed_seizure_like_movements",
+      "prompt": "有人觀察到類似癲癇發作的動作（例如，顫抖、抽搐、眼睛上吊）嗎？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "有人觀察到類似癲癇發作的動作（例如，顫抖、抽搐、眼睛上吊）嗎？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "昏厥可能預示著危及生命的事件。若伴隨胸痛、呼吸困難、嚴重頭痛、或局部神經功能缺損等警訊症狀，應優先考慮緊急醫療流程，而非僅依賴問卷。此問卷草稿不應用於診斷或取代緊急評估。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-7acafdd302fe"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "warning",
+      "note": "目擊者對事件的描述（例如事後是否混亂）對於區分昏厥與癲癇等其他原因至關重要。問卷應考慮納入目擊者觀察的欄位。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.3616,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-7ef049929997",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "route": "common",
+      "chunk_id": "2b6eb94497953c8a6426_13",
+      "distance": 0.4669,
+      "excerpt": "unconscious, family, friends, or prehospital personnel can be questioned). Other history findings may include the following: Recent noncompliance with medications History of central nervous system (CNS) pathology (stroke, neoplasms, recent surgery) History of systemic neoplasms, infections, metabolic disorders, or toxic ingestions Recent trauma or fall Alcohol abuse Recent travel or immigration to the United States Pregnancy Focal symptoms (partial seizure activity) that then progressed to a generalized seizure Physical examination A generalized seizure is recognizable at the bedside when"
+    },
+    {
+      "id": "rag-0fb8e1fc13b3",
+      "title": "Hypophosphatemia in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767955-overview",
+      "route": "common",
+      "chunk_id": "6bf3610cae447cfa658b_1",
+      "distance": 0.4833,
+      "excerpt": "is the most common symptom suggesting hypophosphatemia and may involve any muscular system to any extent. Other symptoms include the following: Diplopia Dysarthria Dysphagia Symptoms of respiratory insufficiency or myocardial depression may indicate hypophosphatemia. Neurologic symptoms may range from simple paresthesias to profound alterations in mental status. See Presentation for more detail. Diagnosis 9pophosphatemia Laboratory studies Hypophosphatemia is defined as mild (2-2.5 mg/dL), moderate (1-2 mg/dL), or severe (< 1 mg/dL).bnormalities in serum magnesium, calcium, and potassium"
+    },
+    {
+      "id": "rag-6a8588ffc76c",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "route": "common",
+      "chunk_id": "a663d18c5f77da4d66fd_25",
+      "distance": 0.4926,
+      "excerpt": "level. Toxicity is defined as a clinical syndrome with the following: lethargy with (1) poor perfusion as evidenced by delayed capillary refill or (2) cyanosis or other signs of respiratory distress. Cold hands and feet, limb pain, and pale or mottled skin are considered \"red flag\" manifestations of septicemia. The presence or absence of meningeal signs is documented in older children. Clinicians should bear in mind that in some infants and younger children (perhaps younger than 12-15 months) who develop meningitis, specific meningeal signs, such as the Kernig or Brudzinski sign, may not be"
+    },
+    {
+      "id": "rag-7acafdd302fe",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_14",
+      "distance": 0.4926,
+      "excerpt": "with syncope. Although most causes of syncope are benign, this symptom presages a life-threatening event in a small subset of patients. It is unclear whether hospital inpatient admission of asymptomatic patients after syncope affects outcomes. No current criterion standard exists for diagnosing undifferentiated syncope. Many physicians continue to admit patients because of perceived risk. Reviews of the 2001 American College of Emergency Physician (ACEP) clinical policy suggested that evidence-based criteria may decrease admission rates by nearly half by identifying cardiac causes of syncope."
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.4968,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-04d05153821c",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "route": "safety",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "distance": 0.4528,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the"
+    },
+    {
+      "id": "rag-effd2446f9f1",
+      "title": "Permanent Pacemaker Insertion: Background, Indications, Contraindications",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1839735-overview",
+      "route": "safety",
+      "chunk_id": "3de735a60d396e6d9c9c_7",
+      "distance": 0.4749,
+      "excerpt": "bpm, but no clear association between the symptoms and bradycardia Unexplained syncope when clinically significant abnormalities of sinus node function are discovered or provoked in electrophysiological (EP) studies Minimally symptomatic patients with chronic heart rate less than 40 bpm while awake Acquired atrioventricular (AV) block Class I indications include the following: Complete third-degree AV block with or without symptoms Symptomatic second degree AV block, Mobitz type I and II Exercise-induced second or third degree AV block in the absence of myocardial infarction Mobitz II with"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "2f5e2012f26516fdfa6680bb2f574c64a8b79813c881a7bdb101742dd05f5dbf",
+    "rag_corpus_hash": "f08ac2ded32ee65d248f8c412357789f8b097fe29dce2629729e902dfc610e63",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:06:18+00:00"
+  }
+}

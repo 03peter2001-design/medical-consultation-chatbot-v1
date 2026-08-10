@@ -83,9 +83,15 @@ def build_document(route: str = "chest") -> dict[str, Any]:
 規則：
 1. 不得發明 fact code；每條 clue 只能引用提供的 source_id。
 2. direction 只能是 support 或 oppose，status 只能是 present 或 absent。
-3. 不輸出數字權重；程式會統一設為一票。
-4. coding 一律輸出 null，避免未驗證術語。
-5. 所有 profile 標記 provisional。
+3. weight 只能是 1、2 或 3：
+   3 = 該疾病近乎特異的表現（例如撕裂痛延伸到背部之於主動脈剝離）。
+   2 = 明顯改變機率的鑑別特徵。
+   1 = 常見但不具鑑別力的伴隨症狀。
+   不可全部給同一個值；同一 profile 內至少要有兩種不同 weight。
+4. 每個 must_not_miss profile 至少要有一條 status="absent" 的 rule-out 線索，
+   說明「病人否認這項時該疾病可能性下降」，否則問診只會累加票數而無法排除。
+5. coding 一律輸出 null，避免未驗證術語。
+6. 所有 profile 標記 provisional。
 
 文獻：
 {"\n\n---\n\n".join(context_parts)}
@@ -103,6 +109,7 @@ def build_document(route: str = "chest") -> dict[str, Any]:
           "fact": "允許的fact code",
           "status": "present",
           "direction": "support",
+          "weight": 1,
           "source_ids": ["rag-..."]
         }}
       ]
@@ -133,7 +140,14 @@ def build_document(route: str = "chest") -> dict[str, Any]:
         for clue in profile.get("clues", []):
             if not isinstance(clue, dict):
                 continue
-            clues.append({**clue, "weight": 1})
+            # Flattening every clue to one vote was what made the funnel unable
+            # to separate a tearing pain from a bout of nausea, so the model's
+            # graded weight is kept and only clamped to the documented scale.
+            try:
+                weight = int(clue.get("weight", 1))
+            except (TypeError, ValueError):
+                weight = 1
+            clues.append({**clue, "weight": max(1, min(weight, 3))})
         normalized_profiles.append(
             {
                 **profile,

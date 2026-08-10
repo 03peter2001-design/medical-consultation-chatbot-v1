@@ -1,0 +1,516 @@
+{
+  "schema_version": 1,
+  "id": "peripheral_vascular_leg_pain",
+  "label": "週邊血管 腿痛",
+  "source_order": 36,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "pain_location"
+    ],
+    "priority_fields": [
+      "chest_pain",
+      "leg_swelling",
+      "affected_area_temperature",
+      "leg_skin_color_change"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 17,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "pain_onset_time",
+      "prompt": "疼痛何時開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛何時開始的？"
+      ]
+    },
+    {
+      "field": "pain_onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然發作還是逐漸出現的？"
+      ]
+    },
+    {
+      "field": "pain_location",
+      "prompt": "疼痛的具體位置在小腿、大腿還是腳？ *",
+      "kind": "choice",
+      "options": [
+        "小腿",
+        "大腿",
+        "腳"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛的具體位置在小腿、大腿還是腳？ *"
+      ]
+    },
+    {
+      "field": "pain_character",
+      "prompt": "疼痛是怎麼個痛法？ 比如痙攣、酸痛、刺痛還是抽痛",
+      "kind": "choice",
+      "options": [
+        "痙攣",
+        "酸痛",
+        "刺痛",
+        "抽痛"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛是怎麼個痛法？ 比如痙攣、酸痛、刺痛還是抽痛"
+      ]
+    },
+    {
+      "field": "pain_timing",
+      "prompt": "疼痛是持續性的還是間歇性的",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛是持續性的還是間歇性的"
+      ]
+    },
+    {
+      "field": "pain_aggravating_factors",
+      "prompt": "什麼情況會讓疼痛加重？比如走路、站立、躺下、彎腰還是某些姿勢",
+      "kind": "choice",
+      "options": [
+        "走路",
+        "站立",
+        "躺下",
+        "彎腰",
+        "某些姿勢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼情況會讓疼痛加重？比如走路、站立、躺下、彎腰還是某些姿勢"
+      ]
+    },
+    {
+      "field": "pain_relieving_factors",
+      "prompt": "什麼情況會讓疼痛緩解？比如止痛藥、休息或是抬腿",
+      "kind": "choice",
+      "options": [
+        "止痛藥",
+        "休息",
+        "抬腿"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼情況會讓疼痛緩解？比如止痛藥、休息或是抬腿"
+      ]
+    },
+    {
+      "field": "previous_similar_pain",
+      "prompt": "以前是否有過類似的疼痛？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "以前是否有過類似的疼痛？"
+      ]
+    },
+    {
+      "field": "leg_swelling",
+      "prompt": "腿部是否有腫脹？ 如果有腫脹是單側或是雙側？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "腿部是否有腫脹？ 如果有腫脹是單側或是雙側？"
+      ]
+    },
+    {
+      "field": "swelling_location",
+      "prompt": "如果腿部有腫脹，腫脹範圍是在大腿、小腿或是腳",
+      "kind": "choice",
+      "options": [
+        "大腿",
+        "小腿",
+        "腳"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "如果腿部有腫脹，腫脹範圍是在大腿、小腿或是腳"
+      ]
+    },
+    {
+      "field": "affected_area_temperature",
+      "prompt": "受影響區域是否發燙或是冰冷？",
+      "kind": "choice",
+      "options": [
+        "發燙",
+        "冰冷"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "受影響區域是否發燙或是冰冷？"
+      ]
+    },
+    {
+      "field": "leg_skin_color_change",
+      "prompt": "腿部皮膚的顏色有何變化？比如蒼白、發紺或是發紅",
+      "kind": "choice",
+      "options": [
+        "蒼白",
+        "發紺",
+        "發紅"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "腿部皮膚的顏色有何變化？比如蒼白、發紺或是發紅"
+      ]
+    },
+    {
+      "field": "blisters_in_pain_area",
+      "prompt": "疼痛區域是否有水泡？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛區域是否有水泡？"
+      ]
+    },
+    {
+      "field": "non_healing_ulcers_or_wounds",
+      "prompt": "腿部是否有難以癒合的潰瘍或傷口？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "腿部是否有難以癒合的潰瘍或傷口？"
+      ]
+    },
+    {
+      "field": "fever_or_chills",
+      "prompt": "是否有發燒或畏寒？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有發燒或畏寒？"
+      ]
+    },
+    {
+      "field": "diagnosed_conditions",
+      "prompt": "是否有被診斷過以下疾病？請將以下有被診斷過的疾病說出來讓我知道",
+      "kind": "choice",
+      "options": [
+        "糖尿病",
+        "高血壓",
+        "心臟病",
+        "周邊動脈疾病",
+        "深靜脈血栓",
+        "靜脈曲張"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有被診斷過以下疾病？請將以下有被診斷過的疾病說出來讓我知道",
+        "糖尿病",
+        "高血壓",
+        "心臟病",
+        "周邊動脈疾病",
+        "深靜脈血栓",
+        "靜脈曲張"
+      ]
+    },
+    {
+      "field": "chest_pain",
+      "prompt": "有沒有胸痛？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "有沒有胸痛？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "胸痛可能是心肌梗塞等心臟急症的警訊，應優先詢問。若為急性胸痛，應考慮啟動緊急醫療流程。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-04d05153821c",
+        "rag-f88b0b8f1f72"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "info",
+      "note": "單側腿部腫脹、發熱、膚色變化可能是深靜脈血栓(DVT)的徵兆，應優先評估。",
+      "source_ids": [
+        "rag-dfb8c609c827"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.3899,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-7e43eb5f6b74",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "route": "safety",
+      "chunk_id": "53b354e14520b0f0479f_8",
+      "distance": 0.4937,
+      "excerpt": "with an identifiable nerve injury, many are not. Even \"microtrauma\" as might occur with an immunization may be responsible. The upper extremities are more likely to be involved than the lower. Entities that have led to RSDS include the following: Head injury Stroke Polio Amyotrophic lateral sclerosis (ALS) Myocardial infarction Polymyalgia rheumatica Operative procedures (eg, carpal tunnel release) Brachial plexopathy Cast/splint immobilization Minor extremity injury Prolonged bedrest A retrospective epidemiologic analysis of CRPS patients compared to patients with other pain disorders found"
+    },
+    {
+      "id": "rag-04d05153821c",
+      "title": "Myocardial Infarction: Practice Essentials, Background, Definitions",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155919-overview",
+      "route": "safety",
+      "chunk_id": "0601a7a65ea991df5238_1",
+      "distance": 0.4788,
+      "excerpt": "Acute anterior myocardial infarction. See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Patients with typical MI may have the following symptoms in the days or even weeks preceding the event (although typical STEMI may occur suddenly, without warning): Fatigue Chest discomfort Malaise Typical chest pain in acute MI has the following characteristics: Intense and unremitting for 30-60 minutes Substernal, and often radiates up to the neck, shoulder, and jaw, and down the"
+    },
+    {
+      "id": "rag-4f510ce43371",
+      "title": "Valproic Acid Level: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2090462-overview",
+      "route": "common",
+      "chunk_id": "c83dccf4f8f69e7ba68d_6",
+      "distance": 0.5399,
+      "excerpt": "prophylaxis Chronic pain syndromes A valproic acid level measures the amount of valproic acid in the blood: either the total level or free level of the drug. Monitoring of serial valproic acid levels is required to maintain the drug within the narrow recommended therapeutic range. Subtherapeutic levels place the patient at risk of recurrence of the condition for which they are taking valproic acid, and supratherapeutic levels place the patient at risk of adverse and toxic side effects. Indications Dosages of valproic acid must be adjusted carefully based on valproic acid blood levels until a"
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.565,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-5e4ca9359f46",
+      "title": "Dysmenorrhea: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/253812-overview",
+      "route": "common",
+      "chunk_id": "9aeedc640c68352d7494_39",
+      "distance": 0.5687,
+      "excerpt": "dysphoric disorder Besides dysmenorrhea, patients with premenstrual dysphoric disorder (formerly premenstrual syndrome) may have bloating, body aches, migraine headaches, breast tenderness, and emotional complaints. The effects of these symptoms are occasionally debilitating. Aside from possible vaginal brownish discharge or bleeding, pelvic examination findings are normal. It is the emergency physician s responsibility to ensure adequate analgesia and appropriate follow-up with a gynecologist. Epidemiology United States statistics Dysmenorrhea may affect more than 50% of menstruating women,"
+    },
+    {
+      "id": "rag-f88b0b8f1f72",
+      "title": "Acute Coronary Syndrome: Practice Essentials, Background, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1910735-overview",
+      "route": "safety",
+      "chunk_id": "29a8db87cd2aa8fb48b6_1",
+      "distance": 0.4871,
+      "excerpt": "for triaging patients with chest pain. ACS = ACS; ASA = aspirin; EKG = ECG; MI = myocardial infarction; Rx = treat; STEMI = ST-elevation myocardial infarction. Courtesy of Wu et al (1999). See Are You Missing Subtle MI Clues on ECGs? Test Your Skills, a Critical Images slideshow, to help identify a variety of electrocardiographic abnormalities. Signs and symptoms Atherosclerosis is the primary cause of ACS, with most cases occurring from the disruption of a previously nonsevere lesion. Complaints reported by patients with ACS include the following: Palpitations Pain, which is usually described"
+    },
+    {
+      "id": "rag-dfb8c609c827",
+      "title": "Thrombolytic Therapy: Background, Thrombolytic Agents, Thrombolytic Therapy for Acute Myocardial Infarction",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811234-overview",
+      "route": "safety",
+      "chunk_id": "0f16c4e4be69b16c1596_140",
+      "distance": 0.5809,
+      "excerpt": "stroke (AIS)? What is the clinical manifestation of peripheral arterial disease (PAD)? What is the role of thrombolytic therapy in the treatment of peripheral arterial disease (PAD)? What are the contraindications to thrombolytic therapy in patients with peripheral arterial disease (PAD)? What is the efficacy and safety of thrombolytic therapy for peripheral arterial disease (PAD)? What are standard regimens for thrombolytic therapy in peripheral arterial disease (PAD)? What are potential complications of thrombolytic therapy? What are risk factors of hemorrhagic complications from"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "0f2e8af79d6a69f4c5b3dd7d85ac5329193dc7dea418ff62bbca3f58efbf5f90",
+    "rag_corpus_hash": "988ce751d4e62e74c46b4817dbb2408b4abfcec1f75094ad87977623ceca6eec",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:09:51+00:00"
+  }
+}

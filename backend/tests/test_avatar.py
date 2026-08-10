@@ -1,0 +1,119 @@
+import asyncio
+import json
+import unittest
+from email.message import Message
+from unittest.mock import AsyncMock, patch
+
+from app.contracts import AvatarSpeechRequest
+from infrastructure.avatar import AvatarClient, AvatarUnavailableError, AvatarVideo
+
+
+class _Response:
+    def __init__(self, body: bytes, content_type: str = "application/json"):
+        self._body = body
+        self.headers = Message()
+        self.headers["Content-Type"] = content_type
+        self.headers["X-Speech-Model"] = "cosy-test"
+        self.headers["X-Animation-Model"] = "muse-test"
+        self.headers["X-Avatar-Cache"] = "hit"
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_args):
+        return False
+
+    def read(self, _limit=None):
+        return self._body
+
+
+class AvatarClientTests(unittest.TestCase):
+    def test_speech_request_trims_and_rejects_blank_text(self):
+        self.assertEqual(AvatarSpeechRequest(text="  您好  ").text, "您好")
+        with self.assertRaisesRegex(ValueError, "must not be blank"):
+            AvatarSpeechRequest(text="  \n ")
+
+    def test_disabled_client_does_not_call_network(self):
+        client = AvatarClient({"AVATAR_ENABLED": "false"})
+        with patch("infrastructure.avatar.urlopen") as urlopen:
+            with self.assertRaisesRegex(AvatarUnavailableError, "未啟用"):
+                client.render("您好")
+        urlopen.assert_not_called()
+
+    def test_status_reports_private_service_metadata(self):
+        client = AvatarClient({"AVATAR_ENABLED": "true"})
+        body = json.dumps(
+            {
+                "status": "ok",
+                "speech_model": "cosy-test",
+                "animation_model": "muse-test",
+                "device": "cuda:0",
+            }
+        ).encode()
+        with patch("infrastructure.avatar.urlopen", return_value=_Response(body)):
+            status = client.status()
+        self.assertTrue(status["enabled"])
+        self.assertTrue(status["available"])
+        self.assertEqual(status["device"], "cuda:0")
+
+    def test_render_preserves_model_and_cache_headers(self):
+        client = AvatarClient({"AVATAR_ENABLED": "true", "AVATAR_MAX_VIDEO_MB": "1"})
+        with patch(
+            "infrastructure.avatar.urlopen",
+            return_value=_Response(b"video", "video/mp4"),
+        ):
+            result = client.render("請問哪裡不舒服？")
+        self.assertEqual(result.content, b"video")
+        self.assertEqual(result.content_type, "video/mp4")
+        self.assertEqual(result.speech_model, "cosy-test")
+        self.assertEqual(result.animation_model, "muse-test")
+        self.assertTrue(result.cache_hit)
+
+    def test_render_rejects_non_video_success_response(self):
+        client = AvatarClient({"AVATAR_ENABLED": "true"})
+        with patch(
+            "infrastructure.avatar.urlopen",
+            return_value=_Response(b'{"status":"ok"}', "application/json"),
+        ):
+            with self.assertRaisesRegex(AvatarUnavailableError, "MP4"):
+                client.render("請問哪裡不舒服？")
+
+    def test_status_rejects_non_object_json(self):
+        client = AvatarClient({"AVATAR_ENABLED": "true"})
+        with patch(
+            "infrastructure.avatar.urlopen",
+            return_value=_Response(b"[]"),
+        ):
+            status = client.status()
+        self.assertTrue(status["enabled"])
+        self.assertFalse(status["available"])
+
+    def test_speak_route_returns_private_mp4(self):
+        async def exercise_route():
+            from app.routes.system import avatar_speak
+
+            video = AvatarVideo(
+                content=b"mp4-test",
+                content_type="video/mp4",
+                speech_model="cosy-test",
+                animation_model="muse-test",
+                cache_hit=True,
+            )
+            with patch(
+                "app.routes.system.run_in_threadpool",
+                new=AsyncMock(return_value=video),
+            ):
+                response = await avatar_speak(AvatarSpeechRequest(text=" 您好 "))
+
+            return response
+
+        response = asyncio.run(exercise_route())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.headers["content-type"], "video/mp4")
+        self.assertEqual(response.headers["cache-control"], "private, no-store")
+        self.assertEqual(response.headers["x-avatar-cache"], "hit")
+        self.assertEqual(response.body, b"mp4-test")
+
+
+if __name__ == "__main__":
+    unittest.main()

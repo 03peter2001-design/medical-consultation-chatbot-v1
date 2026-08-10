@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "id": "laceration",
+  "label": "撕裂傷",
+  "source_order": 28,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "injury_time",
+      "location",
+      "is_bleeding"
+    ],
+    "priority_fields": [
+      "is_bleeding",
+      "neurological_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 7,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "injury_time",
+      "prompt": "什麼時候受傷的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼時候受傷的？"
+      ]
+    },
+    {
+      "field": "location",
+      "prompt": "撕裂傷位於身體的臉 頭皮 頸部 軀幹 四肢哪個部位？",
+      "kind": "choice",
+      "options": [
+        "臉",
+        "頭皮",
+        "頸部",
+        "軀幹",
+        "四肢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "撕裂傷位於身體的臉 頭皮 頸部 軀幹 四肢哪個部位？"
+      ]
+    },
+    {
+      "field": "is_bleeding",
+      "prompt": "是否正在出血？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否正在出血？"
+      ]
+    },
+    {
+      "field": "neurological_symptoms",
+      "prompt": "是否感到受傷部位附近有麻木、刺痛或無力、或是無法正常使用？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否感到受傷部位附近有麻木、刺痛或無力、或是無法正常使用？"
+      ]
+    },
+    {
+      "field": "object_condition",
+      "prompt": "造成撕裂傷的物體是否乾淨或髒污？",
+      "kind": "choice",
+      "options": [
+        "乾淨",
+        "髒污"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "造成撕裂傷的物體是否乾淨或髒污？"
+      ]
+    },
+    {
+      "field": "tetanus_vaccine_complete",
+      "prompt": "是否完整接受過破傷風疫苗注射？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否完整接受過破傷風疫苗注射？"
+      ]
+    },
+    {
+      "field": "tetanus_toxoid_5_years",
+      "prompt": "五年內是否接受過破傷風類毒素注射？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "五年內是否接受過破傷風類毒素注射？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "RAG 文獻指出，神經功能缺損（如麻木、無力）可能是警訊症狀，應優先詢問以評估神經損傷的可能性。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "warning",
+      "note": "RAG 文獻提到，嚴重出血或凝血功能障礙是重要考量。應優先詢問出血狀況，以評估是否需要緊急止血或進一步處理。",
+      "source_ids": [
+        "rag-68ced4f0c702",
+        "rag-7697ad896f4f"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4198,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-68ced4f0c702",
+      "title": "von Willebrand Factor Multimers: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2086389-overview",
+      "route": "common",
+      "chunk_id": "65fa093d43ebbdfba73a_12",
+      "distance": 0.5375,
+      "excerpt": "and therapeutic requirements. Manifestations of vWD include the following: Easy bruising Prolonged bleeding after minor trauma to skin or mucous membranes Severe hemorrhage after major surgery or delayed bleeding up to several weeks after surgery Heavy bleeding after tooth extraction or other oral surgery (eg, tonsillectomy and adenoidectomy) Menorrhagia Bleeding symptoms exacerbated by ingestion of aspirin and ameliorated by oral contraceptives Questions & Answers Overview What is the reference range for von Willebrand factor (vWF) multimer analysis? Why is von Willebrand factor (vWF)"
+    },
+    {
+      "id": "rag-1d3d3891f923",
+      "title": "Diagnostic Influenza Tests: Reference Range, Interpretation, Collection and Diagnostic Methods",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2053517-overview",
+      "route": "common",
+      "chunk_id": "9938149389dea7f1fe21_27",
+      "distance": 0.5538,
+      "excerpt": "than rapid antigen tests. Questions & Answers Overview What are diagnostic influenza tests? How are diagnostic influenza tests interpreted? How are diagnostic influenza tests performed? What are the types of diagnostic influenza tests? When are diagnostic influenza tests indicated? What are the sensitivity and specificity of diagnostic influenza tests?"
+    },
+    {
+      "id": "rag-6a8588ffc76c",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "route": "common",
+      "chunk_id": "a663d18c5f77da4d66fd_25",
+      "distance": 0.5436,
+      "excerpt": "level. Toxicity is defined as a clinical syndrome with the following: lethargy with (1) poor perfusion as evidenced by delayed capillary refill or (2) cyanosis or other signs of respiratory distress. Cold hands and feet, limb pain, and pale or mottled skin are considered \"red flag\" manifestations of septicemia. The presence or absence of meningeal signs is documented in older children. Clinicians should bear in mind that in some infants and younger children (perhaps younger than 12-15 months) who develop meningitis, specific meningeal signs, such as the Kernig or Brudzinski sign, may not be"
+    },
+    {
+      "id": "rag-7697ad896f4f",
+      "title": "Thrombosed External Hemorrhoid Excision: Background, Indications, Contraindications",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/81039-overview",
+      "route": "common",
+      "chunk_id": "90042f6f81ed74bc8112_5",
+      "distance": 0.5693,
+      "excerpt": "external hemorrhoid, such as a painless rectal mass (thrombosed external hemorrhoids are always painful) A grade IV internal hemorrhoid associated with a thrombosed external hemorrhoid Known severe coagulopathy Hemodynamic instability Relative contraindications to ED excision of a thrombosed external hemorrhoid include the following: Allergy to local anesthetic Perianal infection Anorectal fissure Portal hypertension Inflammatory bowel disease Known coagulopathy Any serious systemic illness or comorbidity that would significantly increase the risk of the procedure Periprocedure"
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.5461,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-e0bcef352b95",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "common",
+      "chunk_id": "bb1164c188b2fc1e1591_6",
+      "distance": 0.5762,
+      "excerpt": "Emergency medical attention should be sought if the patient develops trouble breathing, persistent pain or chest pressure, new confusion, inability to awaken or to stay awake, or bluish lips or face. Who is at risk for severe coronavirus disease 2019 (COVID-19)? Risk factors for severe COVID-19, regardless of age, include the following: Chronic kidney disease COPD Immunocompromised state due to solid organ transplant Obesity (BMI ≥30) Serious heart conditions (eg, heart failure, coronary artery disease, cardiomyopathies) Sickle cell disease Type 2 diabetes mellitus The following are underlying"
+    },
+    {
+      "id": "rag-3d52d3b64366",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "safety",
+      "chunk_id": "53fc3e4f98765d889be9_33",
+      "distance": 0.5,
+      "excerpt": "Focal cortical hemorrhage is common as a sequela of head trauma and may be multifocal, as in coup (direct) and contrecoup (indirect) injuries, or diffuse. Focally dense gyri with subjacent edema, particularly those adjacent to the inner calvarial structures (ie, orbit roof-frontal pole, petrous ridge, sphenoid wing-temporal pole) represent contusions (see the images below). Skull fracture - Emergency neuroradiology. Lateral scout image from a CT brain examination shows linear lucency representing a right posterior frontal skull fracture (arrow). Subarachnoid hemorrhage - Emergency"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "db735143220c43785fc17193fca30d8088da146e56887bab1017fcccd70e2daf",
+    "rag_corpus_hash": "8da284610867deacb511cd0d8bc2410a2ac0714a680501037380a9f9dcd042e8",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:06:32+00:00"
+  }
+}

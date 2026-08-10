@@ -1,0 +1,334 @@
+{
+  "schema_version": 1,
+  "id": "stab_wound",
+  "label": "刺傷",
+  "source_order": 40,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "local_neurological_symptoms",
+      "tetanus_vaccination_complete",
+      "tetanus_toxoid_last_5_years"
+    ],
+    "priority_fields": [
+      "injury_location",
+      "active_bleeding",
+      "local_neurological_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 11,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "when_stabbed",
+      "prompt": "什麼時候被刺傷的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼時候被刺傷的？"
+      ]
+    },
+    {
+      "field": "injury_location",
+      "prompt": "你被刺傷的部位是在頭頸部、軀幹還是四肢？",
+      "kind": "choice",
+      "options": [
+        "頭頸部",
+        "軀幹",
+        "四肢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你被刺傷的部位是在頭頸部、軀幹還是四肢？"
+      ]
+    },
+    {
+      "field": "penetrating_object_removed",
+      "prompt": "刺入物已經移除嗎？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "刺入物已經移除嗎？"
+      ]
+    },
+    {
+      "field": "penetrating_object_barbed",
+      "prompt": "是否有倒鉤？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有倒鉤？"
+      ]
+    },
+    {
+      "field": "retained_foreign_body_sensation",
+      "prompt": "刺入物有沒有可能遺留在體內?是否有異物感？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "刺入物有沒有可能遺留在體內?是否有異物感？"
+      ]
+    },
+    {
+      "field": "seawater_or_marine_life_contact",
+      "prompt": "刺入物是否有接觸海水或是海洋生物過？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "刺入物是否有接觸海水或是海洋生物過？"
+      ]
+    },
+    {
+      "field": "active_bleeding",
+      "prompt": "你是否有部位正在出血？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你是否有部位正在出血？"
+      ]
+    },
+    {
+      "field": "local_inflammation_symptoms",
+      "prompt": "受傷部位有紅熱腫痛的症狀嗎？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "受傷部位有紅熱腫痛的症狀嗎？"
+      ]
+    },
+    {
+      "field": "local_neurological_symptoms",
+      "prompt": "受傷部位附近是否麻木或無法使力？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "受傷部位附近是否麻木或無法使力？ *"
+      ]
+    },
+    {
+      "field": "tetanus_vaccination_complete",
+      "prompt": "是否完整接受過破傷風疫苗注射？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否完整接受過破傷風疫苗注射？ *"
+      ]
+    },
+    {
+      "field": "tetanus_toxoid_last_5_years",
+      "prompt": "五年內是否接受過破傷風類毒素注射？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "五年內是否接受過破傷風類毒素注射？ *"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "刺傷可能涉及嚴重創傷，特別是頭頸部或軀幹的穿刺傷，可能導致大出血、氣道阻塞或重要器官損傷，有立即生命危險。應優先評估生命徵象並啟動緊急醫療流程，而非僅依賴問卷。",
+      "source_ids": [
+        "rag-ee94c060a833"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4316,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-f46bc121476a",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "safety",
+      "chunk_id": "53fc3e4f98765d889be9_8",
+      "distance": 0.493,
+      "excerpt": "patients. Patient monitoring is simple and safe, and CT is compatible with patient stabilization devices. Identification and localization of fractures and bony/metallic fragments are easily achieved, as is the assessment for acute hemorrhage and mass effect. Primary indications for CT include acute head trauma, suspected acute intracranial hemorrhage, mental status changes, headache, acute neurologic deficits, suspected intracranial infection, suspected hydrocephalus, brain herniation, and suspected mass tumor. In cases in which MRI is primarily indicated but unavailable, contraindicated, or"
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.5357,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-68ced4f0c702",
+      "title": "von Willebrand Factor Multimers: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2086389-overview",
+      "route": "common",
+      "chunk_id": "65fa093d43ebbdfba73a_12",
+      "distance": 0.5761,
+      "excerpt": "and therapeutic requirements. Manifestations of vWD include the following: Easy bruising Prolonged bleeding after minor trauma to skin or mucous membranes Severe hemorrhage after major surgery or delayed bleeding up to several weeks after surgery Heavy bleeding after tooth extraction or other oral surgery (eg, tonsillectomy and adenoidectomy) Menorrhagia Bleeding symptoms exacerbated by ingestion of aspirin and ameliorated by oral contraceptives Questions & Answers Overview What is the reference range for von Willebrand factor (vWF) multimer analysis? Why is von Willebrand factor (vWF)"
+    },
+    {
+      "id": "rag-6a8588ffc76c",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "route": "common",
+      "chunk_id": "a663d18c5f77da4d66fd_25",
+      "distance": 0.5768,
+      "excerpt": "level. Toxicity is defined as a clinical syndrome with the following: lethargy with (1) poor perfusion as evidenced by delayed capillary refill or (2) cyanosis or other signs of respiratory distress. Cold hands and feet, limb pain, and pale or mottled skin are considered \"red flag\" manifestations of septicemia. The presence or absence of meningeal signs is documented in older children. Clinicians should bear in mind that in some infants and younger children (perhaps younger than 12-15 months) who develop meningitis, specific meningeal signs, such as the Kernig or Brudzinski sign, may not be"
+    },
+    {
+      "id": "rag-ee94c060a833",
+      "title": "Neck Trauma Management: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/827223-overview",
+      "route": "safety",
+      "chunk_id": "bbce752c4c2a785b6f5c_1",
+      "distance": 0.5662,
+      "excerpt": "signs or symptoms, and potentially lethal injuries could be easily overlooked or discounted. Neck injury may result in the laceration of major vessels, potentially leading to hemorrhagic shock. Extracranial arterial injuries to the brachiocephalic, common carotid, and vertebral arteries can result in major neurologic deficits. Airway occlusion and exsanguinating hemorrhage pose the most immediate risks to life. From the time when Ambroise Pare successfully treated a neck injury in 1552, debate has continued about the best approach for particular neck wounds. Awareness of the various"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "1981e98fa579c94f720dbe2361b8b06ff4ebe6079d6d5a5b2c3a9300c1c7c0a5",
+    "rag_corpus_hash": "ae27550a3a9a03a88809505d82b2ab986585bb59ef6bc4f5132d4dcabf889255",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:13:18+00:00"
+  }
+}

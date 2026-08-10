@@ -1,0 +1,281 @@
+{
+  "schema_version": 1,
+  "id": "bleeding",
+  "label": "出血",
+  "source_order": 24,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "onset_time",
+      "onset_pattern",
+      "medication_history"
+    ],
+    "priority_fields": [
+      "onset_pattern",
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 6,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_time",
+      "prompt": "症狀是什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是什麼時候開始的？ *"
+      ]
+    },
+    {
+      "field": "onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然發作還是逐漸出現的？ *"
+      ]
+    },
+    {
+      "field": "bleeding_location",
+      "prompt": "出血來自哪裡？",
+      "kind": "choice",
+      "options": [
+        "鼻子",
+        "消化道",
+        "泌尿道",
+        "陰道"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "出血來自哪裡？ 比如說鼻子 消化道 泌尿道 或是陰道的部位"
+      ]
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "除了出血，還有其他像是疼痛 頭暈 無力 喘 或是異常疲倦的症狀嗎？",
+      "kind": "choice",
+      "options": [
+        "疼痛",
+        "頭暈",
+        "無力",
+        "喘",
+        "異常疲倦"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "除了出血，還有其他像是疼痛 頭暈 無力 喘 或是異常疲倦的症狀嗎？"
+      ]
+    },
+    {
+      "field": "medication_history",
+      "prompt": "你是否在服用抗血小板藥物或是抗凝血劑？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你是否在服用抗血小板藥物或是抗凝血劑？ *"
+      ]
+    },
+    {
+      "field": "chronic_illness_history",
+      "prompt": "有沒有像是 肝病 血友病 或是癌症的慢性疾病？",
+      "kind": "choice",
+      "options": [
+        "肝病",
+        "血友病",
+        "癌症"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "有沒有像是 肝病  血友病 或是癌症的慢性疾病？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "RAG 文獻指出，伴隨胸痛、呼吸困難、嚴重頭痛或局部神經功能缺損的出血可能是警訊症狀，需優先評估。應考慮將這些症狀列為優先詢問欄位。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-8d0c839d378d"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-4830f3b94af7",
+      "title": "Cerebrospinal Fluid Analysis: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2093316-overview",
+      "route": "chest",
+      "chunk_id": "a9b2d72df127beb59ec9_46",
+      "distance": 0.427,
+      "excerpt": "a stiff neck Confusion, hallucinations, or seizures Muscle weakness or lethargy, fatigue Nausea (severe or prolonged) Flu-like symptoms that intensify over a few hours to a few days Fever or rash Sensitivity to light Numbness or tremor Dizziness Difficulties with speech Difficulty walking, lack of coordination Mood swings, depression Infants: Persistent irritability, body stiffness, poor feeding, or bulging fontanel Considerations The aspect, biochemical composition, and microscopic content of CSF change with different diseases, conditions, or medication. Also, various laboratory findings"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "chest",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.3524,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-8d0c839d378d",
+      "title": "Hypertensive Emergencies: Uncontrolled Blood Pressure, Management of Hypertensive Emergencies",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1952052-overview",
+      "route": "chest",
+      "chunk_id": "9ba3bdd8c1367b8de718_6",
+      "distance": 0.431,
+      "excerpt": "of their last menstrual period. Patients may complain of specific symptoms that suggest end-organ dysfunction may be present. Chest pain may indicate myocardial ischemia or infarction, back pain may denote aortic dissection; and dyspnea may suggest pulmonary edema or congestive heart failure. The presence of neurologic symptoms may include seizures, visual disturbances, and altered level of consciousness and may be indicative of hypertensive encephalopathy. The physical examination should assess whether end-organ dysfunction is present. BP should not only be measured in both the supine"
+    },
+    {
+      "id": "rag-624e76ddaa7a",
+      "title": "Paroxysmal Nocturnal Hemoglobinuria: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/207468-overview",
+      "route": "chest",
+      "chunk_id": "77d786d034d28071b2d5_13",
+      "distance": 0.425,
+      "excerpt": "free hemoglobin circulates and binds irreversibly with nitric oxide (NO), depleting NO levels in peripheral blood. Because NO regulates smooth muscle tone, depletion of NO levels leads to smooth muscle contraction, with consequent vasoconstriction, constriction of the gut, and pulmonary hypertension. Resultant symptoms may include the following: Abdominal pain Bloating Back pain Headaches Esophageal spasms Erectile dysfunction Fatigue Progressive chronic kidney disease can occur after several years of hemoglobinuria from the acute tubulonecrosis effects of heme and iron (pigment nephropathy),"
+    },
+    {
+      "id": "rag-88841bd96012",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "route": "headache",
+      "chunk_id": "c073c38d1231a0946898_1",
+      "distance": 0.4347,
+      "excerpt": "alternative diagnoses. Signs of dysfunction of other cranial neruves or other neurologic abnormality exclude the diagnosis of classic trigeminal neuralgia and suggest that pain may be secondary to a structural lesion. The International Association for the Study of Pain (IASP) classifies TN into three categories. Classical TN is described as vascular compression that causes anatomical changes in the trigeminal nerve root. Next, secondary TN is due to an underlying neurologic disease. Third, idiopathic TN, is diagnosed after all studies reveal no etiology or there is no apparent cause. Classic"
+    },
+    {
+      "id": "rag-cd4d398b4553",
+      "title": "Trigeminal Neuralgia in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/794402-overview",
+      "route": "headache",
+      "chunk_id": "c073c38d1231a0946898_5",
+      "distance": 0.4349,
+      "excerpt": "small arteries or veins compressing the facial nerve. In about 85% of cases, no lesion is identified, even after extensive investigations, and the etiology is labeled idiopathic (classic) by default. Aneurysms, tumors, chronic meningeal inflammation, or other lesions may irritate trigeminal nerve roots along the pons, causing symptomatic trigeminal neuralgia. Uncommonly, an area of demyelination from multiple sclerosis may be the precipitant. Lesions of the entry zone of the trigeminal roots within the pons may cause a similar pain syndrome. An area of demyelination is shown in the image"
+    },
+    {
+      "id": "rag-23645f44d446",
+      "title": "Multifocal Atrial Tachycardia: Overview of Multifocal Atrial Tachycardia, Pathophysiology of MAT, Etiology of MAT",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/155825-overview",
+      "route": "chest",
+      "chunk_id": "64bfd50d23b5cd52a2ce_6",
+      "distance": 0.4437,
+      "excerpt": "to quantify because the underlying disease is the primary determinant of complications. Clinical Presentation Patient history Patients may complain of a variety of symptoms, or more rarely, the disease may be asymptomatic. The most common complaints include the following: Palpitations Shortness of breath Chest pain Lightheadedness Syncopal episode These symptoms may be transient. Physical examination Physical examination findings are typically related to the underlying disease process and are not specific for MAT. The pulse is rapid and irregular, and the first heart sound may be variable. The"
+    },
+    {
+      "id": "rag-c19a1a4a7ae0",
+      "title": "Decompression Sickness: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769717-overview",
+      "route": "headache",
+      "chunk_id": "0e015057c60c6e6987b9_55",
+      "distance": 0.4484,
+      "excerpt": "causes a combination of nausea, vomiting, vertigo, and nystagmus, in addition to tinnitus and partial deafness. This alternobaric vertigo can be difficult to differentiate from dysbaric eustachian tube dysfunction. A history of eustachian tube problems depicted by past otitis media, past eustachian tube dysfunction, and problems equalizing pressure in the ears during the dive is associated with an increased prevalence of alternobaric vertigo. In inner-ear DCS (IEDCS), vertigo was the major presenting complaint in 77-100%. Hearing loss occurred in 6-40% and a combination of both in 18%."
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "bc167a45075b219efbbd1e2c7a3d17ebb76a5b3b8656f3c73eff3088efe6efda",
+    "rag_corpus_hash": "49cd504a66c0f5768058b22afe1fd6c8d1a4767482436ea2b9349c2342594989",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:04:42+00:00"
+  }
+}

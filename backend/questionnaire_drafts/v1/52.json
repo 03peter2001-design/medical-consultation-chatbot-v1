@@ -1,0 +1,327 @@
+{
+  "schema_version": 1,
+  "id": "severe_dehydration",
+  "label": "嚴重脫水",
+  "source_order": 52,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "dehydration_symptom_onset"
+    ],
+    "priority_fields": [
+      "present_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 8,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "dehydration_symptom_onset",
+      "prompt": "什麼時候開始出現脫水症狀？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼時候開始出現脫水症狀？ *"
+      ]
+    },
+    {
+      "field": "present_symptoms",
+      "prompt": "是否出現以下症狀？",
+      "kind": "choice",
+      "options": [
+        "口乾舌燥",
+        "極度口渴",
+        "尿液顏色深黃或橙色",
+        "小便次數減少",
+        "皮膚乾燥或失去彈性",
+        "頭暈或昏厥",
+        "極度疲勞或乏力",
+        "心跳加速"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否出現以下症狀？  請將以下有出現的症狀或是其他症狀描述讓我知道",
+        "口乾舌燥",
+        "極度口渴",
+        "尿液顏色深黃或橙色",
+        "小便次數減少",
+        "皮膚乾燥或失去彈性",
+        "頭暈或昏厥",
+        "極度疲勞或乏力",
+        "心跳加速"
+      ]
+    },
+    {
+      "field": "recent_conditions",
+      "prompt": "最近是否有以下情況？",
+      "kind": "choice",
+      "options": [
+        "高熱",
+        "過度出汗",
+        "嘔吐",
+        "腹瀉",
+        "使用利尿劑",
+        "過度飲酒",
+        "長時間曝曬在陽光下",
+        "大量運動"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "最近是否有以下情況？  請將以下有出現的情況或是其他狀況描述讓我知道",
+        "高熱",
+        "過度出汗",
+        "嘔吐",
+        "腹瀉",
+        "使用利尿劑",
+        "過度飲酒",
+        "長時間曝曬在陽光下",
+        "大量運動"
+      ]
+    },
+    {
+      "field": "recent_fluid_intake",
+      "prompt": "最近的飲水量是否減少？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "最近的飲水量是否減少？"
+      ]
+    },
+    {
+      "field": "chronic_illness_and_medications",
+      "prompt": "是否有任何慢性疾病或正在服用的藥物？ 若有 請進一步說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有任何慢性疾病或正在服用的藥物？ 若有 請進一步說明"
+      ]
+    },
+    {
+      "field": "other_health_problems",
+      "prompt": "是否還有其他健康問題或症狀？比如頭痛 眼窩凹陷 低血壓 快速呼吸 或是其他健康問題",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否還有其他健康問題或症狀？比如頭痛 眼窩凹陷 低血壓 快速呼吸 或是其他健康問題"
+      ]
+    },
+    {
+      "field": "recent_lifestyle_changes",
+      "prompt": "是否有最近的飲食或生活習慣改變？若有 請進一步說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有最近的飲食或生活習慣改變？若有 請進一步說明"
+      ]
+    },
+    {
+      "field": "past_medical_treatment",
+      "prompt": "是否有接受過任何醫療或治療過程？若有 請進一步說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有接受過任何醫療或治療過程？若有 請進一步說明"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "嚴重脫水可能導致意識改變、休克或器官衰竭，屬於醫療緊急情況。若患者出現昏厥、極度疲勞或心跳加速等警訊症狀，應優先考慮緊急醫療流程，而非僅填寫問卷。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26",
+        "rag-6da52507d845"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4878,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-c34ba2025773",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "safety",
+      "chunk_id": "bb1164c188b2fc1e1591_12",
+      "distance": 0.554,
+      "excerpt": "(ARDS) and should be avoided unless indicated for another reason (eg, COPD exacerbation, refractory septic shock). Nonetheless, The UK RECOVERY trial showed that low-dose dexamethasone (6 mg PO or IV daily for 10 days) randomized to 2104 patients reduced deaths by 35% in ventilated patients (P = 0.0003) and by 20% in other patients receiving oxygen only (P = 0.0021) compared with patients who received standard of care (n = 4321). No benefit was seen in patients who did not require respiratory intervention (P = 0.14). Acute respiratory distress syndrome (ARDS) Prone ventilation for 12-16 hours"
+    },
+    {
+      "id": "rag-f2e6c31a6868",
+      "title": "Fibrinogen: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2085501-overview",
+      "route": "common",
+      "chunk_id": "38ddb953a9f7896fb9ae_1",
+      "distance": 0.5571,
+      "excerpt": "liver disease: Chronic Severe malnutrition: Chronic Disseminated intravascular coagulation (DIC): Acute Abnormal fibrinolysis: Acute Large-volume blood transfusions: Acute Fibrinogen is an acute-phase reactant, meaning that elevated fibrinogen levels can be seen the following conditions: Inflammation Tissue damage/trauma Infection Cancer Acute coronary syndrome Strokes Inflammatory conditions Collection and Panels Specimen: Plasma Container: Light blue (sodium citrate) Collection method: Routine venipuncture Processing: Electromagnetic mechanical clot detection/radial immunodiffusion; 2 mL"
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.5315,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-0ba08919556c",
+      "title": "Symptoms and Management of Coronavirus Disease 2019 (COVID-19) FAQ: What are the signs and symptoms of coronavirus disease 2019 (COVID-19)?, What are the signs and symptoms of severe or critical coron",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/2500122-overview",
+      "route": "common",
+      "chunk_id": "bb1164c188b2fc1e1591_7",
+      "distance": 0.5582,
+      "excerpt": "Sickle cell disease Type 2 diabetes mellitus The following are underlying conditions that may represent an increased risk of severe COVID-19: Asthma (moderate to severe) Cerebrovascular disease Cystic fibrosis Immunocompromised state due to blood or bone marrow transplant, immunodeficiencies, HIV infection, corticosteroid use (or other medications that weaken the immune system) Neurologic conditions (eg, dementia) Liver disease Pregnancy Pulmonary fibrosis Smoking Thalassemia Type 1 diabetes mellitus People who live in a nursing home or long-term care facility are also at a higher risk of"
+    },
+    {
+      "id": "rag-6a8588ffc76c",
+      "title": "Emergent Management of Pediatric Patients with Fever: Overview, Patient History, Physical Examination",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/801598-overview",
+      "route": "common",
+      "chunk_id": "a663d18c5f77da4d66fd_25",
+      "distance": 0.5445,
+      "excerpt": "level. Toxicity is defined as a clinical syndrome with the following: lethargy with (1) poor perfusion as evidenced by delayed capillary refill or (2) cyanosis or other signs of respiratory distress. Cold hands and feet, limb pain, and pale or mottled skin are considered \"red flag\" manifestations of septicemia. The presence or absence of meningeal signs is documented in older children. Clinicians should bear in mind that in some infants and younger children (perhaps younger than 12-15 months) who develop meningitis, specific meningeal signs, such as the Kernig or Brudzinski sign, may not be"
+    },
+    {
+      "id": "rag-7ef049929997",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "route": "common",
+      "chunk_id": "2b6eb94497953c8a6426_13",
+      "distance": 0.5571,
+      "excerpt": "unconscious, family, friends, or prehospital personnel can be questioned). Other history findings may include the following: Recent noncompliance with medications History of central nervous system (CNS) pathology (stroke, neoplasms, recent surgery) History of systemic neoplasms, infections, metabolic disorders, or toxic ingestions Recent trauma or fall Alcohol abuse Recent travel or immigration to the United States Pregnancy Focal symptoms (partial seizure activity) that then progressed to a generalized seizure Physical examination A generalized seizure is recognizable at the bedside when"
+    },
+    {
+      "id": "rag-6da52507d845",
+      "title": "Serum Protein Electrophoresis: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2087113-overview",
+      "route": "common",
+      "chunk_id": "cc23c1f5f70665a63f35_3",
+      "distance": 0.5702,
+      "excerpt": "Increased Decreased Albumin Severe dehydration Malnutrition, cachexia, liver disease, nephrotic syndrome, protein-losing enteropathies, severe burns Alpha-1 Inflammatory states, pregnancy Alpha-1 antitrypsin deficiency Alpha-2 Inflammatory states, nephrotic syndrome, oral contraceptive use, steroid use, hyperthyroidism Hemolysis, liver disease Beta Hyperlipidemia, iron-deficiency anemia Hypo-B-lipoproteinemia, malnutrition Gamma Polyclonal and Monoclonal Gammopathies Agammaglobulinemia, hypogammaglobulinemia Monoclonal gammopathy A dense narrow band that is composed of a single class of"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "90cb14fb9e27a4cd09f9dcf6f29ad0f02a907feefd658e822c8b7e0966e52da0",
+    "rag_corpus_hash": "c8b055bcb47089ff430f4f55f6cd396c5c5f225e3ccbce43861dec82020fc0da",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:12:19+00:00"
+  }
+}

@@ -1,0 +1,676 @@
+{
+  "schema_version": 1,
+  "id": "genitourinary_system_problems",
+  "label": "泌尿生殖系統問題",
+  "source_order": 21,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "symptom_onset_time_male",
+      "symptom_onset_pattern_male",
+      "symptom_duration_pattern_male",
+      "urinary_symptoms_male",
+      "symptom_onset_time_female",
+      "symptom_onset_pattern_female",
+      "symptom_duration_pattern_female",
+      "urinary_symptoms_female"
+    ],
+    "priority_fields": [
+      "associated_symptoms_male",
+      "associated_symptoms_female"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 20,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "symptom_onset_time_male",
+      "prompt": "症狀是什麼時候開始的 *",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "男性",
+        "症狀是什麼時候開始的 *"
+      ]
+    },
+    {
+      "field": "symptom_onset_pattern_male",
+      "prompt": "是突然發作還是逐漸出現的？ *",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然發作還是逐漸出現的？ *"
+      ]
+    },
+    {
+      "field": "symptom_duration_pattern_male",
+      "prompt": "症狀是持續性的還是間歇性的？ *",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是持續性的還是間歇性的？ *"
+      ]
+    },
+    {
+      "field": "symptom_location_male",
+      "prompt": "你在哪裡感覺到症狀？ 比方說下腹部 骨盆區 或 外生殖器區域",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你在哪裡感覺到症狀？ 比方說下腹部 骨盆區 或 外生殖器區域"
+      ]
+    },
+    {
+      "field": "symptom_description_male",
+      "prompt": "你如何描述這些症狀？比方說疼痛 癢 灼熱感或是腫脹呢",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你如何描述這些症狀？比方說疼痛 癢 灼熱感或是腫脹呢"
+      ]
+    },
+    {
+      "field": "symptom_triggering_events_male",
+      "prompt": "症狀開始前是否有像是性行為 外傷 服用新藥 或是激烈運動的事件呢？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀開始前是否有像是性行為 外傷 服用新藥 或是激烈運動的事件呢？"
+      ]
+    },
+    {
+      "field": "urinary_symptoms_male",
+      "prompt": "是否感到排尿困難、頻尿、尿急或尿液顏色或氣味改變？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否感到排尿困難、頻尿、尿急或尿液顏色或氣味改變？ *"
+      ]
+    },
+    {
+      "field": "abnormal_discharge_male",
+      "prompt": "是否有異常分泌物？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有異常分泌物？"
+      ]
+    },
+    {
+      "field": "associated_symptoms_male",
+      "prompt": "是否有以下相關症狀？ 請將有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "發燒或畏寒",
+        "噁心或嘔吐",
+        "下背部疼痛",
+        "小便帶血",
+        "生殖器區域有皮疹、潰瘍、腫脹或其他皮膚變化"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "男性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有以下相關症狀？ 請將有出現的症狀描述給我聽",
+        "發燒或畏寒",
+        "噁心或嘔吐",
+        "下背部疼痛",
+        "小便帶血",
+        "生殖器區域有皮疹、潰瘍、腫脹或其他皮膚變化"
+      ]
+    },
+    {
+      "field": "symptom_onset_time_female",
+      "prompt": "症狀是什麼時候開始的 *",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "女性",
+        "症狀是什麼時候開始的 *"
+      ]
+    },
+    {
+      "field": "symptom_onset_pattern_female",
+      "prompt": "是突然發作還是逐漸出現的？ *",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然發作還是逐漸出現的？ *"
+      ]
+    },
+    {
+      "field": "symptom_duration_pattern_female",
+      "prompt": "症狀是持續性的還是間歇性的？ *",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀是持續性的還是間歇性的？ *"
+      ]
+    },
+    {
+      "field": "symptom_location_female",
+      "prompt": "你在哪裡感覺到症狀？ 比方說下腹部 骨盆區 或 外生殖器區域",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你在哪裡感覺到症狀？ 比方說下腹部 骨盆區 或 外生殖器區域"
+      ]
+    },
+    {
+      "field": "symptom_description_female",
+      "prompt": "你如何描述這些症狀？比方說疼痛 癢 灼熱感或是腫脹呢",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你如何描述這些症狀？比方說疼痛 癢 灼熱感或是腫脹呢"
+      ]
+    },
+    {
+      "field": "symptom_triggering_events_female",
+      "prompt": "症狀開始前是否有像是性行為 外傷 服用新藥 或是激烈運動的事件呢？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "症狀開始前是否有像是性行為 外傷 服用新藥 或是激烈運動的事件呢？"
+      ]
+    },
+    {
+      "field": "urinary_symptoms_female",
+      "prompt": "是否感到排尿困難、頻尿、尿急或尿液顏色或氣味改變？ *",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否感到排尿困難、頻尿、尿急或尿液顏色或氣味改變？ *"
+      ]
+    },
+    {
+      "field": "abnormal_discharge_female",
+      "prompt": "是否有異常分泌物？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有異常分泌物？"
+      ]
+    },
+    {
+      "field": "associated_symptoms_female",
+      "prompt": "是否有以下相關症狀？ 請將有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "發燒或畏寒",
+        "噁心或嘔吐",
+        "下背部疼痛",
+        "小便帶血",
+        "生殖器區域有皮疹、潰瘍、腫脹或其他皮膚變化"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有以下相關症狀？ 請將有出現的症狀描述給我聽",
+        "發燒或畏寒",
+        "噁心或嘔吐",
+        "下背部疼痛",
+        "小便帶血",
+        "生殖器區域有皮疹、潰瘍、腫脹或其他皮膚變化"
+      ]
+    },
+    {
+      "field": "last_menstrual_period",
+      "prompt": "最近一次月經是什麼時候",
+      "kind": "date",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "最近一次月經是什麼時候"
+      ]
+    },
+    {
+      "field": "pregnancy_possibility",
+      "prompt": "是否有可能懷孕呢",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": {
+        "field": "gender",
+        "contains_any": [
+          "女性"
+        ]
+      },
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有可能懷孕呢"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "info",
+      "note": "RAG 文獻指出，排尿困難、頻尿和尿急的組合對 UTI 有約 75% 的預測價值。發燒、寒顫和不適可能與膀胱炎有關，但更常見於上泌尿道感染。",
+      "source_ids": [
+        "rag-9968e8acf21b",
+        "rag-e1afc4ea980f"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "info",
+      "note": "RAG 文獻提到，對於在 48 小時內發燒未退的急性細菌性前列腺炎患者，應懷疑前列腺膿瘍。此外，淋菌性和非淋菌性尿道炎可能進展為前列腺炎、附睪炎或睪丸炎，尤其是在年輕患者中。",
+      "source_ids": [
+        "rag-92e77c25e7a4"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-92e77c25e7a4",
+      "title": "Urinary Tract Infection (UTI) in Males: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/231574-overview",
+      "route": "safety",
+      "chunk_id": "435eaf70708991e13930_11",
+      "distance": 0.4696,
+      "excerpt": "Epididymitis involving spermatic cord torsion See Treatment and Medication for more detail. Background Complications Complications of acute bacterial prostatitis include bacteremia, septic shock, prostatic abscess, epididymitis, seminal vesiculitis, and pyelonephritis. Suspect a prostate abscess if fever does not resolve within 48 hours; if confirmed, add anaerobic coverage, and arrange for drainage. Gonococcal and nongonococcal urethritis may progress to prostatitis, epididymitis, or orchitis, especially in younger patients. Urethral strictures (secondary to inflammation within the urinary"
+    },
+    {
+      "id": "rag-9644b327adb1",
+      "title": "Tuberculous Meningitis: Background, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1166190-overview",
+      "route": "safety",
+      "chunk_id": "fbdeca101e0c7765ff94_4",
+      "distance": 0.5196,
+      "excerpt": "not present in the early course of the illness. The duration of presenting symptoms may vary from 1 day to 9 months (generally, a week to a month), and the prodrome is usually nonspecific, including headache, vomiting, photophobia, and fever. Meningismus may also occur. Unlike most forms of bacterial meningitis, TBM is more likely to cause neurological deficits, including altered mental status, personality changes, and, as the lesions may result in neurovascular compression, cranial nerve deficits and infarcts. (See Clinical Presentation). The clinician should have a high index of clinical"
+    },
+    {
+      "id": "rag-eba629ac0d85",
+      "title": "Trigonitis: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/438185-overview",
+      "route": "abdomen",
+      "chunk_id": "7c959a69d50ebc8da140_12",
+      "distance": 0.4134,
+      "excerpt": "to have squamous metaplasia; in comparison, only 7% of men were found to have squamous metaplasia of the bladder. In an autopsy study of bladders from 106 women who had died of diseases unrelated to the urinary tract, 72% exhibited squamous metaplasia in the trigone. Other reports suggest that trigonitis occurs in approximately 40% of adult women and approximately 5% of men. Trigonitis may also be seen in men receiving hormonal therapy for prostate cancer. Clinical Presentation"
+    },
+    {
+      "id": "rag-9968e8acf21b",
+      "title": "Urinary Tract Infection (UTI) in Males: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/231574-overview",
+      "route": "abdomen",
+      "chunk_id": "435eaf70708991e13930_1",
+      "distance": 0.4305,
+      "excerpt": "complaint in men with UTI. The combination of dysuria, urinary frequency, and urinary urgency is about 75% predictive for UTI, whereas the acute onset of hesitancy, urinary dribbling, and slow stream is only about 33% predictive for UTI. Relevant clinical history includes the following: Previous UTI(s) Nocturia, gross hematuria, any changes in the color and/or consistency of the urine Prostatic enlargement Urinary tract abnormalities: personally, and within the family Comorbid conditions (eg, diabetes) Human immunodeficiency virus (HIV) status Immunosuppressive treatments for other conditions"
+    },
+    {
+      "id": "rag-9c2f50a40a64",
+      "title": "Trigonitis: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/438185-overview",
+      "route": "abdomen",
+      "chunk_id": "7c959a69d50ebc8da140_2",
+      "distance": 0.425,
+      "excerpt": "etiology of trigonitis is unknown, the condition usually occurs in response to an irritative insult to the bladder trigone (eg, from a long-term indwelling catheter) or an infectious process. Patients with squamous metaplastic changes in the bladder may be asymptomatic or may present with irritative voiding symptoms. Diagnosis of trigonitis requires cystoscopy (see Workup). Asymptomatic patients do not require treatment. Several treatment approaches have been tried in patients with symptomatic trigonitis, including medications and surgery. See Treatment. Trigonitis is a benign lesion that does"
+    },
+    {
+      "id": "rag-8d43d6cc954f",
+      "title": "Nonbacterial Prostatitis: Practice Essentials, Pathophysiology, Etiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/456165-overview",
+      "route": "abdomen",
+      "chunk_id": "ace146c213fe1ddffd02_12",
+      "distance": 0.4346,
+      "excerpt": "Carcinoma in situ of the bladder, which can present with irritative urinary symptoms, must be considered and excluded. Epidemiology Approximately half of all men develop symptoms consistent with prostatitis at some time in their lives. Prostatitis symptoms are very common in men aged 35-50 years. These symptoms are the most common urologic problem in men younger than 50 years and the third most common urologic problem in older men; these symptoms account for 25% of men evaluated for a urologic problem and 8% of all visits to urologists. Studies using the National Institutes of Health Chronic"
+    },
+    {
+      "id": "rag-e1afc4ea980f",
+      "title": "Urinary Tract Infection (UTI) and Cystitis (Bladder Infection) in Females: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/233101-overview",
+      "route": "abdomen",
+      "chunk_id": "4d07a571dd8fc318526e_3",
+      "distance": 0.4392,
+      "excerpt": "to infection. Signs and symptoms Symptoms and signs of UTI in adults are as follows: Dysuria Urinary urgency and frequency A sensation of bladder fullness or lower abdominal discomfort Suprapubic tenderness Flank pain and costovertebral angle tenderness (may be present in cystitis but suggest upper UTI) Bloody urine Fevers, chills, and malaise (may be noted in patients with cystitis, but more frequently associated with upper UTI) See Clinical Presentation for more detail. Diagnosis Diagnostic studies for UTI consist of dipstick, urinalysis, and culture. No imaging studies are indicated in the"
+    },
+    {
+      "id": "rag-c2fddaf51cfa",
+      "title": "Male Urethritis: Practice Essentials, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/778374-overview",
+      "route": "abdomen",
+      "chunk_id": "5935ef4e9f87e4b51fdc_14",
+      "distance": 0.4489,
+      "excerpt": "increases this risk. Symptoms of urethritis (urethral syndrome) can also be due to sensitivity to chemicals in spermicidal or contraceptive jellies or foams. Idiopathic urethritis of childhood is of uncertain cause, perhaps related to dysfunctional elimination syndrome, and presents as blood-stained urethral discharge, bleeding between micturition, or dysuria in the 5- to 15-year-old male, and it can result in urethral stricture. Urethritis involves local mucous membrane epithelial cell damage or invasion by an infectious agent (bacterial, viral, or fungal) followed by inflammatory changes,"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "785f0c0c6062f2a6bdb017abdd3b04901bef189f4aa9517fb2af952b1c82e745",
+    "rag_corpus_hash": "21dfdbb850c4c242368ea4f805faf4af5c00879a58533161f22a3888445cdbeb",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:10:12+00:00"
+  }
+}

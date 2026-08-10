@@ -1,0 +1,379 @@
+{
+  "schema_version": 1,
+  "id": "supplemental_medications",
+  "label": "補充藥物",
+  "source_order": 29,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "medication_name",
+      "medication_dosage_and_frequency",
+      "medication_side_effects",
+      "other_medications",
+      "allergy_history"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 12,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "medication_name",
+      "prompt": "您需要補充的藥物名稱是什麼？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您需要補充的藥物名稱是什麼？"
+      ]
+    },
+    {
+      "field": "medication_dosage_and_frequency",
+      "prompt": "您的藥物劑量是多少？請描述劑量和服用頻率。",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您的藥物劑量是多少？請描述劑量和服用頻率。"
+      ]
+    },
+    {
+      "field": "medication_indication",
+      "prompt": "這種藥物是為了治療什麼疾病或症狀？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "這種藥物是為了治療什麼疾病或症狀？"
+      ]
+    },
+    {
+      "field": "prescribing_doctor",
+      "prompt": "您的藥物是由哪位醫生處方的？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您的藥物是由哪位醫生處方的？"
+      ]
+    },
+    {
+      "field": "last_medication_refill_time",
+      "prompt": "您上次補充藥物是在什麼時候？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您上次補充藥物是在什麼時候？"
+      ]
+    },
+    {
+      "field": "medication_non_adherence_reason",
+      "prompt": "您是否有未按醫囑服藥的情況？ 若有 請說明未按醫囑服藥的原因",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有未按醫囑服藥的情況？ 若有 請說明未按醫囑服藥的原因"
+      ]
+    },
+    {
+      "field": "medication_side_effects",
+      "prompt": "您是否有以下副作用或不良反應？請將以下有出現的或其他副作用或不良反應描述給我聽",
+      "kind": "choice",
+      "options": [
+        "頭暈",
+        "噁心",
+        "嘔吐",
+        "腹瀉",
+        "便秘",
+        "頭痛",
+        "皮疹或過敏反應",
+        "失眠",
+        "乏力"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有以下副作用或不良反應？請將以下有出現的或其他副作用或不良反應描述給我聽",
+        "頭暈",
+        "噁心",
+        "嘔吐",
+        "腹瀉",
+        "便秘",
+        "頭痛",
+        "皮疹或過敏反應",
+        "失眠",
+        "乏力"
+      ]
+    },
+    {
+      "field": "other_medications",
+      "prompt": "您是否有其他正在服用的藥物？ 若有 請進一步說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有其他正在服用的藥物？ 若有 請進一步說明"
+      ]
+    },
+    {
+      "field": "allergy_history",
+      "prompt": "是否有任何過敏史？ 若有 請進一步說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有任何過敏史？ 若有 請進一步說明"
+      ]
+    },
+    {
+      "field": "chronic_conditions",
+      "prompt": "您是否有任何慢性疾病或健康問題？ 若有 請進一步說明",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有任何慢性疾病或健康問題？ 若有 請進一步說明"
+      ]
+    },
+    {
+      "field": "needs_medication_reassessment",
+      "prompt": "您是否需要醫生重新評估或調整您的藥物？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否需要醫生重新評估或調整您的藥物？"
+      ]
+    },
+    {
+      "field": "other_supplemental_issues",
+      "prompt": "您是否有其他需要補充的情況或問題？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有其他需要補充的情況或問題？"
+      ]
+    }
+  ],
+  "review_notes": [],
+  "rag_sources": [
+    {
+      "id": "rag-c64e61230f91",
+      "title": "Lipid Profile (Triglycerides): Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2074115-overview",
+      "route": "common",
+      "chunk_id": "2c9f77ac2b60838a0f6d_25",
+      "distance": 0.5453,
+      "excerpt": "are critical values on a lipid profile (triglycerides)? How are lipid profile (triglycerides) levels results interpreted? How are specimens collected and prepared for a lipid profile (triglycerides)? Which panels include serum triglyceride? What are triglycerides? What are the USPSTF recommendations for lipid screening? What are the causes of an elevated lipid profile (triglycerides)? What is the association of an elevated lipid profile (triglycerides) with pancreatitis? What are the ACC/AHA guidelines on lipid profile (triglycerides) screening?"
+    },
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4541,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-0fbee16404b9",
+      "title": "Cardiac Markers: Definition and Efficacy, Markers of Myocardial Necrosis and Ischemia, Acute Coronary Syndrome Testing Strategy",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811905-overview",
+      "route": "safety",
+      "chunk_id": "60a8e9fb259d62f055c2_79",
+      "distance": 0.4841,
+      "excerpt": "Overview What are cardiac markers? What is the efficacy of cardiac markers? Where are troponin cardiac markers found and what reference ranges are used in troponin assays? How is creatine kinase-MB (CK-MB) used as a cardiac marker? How is myoglobin used as a cardiac marker? How are ischemia modified albumin (IMA) cardiac markers characterized and what do they indicate? What is the role of troponin cardiac markers in the diagnosis of myocardial infarction (MI)? How does the sensitivity, specificity, and precision of cardiac troponin assays vary? How is the creatine kinase-MB (CK-MB) relative"
+    },
+    {
+      "id": "rag-1d3d3891f923",
+      "title": "Diagnostic Influenza Tests: Reference Range, Interpretation, Collection and Diagnostic Methods",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2053517-overview",
+      "route": "common",
+      "chunk_id": "9938149389dea7f1fe21_27",
+      "distance": 0.5144,
+      "excerpt": "than rapid antigen tests. Questions & Answers Overview What are diagnostic influenza tests? How are diagnostic influenza tests interpreted? How are diagnostic influenza tests performed? What are the types of diagnostic influenza tests? When are diagnostic influenza tests indicated? What are the sensitivity and specificity of diagnostic influenza tests?"
+    },
+    {
+      "id": "rag-0ddcaaabd981",
+      "title": "Triiodothyronine: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2089598-overview",
+      "route": "common",
+      "chunk_id": "db5d21435125369652e8_3",
+      "distance": 0.5248,
+      "excerpt": "procedure Assessment of the signs and symptoms of thyroid disease Noting the use of medications, if any Advice for overnight fasting prior to collection Interpretation, counseling, treatment, monitoring, and follow-up by the referring physician All laboratories may not be equipped to perform thyroid testing, and samples may be sent to a reference laboratory in such cases, where specialized equipment is available. In general, thyroid hormones are not measured in isolation. A thyroid panel consists of essentially the baseline fT3, fT4, and thyroid-stimulating hormone (TSH). For future review,"
+    },
+    {
+      "id": "rag-3a54d09466a8",
+      "title": "Glucagon: Reference Range, Interpretation, Collection and Panels",
+      "source": "Laboratory Medicine (Medscape)",
+      "url": "https://reference.medscape.com/article/2089114-overview",
+      "route": "common",
+      "chunk_id": "9fabdfa72917c928253b_16",
+      "distance": 0.5337,
+      "excerpt": "What are the glucagon reference ranges? How are glucagon results interpreted? What are glucagonomas? What are requirements for the collection and transport of glucagon? What are requirements for glucagon stability? What are the metabolic actions of glucagon?"
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.5542,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-787fd5ee0bab",
+      "title": "Pneumonia in Immunocompromised Patients: Overview, Causes of Pneumonia, HIV/AIDS",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/807846-overview",
+      "route": "common",
+      "chunk_id": "c4c100811172e8df64cd_49",
+      "distance": 0.5546,
+      "excerpt": "immunocompromised transplant patients? What are the risk factors for pneumonia in immunocompromised patients with autoimmune conditions? What are the risk factors for pneumonia in patients with primary immunodeficiencies? What is the increased risk for pneumonia in immunocompromised patients on long-term steroid therapy? What is the incidence of pneumonia in immunocompromised asplenic patients? Which clinical history findings are characteristic of pneumonia in immunocompromised patients? Which physical findings are characteristic of pneumonia in immunocompromised patients? Which conditions are"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "61a4e2a5dd845d653d7ca8f2813fe74e757d878a5ec5fcfcd613b70ecb31afdb",
+    "rag_corpus_hash": "79f60d83e90d0d2fd788543302df1fb7922b40f53c970d8bf3d8a5f1dbb5018d",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:06:49+00:00"
+  }
+}

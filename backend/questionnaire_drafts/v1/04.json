@@ -1,0 +1,350 @@
+{
+  "schema_version": 1,
+  "id": "back_pain",
+  "label": "背痛",
+  "source_order": 4,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_time",
+      "prompt": "背痛什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "背痛什麼時候開始的？"
+      ]
+    },
+    {
+      "field": "onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是突然發作還是逐漸出現的？"
+      ]
+    },
+    {
+      "field": "pain_location",
+      "prompt": "疼痛的位置在哪裡？",
+      "kind": "choice",
+      "options": [
+        "下背部",
+        "上背部",
+        "中背部"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛的位置在哪裡？ 下背部 上背部 還是中背部呢"
+      ]
+    },
+    {
+      "field": "pain_radiation",
+      "prompt": "是局部還是牽連到其他部位？",
+      "kind": "choice",
+      "options": [
+        "局部",
+        "牽連到其他部位"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是局部還是牽連到其他部位？"
+      ]
+    },
+    {
+      "field": "point_tenderness",
+      "prompt": "有觸痛點嗎？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "有觸痛點嗎？"
+      ]
+    },
+    {
+      "field": "pain_timing",
+      "prompt": "疼痛是持續性還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "疼痛是持續性還是間歇性的？"
+      ]
+    },
+    {
+      "field": "aggravating_factors",
+      "prompt": "什麼姿勢會讓疼痛加重？",
+      "kind": "choice",
+      "options": [
+        "站姿",
+        "坐姿",
+        "身體活動的時候"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼姿勢會讓疼痛加重？比如站姿 坐姿 還是有身體活動的時候"
+      ]
+    },
+    {
+      "field": "relieving_factors",
+      "prompt": "什麼情況會讓疼痛緩解？",
+      "kind": "choice",
+      "options": [
+        "休息",
+        "藥物",
+        "按摩"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼情況會讓疼痛緩解？比如休息 藥物 還是 按摩呢"
+      ]
+    },
+    {
+      "field": "previous_episodes",
+      "prompt": "你以前有過類似的背痛嗎？",
+      "kind": "choice",
+      "options": [
+        "有",
+        "沒有"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你以前有過類似的背痛嗎？"
+      ]
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "請幫我觀察是否出現以下症狀並將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "胸痛",
+        "肚子痛",
+        "感到腿部或腳部麻木、刺痛或無力",
+        "有排尿或排便的困難，如失禁或尿滯留",
+        "小便會疼痛或是血尿",
+        "有發燒或畏寒",
+        "疼痛在夜間會加重或會把你痛醒",
+        "痛點附近皮膚有起水泡"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請幫我觀察是否出現以下症狀並將以下有出現的症狀描述給我聽",
+        "胸痛",
+        "肚子痛",
+        "感到腿部或腳部麻木、刺痛或無力",
+        "有排尿或排便的困難，如失禁或尿滯留",
+        "小便會疼痛或是休血尿",
+        "有發燒或畏寒",
+        "疼痛在夜間會加重或會把你痛醒",
+        "痛點附近皮膚有起水泡"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "RAG 文獻指出，伴隨胸痛、神經學症狀（如腿部無力、麻木）的背痛可能是警訊症狀，建議優先詢問。人工審查應確認這些症狀是否需要立即的醫療介入。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4113,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.5208,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-7ef049929997",
+      "title": "Seizure Assessment in the Emergency Department: Overview, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1609294-overview",
+      "route": "common",
+      "chunk_id": "2b6eb94497953c8a6426_13",
+      "distance": 0.5687,
+      "excerpt": "unconscious, family, friends, or prehospital personnel can be questioned). Other history findings may include the following: Recent noncompliance with medications History of central nervous system (CNS) pathology (stroke, neoplasms, recent surgery) History of systemic neoplasms, infections, metabolic disorders, or toxic ingestions Recent trauma or fall Alcohol abuse Recent travel or immigration to the United States Pregnancy Focal symptoms (partial seizure activity) that then progressed to a generalized seizure Physical examination A generalized seizure is recognizable at the bedside when"
+    },
+    {
+      "id": "rag-440a0100b66f",
+      "title": "Cysticercosis in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/781845-overview",
+      "route": "common",
+      "chunk_id": "8180322f2e2a0415d2af_4",
+      "distance": 0.5869,
+      "excerpt": "locations are skin, skeletal muscle, heart, eye, and the central nervous system (CNS). Involvement of the CNS leads to the most important manifestation of the disease, neurocysticercosis (NCC). Symptomatology of neurocysticercosis (NCC) ranges from completely asymptomatic to severe disease and death. Symptoms largely depend on the presence of pericystic inflammation, the absence of which will usually manifest as asymptomatic disease. Lack of perilesional inflammation is seen with both \"active\" healthy parasites, which are able to evade host immunity (an adaptive feat that may be abetted by the"
+    },
+    {
+      "id": "rag-6ee4590da383",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "safety",
+      "chunk_id": "53fc3e4f98765d889be9_32",
+      "distance": 0.5251,
+      "excerpt": "Subarachnoid hemorrhage - Emergency neuroradiology. Axial CT scan at the level of the mesencephalic cistern shows subarachnoid hemorrhage in the left sylvian fissure (green arrow) and the ambient cistern (red arrow). At least part of the density in the ambient cistern represents the aneurysm itself. Cerebral aneurysm - Emergency neuroradiology. Cerebral angiogram, anteroposterior projection, of a left vertebral artery injection demonstrates an aneurysm of the tip of the basilar artery (arrow). Parenchymal lesions Focal cortical hemorrhage is common as a sequela of head trauma and may be"
+    },
+    {
+      "id": "rag-7e43eb5f6b74",
+      "title": "Complex Regional Pain Syndrome in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/793370-overview",
+      "route": "safety",
+      "chunk_id": "53b354e14520b0f0479f_8",
+      "distance": 0.5297,
+      "excerpt": "with an identifiable nerve injury, many are not. Even \"microtrauma\" as might occur with an immunization may be responsible. The upper extremities are more likely to be involved than the lower. Entities that have led to RSDS include the following: Head injury Stroke Polio Amyotrophic lateral sclerosis (ALS) Myocardial infarction Polymyalgia rheumatica Operative procedures (eg, carpal tunnel release) Brachial plexopathy Cast/splint immobilization Minor extremity injury Prolonged bedrest A retrospective epidemiologic analysis of CRPS patients compared to patients with other pain disorders found"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "3304b7e9ff7ded868a4210f2ff65209dfdbd5d63c66125a498e3c884e888669f",
+    "rag_corpus_hash": "02653e72fcfbcc05537f20b962eee79312d404bcab73e319b4f94ad828217522",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:01:38+00:00"
+  }
+}

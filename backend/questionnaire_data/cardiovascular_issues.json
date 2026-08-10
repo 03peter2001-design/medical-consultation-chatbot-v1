@@ -1,0 +1,234 @@
+{
+  "id": "cardiovascular_issues",
+  "label": "心血管問題",
+  "section": "disease",
+  "review_status": "source_structured_provisional",
+  "provenance": {
+    "source_order": 9,
+    "source_sha256": "338bef36b09f394ab384268a339aba89e622418f922052a5ef0bdf8f8ef2f43c",
+    "pipeline_version": "questionnaire-structure-v2",
+    "model": "gemini-2.5-pro"
+  },
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "symptom_onset_pattern",
+      "presenting_symptoms",
+      "chest_discomfort_radiation",
+      "associated_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 10,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "symptom_onset_time",
+      "prompt": "心血管症狀什麼時候開始的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_onset_pattern",
+      "prompt": "是突然發作還是逐漸出現的？",
+      "kind": "choice",
+      "options": [
+        "突然發作",
+        "逐漸出現"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "presenting_symptoms",
+      "prompt": "你正經歷什麼症狀？",
+      "kind": "choice",
+      "options": [
+        "胸痛",
+        "呼吸困難",
+        "心悸",
+        "軀干或四肢出現水腫"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "chest_discomfort_radiation",
+      "prompt": "胸口不適是否牽連到其他部位？",
+      "kind": "choice",
+      "options": [
+        "手臂",
+        "頸部",
+        "下巴",
+        "背部"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "pain_discomfort_description",
+      "prompt": "你如何描述這種疼痛或不適？",
+      "kind": "choice",
+      "options": [
+        "尖銳",
+        "鈍痛",
+        "壓迫感",
+        "擠壓感",
+        "灼熱感"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_timing",
+      "prompt": "症狀是持續性的還是間歇性的？",
+      "kind": "choice",
+      "options": [
+        "持續性",
+        "間歇性"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_aggravating_factors",
+      "prompt": "什麼情況會讓症狀加重？",
+      "kind": "choice",
+      "options": [
+        "體力活動",
+        "壓力大",
+        "吃飯",
+        "躺下"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_relieving_factors",
+      "prompt": "什麼情況會讓症狀緩解？",
+      "kind": "choice",
+      "options": [
+        "休息",
+        "用藥",
+        "坐姿"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "symptom_preceding_events",
+      "prompt": "在症狀出現之前是否有像是運動或感到情緒壓力的情形",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    },
+    {
+      "field": "associated_symptoms",
+      "prompt": "請幫我觀察是否有其他相關症狀並將有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "感到呼吸困難",
+        "感到心跳不規則或加快",
+        "昏厥快暈倒或頭暈",
+        "腿、腳踝或腳有腫脹或是水腫",
+        "冒冷汗",
+        "感到噁心或嘔吐",
+        "肚子痛",
+        "背痛"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {}
+    }
+  ]
+}

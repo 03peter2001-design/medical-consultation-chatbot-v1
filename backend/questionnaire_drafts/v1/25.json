@@ -1,0 +1,400 @@
+{
+  "schema_version": 1,
+  "id": "industrial_machinery_accident",
+  "label": "工業機械事故",
+  "source_order": 25,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "accident_time",
+      "accident_location",
+      "injury_location",
+      "injury_type"
+    ],
+    "priority_fields": [
+      "bleeding",
+      "symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 11,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "accident_time",
+      "prompt": "事故發生的時間？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "事故發生的時間？"
+      ]
+    },
+    {
+      "field": "accident_location",
+      "prompt": "事故發生的地點在工廠 建築工地 農場 倉庫 還是其他地方呢？",
+      "kind": "choice",
+      "options": [
+        "工廠",
+        "建築工地",
+        "農場",
+        "倉庫"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "事故發生的地點在工廠 建築工地 農場 倉庫 還是其他地方呢？"
+      ]
+    },
+    {
+      "field": "machinery_type",
+      "prompt": "事故涉及的機械或設備類型是像起重機與挖土機的重型機械 、鋸子與鑽機的電動工具 、叉車與拖拉機的運輸工具還是像壓機與剪切機的生產設備 若以上接非 請進一步描述讓我知道",
+      "kind": "choice",
+      "options": [
+        "像起重機與挖土機的重型機械",
+        "鋸子與鑽機的電動工具",
+        "叉車與拖拉機的運輸工具",
+        "像壓機與剪切機的生產設備"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "事故涉及的機械或設備類型是像起重機與挖土機的重型機械 、鋸子與鑽機的電動工具 、叉車與拖拉機的運輸工具還是像壓機與剪切機的生產設備 若以上接非 請進一步描述讓我知道"
+      ]
+    },
+    {
+      "field": "injury_location",
+      "prompt": "您受傷的部位是在 頭 胸 腹 背 上肢 下肢還是其他地方呢？",
+      "kind": "choice",
+      "options": [
+        "頭",
+        "胸",
+        "腹",
+        "背",
+        "上肢",
+        "下肢"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您受傷的部位是在 頭 胸 腹 背 上肢 下肢還是其他地方呢？"
+      ]
+    },
+    {
+      "field": "injury_type",
+      "prompt": "受傷的類型是像切割傷 撞擊傷 擠壓傷 燒傷 還是有骨折呢？若以上皆非 請進一步描述讓我知道",
+      "kind": "choice",
+      "options": [
+        "切割傷",
+        "撞擊傷",
+        "擠壓傷",
+        "燒傷",
+        "骨折"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "受傷的類型是像切割傷 撞擊傷 擠壓傷 燒傷 還是有骨折呢？若以上皆非 請進一步描述讓我知道"
+      ]
+    },
+    {
+      "field": "bleeding",
+      "prompt": "您是否有出血？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有出血？"
+      ]
+    },
+    {
+      "field": "symptoms",
+      "prompt": "受傷後是否有出現疼痛、頭暈、呼吸困難、意識模糊或無力麻木的症狀？若以上皆非 請進一步描述讓我知道",
+      "kind": "choice",
+      "options": [
+        "疼痛",
+        "頭暈",
+        "呼吸困難",
+        "意識模糊",
+        "無力麻木"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "受傷後是否有出現疼痛、頭暈、呼吸困難、意識模糊或無力麻木的症狀？若以上皆非 請進一步描述讓我知道"
+      ]
+    },
+    {
+      "field": "first_aid_measures",
+      "prompt": "是否已經進行了急救措施？ 若有 請描述採取的措施",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否已經進行了急救措施？ 若有 請描述採取的措施"
+      ]
+    },
+    {
+      "field": "medical_history",
+      "prompt": "您是否有慢性疾病或正在服用的藥物？ 若有 請進一步說明你的慢性疾病或正在服用的藥物",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "您是否有慢性疾病或正在服用的藥物？ 若有 請進一步說明你的慢性疾病或正在服用的藥物"
+      ]
+    },
+    {
+      "field": "safety_training",
+      "prompt": "是否有相關的工作安全培訓？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是否有相關的工作安全培訓？"
+      ]
+    },
+    {
+      "field": "accident_cause",
+      "prompt": "事故發生的原因是像機械故障、人為錯誤、安全措施不到位還是有什麼其他因素嗎",
+      "kind": "choice",
+      "options": [
+        "機械故障",
+        "人為錯誤",
+        "安全措施不到位"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "事故發生的原因是像機械故障、人為錯誤、安全措施不到位還是有什麼其他因素嗎"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "工業機械事故可能導致嚴重創傷，例如意識模糊、呼吸困難、嚴重出血或骨折。這些情況需要立即啟動緊急醫療流程（如創傷小組），而非僅依賴標準問卷。應優先評估生命體徵（ABCs）。",
+      "source_ids": [
+        "rag-cc237759ee25",
+        "rag-3aef2d52c0bd",
+        "rag-7619661f37e2"
+      ],
+      "citation_review_status": "unverified"
+    },
+    {
+      "severity": "warning",
+      "note": "頭部受傷伴隨意識模糊、頭暈或無力麻木等症狀，可能表示有顱內損傷，應優先進行神經學評估與影像學檢查。",
+      "source_ids": [
+        "rag-5b964072ed0b",
+        "rag-7619661f37e2"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "chest",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.4994,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-6115057b8895",
+      "title": "Sternoclavicular Joint Injury in Emergency Medicine: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/828642-overview",
+      "route": "chest",
+      "chunk_id": "93b63b3f013ca7f2fc93_20",
+      "distance": 0.4771,
+      "excerpt": "causing clavicular displacement may present with similar signs and symptoms . Clinical Presentation"
+    },
+    {
+      "id": "rag-7619661f37e2",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "safety",
+      "chunk_id": "53fc3e4f98765d889be9_5",
+      "distance": 0.5153,
+      "excerpt": "management. Also see Ischemic Stroke in Emergency Medicine and Hemorrhagic Stroke. Clinical Presentation History See the list below: Age, comorbidities Head trauma Motor vehicle collision Fall/jump from height Assault Penetrating injury Loss of consciousness Headache Changes in vision Changes in strength or sensation Coordination or balance problems Loss of executive function or cognition Seizure Coagulation disorders or therapy Intoxication; history of substance abuse Previous neurosurgery Physical See the list below: Altered mental status; unresponsiveness; deficits in Glasgow Coma Scale"
+    },
+    {
+      "id": "rag-cc237759ee25",
+      "title": "Sternoclavicular Joint Injury in Emergency Medicine: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/828642-overview",
+      "route": "chest",
+      "chunk_id": "93b63b3f013ca7f2fc93_9",
+      "distance": 0.4802,
+      "excerpt": "further investigation by CT or MRI to make the diagnosis. Depending on the mechanism of injury (eg, motor vehicle crash) and the close proximity of the sternum and clavicle to the vital structures of the neck and chest, patients with sternoclavicular joint injuries may incur severe and life-threatening injuries. Foremost, therefore, the ABCs should be addressed during prehospital care, with rapid transport to an appropriate trauma care facility if indicated. For patients with seemingly isolated SJI, immobilization of the affected upper extremity with a sling stabilizes the joint and minimizes"
+    },
+    {
+      "id": "rag-774f2e10cd31",
+      "title": "Perilymphatic Fistula: Practice Essentials, History of the Procedure, Problem",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/856806-overview",
+      "route": "chest",
+      "chunk_id": "946610927a231214762d_22",
+      "distance": 0.5146,
+      "excerpt": "83% of their patients with traumatic PLF had complaints of sudden or fluctuating sensorineural loss. Vestibular symptoms occur in most patients. Balance disturbance can be described as true rotational vertigo, lightheadedness, disequilibrium, intolerance to motion, or any combination of these symptoms. Seltzer and McCabe reported such symptoms in 80% of patients with PLF, and Glasscock et al reported 77% incidence of true vertigo or disequilibrium. In obvious cases, membrane rupture is accompanied (or followed within a few minutes) by rapid, severe hearing loss; loud, roaring tinnitus; and"
+    },
+    {
+      "id": "rag-3aef2d52c0bd",
+      "title": "Penetrating Neck Trauma: Practice Essentials, History of the Procedure, Problem",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/433306-overview",
+      "route": "chest",
+      "chunk_id": "00fa3ded7b1b38e9881f_13",
+      "distance": 0.5116,
+      "excerpt": "bleeding Vascular, tracheal, or esophageal injury Neurologic deficit Vascular and/or spinal cord injury Hypotension Nonspecific; may be related to the neck injury or may indicate trauma elsewhere Proposed hard signs of airway injury include the following: Subcutaneous emphysema Tracheal, esophageal, or pulmonary injury Air bubbling through the wound Stridor or respiratory distress Laryngeal and/or esophageal injury Several so-called hard signs that strongly indicate vascular injury are as follows: Hematoma (expanding) Vascular injury Active external hemorrhage from the wound site Arterial"
+    },
+    {
+      "id": "rag-5b964072ed0b",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "chest",
+      "chunk_id": "53fc3e4f98765d889be9_0",
+      "distance": 0.5192,
+      "excerpt": "Overview Neuroimaging has become a key diagnostic tool in the emergency department. Complaints of weakness, dizziness, headache, and trauma lend themselves to rapid evaluation and diagnosis through the use of computed tomography (CT) and magnetic resonance imaging (MRI). This article focuses on the basic principles and key considerations in ordering and interpreting neuroimaging in the emergency department in conjunction with the radiologist. Trauma is the leading cause of death in patients younger than 45 years. Cranial trauma accounts for a substantial proportion of morbidity and mortality"
+    },
+    {
+      "id": "rag-cc15633d2f02",
+      "title": "Diaphragmatic Injury Management in the Emergency Department: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/822999-overview",
+      "route": "safety",
+      "chunk_id": "11996c158911670ee976_14",
+      "distance": 0.5475,
+      "excerpt": "They generally involve the liver or colon. lateral injuries are extremely rare, occurring in approximately 3% of the patients. Diaphragmatic injuries are often related to thoracic and abdominal organ injuries (aorta, kidney, hollow viscera, liver, lung, spleen, pelvic and rib fractures) and severe complications (deep vein thrombosis, pulmonary embolism, hemopneumothorax, pneumonia, respiratory distress, sepsis), with a mortality of 20% being reported. Clinical Presentation"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "235536f27b3c5b3ff2a8bc982bd85e29d6895c0300b7b896625781760e616c1d",
+    "rag_corpus_hash": "b0559e0a56dd6415ef30f483d46db0f73f83eec69edaf2f976a84570ec717f3b",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:05:20+00:00"
+  }
+}

@@ -1,0 +1,288 @@
+{
+  "schema_version": 1,
+  "id": "foreign_body",
+  "label": "異物",
+  "source_order": 20,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "onset_time"
+    ],
+    "priority_fields": [
+      "symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 6,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_time",
+      "prompt": "什麼時候開始有異物感？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼時候開始有異物感？ *"
+      ]
+    },
+    {
+      "field": "location",
+      "prompt": "異物感位於哪裡？比方說 眼睛 耳朵 喉嚨 鼻子 或皮膚",
+      "kind": "choice",
+      "options": [
+        "眼睛",
+        "耳朵",
+        "喉嚨",
+        "鼻子",
+        "皮膚"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "異物感位於哪裡？比方說 眼睛 耳朵 喉嚨 鼻子 或皮膚"
+      ]
+    },
+    {
+      "field": "size",
+      "prompt": "你能描述一下異物的大小嗎？ 是否小於2毫米 2至5毫米 或是超過5毫米以上呢",
+      "kind": "choice",
+      "options": [
+        "小於2毫米",
+        "2至5毫米",
+        "超過5毫米以上"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你能描述一下異物的大小嗎？ 是否小於2毫米 2至5毫米 或是超過5毫米以上呢"
+      ]
+    },
+    {
+      "field": "sharpness",
+      "prompt": "你能描述一下異物是否有尖銳處嗎",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你能描述一下異物是否有尖銳處嗎"
+      ]
+    },
+    {
+      "field": "material",
+      "prompt": "異物是什麼材料製成的？ 金屬 木頭 還是塑膠",
+      "kind": "choice",
+      "options": [
+        "金屬",
+        "木頭",
+        "塑膠"
+      ],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "異物是什麼材料製成的？ 金屬 木頭 還是塑膠"
+      ]
+    },
+    {
+      "field": "symptoms",
+      "prompt": "你有哪些症狀？ 請將以下有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "疼痛",
+        "腫脹",
+        "出血",
+        "呼吸困難、咳嗽或喘鳴",
+        "噁心、嘔吐、腹痛或吞嚥困難",
+        "視力變化、疼痛或分泌物",
+        "紅腫、發熱、化膿"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你有哪些症狀？ 請將以下有出現的症狀描述給我聽",
+        "疼痛",
+        "腫脹",
+        "出血",
+        "呼吸困難、咳嗽或喘鳴",
+        "噁心、嘔吐、腹痛或吞嚥困難",
+        "視力變化、疼痛或分泌物",
+        "紅腫、發熱、化膿"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "若異物位於呼吸道或消化道，並出現呼吸困難、吞嚥困難等警示症狀，可能需要緊急醫療介入。應優先評估氣道通暢與生命徵象。",
+      "source_ids": [
+        "rag-fa69ea7f9d7e"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "common",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.5277,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-6ee4590da383",
+      "title": "Emergency Neuroradiology: Overview, Clinical Presentation, Alternate Diagnoses",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/810904-overview",
+      "route": "safety",
+      "chunk_id": "53fc3e4f98765d889be9_32",
+      "distance": 0.5694,
+      "excerpt": "Subarachnoid hemorrhage - Emergency neuroradiology. Axial CT scan at the level of the mesencephalic cistern shows subarachnoid hemorrhage in the left sylvian fissure (green arrow) and the ambient cistern (red arrow). At least part of the density in the ambient cistern represents the aneurysm itself. Cerebral aneurysm - Emergency neuroradiology. Cerebral angiogram, anteroposterior projection, of a left vertebral artery injection demonstrates an aneurysm of the tip of the basilar artery (arrow). Parenchymal lesions Focal cortical hemorrhage is common as a sequela of head trauma and may be"
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.4607,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-1c2d5666ef34",
+      "title": "Trigonitis: Practice Essentials, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/438185-overview",
+      "route": "common",
+      "chunk_id": "7c959a69d50ebc8da140_11",
+      "distance": 0.5119,
+      "excerpt": "understanding of this elusive disease process. Epidemiology The frequency of trigonitis differs in various reports, but the literature consistently shows that trigonitis occurs almost exclusively in women of childbearing age. Nonkeratinizing squamous metaplasia of the bladder neck and trigone can be seen in 50-70% of premenopausal women and is considered a normal variant. In a study by Wiener et al that examined 100 grossly normal bladders at autopsy, 46% of premenopausal and postmenopausal women were to found to have squamous metaplasia; in comparison, only 7% of men were found to have"
+    },
+    {
+      "id": "rag-fa69ea7f9d7e",
+      "title": "Foreign Body Aspiration: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/298940-overview",
+      "route": "common",
+      "chunk_id": "5b6d67292725dc72ec88_12",
+      "distance": 0.5788,
+      "excerpt": "procedures, (2) have various oral appliances, (3) become intoxicated, (4) receive sedatives, or (5) may have neurological or psychiatric disorders are at increased risk of aspirating foreign bodies. Because young children and older persons with neurological, cognitive, or psychiatric disorders might not be able to provide their history, diagnosis may be delayed. In Limper and Prakash's 1990 study, the median age for adults (ie, patients >16 y) with foreign body aspirations was 60 years, with an age range of 18-88 years. Numerous studies concur that children younger than 16 years account for"
+    },
+    {
+      "id": "rag-4a208a837e29",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_21",
+      "distance": 0.518,
+      "excerpt": "trichomoniasis. Of these, 77% were asymptomatic. Race-related demographics In the National Longitudinal Study of Adolescent Health Study, significant differences in the prevalence of trichomoniasis among adolescents were noted by race: white, 1.2%; Asian, 1.8%; Latino, 2.1%; Native American, 4.1%; and African American, 6.9%. Considerable differences were also observed in the national NHANES 2001-2004 study conducted among women ages 14-49: non-Hispanic whites, 1.2%; Mexican Americans, 1.5%; and non-Hispanic blacks, 13.5%. Evidence suggests that T vaginalis infection likely increases HIV"
+    },
+    {
+      "id": "rag-5eeba6a1a2ac",
+      "title": "Latex Allergy: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/756632-overview",
+      "route": "common",
+      "chunk_id": "dd9970b5cca993dde8ee_5",
+      "distance": 0.5829,
+      "excerpt": "Images slideshow, to help identify a variety of allergens and symptoms. For related information, see Medscape's Allergy & Immunology Resource Center. Pathophysiology Latex exposure is associated with 3 clinical syndromes. Irritant dermatitis results from mechanical disruption of the skin due to the rubbing of gloves and accounts for the majority of latex-induced local skin rashes. It is not immune mediated, is not associated with allergic complications, and is not the subject of this article. It may be confused with Type IV hypersensitivity. Any chronic hand dermatitis in HCWs raises the risk"
+    },
+    {
+      "id": "rag-303c6a75d676",
+      "title": "Tinea in Emergency Medicine: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/787217-overview",
+      "route": "common",
+      "chunk_id": "d6ff316a73eac32d5001_14",
+      "distance": 0.5913,
+      "excerpt": "diseases, including tinea infections. Developing countries have high rates of tinea capitis, while developed countries have high rates of tinea pedis and onychomycosis. Low socioeconomic conditions are strongly linked to higher prevalence rates for skin infections, including tinea infections. A review of 18 studies representing large geographical areas determined that tinea capitis is present in up to 19.7% of the general population in developing countries. Mortality/Morbidity While mortality due to dermatophytes is very low, there is significant morbidity associated with these infections,"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "5b01f687b3ff33590786e3f3c990a7f2a1078872e8d4a21a76b1f74a181dc6aa",
+    "rag_corpus_hash": "11fa3e6b9e17fa63a04b3e9829d0d38dd7a249a1fa6b63e6dafc27664d47704a",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:01:13+00:00"
+  }
+}

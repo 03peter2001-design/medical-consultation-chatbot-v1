@@ -5,6 +5,7 @@ import sqlite3
 import tempfile
 import time
 import unittest
+import warnings
 from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import Mock, patch
@@ -77,6 +78,57 @@ class ConsultationRepositoryTests(unittest.TestCase):
             ConsultationRepository._enable_write_ahead_log(broken_connection)
         self.assertIs(raised.exception, disk_error)
         self.assertEqual(broken_connection.execute.call_count, 2)
+
+    def test_short_lived_connections_close_on_success_and_error(self):
+        original_connect = self.repository._connect
+        opened = []
+
+        class TrackedConnection:
+            def __init__(self, connection, *, fail=False):
+                self.connection = connection
+                self.fail = fail
+                self.closed = False
+
+            def __getattr__(self, name):
+                return getattr(self.connection, name)
+
+            def __enter__(self):
+                self.connection.__enter__()
+                return self
+
+            def __exit__(self, *args):
+                return self.connection.__exit__(*args)
+
+            def execute(self, *args, **kwargs):
+                if self.fail:
+                    raise sqlite3.OperationalError("synthetic query failure")
+                return self.connection.execute(*args, **kwargs)
+
+            def close(self):
+                self.closed = True
+                self.connection.close()
+
+        def tracked_connect(*, fail=False):
+            tracked = TrackedConnection(original_connect(), fail=fail)
+            opened.append(tracked)
+            return tracked
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", ResourceWarning)
+            with patch.object(self.repository, "_connect", side_effect=tracked_connect):
+                self.assertEqual(self.repository.count(), 0)
+            self.assertTrue(opened and all(connection.closed for connection in opened))
+
+            opened.clear()
+            with patch.object(
+                self.repository,
+                "_connect",
+                side_effect=lambda: tracked_connect(fail=True),
+            ):
+                with self.assertRaisesRegex(sqlite3.OperationalError, "synthetic"):
+                    self.repository.count()
+            self.assertTrue(opened and all(connection.closed for connection in opened))
+            gc.collect()
 
     def test_create_and_get_preserves_complete_result(self):
         record = {

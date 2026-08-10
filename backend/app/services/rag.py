@@ -30,7 +30,7 @@ def retrieve_context_block(
         traceback.print_exc()
         raise HTTPException(
             status_code=500,
-            detail=f"向量庫查詢失敗：{error}",
+            detail="向量庫查詢失敗，請稍後重試",
         ) from error
 
     title_counts: dict[str, int] = {}

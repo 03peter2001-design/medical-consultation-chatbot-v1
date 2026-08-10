@@ -1,0 +1,308 @@
+{
+  "schema_version": 1,
+  "id": "bite",
+  "label": "咬傷",
+  "source_order": 5,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [
+      "bite_time",
+      "bite_source_animal"
+    ],
+    "priority_fields": [
+      "systemic_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 7,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "bite_time",
+      "prompt": "什麼時候被咬的？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼時候被咬的？"
+      ]
+    },
+    {
+      "field": "bite_source_animal",
+      "prompt": "你知道是什麼動物或昆蟲咬你的？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你知道是什麼動物或昆蟲咬你的？"
+      ]
+    },
+    {
+      "field": "bite_location",
+      "prompt": "你在哪裡被咬傷的？是在台灣或是國外？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "你在哪裡被咬傷的？是在台灣或是國外？"
+      ]
+    },
+    {
+      "field": "initial_reaction",
+      "prompt": "被咬後的最初反應是什麼？",
+      "kind": "choice",
+      "options": [
+        "腫脹",
+        "紅腫",
+        "即時疼痛"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "被咬後的最初反應是什麼？ 腫脹  紅腫 或是 即時疼痛"
+      ]
+    },
+    {
+      "field": "local_symptom_changes",
+      "prompt": "請幫我觀察被咬傷的區域是否出現以下變化並將有出現的變化描述給我聽",
+      "kind": "choice",
+      "options": [
+        "紅腫加劇",
+        "皮疹擴散",
+        "腫脹",
+        "麻木",
+        "水泡"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請幫我觀察被咬傷的區域是否出現以下變化並將有出現的變化描述給我聽",
+        "紅腫加劇",
+        "皮疹擴散",
+        "腫脹",
+        "麻木",
+        "水泡"
+      ]
+    },
+    {
+      "field": "systemic_symptoms",
+      "prompt": "請幫我觀察是否有其他相關症狀並將有出現的症狀描述給我聽",
+      "kind": "choice",
+      "options": [
+        "發燒或發冷畏寒",
+        "咬傷周圍或身體其他部位有腫脹",
+        "咬傷處有紅腫、皮疹或是水泡",
+        "呼吸困難、呼吸急促或喘鳴",
+        "噁心、嘔吐或腹痛",
+        "頭痛、頭暈、無力或麻木",
+        "出現蕁麻疹、癢、或臉部、嘴唇、舌頭腫脹"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "請幫我觀察是否有其他相關症狀並將有出現的症狀描述給我聽",
+        "發燒或發冷畏寒",
+        "咬傷周圍或身體其他部位有腫脹",
+        "咬傷處有紅腫、皮疹或是水泡",
+        "呼吸困難、呼吸急促或喘鳴",
+        "噁心、嘔吐或腹痛",
+        "頭痛、頭暈、無力或麻木",
+        "出現蕁麻疹、癢、或臉部、嘴唇、舌頭腫脹"
+      ]
+    },
+    {
+      "field": "tetanus_vaccination_status",
+      "prompt": "五年內是否接受過破傷風類毒素的注射？",
+      "kind": "choice",
+      "options": [
+        "是",
+        "否"
+      ],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "五年內是否接受過破傷風類毒素的注射？"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "critical",
+      "note": "若患者回報「呼吸困難、呼吸急促或喘鳴」或「臉部、嘴唇、舌頭腫脹」，可能為過敏性休克徵兆，應優先處理或引導至緊急流程。此為未經人工核實的 RAG 建議。",
+      "source_ids": [
+        "rag-c0b6273bda01"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-3a6962026776",
+      "title": "Tick-Borne Diseases: Overview, Biology and Life Cycle of Ticks, Guidelines on the Diagnosis and Management of Tickborne Rickettsial Diseases",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/786652-overview",
+      "route": "common",
+      "chunk_id": "5f0c535325053b5addec_8",
+      "distance": 0.5079,
+      "excerpt": "suspected cases of AGS were identified in the United States. Places where the lone star tick is found are most affected. Cases predominantly occur in counties within the southern, midwestern, and mid-Atlantic regions. The primary management of mammalian meat allergy is avoidance of mammalian meat. The allergy can cause symptoms ranging from urticaria to angioedema and anaphylaxis. Delayed anaphylactic shock has also been reported to occur 4-6 hours after consumption of red meat. These symptoms are treated in the usual manner. Oral antihistamines are recommended for patients who remain"
+    },
+    {
+      "id": "rag-5eeba6a1a2ac",
+      "title": "Latex Allergy: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/756632-overview",
+      "route": "common",
+      "chunk_id": "dd9970b5cca993dde8ee_5",
+      "distance": 0.5035,
+      "excerpt": "Images slideshow, to help identify a variety of allergens and symptoms. For related information, see Medscape's Allergy & Immunology Resource Center. Pathophysiology Latex exposure is associated with 3 clinical syndromes. Irritant dermatitis results from mechanical disruption of the skin due to the rubbing of gloves and accounts for the majority of latex-induced local skin rashes. It is not immune mediated, is not associated with allergic complications, and is not the subject of this article. It may be confused with Type IV hypersensitivity. Any chronic hand dermatitis in HCWs raises the risk"
+    },
+    {
+      "id": "rag-a3e54dacc5b3",
+      "title": "Infectious Myositis: Background, Pathophysiology, Epidemiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/1168167-overview",
+      "route": "common",
+      "chunk_id": "5f6684809da1e58550a3_9",
+      "distance": 0.4819,
+      "excerpt": "weeks. Infection may be fatal if severe and involving other organs systems (eg, cardiac, pulmonary, CNS). Patient Education Travelers visiting area of endemic trichinosis should be educated on the hazards of eating raw or undercooked pork. Educate traveling diabetic patients concerning the need for prompt treatment of cutaneous infections and infected insect bites and to avoid strenuous activity. The Myositis Association of America serves as a resource for patients and the medical community. Clinical Presentation"
+    },
+    {
+      "id": "rag-c213cde023e1",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "route": "common",
+      "chunk_id": "533df8c4e1c8cc2bd460_3",
+      "distance": 0.5354,
+      "excerpt": "All observed symptoms and each one s severity Duration of the reaction Treatment provided and clinical response to treatment Most recent reaction Physical examination findings are most useful for the following: Assessing nutritional status, growth parameters, and signs of other allergic disease Helping to rule out other conditions that may mimic food allergy See Clinical Presentation for more detail. Diagnosis Laboratory studies that may be helpful include the following: Specific immunoglobulin E (IgE) antibody testing: Positive results primarily denote sensitization and may not confirm"
+    },
+    {
+      "id": "rag-614854882e76",
+      "title": "Trichomoniasis: Background, Pathophysiology, Etiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230617-overview",
+      "route": "common",
+      "chunk_id": "fe51da7e7dd5159afbad_3",
+      "distance": 0.484,
+      "excerpt": "Trichomoniasis is thought to be widely underdiagnosed owing to various factors, including a lack of routine testing, the low sensitivity of a commonly used diagnostic technique (wet mount microscopy), and nonspecific symptomatology. Self-diagnosis and self-treatment or diagnosis by practitioners without adequate laboratory testing may also contribute to misdiagnosis. Currently, the Centers for Disease Control and Prevention (CDC) recommends numerous molecular detection methods to diagnose trichomoniasis, including several validated nucleic acid amplification tests (NAATs) and an"
+    },
+    {
+      "id": "rag-f95f1749de8d",
+      "title": "Food Allergies: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/135959-overview",
+      "route": "common",
+      "chunk_id": "533df8c4e1c8cc2bd460_20",
+      "distance": 0.5829,
+      "excerpt": "between certain pollen and food allergens. For example, individuals with ragweed allergy may experience oropharyngeal symptoms following the ingestion of bananas or melons, and patients with birch pollen allergy may experience these symptoms following the ingestion of raw carrots, celery, potato, apple, peach or hazelnut. Mixed IgE/non-IgE gastrointestinal food allergy (eosinophilic esophagitis and gastroenteritis) Symptoms vary according to location of the eosinophilia. Typical symptoms include postprandial nausea, abdominal pain, and a sensation of early satiety. Eosinophilic esophagitis may"
+    },
+    {
+      "id": "rag-65b16e084fa2",
+      "title": "Trichinosis (Trichinellosis): Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape) | Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230490-overview",
+      "route": "safety",
+      "chunk_id": "18637b5c7017fc509666_17",
+      "distance": 0.4725,
+      "excerpt": "Those with mild symptoms improve in 2-3 weeks. Symptoms associated with heavy infections may persist for 2-3 months. Factors that may affect morbidity include the quantity of larvae ingested, the species of Trichinella (most notably T spiralis), and the immune status of the host. Patients succumb to exhaustion, pneumonia, pulmonary embolism, encephalitis, or cardiac failure and/or arrhythmia. Death from trichinosis usually occurs in 4-8 weeks but may occur as early as in 2-3 weeks. Race Although Trichinella infections may be related to cultural differences in food cooking and storing methods"
+    },
+    {
+      "id": "rag-c0b6273bda01",
+      "title": "Insect Bites: Background, Pathophysiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/769067-overview",
+      "route": "safety",
+      "chunk_id": "bd171df957b0cc6f2399_15",
+      "distance": 0.5502,
+      "excerpt": "diseases as humans travel to more remote areas of the country and the world. Additionally, exotic insects are often kept as pets (sometimes illegally) or can be encountered in shipments of foreign origin (eg, mantises, stick insects). Anaphylactic shock Anaphylactic shock is the most notable immediate risk associated with insect exposures. Hypersensitivity to otherwise harmless insect saliva, venom, body parts, excretions, or secretions can cause systemic responses in some individuals. Diagnosing the early phases of a systemic allergic reaction preceding anaphylactic shock is of paramount"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "ceac572b96c028e58f4474c8599e18aa836af5c0bb3225c41be71d249e9d153f",
+    "rag_corpus_hash": "ad7a5b9ee2e545a2851a2e1ff637a7dfbb167e073c87a4c5c9eba0c57ea12039",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:02:04+00:00"
+  }
+}

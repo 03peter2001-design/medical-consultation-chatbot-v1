@@ -16,12 +16,18 @@ def normalize_fact(raw: Any) -> dict[str, Any] | None:
     """Return a bounded fact or reject values outside the deployed vocabulary."""
     rules = clinical_fact_rules()
     allowed_fields = set(rules["record_fields"])
-    if not isinstance(raw, dict) or set(raw) != allowed_fields:
+    # ``route`` was added after the first sessions were persisted, so records
+    # without it stay valid and are treated as applying to every route.
+    if not isinstance(raw, dict) or set(raw) not in (
+        allowed_fields,
+        allowed_fields - {"route"},
+    ):
         return None
     code = str(raw.get("code", "")).strip()
     status = str(raw.get("status", "present")).strip().lower()
     evidence = str(raw.get("evidence", "")).strip()[:160]
     source = str(raw.get("source", "semantic")).strip()[:40] or "semantic"
+    route = str(raw.get("route", "") or "").strip()[:64]
     try:
         turn = max(0, int(raw.get("turn", 0)))
     except (TypeError, ValueError):
@@ -34,20 +40,76 @@ def normalize_fact(raw: Any) -> dict[str, Any] | None:
         "evidence": evidence,
         "source": source,
         "turn": turn,
+        "route": route,
     }
+
+
+def fact_key(fact: dict[str, Any]) -> tuple[str, str]:
+    return (fact.get("route", ""), fact["code"])
+
+
+def facts_for_route(
+    facts: Iterable[dict[str, Any]] | None,
+    route: str,
+) -> dict[str, dict[str, Any]]:
+    """Index facts by code for one route, route-scoped evidence winning.
+
+    Codes such as ``onset_sudden`` are shared by several disease tables, so an
+    answer given about the chest must not be read as an answer about the
+    abdomen. Facts with no route are unscoped and apply everywhere.
+    """
+    indexed: dict[str, dict[str, Any]] = {}
+    for fact in merge_facts([], facts):
+        fact_route = fact.get("route", "")
+        if fact_route and fact_route != route:
+            continue
+        if fact_route or fact["code"] not in indexed:
+            indexed[fact["code"]] = fact
+    return indexed
 
 
 def merge_facts(
     existing: Iterable[dict[str, Any]] | None,
     incoming: Iterable[dict[str, Any]] | None,
 ) -> list[dict[str, Any]]:
-    """Merge facts deterministically; newer explicit evidence wins by code."""
-    merged: dict[str, dict[str, Any]] = {}
+    """Merge facts deterministically; newer explicit evidence wins per route."""
+    merged: dict[tuple[str, str], dict[str, Any]] = {}
     for raw in [*(existing or []), *(incoming or [])]:
         fact = normalize_fact(raw)
         if fact:
-            merged[fact["code"]] = fact
-    return [merged[code] for code in sorted(merged)]
+            merged[fact_key(fact)] = fact
+    return [merged[key] for key in sorted(merged)]
+
+
+def fact_conflicts(
+    existing: Iterable[dict[str, Any]] | None,
+    incoming: Iterable[dict[str, Any]] | None,
+) -> list[dict[str, Any]]:
+    """Report facts the patient has just contradicted.
+
+    The merge keeps the newer answer, which is usually the right call, but a
+    silent overwrite hides the two cases that matter: the patient corrected
+    themselves, or the extractor got it wrong the first time. Either way a
+    clinician has to see that the record changed.
+    """
+    previous = {fact_key(fact): fact for fact in merge_facts([], existing)}
+    conflicts = []
+    for fact in merge_facts([], incoming):
+        earlier = previous.get(fact_key(fact))
+        if earlier is None or earlier["status"] == fact["status"]:
+            continue
+        conflicts.append(
+            {
+                "code": fact["code"],
+                "route": fact.get("route", ""),
+                "previous_status": earlier["status"],
+                "previous_evidence": earlier["evidence"],
+                "current_status": fact["status"],
+                "current_evidence": fact["evidence"],
+                "turn": fact["turn"],
+            }
+        )
+    return conflicts
 
 
 def facts_from_assessment(
@@ -55,6 +117,7 @@ def facts_from_assessment(
     *,
     turn: int,
     source: str,
+    route: str = "",
 ) -> list[dict[str, Any]]:
     """Convert the evidence-grounded semantic extraction into fact records."""
     facts: list[dict[str, Any]] = []
@@ -70,6 +133,7 @@ def facts_from_assessment(
                     "evidence": value.evidence,
                     "source": source,
                     "turn": turn,
+                    "route": route,
                 }
             )
     symptom_mappings = clinical_fact_rules()["symptom_mappings"]
@@ -83,6 +147,7 @@ def facts_from_assessment(
                     "evidence": symptom.evidence,
                     "source": source,
                     "turn": turn,
+                    "route": route,
                 }
             )
     for finding in [*assessment.findings, *assessment.negated_findings]:
@@ -93,6 +158,7 @@ def facts_from_assessment(
                 "evidence": finding.evidence,
                 "source": source,
                 "turn": turn,
+                "route": route,
             }
         )
     return merge_facts([], facts)
@@ -182,6 +248,13 @@ def filter_question_by_questionnaire_answers(
 
 def facts_from_legacy_data(data: dict[str, Any]) -> list[dict[str, Any]]:
     """Reconstruct conservative facts from stored questionnaires without an LLM."""
+    existing_facts = data.get("_clinical_facts", [])
+    # An explicit fact stream is authoritative. Mixing it with reconstruction
+    # from unscoped legacy fields would duplicate route-scoped live answers and
+    # leak the primary questionnaire into secondary disease tables.
+    if existing_facts:
+        return merge_facts([], existing_facts)
+
     rules = clinical_fact_rules()
     text = "、".join(
         str(data.get(field, "")) for field in rules["legacy_text_fields"] if data.get(field)
@@ -193,6 +266,7 @@ def facts_from_legacy_data(data: dict[str, Any]) -> list[dict[str, Any]]:
             "evidence": term,
             "source": "legacy_questionnaire",
             "turn": 0,
+            "route": "",
         }
         for code, terms in rules["legacy_terms"].items()
         for term in terms
@@ -217,6 +291,7 @@ def facts_from_legacy_data(data: dict[str, Any]) -> list[dict[str, Any]]:
                 ),
                 "source": "legacy_questionnaire",
                 "turn": 0,
+                "route": "",
             }
         )
     semantic = data.get("_semantic_safety_state") or data.get("_chief_assessment", {}).get(
@@ -234,7 +309,7 @@ def facts_from_legacy_data(data: dict[str, Any]) -> list[dict[str, Any]]:
             )
         except Exception:
             pass
-    return merge_facts(data.get("_clinical_facts", []), facts)
+    return merge_facts(existing_facts, facts)
 
 
 def filter_question_by_known_facts(
@@ -246,7 +321,10 @@ def filter_question_by_known_facts(
     if filtered.get("kind") != "choice":
         return filtered
 
-    known = {fact["code"]: fact["status"] for fact in merge_facts([], facts)}
+    known = {
+        code: fact["status"]
+        for code, fact in facts_for_route(facts, str(filtered.get("route") or "")).items()
+    }
     if not known:
         return filtered
 

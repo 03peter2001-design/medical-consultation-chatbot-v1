@@ -5,6 +5,8 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Any
 
+from domain.questionnaires import clinical_domain
+
 from .clinical_facts import facts_from_assessment
 from .models import ChiefComplaintAssessment
 from .rule_config import clinical_fact_descriptions, load_safety_rules
@@ -106,9 +108,13 @@ def detect_red_flags(
     condition_candidates = rules["urgent_condition_candidates"]
     flags: list[SafetyFlag] = []
 
+    # A complaint word decides the questionnaire, not the anatomy. "心悸" and
+    # "喘" describe the same chest that "胸痛" does, so a route borrows its
+    # clinical domain's rules on top of the universal ones.
+    rule_routes = list(dict.fromkeys(filter(None, [route, clinical_domain(route)])))
     phrase_rules = [
         *raw_rules["universal"],
-        *raw_rules["routes"].get(route or "", []),
+        *(rule for name in rule_routes for rule in raw_rules["routes"].get(name, [])),
     ]
     for rule in phrase_rules:
         if flag := _phrase_flag(
@@ -120,7 +126,7 @@ def detect_red_flags(
             flags.append(flag)
 
     for rule in raw_rules["combinations"]:
-        if rule["route"] != route:
+        if rule["route"] not in rule_routes:
             continue
         evidence = [
             _first_affirmed(text, group["terms"], negation) for group in rule["all_term_groups"]
@@ -227,10 +233,15 @@ def detect_structured_red_flags(
         if finding.status == "present" and finding.evidence
     }
     supported = set(rules["supported_routes"])
+    # ``primary_in`` predicates are written against the three domains that own a
+    # disease table, so a complaint routed to a later questionnaire is resolved
+    # to its domain before matching; otherwise none of those rules can fire.
     primary = (
         assessment.primary_symptom
         if assessment.primary_symptom in {*supported, "other"}
-        else route_hint
+        else clinical_domain(assessment.primary_symptom)
+        or clinical_domain(route_hint)
+        or route_hint
     )
 
     flags: list[SafetyFlag] = []

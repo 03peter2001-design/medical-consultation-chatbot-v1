@@ -1,0 +1,255 @@
+{
+  "schema_version": 1,
+  "id": "weakness",
+  "label": "無力虛弱",
+  "source_order": 48,
+  "section": "disease",
+  "review_status": "provisional",
+  "live_route_overlap": null,
+  "policy": {
+    "schema_version": 2,
+    "selection_strategy": "fixed_order",
+    "required_fields": [],
+    "priority_fields": [
+      "location_of_weakness",
+      "generalized_weakness_symptoms"
+    ],
+    "coverage_threshold": 1.0,
+    "max_turns": 5,
+    "frontier_vote_margin": 0,
+    "frontier_max_candidates": 1
+  },
+  "questions": [
+    {
+      "field": "onset_of_weakness",
+      "prompt": "什麼時候開始覺得無力 ？",
+      "kind": "duration",
+      "options": [],
+      "multiple": false,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [
+        "1小時前",
+        "1天前",
+        "1週前",
+        "1個月前"
+      ],
+      "units": [
+        "分鐘前",
+        "小時前",
+        "天前",
+        "週前",
+        "個月前",
+        "年前"
+      ],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "什麼時候開始覺得無力 ？"
+      ]
+    },
+    {
+      "field": "location_of_weakness",
+      "prompt": "是全身無力、手臂無力、腳無力還是半側身體無力？",
+      "kind": "choice",
+      "options": [
+        "全身無力",
+        "手臂無力",
+        "腳無力",
+        "半側身體無力"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是全身無力、手臂無力、腳無力還是半側身體無力？"
+      ]
+    },
+    {
+      "field": "weakness_related_to_pain",
+      "prompt": "是因為身體有部位疼痛，或是因為活動時會引發疼痛不敢使力？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "是因為身體有部位疼痛，或是因為活動時會引發疼痛不敢使力？"
+      ]
+    },
+    {
+      "field": "limb_weakness_symptoms",
+      "prompt": "如果是手腳無力，除了沒有力氣外，是否感到麻木或刺痛？",
+      "kind": "text",
+      "options": [],
+      "multiple": false,
+      "allow_other": false,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "如果是手腳無力，除了沒有力氣外，是否感到麻木或刺痛？"
+      ]
+    },
+    {
+      "field": "generalized_weakness_symptoms",
+      "prompt": "如果是全身無力，還有其他症狀嗎？請將以下有出現的症狀描述讓我知道",
+      "kind": "choice",
+      "options": [
+        "頭暈",
+        "發燒",
+        "咳嗽，有痰，流鼻水",
+        "腹痛，上吐下瀉",
+        "頻尿，小便疼痛",
+        "胸痛，胸悶或是喘"
+      ],
+      "multiple": true,
+      "allow_other": true,
+      "exclusive_options": [],
+      "quick_options": [],
+      "units": [],
+      "placeholder": "",
+      "condition": null,
+      "option_conditions": {},
+      "semantic_options": {},
+      "source_lines": [
+        "如果是全身無力，還有其他症狀嗎？請將以下有出現的症狀描述讓我知道",
+        "頭暈",
+        "發燒",
+        "咳嗽，有痰，流鼻水",
+        "腹痛，上吐下瀉",
+        "頻尿，小便疼痛",
+        "胸痛，胸悶或是喘"
+      ]
+    }
+  ],
+  "review_notes": [
+    {
+      "severity": "warning",
+      "note": "半側身體無力、胸痛、胸悶或喘可能是中風或心臟疾病的警訊症狀，應優先詢問。RAG 文獻提及局灶性神經功能缺損（focal neurologic deficits）、胸痛（chest pain）、呼吸困難（dyspnea）為警訊症狀。",
+      "source_ids": [
+        "rag-d4cb3cb8cf26"
+      ],
+      "citation_review_status": "unverified"
+    }
+  ],
+  "rag_sources": [
+    {
+      "id": "rag-d4cb3cb8cf26",
+      "title": "Syncope: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/811669-overview",
+      "route": "chest",
+      "chunk_id": "9f7eb5027998a34eb6c2_3",
+      "distance": 0.3531,
+      "excerpt": "Red flag symptoms - Exertional onset, chest pain, dyspnea, low back pain, palpitations, severe headache, focal neurologic deficits, diplopia, ataxia, or dysarthria Other information that should be obtained includes the following: Detailed account of the event from any available witnesses (eg, whether patient experienced postevent confusion) Patient s medication history Patient s personal or familial medical history of cardiac disease A complete physical examination is required, with particular attention to the following: Analysis of vital signs Measurement of the glucose level by rapid"
+    },
+    {
+      "id": "rag-774f2e10cd31",
+      "title": "Perilymphatic Fistula: Practice Essentials, History of the Procedure, Problem",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/856806-overview",
+      "route": "headache",
+      "chunk_id": "946610927a231214762d_22",
+      "distance": 0.3998,
+      "excerpt": "83% of their patients with traumatic PLF had complaints of sudden or fluctuating sensorineural loss. Vestibular symptoms occur in most patients. Balance disturbance can be described as true rotational vertigo, lightheadedness, disequilibrium, intolerance to motion, or any combination of these symptoms. Seltzer and McCabe reported such symptoms in 80% of patients with PLF, and Glasscock et al reported 77% incidence of true vertigo or disequilibrium. In obvious cases, membrane rupture is accompanied (or followed within a few minutes) by rapid, severe hearing loss; loud, roaring tinnitus; and"
+    },
+    {
+      "id": "rag-fd6f27eab334",
+      "title": "Trench Fever: Practice Essentials, Background, Pathophysiology",
+      "source": "Infectious Diseases (Medscape)",
+      "url": "https://emedicine.medscape.com/article/230294-overview",
+      "route": "headache",
+      "chunk_id": "a1a4b32400076d4498d9_2",
+      "distance": 0.4247,
+      "excerpt": "frontal or retro-orbital headache, often associated with a stiff neck and photophobia Neuropsychiatric symptoms, such as weakness, depression, restlessness, and insomnia Conjunctivitis Dyspnea Diffuse abdominal pain, often associated with anorexia, nausea, vomiting, weight loss, diarrhea, and constipation Bone pain, particularly involving the shins; loin pain Erythematous, macular rash Urban trench fever typically includes 1 or more of these symptoms, but the presentation tends to be more variable. Three additional syndromes are associated with B quintana infection, as follows: Chronic"
+    },
+    {
+      "id": "rag-5fd2ae165f07",
+      "title": "Heart Failure: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/163062-overview",
+      "route": "chest",
+      "chunk_id": "4d6cbe4e1c12469911bd_4",
+      "distance": 0.3793,
+      "excerpt": "activity Class II: Slight limitation of physical activity Class III: Marked limitation of physical activity Class IV: Symptoms occur even at rest; discomfort with any physical activity The American College of Cardiology/American Heart Association (ACC/AHA) staging system is defined by the following four stages : Stage A: High risk of heart failure but no structural heart disease or symptoms of heart failure Stage B: Structural heart disease but no symptoms of heart failure Stage C: Structural heart disease and symptoms of heart failure Stage D: Refractory heart failure requiring specialized"
+    },
+    {
+      "id": "rag-eef6512cd1af",
+      "title": "Hyperkalemia in Emergency Medicine: Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/766479-overview",
+      "route": "chest",
+      "chunk_id": "603fbb87de7ec375134e_2",
+      "distance": 0.3948,
+      "excerpt": "and neurologic symptoms predominate): Generalized fatigue Weakness Paresthesias Paralysis Palpitations Evaluation of vital signs is essential for determining the patient s hemodynamic stability and the presence of cardiac arrhythmias related to hyperkalemia. Additional important components of the physical exam may include the following: Cardiac examination may reveal extrasystoles, pauses, or bradycardia Neurologic examination may reveal diminished deep tendon reflexes or decreased motor strength In rare cases, muscular paralysis and hypoventilation may be observed Signs of renal failure, such"
+    },
+    {
+      "id": "rag-ec6bf7bbe174",
+      "title": "Delirium Tremens (DTs): Practice Essentials, Background, Pathophysiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/166032-overview",
+      "route": "headache",
+      "chunk_id": "3206c509f2869bb4033e_1",
+      "distance": 0.4483,
+      "excerpt": "blood pressure). Signs and symptoms of delirium tremens Signs and symptoms can include the following: Minor withdrawal: Tremor, anxiety, nausea, vomiting, and insomnia Major withdrawal: Visual hallucinations and auditory hallucinations, whole body tremor, vomiting, diaphoresis, and hypertension Withdrawal seizures Delirium tremens: Agitation, global confusion, disorientation, hallucinations, fever, hypertension, diaphoresis, autonomic hyperactivity (tachycardia and hypertension) and profound global confusion (hallmark of DTs) See History and Physical Examination. Treatments for delirium"
+    },
+    {
+      "id": "rag-28637ee75fee",
+      "title": "Acute Hypopituitarism: Overview, Diagnostic Considerations, Hormone Deficiency Symptoms",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/767828-overview",
+      "route": "safety",
+      "chunk_id": "87996f6a71b53073e20c_3",
+      "distance": 0.4407,
+      "excerpt": "rate. The setting is not uncommon in which an emergency physician is evaluating a patient with complaints of weakness, fatigue, or altered mental status without a clear diagnosis. Subtle, but still abnormal, vital signs, such as slightly reduced blood pressure or heart rate, may be the only initial clues to suggest a pituitary deficiency rather than a relatively benign etiology. Emergency physicians frequently provide care to patients at risk of developing hypopituitarism. Risk factors include, but are not limited to, TBI, cocaine use, subarachnoid hemorrhage, and postpartum hypotension (a"
+    },
+    {
+      "id": "rag-addde1c30fc5",
+      "title": "Hypertensive Heart Disease: Overview, Etiology, Epidemiology",
+      "source": "Emergency Medicine (Medscape)",
+      "url": "https://emedicine.medscape.com/article/162449-overview",
+      "route": "safety",
+      "chunk_id": "66b33c95b2ca1af9c721_34",
+      "distance": 0.4658,
+      "excerpt": "arm Provoked by emotional or physical exertion Relieved with rest or sublingual nitroglycerin However, patients may also present with atypical symptoms without chest pain, such as exertional dyspnea or excessive fatigue, commonly referred to as an angina equivalent. Female patients, in particular, are more likely to present atypically. Patients may present with chronic, stable angina or acute coronary syndrome, including myocardial infarction without ST-segment elevation and acute myocardial infarction with ST elevation. Ischemic electrocardiographic (ECG) changes may be found in individuals"
+    }
+  ],
+  "generation": {
+    "method": "one-time-local-rag-gemini-questionnaire-structuring",
+    "pipeline_version": "questionnaire-structure-v2",
+    "provider": "gemini",
+    "model": "gemini-2.5-pro",
+    "source_sha256": "4bfba5c068ee0204266896c3764889f5d6d40fe4ee3c0cad9211409300082dc7",
+    "rag_corpus_hash": "3bbb09ab03cb2004a310a879517b12a997aa07be35c4399acbbaf05ceb1495c6",
+    "rag_index_version": "v2",
+    "rag_collections": [
+      "chest",
+      "headache",
+      "abdomen",
+      "common",
+      "safety"
+    ],
+    "temperature": 0,
+    "max_output_tokens": 12000,
+    "generated_at": "2026-08-07T09:08:49+00:00"
+  }
+}

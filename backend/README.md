@@ -3,6 +3,154 @@
 `backend/` 是 FastAPI 應用、AMIE-inspired 確定性問診、SQLite repository、
 RAG 查詢服務與 FHIR／SNOMED 整合所在位置。
 
+## 服務版本
+
+目前版本：**v1.3.0（2026-08-09）**。
+
+此版本號是依 `devlog/2026-07-27.md` 至 `devlog/2026-08-07.md` 回溯整理的
+後端服務文件基線，目前沒有對應的 Git tag 或獨立 release；它也不表示其中的
+疾病表、Safety 規則、問卷或其他臨床內容已取得臨床核准。
+
+服務版本與下列既有版本機制彼此獨立，不可互相替代：
+
+- API 的 `/v1` 是 HTTP 契約前綴，不是後端服務的 SemVer。
+- SQLite schema version 是資料庫遷移版本；本基線於 2026-08-05 升至 version 6。
+- RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
+- Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
+  revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v1.3.0 (2026-08-09)
+
+- 每場問診記錄 `interview_length` 觀測值（各 section 題數、病歷預填題數、漏斗未問
+  題數、預填覆蓋率），寫入 `amie_state` 與 `_amie`。僅保存欄位名與計數，不含任何
+  答案或臨床內容；不改變任何選題、完診或安全決策。
+- 新增 `scripts/measure_interview_length.py`，以合成且決定性的作答比較「提案中的
+  單頁多選批次」與現行逐題流程。批次化本身未實作，因為它會改變 `next_question`
+  契約與病人流程，屬待決策項目。
+- 量測揭露兩項既有行為，已記錄於 `docs/funnel_clinical_signoff.md` 第 5、6 節並以
+  測試鎖定，本版未修改臨床政策：
+  - active 三痛問卷與共用病史有 78 個選項沒有 fact 對應
+    （`chest.cardio` 16／16、`chest.surgery` 12／12、`history.chronic` 7／7 等）。
+    這些選項不會影響疾病投票，但欄位仍可因 required／priority 政策而被詢問。
+  - `smoke`／`chronic`／`past_meds` 不在任何路由的 `required_fields` 且 utility 恆為
+    0；同一份胸痛問卷，合成作答選第一個選項時 18 題完診並問到三者，選最後一個
+    選項時 6 題完診且三者皆未詢問。
+- 驗證：`ruff check .` 通過；`ruff format --check` 對本次變更的 5 個 Python
+  檔案通過；`unittest discover -s tests` 共 356 項，354 項通過。僅 2 項 eHIS
+  static-contract 因未掛載外部 Windows 原始碼而 error，本專案內沒有產品 assertion
+  failure。`pyright` 與 `lint-imports` 未安裝於 venv，本次未執行亦未安裝。
+
+### v1.2.0 (2026-08-09)
+
+- Safety rule loader 依原子檔案 signature 自動刷新，讓已啟動的多個 worker 在下一次
+  問診即可讀到 publisher 寫入的新 revision，不再依賴單一 process 的 cache clear。
+- Async 病患與醫師 routes 將同步 chief extraction、AMIE turn 及 LLM generation 移至
+  bounded worker；可用 `CLINICAL_IO_CONCURRENCY` 與 `CLINICAL_IO_TIMEOUT_SECONDS`
+  設定容量及逾時，病患逾時 fail closed 至人工 handoff。
+- API error response 保留既有 `detail` 並加入 `error_code`、`correlation_id` 與 headers；
+  validation 不反射輸入，internal exception 原文不會出現在 response 或 log。
+- Consultation repository 的每個短生命週期 SQLite connection 現在於成功、rollback 與
+  exception 路徑都確實關閉。
+- 完整 backend suite 共 344 項，342 項通過；僅 2 項外部 eHIS static-contract tests
+  因本機未掛載 `D:\\ehis\\eHIS` 而無法執行。Ruff、OpenAPI drift 及相關並行／錯誤／
+  connection regression checks 通過。
+
+### v1.1.0 (2026-08-09)
+
+- 將 49 份尚未取得臨床簽核的結構化問卷保留為候選內容；runtime 僅啟用既有
+  胸痛、頭痛、腹痛路由，缺少簽核時 fail closed，不把 provisional 內容送入病人流程。
+- promotion CLI 現在驗證 reviewer、日期、來源與路由 catalog SHA-256、逐路由核准
+  及 review note resolution，並保留稽核來源；frontend exporter 新增原子寫入、
+  `--check`，且只有明示 `--frontend-v2` 才更新正式部署產物。
+- 修正英文短字串路由誤判；多主訴問診改為逐路由計算疾病 assessment、frontier、
+  must-not-miss 與完成條件，避免次要主訴尚未完成時提前結束。
+- live ClinicalFact 成為語意事實的權威來源，避免 legacy 重建產生未限定路由的重複
+  fact；同一 finding 的較新更正會取代舊狀態，衝突仍保留於 audit。
+- 固定順序候選路由不再借用胸痛／頭痛／腹痛疾病表。未簽核的三個既有問卷選項
+  已撤回，相關臨床政策仍記錄於 signoff 文件等待合格人員決定。
+- 驗證包含 334 項 backend tests（332 通過；2 項因外部 eHIS 原始碼未掛載而無法
+  執行）、Ruff、26 個變更 Python 檔格式檢查，以及兩份 frontend export drift 檢查。
+
+### v1.0.0（2026-08-07）
+
+這是目前第一個文件化的服務版本基線，涵蓋以下已記錄更新：
+
+#### 2026-07-27
+
+- 將主訴、基本資料、一般病史及胸痛、頭痛、腹痛問卷拆成具 schema 驗證、
+  lazy loading 與快取的 JSON 動態問卷，並依自由主訴選擇問診路由。
+- 統一 Groq／Gemini LLM provider，處理 Gemini thinking budget 與空回應重試，
+  並更新問診、語音辨識、結構化回答及六段式報告流程。
+- 建立 FHIR `$everything` 預填映射及合成病例；身分證字號只用於 FHIR 查詢，
+  並排除本次 encounter diagnosis。
+- 建立 RAG v2 語料清理、分類、versioned Chroma collections、RRF 合併及
+  legacy／v2 評估工具；查詢翻譯會遮蔽直接識別資訊，失敗時回退多語檢索。
+
+#### 2026-07-28
+
+- 將 FastAPI 後端由單一入口拆分為 `app`、`domain`、`infrastructure`、
+  `knowledge` 與 `scripts` 等分層模組。
+- 導入 AMIE-inspired 狀態感知問診、具原文 evidence 的 ClinicalFact、動態選題、
+  兩層確定性 Safety 判定及可稽核逐輪摘要；模型不直接決定 urgent／routine。
+- 新增 SQLite consultation repository，支援病例建立、搜尋、分頁、刪除、摘要狀態
+  與結構化報告快取；病例先保存並核發編號，再於背景產生摘要。
+- 加入疼痛區域、輸入驗證、TW Core 術語參考與合成 FHIR 測試資料，並建立後端
+  lint、型別、coverage、依賴方向及供應鏈檢查設定。
+
+#### 2026-07-29
+
+- 將主訴抽取收斂為 evidence-grounded 白名單流程，限制各症狀 route 的 fact，
+  支援起始時間、持續時間、問卷預填及依病人情境過濾不適用選項。
+- 建立胸痛、頭痛、腹痛的版本化固定疾病表；支持票、反對票、完整度、穩定排序、
+  Safety 必問題、70% 停止條件及 24 輪上限均由程式決定，RAG 不參與病患端評分。
+- 新增 Safety 規則管理 API，包含管理權杖、schema 驗證、版本衝突、原子更新與
+  更新前稽核快照；LLM 助理只能產生待醫師確認的既有規則草稿。
+- 建立 SNOMED CT RF2 驗證、HAPI 匯入、本機 FTS 索引、`$lookup` 代理及疾病 coding
+  registry；同時支援 SMART OAuth 後的 FHIR 預填與同源 `/api` reverse proxy。
+
+#### 2026-08-04
+
+- 擴充疾病票數、ClinicalFact 與組合／原文 Safety 的獨立治理流程，加入 reviewer、
+  `safety_rule_codes`、發布確認、差異稽核、原子寫入及失敗回復。
+- 正式 API 統一採 `/v1` 前綴，保留未版本化相容別名但不納入 OpenAPI；補上具名
+  response model、錯誤 envelope、OpenAPI 匯出及契約檢查。
+- 重整醫師速覽：模型只壓縮既有病史；最多三個可能疾病及支持理由由 Safety
+  觸發結果、固定疾病表票數與病人原始 evidence 組成，並明示不是正式診斷。
+
+#### 2026-08-05
+
+- 將病患問診 route 與規則治理後端拆成較小的服務／support 模組，保留原有 facade
+  與測試介面。
+- 加入確定性疾病候選漏斗，以支持票、區辨力、確認力及反證力排序問題；問卷
+  policy schema version 2 新增候選票距與數量上限，稽核則記錄階段、候選與分數。
+- SQLite schema 升至 version 6，採「看診日期＋掛號編號」形成永久
+  `consultation_id`，加入每日 sequence、WAL contention retry、交易式舊資料遷移，
+  並讓背景摘要、更新及刪除以 composite ID 精確定位。
+
+#### 2026-08-06
+
+- 新增 UCC RS256 JWT、scope 驗證、一次性病患邀請、Secure／HttpOnly session、
+  CSRF 與機構／encounter 隔離；瀏覽器輸入的識別資料不直接作為授權依據。
+- SQLite repository 新增 invitation、patient session、consultation access 與
+  security audit 資料；安全日誌避免記錄 token、病歷內容及例外細節。
+- CORS 改為明確 allowlist，正式環境可停用未版本化 API alias，並為病患問診、
+  語音轉錄、病例查詢與醫師管理端點加入相應身分依賴。
+
+#### 2026-08-07
+
+- 病患 chat API 新增 `answer`／`back` action 與 `can_go_back`；每次有效作答前保存
+  有限 session 快照，可回復上一題、問卷資料及 AMIE transcript，同時保留授權內容。
+- 新增只接受 loopback TCP peer 的 `ALLOW_LOCAL_AUTH_BYPASS` 開發模式；正式 principal
+  仍依院所隔離，且不信任 `Host` 或 forwarded header。
+- 將 EMR 摘要固定為基本資料／主訴首行與恰好兩句其他病史，模型結果不安全或缺漏時
+  由既有病史、用藥及過敏資料產生 deterministic fallback。
+- 產生 52 類具來源 hash、模型及逐字來源的 provisional 問卷審查草稿；草稿不會載入
+  runtime，未經醫療、安全、隱私與 UX 審查不得發布。
+- `/v1/transcribe` 預設改用延遲載入的 Breeze-ASR-26，加入 ffmpeg 解碼、音訊長度、
+  RMS 靜音門檻及 MIME 檢查；辨識文字需由病患確認後才送入問診。
+- 新增沿用病患 session 的 Avatar status／speak gateway；回傳影片時不暴露私有
+  Avatar service host，並同步更新 OpenAPI 契約。
+
 ## 目錄與責任
 
 | 路徑 | 責任 |
@@ -80,8 +228,20 @@ Groq Key 可由 [Groq Console](https://console.groq.com/keys) 申請。
 | --- | --- |
 | `INTERVIEW_ENGINE=amie` | 啟用 evidence-grounded ClinicalFact 與確定性問診 |
 | `INTERVIEW_ENGINE=legacy` | A/B 比較或緊急回退至順序式問卷 |
-| `AMIE_MAX_TURNS` | 動態問診輪數上限，預設 24 |
+| `AMIE_MAX_TURNS` | 可選的整體動態問診硬上限；未設定時依共用題與每條核准路由 policy 動態計算（最高 100） |
+| `CLINICAL_IO_CONCURRENCY` | async route 的同步臨床／模型 worker 上限，預設 4、範圍 1–32 |
+| `CLINICAL_IO_TIMEOUT_SECONDS` | 單次同步臨床／模型工作的 route 等待上限，預設 45 秒、範圍 5–180 秒 |
 | `AMIE_DEBUG_TRACE=true` | 測試時顯示去除疾病票數與排名後的決策摘要 |
+| `ASR_PROVIDER=breeze` | 使用本機 `MediaTek-Research/Breeze-ASR-26` 辨識錄音 |
+| `BREEZE_ASR_DEVICE=auto` | 有 CUDA 時使用 GPU/FP16，否則使用 CPU/FP32 |
+| `BREEZE_ASR_RELEASE_GPU_AFTER_TRANSCRIBE=true` | 每次 CUDA 辨識後卸載模型，讓同卡 Avatar 使用顯存 |
+| `BREEZE_ASR_MODEL` | 覆寫 Hugging Face 模型 ID 或本機模型目錄 |
+| `ASR_MAX_AUDIO_SECONDS` | 後端接受的單次錄音上限，預設 120 秒 |
+| `ASR_MIN_AUDIO_RMS` | 靜音／過小音量門檻，預設 0.001，避免將靜音幻覺成病人回答 |
+| `AVATAR_ENABLED=true` | 啟用私有網路上的本地 CosyVoice3 + MuseTalk 服務 |
+| `AVATAR_SERVICE_URL` | Avatar 容器內網 URL；整合部署為 `http://avatar:8090` |
+| `AVATAR_TIMEOUT_SECONDS` | 首次載入與影片生成逾時，整合部署預設 600 秒 |
+| `ALLOW_LOCAL_AUTH_BYPASS=true` | 只在 loopback 開發時略過病患 session 與 UCC Bearer；預設關閉 |
 | `CONSULTATION_DB_PATH` | SQLite 路徑；相對路徑以 `backend/` 為基準 |
 | `SAFETY_RULE_ADMIN_TOKEN` | 啟用規則中心編輯；未設定時維持唯讀 |
 | `FHIR_BASE_URL` | HAPI FHIR terminology server URL |
@@ -92,6 +252,50 @@ Groq Key 可由 [Groq Console](https://console.groq.com/keys) 申請。
 覆寫。模型因 `MAX_TOKENS` 沒有產生正文時，系統會提高上限重試一次。
 
 `.env` 含有祕密，不得提交版本控制。
+
+本機直接以 `http://127.0.0.1:5173` 開發舊版 `frontend/` 時，可在
+`backend/.env` 設定 `ALLOW_LOCAL_AUTH_BYPASS=true`。後端只會對
+`127.0.0.0/8` 或 `::1` 的直接連線略過病患 session 與 UCC Bearer；
+判斷依據是無法由用戶偽造的 TCP peer IP，不是 `Host` header。非 loopback
+來源、integration deployment 與正式環境仍強制完整驗證。本機舊版
+`frontend/` 的開發身分不套用院所篩選，因此可讀取尚未寫入
+`institution_id` 的舊病例；正式 Bearer 身分仍依院所隔離。
+
+### Breeze 語音辨識
+
+語音端點預設改用本機 Breeze-ASR-26，不再將病人錄音傳給
+Gemini 或 Groq。系統需要 `ffmpeg`；Ubuntu/WSL 可先安裝：
+
+```bash
+sudo apt-get install ffmpeg
+```
+
+模型採延遲載入，第一次辨識會從 Hugging Face 下載約 6 GB 權重並
+花較長時間。之後同一後端 process 會重用模型。本專案的 RTX 5060 Ti /
+CUDA 12.8 開發機可安裝與參考專案相同的 wheel：
+
+```bash
+cd backend
+venv/bin/python -m pip install --index-url https://download.pytorch.org/whl/cu128 \
+  torch==2.11.0
+```
+
+`BREEZE_ASR_DEVICE=auto` 會自動選擇 GPU/FP16，否則回退 CPU/FP32；
+部署機已確定有 GPU 時建議設為 `cuda`，未正確傳入 GPU 時會明確失敗，
+避免不小心用 CPU 推論。同一張 16 GB GPU 還要執行 Avatar 時，整合部署會設
+`BREEZE_ASR_RELEASE_GPU_AFTER_TRANSCRIBE=true`，在 inference lock 內完成辨識後
+卸載 pipeline 並清除 CUDA cache；下一段錄音因此需要重新載入模型。CPU 模式不
+受此設定影響。需要回退原有雲端辨識時設為 `ASR_PROVIDER=llm`。
+
+瀏覽器端最長錄音 60 秒，辨識結果只會回填輸入框；病人需先確認或
+修正文字才會送出問診答案。
+
+### 本地語音與 Avatar
+
+整合部署會以 `Fun-CosyVoice3-0.5B-2512` 合成 AI 回覆，再由 MuseTalk 1.5
+依指定醫師圖產生唇形 MP4。模型服務沒有發布 host port；`/v1/avatar/status`
+與 `/v1/avatar/speak` 都沿用病患 session 驗證。完整安裝、聲線替換與 GPU
+調校說明見 [../avatar-service/README.md](../avatar-service/README.md)。
 
 ## 啟動與 API
 

@@ -10,10 +10,30 @@ from app.routes.patient import (
     _copy_prefills_to_secondary_routes,
     _question_payload,
 )
-from domain.questionnaires import build_questionnaire
+from app.services.patient_interview import _keyword_matches, local_complaint_route
+from domain.questionnaires import build_questionnaire, questionnaire_disposition
 
 
 class PatientTriagePayloadTests(unittest.TestCase):
+    def test_only_approved_routes_are_deterministically_recognized(self):
+        self.assertEqual(local_complaint_route("我今天開始胸痛"), "chest")
+        self.assertEqual(local_complaint_route("我肚子痛"), "abdomen")
+        self.assertIsNone(local_complaint_route("我今天開始發燒"))
+        self.assertIsNone(local_complaint_route("突然半身無力，可能中風"))
+        self.assertIsNone(local_complaint_route("我沒有胸痛，也沒有呼吸困難"))
+
+    def test_ascii_keywords_require_word_or_phrase_boundaries(self):
+        self.assertFalse(_keyword_matches("patient has a cough", "ENT"))
+        self.assertFalse(_keyword_matches("current chest discomfort", "ENT"))
+        self.assertTrue(_keyword_matches("please assess ENT symptoms", "ENT"))
+
+    def test_candidate_route_dispositions_are_not_available_to_patient_runtime(self):
+        self.assertEqual(questionnaire_disposition("chest"), "questionnaire")
+        with self.assertRaisesRegex(ValueError, "不支援"):
+            questionnaire_disposition("stroke")
+        with self.assertRaisesRegex(ValueError, "不支援"):
+            build_questionnaire("fever")
+
     def test_headache_with_right_eye_blurring_stops_at_raw_safety(self):
         data = {}
 
@@ -42,7 +62,7 @@ class PatientTriagePayloadTests(unittest.TestCase):
             ["headache", "abdomen"],
         )
 
-    def test_dizziness_without_headache_is_not_sent_to_headache_questionnaire(self):
+    def test_provisional_dizziness_route_cannot_be_selected_by_semantic_extraction(self):
         assessment = ChiefComplaintAssessment.model_validate(
             {
                 "primary_symptom": "unknown",

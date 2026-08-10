@@ -6,12 +6,17 @@ ENV PYTHONPATH=/app
 ENV HF_HUB_CACHE=/models/hub
 
 WORKDIR /app
-COPY requirements-runtime.txt requirements-rag.txt ./
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements-runtime.txt requirements-rag.txt requirements-asr.txt ./
 RUN pip install --no-cache-dir -r requirements-runtime.txt \
     && pip install --no-cache-dir \
-        --index-url https://download.pytorch.org/whl/cpu \
-        "torch==2.13.0" \
-    && pip install --no-cache-dir -r requirements-rag.txt
+        --index-url https://download.pytorch.org/whl/cu128 \
+        "torch==2.11.0" \
+    && pip install --no-cache-dir -r requirements-rag.txt \
+    && pip install --no-cache-dir -r requirements-asr.txt
 COPY . ./
 
 EXPOSE 8000

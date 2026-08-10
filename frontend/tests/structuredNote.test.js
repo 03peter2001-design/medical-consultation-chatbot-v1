@@ -52,13 +52,14 @@ test('moves the EMR section out while preserving clinical decisions', () => {
 【初步鑑別診斷（前3項最可能）】
 1. 急性冠心症
 
-【理學檢查建議】
+【理學檢查】
 - 生命徵象`)
 
   assert.equal(sections.emrSummary, '58歲男性，活動時胸悶。')
   assert.doesNotMatch(sections.clinicalDecision, /病歷摘要 EMR/)
   assert.match(sections.clinicalDecision, /初步鑑別診斷/)
-  assert.match(sections.clinicalDecision, /理學檢查建議/)
+  assert.match(sections.clinicalDecision, /【理學檢查】/)
+  assert.doesNotMatch(sections.clinicalDecision, /建議/)
 })
 
 test('keeps the full report when no EMR heading exists', () => {
@@ -79,6 +80,10 @@ test('preloaded report moves EMR to the patient card and keeps the bottom report
     new URL('../src/components/StructuredReport.vue', import.meta.url),
     'utf8',
   )
+  const terminologyCode = readFileSync(
+    new URL('../src/components/TerminologyCode.vue', import.meta.url),
+    'utf8',
+  )
 
   assert.match(
     doctorView,
@@ -90,4 +95,8 @@ test('preloaded report moves EMR to the patient card and keeps the bottom report
     /🩺 結構化病歷分析（EMR \+ 臨床決策）/,
   )
   assert.match(structuredReport, /splitStructuredNote\(props\.text\)\.clinicalDecision/)
+  assert.match(doctorView, /檢驗（抽血／驗尿） \/ 影像學決策/)
+  assert.doesNotMatch(doctorView, /檢驗建議/)
+  assert.match(terminologyCode, /AI 編碼結果，待醫師確認/)
+  assert.doesNotMatch(terminologyCode, /AI 建議編碼/)
 })

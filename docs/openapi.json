@@ -702,8 +702,8 @@
           },
           "interview_engine": {
             "enum": [
-              "amie",
-              "legacy"
+              "questionnaire",
+              "amie"
             ],
             "title": "Interview Engine",
             "type": "string"

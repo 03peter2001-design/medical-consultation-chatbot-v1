@@ -574,6 +574,15 @@ class ConsultationRepository:
     def create_with_identifiers(self, record: dict[str, Any]) -> dict[str, str]:
         """Insert a result and return its permanent and patient-facing IDs."""
         data_json = self._serialize_data(record.get("data", {}))
+        structured_note = str(record.get("structured_note") or "").strip() or None
+        structured_sources = record.get("structured_sources", [])
+        if not isinstance(structured_sources, list):
+            raise ValueError("structured note sources must be a list")
+        structured_sources_json = json.dumps(
+            structured_sources,
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
         now, consultation_date = self._creation_times()
         triage_level = record.get("triage_level", "routine")
         if triage_level not in {"routine", "urgent"}:
@@ -600,6 +609,9 @@ class ConsultationRepository:
                             summary,
                             report,
                             data_json,
+                            structured_note,
+                            structured_sources_json,
+                            structured_note_created_at,
                             triage_level,
                             workflow_status,
                             consultation_date,
@@ -610,7 +622,7 @@ class ConsultationRepository:
                             patient_sno,
                             reg_sno
                         )
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         """,
                         (
                             queue_number,
@@ -622,6 +634,9 @@ class ConsultationRepository:
                             record.get("summary", ""),
                             record.get("report", ""),
                             data_json,
+                            structured_note,
+                            structured_sources_json,
+                            now if structured_note else None,
                             triage_level,
                             record.get("status", "completed"),
                             consultation_date,

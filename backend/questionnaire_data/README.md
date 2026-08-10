@@ -5,8 +5,8 @@
 - `chief.json`：自由主訴入口
 - `basic.json`：基本資料
 - `history.json`：共用病史
-- `chest.json`、`headache.json`、`abdomen.json`：既有三痛問卷，使用
-  `disease_vote` 與核准的 ClinicalFact／Safety 規則
+- `chest.json`、`headache.json`、`abdomen.json`：既有三痛問卷；預設 runtime 依
+  檔案順序逐題詢問，舊 `disease_vote` policy 只供明示啟用的 AMIE 相容流程
 - 其餘 49 份：由 `docs/疾病問卷.txt` 產生的 `source_structured_provisional`
   candidate，使用 `fixed_order` 並保留來源 SHA、pipeline 與模型 provenance；
   未經臨床簽核時不會加入 `DISEASE_ROUTES`、主訴分類或病患問卷
@@ -67,7 +67,14 @@ Avatar 朗讀的是組裝後的 `reply`，因此新的固定文案會一併生�
 等內容雖已資料化，仍屬臨床安全文案，修改後必須由合格人員審查；JSON 文案不得用來
 改變 Safety 規則、問卷選題、路由 disposition 或完成條件。
 
-疾病問卷另有 `policy`。目前 schema version 2 保留固定疾病表投票，並以
+預設 `questionnaire` pipeline 不讀取 `policy` 來選題或提前停止，只依組合後的
+JSON 順序、`condition` 與 FHIR prefill 決定下一題，也不執行 semantic options、
+ClinicalFact、Safety 或疾病票數。最後一題完成後，後端才將所有已回答題目的
+`prompt` 與患者答案連同院方預填資料一次送給 Gemini 產生 EMR、初步評估與一句
+臨床決策；逐題期間不會呼叫模型。完成時會以新 RAG 分別取得鑑別／危險徵兆、檢驗、
+影像三組文獻，供六段式報告引用；輸出不含名為「建議」的段落或標題。疾病問卷仍
+保留 `policy` 供舊 AMIE 相容流程；目前 schema
+version 2 以
 `priority_fields`、`required_fields`、一般問題作為選題層級；同層問題再依當輪
 ClinicalFact 建立的疾病漏斗排序。`frontier_vote_margin` 定義領先群與第一名可容許
 的淨票差，`frontier_max_candidates` 限制有支持票時最多追蹤的候選數。無支持票時

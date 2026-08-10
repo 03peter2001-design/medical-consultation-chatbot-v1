@@ -1,11 +1,15 @@
 # 後端服務
 
-`backend/` 是 FastAPI 應用、AMIE-inspired 確定性問診、SQLite repository、
-RAG 查詢服務與 FHIR／SNOMED 整合所在位置。
+`backend/` 是 FastAPI 應用、順序式問卷、SQLite repository、RAG 查詢服務與
+FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退選項，不是預設流程。
 
 ## 服務版本
 
-目前版本：**v1.6.0（2026-08-10）**。
+目前版本：**v0.3.0（2026-08-10）**。
+
+本次因主動撤除既有 AMIE／語意標籤能力並回到較小的實驗性功能面，版本線依專案
+決策由 0 重新編碼。下方 `v1.x` 條目保留為舊能力線的歷史紀錄，不表示 `v0.3.0`
+在 SemVer 上高於它們。
 
 此版本號是依 `devlog/2026-07-27.md` 至 `devlog/2026-08-07.md` 回溯整理的
 後端服務文件基線，目前沒有對應的 Git tag 或獨立 release；它也不表示其中的
@@ -18,6 +22,55 @@ RAG 查詢服務與 FHIR／SNOMED 整合所在位置。
 - RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
 - Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
   revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v0.3.0 (2026-08-10)
+
+- Gemini 最終整理 prompt 參考 2026-07-06 初始版本 commit `d84901f` 的
+  `STRUCTURED_NOTE_SYSTEM_PROMPT`／`build_structured_note_prompt`，產生 EMR、前三項
+  初步鑑別、五項防漏診鑑別、理學檢查、檢驗與影像學決策的六段式報告。
+- 固定問卷最後一題後，以新 RAG 分別檢索鑑別／危險徵兆、檢驗及影像三組文獻，再把
+  全部題目、患者答案、院方預填資料與 A／B／C evidence blocks 一次送給 Gemini；
+  RAG 不參與問卷路由、下一題或後端 Safety 規則。
+- 依產品要求移除輸出中的「建議」：不再產生患者端建議段落，兩個臨床段落改為
+  `【理學檢查】` 與 `【檢驗（抽血／驗尿）】`，parser 也會移除模型欄位中的該詞。
+- Gemini 嚴格 JSON 經後端驗證及固定 renderer 組裝；RAG sources 一併保存。模型內容
+  仍標示未經醫師確認，不代表正式診斷或已簽署醫囑。
+- 更新 prompt／schema／渲染 regression assertions；固定問題順序、單次末端 Gemini
+  呼叫、無後端 Safety／投票與失敗保留答案的行為不變。完整 backend suite 共
+  376 項、374 項通過；其餘 2 項只因未掛載外部 `D:\ehis\eHIS` C# 原始碼而 error。
+
+### v0.2.0 (2026-08-10)
+
+- 預設流程仍由後端按 JSON 原始順序逐題顯示固定問卷；主訴僅以本機關鍵字選擇
+  症狀問卷，無法分類時改問固定的 chief／basic／history 共通題，不再提前 handoff。
+- `questionnaire` 路徑不執行原文字串或語意 Safety、AMIE、ClinicalFact、疾病票數、
+  RAG 或逐題 LLM 呼叫，所有題目與輸入驗證均在本機完成。
+- 最後一題通過驗證後，後端才以單一 Gemini request 傳送全部已回答的「題目＋患者
+  答案」及院方預填欄位，要求嚴格 JSON EMR；結果以「Gemini 生成、未經醫師確認」
+  標示後同步保存，不再啟動背景疾病評分或摘要流程。
+- Gemini 回應逾時、失敗或格式不符時回傳 503，不核發問診編號也不產生臨床猜測；
+  已填答案保留於 session，病人可重試最後一步。此流程會把完整問卷答案送至 Google
+  Gemini，正式使用前必須由院方完成資料處理、同意、保存地區與隱私審查。
+- 新增固定順序、單次完整 payload、無 Safety／AMIE／背景投票、未知主訴共通題、
+  Gemini 格式失敗可重試及 EMR 持久化的 regression tests。完整 backend suite 共
+  375 項、373 項通過；其餘 2 項只因未掛載外部 `D:\ehis\eHIS` C# 原始碼而 error。
+
+### v0.1.0 (2026-08-10)
+
+- 病患 runtime 預設改為 `questionnaire`：自由主訴只由本機關鍵字選擇一份核准問卷，
+  之後依 `chief → basic → history → disease` 的 JSON 原始順序逐題詢問，只略過 FHIR
+  已預填欄位及條件不成立題目。
+- 新 pipeline 不呼叫 ChiefComplaintExtractor、AMIE engine、ClinicalFact 轉換或疾病
+  票數；明確原文字串 Safety 規則仍保留，無單一路由時保存已收資料並轉交醫療人員。
+- routine、urgent 與 unsupported handoff 都在核發編號時同步保存
+  `【病歷摘要 EMR】`，只整理病人回答與院方預填資料，不產生疾病、診斷或臨床推論。
+  背景摘要與醫師載入也不會為此類病例重建 disease votes。
+- 新版 RAG collections、醫師文獻問答、Avatar gateway 與既有權限／tenant 邊界維持；
+  RAG 不進入病患逐題流程或 deterministic EMR。`legacy` 設定值保留為
+  `questionnaire` 相容別名，明示 `amie` 才會啟用舊引擎。
+- 新增逐題順序、無語意／AMIE 呼叫、原文 Safety、EMR 持久化及背景不回算疾病票數的
+  regression tests。完整 backend suite 共 374 項，其中產品測試通過；OpenAPI artifact
+  已同步，另 2 項外部 eHIS static-contract 仍因未掛載 `D:\\ehis\\eHIS` 而無法執行。
 
 ### v1.6.0 (2026-08-10)
 
@@ -245,20 +298,22 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-選擇 Gemini 或 Groq provider，並填入自己的 API key：
+固定問卷完成後必須使用 Gemini 整理 EMR，因此即使其他 LLM 工作選用 Groq，仍需
+設定 `GEMINI_API_KEY`：
 
 ```dotenv
 LLM_PROVIDER=gemini
 GEMINI_API_KEY=你的_Gemini_API_Key
-INTERVIEW_ENGINE=amie
+INTERVIEW_ENGINE=questionnaire
 ```
 
-或：
+其他既有 LLM 工作可另外選 Groq：
 
 ```dotenv
 LLM_PROVIDER=groq
 GROQ_API_KEY=你的_Groq_API_Key
-INTERVIEW_ENGINE=amie
+GEMINI_API_KEY=你的_Gemini_API_Key
+INTERVIEW_ENGINE=questionnaire
 ```
 
 Gemini Key 可由 [Google AI Studio](https://aistudio.google.com/app/apikey) 申請，
@@ -272,8 +327,10 @@ Groq Key 可由 [Groq Console](https://console.groq.com/keys) 申請。
 
 | 變數 | 用途 |
 | --- | --- |
-| `INTERVIEW_ENGINE=amie` | 啟用 evidence-grounded ClinicalFact 與確定性問診 |
-| `INTERVIEW_ENGINE=legacy` | A/B 比較或緊急回退至順序式問卷 |
+| `INTERVIEW_ENGINE=questionnaire` | 預設：本機依序問固定題目，完成後一次送全部題目與答案給 Gemini 整理 EMR |
+| `INTERVIEW_ENGINE=legacy` | `questionnaire` 的相容別名 |
+| `INTERVIEW_ENGINE=simple` | `questionnaire` 的相容別名 |
+| `INTERVIEW_ENGINE=amie` | 明示回退舊 AMIE／ClinicalFact／疾病票數流程；不建議作為新流程 |
 | `AMIE_MAX_TURNS` | 可選的整體動態問診硬上限；未設定時依共用題與每條核准路由 policy 動態計算（最高 100） |
 | `CLINICAL_IO_CONCURRENCY` | async route 的同步臨床／模型 worker 上限，預設 4、範圍 1–32 |
 | `CLINICAL_IO_TIMEOUT_SECONDS` | 單次同步臨床／模型工作的 route 等待上限，預設 45 秒、範圍 5–180 秒 |
@@ -375,20 +432,24 @@ npm run api:check
 
 ## 問診與資料邊界
 
-目前支援胸痛、頭痛與腹痛。自由主訴會先抽取附有逐字 evidence 的候選；
-抽取失敗或仍不明確時，才退回既有 LLM 分科，再載入對應問卷。
+預設 `questionnaire` pipeline 只依自由主訴中的本機關鍵字選擇一份固定症狀問卷；
+無法對應時使用固定的 chief／basic／history 共通題。選定後依問卷 JSON 原始順序
+逐題詢問，保留條件題與 FHIR 預填略過。
 
-病患原話先經確定性 Safety：
+- 下一題只由目前索引、問卷順序、條件與已預填欄位決定
+- 不執行原文字串或語意 Safety、症狀抽取、ClinicalFact、疾病候選或票數
+- 問卷進行中不呼叫 LLM，RAG 也不參與路由或下一題
+- 最後一題完成後才檢索 RAG A／B／C 三組文獻，並以一次 Gemini request 傳送全部
+  題目、患者答案、院方預填資料及文獻內容
+- Gemini 回傳六段式 EMR 與臨床決策草稿；輸出會標示未經醫師確認，不代表正式診斷
 
-- 明確警訊不呼叫模型，直接終止並保存規則、鑑別方向與原始證據
-- 未命中時，LLM 只能輸出白名單 ClinicalFact，且每項 evidence 都由程式驗證
-- 三種主訴皆由程式執行支持票、反對票、完整度、穩定排序與下一題選擇
-- urgent 核發三位數編號；routine 完成時核發五位數編號
-- RAG 不參與病患疾病候選、Safety、票數或下一題
+每筆新病例會標記 `_interview_pipeline.engine=questionnaire`，並保存送往 Gemini 的
+固定問卷答案、模型名稱與 prompt version；不建立 AMIE trace、ClinicalFact、
+Safety 結果、疾病 assessment 或漏斗分數。舊引擎資料仍可讀取，但不會套到新病例。
 
-每輪會保存題目、回答、ClinicalFact、Safety 結果、投票快照、下一題、動態
-疾病領先群、目標標籤、漏斗階段與確定性選題分數，並標記為
-`deterministic_disease_vote`。這是可供稽核的決策摘要，不是模型隱藏思維鏈。
+此流程刻意將完整問卷回答交給 Google Gemini，而非去識別化查詢。這是外部資料邊界
+變更：正式處理真實病人資料前，院方必須確認告知與同意、供應商契約、資料保存／訓練
+政策、傳輸與保存地區及稽核要求。未完成這些審查時只能使用合成資料。
 
 `amie/disease_data/{chest,headache,abdomen}.json` 是一次性 RAG＋離線 LLM
 建表後提交版本控制的凍結產物，包含來源、corpus SHA-256、模型、不能漏診標記
@@ -416,15 +477,13 @@ Google 官方 AMIE 模型或服務，也不包含 self-play 訓練。
 ## 問診資料庫與測試病例
 
 問診結果預設保存於 `data/consultations.db`，啟動時自動建立，不需 migration。
-routine 與 urgent 都會先寫入結構化問卷、ClinicalFact、評分快照與分流結果，
-立即核發編號；HTTP 回應送出後才在背景產生摘要與六段式臨床分析。
+固定問卷最後一題完成後，Gemini 必須先成功回傳符合 schema 的病歷草稿，後端才會
+同步保存完整問卷答案、模型輸出及 routine 五位數編號。新 `questionnaire` 病例不跑
+背景摘要、不附加可能疾病或固定疾病表排名；舊 AMIE 病例仍依既有流程相容顯示。
 
-醫師速覽中的 Gemini 只負責壓縮既有病史；可能疾病與理由只來自固定疾病表及
-病人的原始支持線索，不允許模型自行增加疾病。
-
-摘要失敗不會讓病人失去編號；醫師端會顯示 `summary_pending`、
-`summary_partial` 或 `summary_failed`。資料庫含病人資料，不應提交、公開或放置
-於未加密位置；正式環境仍需備份、身分驗證、授權與稽核政策。
+Gemini 逾時、服務錯誤或輸出格式不符時，API 回 503、不建立病例也不核發編號；已填
+答案仍保留於受驗證 session，病人可重試最後一步。資料庫含病人資料，不應提交、公開
+或放置於未加密位置；正式環境仍需備份、身分驗證、授權與稽核政策。
 
 醫師端輸入問診編號 `00000` 可載入預先建立的胸痛假病人。其初步評估是固定
 測試文字，並有「測試用假病人資料」標示，不會被誤認為真實病例。

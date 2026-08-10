@@ -4,6 +4,7 @@ import { ref, watchEffect } from 'vue'
 const props = defineProps({
   avatar: { type: Object, required: true },
 })
+const emit = defineEmits(['connect'])
 
 const videoElement = ref(null)
 
@@ -18,13 +19,9 @@ watchEffect(() => {
 
 <template>
   <section
-    v-if="
-      avatar.isConnected.value ||
-      avatar.isConnecting.value
-    "
     class="avatar-stage"
     aria-label="AI 醫師 Avatar"
-    :aria-busy="avatar.isConnecting.value"
+    :aria-busy="avatar.isConnecting.value || avatar.rendering.value"
   >
     <div
       class="doctor-portrait"
@@ -63,7 +60,11 @@ watchEffect(() => {
         @ended="avatar.onPlaybackEnd"
         @error="avatar.onPlaybackError"
       />
-      <span class="presence-dot" aria-hidden="true" />
+      <span
+        v-if="avatar.isConnected.value"
+        class="presence-dot"
+        aria-hidden="true"
+      />
       <div
         v-if="avatar.isConnecting.value && !avatar.talking.value"
         class="stage-loading"
@@ -82,7 +83,13 @@ watchEffect(() => {
             ? 'AI 醫師正在說話'
             : avatar.isConnecting.value
               ? '模型載入／生成中'
-              : 'AI 醫師'
+            : avatar.rendering.value
+              ? '下一題已就緒 · Avatar 背景生成中'
+            : avatar.statusTone.value === 'error'
+              ? 'Avatar 暫時不可用'
+              : avatar.isConnected.value
+                ? 'AI 醫師'
+                : 'AI 醫師準備啟用'
         }}
         <template v-if="avatar.isLocal.value">
           · {{ avatar.languageLabel.value }}
@@ -92,10 +99,28 @@ watchEffect(() => {
         {{
           avatar.isConnecting.value
             ? avatar.status.value
-            : avatar.caption.value ||
-              'Avatar 已準備完成，接下來可直接使用語音回答。'
+            : avatar.rendering.value
+              ? avatar.caption.value
+            : avatar.statusTone.value === 'error'
+              ? avatar.status.value
+              : avatar.isConnected.value
+                ? avatar.caption.value ||
+                  'Avatar 已準備完成，接下來可直接使用語音回答。'
+                : '正在自動啟用院內 AI 醫師 Avatar。'
         }}
       </p>
+      <p v-if="avatar.rendering.value" class="rendering-note">
+        問題已顯示，可立即作答，不必等待影片完成。
+      </p>
+      <div
+        v-if="!avatar.isConnected.value && !avatar.isConnecting.value"
+        class="avatar-fallback"
+      >
+        <span>Avatar 不影響問診；您仍可使用下方文字輸入。</span>
+        <button type="button" @click="emit('connect')">
+          重新啟用 Avatar
+        </button>
+      </div>
     </div>
   </section>
 </template>
@@ -103,12 +128,13 @@ watchEffect(() => {
 <style scoped>
 .avatar-stage {
   display: grid;
-  grid-template-columns: minmax(180px, 260px) minmax(280px, 520px);
+  grid-template-columns: minmax(260px, 360px) minmax(320px, 540px);
+  min-height: 320px;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  gap: clamp(20px, 4vw, 48px);
-  padding: 20px 28px;
+  gap: clamp(24px, 4vw, 56px);
+  padding: 26px 32px;
   border-bottom: 1px solid var(--border);
   background:
     radial-gradient(circle at 22% 25%, rgb(10 146 126 / 12%), transparent 42%),
@@ -117,7 +143,7 @@ watchEffect(() => {
 
 .doctor-portrait {
   position: relative;
-  width: min(100%, 260px);
+  width: min(100%, 360px);
   aspect-ratio: 4 / 3;
   justify-self: end;
   overflow: hidden;
@@ -236,6 +262,38 @@ watchEffect(() => {
   line-height: 1.65;
 }
 
+.avatar-caption .rendering-note {
+  margin-top: 10px;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.avatar-fallback {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.avatar-fallback button {
+  min-height: 42px;
+  padding: 9px 14px;
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  background: var(--green);
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+}
+
 @keyframes avatar-spin {
   to {
     transform: rotate(360deg);
@@ -251,13 +309,14 @@ watchEffect(() => {
 
 @media (max-width: 760px) {
   .avatar-stage {
-    grid-template-columns: 112px minmax(0, 1fr);
-    gap: 12px;
-    padding: 12px;
+    grid-template-columns: 140px minmax(0, 1fr);
+    min-height: 0;
+    gap: 14px;
+    padding: 14px;
   }
 
   .doctor-portrait {
-    width: 112px;
+    width: 140px;
     border-radius: 14px;
   }
 
@@ -271,6 +330,31 @@ watchEffect(() => {
     font-size: 14px;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
+  }
+
+  .avatar-fallback {
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+
+  .avatar-fallback button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .avatar-stage {
+    grid-template-columns: 118px minmax(0, 1fr);
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .doctor-portrait {
+    width: 118px;
+  }
+
+  .avatar-fallback span {
+    display: none;
   }
 }
 </style>

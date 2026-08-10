@@ -1,27 +1,33 @@
 # AI 預問診系統（Medical Consultation Chatbot）
 
-AI 輔助預問診系統。病患可用文字或語音完成胸痛、頭痛或腹痛的結構化問診；
-醫師可依問診編號查看原始回答、固定疾病表排名、摘要與臨床分析。
+AI 輔助預問診系統。病患可透過預設啟用的本機 Avatar，以文字或語音完成胸痛、
+頭痛或腹痛的逐題結構化問診；醫師可依問診編號查看原始回答、結構化電子病歷與摘要。
 
 本專案目前是研究與合成資料開發原型，不是醫療器材，也不提供正式診斷。
 疾病票數、完整度與排序均不代表患病機率，正式臨床使用仍需醫師審查、院方整合、
 身分與權限管理、稽核及資料治理。
 
+目前預設流程會在固定問卷結束後，把全部題目、患者答案與院方預填欄位送往 Google
+Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內容未經醫師確認，
+不代表正式診斷或已簽署醫囑；未完成院方的告知同意、供應商契約、資料保存地區與
+隱私審查前，不得用於真實病人資料。
+
 ## 系統總覽
 
-- **病患端**：自由主訴、FHIR 病歷預填、安全必問題、動態問卷與疼痛位置標記
-- **確定性問診**：LLM 只抽取附有原文證據的 ClinicalFact；Safety、疾病票數、
-  完整度、下一題與停止條件皆由本機規則執行
-- **醫師端**：病例搜尋、醫師速覽、六段式分析、SNOMED CT 查詢與規則中心
+- **病患端**：自由主訴、FHIR 病歷預填、逐題問卷、疼痛位置標記及預設本機 Avatar
+- **順序式問診**：主訴只以本機關鍵字選擇固定問卷，之後依 JSON 原始順序提問；
+  不執行 AMIE、症狀語意抽取、Safety、ClinicalFact 或疾病票數
+- **醫師端**：病例搜尋、問卷原始回答、Gemini 生成 EMR、醫師速覽、SNOMED CT
+  查詢與舊病例相容的規則／分析畫面
 - **本機資料層**：SQLite 保存問診結果，Chroma 保存版本化 RAG collections
 - **FHIR／SMART**：支援 TW Core 開發環境、SNOMED CT 匯入及本機 SMART on FHIR
   合成病例流程
-- **RAG**：僅供疾病表離線建置、醫師文獻問答及背景檢查／檢驗／影像建議；
-  不參與病患端 Safety 或疾病投票
+- **RAG**：新版索引不參與病患問卷路由、下一題或 Safety；僅在固定問卷完成後提供
+  鑑別／危險徵兆、檢驗與影像三組文獻給 Gemini 產生六段式報告
 
 ```text
-病患端：病人原話 → LLM 抽取具原文證據的 ClinicalFact
-                  → 本機 Safety／問卷／固定疾病表投票 → 問診結果
+病患端：病人主訴 → 本機關鍵字選擇固定問卷 → 依 JSON 順序逐題詢問
+                  → RAG A／B／C 文獻＋全部答案一次送 Gemini → 保存六段式報告
 
 醫師端：中文問題 → 去識別化與醫療術語英文化
                 → 本機 embedding／Chroma 檢索 → LLM 整理來源片段
@@ -36,8 +42,8 @@ AI 輔助預問診系統。病患可用文字或語音完成胸痛、頭痛或�
 
 | 服務／可部署產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
 | --- | --- | --- | --- | --- |
-| Backend API（含 Breeze ASR） | `1.6.0` | 2026-08-10 | 疾病名稱導向 Gemini＋RAG 產生 49 路徑的隔離 provisional AMIE 草稿 | [backend/README.md](backend/README.md#服務版本) |
-| 開發版 Vue frontend | `1.7.0` | 2026-08-10 | 結構化問卷語音輸入、確定性答案映射與送出前人工確認 | [frontend/README.md](frontend/README.md#服務版本) |
+| Backend API（含 Breeze ASR） | `0.3.0` | 2026-08-10 | 固定問卷完成後由 RAG＋Gemini 產生六段式臨床決策報告，輸出移除「建議」段落與標題 | [backend/README.md](backend/README.md#服務版本) |
+| 開發版 Vue frontend | `0.2.6` | 2026-08-10 | 醫師端六段式與 AI 編碼文案移除「建議」，保留來源及確認狀態 | [frontend/README.md](frontend/README.md#服務版本) |
 | 正式部署 Doctor frontend | `2.1.0` | 2026-08-09 | 候選問卷路由與欄位標籤可讀化，保留歷史病例顯示能力 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | 正式部署 Patient frontend | `2.0.1` | 2026-08-09 | FHIR query override fail-closed 與本次症狀／既往病史分類修正 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | Local Avatar service | `1.1.1` | 2026-08-10 | 修正閩南語控制詞，並保留全模型 warm-up 常駐與嘴部羽化融合 | [avatar-service/README.md](avatar-service/README.md#服務版本) |
@@ -74,7 +80,8 @@ cd medical-consultation-chatbot-v1
 
 第一次執行時，腳本會建立後端虛擬環境、安裝前後端依賴、建置 Vue frontend，
 並準備本機 HAPI FHIR／TW Core（不需要 FHIR 時可加 `--skip-fhir`）。接著填妥
-`backend/.env` 中的 Gemini 或 Groq API key。
+`backend/.env` 中的 `GEMINI_API_KEY`；固定問卷會在最後一次把全部題目與答案交給
+Gemini 整理病歷，因此即使其他 LLM 工作使用 Groq，這個 key 仍是必要設定。
 
 需要建立完整 RAG 索引時執行：
 

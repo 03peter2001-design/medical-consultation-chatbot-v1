@@ -10,7 +10,6 @@ import {
 import { RouterLink } from 'vue-router'
 
 import AppHeader from '../components/AppHeader.vue'
-import AmieTracePanel from '../components/AmieTracePanel.vue'
 import AvatarSettings from '../components/AvatarSettings.vue'
 import AvatarStage from '../components/AvatarStage.vue'
 import ChatMessage from '../components/ChatMessage.vue'
@@ -56,10 +55,10 @@ const avatar = useAvatar({
 const avatarClientKey = ref(import.meta.env.VITE_DID_CLIENT_KEY?.trim() || '')
 const avatarAgentId = ref(import.meta.env.VITE_DID_AGENT_ID?.trim() || '')
 const messages = ref([])
-const amieTraces = ref([])
 const queueNumber = ref('')
 const input = ref('')
 const started = ref(false)
+const consultationAvatarSettingsOpen = ref(false)
 const starting = ref(false)
 const sending = ref(false)
 const completed = ref(false)
@@ -70,7 +69,6 @@ const nationalId = ref('A000000000')
 const fhirPatient = ref(null)
 const fhirResourceCount = ref(0)
 const smartContext = ref(null)
-const mobileAvatarOpen = ref(false)
 const selectedPainLocationIds = ref([])
 const questionInput = ref(null)
 const questionnaireInfo = ref(null)
@@ -117,6 +115,13 @@ const inputsDisabled = computed(
     recording.value ||
     voiceProcessing.value ||
     completed.value,
+)
+const consultationAvatarVisible = computed(
+  () =>
+    avatar.isConnected.value ||
+    avatar.isConnecting.value ||
+    avatar.rendering.value ||
+    avatar.talking.value,
 )
 const microphoneLabel = computed(() => {
   if (voiceProcessing.value) return '⏳'
@@ -293,14 +298,12 @@ async function startConsultation({ skipFhir = false } = {}) {
 }
 
 onMounted(() => {
+  void connectAvatar()
   if (smartLaunchDetected) void startSmartConsultation()
 })
 
 function handleResponse(data, rawFallback) {
   addMessage('user', data.user_display ?? rawFallback)
-  if (data.amie_debug) {
-    amieTraces.value.push(data.amie_debug)
-  }
   setQuestionState(data)
 
   if (data.completed) {
@@ -357,7 +360,6 @@ async function goToPreviousQuestion() {
   try {
     const data = await api.patientBack(sessionId)
     trimLastAnsweredTurn()
-    if (amieTraces.value.length) amieTraces.value.pop()
     selectedPainLocationIds.value = []
     completed.value = false
     queueNumber.value = ''
@@ -383,7 +385,6 @@ async function connectAvatar() {
     agentId: avatarAgentId.value,
   })
   if (!connected) return
-  mobileAvatarOpen.value = false
   if (started.value) {
     const latestAssistant = [...messages.value]
       .reverse()
@@ -648,12 +649,12 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div
-    class="app-shell patient-app"
-    :class="{ 'drawer-open': mobileAvatarOpen }"
-  >
+  <div class="app-shell patient-app">
     <StartConsultationOverlay
       v-model:national-id="nationalId"
+      v-model:avatar-client-key="avatarClientKey"
+      v-model:avatar-agent-id="avatarAgentId"
+      :avatar="avatar"
       :visible="overlayVisible"
       :direct-fhir-enabled="effectiveDirectFhirEnabled"
       :fhir-base-url="fhirBaseUrl"
@@ -662,6 +663,7 @@ onBeforeUnmount(() => {
       :starting="starting"
       :error="startError"
       @start="startConsultation"
+      @connect-avatar="connectAvatar"
     />
 
     <AppHeader
@@ -670,26 +672,8 @@ onBeforeUnmount(() => {
       :status="completed ? '問診完成' : avatar.headerStatus.value"
       :status-tone="completed ? 'online' : avatar.headerTone.value"
     >
-      <button
-        class="utility-button avatar-toggle"
-        type="button"
-        aria-controls="avatar-settings"
-        :aria-expanded="mobileAvatarOpen"
-        @click="mobileAvatarOpen = !mobileAvatarOpen"
-      >
-        Avatar
-      </button>
       <RouterLink class="nav-link" to="/doctor">醫師端 →</RouterLink>
     </AppHeader>
-
-    <AvatarSettings
-      v-model:client-key="avatarClientKey"
-      v-model:agent-id="avatarAgentId"
-      :avatar="avatar"
-      :open="mobileAvatarOpen"
-      @close="mobileAvatarOpen = false"
-      @connect="connectAvatar"
-    />
 
     <main class="patient-layout">
       <section class="consultation-panel">
@@ -726,7 +710,44 @@ onBeforeUnmount(() => {
             以上僅為安全規則提示，不代表診斷；請勿等待線上問診結果。
           </p>
         </div>
-        <AvatarStage :avatar="avatar" />
+        <AvatarStage
+          v-if="started && consultationAvatarVisible"
+          :avatar="avatar"
+          @connect="connectAvatar"
+        />
+        <div v-if="started" class="consultation-avatar-settings">
+          <button
+            class="avatar-settings-toggle"
+            type="button"
+            aria-controls="consultation-avatar-settings"
+            :aria-expanded="consultationAvatarSettingsOpen"
+            @click="consultationAvatarSettingsOpen = !consultationAvatarSettingsOpen"
+          >
+            <span class="avatar-settings-toggle-label">Avatar 設定</span>
+            <span class="avatar-settings-toggle-summary">
+              {{
+                consultationAvatarVisible
+                  ? `${avatar.providerLabel.value} · ${avatar.languageLabel.value}`
+                  : avatar.status.value
+              }}
+            </span>
+            <span aria-hidden="true">
+              {{ consultationAvatarSettingsOpen ? '隱藏 ↑' : '顯示 ↓' }}
+            </span>
+          </button>
+          <div
+            v-show="consultationAvatarSettingsOpen"
+            id="consultation-avatar-settings"
+            class="consultation-avatar-settings-content"
+          >
+            <AvatarSettings
+              v-model:client-key="avatarClientKey"
+              v-model:agent-id="avatarAgentId"
+              :avatar="avatar"
+              @connect="connectAvatar"
+            />
+          </div>
+        </div>
         <div class="progress-bar" aria-label="問診進度">
           <span
             v-if="questionnaireInfo"
@@ -758,7 +779,6 @@ onBeforeUnmount(() => {
             :queue-number="queueNumber"
             :triage-level="triageState.level"
           />
-          <AmieTracePanel :traces="amieTraces" />
           <button
             v-if="!completed && canGoBack"
             class="previous-question-button"
@@ -1007,6 +1027,57 @@ onBeforeUnmount(() => {
   font-size: 12px;
 }
 
+.consultation-avatar-settings {
+  flex: 0 0 auto;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-1);
+}
+
+.avatar-settings-toggle {
+  display: flex;
+  width: 100%;
+  min-height: 48px;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 20px;
+  border: 0;
+  background: var(--surface-1);
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 12px;
+  text-align: left;
+}
+
+.avatar-settings-toggle:hover,
+.avatar-settings-toggle:focus-visible {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.avatar-settings-toggle:focus-visible {
+  outline: 3px solid rgb(10 146 126 / 20%);
+  outline-offset: -3px;
+}
+
+.avatar-settings-toggle-label {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.avatar-settings-toggle-summary {
+  flex: 1;
+  overflow: hidden;
+  font-family: 'JetBrains Mono', monospace;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.consultation-avatar-settings-content {
+  padding: 0 12px 12px;
+  background: var(--surface-2);
+}
+
 .progress-bar {
   display: flex;
   height: 56px;
@@ -1210,6 +1281,19 @@ onBeforeUnmount(() => {
 
   .urgent-condition-alert strong {
     font-size: 18px;
+  }
+
+  .avatar-settings-toggle {
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  .avatar-settings-toggle-summary {
+    font-size: 10px;
+  }
+
+  .consultation-avatar-settings-content {
+    padding: 0 8px 8px;
   }
 
   .patient-input-bar {

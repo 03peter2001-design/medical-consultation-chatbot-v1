@@ -1,100 +1,32 @@
 <script setup>
-import { ref, watchEffect } from 'vue'
-
 const props = defineProps({
   avatar: { type: Object, required: true },
-  open: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['close', 'connect'])
+const emit = defineEmits(['connect'])
 const clientKey = defineModel('clientKey', { type: String, default: '' })
 const agentId = defineModel('agentId', { type: String, default: '' })
-const videoElement = ref(null)
-
-watchEffect(() => {
-  if (videoElement.value) {
-    videoElement.value.srcObject = props.avatar.isDid.value
-      ? props.avatar.videoStream.value
-      : null
-  }
-})
 </script>
 
 <template>
-  <div
-    v-if="open"
-    class="drawer-backdrop"
-    @click="emit('close')"
-  />
-
-  <aside
-    id="avatar-settings"
-    class="avatar-sidebar"
-    :class="{ open }"
-    role="dialog"
-    aria-modal="true"
-    aria-label="Avatar 設定"
-    :aria-hidden="!open"
-    :inert="!open"
-  >
-    <div class="avatar-preview">
-      <div
-        v-if="avatar.isDid.value && !avatar.videoStream.value"
-        class="avatar-placeholder"
-      >
-        <div class="avatar-symbol">👤</div>
-        <div>D-ID Avatar 為選用功能<br />未連接也可正常問診</div>
-      </div>
-      <video
-        v-if="avatar.isDid.value"
-        ref="videoElement"
-        autoplay
-        playsinline
-        muted
-        :class="{ visible: avatar.videoStream.value }"
-      />
-      <img
-        v-if="avatar.isLocal.value"
-        class="avatar-image"
-        :class="{ hidden: avatar.videoUrl.value }"
-        :src="avatar.imageUrl.value"
-        alt="本地 AI 醫師 Avatar"
-      />
-      <video
-        v-if="avatar.isLocal.value && avatar.videoUrl.value"
-        :src="avatar.videoUrl.value"
-        playsinline
-        muted
-        controls
-        preload="metadata"
-        class="visible"
-      />
-      <div class="wave-overlay" :class="{ visible: avatar.talking.value }">
-        <span /><span /><span /><span /><span />
+  <section class="avatar-controls" aria-labelledby="avatar-controls-title">
+    <div class="controls-heading">
+      <div>
+        <span>AVATAR CONTROL</span>
+        <h3 id="avatar-controls-title">醫師 Avatar 設定</h3>
       </div>
       <div
-        v-if="avatar.isConnecting.value && !avatar.talking.value"
-        class="model-loading-overlay"
+        class="config-status"
+        :class="`tone-${avatar.statusTone.value}`"
         role="status"
         aria-live="polite"
       >
-        <span class="model-spinner" aria-hidden="true" />
-        <strong>模型載入／生成中</strong>
-        <span>{{ avatar.status.value }}</span>
-        <small>第一次啟用可能需要較長時間，請保持此頁開啟。</small>
+        <span class="status-dot" aria-hidden="true" />
+        {{ avatar.status.value }}
       </div>
-      <button
-        class="drawer-close"
-        type="button"
-        aria-label="關閉 Avatar 設定"
-        @click="emit('close')"
-      >
-        ✕
-      </button>
     </div>
 
-    <form class="avatar-config" @submit.prevent="emit('connect')">
-      <div class="config-title">Avatar Provider</div>
+    <form class="controls-grid" @submit.prevent="emit('connect')">
       <label>
         <span>提供者</span>
         <select
@@ -102,7 +34,7 @@ watchEffect(() => {
           :disabled="avatar.isConnecting.value"
           @change="avatar.setProvider($event.target.value)"
         >
-          <option value="local">本地（CosyVoice3 + MuseTalk）</option>
+          <option value="local">本地 · CosyVoice3 + MuseTalk</option>
           <option value="did">D-ID 雲端 Avatar</option>
         </select>
       </label>
@@ -119,12 +51,6 @@ watchEffect(() => {
         </select>
       </label>
 
-      <div v-if="avatar.isLocal.value" class="model-card">
-        <span>語音</span>
-        <strong>{{ avatar.speechModel.value }}</strong>
-        <span>唇形動畫</span>
-        <strong>{{ avatar.animationModel.value }}</strong>
-      </div>
       <template v-else>
         <label>
           <span>CLIENT KEY</span>
@@ -147,13 +73,14 @@ watchEffect(() => {
           />
         </label>
       </template>
+
       <button
         v-if="!avatar.isConnected.value"
         class="avatar-primary"
         type="submit"
         :disabled="avatar.isConnecting.value"
       >
-        {{ avatar.isConnecting.value ? '連線中…' : `啟用 ${avatar.providerLabel.value}` }}
+        {{ avatar.isConnecting.value ? '模型準備中…' : `啟用 ${avatar.providerLabel.value}` }}
       </button>
       <button
         v-else
@@ -163,353 +90,227 @@ watchEffect(() => {
       >
         中斷連線
       </button>
-      <div
-        class="config-status"
-        :class="`tone-${avatar.statusTone.value}`"
-      >
-        {{ avatar.status.value }}
-      </div>
-      <div v-if="avatar.isLocal.value" class="config-hint">
-        語音與影片都在院內主機產生，不需要 D-ID 或其他雲端 Avatar 金鑰。
-        第一次使用會下載並載入模型，因此等候時間較長。
-      </div>
-      <div v-else class="config-hint">
-        D-ID 會把要朗讀的文字傳送至其雲端服務。介面輸入的 Client Key 僅保存在
-        此頁記憶體；若以 <code>VITE_DID_CLIENT_KEY</code> 設定，金鑰會被編入公開的
-        JavaScript，任何訪客都能查看。請只使用限制網域的瀏覽器／Embed Key，切勿
-        放入伺服器私鑰。可至
-        <a href="https://studio.d-id.com" target="_blank" rel="noopener noreferrer">
-          D-ID Studio
-        </a>
-        建立 Agent。
-      </div>
     </form>
-  </aside>
+
+    <div v-if="avatar.isLocal.value" class="model-strip">
+      <span>語音模型</span>
+      <strong>{{ avatar.speechModel.value }}</strong>
+      <span>唇形動畫</span>
+      <strong>{{ avatar.animationModel.value }}</strong>
+      <small>語音與影片皆在院內主機產生；第一次載入可能需要較長時間。</small>
+    </div>
+    <p v-else class="privacy-note">
+      D-ID 會將朗讀文字送往雲端。Client Key 只保存在本頁記憶體；請使用限制網域的
+      Browser／Embed Key，切勿輸入伺服器私鑰。
+      <a href="https://studio.d-id.com" target="_blank" rel="noopener noreferrer">
+        開啟 D-ID Studio
+      </a>
+    </p>
+  </section>
 </template>
 
 <style scoped>
-.avatar-sidebar {
-  position: fixed;
-  z-index: 120;
-  top: var(--header-height);
-  bottom: 0;
-  left: 0;
+.avatar-controls {
+  width: 100%;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgb(255 255 255 / 94%);
+  text-align: left;
+}
+
+.controls-heading {
   display: flex;
-  width: min(340px, 90vw);
-  flex-direction: column;
-  overflow: hidden;
-  border-right: 1px solid var(--border);
-  background: var(--surface-1);
-  box-shadow: 18px 0 45px rgb(37 67 91 / 14%);
-  transform: translateX(-102%);
-  transition: transform 0.25s ease;
-}
-
-.avatar-sidebar.open {
-  transform: translateX(0);
-}
-
-.avatar-preview {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 12;
-  flex: 0 0 auto;
-  overflow: hidden;
-  background: var(--surface-2);
-}
-
-.avatar-preview video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-}
-
-.avatar-preview video.visible {
-  opacity: 1;
-}
-
-.avatar-image {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity 0.2s ease;
-}
-
-.avatar-image.hidden {
-  display: none;
-}
-
-.avatar-placeholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.controls-heading > div:first-child span {
+  color: var(--green);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+}
+
+.controls-heading h3 {
+  margin-top: 3px;
+  font-size: 17px;
+  font-weight: 720;
+}
+
+.config-status {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 7px;
   color: var(--muted);
-  font-size: 14px;
-  line-height: 1.6;
-  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  text-align: right;
 }
 
-.avatar-symbol {
-  font-size: 40px;
-  opacity: 0.25;
-}
-
-.wave-overlay {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  display: none;
-  height: 20px;
-  align-items: flex-end;
-  gap: 3px;
-  transform: translateX(-50%);
-}
-
-.wave-overlay.visible {
-  display: flex;
-}
-
-.wave-overlay span {
-  width: 4px;
+.status-dot {
+  width: 8px;
   height: 8px;
-  border-radius: 3px;
-  background: var(--blue);
-  animation: wave 0.7s ease-in-out infinite;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 14%, transparent);
 }
 
-.wave-overlay span:nth-child(2) {
-  height: 16px;
-  animation-delay: 0.1s;
+.config-status.tone-success { color: var(--green); }
+.config-status.tone-error { color: var(--danger); }
+.config-status.tone-waiting { color: var(--blue); }
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: minmax(190px, 1.2fr) minmax(150px, 0.8fr) minmax(150px, auto);
+  align-items: end;
+  gap: 12px;
 }
 
-.wave-overlay span:nth-child(3) {
-  height: 10px;
-  animation-delay: 0.2s;
-}
-
-.wave-overlay span:nth-child(4) {
-  height: 18px;
-  animation-delay: 0.3s;
-}
-
-.wave-overlay span:nth-child(5) {
-  animation-delay: 0.4s;
-}
-
-.model-loading-overlay {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
+.controls-grid label {
   display: flex;
+  min-width: 0;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 24px;
-  background: rgb(17 42 59 / 78%);
-  color: white;
-  text-align: center;
+  gap: 5px;
 }
 
-.model-loading-overlay strong {
-  font-size: 16px;
-}
-
-.model-loading-overlay > span:not(.model-spinner) {
-  font-size: 13px;
+.controls-grid label > span {
+  color: var(--muted);
+  font-size: 12px;
   font-weight: 650;
 }
 
-.model-loading-overlay small {
-  color: rgb(255 255 255 / 78%);
-  font-size: 12px;
-  line-height: 1.5;
-}
-
-.model-spinner {
-  width: 34px;
-  height: 34px;
-  border: 3px solid rgb(255 255 255 / 32%);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: model-spin 0.8s linear infinite;
-}
-
-.drawer-close {
-  position: absolute;
-  z-index: 3;
-  top: 12px;
-  right: 12px;
-  display: grid;
-  width: 40px;
-  height: 40px;
-  place-items: center;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  background: rgb(255 255 255 / 92%);
-  color: var(--text);
-  cursor: pointer;
-}
-
-.avatar-config {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 14px;
-  overflow-y: auto;
-  padding: 16px;
-}
-
-.config-title,
-.avatar-config label span {
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-}
-
-.model-card {
-  display: grid;
-  grid-template-columns: 78px minmax(0, 1fr);
-  gap: 8px 10px;
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface-2);
-  font-size: 12px;
-}
-
-.model-card span { color: var(--muted); }
-.model-card strong { overflow-wrap: anywhere; color: var(--text); }
-
-.avatar-config label {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.avatar-config input,
-.avatar-config select {
+.controls-grid input,
+.controls-grid select {
   width: 100%;
   min-height: 44px;
   padding: 9px 11px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface-1);
   color: var(--text);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
+  font-size: 12px;
+}
+
+.controls-grid input:focus,
+.controls-grid select:focus {
+  border-color: var(--green);
+  outline: 3px solid rgb(10 146 126 / 12%);
 }
 
 .avatar-primary,
 .avatar-secondary {
-  width: 100%;
   min-height: 44px;
-  padding: 10px 12px;
-  border-radius: 7px;
+  padding: 9px 16px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 720;
+  white-space: nowrap;
 }
 
 .avatar-primary {
+  border: 1px solid var(--green);
   background: var(--green);
   color: white;
 }
 
 .avatar-secondary {
-  border: 1px solid var(--border);
-  background: transparent;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-1);
   color: var(--muted);
 }
 
 .avatar-primary:disabled {
   cursor: wait;
-  opacity: 0.4;
+  opacity: 0.48;
 }
 
-.config-status {
-  color: var(--muted);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  text-align: center;
-}
-
-.config-status.tone-success {
-  color: var(--green);
-}
-
-.config-status.tone-error {
-  color: var(--danger);
-}
-
-.config-status.tone-waiting {
-  color: var(--blue);
-}
-
-.avatar-config hr {
-  border: 0;
+.model-strip {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 5px 10px;
+  margin-top: 12px;
+  padding-top: 11px;
   border-top: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
 }
 
-.config-hint {
+.model-strip span { color: var(--muted); }
+.model-strip strong { overflow-wrap: anywhere; color: var(--text); }
+.model-strip small {
+  grid-column: 1 / -1;
+  margin-top: 3px;
   color: var(--muted);
-  font-size: 13px;
-  line-height: 1.75;
+  font-family: 'Noto Sans TC', sans-serif;
+  line-height: 1.5;
 }
 
-.config-hint a {
+.privacy-note {
+  margin-top: 12px;
+  padding-top: 11px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.privacy-note a {
   color: var(--blue);
   text-decoration: none;
 }
 
-.drawer-backdrop {
-  position: fixed;
-  z-index: 110;
-  inset: var(--header-height) 0 0;
-  display: block;
-  background: rgb(31 51 69 / 28%);
-  backdrop-filter: blur(2px);
-}
-
-@keyframes wave {
-  50% {
-    transform: scaleY(0.3);
-  }
-}
-
-@keyframes model-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .model-spinner {
-    animation: none;
-    border-color: white;
-  }
-}
-
 @media (max-width: 760px) {
-  .avatar-sidebar {
-    width: min(320px, 88vw);
+  .avatar-controls {
+    padding: 14px;
   }
 
-  .drawer-backdrop {
-    background: rgb(31 51 69 / 32%);
+  .controls-heading {
+    align-items: flex-start;
   }
 
-  .drawer-close {
-    top: 8px;
-    right: 8px;
+  .config-status {
+    max-width: 54%;
+    line-height: 1.4;
+  }
+
+  .controls-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .controls-grid button {
+    grid-column: 1 / -1;
+  }
+
+  .model-strip {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .controls-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .controls-grid button {
+    grid-column: auto;
+  }
+
+  .controls-heading {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .config-status {
+    max-width: none;
+    text-align: left;
   }
 }
 </style>

@@ -15,7 +15,11 @@ from amie.disease_profiles import (
 )
 from app import runtime
 from app.prompts.report import build_report_prompt
-from app.services.clinical_summary import clinical_patient_data, model_patient_summary
+from app.services.clinical_summary import (
+    build_structured_emr,
+    clinical_patient_data,
+    model_patient_summary,
+)
 from app.services.consultation_service import (
     process_consultation_summaries,
 )
@@ -214,6 +218,8 @@ def _render_physician_quick_summary(
 
 def _assessment_for_record(record: dict) -> dict:
     data = record.get("data") or {}
+    if data.get("_interview_pipeline", {}).get("engine") == "questionnaire":
+        return {}
     assessment = dict(
         data.get("_disease_assessment") or (data.get("_amie") or {}).get("disease_assessment") or {}
     )
@@ -412,6 +418,9 @@ def _render_structured_note(
 def generate_structured_note(
     record: dict,
 ) -> tuple[str | None, list[dict]]:
+    data = record.get("data") or {}
+    if data.get("_interview_pipeline", {}).get("engine") == "questionnaire":
+        return build_structured_emr(data), []
     if not runtime.RAG_ENABLED:
         return None, []
 
@@ -522,8 +531,13 @@ def generate_ai_report(record: dict) -> str | None:
         temperature=0.3,
         max_tokens=500,
     )
+    questionnaire_pipeline = data.get("_interview_pipeline", {}).get("engine") == "questionnaire"
     assessment = _assessment_for_record(record)
-    normalized = _render_physician_quick_summary(record, report, assessment)
+    normalized = (
+        _validated_history_summary(record, report)
+        if questionnaire_pipeline
+        else _render_physician_quick_summary(record, report, assessment)
+    )
     if not normalized:
         return None
     if record.get("triage_level") != "urgent":

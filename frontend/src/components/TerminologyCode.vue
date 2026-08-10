@@ -15,7 +15,7 @@ const sourceLabel = computed(() => {
     return 'TW Core 官方套件'
   }
   if (props.coding.source === 'ai-suggested') {
-    return 'AI 建議編碼，待醫師確認'
+    return 'AI 編碼結果，待醫師確認'
   }
   if (props.coding.source === 'snomed-registry') {
     return '本機 HAPI SNOMED CT 已驗證'

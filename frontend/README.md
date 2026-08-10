@@ -6,6 +6,89 @@ SNOMED CT 查詢。根目錄的 `index.html`、`doctor.html` 是重構前的相�
 
 ## 服務版本
 
+### v0.2.6 (2026-08-10)
+
+- 醫師工作區的六段式病歷說明把「檢驗建議」改為「檢驗（抽血／驗尿）」，與後端
+  新報告標題一致；病歷仍標示為 Gemini 生成、未經醫師確認的臨床決策草稿。
+- 舊病例的 AI terminology badge 改標示為「AI 編碼結果，待醫師確認」，不再使用
+  「AI 建議編碼」字樣；保留來源與人工確認邊界。
+- Structured note regression test 驗證新標題並防止報告說明恢復「建議」字樣；未修改
+  獨立控制的 `frontend-v2/` 正式部署線。
+
+### v0.2.5 (2026-08-10)
+
+- 更新病患／醫師流程文件：固定問卷完成後顯示的是 Gemini 依完整題目與答案生成的
+  EMR 草稿，不再描述為 deterministic EMR；前端 runtime 與 bundle 未變更。
+- 文件同步說明新 `questionnaire` 病例不建立疾病票數；OpenAPI type drift check 通過。
+
+### v0.2.4 (2026-08-10)
+
+- 開始頁仍保留完整 Avatar 舞台與 fallback；進入問診後，只有 connected、connecting、
+  rendering 或 talking 時顯示舞台，未啟用／啟用失敗時自動收合，讓文字問診使用主要空間。
+- 收合摘要列直接顯示 Avatar 失敗原因；展開設定後仍提供啟用／重試控制。成功啟用後
+  舞台會自動出現，既有設定顯示／隱藏行為不變。
+- Avatar focused regression、完整 Node tests、production build、OpenAPI type drift
+  check 通過；headless Chrome/CDP 驗證模擬 GPU 不可用的桌機／390×844 收合狀態、
+  重試入口及成功啟用對照，無 Vite overlay、console warning/error 或 runtime exception。
+
+### v0.2.3 (2026-08-10)
+
+- 開始問診頁仍直接顯示完整 Avatar 設定；進入問診後預設收合成一列，保留 provider、
+  語言摘要及「顯示」按鈕，病人可 inline 展開或再次隱藏，不使用 drawer／modal。
+- 展開按鈕同步 `aria-expanded` 與 `aria-controls`，支援鍵盤 focus；桌機與手機收合時
+  都不占用問卷主要內容空間，題目、進度與輸入控制維持可用。
+- Avatar focused regression、完整 Node tests、production build、OpenAPI type drift
+  check 通過；headless Chrome/CDP 驗證開始頁可見、問診預設收合、展開、再收合及
+  390×844 響應式狀態，無 Vite overlay、console warning/error 或 runtime exception。
+
+### v0.2.2 (2026-08-10)
+
+- 本地 Avatar 的 CosyVoice3／MuseTalk 影片改為獨立背景生成狀態；後端回傳下一題後，
+  題目與輸入控制立即可用，不再把影片生成呈現為整個 Avatar 重新連線或要求病人等待。
+- 快速連續作答時合併尚未開始的 Avatar 工作，只保留最新題目；已在執行的工作完成後
+  若已過時便不播放，避免舊題影片逐題累積、晚於目前問診進度才出現。
+- 舞台與 Header 明示「背景生成中，可直接作答」；連線 warm-up、問卷 Safety、答案
+  保存及完成後 EMR 行為不變。
+- Unit regression test 驗證連線在生成期間保持可用且第二個過時工作不會執行；以
+  headless Chrome/CDP 攔截慢速 Avatar，在首個影片請求保持 pending 時連續送出兩題，
+  下一題分別於 31ms／8ms 可操作，且只送出第一題與最新第三題影片工作。此數值是本機
+  模擬回應的 UI 非阻塞證據，不代表正式 GPU 推論時間。完整 Node tests、production
+  build 與 OpenAPI type drift check 通過。
+
+### v0.2.1 (2026-08-10)
+
+- 修復 `v0.2.0` 將 Avatar 舞台、設定與開始流程全部垂直堆疊，導致常見筆電與手機
+  首屏看不到身分欄位和開始按鈕的響應式版面 regression。
+- 桌機改為 Avatar／常駐設定與開始流程雙欄配置；窄螢幕依序顯示 Avatar、開始流程、
+  常駐設定，保留 provider 與語言直接可操作且不恢復 drawer。
+- 以 1366×768、390×844 headless Chrome/CDP 驗證主要按鈕首屏可見、D-ID provider
+  切換、無 Vite overlay、console warning/error 與 runtime exception。
+
+### v0.2.0 (2026-08-10)
+
+- Avatar 設定不再藏在左側 drawer；provider、醫生說話語言、模型名稱、目前狀態及
+  啟用／中斷控制直接常駐於開始問診頁與問診中的主舞台下方。
+- 切換 D-ID 後，Client Key 與 Agent ID 在同一控制區直接顯示，並保留資料傳輸與
+  Browser／Embed Key 警告；本地 provider 則顯示院內模型與首次載入說明。
+- 移除 Header Avatar panel 按鈕、modal backdrop 與 drawer state；桌面使用緊湊橫向
+  控制列，手機改為可直接捲動的單欄表單，Avatar 失敗時文字問診 fallback 不變。
+- Avatar regression tests、完整 Node tests、production build、OpenAPI type drift，
+  以及 headless Chrome 桌面／手機畫面與 provider 切換互動驗證通過。
+
+### v0.1.0 (2026-08-10)
+
+此版本配合簡化問診方向重新以 0 編碼；下方 `v1.x` 條目是先前能力線的歷史紀錄，
+不是目前發布線的連續 SemVer 前序版本。
+
+- 本機 Avatar 在病患頁載入時自動 warm-up／連線，不再要求病人先進設定抽屜手動啟用；
+  開始問診 overlay 與問診頁首屏都以放大的醫師舞台作為主視覺。
+- 未連線、載入中、已連線與失敗狀態都保留醫師圖、可讀狀態及字幕區；失敗時明示
+  文字問診仍可使用，並提供可用鍵盤操作的重試按鈕，不會因 Avatar 中斷問診。
+- 病患頁移除 AMIE trace 狀態與面板；前端仍保留其他醫師端治理／歷史相容元件，且
+  沒有修改獨立控制的 `frontend-v2/` 正式部署線。
+- 14 個 Node test files、production build、OpenAPI type drift，以及 headless Chrome
+  1440×960／390×844 首屏、fallback、重試互動、DOM 與 console 驗證通過。
+
 ### v1.7.0 (2026-08-10)
 
 - 將既有 Breeze ASR 語音輸入延伸至選擇、複選、持續時間與日期題；結構化題目
@@ -221,11 +304,13 @@ Docker gateway 可達，再檢查 frontend 的 backend URL 設定。Port 18000 �
 ## 病患端與醫師端
 
 病患端會收集自由主訴、FHIR 尚未提供的基本資料與病史，再依主訴進入胸痛、
-頭痛或腹痛問卷。選擇題支援單選、複選、自由補充與正／背面人體疼痛位置標記。
+頭痛或腹痛的逐題問卷。選擇題支援單選、複選、自由補充與正／背面人體疼痛位置標記；
+病患頁不再顯示 AMIE 決策 trace。
 
-醫師端可瀏覽、分頁及依姓名、問診編號或主訴搜尋病例；點選後可查看疼痛位置、
-約 300 字速覽摘要、固定疾病表排名與六段式分析。病例需經二次確認才會永久
-刪除。問診編號 `00000` 是內建的假病人展示資料。
+醫師端可瀏覽、分頁及依姓名、問診編號或主訴搜尋病例；新 `questionnaire` 病例顯示
+疼痛位置、問卷原始回答與 Gemini 生成且未經醫師確認的六段式 EMR／臨床決策草稿，
+但不建立固定疾病表排名。舊 AMIE 病例仍相容顯示既有排名與分析。病例需經二次確認
+才會永久刪除；問診編號 `00000` 是內建的假病人展示資料。
 
 規則中心的實際治理與權限邏輯在後端，請見
 [../backend/README.md](../backend/README.md#醫師端規則中心)。
@@ -267,12 +352,13 @@ VITE_DID_CLIENT_KEY=
 VITE_DID_AGENT_ID=
 ```
 
-未啟用時仍可使用純文字或語音輸入。所有 `VITE_*` 值都會在 build-time
+頁面載入後會自動啟用預設 provider；失敗時仍可使用純文字輸入並在主舞台重試。
+所有 `VITE_*` 值都會在 build-time
 寫入公開的瀏覽器 JavaScript；因此建議在 UI 輸入 D-ID 資料（只存於頁面記憶體）。
 若必須預先設定，只能使用由 [D-ID Studio](https://studio.d-id.com) 建立、限制部署
 網域的瀏覽器／Embed Key，絕不可放伺服器私鑰。
 
-啟用 Avatar 後，醫師影像與朗讀字幕會顯示在問診畫面上方。每次 Avatar 播放
+醫師影像與朗讀字幕會在開始問診前及問診畫面上方優先顯示。每次 Avatar 播放
 完成後會自動開啟麥克風；使用者開始說話後連續停頓 5 秒，錄音會自動交給
 Breeze ASR。辨識文字回填輸入框後有 3 秒可直接編輯，任何編輯都會取消自動
 送出；按下麥克風手動停止的錄音則不會自動送出。Avatar 設定可選國語或閩南語；

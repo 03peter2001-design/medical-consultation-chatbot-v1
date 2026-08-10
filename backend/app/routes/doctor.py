@@ -575,17 +575,29 @@ def load_patient(request: LoadPatientRequest):
     }
     stored_data = record.get("data", {})
     amie_state = dict(stored_data.get("_amie") or {})
+    questionnaire_safety = dict(stored_data.get("_safety") or {})
+    if questionnaire_safety:
+        amie_state["red_flags"] = list(questionnaire_safety.get("red_flags") or [])
+        amie_state["safety_source"] = questionnaire_safety.get("source", "raw_text_rules")
     legacy_differentials = list(amie_state.get("differential_hypotheses") or [])
     disease_assessment = dict(
         stored_data.get("_disease_assessment") or amie_state.get("disease_assessment") or {}
     )
     route = record.get("type")
+    questionnaire_pipeline = (
+        stored_data.get("_interview_pipeline", {}).get("engine") == "questionnaire"
+    )
     uses_disease_vote = (
-        route in DISEASE_ROUTES
+        not questionnaire_pipeline
+        and route in DISEASE_ROUTES
         and load_questionnaire_policy(route)["selection_strategy"] == "disease_vote"
     )
     red_flags = list(amie_state.get("red_flags") or [])
-    if red_flags and not disease_assessment.get("safety_triggered_conditions"):
+    if (
+        not questionnaire_pipeline
+        and red_flags
+        and not disease_assessment.get("safety_triggered_conditions")
+    ):
         disease_assessment = attach_safety_conditions(
             str(route or ""),
             red_flags,

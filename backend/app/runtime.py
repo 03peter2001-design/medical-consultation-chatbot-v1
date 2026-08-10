@@ -22,10 +22,32 @@ print(f"[ASR] 使用 {asr_service.status()['provider']}（{asr_service.status()[
 avatar_client = AvatarClient()
 print("[Avatar] " + ("啟用本地 CosyVoice3 + MuseTalk" if avatar_client.enabled else "未啟用"))
 
-INTERVIEW_ENGINE = os.getenv("INTERVIEW_ENGINE", "amie").strip().lower()
-if INTERVIEW_ENGINE not in {"amie", "legacy"}:
-    raise RuntimeError("INTERVIEW_ENGINE 僅支援 amie 或 legacy")
+
+def _normalize_interview_engine(value: str) -> str:
+    configured = value.strip().lower()
+    aliases = {"legacy": "questionnaire", "simple": "questionnaire"}
+    normalized = aliases.get(configured, configured)
+    if normalized not in {"amie", "questionnaire"}:
+        raise RuntimeError("INTERVIEW_ENGINE 僅支援 questionnaire（legacy／simple 別名）或 amie")
+    return normalized
+
+
+INTERVIEW_ENGINE = _normalize_interview_engine(os.getenv("INTERVIEW_ENGINE", "questionnaire"))
 print(f"[Interview] 使用 {INTERVIEW_ENGINE} 問診引擎")
+
+_gemini_summary_client: LLMClient | None = None
+
+
+def get_gemini_summary_client() -> LLMClient:
+    """Return the Gemini client used after a fixed questionnaire is complete."""
+
+    global _gemini_summary_client
+    if _gemini_summary_client is None:
+        env = dict(os.environ)
+        env["LLM_PROVIDER"] = "gemini"
+        _gemini_summary_client = LLMClient(env)
+    return _gemini_summary_client
+
 
 AMIE_DEBUG_TRACE = os.getenv("AMIE_DEBUG_TRACE", "true").strip().lower() in {
     "1",

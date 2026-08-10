@@ -62,9 +62,12 @@ export function useAvatar({
   const status = ref('Avatar 尚未啟用')
   const statusTone = ref('idle')
   const talking = ref(false)
+  const rendering = ref(false)
   const speechModel = ref('Fun-CosyVoice3-0.5B-2512')
   const animationModel = ref('MuseTalk 1.5')
-  let speechQueue = Promise.resolve()
+  let pendingLocalSpeech = null
+  let localSpeechWorker = null
+  let localSpeechRequestId = 0
   let userEnabled = false
   let lifecycleToken = 0
   let activeRequestController = null
@@ -80,6 +83,7 @@ export function useAvatar({
   const headerStatus = computed(() => {
     if (talking.value) return `${providerLabel.value} 說話中`
     if (isConnecting.value) return `${providerLabel.value} 連線或生成中`
+    if (rendering.value) return `${providerLabel.value} 背景生成中，可直接作答`
     if (isConnected.value) return `${providerLabel.value} 已啟用`
     return '文字問診模式'
   })
@@ -103,6 +107,7 @@ export function useAvatar({
     videoStream.value = null
     connectionState.value = 'idle'
     talking.value = false
+    rendering.value = false
     caption.value = ''
     status.value = message
     statusTone.value = 'idle'
@@ -220,6 +225,9 @@ export function useAvatar({
   async function disconnect(message = 'Avatar 已停用；問診仍可繼續') {
     userEnabled = false
     lifecycleToken += 1
+    localSpeechRequestId += 1
+    pendingLocalSpeech = null
+    rendering.value = false
     activeRequestController?.abort()
     activeRequestController = null
     const currentManager = manager.value
@@ -250,12 +258,11 @@ export function useAvatar({
     }
   }
 
-  async function performLocalSpeech(text, token) {
+  async function performLocalSpeech(text, token, requestId) {
     if (!isCurrent(token, 'local')) return
     const input = cleanSpeechText(text)
     if (!input) return
-    connectionState.value = 'connecting'
-    status.value = 'CosyVoice3 與 MuseTalk 生成中…'
+    status.value = 'Avatar 影片背景生成中；下一題已可直接作答'
     statusTone.value = 'waiting'
     const controller = new AbortController()
     activeRequestController = controller
@@ -264,25 +271,41 @@ export function useAvatar({
         language: language.value,
         signal: controller.signal,
       })
-      if (!isCurrent(token, 'local')) return
+      if (!isCurrent(token, 'local') || requestId !== localSpeechRequestId) return
       revokeVideo()
       videoUrl.value = URL.createObjectURL(result.blob)
       speechModel.value = result.speechModel || speechModel.value
       animationModel.value = result.animationModel || animationModel.value
-      connectionState.value = 'connected'
       status.value = result.cacheHit
         ? `${languageLabel.value}影片已由本機快取載入`
         : `${languageLabel.value}影片已完成`
       statusTone.value = 'success'
     } catch (error) {
-      if (!isCurrent(token, 'local') || error?.name === 'AbortError') return
-      connectionState.value = 'connected'
+      if (
+        !isCurrent(token, 'local') ||
+        requestId !== localSpeechRequestId ||
+        error?.name === 'AbortError'
+      ) return
       talking.value = false
       status.value = `本次本地 Avatar 失敗：${error.message}`
       statusTone.value = 'error'
       console.warn('本地 Avatar 語音播放失敗：', error)
     } finally {
       if (activeRequestController === controller) activeRequestController = null
+    }
+  }
+
+  async function drainLocalSpeech(token) {
+    rendering.value = true
+    try {
+      while (pendingLocalSpeech && isCurrent(token, 'local')) {
+        const request = pendingLocalSpeech
+        pendingLocalSpeech = null
+        await performLocalSpeech(request.text, token, request.id)
+      }
+    } finally {
+      rendering.value = false
+      localSpeechWorker = null
     }
   }
 
@@ -298,10 +321,12 @@ export function useAvatar({
     }
 
     const token = lifecycleToken
-    speechQueue = speechQueue
-      .catch(() => undefined)
-      .then(() => performLocalSpeech(input, token))
-    return speechQueue
+    const requestId = ++localSpeechRequestId
+    pendingLocalSpeech = { id: requestId, text: input }
+    if (!localSpeechWorker) {
+      localSpeechWorker = drainLocalSpeech(token)
+    }
+    return localSpeechWorker
   }
 
   function onPlaybackStart() {
@@ -348,6 +373,7 @@ export function useAvatar({
     status,
     statusTone,
     talking,
+    rendering,
     isConnected,
     isConnecting,
     headerStatus,

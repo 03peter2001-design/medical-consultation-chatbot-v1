@@ -687,7 +687,7 @@ export interface components {
              * Interview Engine
              * @enum {string}
              */
-            interview_engine: "amie" | "legacy";
+            interview_engine: "questionnaire" | "amie";
             /** Llm Model */
             llm_model: string;
             /** Llm Provider */

@@ -9,6 +9,7 @@ from fastapi import (
     APIRouter,
     BackgroundTasks,
     Depends,
+    HTTPException,
 )
 
 from amie import (
@@ -35,6 +36,7 @@ from app.runtime import (
     SESSION_TTL,
     URGENT_CARE_MESSAGE,
     consultation_repository,
+    get_gemini_summary_client,
     llm_client,
     sessions,
 )
@@ -52,9 +54,26 @@ from app.services.async_clinical_io import (
     ClinicalOperationTimeout,
     run_clinical_io,
 )
-from app.services.clinical_summary import build_summary
+from app.services.clinical_summary import (
+    build_structured_emr,
+    build_summary,
+    clinical_patient_data,
+)
 from app.services.consultation_reporting import (
     process_background_summaries,
+)
+from app.services.gemini_questionnaire_summary import (
+    PROMPT_VERSION as GEMINI_SUMMARY_PROMPT_VERSION,
+)
+from app.services.gemini_questionnaire_summary import (
+    build_summary_messages,
+    questionnaire_answers,
+)
+from app.services.gemini_questionnaire_summary import (
+    parse_summary as parse_gemini_summary,
+)
+from app.services.gemini_questionnaire_summary import (
+    render_emr as render_gemini_emr,
 )
 from app.services.input_validation import (
     store_question_answer,
@@ -90,10 +109,13 @@ from app.services.patient_interview import (
 from app.services.patient_interview import (
     urgent_possible_conditions as _urgent_possible_conditions,
 )
+from app.services.rag import deduplicate_sources, retrieve_context_block
 from app.services.security_audit import audit_patient, safe_log
 from domain.patient_messages import patient_message
 from domain.questionnaires import (
+    BASIC_QUESTIONNAIRE,
     CHIEF_QUESTIONNAIRE,
+    HISTORY_QUESTIONNAIRE,
     ROUTE_LABELS,
     build_questionnaire,
     condition_matches,
@@ -302,6 +324,120 @@ def _question_payload(
     }
 
 
+def _questionnaire_rag_contexts(data: dict) -> tuple[dict[str, str], list[dict]]:
+    """Retrieve the three evidence blocks used by the six-part final report."""
+
+    reason = str(data.get("reason") or "").strip()
+    route = str(data.get("type") or "")
+    primary_route = route if route in SUPPORTED_PATIENT_ROUTES else None
+    patient_data = clinical_patient_data(data)
+    diagnosis, diagnosis_sources = retrieve_context_block(
+        f"{reason} 鑑別診斷 危險徵兆 紅旗症狀",
+        n_results=5,
+        primary_route=primary_route,
+        patient_data=patient_data,
+        purpose="diagnosis",
+    )
+    laboratory, laboratory_sources = retrieve_context_block(
+        f"{reason} 抽血檢驗 實驗室檢查",
+        n_results=4,
+        primary_route=primary_route,
+        patient_data=patient_data,
+        purpose="lab",
+    )
+    imaging, imaging_sources = retrieve_context_block(
+        f"{reason} 影像學 X光 電腦斷層 CT MRI 超音波",
+        n_results=4,
+        primary_route=primary_route,
+        patient_data=patient_data,
+        purpose="imaging",
+    )
+    return (
+        {
+            "diagnosis": diagnosis,
+            "laboratory": laboratory,
+            "imaging": imaging,
+        },
+        deduplicate_sources(
+            diagnosis_sources,
+            laboratory_sources,
+            imaging_sources,
+        ),
+    )
+
+
+async def _complete_questionnaire_consultation(
+    session: dict,
+    user_display: str,
+) -> dict:
+    data = session["data"]
+    ctype = data["type"]
+    answers = questionnaire_answers(session["questionnaire"], data)
+    prefilled_data = {
+        field: data[field] for field in session.get("prefilled_fields", []) if field in data
+    }
+    try:
+        knowledge_contexts, structured_sources = await run_clinical_io(
+            _questionnaire_rag_contexts,
+            data,
+        )
+        client = get_gemini_summary_client()
+        raw = await run_clinical_io(
+            client.generate_text,
+            build_summary_messages(
+                answers,
+                prefilled_data=prefilled_data,
+                knowledge_contexts=knowledge_contexts,
+            ),
+            temperature=0.2,
+            max_tokens=3200,
+        )
+        generated = parse_gemini_summary(raw)
+    except Exception as error:
+        safe_log("patient.questionnaire_summary", "failure", error=error)
+        raise HTTPException(
+            status_code=503,
+            detail="Gemini 目前無法整理問診結果，答案已保留，請稍後重試。",
+        ) from error
+    structured_note = render_gemini_emr(generated, model=client.model)
+    data["_questionnaire_answers"] = answers
+    data["_gemini_emr"] = generated.emr
+    data["_interview_pipeline"].update(
+        {
+            "model": client.model,
+            "prompt_version": GEMINI_SUMMARY_PROMPT_VERSION,
+            "postprocess": "single_gemini_six_part_report_after_questionnaire",
+            "rag_contexts": ["diagnosis", "laboratory", "imaging"],
+        }
+    )
+    created = consultation_repository.create_with_identifiers(
+        {
+            "session_id": session["session_id"],
+            "type": ctype,
+            "reason": data.get("reason", ""),
+            "summary": structured_note,
+            "report": structured_note,
+            "data": data,
+            "structured_note": structured_note,
+            "structured_sources": structured_sources,
+            "triage_level": "routine",
+            "status": "completed",
+            **session.get("_integration", {}),
+        }
+    )
+    queue_number = created["queue_number"]
+    session["step"] = -1
+    session["index"] = -1
+    reply = patient_message("completion.routine", queue_number=queue_number)
+    return _question_payload(
+        session,
+        reply=reply,
+        user_display=user_display,
+        completed=True,
+        queue_number=queue_number,
+    )
+
+
 async def _complete_consultation(
     session: dict,
     user_display: str,
@@ -309,6 +445,9 @@ async def _complete_consultation(
 ) -> dict:
     data = session["data"]
     ctype = data["type"]
+    if data.get("_interview_pipeline", {}).get("engine") == "questionnaire":
+        return await _complete_questionnaire_consultation(session, user_display)
+
     created = consultation_repository.create_with_identifiers(
         {
             "session_id": session["session_id"],
@@ -317,6 +456,8 @@ async def _complete_consultation(
             "summary": build_summary(data),
             "report": patient_message("report.summary_pending"),
             "data": data,
+            "structured_note": None,
+            "structured_sources": [],
             "triage_level": "routine",
             "status": "summary_pending",
             **session.get("_integration", {}),
@@ -346,9 +487,12 @@ async def _complete_urgent_consultation(
 ) -> dict:
     """Persist urgent safety output, then generate AI summaries in background."""
     data = session["data"]
-    red_flags = session.get("amie_state", {}).get("red_flags", [])
+    red_flags = session.get("safety_state", {}).get("red_flags", []) or session.get(
+        "amie_state", {}
+    ).get("red_flags", [])
     flag_labels = "、".join(flag.get("label", "") for flag in red_flags if flag.get("label"))
-    possible_conditions = _urgent_possible_conditions(session)
+    questionnaire_pipeline = data.get("_interview_pipeline", {}).get("engine") == "questionnaire"
+    possible_conditions = [] if questionnaire_pipeline else _urgent_possible_conditions(session)
     condition_summary = "、".join(possible_conditions)
     condition_line = (
         patient_message(
@@ -373,6 +517,8 @@ async def _complete_urgent_consultation(
             "summary": build_summary(data),
             "report": report,
             "data": data,
+            "structured_note": (build_structured_emr(data) if questionnaire_pipeline else None),
+            "structured_sources": [],
             "triage_level": "urgent",
             "status": "summary_pending",
             **session.get("_integration", {}),
@@ -921,50 +1067,36 @@ async def _chat_amie(
     )
 
 
-async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
-    _cleanup_sessions()
+def _questionnaire_initial_session(req: ChatRequest) -> dict:
+    data, prefilled_fields = _prefilled_patient_data(req)
+    data["_interview_pipeline"] = {
+        "engine": "questionnaire",
+        "routing": "deterministic_keyword_or_common_questions",
+        "version": 2,
+    }
+    return {
+        "session_id": req.session_id,
+        "engine": "questionnaire",
+        "step": 0,
+        "index": 0,
+        "triage_level": "routine",
+        "questionnaire": list(CHIEF_QUESTIONNAIRE),
+        "data": data,
+        "prefilled_fields": sorted(prefilled_fields),
+        "_history": [],
+        "ts": time.time(),
+    }
 
-    patient_session = current_patient_session()
-    if patient_session is not None:
-        req.session_id = patient_session["interview_session_id"]
-        req.patient_prefill = PatientPrefill(**patient_session["prefill"])
 
-    if req.action == "back" and req.session_id in sessions:
-        return _restore_previous_question(sessions[req.session_id])
-
-    if INTERVIEW_ENGINE == "amie":
-        response = await _chat_amie(req, background_tasks)
-        if patient_session is not None and req.session_id in sessions:
-            sessions[req.session_id]["_integration"] = {
-                "invitation_id": patient_session["invite_id"],
-                "institution_id": patient_session["institution_id"],
-                "patient_sno": patient_session["patient_sno"],
-                "reg_sno": patient_session["reg_sno"],
-            }
-        return response
+async def _chat_questionnaire(
+    req: ChatRequest,
+    background_tasks: BackgroundTasks,
+) -> dict:
+    """Advance the original-order questionnaire without AMIE or semantic extraction."""
 
     if req.session_id not in sessions:
-        data, prefilled_fields = _prefilled_patient_data(req)
-
-        session = {
-            "session_id": req.session_id,
-            "engine": "legacy",
-            "step": 0,
-            "index": 0,
-            "questionnaire": list(CHIEF_QUESTIONNAIRE),
-            "data": data,
-            "prefilled_fields": list(prefilled_fields),
-            "_history": [],
-            "ts": time.time(),
-        }
+        session = _questionnaire_initial_session(req)
         sessions[req.session_id] = session
-        if patient_session is not None:
-            session["_integration"] = {
-                "invitation_id": patient_session["invite_id"],
-                "institution_id": patient_session["institution_id"],
-                "patient_sno": patient_session["patient_sno"],
-                "reg_sno": patient_session["reg_sno"],
-            }
         return _question_payload(
             session,
             reply=patient_message(
@@ -1002,6 +1134,7 @@ async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
                 prompt=current["prompt"],
             ),
         )
+
     _record_question_history(session)
     field = current["field"]
     user_input, user_display = store_question_answer(
@@ -1012,71 +1145,20 @@ async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
     )
 
     if field == "reason":
-        try:
-            route, chief_flags = await run_clinical_io(
-                _assess_chief_complaint,
-                user_input,
-                data,
-            )
-        except ClinicalOperationTimeout:
-            route, chief_flags = "safety_unavailable", []
-        if chief_flags:
-            return await _complete_urgent_chief_complaint(
-                session,
-                user_input=user_input,
-                route=route,
-                red_flags=chief_flags,
-                background_tasks=background_tasks,
-            )
-        data["type"] = route
-        if route == "safety_unavailable":
-            session["step"] = -1
-            session["index"] = -1
-            return _question_payload(
-                session,
-                reply=patient_message("handoff.safety_unavailable"),
-                user_display=user_display,
-                completed=True,
-            )
-        if route not in SUPPORTED_PATIENT_ROUTES:
-            session["step"] = -1
-            session["index"] = -1
-            return _question_payload(
-                session,
-                reply=patient_message("handoff.unsupported_route"),
-                user_display=user_display,
-                completed=True,
-            )
-        routes = _complaint_routes(data, route)
-        data["types"] = routes
-        governed_route = _governed_entry_route(routes)
-        if governed_route:
-            data["type"] = governed_route
-            governed_response = await _governed_route_entry(
-                session,
-                route=governed_route,
-                user_input=user_input,
-                user_display=user_display,
-                background_tasks=background_tasks,
-            )
-            if governed_response is not None:
-                return governed_response
-        questionnaire = build_questionnaire(routes)
-        _apply_chief_questionnaire_prefills(data, questionnaire)
-        questionnaire = [
-            filtered
-            for item in questionnaire
-            if (
-                filtered := filter_question_by_known_facts(
-                    item,
-                    data.get("_clinical_facts", []),
-                )
-            )
-            is not None
-        ]
+        route = local_complaint_route(user_input)
+        data["type"] = route or "other"
+        data["types"] = [route] if route else []
+        questionnaire = (
+            build_questionnaire(route)
+            if route in SUPPORTED_PATIENT_ROUTES
+            else [
+                *deepcopy(CHIEF_QUESTIONNAIRE),
+                *deepcopy(BASIC_QUESTIONNAIRE),
+                *deepcopy(HISTORY_QUESTIONNAIRE),
+            ]
+        )
         session["questionnaire"] = questionnaire
-        _copy_prefills_to_secondary_routes(session, questionnaire)
-        index = -1
+        index = 0
 
     prefilled_fields = set(session.get("prefilled_fields", []))
     next_index = next_question_index(
@@ -1092,20 +1174,45 @@ async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
             background_tasks,
         )
 
-    previous_section = current["section"]
     session["index"] = next_index
     session["step"] = next_index
     next_question = questionnaire[next_index]
     return _question_payload(
         session,
         reply=_section_transition_reply(
-            previous_section,
+            current["section"],
             next_question,
             next_question.get("route") or data["type"],
             prefilled_fields,
         ),
         user_display=user_display,
     )
+
+
+async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
+    _cleanup_sessions()
+
+    patient_session = current_patient_session()
+    if patient_session is not None:
+        req.session_id = patient_session["interview_session_id"]
+        req.patient_prefill = PatientPrefill(**patient_session["prefill"])
+
+    if req.action == "back" and req.session_id in sessions:
+        return _restore_previous_question(sessions[req.session_id])
+
+    if INTERVIEW_ENGINE == "amie":
+        response = await _chat_amie(req, background_tasks)
+    else:
+        response = await _chat_questionnaire(req, background_tasks)
+
+    if patient_session is not None and req.session_id in sessions:
+        sessions[req.session_id]["_integration"] = {
+            "invitation_id": patient_session["invite_id"],
+            "institution_id": patient_session["institution_id"],
+            "patient_sno": patient_session["patient_sno"],
+            "reg_sno": patient_session["reg_sno"],
+        }
+    return response
 
 
 def _patient_runtime_binding(patient_session: dict) -> dict[str, str]:

@@ -42,17 +42,17 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 
 | 服務／可部署產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
 | --- | --- | --- | --- | --- |
-| Backend API（含 Breeze ASR） | `0.3.0` | 2026-08-10 | 固定問卷完成後由 RAG＋Gemini 產生六段式臨床決策報告，輸出移除「建議」段落與標題 | [backend/README.md](backend/README.md#服務版本) |
-| 開發版 Vue frontend | `0.2.6` | 2026-08-10 | 醫師端六段式與 AI 編碼文案移除「建議」，保留來源及確認狀態 | [frontend/README.md](frontend/README.md#服務版本) |
+| Backend API（含 Breeze ASR） | `0.5.2` | 2026-08-17 | 拒絕占位審查者、範圍與無效日期，避免未審台語機器翻譯被誤認為已簽核 | [backend/README.md](backend/README.md#服務版本) |
+| 開發版 Vue frontend | `0.4.1` | 2026-08-13 | 區分 API 拒絕與網路斷線，直接顯示台語問卷審核失敗原因 | [frontend/README.md](frontend/README.md#服務版本) |
 | 正式部署 Doctor frontend | `2.1.0` | 2026-08-09 | 候選問卷路由與欄位標籤可讀化，保留歷史病例顯示能力 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
-| 正式部署 Patient frontend | `2.0.1` | 2026-08-09 | FHIR query override fail-closed 與本次症狀／既往病史分類修正 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
-| Local Avatar service | `1.1.1` | 2026-08-10 | 修正閩南語控制詞，並保留全模型 warm-up 常駐與嘴部羽化融合 | [avatar-service/README.md](avatar-service/README.md#服務版本) |
+| 正式部署 Patient frontend | `2.1.0` | 2026-08-11 | 問診主畫面常駐醫師 Avatar、朗讀字幕與可恢復有聲播放的控制 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
+| Local Avatar service | `1.2.0` | 2026-08-11 | 新增可由 Backend 逐請求覆寫、完全跳過 MuseTalk 的靜態醫師 CosyVoice 模式 | [avatar-service/README.md](avatar-service/README.md#服務版本) |
 | SMART on FHIR sandbox app | `1.0.0` | 2026-08-05 | SMART OAuth launch、FHIR 預填、同源 API proxy、合成病人 seed 與本機驗證 | [smart-app/README.md](smart-app/README.md#服務版本) |
-| Integration deployment bundle | `1.4.0` | 2026-08-10 | 新增 loopback-only Dozzle 容器狀態、health、資源與即時 log 監視頁 | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
+| Integration deployment bundle | `1.5.1` | 2026-08-13 | Gateway health 涵蓋 backend upstream，部署前拒絕缺失 secret 形成的同名目錄 | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
 
 `frontend-v2/packages/shared` 是 doctor／patient 共用程式庫，不是獨立服務；
 `smart-deployment/` 是 SMART sandbox 的 proxy 設定，跟隨 SMART app
-`1.0.0` 基線維護。Doctor app 與 Patient app 目前分別為 `2.1.0`、`2.0.1`。
+`1.0.0` 基線維護。Doctor app 與 Patient app 目前皆為 `2.1.0`。
 HAPI FHIR、PostgreSQL、TW Core 與 SNOMED installer 是外部或
 建置元件，使用各自上游版本；目前矩陣與更新說明見
 [FHIR／術語服務](backend/terminology/README.md#外部元件版本矩陣)。

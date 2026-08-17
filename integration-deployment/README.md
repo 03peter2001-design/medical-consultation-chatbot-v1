@@ -6,10 +6,30 @@ explicitly runs the scripts.
 
 ## Service version
 
-目前版本為 **integration deployment bundle v1.4.0（2026-08-10）**。
+目前版本為 **integration deployment bundle v1.5.1（2026-08-13）**。
 這是依 `devlog/` 回溯整理的部署文件版本，用來標示安全整合藍圖、雙前端與
 GPU／Avatar 部署能力的共同基線；repository 目前沒有與此版本對應的 Git tag，
 也不表示任何院所環境已完成正式上線驗收。
+
+### v1.5.1 (2026-08-13)
+
+- Gateway healthcheck 改走實際的 HTTPS `/api/v1/health` 反代路徑；若 Nginx 無法連到
+  Docker 內部的 `backend:8000`，gateway 不再誤顯示 healthy。
+- Ubuntu 部署前置檢查現在要求 `.env`、UCC JWT 公鑰與 TLS 檔案皆為非空的一般檔案，
+  避免 Docker 因遺漏 bind-mount 來源而建立同名目錄並讓檢查誤判通過。
+- Backend 仍只 `expose` 容器內 8000，不新增任何 host port；UCC 持續經 gateway 8443
+  存取。驗證包含完整 Compose rebuild、backend 容器內 health 與 gateway upstream health。
+
+### v1.5.0 (2026-08-11)
+
+- 新增 `AVATAR_ANIMATION_ENABLED` 部署開關，預設 `true`，保留既有 MuseTalk
+  嘴型動畫行為與相容性；Compose 對 backend 與 Avatar service 顯式提供同一預設。
+- 設為 `false` 時，Avatar service 跳過 MuseTalk，以基準醫師靜態圖搭配本機
+  CosyVoice 語音輸出；字幕／朗讀文字仍由前端顯示，不改變問診內容或後端 API。
+- 正常 frontend → backend 流程由 backend 預設或單次 request override 決定是否動畫；
+  Avatar service 的環境值只供直接 caller 或未帶 override 時 fallback。單次切換不需
+  重建 Avatar image/container。
+- Compose 與靜態部署驗證會檢查此設定仍有明確且向後相容的預設值。
 
 ### v1.4.0 (2026-08-10)
 
@@ -302,6 +322,16 @@ The health output must show `status: ok`, `device: cuda:0`, and
 `AVATAR_RELEASE_GPU_AFTER_RENDER=false`, health then keeps `speech_loaded` and
 `animation_loaded` true across renders. Generated MP4 files are capped by count
 and stored in `avatar-cache`; do not treat that volume as a clinical record.
+
+Set `AVATAR_ANIMATION_ENABLED=false` when lip animation is not required. For the
+normal frontend → backend path, this is the backend default; a render request can
+override it without rebuilding the Avatar image or container. The same Compose
+value is also passed to the Avatar service as the fallback for direct callers or
+requests that omit an override. Static mode skips MuseTalk inference and returns
+a video made from the static doctor image plus local CosyVoice speech. The patient
+frontend continues to display the spoken text as subtitles; this setting changes
+only animation work, not the text, speech provider, authentication boundary, or
+consultation behavior. The default is `true` for backward compatibility.
 
 Resident models reduce single-user sequential flow latency, but do not serialize
 simultaneous ASR and Avatar requests from different users. On a multi-user

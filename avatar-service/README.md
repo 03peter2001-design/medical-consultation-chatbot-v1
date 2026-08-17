@@ -3,7 +3,8 @@
 這個容器把問診系統的 AI 回覆轉成一段 MP4：
 
 1. `FunAudioLLM/Fun-CosyVoice3-0.5B-2512` 在本機合成國語或臺灣閩南語語音。
-2. `TMElyralab/MuseTalk 1.5` 依 `pic/dr training pc.png` 產生 25 fps 唇形。
+2. 預設由 `TMElyralab/MuseTalk 1.5` 依 `pic/dr training pc.png` 產生 25 fps
+   唇形；也可關閉動圖，只輸出同一醫師基準圖與語音的靜態 MP4。
 3. 結果保存於 `avatar-cache` volume；相同文字會直接讀取快取。
 
 服務只加入 Docker 私有網路，不發布 host port。病患瀏覽器透過已驗證的
@@ -12,11 +13,36 @@ FastAPI `/v1/avatar/*` 路由使用它。問診流程不依賴 Avatar；服務�
 
 ## 服務版本
 
-目前文件基線：**v1.1.1（2026-08-10）**。
+目前文件基線：**v1.2.0（2026-08-11）**。
 
 此版本號是依 `devlog/2026-08-07.md` 回溯整理的 Avatar 服務文件基線，目前沒有
 對應的 Git tag 或獨立 release，也不表示 Avatar、聲線、肖像或任何臨床內容已取得
 臨床核准。後端 `/v1/avatar/*` 的 `/v1` 是 API 契約前綴，與本服務版本無關。
+
+### v1.2.0 (2026-08-11)
+
+- 新增向下相容的 `AVATAR_ANIMATION_ENABLED` 服務預設；預設 `true` 保留
+  MuseTalk 唇形，設為 `false` 時仍以醫師基準圖與 CosyVoice 音訊快速產生靜態
+  MP4。`/v1/synthesize` 與 `/v1/warmup` 也接受 optional `animation_enabled`
+  boolean，讓本機 frontend／backend 流程可逐次覆寫，不必重建 Docker image。
+- 靜態模式的模型檢查、預下載及 warm-up 只需要 CosyVoice，不下載、不載入也不
+  呼叫 MuseTalk、VAE 或嘴型用 `whisper-tiny`；health 會回報
+  `animation_enabled: false` 與 `animation_model: static-image mode`。
+- 動態／靜態模式已納入影片 cache key，切換設定不會誤用另一模式先前產生的影片；
+  相同模式與文字仍沿用既有 MP4 快取。此模式只改變呈現方式，不改寫問診內容或
+  CosyVoice 語音，也不新增外部資料傳輸。
+
+請求省略 `animation_enabled` 時會沿用服務預設，保持既有 client 相容：
+
+```json
+{"text":"請問哪裡不舒服？","language":"mandarin","animation_enabled":false}
+```
+
+warm-up 可用同一欄位只預載當次模式需要的模型；空 body 或省略欄位仍採服務預設：
+
+```json
+{"animation_enabled":true}
+```
 
 ### v1.1.1（2026-08-10）
 
@@ -65,9 +91,9 @@ Docker image 固定使用下列官方原始碼 revision，以免上游更新未�
 Face 下載，之後全部從 `avatar-models` volume 讀取；推論期間不會把文字、語音
 或影像送到第三方 Avatar 服務。
 
-容器內的 `openai-whisper` 套件只供 CosyVoice 擷取參考聲音特徵；MuseTalk 的
-`whisper-tiny` 權重則只把已合成的語音編碼成嘴型條件。兩者都不執行語音轉文字，
-也不會另建 ASR 服務；病患語音辨識仍使用系統既有的 Breeze ASR。
+容器內的 `openai-whisper` 套件只供 CosyVoice 擷取參考聲音特徵；啟用動圖時，
+MuseTalk 的 `whisper-tiny` 權重則只把已合成的語音編碼成嘴型條件。兩者都不執行
+語音轉文字，也不會另建 ASR 服務；病患語音辨識仍使用系統既有的 Breeze ASR。
 
 為避開 Blackwell 顯示卡上 ONNX Runtime 的 PTX 相容性問題，CosyVoice 的小型
 speech-tokenizer ONNX 前處理固定走 CPU；CosyVoice3 語音主模型及 MuseTalk
@@ -80,6 +106,11 @@ cd integration-deployment
 docker compose build avatar
 docker compose run --rm avatar python3.10 -m app.download_models
 ```
+
+上述 CLI 下載命令會依服務的 `AVATAR_ANIMATION_ENABLED` 預設判斷所需模型；
+`false` 時只下載 CosyVoice，不下載 MuseTalk、VAE 或嘴型用 `whisper-tiny`。
+若服務預設為靜態，但 `/v1/warmup` 當次傳入 `animation_enabled: true`，則會下載
+並載入動圖所需模型；反向覆寫為 `false` 時只檢查及載入 CosyVoice。
 
 ## 說話人與肖像
 
@@ -102,6 +133,9 @@ services:
 ## 調校
 
 - `MUSETALK_FACE_BBOX=585,140,915,520` 是原始 1536×1024 圖片上的人臉框。
+- `AVATAR_ANIMATION_ENABLED=true` 啟用 MuseTalk 動態唇形；設為 `false` 時完全
+  略過 MuseTalk 模型檢查、下載、warm-up 與推論，只輸出基準圖加語音的靜態 MP4。
+  此值是請求省略 `animation_enabled` 時的預設，不限制 client 逐次覆寫。
 - `AVATAR_OUTPUT_WIDTH=768` 控制影片寬度；降低可節省延遲與儲存空間。
 - `MUSETALK_BATCH_SIZE=8` 可依顯示卡記憶體調整；OOM 時先降為 `4` 或 `2`。
 - `AVATAR_REQUIRE_CUDA=true` 避免正式環境意外以極慢的 CPU 跑 MuseTalk。

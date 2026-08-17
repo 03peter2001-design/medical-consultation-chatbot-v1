@@ -5,10 +5,10 @@ same clinical component library.
 
 ## Service versions
 
-The following versions were reconstructed from the existing `devlog/` records
-and do not have matching Git tags. They describe the documented feature baseline
-as of 2026-08-07; they do not by themselves mean that a build was released,
-deployed, or clinically approved. The doctor and patient apps are independently
+The initial versions were reconstructed from the existing `devlog/` records and
+do not have matching Git tags; newer entries continue that documented release
+line. They do not by themselves mean that a build was released, deployed, or
+clinically approved. The doctor and patient apps are independently
 versioned services, and this deployment line also evolves independently from
 `frontend/`. API `/v1`, database schemas, disease profiles, and Safety rules keep
 their own versions or revisions.
@@ -43,6 +43,16 @@ their own versions or revisions.
     the development frontend.
 
 ### Patient app
+
+#### v2.1.0 (2026-08-11)
+
+- 在問診主畫面新增 Patient 專用的常駐 Avatar 舞台：本地服務生成 MP4 時顯示醫師、
+  當次朗讀字幕與生成／播放狀態，原有聊天訊息與作答流程維持可見可用。
+- 本地 MP4 使用有聲自動播放並保留原生 controls；瀏覽器拒絕播放時，舞台顯示明確的
+  「播放醫師語音」按鈕與提示，讓病人用一次點擊恢復聲音。
+- 設定 drawer 改為靜態醫師預覽，避免與主舞台同時播放同一段影片造成重複音訊；
+  provider、D-ID 記憶體內憑證與本地預設行為不變。
+- 共享 Avatar 模組目前只由 Patient app 引用，因此 Doctor app 版本與執行路徑未變更。
 
 #### v2.0.1 (2026-08-09)
 

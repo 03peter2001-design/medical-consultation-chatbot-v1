@@ -5,7 +5,7 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 
 ## 服務版本
 
-目前版本：**v0.3.0（2026-08-10）**。
+目前版本：**v0.5.2（2026-08-17）**。
 
 本次因主動撤除既有 AMIE／語意標籤能力並回到較小的實驗性功能面，版本線依專案
 決策由 0 重新編碼。下方 `v1.x` 條目保留為舊能力線的歷史紀錄，不表示 `v0.3.0`
@@ -22,6 +22,48 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 - RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
 - Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
   revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v0.5.2 (2026-08-17)
+
+- 台語問卷的 `clinically_reviewed` manifest 除了必須提供非空的 reviewer、日期與範圍，
+  現在也會拒絕文件範例中的占位審查者／範圍及無效 ISO 日期，避免未完成的人工作業被
+  誤認為正式簽核。
+- 本機產生的 56 份機器翻譯仍標記為 `machine_translated_unreviewed`，未納入 Git；
+  Backend 在缺少真正人工審查資產時維持 503 fail closed。此版本不核准任何問卷內容。
+- 新增占位審查紀錄 regression test；完整 Backend suite 共 388 項，其中 386 項通過，
+  另 2 項只因本機未掛載外部 eHIS C# 原始碼而 error。
+
+### v0.5.1 (2026-08-13)
+
+- 台語 manifest 驗證現在分別回報「格式／模型 provenance 錯誤」、「尚未人工審核」與
+  「缺少 reviewer／日期／範圍」，避免把有效但尚未簽核的機器翻譯誤報為格式錯誤。
+- 未經合格台語及臨床人員審查的資產仍維持 503 fail closed；此修正不放寬臨床發布門檻。
+
+### v0.5.0 (2026-08-13)
+
+- `/v1/chat` 新增向後相容的 optional `language`，支援 `mandarin` 與 `minnan`；語言在
+  問診建立時鎖定並保存，後續 request 省略時沿用，明示切換則以 409 拒絕且不改狀態。
+- 台語問卷由 `questionnaire_data/tai/` 的獨立 JSON 顯示資產載入。Backend 驗證來源與
+  輸出 SHA-256、模型 provenance、題目結構及具 reviewer／日期／範圍的
+  `clinically_reviewed` manifest；缺檔、未審、過期、破損或含保留分隔符時 fail closed
+  回 503，不會靜默混用國語。
+- 問卷 prompt、選項、快捷時間與單位可顯示台語，但 API 仍以國語 canonical value 驗證、
+  保存與交付 Gemini，保留既有條件、FHIR 預填、semantic mapping 與病例相容性；回應另
+  提供台語 `user_display` 供病患聊天泡泡顯示。
+- 新增固定 revision 的 Taigi-Llama-2-Translator-7B 離線產生器與翻譯 manifest；模型
+  產物一律先標示 `machine_translated_unreviewed`，不可因生成完成而自動上線。
+- 聚焦 localization／問卷 pipeline／back navigation／輸入驗證與 OpenAPI tests 通過；
+  OpenAPI contract 及開發版 frontend 型別已同步。
+
+### v0.4.0 (2026-08-11)
+
+- Backend Avatar client 新增 `AVATAR_ANIMATION_ENABLED`（預設 `true`）；status、warm-up
+  與影片生成統一使用後端設定的有效模式，warm-up／synthesize request 都明確傳送
+  `animation_enabled`，避免 Avatar service 容器預設值不同時誤載 MuseTalk。
+- `/v1/avatar/status` 對瀏覽器回報後端有效的 `animation_enabled`、動畫模型與 loaded
+  判定；靜態模式只要求 CosyVoice 已載入，動態模式仍要求 CosyVoice 與 MuseTalk。
+- 此變更只影響 Avatar readiness，不改變病患問診、語音內容、字幕、授權或臨床決策；
+  靜態模式仍透過原有受病患 session 保護的 MP4 API 提供醫師圖與本機語音。
 
 ### v0.3.0 (2026-08-10)
 
@@ -343,6 +385,7 @@ Groq Key 可由 [Groq Console](https://console.groq.com/keys) 申請。
 | `ASR_MIN_AUDIO_RMS` | 靜音／過小音量門檻，預設 0.001，避免將靜音幻覺成病人回答 |
 | `AVATAR_ENABLED=true` | 啟用私有網路上的本地 CosyVoice3 + MuseTalk 服務 |
 | `AVATAR_SERVICE_URL` | Avatar 容器內網 URL；整合部署為 `http://avatar:8090` |
+| `AVATAR_ANIMATION_ENABLED=true` | 預設使用 MuseTalk；設為 `false` 時請 Avatar service 產生靜態醫師圖 MP4，只需載入 CosyVoice |
 | `AVATAR_TIMEOUT_SECONDS` | 首次載入與影片生成逾時，整合部署預設 600 秒 |
 | `ALLOW_LOCAL_AUTH_BYPASS=true` | 只在 loopback 開發時略過病患 session 與 UCC Bearer；預設關閉 |
 | `CONSULTATION_DB_PATH` | SQLite 路徑；相對路徑以 `backend/` 為基準 |
@@ -395,8 +438,9 @@ CPU 模式不受此設定影響。需要回退原有雲端辨識時設為 `ASR_P
 
 ### 本地語音與 Avatar
 
-整合部署會以 `Fun-CosyVoice3-0.5B-2512` 合成 AI 回覆，再由 MuseTalk 1.5
-依指定醫師圖產生唇形 MP4。模型服務不對 LAN 或公網發布；integration 開發設定
+整合部署會以 `Fun-CosyVoice3-0.5B-2512` 合成 AI 回覆；預設再由 MuseTalk 1.5
+依指定醫師圖產生唇形 MP4。`AVATAR_ANIMATION_ENABLED=false` 時，後端會在預載與
+每次生成 request 明確要求靜態醫師圖 MP4，不載入 MuseTalk。模型服務不對 LAN 或公網發布；integration 開發設定
 僅綁 host loopback。`/v1/avatar/status`、`/v1/avatar/warmup` 與
 `/v1/avatar/speak` 都沿用病患 session 驗證。完整安裝、聲線替換與 GPU
 調校說明見 [../avatar-service/README.md](../avatar-service/README.md)。

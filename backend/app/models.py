@@ -140,6 +140,7 @@ class ChatRequest(BaseModel):
     action: Literal["answer", "back"] = "answer"
     pain_location_ids: list[str] = Field(default_factory=list)
     patient_prefill: PatientPrefill | None = None
+    language: Literal["mandarin", "minnan"] | None = None
 
     @validator("session_id")
     def session_id_not_empty(cls, value):

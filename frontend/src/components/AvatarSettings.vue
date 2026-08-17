@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps({
   avatar: { type: Object, required: true },
+  languageLocked: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['connect'])
@@ -39,19 +40,19 @@ const agentId = defineModel('agentId', { type: String, default: '' })
         </select>
       </label>
 
-      <label v-if="avatar.isLocal.value">
-        <span>醫生說話語言</span>
+      <label>
+        <span>問卷與醫生語言</span>
         <select
           :value="avatar.language.value"
-          :disabled="avatar.isConnecting.value"
+          :disabled="avatar.isConnecting.value || languageLocked"
           @change="avatar.setLanguage($event.target.value)"
         >
           <option value="mandarin">國語</option>
-          <option value="minnan">閩南語</option>
+          <option value="minnan">台語</option>
         </select>
       </label>
 
-      <template v-else>
+      <template v-if="!avatar.isLocal.value">
         <label>
           <span>CLIENT KEY</span>
           <input

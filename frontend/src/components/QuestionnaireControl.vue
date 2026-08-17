@@ -40,6 +40,10 @@ const answerReady = computed(() =>
   isQuestionAnswerReady(props.spec, answerState.value),
 )
 
+function localizedLabel(labels, canonicalValue) {
+  return labels?.[canonicalValue] || canonicalValue
+}
+
 watch(
   () => props.spec,
   (spec) => {
@@ -150,7 +154,7 @@ defineExpose({ applyVoiceTranscript, focus })
           :disabled="disabled"
           @click="selectQuickDuration(option)"
         >
-          {{ option }}
+          {{ localizedLabel(spec.quick_option_labels, option) }}
         </button>
       </div>
     </div>
@@ -179,7 +183,7 @@ defineExpose({ applyVoiceTranscript, focus })
           @change="handleDurationUnit"
         >
           <option v-for="unit in spec.units" :key="unit" :value="unit">
-            {{ unit }}
+            {{ localizedLabel(spec.unit_labels, unit) }}
           </option>
         </select>
       </label>
@@ -220,7 +224,7 @@ defineExpose({ applyVoiceTranscript, focus })
           :disabled="disabled"
           @click.prevent="selectOption(option)"
         />
-        <span>{{ option }}</span>
+        <span>{{ localizedLabel(spec.option_labels, option) }}</span>
       </label>
     </div>
     <label v-if="spec.allow_other" class="other-answer">

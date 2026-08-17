@@ -112,6 +112,14 @@ from app.services.patient_interview import (
 from app.services.rag import deduplicate_sources, retrieve_context_block
 from app.services.security_audit import audit_patient, safe_log
 from domain.patient_messages import patient_message
+from domain.questionnaire_localization import (
+    TaigiQuestionnaireUnavailable,
+    localize_answer_display,
+    localize_question,
+    normalize_questionnaire_language,
+    taigi_questionnaire_provenance,
+    validate_taigi_questionnaires,
+)
 from domain.questionnaires import (
     BASIC_QUESTIONNAIRE,
     CHIEF_QUESTIONNAIRE,
@@ -243,6 +251,10 @@ def _question_payload(
         current = filter_question_by_context(current, data)
         if isinstance(questionnaire, list):
             questionnaire[index] = current
+    language = normalize_questionnaire_language(session.get("language"))
+    display_current = localize_question(current, language) if current else None
+    if current is not None and display_current is not None and language == "minnan":
+        reply = reply.replace(current["prompt"], display_current["prompt"])
     if session.get("engine") == "amie":
         active = [item for item in questionnaire if condition_matches(item, data)]
         completed_fields = set(data) | set(session.get("prefilled_fields", []))
@@ -307,13 +319,14 @@ def _question_payload(
     return {
         "reply": reply,
         "session_id": session["session_id"],
+        "language": language,
         "completed": completed,
         "can_go_back": bool(session.get("_history")) and not completed,
         "user_display": user_display,
         "step": -1 if completed else index,
         "queue_number": queue_number,
         "triage": triage,
-        "question_input": (structured_question_input(current) if current else None),
+        "question_input": (structured_question_input(display_current) if display_current else None),
         "questionnaire": (questionnaire_meta(current, data.get("type")) if current else None),
         "progress": (
             {"current": 1, "total": 1, "percent": 100}
@@ -876,6 +889,11 @@ async def _chat_amie(
         user_input,
         pain_location_ids=req.pain_location_ids,
     )
+    user_display = localize_answer_display(
+        current,
+        user_display,
+        normalize_questionnaire_language(session.get("language")),
+    )
     if field == "reason":
         try:
             route, chief_flags = await run_clinical_io(
@@ -1071,12 +1089,17 @@ def _questionnaire_initial_session(req: ChatRequest) -> dict:
     data, prefilled_fields = _prefilled_patient_data(req)
     data["_interview_pipeline"] = {
         "engine": "questionnaire",
+        "language": normalize_questionnaire_language(req.language),
         "routing": "deterministic_keyword_or_common_questions",
         "version": 2,
+        "display_language": normalize_questionnaire_language(req.language),
     }
+    if normalize_questionnaire_language(req.language) == "minnan":
+        data["_interview_pipeline"]["localization"] = taigi_questionnaire_provenance()
     return {
         "session_id": req.session_id,
         "engine": "questionnaire",
+        "language": normalize_questionnaire_language(req.language),
         "step": 0,
         "index": 0,
         "triage_level": "routine",
@@ -1143,6 +1166,11 @@ async def _chat_questionnaire(
         user_input,
         pain_location_ids=req.pain_location_ids,
     )
+    user_display = localize_answer_display(
+        current,
+        user_display,
+        normalize_questionnaire_language(session.get("language")),
+    )
 
     if field == "reason":
         route = local_complaint_route(user_input)
@@ -1197,6 +1225,29 @@ async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
         req.session_id = patient_session["interview_session_id"]
         req.patient_prefill = PatientPrefill(**patient_session["prefill"])
 
+    existing_session = sessions.get(req.session_id)
+    existing_language = normalize_questionnaire_language(
+        existing_session.get("language") if existing_session else None
+    )
+    if (
+        existing_session is not None
+        and req.language is not None
+        and req.language != existing_language
+    ):
+        raise HTTPException(
+            status_code=409,
+            detail="問診開始後不可切換問卷語言，請完成或重新開始問診。",
+        )
+    language = (
+        existing_language
+        if existing_session is not None
+        else normalize_questionnaire_language(req.language)
+    )
+    if language == "minnan":
+        try:
+            validate_taigi_questionnaires(["chief", "basic", "history", *SUPPORTED_PATIENT_ROUTES])
+        except TaigiQuestionnaireUnavailable as exc:
+            raise HTTPException(status_code=503, detail=str(exc)) from exc
     if req.action == "back" and req.session_id in sessions:
         return _restore_previous_question(sessions[req.session_id])
 
@@ -1265,7 +1316,7 @@ async def _chat_serialized(
 @router.post(
     "/chat",
     response_model=PatientChatResponse,
-    responses=error_responses(422, 500, 503),
+    responses=error_responses(409, 422, 500, 503),
     summary="Advance or start a patient pre-consultation interview",
     dependencies=[Depends(require_patient_session)],
 )

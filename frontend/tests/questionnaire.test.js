@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
 import test from 'node:test'
 
 import {
@@ -6,6 +7,11 @@ import {
   isQuestionAnswerReady,
   toggleQuestionOption,
 } from '../src/services/questionnaire.js'
+
+const questionnaireControl = readFileSync(
+  new URL('../src/components/QuestionnaireControl.vue', import.meta.url),
+  'utf8',
+)
 
 test('single choice replaces the previous selection', () => {
   const spec = { multiple: false, exclusive_options: [] }
@@ -83,4 +89,21 @@ test('duration free text takes precedence', () => {
     },
   )
   assert.equal(answer, '昨天晚上開始')
+})
+
+test('renders localized labels while submitting canonical values', () => {
+  assert.match(questionnaireControl, /localizedLabel\(spec\.option_labels, option\)/)
+  assert.match(questionnaireControl, /localizedLabel\(spec\.quick_option_labels, option\)/)
+  assert.match(questionnaireControl, /localizedLabel\(spec\.unit_labels, unit\)/)
+  assert.equal(
+    composeQuestionAnswer(
+      {
+        kind: 'choice',
+        options: ['沒有，從未抽菸'],
+        option_labels: { '沒有，從未抽菸': '無，毋捌食薰' },
+      },
+      { selectedOptions: ['沒有，從未抽菸'] },
+    ),
+    '沒有，從未抽菸',
+  )
 })

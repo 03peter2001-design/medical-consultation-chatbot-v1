@@ -98,6 +98,33 @@ test('maps duration quick options and numeric approved units', () => {
   )
 })
 
+test('maps spoken Taigi labels back to canonical values', () => {
+  const choice = interpretQuestionnaireVoice(
+    {
+      kind: 'choice',
+      multiple: false,
+      options: ['沒有，從未抽菸'],
+      option_labels: { '沒有，從未抽菸': '無，毋捌食薰' },
+      allow_other: false,
+    },
+    '我揀無，毋捌食薰',
+  )
+  assert.deepEqual(choice.selectedOptions, ['沒有，從未抽菸'])
+
+  const duration = interpretQuestionnaireVoice(
+    {
+      kind: 'duration',
+      quick_options: [],
+      units: ['天前'],
+      unit_labels: { 天前: '工進前' },
+      allow_other: false,
+    },
+    '3工進前',
+  )
+  assert.equal(duration.durationNumber, '3')
+  assert.equal(duration.durationUnit, '天前')
+})
+
 test('maps explicit Gregorian and ROC dates to ISO', () => {
   const spec = { kind: 'date' }
   const options = { maxDate: '2026-08-10' }

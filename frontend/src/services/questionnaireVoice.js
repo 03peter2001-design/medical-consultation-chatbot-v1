@@ -1,5 +1,5 @@
 const OPTION_PUNCTUATION = /[\s，,。.!！?？；;：:'\"「」『』（）()]/g
-const CHOICE_SEPARATOR = /(?:、|，|,|以及|和|與)/
+const CHOICE_SEPARATOR = /(?:、|，|,|以及|和|與|佮|閣有)/
 
 function normalizedOption(value) {
   return String(value || '').replace(OPTION_PUNCTUATION, '').toLocaleLowerCase()
@@ -8,13 +8,24 @@ function normalizedOption(value) {
 function withoutSelectionPrefix(value) {
   return String(value || '')
     .trim()
-    .replace(/^(?:我的答案是|答案是|我選擇|我選|選擇)\s*/, '')
+    .replace(/^(?:我的答案是|答案是|我選擇|我選|選擇|我欲揀|我揀)\s*/, '')
+}
+
+function localizedValueMap(values, labels = {}) {
+  const result = new Map()
+  for (const value of values) {
+    result.set(normalizedOption(value), value)
+    const label = labels[value]
+    if (label) result.set(normalizedOption(label), value)
+  }
+  return result
 }
 
 function matchChoice(spec, transcript) {
   const options = spec?.options ?? []
-  const optionByNormalizedValue = new Map(
-    options.map((option) => [normalizedOption(option), option]),
+  const optionByNormalizedValue = localizedValueMap(
+    options,
+    spec?.option_labels,
   )
   const spoken = withoutSelectionPrefix(transcript)
   const wholeMatch = optionByNormalizedValue.get(normalizedOption(spoken))
@@ -62,9 +73,10 @@ function matchDuration(spec, transcript) {
   const compact = String(transcript || '')
     .trim()
     .replace(/[\s，,。!！?？；;：:'\"「」『』（）()]/g, '')
-  const quickOption = (spec?.quick_options ?? []).find(
-    (option) => normalizedOption(option) === normalizedOption(compact),
-  )
+  const quickOption = localizedValueMap(
+    spec?.quick_options ?? [],
+    spec?.quick_option_labels,
+  ).get(normalizedOption(compact))
   if (quickOption) {
     return {
       status: 'mapped',
@@ -74,10 +86,16 @@ function matchDuration(spec, transcript) {
     }
   }
 
-  const unit = [...(spec?.units ?? [])]
-    .sort((left, right) => right.length - left.length)
-    .find((candidate) => compact.endsWith(candidate))
-  const number = unit ? compact.slice(0, -unit.length) : ''
+  const unitMatch = [...(spec?.units ?? [])]
+    .flatMap((canonical) => [
+      [canonical, canonical],
+      [spec?.unit_labels?.[canonical], canonical],
+    ])
+    .filter(([label]) => label)
+    .sort(([left], [right]) => right.length - left.length)
+    .find(([label]) => compact.endsWith(label))
+  const number = unitMatch ? compact.slice(0, -unitMatch[0].length) : ''
+  const unit = unitMatch?.[1]
   if (unit && /^\d+(?:\.\d+)?$/.test(number) && Number(number) > 0) {
     return {
       status: 'mapped',

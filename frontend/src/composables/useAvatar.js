@@ -78,7 +78,7 @@ export function useAvatar({
   const isConnecting = computed(() => connectionState.value === 'connecting')
   const providerLabel = computed(() => isDid.value ? 'D-ID' : '本地 Avatar')
   const languageLabel = computed(() =>
-    language.value === 'minnan' ? '閩南語' : '國語',
+    language.value === 'minnan' ? '台語' : '國語',
   )
   const headerStatus = computed(() => {
     if (talking.value) return `${providerLabel.value} 說話中`
@@ -129,7 +129,7 @@ export function useAvatar({
         throw new Error('GPU 模型服務尚未就緒')
       }
       if (typeof warmup === 'function') {
-        status.value = '正在預載 Breeze ASR、CosyVoice3 與 MuseTalk…'
+        status.value = '正在預載 Breeze ASR 與本機醫師語音模型…'
         const warmed = await warmup()
         if (!isCurrent(token, 'local')) return false
         if (!warmed.available || !warmed.loaded) {

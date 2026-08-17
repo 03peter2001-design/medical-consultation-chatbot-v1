@@ -442,6 +442,8 @@ export interface components {
              * @enum {string}
              */
             action: "answer" | "back";
+            /** Language */
+            language?: ("mandarin" | "minnan") | null;
             /**
              * Message
              * @default
@@ -872,6 +874,11 @@ export interface components {
             can_go_back: boolean;
             /** Completed */
             completed: boolean;
+            /**
+             * Language
+             * @enum {string}
+             */
+            language: "mandarin" | "minnan";
             progress: components["schemas"]["ProgressResponse"];
             /** Question Input */
             question_input?: {
@@ -1423,6 +1430,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PatientChatResponse"];
+                };
+            };
+            /** @description The submitted revision conflicts with the current revision. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
             /** @description Request validation or domain validation failed. */

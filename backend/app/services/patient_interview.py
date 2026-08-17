@@ -12,6 +12,7 @@ from amie.rule_config import load_safety_rules
 from app.models import ChatRequest
 from app.services.input_validation import prefill_gender_is_valid
 from domain.patient_messages import patient_message
+from domain.questionnaire_localization import normalize_questionnaire_language
 from domain.questionnaires import (
     CHIEF_QUESTIONNAIRE,
     DISEASE_ROUTES,
@@ -206,9 +207,11 @@ def apply_chief_questionnaire_prefills(data: dict, questionnaire: list[dict]) ->
 
 def amie_initial_session(req: ChatRequest) -> dict:
     data, prefilled_fields = prefilled_patient_data(req)
+    language = normalize_questionnaire_language(req.language)
     return {
         "session_id": req.session_id,
         "engine": "amie",
+        "language": language,
         "step": 0,
         "index": 0,
         "turn_count": 0,

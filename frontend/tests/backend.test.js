@@ -8,6 +8,7 @@ import {
   consultationDetailPath,
   consultationListPath,
   consultationLookupFields,
+  connectionError,
   credentialsForBackendUrl,
   diseaseProfileUpdatePath,
   factLabelUpdatePath,
@@ -22,6 +23,51 @@ import {
 
 test('uses the canonical versioned API prefix', () => {
   assert.equal(apiVersionPrefix, '/v1')
+})
+
+test('sends the selected questionnaire language with patient chat requests', async () => {
+  const originalFetch = globalThis.fetch
+  const captured = []
+  globalThis.fetch = async (url, options) => {
+    captured.push({ url, options })
+    return {
+      ok: true,
+      json: async () => ({ status: 'ok' }),
+    }
+  }
+  try {
+    await api.patientChat('', 'patient-session', [], null, 'minnan')
+    await api.patientBack('patient-session', 'minnan')
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+
+  assert.equal(JSON.parse(captured[0].options.body).language, 'minnan')
+  assert.equal(JSON.parse(captured[1].options.body).language, 'minnan')
+})
+
+test('distinguishes backend rejection from a network connection failure', async () => {
+  const originalFetch = globalThis.fetch
+  globalThis.fetch = async () => ({
+    ok: false,
+    status: 503,
+    json: async () => ({ detail: '台語問卷尚未完成人工審查。' }),
+  })
+  try {
+    await assert.rejects(
+      api.patientChat('', 'patient-session', [], null, 'minnan'),
+      (error) => {
+        assert.equal(error.status, 503)
+        assert.equal(
+          connectionError(error),
+          '後端回應錯誤（HTTP 503）：台語問卷尚未完成人工審查。',
+        )
+        return true
+      },
+    )
+  } finally {
+    globalThis.fetch = originalFetch
+  }
 })
 
 test('uses an audio filename that matches the browser recording type', () => {

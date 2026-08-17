@@ -115,6 +115,19 @@ class OpenApiContractTests(unittest.TestCase):
         ]
         self.assertEqual(len(compatibility_routers), 3)
 
+    def test_patient_chat_contract_exposes_questionnaire_language(self):
+        request = self.schema["components"]["schemas"]["ChatRequest"]
+        language = request["properties"]["language"]
+        self.assertNotIn("language", request["required"])
+        self.assertEqual(language["anyOf"][0]["enum"], ["mandarin", "minnan"])
+
+        response = self.schema["components"]["schemas"]["PatientChatResponse"]
+        self.assertIn("language", response["required"])
+        self.assertEqual(
+            response["properties"]["language"]["enum"],
+            ["mandarin", "minnan"],
+        )
+
     def test_representative_responses_satisfy_the_published_models(self):
         HealthResponse.model_validate(health())
         RuleCenterResponse.model_validate(get_rule_center())

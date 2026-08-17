@@ -59,6 +59,7 @@ const queueNumber = ref('')
 const input = ref('')
 const started = ref(false)
 const consultationAvatarSettingsOpen = ref(false)
+const consultationLanguage = ref(null)
 const starting = ref(false)
 const sending = ref(false)
 const completed = ref(false)
@@ -209,6 +210,7 @@ async function initializeBackendSession(patientRecord = null) {
     sessionId,
     [],
     patientRecord ? buildPatientPrefill(patientRecord) : null,
+    consultationLanguage.value || avatar.language.value,
   )
 }
 
@@ -218,7 +220,14 @@ async function finishConsultationStart(
     successMessage = '',
   } = {},
 ) {
-  const data = await initializeBackendSession(patientRecord)
+  consultationLanguage.value = avatar.language.value
+  let data
+  try {
+    data = await initializeBackendSession(patientRecord)
+  } catch (error) {
+    consultationLanguage.value = null
+    throw error
+  }
   started.value = true
   overlayVisible.value = false
   setQuestionState(data)
@@ -332,7 +341,13 @@ async function submitMessage(
   sending.value = true
   typing.value = true
   try {
-    const data = await api.patientChat(text, sessionId, painLocationIds)
+    const data = await api.patientChat(
+      text,
+      sessionId,
+      painLocationIds,
+      null,
+      consultationLanguage.value,
+    )
     handleResponse(data, text)
     selectedPainLocationIds.value = []
   } catch (error) {
@@ -358,7 +373,7 @@ async function goToPreviousQuestion() {
 
   sending.value = true
   try {
-    const data = await api.patientBack(sessionId)
+    const data = await api.patientBack(sessionId, consultationLanguage.value)
     trimLastAnsweredTurn()
     selectedPainLocationIds.value = []
     completed.value = false
@@ -744,6 +759,7 @@ onBeforeUnmount(() => {
               v-model:client-key="avatarClientKey"
               v-model:agent-id="avatarAgentId"
               :avatar="avatar"
+              :language-locked="started"
               @connect="connectAvatar"
             />
           </div>

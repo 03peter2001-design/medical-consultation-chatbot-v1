@@ -91,3 +91,34 @@ ClinicalFact 建立的疾病漏斗排序。`frontier_vote_margin` 定義領先�
 而是隔離在 `questionnaire_drafts/clinical_artifacts/`。這些 overlay 不會回填此處仍為空的
 candidate `semantic_options`，也不能由 questionnaire-only promoter 帶入 runtime；其
 `complete` 僅代表生成檔案齊全，不是 clinical signoff。
+
+## 產生台語問卷副本
+
+[`translate_to_taigi.py`](translate_to_taigi.py) 會使用固定 revision 的
+`Bohanlu/Taigi-Llama-2-Translator-7B`，依官方 `[TRANS] ... [HAN]` prompt 將本目錄
+55 份問卷與 `ui/patient_messages.json` 的顯示文字轉為台語漢字，並把完整副本輸出到
+`tai/`。原始國語 JSON 不會被修改；欄位 ID、policy、clinical code 與 semantic value
+保持不變，引用選項文字的條件及 mapping key 則同步翻譯。
+
+建議在獨立生成環境安裝 `torch`、`transformers`、`accelerate` 與 `sentencepiece`。
+模型約 13.9 GB，第一次執行會由 Hugging Face 下載；CPU 可執行但耗時較長：
+
+```bash
+cd backend/questionnaire_data
+python translate_to_taigi.py --dry-run
+python translate_to_taigi.py --device cuda --batch-size 4
+python translate_to_taigi.py --check
+```
+
+腳本逐批寫入 `tai/.translation-cache.json`，中斷後可直接重跑續傳；要忽略 cache 可加
+`--force`。`tai/_translation_manifest.json` 會記錄來源與輸出 SHA-256、模型 revision、
+生成參數與 CC BY-NC-SA 4.0 授權。所有生成內容皆為
+`machine_translated_unreviewed`，正式使用前必須由合格的台語與臨床人員逐題審查，
+不可因模型輸出而自動視為已發布或已核准。
+
+Backend 只有在 `_translation_manifest.json` 的 `review_status` 改為
+`clinically_reviewed`，且加入非空的 `review.reviewer`、`review.reviewed_on` 與
+`review.scope` 後，才允許 `language=minnan` 建立問診 session。審查期間若修改任何
+台語 JSON，須重新計算該檔 `output_sha256`；國語來源若有更新，則必須重新產生並重新
+審查。問診開始後語言會鎖定；台語只用於 prompt／label／病患顯示，儲存的結構化答案
+仍採原國語 canonical value。

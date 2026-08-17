@@ -123,6 +123,14 @@ export function credentialsForBackendUrl(
 
 const backendCredentials = credentialsForBackendUrl(backendUrl)
 
+export class BackendApiError extends Error {
+  constructor(message, status) {
+    super(message)
+    this.name = 'BackendApiError'
+    this.status = status
+  }
+}
+
 function apiPath(path) {
   return `${apiVersionPrefix}${path}`
 }
@@ -187,7 +195,10 @@ async function request(path, options = {}) {
   })
   const data = await response.json().catch(() => ({}))
   if (!response.ok) {
-    throw new Error(formatApiErrorDetail(data.detail, response.status))
+    throw new BackendApiError(
+      formatApiErrorDetail(data.detail, response.status),
+      response.status,
+    )
   }
   return data
 }
@@ -199,7 +210,10 @@ async function requestVideo(path, options = {}) {
   })
   if (!response.ok) {
     const data = await response.json().catch(() => ({}))
-    throw new Error(formatApiErrorDetail(data.detail, response.status))
+    throw new BackendApiError(
+      formatApiErrorDetail(data.detail, response.status),
+      response.status,
+    )
   }
   return {
     blob: await response.blob(),
@@ -265,6 +279,7 @@ export const api = {
     sessionId,
     painLocationIds = [],
     patientPrefill = null,
+    language = 'mandarin',
   ) =>
     request(
       apiPath('/chat'),
@@ -273,15 +288,17 @@ export const api = {
         session_id: sessionId,
         pain_location_ids: painLocationIds,
         patient_prefill: patientPrefill,
+        language,
       }),
     ),
-  patientBack: (sessionId) =>
+  patientBack: (sessionId, language = 'mandarin') =>
     request(
       apiPath('/chat'),
       jsonOptions('POST', {
         message: '',
         session_id: sessionId,
         action: 'back',
+        language,
       }),
     ),
   transcribe: (audioBlob) => {
@@ -378,5 +395,8 @@ export const api = {
 }
 
 export function connectionError(error) {
+  if (Number.isInteger(error?.status)) {
+    return `後端回應錯誤（HTTP ${error.status}）：${error.message}`
+  }
   return `無法連接後端（${error.message}）。\n嘗試連線：${backendUrl}\n請確認 FastAPI 的 host 與 port 設定。`
 }

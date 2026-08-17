@@ -81,7 +81,13 @@ class QuestionnairePipelineTests(unittest.TestCase):
     def tearDown(self):
         self.temp_directory.cleanup()
 
-    def _chat(self, session_id: str, message: str = "") -> dict:
+    def _chat(
+        self,
+        session_id: str,
+        message: str = "",
+        *,
+        language: str | None = None,
+    ) -> dict:
         with (
             patch.object(patient, "INTERVIEW_ENGINE", "questionnaire"),
             patch.object(patient, "current_patient_session", return_value=None),
@@ -107,7 +113,7 @@ class QuestionnairePipelineTests(unittest.TestCase):
         ):
             return asyncio.run(
                 patient._chat_impl(
-                    ChatRequest(session_id=session_id, message=message),
+                    ChatRequest(session_id=session_id, message=message, language=language),
                     BackgroundTasks(),
                 )
             )
@@ -130,6 +136,38 @@ class QuestionnairePipelineTests(unittest.TestCase):
         self.assertEqual(runtime._normalize_interview_engine("amie"), "amie")
         with self.assertRaises(RuntimeError):
             runtime._normalize_interview_engine("unknown")
+
+    def test_taigi_language_is_snapshotted_and_cannot_change_mid_interview(self):
+        with (
+            patch.object(patient, "sessions", self.sessions),
+            patch.object(patient, "validate_taigi_questionnaires"),
+            patch.object(patient, "taigi_questionnaire_provenance", return_value={}),
+            patch.object(patient, "localize_question", side_effect=lambda item, _: item),
+        ):
+            response = self._chat("taigi-session", language="minnan")
+            index = self.sessions["taigi-session"]["index"]
+            with self.assertRaises(HTTPException) as caught:
+                self._chat("taigi-session", language="mandarin")
+
+        self.assertEqual(response["language"], "minnan")
+        self.assertEqual(self.sessions["taigi-session"]["language"], "minnan")
+        self.assertEqual(caught.exception.status_code, 409)
+        self.assertEqual(self.sessions["taigi-session"]["index"], index)
+
+    def test_missing_taigi_assets_fail_before_session_creation(self):
+        with (
+            patch.object(patient, "sessions", self.sessions),
+            patch.object(
+                patient,
+                "validate_taigi_questionnaires",
+                side_effect=patient.TaigiQuestionnaireUnavailable("尚未產生台語問卷"),
+            ),
+        ):
+            with self.assertRaises(HTTPException) as caught:
+                self._chat("missing-taigi", language="minnan")
+
+        self.assertEqual(caught.exception.status_code, 503)
+        self.assertNotIn("missing-taigi", self.sessions)
 
     def test_final_report_retrieves_diagnosis_lab_and_imaging_evidence(self):
         responses = [

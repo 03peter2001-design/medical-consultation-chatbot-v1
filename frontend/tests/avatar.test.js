@@ -160,21 +160,23 @@ test('does not expose legacy AMIE traces in the patient consultation', () => {
   assert.doesNotMatch(patientView, /AmieTracePanel|amieTraces|amie_debug/)
 })
 
-test('offers Mandarin and Minnan and sends the selected language', () => {
+test('offers Mandarin and Taigi and sends the selected language', () => {
   assert.equal(normalizeAvatarLanguage(), 'mandarin')
   assert.equal(normalizeAvatarLanguage('unknown'), 'mandarin')
   assert.equal(normalizeAvatarLanguage(' MINNAN '), 'minnan')
-  assert.match(settings, /醫生說話語言/)
+  assert.match(settings, /問卷與醫生語言/)
   assert.match(settings, /<option value="mandarin">國語<\/option>/)
-  assert.match(settings, /<option value="minnan">閩南語<\/option>/)
+  assert.match(settings, /<option value="minnan">台語<\/option>/)
   assert.match(avatar, /language: language\.value/)
   assert.match(backend, /language: options\.language \|\| 'mandarin'/)
+  assert.match(backend, /patient_prefill: patientPrefill,[\s\S]*language,/)
+  assert.match(patientView, /avatar\.language\.value/)
   assert.match(stage, /avatar\.languageLabel\.value/)
 })
 
 test('warms every local voice model before marking the avatar connected', () => {
   assert.match(backend, /avatar\/warmup/)
-  assert.match(avatar, /正在預載 Breeze ASR、CosyVoice3 與 MuseTalk/)
+  assert.match(avatar, /正在預載 Breeze ASR 與本機醫師語音模型/)
   assert.match(avatar, /const warmed = await warmup\(\)/)
   assert.match(avatar, /!warmed\.available \|\| !warmed\.loaded/)
 })

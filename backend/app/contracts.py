@@ -160,6 +160,7 @@ class QuestionnaireMetadata(BaseModel):
 class PatientChatResponse(BaseModel):
     reply: str
     session_id: str
+    language: Literal["mandarin", "minnan"]
     completed: bool
     can_go_back: bool = False
     user_display: str | None = None

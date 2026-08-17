@@ -20,8 +20,12 @@ foreach ($relative in $required) {
 $compose = Get-Content -LiteralPath (Join-Path $deployRoot 'docker-compose.yml') -Raw
 $nginx = Get-Content -LiteralPath (Join-Path $deployRoot 'nginx\default.conf.template') -Raw
 $exampleEnv = Get-Content -LiteralPath (Join-Path $deployRoot '.env.example') -Raw
-foreach ($needle in @('workers', '"1"', 'ENABLE_UNVERSIONED_ALIASES', 'CORS_ALLOWED_ORIGINS', 'internal: true', 'edge:', 'backend-egress', 'AVATAR_CSP_CONNECT_SRC_SUFFIX', '127.0.0.1:${DEVELOPMENT_API_PORT:-18000}:8000', '${PATIENT_HTTPS_PORT:-443}:443', '${UCC_API_PORT:-8443}:8443', '${RAG_CHROMA_DB_PATH:-../backend/chroma_db}:/app/chroma_db', 'amir20/dozzle:v10.6.14', 'ghcr.io/tecnativa/docker-socket-proxy:v0.5.0', '127.0.0.1:${CONTAINER_MONITOR_PORT:-18080}:8080', '/var/run/docker.sock:/var/run/docker.sock:ro', 'DOZZLE_REMOTE_HOST: tcp://docker-api-proxy:2375|${COMPOSE_PROJECT_NAME:-medical-consultation}', 'DOZZLE_ENABLE_ACTIONS: "false"', 'DOZZLE_ENABLE_SHELL: "false"', 'DOZZLE_ENABLE_MCP: "false"', 'DOZZLE_NO_ANALYTICS: "true"', 'POST: "0"')) {
+foreach ($needle in @('workers', '"1"', 'ENABLE_UNVERSIONED_ALIASES', 'CORS_ALLOWED_ORIGINS', 'internal: true', 'edge:', 'backend-egress', 'AVATAR_CSP_CONNECT_SRC_SUFFIX', '127.0.0.1:${DEVELOPMENT_API_PORT:-18000}:8000', '${PATIENT_HTTPS_PORT:-443}:443', '${UCC_API_PORT:-8443}:8443', 'https://127.0.0.1/api/v1/health', '${RAG_CHROMA_DB_PATH:-../backend/chroma_db}:/app/chroma_db', 'amir20/dozzle:v10.6.14', 'ghcr.io/tecnativa/docker-socket-proxy:v0.5.0', '127.0.0.1:${CONTAINER_MONITOR_PORT:-18080}:8080', '/var/run/docker.sock:/var/run/docker.sock:ro', 'DOZZLE_REMOTE_HOST: tcp://docker-api-proxy:2375|${COMPOSE_PROJECT_NAME:-medical-consultation}', 'DOZZLE_ENABLE_ACTIONS: "false"', 'DOZZLE_ENABLE_SHELL: "false"', 'DOZZLE_ENABLE_MCP: "false"', 'DOZZLE_NO_ANALYTICS: "true"', 'POST: "0"')) {
     if (-not $compose.Contains($needle)) { throw "Compose invariant missing: $needle" }
+}
+$animationDefault = 'AVATAR_ANIMATION_ENABLED: ${AVATAR_ANIMATION_ENABLED:-true}'
+if ([regex]::Matches($compose, [regex]::Escape($animationDefault)).Count -ne 2) {
+    throw 'Backend and Avatar service must both receive the animation default explicitly.'
 }
 if ($compose.Contains('${RAG_CHROMA_DB_PATH:-../backend/chroma_db}:/app/chroma_db:ro')) {
     throw 'Chroma PersistentClient requires a writable SQLite working directory.'
@@ -47,6 +51,9 @@ if (-not $exampleEnv.Contains('ALLOW_LOCAL_AUTH_BYPASS=false')) {
 if (-not $exampleEnv.Contains('CONTAINER_MONITOR_PORT=18080')) {
     throw 'Deployment monitor must retain its documented loopback port default.'
 }
+if (-not $exampleEnv.Contains('AVATAR_ANIMATION_ENABLED=true')) {
+    throw 'Deployment defaults must keep Avatar animation enabled for compatibility.'
+}
 
 $trackedFrontendChanges = git -C $repoRoot status --short -- frontend
 if ($trackedFrontendChanges) {
@@ -65,6 +72,12 @@ if (Get-Command docker -ErrorAction SilentlyContinue) {
         $composeExitCode = $LASTEXITCODE
         if ($composeExitCode -ne 0) { throw 'docker compose JSON validation failed.' }
         $resolvedCompose = $resolvedComposeJson | ConvertFrom-Json
+        $backendAnimationDefault = $resolvedCompose.services.backend.environment.AVATAR_ANIMATION_ENABLED
+        $avatarAnimationDefault = $resolvedCompose.services.avatar.environment.AVATAR_ANIMATION_ENABLED
+        if ($null -eq $backendAnimationDefault -or
+            $backendAnimationDefault -ne $avatarAnimationDefault) {
+            throw 'Resolved backend and Avatar animation defaults must remain explicit and equal.'
+        }
         $ragMounts = @($resolvedCompose.services.backend.volumes | Where-Object {
             $_.target -eq '/app/chroma_db'
         })

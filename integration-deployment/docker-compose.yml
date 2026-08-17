@@ -17,6 +17,9 @@ services:
       AVATAR_ENABLED: ${AVATAR_ENABLED:-true}
       AVATAR_SERVICE_URL: http://avatar:8090
       AVATAR_TIMEOUT_SECONDS: ${AVATAR_TIMEOUT_SECONDS:-600}
+      # Normal frontend -> backend requests use this default unless the API
+      # request explicitly overrides animation for that render.
+      AVATAR_ANIMATION_ENABLED: ${AVATAR_ANIMATION_ENABLED:-true}
     command:
       - uvicorn
       - main:app
@@ -79,6 +82,8 @@ services:
       AVATAR_IMAGE_PATH: /app/assets/doctor.png
       AVATAR_REQUIRE_CUDA: ${AVATAR_REQUIRE_CUDA:-true}
       AVATAR_STATIC_FALLBACK: ${AVATAR_STATIC_FALLBACK:-true}
+      # Service-level fallback for direct callers that omit a request override.
+      AVATAR_ANIMATION_ENABLED: ${AVATAR_ANIMATION_ENABLED:-true}
       AVATAR_RELEASE_GPU_AFTER_RENDER: ${AVATAR_RELEASE_GPU_AFTER_RENDER:-false}
       AVATAR_OUTPUT_WIDTH: ${AVATAR_OUTPUT_WIDTH:-768}
       MUSETALK_BATCH_SIZE: ${MUSETALK_BATCH_SIZE:-8}
@@ -161,7 +166,9 @@ services:
       - ./secrets/tls-fullchain.pem:/etc/nginx/tls/fullchain.pem:ro
       - ./secrets/tls-private-key.pem:/etc/nginx/tls/private-key.pem:ro
     healthcheck:
-      test: ["CMD-SHELL", "wget -q --no-check-certificate -O /dev/null https://127.0.0.1/healthz || exit 1"]
+      # Exercise the real Nginx -> FastAPI path so a broken upstream cannot
+      # leave the gateway marked healthy while UCC receives HTTP 502.
+      test: ["CMD-SHELL", "wget -q --no-check-certificate -O /dev/null https://127.0.0.1/api/v1/health || exit 1"]
       interval: 15s
       timeout: 5s
       retries: 5

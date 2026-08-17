@@ -9,8 +9,8 @@ for required in "$DEPLOY_DIR/.env" \
   "$DEPLOY_DIR/secrets/ucc-jwt-public.pem" \
   "$DEPLOY_DIR/secrets/tls-fullchain.pem" \
   "$DEPLOY_DIR/secrets/tls-private-key.pem"; do
-  if [ ! -s "$required" ]; then
-    echo "Missing required deployment file: $required" >&2
+  if [ ! -f "$required" ] || [ ! -s "$required" ]; then
+    echo "Missing, empty, or non-regular deployment file: $required" >&2
     exit 1
   fi
 done

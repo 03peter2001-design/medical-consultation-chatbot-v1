@@ -1,7 +1,5 @@
 <script setup>
-import { ref, watchEffect } from 'vue'
-
-const props = defineProps({
+defineProps({
   avatar: { type: Object, required: true },
   open: { type: Boolean, default: false },
 })
@@ -9,15 +7,6 @@ const props = defineProps({
 const emit = defineEmits(['close', 'connect'])
 const clientKey = defineModel('clientKey', { type: String, default: '' })
 const agentId = defineModel('agentId', { type: String, default: '' })
-const videoElement = ref(null)
-
-watchEffect(() => {
-  if (videoElement.value) {
-    videoElement.value.srcObject = props.avatar.isDid.value
-      ? props.avatar.videoStream.value
-      : null
-  }
-})
 </script>
 
 <template>
@@ -38,41 +27,18 @@ watchEffect(() => {
     :inert="!open"
   >
     <div class="avatar-preview">
-      <div
-        v-if="avatar.isDid.value && !avatar.videoStream.value"
-        class="avatar-placeholder"
-      >
-        <div class="avatar-symbol">👤</div>
-        <div>D-ID Avatar 為選用功能<br />未連接也可正常問診</div>
-      </div>
-      <video
-        v-if="avatar.isDid.value"
-        ref="videoElement"
-        autoplay
-        playsinline
-        :class="{ visible: avatar.videoStream.value }"
-      />
       <img
         v-if="avatar.isLocal.value"
         class="avatar-image"
-        :class="{ hidden: avatar.videoUrl.value }"
         :src="avatar.imageUrl.value"
-        alt="本地 AI 醫師 Avatar"
+        alt="本地 AI 醫師 Avatar 設定"
       />
-      <video
-        v-if="avatar.isLocal.value && avatar.videoUrl.value"
-        :src="avatar.videoUrl.value"
-        autoplay
-        playsinline
-        controls
-        class="visible"
-        @play="avatar.onPlaybackStart"
-        @pause="avatar.onPlaybackEnd"
-        @ended="avatar.onPlaybackEnd"
-        @error="avatar.onPlaybackError"
-      />
-      <div class="wave-overlay" :class="{ visible: avatar.talking.value }">
-        <span /><span /><span /><span /><span />
+      <div v-else class="avatar-placeholder">
+        <strong>D-ID Avatar</strong>
+        <span>連線後會顯示在問診主畫面</span>
+      </div>
+      <div class="preview-note">
+        醫師影像、朗讀字幕與播放控制會常駐顯示在問診畫面。
       </div>
       <button
         class="drawer-close"
@@ -197,89 +163,41 @@ watchEffect(() => {
   background: var(--surface-2);
 }
 
-.avatar-preview video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-}
-
 .avatar-image {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 0.2s ease;
 }
 
-.avatar-image.hidden {
-  display: none;
-}
-
-.avatar-preview video.visible {
-  opacity: 1;
-}
-
-.avatar-placeholder {
+.preview-note {
   position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.6;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgb(17 42 59 / 82%);
+  color: white;
+  font-size: 12px;
+  line-height: 1.45;
   text-align: center;
 }
 
-.avatar-symbol {
-  font-size: 40px;
-  opacity: 0.25;
+.avatar-placeholder {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-content: center;
+  gap: 6px;
+  padding: 24px;
+  color: var(--muted);
+  text-align: center;
 }
 
-.wave-overlay {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  display: none;
-  height: 20px;
-  align-items: flex-end;
-  gap: 3px;
-  transform: translateX(-50%);
-}
-
-.wave-overlay.visible {
-  display: flex;
-}
-
-.wave-overlay span {
-  width: 4px;
-  height: 8px;
-  border-radius: 3px;
-  background: var(--blue);
-  animation: wave 0.7s ease-in-out infinite;
-}
-
-.wave-overlay span:nth-child(2) {
-  height: 16px;
-  animation-delay: 0.1s;
-}
-
-.wave-overlay span:nth-child(3) {
-  height: 10px;
-  animation-delay: 0.2s;
-}
-
-.wave-overlay span:nth-child(4) {
-  height: 18px;
-  animation-delay: 0.3s;
-}
-
-.wave-overlay span:nth-child(5) {
-  animation-delay: 0.4s;
+.avatar-placeholder strong {
+  color: var(--text);
+  font-size: 18px;
 }
 
 .drawer-close {
@@ -422,12 +340,6 @@ watchEffect(() => {
   display: block;
   background: rgb(31 51 69 / 28%);
   backdrop-filter: blur(2px);
-}
-
-@keyframes wave {
-  50% {
-    transform: scaleY(0.3);
-  }
 }
 
 @media (max-width: 760px) {

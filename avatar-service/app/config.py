@@ -37,6 +37,7 @@ class Settings:
     batch_size: int = max(1, int(os.getenv("MUSETALK_BATCH_SIZE", "8")))
     output_width: int = max(320, int(os.getenv("AVATAR_OUTPUT_WIDTH", "768")))
     require_cuda: bool = _flag("AVATAR_REQUIRE_CUDA", True)
+    animation_enabled: bool = _flag("AVATAR_ANIMATION_ENABLED", True)
     static_fallback: bool = _flag("AVATAR_STATIC_FALLBACK", True)
     release_gpu_after_render: bool = _flag(
         "AVATAR_RELEASE_GPU_AFTER_RENDER",

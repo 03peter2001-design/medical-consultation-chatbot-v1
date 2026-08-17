@@ -51,6 +51,11 @@
       },
       "AvatarStatusResponse": {
         "properties": {
+          "animation_enabled": {
+            "default": true,
+            "title": "Animation Enabled",
+            "type": "boolean"
+          },
           "animation_model": {
             "title": "Animation Model",
             "type": "string"

@@ -21,6 +21,11 @@ engine = AvatarEngine()
 class SynthesisRequest(BaseModel):
     text: str = Field(min_length=1, max_length=1200)
     language: Literal["mandarin", "minnan"] = "mandarin"
+    animation_enabled: bool | None = None
+
+
+class WarmupRequest(BaseModel):
+    animation_enabled: bool | None = None
 
 
 @app.get("/health")
@@ -29,9 +34,10 @@ def health():
 
 
 @app.post("/v1/warmup")
-async def warmup():
+async def warmup(payload: WarmupRequest | None = None):
     try:
-        return await run_in_threadpool(engine.warmup)
+        animation_enabled = payload.animation_enabled if payload else None
+        return await run_in_threadpool(engine.warmup, animation_enabled)
     except AvatarEngineError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error
     except Exception as error:
@@ -46,6 +52,7 @@ async def synthesize(payload: SynthesisRequest):
             engine.render,
             payload.text,
             payload.language,
+            payload.animation_enabled,
         )
     except AvatarEngineError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error

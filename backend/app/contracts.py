@@ -113,6 +113,7 @@ class AvatarStatusResponse(BaseModel):
     available: bool
     speech_model: str
     animation_model: str
+    animation_enabled: bool = True
     device: str
     loaded: bool = False
 

@@ -110,6 +110,11 @@ test('uses the bundled doctor image and renders a central captioned stage', () =
   assert.match(stage, /avatar\.caption\.value/)
   assert.match(stage, /justify-content: center/)
   assert.match(stage, /<section\s+class="avatar-stage"/)
+  assert.match(stage, /ref="localVideoElement"/)
+  assert.match(stage, /controls/)
+  assert.match(stage, /@loadedmetadata="playLocalVideo"/)
+  assert.match(stage, /playbackBlocked/)
+  assert.match(stage, /播放醫師語音/)
 })
 
 test('starts the avatar automatically and preserves an accessible text fallback', () => {

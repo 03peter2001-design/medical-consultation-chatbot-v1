@@ -9,6 +9,7 @@ function read(relativePath) {
 const avatar = read('../packages/shared/src/composables/useAvatar.js')
 const settings = read('../packages/shared/src/components/AvatarSettings.vue')
 const patientView = read('../apps/patient/src/views/PatientView.vue')
+const stage = read('../apps/patient/src/components/AvatarStage.vue')
 const envExample = read('../apps/patient/.env.example')
 
 test('patient app supports local and D-ID providers with local as default', () => {
@@ -28,4 +29,22 @@ test('D-ID credentials remain in memory and carry a public-bundle warning', () =
   assert.match(settings, /公開的/)
   assert.doesNotMatch(avatar, /localStorage|sessionStorage/)
   assert.doesNotMatch(envExample, /VITE_DID_CLIENT_KEY=\S+/)
+})
+
+test('keeps the deployed patient doctor, caption, chat text, and audio controls visible', () => {
+  assert.match(avatar, /const caption = ref\(''\)/)
+  assert.match(avatar, /caption\.value = input/)
+  assert.match(patientView, /import AvatarStage from '\.\.\/components\/AvatarStage\.vue'/)
+  assert.match(patientView, /const consultationAvatarVisible = computed/)
+  assert.match(patientView, /<AvatarStage[\s\S]*v-if="started && consultationAvatarVisible"/)
+  assert.match(patientView, /v-for="message in messages"/)
+  assert.match(stage, /avatar\.imageUrl\.value/)
+  assert.match(stage, /avatar\.videoUrl\.value/)
+  assert.match(stage, /avatar\.caption\.value/)
+  assert.match(stage, /ref="localVideoElement"/)
+  assert.match(stage, /controls/)
+  assert.match(stage, /@loadedmetadata="playLocalVideo"/)
+  assert.match(stage, /playbackBlocked/)
+  assert.match(stage, /播放醫師語音/)
+  assert.doesNotMatch(settings, /<video/)
 })

@@ -13,6 +13,7 @@ from .config import Settings
 
 SPEECH_MODEL = "FunAudioLLM/Fun-CosyVoice3-0.5B-2512"
 ANIMATION_MODEL = "TMElyralab/MuseTalk 1.5"
+STATIC_ANIMATION_MODEL = "static-image mode"
 SUPPORTED_LANGUAGES = frozenset({"mandarin", "minnan"})
 
 
@@ -43,7 +44,11 @@ class AvatarEngine:
         self._muse = None
         self._device = "unknown"
 
-    def health(self) -> dict[str, object]:
+    def _resolve_animation_enabled(self, override: bool | None) -> bool:
+        return self.settings.animation_enabled if override is None else override
+
+    def health(self, animation_enabled: bool | None = None) -> dict[str, object]:
+        animation_enabled = self._resolve_animation_enabled(animation_enabled)
         try:
             import torch
 
@@ -53,56 +58,77 @@ class AvatarEngine:
             cuda = False
             self._device = "unavailable"
         ready = cuda or not self.settings.require_cuda
+        animation_model = (
+            ANIMATION_MODEL
+            if animation_enabled
+            else STATIC_ANIMATION_MODEL
+        )
         return {
             "status": "ok" if ready else "degraded",
             "speech_model": SPEECH_MODEL,
-            "animation_model": ANIMATION_MODEL,
+            "animation_model": animation_model,
+            "animation_enabled": animation_enabled,
             "device": self._device,
-            "models_downloaded": self._models_downloaded(),
+            "models_downloaded": self._models_downloaded(animation_enabled),
             "speech_loaded": self._cosyvoice is not None,
             "animation_loaded": self._muse is not None,
             "keep_models_loaded": not self.settings.release_gpu_after_render,
         }
 
-    def warmup(self) -> dict[str, object]:
-        """Load every Avatar model once and retain it for subsequent renders."""
+    def warmup(
+        self,
+        animation_enabled: bool | None = None,
+    ) -> dict[str, object]:
+        """Load and retain the models required by the configured render mode."""
+        animation_enabled = self._resolve_animation_enabled(animation_enabled)
         with self._lock:
             try:
                 self._assert_runtime()
-                self._ensure_models()
+                self._ensure_models(animation_enabled)
                 self._load_cosyvoice()
-                self._load_muse()
+                if animation_enabled:
+                    self._load_muse()
             except Exception:
                 self._release_models()
                 raise
-        return self.health()
+        return self.health(animation_enabled)
 
     def render(
         self,
         raw_text: str,
         language: str = "mandarin",
+        animation_enabled: bool | None = None,
     ) -> tuple[Path, bool, str]:
         text = clean_speech_text(raw_text)
         if not text:
             raise AvatarEngineError("沒有可朗讀的文字")
         language = normalize_language(language)
+        animation_enabled = self._resolve_animation_enabled(animation_enabled)
         instruction = (
             self.settings.minnan_instruction
             if language == "minnan"
             else self.settings.instruction
         )
+        animation_model = (
+            ANIMATION_MODEL
+            if animation_enabled
+            else STATIC_ANIMATION_MODEL
+        )
+        animation_mode = "animated" if animation_enabled else "static"
         digest = hashlib.sha256(
-            f"v3\0{language}\0{instruction}\0{text}".encode("utf-8")
+            f"v4\0{animation_mode}\0{language}\0{instruction}\0{text}".encode(
+                "utf-8"
+            )
         ).hexdigest()
         output = self.settings.output_dir / f"{digest}.mp4"
         if output.is_file() and output.stat().st_size > 0:
-            return output, True, ANIMATION_MODEL
+            return output, True, animation_model
 
         with self._lock:
             if output.is_file() and output.stat().st_size > 0:
-                return output, True, ANIMATION_MODEL
+                return output, True, animation_model
             self._assert_runtime()
-            self._ensure_models()
+            self._ensure_models(animation_enabled)
             self.settings.output_dir.mkdir(parents=True, exist_ok=True)
             try:
                 with tempfile.TemporaryDirectory(dir=self.settings.data_dir) as temp_dir:
@@ -113,18 +139,20 @@ class AvatarEngine:
                         # The WAV is on CPU/disk now, so CosyVoice can be
                         # released before MuseTalk claims its own GPU memory.
                         self._release_models(speech=True, animation=False)
-                    animation_model = ANIMATION_MODEL
-                    try:
-                        self._animate(wav_path, rendered_path)
-                    except Exception as error:
-                        if not self.settings.static_fallback:
-                            raise
-                        animation_model = "static-image fallback"
+                    if not animation_enabled:
                         self._render_static(wav_path, rendered_path)
-                        print(
-                            f"[Avatar] MuseTalk fallback: "
-                            f"{type(error).__name__}: {error}"
-                        )
+                    else:
+                        try:
+                            self._animate(wav_path, rendered_path)
+                        except Exception as error:
+                            if not self.settings.static_fallback:
+                                raise
+                            animation_model = "static-image fallback"
+                            self._render_static(wav_path, rendered_path)
+                            print(
+                                f"[Avatar] MuseTalk fallback: "
+                                f"{type(error).__name__}: {error}"
+                            )
                     if not rendered_path.is_file() or rendered_path.stat().st_size == 0:
                         raise AvatarEngineError("Avatar 影片輸出為空")
                     os.replace(rendered_path, output)
@@ -166,10 +194,14 @@ class AvatarEngine:
             if not torch.cuda.is_available():
                 raise AvatarEngineError("NVIDIA CUDA 尚未可用")
 
-    def _models_downloaded(self) -> bool:
+    def _models_downloaded(self, animation_enabled: bool | None = None) -> bool:
+        animation_enabled = self._resolve_animation_enabled(animation_enabled)
+        if not self._cosyvoice_downloaded():
+            return False
+        if not animation_enabled:
+            return True
         return all(
             (
-                self._cosyvoice_downloaded(),
                 self._musetalk_downloaded(),
                 self._vae_downloaded(),
                 self._whisper_downloaded(),
@@ -213,8 +245,9 @@ class AvatarEngine:
             for name in ("config.json", "preprocessor_config.json")
         )
 
-    def _ensure_models(self) -> None:
-        if self._models_downloaded():
+    def _ensure_models(self, animation_enabled: bool | None = None) -> None:
+        animation_enabled = self._resolve_animation_enabled(animation_enabled)
+        if self._models_downloaded(animation_enabled):
             return
         from huggingface_hub import snapshot_download
 
@@ -224,19 +257,19 @@ class AvatarEngine:
                 repo_id=self.settings.cosyvoice_repo,
                 local_dir=self.settings.cosyvoice_dir,
             )
-        if not self._musetalk_downloaded():
+        if animation_enabled and not self._musetalk_downloaded():
             snapshot_download(
                 repo_id="TMElyralab/MuseTalk",
                 local_dir=self.settings.musetalk_dir,
                 allow_patterns=["musetalkV15/*"],
             )
-        if not self._vae_downloaded():
+        if animation_enabled and not self._vae_downloaded():
             snapshot_download(
                 repo_id="stabilityai/sd-vae-ft-mse",
                 local_dir=self.settings.vae_dir,
                 allow_patterns=["config.json", "diffusion_pytorch_model.bin"],
             )
-        if not self._whisper_downloaded():
+        if animation_enabled and not self._whisper_downloaded():
             snapshot_download(
                 repo_id="openai/whisper-tiny",
                 local_dir=self.settings.whisper_dir,

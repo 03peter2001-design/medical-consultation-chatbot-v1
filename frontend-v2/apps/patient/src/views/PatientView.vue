@@ -16,6 +16,7 @@ import QuestionnaireControl from '@medical/shared/components/QuestionnaireContro
 import QueueCard from '@medical/shared/components/QueueCard.vue'
 import TypingIndicator from '@medical/shared/components/TypingIndicator.vue'
 import { useAvatar } from '@medical/shared/composables/useAvatar.js'
+import AvatarStage from '../components/AvatarStage.vue'
 import { getPainMapPreset } from '@medical/shared/data/bodyPainRegions.js'
 import { api, connectionError } from '@medical/shared/services/patientBackend.js'
 import {
@@ -89,6 +90,12 @@ const inputsDisabled = computed(
     sending.value ||
     voiceProcessing.value ||
     completed.value,
+)
+const consultationAvatarVisible = computed(
+  () =>
+    avatar.isConnected.value ||
+    avatar.isConnecting.value ||
+    avatar.talking.value,
 )
 const microphoneLabel = computed(() => {
   if (voiceProcessing.value) return '⏳'
@@ -351,7 +358,14 @@ async function connectAvatar() {
     clientKey: avatarClientKey.value,
     agentId: avatarAgentId.value,
   })
-  if (connected) mobileAvatarOpen.value = false
+  if (!connected) return
+  mobileAvatarOpen.value = false
+  if (started.value) {
+    const latestAssistant = [...messages.value]
+      .reverse()
+      .find((message) => message.role === 'ai' && message.text)
+    if (latestAssistant) void avatar.speak(latestAssistant.text)
+  }
 }
 
 async function toggleVoice() {
@@ -487,6 +501,10 @@ onBeforeUnmount(() => {
             以上僅為安全規則提示，不代表診斷；請勿等待線上問診結果。
           </p>
         </div>
+        <AvatarStage
+          v-if="started && consultationAvatarVisible"
+          :avatar="avatar"
+        />
         <div class="progress-bar" aria-label="問診進度">
           <span
             v-if="questionnaireInfo"

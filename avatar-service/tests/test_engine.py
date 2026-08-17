@@ -5,7 +5,12 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 from app.config import Settings
-from app.engine import AvatarEngine, clean_speech_text, normalize_language
+from app.engine import (
+    STATIC_ANIMATION_MODEL,
+    AvatarEngine,
+    clean_speech_text,
+    normalize_language,
+)
 
 
 class AvatarEngineTests(unittest.TestCase):
@@ -46,7 +51,7 @@ class AvatarEngineTests(unittest.TestCase):
             def _assert_runtime(self):
                 return None
 
-            def _ensure_models(self):
+            def _ensure_models(self, animation_enabled=None):
                 return None
 
             def _load_cosyvoice(self):
@@ -57,20 +62,196 @@ class AvatarEngineTests(unittest.TestCase):
                 self._muse = "animation-model"
                 return self._muse
 
-            def health(self):
+            def health(self, animation_enabled=None):
                 return {
                     "speech_loaded": self._cosyvoice is not None,
                     "animation_loaded": self._muse is not None,
                 }
 
         with tempfile.TemporaryDirectory() as directory:
-            engine = FakeEngine(Settings(data_dir=Path(directory)))
-            status = engine.warmup()
+            engine = FakeEngine(
+                Settings(data_dir=Path(directory), animation_enabled=False)
+            )
+            status = engine.warmup(True)
 
         self.assertTrue(status["speech_loaded"])
         self.assertTrue(status["animation_loaded"])
         self.assertEqual(engine._cosyvoice, "speech-model")
         self.assertEqual(engine._muse, "animation-model")
+
+    def test_static_warmup_and_health_never_load_musetalk(self):
+        fake_torch = SimpleNamespace(
+            cuda=SimpleNamespace(is_available=lambda: True)
+        )
+
+        class FakeEngine(AvatarEngine):
+            def _assert_runtime(self):
+                return None
+
+            def _ensure_models(self, animation_enabled=None):
+                return None
+
+            def _models_downloaded(self, animation_enabled=None):
+                return True
+
+            def _load_cosyvoice(self):
+                self._cosyvoice = "speech-model"
+                return self._cosyvoice
+
+            def _load_muse(self):
+                self.testcase.fail("static warmup 不得載入 MuseTalk")
+
+        with tempfile.TemporaryDirectory() as directory:
+            settings = Settings(
+                data_dir=Path(directory),
+                animation_enabled=True,
+            )
+            engine = FakeEngine(settings)
+            engine.testcase = self
+            with patch.dict("sys.modules", {"torch": fake_torch}):
+                status = engine.warmup(False)
+
+        self.assertTrue(status["speech_loaded"])
+        self.assertFalse(status["animation_loaded"])
+        self.assertFalse(status["animation_enabled"])
+        self.assertEqual(status["animation_model"], STATIC_ANIMATION_MODEL)
+
+    def test_static_model_download_only_requests_cosyvoice(self):
+        calls = []
+        fake_hub = SimpleNamespace(
+            snapshot_download=lambda **kwargs: calls.append(kwargs)
+        )
+
+        with tempfile.TemporaryDirectory() as directory:
+            settings = Settings(
+                model_dir=Path(directory),
+                animation_enabled=True,
+            )
+            with patch.dict("sys.modules", {"huggingface_hub": fake_hub}):
+                AvatarEngine(settings)._ensure_models(False)
+
+        self.assertEqual(
+            [call["repo_id"] for call in calls],
+            [settings.cosyvoice_repo],
+        )
+
+    def test_request_can_enable_animation_downloads_over_static_default(self):
+        calls = []
+        fake_hub = SimpleNamespace(
+            snapshot_download=lambda **kwargs: calls.append(kwargs)
+        )
+
+        with tempfile.TemporaryDirectory() as directory:
+            settings = Settings(
+                model_dir=Path(directory),
+                animation_enabled=False,
+            )
+            with patch.dict("sys.modules", {"huggingface_hub": fake_hub}):
+                AvatarEngine(settings)._ensure_models(True)
+
+        self.assertEqual(
+            [call["repo_id"] for call in calls],
+            [
+                settings.cosyvoice_repo,
+                "TMElyralab/MuseTalk",
+                "stabilityai/sd-vae-ft-mse",
+                "openai/whisper-tiny",
+            ],
+        )
+
+    def test_static_model_readiness_only_requires_cosyvoice(self):
+        class FakeEngine(AvatarEngine):
+            def _cosyvoice_downloaded(self):
+                return True
+
+            def _musetalk_downloaded(self):
+                self.testcase.fail("static readiness 不得檢查 MuseTalk")
+
+            def _vae_downloaded(self):
+                self.testcase.fail("static readiness 不得檢查 VAE")
+
+            def _whisper_downloaded(self):
+                self.testcase.fail("static readiness 不得檢查嘴型 Whisper")
+
+        engine = FakeEngine(Settings(animation_enabled=True))
+        engine.testcase = self
+        self.assertTrue(engine._models_downloaded(False))
+
+    def test_static_mode_renders_and_caches_without_musetalk(self):
+        calls = []
+
+        class FakeEngine(AvatarEngine):
+            def _assert_runtime(self):
+                return None
+
+            def _ensure_models(self, animation_enabled=None):
+                calls.append("ensure")
+
+            def _synthesize(self, text, target, instruction):
+                calls.append("synthesize")
+                target.write_bytes(b"wav")
+
+            def _load_muse(self):
+                self.testcase.fail("static render 不得載入 MuseTalk")
+
+            def _animate(self, wav_path, target):
+                self.testcase.fail("static render 不得呼叫 MuseTalk")
+
+            def _render_static(self, wav_path, target):
+                calls.append("static")
+                target.write_bytes(b"static-mp4")
+
+        with tempfile.TemporaryDirectory() as directory:
+            settings = Settings(
+                data_dir=Path(directory),
+                animation_enabled=True,
+            )
+            engine = FakeEngine(settings)
+            engine.testcase = self
+            output, cache_hit, model = engine.render(
+                "您好",
+                animation_enabled=False,
+            )
+            cached_output, cached, cached_model = engine.render(
+                "您好",
+                animation_enabled=False,
+            )
+            output_bytes = output.read_bytes()
+
+        self.assertEqual(output_bytes, b"static-mp4")
+        self.assertFalse(cache_hit)
+        self.assertTrue(cached)
+        self.assertEqual(cached_output, output)
+        self.assertEqual(model, STATIC_ANIMATION_MODEL)
+        self.assertEqual(cached_model, STATIC_ANIMATION_MODEL)
+        self.assertEqual(calls, ["ensure", "synthesize", "static"])
+
+    def test_animation_mode_is_part_of_video_cache_key(self):
+        class FakeEngine(AvatarEngine):
+            def _assert_runtime(self):
+                return None
+
+            def _ensure_models(self, animation_enabled=None):
+                return None
+
+            def _synthesize(self, text, target, instruction):
+                target.write_bytes(b"wav")
+
+            def _animate(self, wav_path, target):
+                target.write_bytes(b"animated-mp4")
+
+            def _render_static(self, wav_path, target):
+                target.write_bytes(b"static-mp4")
+
+        with tempfile.TemporaryDirectory() as directory:
+            data_dir = Path(directory)
+            engine = FakeEngine(
+                Settings(data_dir=data_dir, animation_enabled=False)
+            )
+            animated, _, _ = engine.render("同一句話", animation_enabled=True)
+            static, _, _ = engine.render("同一句話", animation_enabled=False)
+
+        self.assertNotEqual(animated.name, static.name)
 
     def test_render_publishes_only_completed_video(self):
         synthesize_calls = []
@@ -79,7 +260,7 @@ class AvatarEngineTests(unittest.TestCase):
             def _assert_runtime(self):
                 return None
 
-            def _ensure_models(self):
+            def _ensure_models(self, animation_enabled=None):
                 return None
 
             def _synthesize(self, text, target, instruction):
@@ -115,7 +296,7 @@ class AvatarEngineTests(unittest.TestCase):
             def _assert_runtime(self):
                 return None
 
-            def _ensure_models(self):
+            def _ensure_models(self, animation_enabled=None):
                 return None
 
             def _synthesize(self, text, target, instruction):
@@ -147,7 +328,7 @@ class AvatarEngineTests(unittest.TestCase):
             def _assert_runtime(self):
                 return None
 
-            def _ensure_models(self):
+            def _ensure_models(self, animation_enabled=None):
                 return None
 
             def _synthesize(self, text, target, instruction):
@@ -197,7 +378,7 @@ class AvatarEngineTests(unittest.TestCase):
             def _assert_runtime(self):
                 return None
 
-            def _ensure_models(self):
+            def _ensure_models(self, animation_enabled=None):
                 return None
 
             def _synthesize(self, text, target, instruction):

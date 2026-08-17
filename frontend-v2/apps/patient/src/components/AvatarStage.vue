@@ -4,15 +4,14 @@ import { ref, watchEffect } from 'vue'
 const props = defineProps({
   avatar: { type: Object, required: true },
 })
-const emit = defineEmits(['connect'])
 
-const videoElement = ref(null)
+const didVideoElement = ref(null)
 const localVideoElement = ref(null)
 const playbackBlocked = ref(false)
 
 watchEffect(() => {
-  if (videoElement.value) {
-    videoElement.value.srcObject = props.avatar.isDid.value
+  if (didVideoElement.value) {
+    didVideoElement.value.srcObject = props.avatar.isDid.value
       ? props.avatar.videoStream.value
       : null
   }
@@ -44,7 +43,7 @@ function onLocalPlaybackError() {
   <section
     class="avatar-stage"
     aria-label="AI 醫師 Avatar"
-    :aria-busy="avatar.isConnecting.value || avatar.rendering.value"
+    :aria-busy="avatar.isConnecting.value"
   >
     <div
       class="doctor-portrait"
@@ -61,7 +60,7 @@ function onLocalPlaybackError() {
       </div>
       <video
         v-if="avatar.isDid.value"
-        ref="videoElement"
+        ref="didVideoElement"
         autoplay
         playsinline
         :class="{ visible: avatar.videoStream.value }"
@@ -116,45 +115,23 @@ function onLocalPlaybackError() {
           avatar.talking.value
             ? 'AI 醫師正在說話'
             : avatar.isConnecting.value
-              ? '模型載入／生成中'
-            : avatar.rendering.value
-              ? '下一題已就緒 · Avatar 背景生成中'
-            : avatar.statusTone.value === 'error'
-              ? 'Avatar 暫時不可用'
-              : avatar.isConnected.value
-                ? 'AI 醫師'
-                : 'AI 醫師準備啟用'
+              ? '影片生成中'
+              : avatar.statusTone.value === 'error'
+                ? 'Avatar 暫時不可用'
+                : 'AI 醫師'
         }}
-        <template v-if="avatar.isLocal.value">
-          · {{ avatar.languageLabel.value }}
-        </template>
       </span>
       <p>
         {{
-          avatar.isConnecting.value
+          avatar.isConnecting.value || avatar.statusTone.value === 'error'
             ? avatar.status.value
-            : avatar.rendering.value
-              ? avatar.caption.value
-            : avatar.statusTone.value === 'error'
-              ? avatar.status.value
-              : avatar.isConnected.value
-                ? avatar.caption.value ||
-                  'Avatar 已準備完成，接下來可直接使用語音回答。'
-                : '正在自動啟用院內 AI 醫師 Avatar。'
+            : avatar.caption.value ||
+              'Avatar 已準備完成；醫師的朗讀文字會顯示在這裡。'
         }}
       </p>
-      <p v-if="avatar.rendering.value" class="rendering-note">
-        問題已顯示，可立即作答，不必等待影片完成。
+      <p v-if="playbackBlocked" class="playback-note">
+        瀏覽器已阻擋自動播放；請按醫師影像上的「播放醫師語音」。
       </p>
-      <div
-        v-if="!avatar.isConnected.value && !avatar.isConnecting.value"
-        class="avatar-fallback"
-      >
-        <span>Avatar 不影響問診；您仍可使用下方文字輸入。</span>
-        <button type="button" @click="emit('connect')">
-          重新啟用 Avatar
-        </button>
-      </div>
     </div>
   </section>
 </template>
@@ -162,13 +139,12 @@ function onLocalPlaybackError() {
 <style scoped>
 .avatar-stage {
   display: grid;
-  grid-template-columns: minmax(260px, 360px) minmax(320px, 540px);
-  min-height: 320px;
+  grid-template-columns: minmax(220px, 320px) minmax(280px, 1fr);
+  min-height: 270px;
   flex: 0 0 auto;
   align-items: center;
-  justify-content: center;
-  gap: clamp(24px, 4vw, 56px);
-  padding: 26px 32px;
+  gap: clamp(20px, 4vw, 44px);
+  padding: 22px 28px;
   border-bottom: 1px solid var(--border);
   background:
     radial-gradient(circle at 22% 25%, rgb(10 146 126 / 12%), transparent 42%),
@@ -177,7 +153,7 @@ function onLocalPlaybackError() {
 
 .doctor-portrait {
   position: relative;
-  width: min(100%, 360px);
+  width: min(100%, 320px);
   aspect-ratio: 4 / 3;
   justify-self: end;
   overflow: hidden;
@@ -185,7 +161,6 @@ function onLocalPlaybackError() {
   border-radius: 18px;
   background: #eaf2f5;
   box-shadow: 0 16px 34px rgb(37 67 91 / 16%);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .doctor-portrait.talking {
@@ -207,17 +182,9 @@ function onLocalPlaybackError() {
   object-position: center 24%;
 }
 
-.doctor-portrait video {
-  opacity: 0;
-}
-
-.doctor-portrait video.visible {
-  opacity: 1;
-}
-
-.doctor-portrait .hidden {
-  display: none;
-}
+.doctor-portrait video { opacity: 0; }
+.doctor-portrait video.visible { opacity: 1; }
+.doctor-portrait .hidden { display: none; }
 
 .doctor-placeholder {
   display: grid;
@@ -276,12 +243,6 @@ function onLocalPlaybackError() {
   text-align: center;
 }
 
-.stage-loading strong {
-  font-size: 14px;
-  letter-spacing: 0.04em;
-  text-shadow: 0 1px 8px rgb(0 0 0 / 32%);
-}
-
 .loading-spinner {
   width: 30px;
   height: 30px;
@@ -317,42 +278,16 @@ function onLocalPlaybackError() {
   line-height: 1.65;
 }
 
-.avatar-caption .rendering-note {
+.avatar-caption .playback-note {
   margin-top: 10px;
-  color: var(--green);
+  color: var(--danger);
   font-size: 12px;
   font-weight: 650;
   line-height: 1.5;
 }
 
-.avatar-fallback {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px 14px;
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px solid var(--border);
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.avatar-fallback button {
-  min-height: 42px;
-  padding: 9px 14px;
-  border: 1px solid var(--green);
-  border-radius: 8px;
-  background: var(--green);
-  color: white;
-  cursor: pointer;
-  font-weight: 700;
-}
-
 @keyframes avatar-spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -364,20 +299,18 @@ function onLocalPlaybackError() {
 
 @media (max-width: 760px) {
   .avatar-stage {
-    grid-template-columns: 140px minmax(0, 1fr);
+    grid-template-columns: 130px minmax(0, 1fr);
     min-height: 0;
-    gap: 14px;
-    padding: 14px;
+    gap: 12px;
+    padding: 12px;
   }
 
   .doctor-portrait {
-    width: 140px;
+    width: 130px;
     border-radius: 14px;
   }
 
-  .avatar-caption {
-    padding: 12px;
-  }
+  .avatar-caption { padding: 12px; }
 
   .avatar-caption p {
     display: -webkit-box;
@@ -387,29 +320,21 @@ function onLocalPlaybackError() {
     -webkit-line-clamp: 4;
   }
 
-  .avatar-fallback {
-    margin-top: 10px;
-    padding-top: 10px;
-  }
-
-  .avatar-fallback button {
-    width: 100%;
+  .manual-play {
+    top: 6px;
+    min-height: 36px;
+    padding: 7px 10px;
+    font-size: 11px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 420px) {
   .avatar-stage {
-    grid-template-columns: 118px minmax(0, 1fr);
-    gap: 10px;
-    padding: 10px;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 8px;
+    padding: 8px;
   }
 
-  .doctor-portrait {
-    width: 118px;
-  }
-
-  .avatar-fallback span {
-    display: none;
-  }
+  .doctor-portrait { width: 110px; }
 }
 </style>

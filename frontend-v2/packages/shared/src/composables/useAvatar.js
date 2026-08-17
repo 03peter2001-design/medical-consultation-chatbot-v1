@@ -46,6 +46,7 @@ export function useAvatar({
   const videoStream = ref(null)
   const videoUrl = ref('')
   const imageUrl = ref('/avatar/doctor.png')
+  const caption = ref('')
   const connectionState = ref('idle')
   const status = ref('Avatar 尚未啟用')
   const statusTone = ref('idle')
@@ -88,6 +89,7 @@ export function useAvatar({
     videoStream.value = null
     connectionState.value = 'idle'
     talking.value = false
+    caption.value = ''
     status.value = message
     statusTone.value = 'idle'
   }
@@ -221,7 +223,7 @@ export function useAvatar({
     const input = cleanSpeechText(text)
     if (!input) return
     connectionState.value = 'connecting'
-    status.value = 'CosyVoice3 與 MuseTalk 生成中…'
+    status.value = '本機醫師語音生成中…'
     statusTone.value = 'waiting'
     const controller = new AbortController()
     activeRequestController = controller
@@ -250,6 +252,7 @@ export function useAvatar({
   function speak(text) {
     const input = cleanSpeechText(text)
     if (!input || !userEnabled || !isConnected.value) return Promise.resolve()
+    caption.value = input
     if (isDid.value) {
       if (!manager.value) return Promise.resolve()
       return manager.value.speak({ type: 'text', input }).catch((error) => {
@@ -299,6 +302,7 @@ export function useAvatar({
     videoStream,
     videoUrl,
     imageUrl,
+    caption,
     speechModel,
     animationModel,
     status,

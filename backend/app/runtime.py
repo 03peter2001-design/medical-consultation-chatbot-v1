@@ -20,7 +20,13 @@ print(f"[LLM] 使用 {llm_client.provider}（{llm_client.model}）")
 asr_service = SpeechTranscriber(llm_client=llm_client)
 print(f"[ASR] 使用 {asr_service.status()['provider']}（{asr_service.status()['model']}，延遲載入）")
 avatar_client = AvatarClient()
-print("[Avatar] " + ("啟用本地 CosyVoice3 + MuseTalk" if avatar_client.enabled else "未啟用"))
+if not avatar_client.enabled:
+    avatar_runtime_label = "未啟用"
+elif avatar_client.animation_enabled:
+    avatar_runtime_label = "啟用本地 CosyVoice3 + MuseTalk"
+else:
+    avatar_runtime_label = "啟用本地 CosyVoice3 靜態醫師模式"
+print(f"[Avatar] {avatar_runtime_label}")
 
 
 def _normalize_interview_engine(value: str) -> str:

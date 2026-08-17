@@ -408,6 +408,11 @@ export interface components {
         };
         /** AvatarStatusResponse */
         AvatarStatusResponse: {
+            /**
+             * Animation Enabled
+             * @default true
+             */
+            animation_enabled: boolean;
             /** Animation Model */
             animation_model: string;
             /** Available */

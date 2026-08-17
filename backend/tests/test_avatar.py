@@ -4,7 +4,7 @@ import unittest
 from email.message import Message
 from unittest.mock import AsyncMock, patch
 
-from app.contracts import AvatarSpeechRequest
+from app.contracts import AvatarSpeechRequest, AvatarStatusResponse
 from infrastructure.avatar import AvatarClient, AvatarUnavailableError, AvatarVideo
 
 
@@ -63,6 +63,34 @@ class AvatarClientTests(unittest.TestCase):
         self.assertTrue(status["enabled"])
         self.assertTrue(status["available"])
         self.assertEqual(status["device"], "cuda:0")
+        self.assertTrue(status["animation_enabled"])
+        self.assertEqual(status["animation_model"], "muse-test")
+
+    def test_status_uses_backend_static_mode_when_service_default_differs(self):
+        client = AvatarClient(
+            {
+                "AVATAR_ENABLED": "true",
+                "AVATAR_ANIMATION_ENABLED": "false",
+            }
+        )
+        body = json.dumps(
+            {
+                "status": "ok",
+                "speech_model": "cosy-test",
+                "animation_model": "muse-test",
+                "animation_enabled": True,
+                "device": "cuda:0",
+                "speech_loaded": True,
+                "animation_loaded": False,
+            }
+        ).encode()
+        with patch("infrastructure.avatar.urlopen", return_value=_Response(body)):
+            status = client.status()
+
+        browser_status = AvatarStatusResponse.model_validate(status).model_dump()
+        self.assertFalse(browser_status["animation_enabled"])
+        self.assertEqual(browser_status["animation_model"], "static-image mode")
+        self.assertTrue(browser_status["loaded"])
 
     def test_render_preserves_model_and_cache_headers(self):
         client = AvatarClient({"AVATAR_ENABLED": "true", "AVATAR_MAX_VIDEO_MB": "1"})
@@ -83,6 +111,7 @@ class AvatarClientTests(unittest.TestCase):
         self.assertEqual(result.animation_model, "muse-test")
         self.assertTrue(result.cache_hit)
         self.assertEqual(request_body["language"], "minnan")
+        self.assertTrue(request_body["animation_enabled"])
 
     def test_warmup_requires_all_private_avatar_models(self):
         client = AvatarClient({"AVATAR_ENABLED": "true"})
@@ -103,6 +132,55 @@ class AvatarClientTests(unittest.TestCase):
         self.assertTrue(status["loaded"])
         self.assertEqual(call.call_args.args[0].method, "POST")
         self.assertTrue(call.call_args.args[0].full_url.endswith("/v1/warmup"))
+        self.assertTrue(json.loads(call.call_args.args[0].data.decode())["animation_enabled"])
+
+    def test_warmup_accepts_speech_only_static_avatar_mode(self):
+        client = AvatarClient(
+            {
+                "AVATAR_ENABLED": "true",
+                "AVATAR_ANIMATION_ENABLED": "false",
+            }
+        )
+        body = json.dumps(
+            {
+                "status": "ok",
+                "speech_model": "cosy-test",
+                "animation_model": "static-image mode",
+                "animation_enabled": False,
+                "device": "cuda:0",
+                "speech_loaded": True,
+                "animation_loaded": False,
+            }
+        ).encode()
+        with patch(
+            "infrastructure.avatar.urlopen",
+            return_value=_Response(body),
+        ) as call:
+            status = client.warmup()
+
+        self.assertTrue(status["available"])
+        self.assertTrue(status["loaded"])
+        self.assertFalse(status["animation_enabled"])
+        self.assertEqual(status["animation_model"], "static-image mode")
+        self.assertFalse(json.loads(call.call_args.args[0].data.decode())["animation_enabled"])
+
+    def test_render_sends_backend_static_mode_to_avatar_service(self):
+        client = AvatarClient(
+            {
+                "AVATAR_ENABLED": "true",
+                "AVATAR_ANIMATION_ENABLED": "off",
+            }
+        )
+        request_body = {}
+
+        def respond(request, timeout):
+            request_body.update(json.loads(request.data.decode("utf-8")))
+            return _Response(b"video", "video/mp4")
+
+        with patch("infrastructure.avatar.urlopen", side_effect=respond):
+            client.render("您好")
+
+        self.assertFalse(request_body["animation_enabled"])
 
     def test_render_rejects_non_video_success_response(self):
         client = AvatarClient({"AVATAR_ENABLED": "true"})

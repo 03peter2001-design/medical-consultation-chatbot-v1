@@ -9,6 +9,9 @@ from dataclasses import dataclass
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
+ANIMATED_ANIMATION_MODEL = "TMElyralab/MuseTalk 1.5"
+STATIC_ANIMATION_MODEL = "static-image mode"
+
 
 class AvatarUnavailableError(RuntimeError):
     """Raised when the optional local avatar service cannot serve a request."""
@@ -29,6 +32,15 @@ class AvatarClient:
     def __init__(self, env: dict[str, str] | None = None):
         source = env if env is not None else os.environ
         self.enabled = source.get("AVATAR_ENABLED", "false").strip().lower() in {
+            "1",
+            "true",
+            "yes",
+            "on",
+        }
+        self.animation_enabled = source.get(
+            "AVATAR_ANIMATION_ENABLED",
+            "true",
+        ).strip().lower() in {
             "1",
             "true",
             "yes",
@@ -60,7 +72,10 @@ class AvatarClient:
             "enabled": self.enabled,
             "available": False,
             "speech_model": "FunAudioLLM/Fun-CosyVoice3-0.5B-2512",
-            "animation_model": "TMElyralab/MuseTalk 1.5",
+            "animation_model": (
+                ANIMATED_ANIMATION_MODEL if self.animation_enabled else STATIC_ANIMATION_MODEL
+            ),
+            "animation_enabled": self.animation_enabled,
             "device": "unknown",
             "loaded": False,
         }
@@ -70,13 +85,25 @@ class AvatarClient:
         payload: dict[str, object],
         fallback: dict[str, object],
     ) -> dict[str, object]:
+        reported_mode = payload.get("animation_enabled")
+        mode_matches = (
+            reported_mode == self.animation_enabled
+            if isinstance(reported_mode, bool)
+            else self.animation_enabled
+        )
+        animation_model = fallback["animation_model"]
+        if mode_matches:
+            animation_model = str(payload.get("animation_model") or animation_model)
+        speech_loaded = bool(payload.get("speech_loaded"))
+        animation_loaded = bool(payload.get("animation_loaded"))
         return {
             **fallback,
             "available": payload.get("status") == "ok",
             "speech_model": str(payload.get("speech_model") or fallback["speech_model"]),
-            "animation_model": str(payload.get("animation_model") or fallback["animation_model"]),
+            "animation_model": animation_model,
+            "animation_enabled": self.animation_enabled,
             "device": str(payload.get("device") or "unknown"),
-            "loaded": bool(payload.get("speech_loaded") and payload.get("animation_loaded")),
+            "loaded": speech_loaded and (animation_loaded or not self.animation_enabled),
         }
 
     def status(self) -> dict[str, object]:
@@ -99,7 +126,9 @@ class AvatarClient:
             raise AvatarUnavailableError("本地 Avatar 服務未啟用")
         request = Request(
             f"{self.base_url}/v1/warmup",
-            data=b"{}",
+            data=json.dumps(
+                {"animation_enabled": self.animation_enabled},
+            ).encode("utf-8"),
             headers={"Content-Type": "application/json"},
             method="POST",
         )
@@ -127,7 +156,11 @@ class AvatarClient:
         if not self.enabled:
             raise AvatarUnavailableError("本地 Avatar 服務未啟用")
         body = json.dumps(
-            {"text": text, "language": language},
+            {
+                "text": text,
+                "language": language,
+                "animation_enabled": self.animation_enabled,
+            },
             ensure_ascii=False,
         ).encode("utf-8")
         request = Request(

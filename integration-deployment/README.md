@@ -6,10 +6,19 @@ explicitly runs the scripts.
 
 ## Service version
 
-目前版本為 **integration deployment bundle v1.5.1（2026-08-13）**。
+目前版本為 **integration deployment bundle v1.5.2（2026-08-17）**。
 這是依 `devlog/` 回溯整理的部署文件版本，用來標示安全整合藍圖、雙前端與
 GPU／Avatar 部署能力的共同基線；repository 目前沒有與此版本對應的 Git tag，
 也不表示任何院所環境已完成正式上線驗收。
+
+### v1.5.2 (2026-08-17)
+
+- 補充更新前的 SQLite online backup 與既有 Backend／Avatar image 標籤快照流程，
+  讓完整 Compose rebuild 前保留可明確選取的程式與資料復原點。
+- 記錄完整 rebuild、health／logs 驗證、以 `--no-build` 回退 image，以及只有資料
+  不相容時才執行確認式 SQLite restore 的操作順序。
+- 明確警告不得在一般更新或回退流程使用 `docker compose down -v`，避免刪除病例、
+  模型、Avatar cache 與監視設定的 named volumes。
 
 ### v1.5.1 (2026-08-13)
 
@@ -443,16 +452,80 @@ retain `frame-ancestors 'self'`.
 
 ## 3. Updating
 
-Before each update, back up SQLite and keep the previous container image and
-doctor static backup:
+Before each update, create separate recovery points for persistent consultation
+data and the currently running application images. Image tags protect the previous
+program version from being replaced by the next `:local` build; they do not back up
+SQLite or bind-mounted configuration.
 
 ```sh
 cd integration-deployment
 ./scripts/backup-sqlite.sh
-git pull --ff-only
-./scripts/deploy-ubuntu.sh
-docker compose ps
+
+# Replace this example with a unique UTC date/time for the maintenance window.
+SNAPSHOT_TAG=20260817T120000Z
+docker image tag medical-consultation-backend:local \
+  medical-consultation-backend:backup-$SNAPSHOT_TAG
+docker image tag medical-consultation-avatar:local \
+  medical-consultation-avatar:backup-$SNAPSHOT_TAG
+
+docker image ls medical-consultation-backend
+docker image ls medical-consultation-avatar
 ```
+
+Keep the Git revision used for the snapshot in the maintenance record. Then update
+the source and rebuild the complete Compose application. Docker may reuse unchanged
+layers; use `docker compose build --no-cache` only when a cache-independent rebuild
+is specifically required.
+
+```sh
+git pull --ff-only
+docker compose config --quiet
+docker compose up -d --build --remove-orphans
+docker compose ps
+docker compose logs --tail=100 backend
+curl --fail http://127.0.0.1:18000/v1/health
+```
+
+For the full production workflow, including the patient frontend build and deployment
+preflight checks, continue to use `./scripts/deploy-ubuntu.sh` instead of the direct
+Compose command above.
+
+If the new containers fail acceptance, point the Compose image names back to the
+snapshot and recreate without building from the current source tree:
+
+```sh
+SNAPSHOT_TAG=20260817T120000Z
+docker image tag medical-consultation-backend:backup-$SNAPSHOT_TAG \
+  medical-consultation-backend:local
+docker image tag medical-consultation-avatar:backup-$SNAPSHOT_TAG \
+  medical-consultation-avatar:local
+
+docker compose up -d --no-build --force-recreate
+docker compose ps
+docker compose logs --tail=100 backend
+curl --fail http://127.0.0.1:18000/v1/health
+```
+
+An image rollback normally keeps the current SQLite data. Restore the matching
+SQLite backup only if the failed release changed data in a way the previous backend
+cannot safely read. Use the confirmed restore procedure in the next section during
+an approved maintenance window.
+
+For an off-host or cleanup-resistant image snapshot, export the tagged images to
+protected storage. The Avatar image may be large; omit it when only Backend changed.
+
+```sh
+docker image save \
+  -o backups/docker-images-$SNAPSHOT_TAG.tar \
+  medical-consultation-backend:backup-$SNAPSHOT_TAG \
+  medical-consultation-avatar:backup-$SNAPSHOT_TAG
+
+# Recover exported tags when the local Docker image cache no longer has them.
+docker image load -i backups/docker-images-$SNAPSHOT_TAG.tar
+```
+
+Never use `docker compose down -v` for an update or rollback. The `-v` option removes
+named volumes, including consultation data, model/cache data, and monitor settings.
 
 On Windows, run `deploy-doctor.ps1` against the development eHIS project, build
 and test eHIS, then use the organization's normal publish/change window. Do not

@@ -27,6 +27,7 @@ class ReportPromptTests(unittest.TestCase):
             self.assertEqual(set(payload["response_schema"]), {task})
             self.assertEqual(payload["patient_context"]["physician_input"], "走路時胸悶")
             self.assertNotIn("每次只回答", prompts[0].messages[0]["content"])
+        self.assertIn("所有內容使用繁體中文", prompts[0].messages[0]["content"])
 
         self.assertNotIn("retrieved_evidence", payloads["emr"])
         self.assertEqual(payloads["differential_diagnoses"]["retrieved_evidence"], "鑑別資料")

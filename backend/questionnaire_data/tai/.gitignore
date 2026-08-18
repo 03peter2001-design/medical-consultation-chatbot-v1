@@ -1,1 +1,7 @@
+# Generated Taigi assets remain local until qualified language and clinical review.
+# Remove these rules only in the reviewed promotion change that records reviewer,
+# review date, scope, and matching post-review hashes.
 .translation-cache.json
+_translation_manifest.json
+/*.json
+/ui/

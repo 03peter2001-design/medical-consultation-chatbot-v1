@@ -5,7 +5,7 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 
 ## 服務版本
 
-目前版本：**v0.8.0（2026-08-18）**。
+目前版本：**v0.8.1（2026-08-18）**。
 
 本次因主動撤除既有 AMIE／語意標籤能力並回到較小的實驗性功能面，版本線依專案
 決策由 0 重新編碼。下方 `v1.x` 條目保留為舊能力線的歷史紀錄，不表示 `v0.3.0`
@@ -22,6 +22,19 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 - RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
 - Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
   revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v0.8.1 (2026-08-18)
+
+- `questionnaire_data/tai/` 現在明確忽略本機產生的翻譯 manifest、問卷 JSON 與 UI
+  文案，避免 `machine_translated_unreviewed` 產物被誤加入功能 commit；本機檔案不會
+  被刪除，Backend 的 fail-closed 審核閘門也不變。
+- 56 份 manifest source／output hashes 與目前檔案一致，但 UI 文案仍可見模型格式標記、
+  重複翻譯與混語殘留；完整性驗證不等於語言或臨床正確性審核。
+- 這項 ignore 規則不代表問卷已核准。完成合格台語與臨床逐題審查後，promotion 變更
+  必須同時移除對應 ignore、記錄真實 reviewer／日期／範圍，並提交與審後內容一致的
+  source／output hashes。
+- 直接執行現有 validator 確認目前資產因 `machine_translated_unreviewed` 被拒絕；
+  questionnaire localization 的 6 項審核閘門測試通過。
 
 ### v0.8.0 (2026-08-18)
 

@@ -43,7 +43,7 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 
 | 服務／可部署產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
 | --- | --- | --- | --- | --- |
-| Backend API（含 Breeze ASR） | `0.8.0` | 2026-08-18 | 固定問卷改產生 doctor-style 英文六段總結，並將防漏診疾病明確串接至後續檢查題 | [backend/README.md](backend/README.md#服務版本) |
+| Backend API（含 Breeze ASR） | `0.8.1` | 2026-08-18 | 忽略未經合格語言與臨床審查的本機台語問卷生成產物 | [backend/README.md](backend/README.md#服務版本) |
 | 開發版 Vue frontend | `0.6.1` | 2026-08-18 | 六段式報告卡片與僅供 Vite 開發伺服器使用的 Vue DevTools | [frontend/README.md](frontend/README.md#服務版本) |
 | 正式部署 Doctor frontend | `2.1.0` | 2026-08-09 | 候選問卷路由與欄位標籤可讀化，保留歷史病例顯示能力 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | 正式部署 Patient frontend | `2.1.0` | 2026-08-11 | 問診主畫面常駐醫師 Avatar、朗讀字幕與可恢復有聲播放的控制 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |

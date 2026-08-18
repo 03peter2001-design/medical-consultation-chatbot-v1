@@ -22,12 +22,13 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 - **本機資料層**：SQLite 保存問診結果，Chroma 保存版本化 RAG collections
 - **FHIR／SMART**：支援 TW Core 開發環境、SNOMED CT 匯入及本機 SMART on FHIR
   合成病例流程
-- **RAG**：新版索引不參與病患問卷路由、下一題或 Safety；僅在固定問卷完成後提供
-  鑑別／危險徵兆、檢驗與影像三組文獻給 Gemini 產生六段式報告
+- **RAG**：不參與病患問卷路由、下一題或 Safety；v2 索引在固定問卷完成後提供
+  A（診斷／理檢）、B（檢驗）、C（影像）三個 metadata 分區的檢索證據，legacy
+  索引則保留具 provenance 的相容檢索，再交由 Gemini 產生六段式報告
 
 ```text
 病患端：病人主訴 → 本機關鍵字選擇固定問卷 → 依 JSON 順序逐題詢問
-                  → RAG A／B／C 文獻＋全部答案一次送 Gemini → 保存六段式報告
+                  → 程式查詢 RAG A／B／C → 逐題送入 Gemini → 驗證後保存六段式報告
 
 醫師端：中文問題 → 去識別化與醫療術語英文化
                 → 本機 embedding／Chroma 檢索 → LLM 整理來源片段
@@ -42,13 +43,13 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 
 | 服務／可部署產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
 | --- | --- | --- | --- | --- |
-| Backend API（含 Breeze ASR） | `0.5.2` | 2026-08-17 | 拒絕占位審查者、範圍與無效日期，避免未審台語機器翻譯被誤認為已簽核 | [backend/README.md](backend/README.md#服務版本) |
-| 開發版 Vue frontend | `0.4.1` | 2026-08-13 | 區分 API 拒絕與網路斷線，直接顯示台語問卷審核失敗原因 | [frontend/README.md](frontend/README.md#服務版本) |
+| Backend API（含 Breeze ASR） | `0.8.0` | 2026-08-18 | 固定問卷改產生 doctor-style 英文六段總結，並將防漏診疾病明確串接至後續檢查題 | [backend/README.md](backend/README.md#服務版本) |
+| 開發版 Vue frontend | `0.6.1` | 2026-08-18 | 六段式報告卡片與僅供 Vite 開發伺服器使用的 Vue DevTools | [frontend/README.md](frontend/README.md#服務版本) |
 | 正式部署 Doctor frontend | `2.1.0` | 2026-08-09 | 候選問卷路由與欄位標籤可讀化，保留歷史病例顯示能力 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | 正式部署 Patient frontend | `2.1.0` | 2026-08-11 | 問診主畫面常駐醫師 Avatar、朗讀字幕與可恢復有聲播放的控制 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | Local Avatar service | `1.2.0` | 2026-08-11 | 新增可由 Backend 逐請求覆寫、完全跳過 MuseTalk 的靜態醫師 CosyVoice 模式 | [avatar-service/README.md](avatar-service/README.md#服務版本) |
 | SMART on FHIR sandbox app | `1.0.0` | 2026-08-05 | SMART OAuth launch、FHIR 預填、同源 API proxy、合成病人 seed 與本機驗證 | [smart-app/README.md](smart-app/README.md#服務版本) |
-| Integration deployment bundle | `1.5.1` | 2026-08-13 | Gateway health 涵蓋 backend upstream，部署前拒絕缺失 secret 形成的同名目錄 | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
+| Integration deployment bundle | `1.5.2` | 2026-08-17 | 補充更新前 image／SQLite 快照、完整重建驗證與失敗回退流程 | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
 
 `frontend-v2/packages/shared` 是 doctor／patient 共用程式庫，不是獨立服務；
 `smart-deployment/` 是 SMART sandbox 的 proxy 設定，跟隨 SMART app

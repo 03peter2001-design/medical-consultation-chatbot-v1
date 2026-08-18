@@ -5,7 +5,7 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 
 ## 服務版本
 
-目前版本：**v0.5.2（2026-08-17）**。
+目前版本：**v0.8.0（2026-08-18）**。
 
 本次因主動撤除既有 AMIE／語意標籤能力並回到較小的實驗性功能面，版本線依專案
 決策由 0 重新編碼。下方 `v1.x` 條目保留為舊能力線的歷史紀錄，不表示 `v0.3.0`
@@ -22,6 +22,64 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 - RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
 - Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
   revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v0.8.0 (2026-08-18)
+
+- 固定問卷完成後的六段式總結改採 doctor-style 英文交班風格：EMR 使用
+  Chief Complaint、Present Illness、Past History、Drug History 與 Allergy History，
+  其餘段落直接列出診斷或檢查項目，不再要求或顯示 rationale。
+- 防漏診題回傳的最多五個英文疾病會先經 Backend JSON schema 驗證，再以
+  `focus_conditions` 明確傳入理學檢查、檢驗與影像三個後續 API request；不再依賴
+  模型理解跨 request 的 “aforementioned five”。
+- 保留六個 request 的固定順序、A／B／C 直接分區檢索、既有六段顯示標題、資料庫與
+  HTTP 契約，以及任一題失敗便不建立病例的 fail-closed 行為。Prompt version 升為
+  `fixed-questionnaire-doctor-style-english-v7`。
+- 醫師 `structured_note` 與一般 RAG 對話維持繁體中文；`structured_note` 的防漏診文字
+  會先通過 exact-key 驗證，再明確傳入理學檢查、檢驗與影像三個後續 request。
+- 相關 prompt／問卷／RAG／醫師與背景報告測試 51 項通過；完整 Backend suite 執行
+  399 項，其中 397 項通過，另 2 項只因未掛載外部 eHIS C# 原始碼而 error。
+
+### v0.7.0 (2026-08-18)
+
+- 六段式報告的 A／B／C 不再只是不同 query 關鍵字：Backend 現在直接把 A 綁定至
+  `diagnosis|workup`、B 綁定至 `lab`、C 綁定至 `imaging`，並以 Chroma
+  `clinical_stage` metadata filter 限制每次檢索。
+- 固定問卷、醫師 `structured_note` 與舊背景結構化報告統一經由具名 A／B／C adapter
+  取得 evidence；來源紀錄新增 `knowledge_base` 與 `clinical_stage` provenance。
+- Prompt 不再要求模型自行尋找或選擇知識庫，只接收 Backend 已取回的
+  `retrieved_evidence`。固定問卷 prompt version 升為
+  `fixed-questionnaire-direct-abc-rag-v6`。
+- A／B／C metadata 分區需要 `RAG_INDEX_VERSION=v2`；legacy 索引缺少可保證的 stage
+  partition，因此保留舊有 purpose-query 相容檢索，來源明確標示
+  `partition_mode=legacy_unpartitioned`，不會被誤記為已完成 metadata 分區。
+- 本機 v2 Chroma 合成查詢確認 A 只回傳 `diagnosis|workup`、B 只回傳 `lab`、C 只回傳
+  `imaging`。聚焦 RAG／prompt／問卷／醫師 session／報告測試共 49 項通過；完整
+  Backend suite 397 項中 395 項通過，另 2 項只因未掛載外部 eHIS 原始碼而 error。
+
+### v0.6.1 (2026-08-18)
+
+- 移除 prompt 內「每次只回答一個問題／不得順帶完成其他段落」等分題用 meta 指令；
+  每個 API request 直接帶入該次要回答的實際問題與專屬 response schema。
+- 固定問卷與醫師 `structured_note` 改為依固定任務順序逐次呼叫模型 API，不再以
+  `asyncio.gather` 同時發送六題；舊背景報告本來即為逐題呼叫，維持相同行為。
+- 固定問卷 prompt version 升為 `fixed-questionnaire-sequential-prompts-rag-v5`，保留
+  新舊報告生成方式的 provenance 區分。
+- 每次回應的 exact-key／欄位驗證、全部成功才組裝保存、失敗不建立半成品病例等安全
+  邊界不變。聚焦 prompt、問卷、醫師 session 與報告測試共 38 項通過。
+
+### v0.6.0 (2026-08-17)
+
+- 固定問卷完成後的六段式 Gemini 報告改為 EMR、初步鑑別、防漏診、理學檢查、
+  檢驗與影像各自一個 prompt；每題只收到所需的 A／B／C 文獻區塊，prompt version
+  升為 `fixed-questionnaire-section-prompts-rag-v4`。
+- 醫師 `structured_note` 模式同步拆成六個獨立問題；舊 AMIE 背景結構化報告則將仍由
+  模型負責的 EMR、理學檢查、檢驗與影像拆成四題，固定疾病排名仍由後端規則產生。
+- 各題回應採 task-specific JSON 與 exact-key 驗證，全部成功後才依既有標題順序組裝；
+  固定問卷任一題失敗時維持 503、保留 session 答案且不建立半成品病例。
+- HTTP request／response、資料庫欄位、六段式顯示標題及前端契約不變。模型呼叫數增加，
+  因此延遲、Gemini 配額與費用可能高於舊單次請求；輸出仍是未經醫師確認的臨床草稿。
+- 聚焦 prompt、固定問卷、醫師 session 與疾病報告測試共 38 項通過；完整 Backend
+  suite 393 項中 391 項通過，另 2 項只因未掛載外部 eHIS 原始碼而 error。
 
 ### v0.5.2 (2026-08-17)
 
@@ -369,7 +427,7 @@ Groq Key 可由 [Groq Console](https://console.groq.com/keys) 申請。
 
 | 變數 | 用途 |
 | --- | --- |
-| `INTERVIEW_ENGINE=questionnaire` | 預設：本機依序問固定題目，完成後一次送全部題目與答案給 Gemini 整理 EMR |
+| `INTERVIEW_ENGINE=questionnaire` | 預設：本機依序問固定題目，完成後以六個獨立 Gemini prompt 整理並驗證六段式報告 |
 | `INTERVIEW_ENGINE=legacy` | `questionnaire` 的相容別名 |
 | `INTERVIEW_ENGINE=simple` | `questionnaire` 的相容別名 |
 | `INTERVIEW_ENGINE=amie` | 明示回退舊 AMIE／ClinicalFact／疾病票數流程；不建議作為新流程 |
@@ -391,7 +449,7 @@ Groq Key 可由 [Groq Console](https://console.groq.com/keys) 申請。
 | `CONSULTATION_DB_PATH` | SQLite 路徑；相對路徑以 `backend/` 為基準 |
 | `SAFETY_RULE_ADMIN_TOKEN` | 啟用規則中心編輯；未設定時維持唯讀 |
 | `FHIR_BASE_URL` | HAPI FHIR terminology server URL |
-| `RAG_INDEX_VERSION=v2` | 使用 RAG v2 collections；移除或設為 `legacy` 可回退 |
+| `RAG_INDEX_VERSION=v2` | 使用具 `clinical_stage` 分區的 RAG v2 collections；移除或設為 `legacy` 會使用具 provenance 的未分區相容檢索 |
 
 若使用 `gemini-2.5-pro`，後端會為不可關閉的 thinking 預留 128 tokens，並將
 可見回答額度另外加入 `max_output_tokens`；可用 `GEMINI_THINKING_BUDGET`
@@ -483,9 +541,10 @@ npm run api:check
 - 下一題只由目前索引、問卷順序、條件與已預填欄位決定
 - 不執行原文字串或語意 Safety、症狀抽取、ClinicalFact、疾病候選或票數
 - 問卷進行中不呼叫 LLM，RAG 也不參與路由或下一題
-- 最後一題完成後才檢索 RAG A／B／C 三組文獻，並以一次 Gemini request 傳送全部
-  題目、患者答案、院方預填資料及文獻內容
-- Gemini 回傳六段式 EMR 與臨床決策草稿；輸出會標示未經醫師確認，不代表正式診斷
+- 最後一題完成後才檢索 RAG A／B／C 三組文獻，再以六個依序的 Gemini request
+  分別處理 EMR、前三鑑別、防漏診、理學檢查、檢驗與影像
+- Gemini 回傳英文六段式 EMR 與臨床決策草稿；經驗證的五個防漏診疾病會明確傳入
+  後三個 request，輸出仍標示未經醫師確認，不代表正式診斷
 
 每筆新病例會標記 `_interview_pipeline.engine=questionnaire`，並保存送往 Gemini 的
 固定問卷答案、模型名稱與 prompt version；不建立 AMIE trace、ClinicalFact、

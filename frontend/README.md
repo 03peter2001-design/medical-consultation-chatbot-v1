@@ -6,6 +6,38 @@ SNOMED CT 查詢。根目錄的 `index.html`、`doctor.html` 是重構前的相�
 
 ## 服務版本
 
+### v0.6.1 (2026-08-18)
+
+- Vite 開發伺服器加入 Vue DevTools，供本機檢查元件樹、狀態與互動；plugin 自身限制
+  `apply: serve`，不注入 production build。
+- 新增項目只屬開發依賴與 Vite 設定，不改變病患／醫師 runtime 契約，也未修改
+  `frontend-v2/` 部署版。
+- 使用主機既有 Node 24 執行 14 組 Node tests、Vite production build 與 OpenAPI
+  type drift check，全部通過。
+
+### v0.6.0 (2026-08-18)
+
+- 醫師病例工作區不再把六段式臨床總結塞在單一純文字區域；EMR、前三鑑別、防漏診、
+  理學檢查、檢驗與影像會依固定 heading 解析成獨立、醒目的問題卡片。
+- 每張卡片顯示可快速掃讀的臨床問題、段落名稱與原始模型內容；防漏診使用紅色識別，
+  其他段落依用途使用不同 accent，桌面為雙欄、窄螢幕自動改為單欄。
+- 保留既有 EMR 上方摘要、RAG sources、模型 provenance、舊無 heading 報告 fallback，
+  並同時相容 `理學檢查`／`理學檢查建議` 與兩種檢驗標題。本次未修改獨立控制的
+  `frontend-v2/` 部署版。
+- 14 組 Node tests、Vite production build 與 OpenAPI type drift check 通過（Node 22）。
+  另以合成病例在 headless Chrome 驗證 1440×960 雙欄與 390×844 單欄版面：五張臨床
+  決策卡均位於 EMR 下方，沒有水平溢出、Vite overlay 或 console warning／error。
+
+### v0.5.0 (2026-08-17)
+
+- 本機直連 HAPI 的開始問診畫面新增 identifier 類型選擇，除了台灣身分證
+  字號，也可以 Synthea Default ID 查詢匯入的合成病人。
+- Synthea 模式以 `https://github.com/synthetichealth/synthea|<UUID>` 精確搜尋
+  `Patient.identifier`；不把 Default ID 當成 HAPI `Patient.id`，而是以搜尋回傳的
+  resource ID 讀取 `$everything`。
+- 兩種 identifier 皆有獨立格式驗證與查無／重複資料的 fail-closed 訊息；Synthea
+  資料仍是美國合成測試資料，不因此視為 TW Core 相容或真實病人資料。
+
 ### v0.4.1 (2026-08-13)
 
 - API HTTP 錯誤與真正的網路連線失敗分開顯示；台語問卷因未審核而被 Backend 以 503
@@ -348,9 +380,16 @@ VITE_ENABLE_DIRECT_FHIR=true
 VITE_FHIR_BASE_URL=http://localhost:8080/fhir
 ```
 
-前端會用台灣身分證 identifier system `http://www.moi.gov.tw` 查詢
-`Patient.identifier`，找到唯一病人後讀取 `Patient/{id}/$everything`，再將資料
-映射至問卷預填。HAPI 必須允許 Vite 開發網址的 CORS。
+開始問診畫面可選擇兩種 `Patient.identifier` 查詢：
+
+- 台灣身分證：`http://www.moi.gov.tw|A000000000`
+- Synthea Default ID：
+  `https://github.com/synthetichealth/synthea|c85baeef-9dbd-d06f-791d-5e1e3f24a8bf`
+
+找到唯一病人後，前端使用 HAPI 回傳的 resource ID 讀取
+`Patient/{id}/$everything`，再將資料映射至問卷預填。Synthea Default ID 只是
+identifier value，不預設與 HAPI `Patient.id` 相同。HAPI 必須允許 Vite 開發網址的
+CORS。
 
 測試 Bundle 位於 `../backend/fhir_samples/`。身分證直接查詢只適用本機或受控
 測試環境；正式環境必須使用 SMART on FHIR OAuth、最小權限 scope、核准的

@@ -30,6 +30,13 @@ from amie.disease_profiles import attach_safety_conditions
 from amie.models import ChiefComplaintAssessment
 from app.contracts import PatientChatResponse, error_responses
 from app.models import ChatRequest, PatientPrefill
+from app.prompts.questionnaire_summary import (
+    PROMPT_VERSION as GEMINI_SUMMARY_PROMPT_VERSION,
+)
+from app.prompts.questionnaire_summary import (
+    SUMMARY_TASKS,
+    build_summary_prompt_request,
+)
 from app.runtime import (
     AMIE_DEBUG_TRACE,
     INTERVIEW_ENGINE,
@@ -63,15 +70,12 @@ from app.services.consultation_reporting import (
     process_background_summaries,
 )
 from app.services.gemini_questionnaire_summary import (
-    PROMPT_VERSION as GEMINI_SUMMARY_PROMPT_VERSION,
+    parse_summary_section as parse_gemini_summary_section,
 )
 from app.services.gemini_questionnaire_summary import (
-    build_summary_messages,
-    questionnaire_answers,
+    parse_summary_sections as parse_gemini_summary_sections,
 )
-from app.services.gemini_questionnaire_summary import (
-    parse_summary as parse_gemini_summary,
-)
+from app.services.gemini_questionnaire_summary import questionnaire_answers
 from app.services.gemini_questionnaire_summary import (
     render_emr as render_gemini_emr,
 )
@@ -109,7 +113,7 @@ from app.services.patient_interview import (
 from app.services.patient_interview import (
     urgent_possible_conditions as _urgent_possible_conditions,
 )
-from app.services.rag import deduplicate_sources, retrieve_context_block
+from app.services.rag import deduplicate_sources, retrieve_knowledge_base_block
 from app.services.security_audit import audit_patient, safe_log
 from domain.patient_messages import patient_message
 from domain.questionnaire_localization import (
@@ -344,26 +348,26 @@ def _questionnaire_rag_contexts(data: dict) -> tuple[dict[str, str], list[dict]]
     route = str(data.get("type") or "")
     primary_route = route if route in SUPPORTED_PATIENT_ROUTES else None
     patient_data = clinical_patient_data(data)
-    diagnosis, diagnosis_sources = retrieve_context_block(
+    diagnosis, diagnosis_sources = retrieve_knowledge_base_block(
+        "A",
         f"{reason} 鑑別診斷 危險徵兆 紅旗症狀",
         n_results=5,
         primary_route=primary_route,
         patient_data=patient_data,
-        purpose="diagnosis",
     )
-    laboratory, laboratory_sources = retrieve_context_block(
+    laboratory, laboratory_sources = retrieve_knowledge_base_block(
+        "B",
         f"{reason} 抽血檢驗 實驗室檢查",
         n_results=4,
         primary_route=primary_route,
         patient_data=patient_data,
-        purpose="lab",
     )
-    imaging, imaging_sources = retrieve_context_block(
+    imaging, imaging_sources = retrieve_knowledge_base_block(
+        "C",
         f"{reason} 影像學 X光 電腦斷層 CT MRI 超音波",
         n_results=4,
         primary_route=primary_route,
         patient_data=patient_data,
-        purpose="imaging",
     )
     return (
         {
@@ -395,17 +399,29 @@ async def _complete_questionnaire_consultation(
             data,
         )
         client = get_gemini_summary_client()
-        raw = await run_clinical_io(
-            client.generate_text,
-            build_summary_messages(
+        raw_sections: dict[str, str] = {}
+        focus_conditions: list[str] = []
+        for task in SUMMARY_TASKS:
+            prompt_request = build_summary_prompt_request(
+                task,
                 answers,
                 prefilled_data=prefilled_data,
                 knowledge_contexts=knowledge_contexts,
-            ),
-            temperature=0.2,
-            max_tokens=3200,
-        )
-        generated = parse_gemini_summary(raw)
+                focus_conditions=focus_conditions,
+            )
+            raw_response = await run_clinical_io(
+                client.generate_text,
+                prompt_request.messages,
+                temperature=0.2,
+                max_tokens=prompt_request.max_tokens,
+            )
+            raw_sections[task] = raw_response
+            if task == "must_not_miss":
+                parsed_focus = parse_gemini_summary_section(task, raw_response)
+                if not isinstance(parsed_focus, list):
+                    raise ValueError("Gemini must_not_miss response must be a list")
+                focus_conditions = parsed_focus
+        generated = parse_gemini_summary_sections(raw_sections)
     except Exception as error:
         safe_log("patient.questionnaire_summary", "failure", error=error)
         raise HTTPException(
@@ -419,7 +435,7 @@ async def _complete_questionnaire_consultation(
         {
             "model": client.model,
             "prompt_version": GEMINI_SUMMARY_PROMPT_VERSION,
-            "postprocess": "single_gemini_six_part_report_after_questionnaire",
+            "postprocess": "per_task_gemini_report_after_questionnaire",
             "rag_contexts": ["diagnosis", "laboratory", "imaging"],
         }
     )

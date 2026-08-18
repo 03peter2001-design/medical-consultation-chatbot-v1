@@ -12,6 +12,7 @@ from app import runtime
 from app.models import ChatRequest
 from app.routes import patient
 from app.services import consultation_reporting
+from app.services import rag as rag_service
 from domain.questionnaires import (
     BASIC_QUESTIONNAIRE,
     CHIEF_QUESTIONNAIRE,
@@ -39,30 +40,37 @@ def _answer_for(question: dict) -> str:
     return "病人提供的回答"
 
 
-def _gemini_response() -> str:
-    return json.dumps(
-        {
-            "emr": {
-                "cc": "左側胸痛，已持續30分鐘。",
-                "pi": "A 36-year-old female presented with pressure-like chest pain.",
-                "ph": "未提供",
-                "meds": "未提供",
-                "allergy": "未提供",
-            },
-            "differential_diagnoses": [
-                {"name": "疾病甲", "rationale": "問卷線索與知識庫A相符。"},
-                {"name": "疾病乙", "rationale": "需與主要症狀鑑別。"},
-                {"name": "疾病丙", "rationale": "仍有部分相符表現。"},
-            ],
-            "must_not_miss": [{"name": "嚴重疾病甲", "rationale": "延誤可能造成嚴重後果。"}],
-            "physical_examination": [
-                {"item": "生命徵象", "rationale": "建議立即確認血行動力學狀態。"}
-            ],
-            "laboratory": [{"item": "檢驗甲", "rationale": "依知識庫B評估相關指標。"}],
-            "imaging": [{"item": "胸部X光", "rationale": "依知識庫C評估胸腔結構。"}],
+def _gemini_response(task: str) -> str:
+    responses = {
+        "emr": {
+            "cc": "Left-sided chest pain for 30 minutes.",
+            "pi": "A 36-year-old female presented with pressure-like chest pain.",
+            "ph": "Not provided",
+            "meds": "Not provided",
+            "allergy": "Not provided",
         },
-        ensure_ascii=False,
-    )
+        "differential_diagnoses": [
+            "Acute coronary syndrome",
+            "Pericarditis",
+            "Gastroesophageal reflux disease",
+        ],
+        "must_not_miss": [
+            "Acute coronary syndrome",
+            "Aortic dissection",
+            "Pulmonary embolism",
+            "Tension pneumothorax",
+            "Cardiac tamponade",
+        ],
+        "physical_examination": ["Bilateral blood pressure measurement"],
+        "laboratory": ["High-sensitivity cardiac troponin"],
+        "imaging": ["Chest radiograph"],
+    }
+    return json.dumps({task: responses[task]}, ensure_ascii=False)
+
+
+def _generate_gemini_section(messages, **_kwargs) -> str:
+    payload = json.loads(messages[-1]["content"])
+    return _gemini_response(payload["task"])
 
 
 class QuestionnairePipelineTests(unittest.TestCase):
@@ -72,7 +80,7 @@ class QuestionnairePipelineTests(unittest.TestCase):
             Path(self.temp_directory.name) / "questionnaire.db"
         )
         self.sessions: dict[str, dict] = {}
-        self.generate_text = Mock(return_value=_gemini_response())
+        self.generate_text = Mock(side_effect=_generate_gemini_section)
         self.gemini_client = SimpleNamespace(
             model="gemini-test-model",
             generate_text=self.generate_text,
@@ -175,7 +183,9 @@ class QuestionnairePipelineTests(unittest.TestCase):
             ("B context", [{"title": "B", "source": "s", "url": "", "route": "chest"}]),
             ("C context", [{"title": "C", "source": "s", "url": "", "route": "chest"}]),
         ]
-        with patch.object(patient, "retrieve_context_block", side_effect=responses) as retrieve:
+        with patch.object(
+            patient, "retrieve_knowledge_base_block", side_effect=responses
+        ) as retrieve:
             contexts, sources = patient._questionnaire_rag_contexts(
                 {"type": "chest", "reason": "胸痛", "age": "36"}
             )
@@ -185,16 +195,72 @@ class QuestionnairePipelineTests(unittest.TestCase):
             {"diagnosis": "A context", "laboratory": "B context", "imaging": "C context"},
         )
         self.assertEqual(
-            [call.kwargs["purpose"] for call in retrieve.call_args_list],
-            [
-                "diagnosis",
-                "lab",
-                "imaging",
-            ],
+            [call.args[0] for call in retrieve.call_args_list],
+            ["A", "B", "C"],
         )
         self.assertEqual([source["title"] for source in sources], ["A", "B", "C"])
 
-    def test_fixed_questions_run_locally_then_one_complete_payload_goes_to_gemini(self):
+    def test_knowledge_base_adapter_binds_abc_to_retrieval_purposes(self):
+        with (
+            patch.object(
+                rag_service,
+                "retrieve_context_block",
+                return_value=("evidence", [{"title": "Synthetic"}]),
+            ) as retrieve,
+            patch.object(
+                rag_service.runtime,
+                "RAG_STATUS",
+                {"index_version": "v2"},
+            ),
+        ):
+            outputs = [
+                rag_service.retrieve_knowledge_base_block(
+                    knowledge_base,
+                    "query",
+                    n_results=3,
+                    primary_route="chest",
+                    patient_data={},
+                )
+                for knowledge_base in ("A", "B", "C")
+            ]
+
+        self.assertEqual(
+            [call.kwargs["purpose"] for call in retrieve.call_args_list],
+            ["diagnosis", "lab", "imaging"],
+        )
+        self.assertTrue(all(call.kwargs["stage_scope"] for call in retrieve.call_args_list))
+        self.assertEqual(
+            [sources[0]["knowledge_base"] for _, sources in outputs],
+            ["A", "B", "C"],
+        )
+
+    def test_knowledge_base_adapter_marks_unpartitioned_legacy_compatibility(self):
+        with (
+            patch.object(
+                rag_service.runtime,
+                "RAG_STATUS",
+                {"index_version": "legacy"},
+            ),
+            patch.object(
+                rag_service,
+                "retrieve_context_block",
+                return_value=("legacy evidence", [{"title": "Legacy"}]),
+            ) as retrieve,
+        ):
+            context, sources = rag_service.retrieve_knowledge_base_block(
+                "A",
+                "query",
+                n_results=3,
+                primary_route="chest",
+                patient_data={},
+            )
+
+        self.assertEqual(context, "legacy evidence")
+        self.assertFalse(retrieve.call_args.kwargs["stage_scope"])
+        self.assertEqual(sources[0]["knowledge_base"], "A")
+        self.assertEqual(sources[0]["partition_mode"], "legacy_unpartitioned")
+
+    def test_fixed_questions_run_locally_then_each_report_question_gets_its_own_prompt(self):
         session_id = "fixed-order"
         with (
             patch.object(patient, "sessions", self.sessions),
@@ -228,27 +294,53 @@ class QuestionnairePipelineTests(unittest.TestCase):
             item["field"] for item in build_questionnaire("chest") if condition_matches(item, data)
         ]
         self.assertEqual(asked_fields, expected_fields)
-        self.assertEqual(self.generate_text.call_count, 1)
-        messages = self.generate_text.call_args.args[0]
-        self.assertIn("資深急診醫師", messages[0]["content"])
-        self.assertIn("不做正式診斷", messages[0]["content"])
-        submitted = json.loads(messages[-1]["content"])
+        self.assertEqual(self.generate_text.call_count, 6)
+        submitted_by_task = {}
+        called_tasks = []
+        for call in self.generate_text.call_args_list:
+            messages = call.args[0]
+            self.assertNotIn("每次請求只回答", messages[0]["content"])
+            submitted = json.loads(messages[-1]["content"])
+            called_tasks.append(submitted["task"])
+            submitted_by_task[submitted["task"]] = submitted
+            self.assertEqual(
+                [item["field"] for item in submitted["patient_context"]["questionnaire_answers"]],
+                expected_fields,
+            )
+            self.assertEqual(
+                submitted["patient_context"]["questionnaire_answers"][0]["answer"],
+                "我胸痛而且昏倒",
+            )
         self.assertEqual(
-            [item["field"] for item in submitted["questionnaire_answers"]],
-            expected_fields,
+            called_tasks,
+            [
+                "emr",
+                "differential_diagnoses",
+                "must_not_miss",
+                "physical_examination",
+                "laboratory",
+                "imaging",
+            ],
         )
+        self.assertNotIn("retrieved_evidence", submitted_by_task["emr"])
         self.assertEqual(
-            submitted["questionnaire_answers"][0]["answer"],
-            "我胸痛而且昏倒",
+            submitted_by_task["differential_diagnoses"]["retrieved_evidence"],
+            "知識庫A內容",
         )
+        self.assertEqual(submitted_by_task["laboratory"]["retrieved_evidence"], "知識庫B內容")
+        self.assertEqual(submitted_by_task["imaging"]["retrieved_evidence"], "知識庫C內容")
+        expected_focus = [
+            "Acute coronary syndrome",
+            "Aortic dissection",
+            "Pulmonary embolism",
+            "Tension pneumothorax",
+            "Cardiac tamponade",
+        ]
         self.assertEqual(
-            submitted["medical_knowledge"],
-            {
-                "A_differential_and_danger_signs": "知識庫A內容",
-                "B_laboratory": "知識庫B內容",
-                "C_imaging": "知識庫C內容",
-            },
+            submitted_by_task["physical_examination"]["focus_conditions"], expected_focus
         )
+        self.assertEqual(submitted_by_task["laboratory"]["focus_conditions"], expected_focus)
+        self.assertEqual(submitted_by_task["imaging"]["focus_conditions"], expected_focus)
         self.assertNotIn("_safety", data)
         self.assertNotIn("_amie", data)
         self.assertEqual(data["_interview_pipeline"]["model"], "gemini-test-model")
@@ -264,7 +356,13 @@ class QuestionnairePipelineTests(unittest.TestCase):
         self.assertIn("【檢驗（抽血／驗尿）】", record["structured_note"])
         self.assertIn("【影像學決策】", record["structured_note"])
         self.assertNotIn("建議", record["structured_note"])
-        self.assertIn("fixed-questionnaire-six-part-rag-v3", record["structured_note"])
+        self.assertIn("Acute coronary syndrome", record["structured_note"])
+        self.assertNotIn("理由：", record["structured_note"])
+        self.assertIn("fixed-questionnaire-doctor-style-english-v7", record["structured_note"])
+        self.assertEqual(
+            data["_interview_pipeline"]["postprocess"],
+            "per_task_gemini_report_after_questionnaire",
+        )
         self.assertEqual(record["structured_sources"][0]["title"], "合成測試文獻")
 
     def test_unknown_complaint_uses_common_fixed_questions_instead_of_handoff(self):
@@ -285,7 +383,7 @@ class QuestionnairePipelineTests(unittest.TestCase):
         self.assertEqual(record["status"], "completed")
 
     def test_invalid_gemini_result_fails_explicitly_and_does_not_create_record(self):
-        self.generate_text.return_value = "not-json"
+        self.generate_text.side_effect = lambda *_args, **_kwargs: "not-json"
         with (
             patch.object(patient, "sessions", self.sessions),
             patch.object(patient, "consultation_repository", self.repository),

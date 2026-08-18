@@ -70,9 +70,15 @@ Avatar 朗讀的是組裝後的 `reply`，因此新的固定文案會一併生�
 預設 `questionnaire` pipeline 不讀取 `policy` 來選題或提前停止，只依組合後的
 JSON 順序、`condition` 與 FHIR prefill 決定下一題，也不執行 semantic options、
 ClinicalFact、Safety 或疾病票數。最後一題完成後，後端才將所有已回答題目的
-`prompt` 與患者答案連同院方預填資料一次送給 Gemini 產生 EMR、初步評估與一句
-臨床決策；逐題期間不會呼叫模型。完成時會以新 RAG 分別取得鑑別／危險徵兆、檢驗、
-影像三組文獻，供六段式報告引用；輸出不含名為「建議」的段落或標題。疾病問卷仍
+`prompt` 與患者答案連同院方預填資料交給 Gemini；EMR、初步鑑別、防漏診、理學檢查、
+檢驗與影像各使用一個獨立 prompt，逐題期間仍不會呼叫模型。完成時會以新 RAG 分別
+取得鑑別／危險徵兆、檢驗、影像三組文獻，各任務只收到相關文獻；六題全部通過格式
+驗證後才組裝與保存。六個模型 API request 由程式依固定順序逐一送出，不靠 prompt
+文字要求模型自行分題。A／B／C 由 Backend 分別以 `diagnosis|workup`、`lab`、
+`imaging` metadata filter 直接查詢 v2 Chroma，不由 prompt 要求模型自行找知識庫；
+防漏診題產生的最多五個疾病會先經 schema 驗證，再以 `focus_conditions` 傳給理學檢查、
+檢驗與影像三題。最後輸出為 doctor-style 英文內容，不顯示 rationale，並保留既有六段
+中文標題供前端分段；任一題失敗不會建立半成品病例。疾病問卷仍
 保留 `policy` 供舊 AMIE 相容流程；目前 schema
 version 2 以
 `priority_fields`、`required_fields`、一般問題作為選題層級；同層問題再依當輪

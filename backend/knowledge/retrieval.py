@@ -85,6 +85,14 @@ PURPOSE_QUERY_TERMS = {
     "treatment": "treatment management",
     "general": "",
 }
+PURPOSE_CLINICAL_STAGES: dict[str, tuple[str, ...] | None] = {
+    "diagnosis": ("diagnosis", "workup"),
+    "workup": ("workup",),
+    "lab": ("lab",),
+    "imaging": ("imaging",),
+    "treatment": ("treatment",),
+    "general": None,
+}
 ROUTE_QUERY_TERMS = {
     "chest": "chest pain chest discomfort cardiopulmonary",
     "headache": "headache neurologic",
@@ -331,6 +339,7 @@ def _query_collection(
     query: str,
     n_results: int = PER_COLLECTION_K,
     query_embedding=None,
+    clinical_stages: tuple[str, ...] | None = None,
 ) -> tuple[list[dict], float]:
     started = time.perf_counter()
     collection = _registry.get(route=route)
@@ -338,11 +347,17 @@ def _query_collection(
     if count == 0:
         return [], time.perf_counter() - started
 
-    query_kwargs = (
+    query_kwargs: dict[str, Any] = (
         {"query_embeddings": [query_embedding]}
         if query_embedding is not None
         else {"query_texts": [query]}
     )
+    if clinical_stages:
+        query_kwargs["where"] = (
+            {"clinical_stage": clinical_stages[0]}
+            if len(clinical_stages) == 1
+            else {"clinical_stage": {"$in": list(clinical_stages)}}
+        )
     results = collection.query(
         **query_kwargs,
         n_results=min(n_results, count),
@@ -357,6 +372,8 @@ def _query_collection(
         ),
         start=1,
     ):
+        if clinical_stages and metadata.get("clinical_stage", "general") not in clinical_stages:
+            continue
         if distance > DISTANCE_THRESHOLD:
             continue
         retrieved.append(
@@ -381,6 +398,7 @@ def _query_collection_variants(
     query_embeddings: list,
     query_variants: list[str],
     n_results: int = PER_COLLECTION_K,
+    clinical_stages: tuple[str, ...] | None = None,
 ) -> tuple[list[list[dict]], float]:
     """在一次 Chroma 呼叫中批次查詢中文原文與英文正規化向量。"""
     if len(query_embeddings) != len(query_variants):
@@ -392,10 +410,18 @@ def _query_collection_variants(
     if count == 0:
         return [[] for _ in query_embeddings], time.perf_counter() - started
 
+    query_kwargs: dict[str, Any] = {}
+    if clinical_stages:
+        query_kwargs["where"] = (
+            {"clinical_stage": clinical_stages[0]}
+            if len(clinical_stages) == 1
+            else {"clinical_stage": {"$in": list(clinical_stages)}}
+        )
     results = collection.query(
         query_embeddings=query_embeddings,
         n_results=min(n_results, count),
         include=["documents", "metadatas", "distances"],
+        **query_kwargs,
     )
     result_sets = []
     for index, variant in enumerate(query_variants):
@@ -408,6 +434,8 @@ def _query_collection_variants(
             ),
             start=1,
         ):
+            if clinical_stages and metadata.get("clinical_stage", "general") not in clinical_stages:
+                continue
             if distance > DISTANCE_THRESHOLD:
                 continue
             retrieved.append(
@@ -524,6 +552,7 @@ def retrieve(
     primary_route: str | None = None,
     patient_data: dict | None = None,
     purpose: str = "general",
+    stage_scope: bool = False,
     final_k: int = 6,
     n_results: int | None = None,
 ) -> list[dict]:
@@ -534,6 +563,7 @@ def retrieve(
         final_k = n_results
     final_k = max(1, min(int(final_k), 20))
     purpose = purpose if purpose in PURPOSE_QUERY_TERMS else "general"
+    clinical_stages = PURPOSE_CLINICAL_STAGES[purpose] if stage_scope else None
     query_expansion = _expand_query_terms(query, patient_data)
     original_query = " ".join(
         part
@@ -586,6 +616,12 @@ def retrieve(
                     query_variants.append("english")
 
         if RAG_INDEX_VERSION == "legacy":
+            if clinical_stages is not None:
+                LOGGER.warning(
+                    "Staged RAG purpose requires a versioned index purpose=%s",
+                    purpose,
+                )
+                return []
             legacy_sets = []
             for variant, search_query in zip(query_variants, search_queries):
                 results = _legacy_retrieve(search_query, final_k)
@@ -623,6 +659,7 @@ def retrieve(
                         search_queries[0],
                         PER_COLLECTION_K,
                         query_embedding=query_embeddings[0],
+                        clinical_stages=clinical_stages,
                     )
                     for item in results:
                         item["query_variant"] = query_variants[0]
@@ -633,6 +670,7 @@ def retrieve(
                         query_embeddings,
                         query_variants,
                         PER_COLLECTION_K,
+                        clinical_stages=clinical_stages,
                     )
                     result_sets.extend(variant_results)
                 timings[route] = round(elapsed * 1000, 1)
@@ -664,6 +702,7 @@ def retrieve(
                         search_queries[0],
                         PER_COLLECTION_K,
                         query_embedding=query_embeddings[0],
+                        clinical_stages=clinical_stages,
                     )
                     for item in common_results:
                         item["query_variant"] = query_variants[0]
@@ -674,6 +713,7 @@ def retrieve(
                         query_embeddings,
                         query_variants,
                         PER_COLLECTION_K,
+                        clinical_stages=clinical_stages,
                     )
                 timings["common"] = round(elapsed * 1000, 1)
                 merged = _rrf_merge(
@@ -686,7 +726,7 @@ def retrieve(
                 LOGGER.exception("RAG common fallback failed")
 
         fallback_used = False
-        if not merged and get_rag_status()["legacy_available"]:
+        if not merged and clinical_stages is None and get_rag_status()["legacy_available"]:
             legacy_sets = []
             for variant, search_query in zip(query_variants, search_queries):
                 results = _legacy_retrieve(search_query, final_k)

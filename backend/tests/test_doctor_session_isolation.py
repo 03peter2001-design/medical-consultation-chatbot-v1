@@ -1,4 +1,5 @@
 import asyncio
+import json
 import time
 import unittest
 from unittest.mock import patch
@@ -37,8 +38,9 @@ class DoctorSessionIsolationTests(unittest.TestCase):
         self.other_institution = _principal("hospital-b", "doctor-a")
 
     def _create_for_owner(self, session_id: str = "shared-session"):
-        with patch.object(doctor.runtime, "doctor_sessions", self.sessions), patch.object(
-            doctor, "current_ucc_principal", return_value=self.owner
+        with (
+            patch.object(doctor.runtime, "doctor_sessions", self.sessions),
+            patch.object(doctor, "current_ucc_principal", return_value=self.owner),
         ):
             key, session = doctor._doctor_session(session_id, create=True)
             session["patient"] = {"consultation_id": "case-a", "queue_number": "10001"}
@@ -52,12 +54,14 @@ class DoctorSessionIsolationTests(unittest.TestCase):
             "history": list(original_session["history"]),
         }
 
-        with patch.object(doctor.runtime, "doctor_sessions", self.sessions), patch.object(
-            doctor, "current_ucc_principal", return_value=principal
-        ), patch.object(
-            doctor.runtime,
-            "consultation_repository",
-            _AccessibleConsultationRepository(),
+        with (
+            patch.object(doctor.runtime, "doctor_sessions", self.sessions),
+            patch.object(doctor, "current_ucc_principal", return_value=principal),
+            patch.object(
+                doctor.runtime,
+                "consultation_repository",
+                _AccessibleConsultationRepository(),
+            ),
         ):
             for operation in (
                 lambda: doctor.load_patient(
@@ -98,8 +102,9 @@ class DoctorSessionIsolationTests(unittest.TestCase):
 
     def test_owner_can_unload_and_reset_only_own_session(self):
         key, _ = self._create_for_owner()
-        with patch.object(doctor.runtime, "doctor_sessions", self.sessions), patch.object(
-            doctor, "current_ucc_principal", return_value=self.owner
+        with (
+            patch.object(doctor.runtime, "doctor_sessions", self.sessions),
+            patch.object(doctor, "current_ucc_principal", return_value=self.owner),
         ):
             self.assertEqual(doctor.unload_patient("shared-session"), {"status": "ok"})
             self.assertIsNone(self.sessions[key]["patient"])
@@ -111,16 +116,15 @@ class DoctorSessionIsolationTests(unittest.TestCase):
         self.assertEqual(self.sessions, {})
 
     def test_missing_session_uses_same_not_found_response(self):
-        with patch.object(doctor.runtime, "doctor_sessions", self.sessions), patch.object(
-            doctor, "current_ucc_principal", return_value=self.other_doctor
+        with (
+            patch.object(doctor.runtime, "doctor_sessions", self.sessions),
+            patch.object(doctor, "current_ucc_principal", return_value=self.other_doctor),
         ):
             for operation in (
                 lambda: doctor.unload_patient("missing"),
                 lambda: doctor.doctor_reset("missing"),
                 lambda: asyncio.run(
-                    doctor.doctor_chat(
-                        DoctorChatRequest(session_id="missing", message="hello")
-                    )
+                    doctor.doctor_chat(DoctorChatRequest(session_id="missing", message="hello"))
                 ),
             ):
                 with self.assertRaises(HTTPException) as raised:
@@ -143,6 +147,63 @@ class DoctorSessionIsolationTests(unittest.TestCase):
             doctor._cleanup_sessions()
         self.assertNotIn(owner_key, self.sessions)
         self.assertIn(live_key, self.sessions)
+
+    def test_structured_note_runs_one_prompt_per_question_then_appends_once(self):
+        with (
+            patch.object(doctor.runtime, "doctor_sessions", self.sessions),
+            patch.object(doctor, "current_ucc_principal", return_value=self.owner),
+        ):
+            _, session = doctor._doctor_session("structured", create=True)
+
+        called_payloads = []
+
+        def generate(messages, **_kwargs):
+            payload = json.loads(messages[-1]["content"])
+            called_payloads.append(payload)
+            task = payload["task"]
+            return json.dumps({task: f"{task}內容"}, ensure_ascii=False)
+
+        contexts = [
+            ("A evidence", [{"title": "A"}]),
+            ("B evidence", [{"title": "B"}]),
+            ("C evidence", [{"title": "C"}]),
+        ]
+        with (
+            patch.object(doctor.runtime, "doctor_sessions", self.sessions),
+            patch.object(doctor, "current_ucc_principal", return_value=self.owner),
+            patch.object(doctor.runtime, "RAG_ENABLED", True),
+            patch.object(doctor, "retrieve_knowledge_base_block", side_effect=contexts),
+            patch.object(doctor.runtime.llm_client, "generate_text", side_effect=generate) as llm,
+            patch.object(doctor, "audit_ucc"),
+        ):
+            response = asyncio.run(
+                doctor.doctor_chat(
+                    DoctorChatRequest(
+                        session_id="structured",
+                        message="請整理病例",
+                        mode="structured_note",
+                    )
+                )
+            )
+
+        self.assertEqual(llm.call_count, 6)
+        self.assertEqual(
+            [payload["task"] for payload in called_payloads],
+            [
+                "emr",
+                "differential_diagnoses",
+                "must_not_miss",
+                "physical_examination",
+                "laboratory",
+                "imaging",
+            ],
+        )
+        for payload in called_payloads[3:]:
+            self.assertEqual(payload["focus_conditions"], "must_not_miss內容")
+        self.assertEqual(len(session["history"]), 1)
+        self.assertEqual(session["history"][0]["assistant"], response["reply"])
+        self.assertEqual(response["reply"].count("【病歷摘要 EMR】"), 1)
+        self.assertEqual(response["reply"].count("【影像學決策】"), 1)
 
 
 if __name__ == "__main__":

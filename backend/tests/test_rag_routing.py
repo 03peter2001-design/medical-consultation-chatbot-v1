@@ -12,6 +12,47 @@ from knowledge.translation import QueryNormalization
 
 
 class RagRoutingTests(unittest.TestCase):
+    def test_stage_scoped_query_uses_chroma_metadata_filter(self):
+        class Collection:
+            def __init__(self):
+                self.query_kwargs = None
+
+            def count(self):
+                return 10
+
+            def query(self, **kwargs):
+                self.query_kwargs = kwargs
+                return {
+                    "documents": [["lab evidence"]],
+                    "metadatas": [
+                        [
+                            {
+                                "source": "synthetic",
+                                "title": "Lab",
+                                "clinical_stage": "lab",
+                            }
+                        ]
+                    ],
+                    "distances": [[0.1]],
+                }
+
+        collection = Collection()
+        registry = SimpleNamespace(get=lambda **_kwargs: collection)
+        with patch.object(rag, "_registry", registry):
+            results, _ = rag._query_collection(
+                "common",
+                "troponin",
+                clinical_stages=("lab",),
+            )
+
+        self.assertEqual(collection.query_kwargs["where"], {"clinical_stage": "lab"})
+        self.assertEqual(results[0]["clinical_stage"], "lab")
+
+    def test_knowledge_base_stage_mapping_is_explicit(self):
+        self.assertEqual(rag.PURPOSE_CLINICAL_STAGES["diagnosis"], ("diagnosis", "workup"))
+        self.assertEqual(rag.PURPOSE_CLINICAL_STAGES["lab"], ("lab",))
+        self.assertEqual(rag.PURPOSE_CLINICAL_STAGES["imaging"], ("imaging",))
+
     def test_primary_route_always_includes_safety(self):
         routes = select_routes(
             "胸痛且想做抽血",
@@ -151,7 +192,15 @@ class RagRoutingTests(unittest.TestCase):
 
         registry = SimpleNamespace(embedding_function=embed)
 
-        def batched(route, query_embeddings, query_variants, n_results):
+        def batched(
+            route,
+            query_embeddings,
+            query_variants,
+            n_results,
+            clinical_stages=None,
+        ):
+            self.assertIsNone(clinical_stages)
+
             def item(variant):
                 return {
                     "chunk_id": f"{route}-1",

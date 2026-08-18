@@ -14,6 +14,10 @@ from amie.disease_profiles import (
     score_diseases,
 )
 from app import runtime
+from app.prompts.consultation_reporting import (
+    REPORTING_TASKS,
+    build_reporting_prompt_requests,
+)
 from app.prompts.report import build_report_prompt
 from app.services.clinical_summary import (
     build_structured_emr,
@@ -23,7 +27,7 @@ from app.services.clinical_summary import (
 from app.services.consultation_service import (
     process_consultation_summaries,
 )
-from app.services.rag import deduplicate_sources, retrieve_context_block
+from app.services.rag import deduplicate_sources, retrieve_knowledge_base_block
 from domain.questionnaires import (
     DISEASE_ROUTES,
     load_questionnaire_policy,
@@ -428,26 +432,26 @@ def generate_structured_note(
     primary_route = record.get("type")
     patient_data = clinical_patient_data(record.get("data"))
     try:
-        diag_context, diag_sources = retrieve_context_block(
+        diag_context, diag_sources = retrieve_knowledge_base_block(
+            "A",
             f"{base_query} 鑑別診斷 危險徵兆 紅旗症狀",
             n_results=5,
             primary_route=primary_route,
             patient_data=patient_data,
-            purpose="diagnosis",
         )
-        lab_context, lab_sources = retrieve_context_block(
+        lab_context, lab_sources = retrieve_knowledge_base_block(
+            "B",
             f"{base_query} 抽血檢驗 實驗室檢查",
             n_results=4,
             primary_route=primary_route,
             patient_data=patient_data,
-            purpose="lab",
         )
-        imaging_context, imaging_sources = retrieve_context_block(
+        imaging_context, imaging_sources = retrieve_knowledge_base_block(
+            "C",
             f"{base_query} 影像學 X光 電腦斷層 CT MRI 超音波",
             n_results=4,
             primary_route=primary_route,
             patient_data=patient_data,
-            purpose="imaging",
         )
         sources = deduplicate_sources(
             diag_sources,
@@ -458,54 +462,30 @@ def generate_structured_note(
         allowed = [
             {"id": item["id"], "name": item["name"]} for item in assessment.get("ranked", [])
         ]
-        prompt = f"""
-你只能整理病史，並針對固定疾病 ID 提出理學檢查、檢驗與影像項目。
-不得新增疾病、不得修改疾病排名、不得輸出患病機率。
-
-病人資料：
-{model_patient_summary(record)}
-
-允許引用的固定疾病：
-{json.dumps(allowed, ensure_ascii=False)}
-
-鑑別與危險徵兆文獻：
-{diag_context}
-
-檢驗文獻：
-{lab_context}
-
-影像文獻：
-{imaging_context}
-
-只回傳 JSON：
-{{
-  "emr_summary": "以恰好兩句簡短繁體中文，摘要年齡、性別、主訴與發作時間以外的其他 EMR 病史（如過去病史、用藥、過敏史與重要伴隨資訊）；不要重複基本病況，也不要提出診斷",
-  "physical_exam": [
-    {{
-      "item": "檢查名稱",
-      "rationale": "依文獻的簡短理由",
-      "linked_condition_ids": ["只能使用允許的ID"]
-    }}
-  ],
-  "laboratory": [],
-  "imaging": []
-}}
-""".strip()
-        response = runtime.llm_client.generate_text(
-            [
-                {
-                    "role": "system",
-                    "content": (
-                        "你是受限的臨床工作檢查建議抽取器。只能輸出指定 JSON，"
-                        "疾病只能用使用者提供的 ID 引用，不得生成疾病候選。"
-                    ),
-                },
-                {"role": "user", "content": prompt},
-            ],
-            temperature=0.2,
-            max_tokens=1400,
+        prompt_requests = build_reporting_prompt_requests(
+            patient_summary=model_patient_summary(record),
+            allowed_conditions=allowed,
+            knowledge_contexts={
+                "diagnosis": diag_context,
+                "laboratory": lab_context,
+                "imaging": imaging_context,
+            },
         )
-        payload = _parse_json_object(response)
+        payload = {}
+        for prompt_request in prompt_requests:
+            response = runtime.llm_client.generate_text(
+                prompt_request.messages,
+                temperature=0.2,
+                max_tokens=prompt_request.max_tokens,
+            )
+            section = _parse_json_object(response)
+            if set(section) != {prompt_request.task}:
+                raise ValueError(
+                    f"structured note {prompt_request.task} response has an invalid shape"
+                )
+            payload[prompt_request.task] = section[prompt_request.task]
+        if set(payload) != set(REPORTING_TASKS):
+            raise ValueError("structured note responses have missing or extra tasks")
         note = _render_structured_note(record, assessment, payload)
         return note, sources
     except Exception as error:

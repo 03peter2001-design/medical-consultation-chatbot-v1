@@ -1,3 +1,4 @@
+import json
 import re
 import tempfile
 import unittest
@@ -15,6 +16,7 @@ from app.services.consultation_reporting import (
     _supported_condition_summaries,
     _validated_workup_items,
     generate_ai_report,
+    generate_structured_note,
 )
 from infrastructure.consultation_repository import ConsultationRepository
 
@@ -586,6 +588,54 @@ class DiseaseReportRestrictionTests(unittest.TestCase):
         self.assertIn("胸口像被壓住", report)
         self.assertNotIn("淨票", report)
         self.assertEqual(generate_text.call_args.kwargs["max_tokens"], 500)
+
+    def test_background_structured_note_uses_one_prompt_per_model_task(self):
+        record = {
+            "type": "chest",
+            "reason": "活動時胸悶",
+            "data": {"type": "chest", "reason": "活動時胸悶"},
+        }
+
+        def generate(messages, **_kwargs):
+            task = json.loads(messages[-1]["content"])["task"]
+            value = (
+                "無其他已知病史。無已知藥物過敏。"
+                if task == "emr_summary"
+                else [
+                    {
+                        "item": f"{task}項目",
+                        "rationale": "合成文獻依據",
+                        "linked_condition_ids": ["acute_coronary_syndrome"],
+                    }
+                ]
+            )
+            return json.dumps({task: value}, ensure_ascii=False)
+
+        contexts = [
+            ("A evidence", [{"title": "A"}]),
+            ("B evidence", [{"title": "B"}]),
+            ("C evidence", [{"title": "C"}]),
+        ]
+        with (
+            patch("app.services.consultation_reporting.runtime.RAG_ENABLED", True),
+            patch(
+                "app.services.consultation_reporting.retrieve_knowledge_base_block",
+                side_effect=contexts,
+            ),
+            patch(
+                "app.services.consultation_reporting._assessment_for_record",
+                return_value=self.assessment,
+            ),
+            patch(
+                "app.services.consultation_reporting.runtime.llm_client.generate_text",
+                side_effect=generate,
+            ) as llm,
+        ):
+            note, sources = generate_structured_note(record)
+
+        self.assertEqual(llm.call_count, 4)
+        self.assertIn("physical_exam項目", note)
+        self.assertEqual([source["title"] for source in sources], ["A", "B", "C"])
 
 
 if __name__ == "__main__":

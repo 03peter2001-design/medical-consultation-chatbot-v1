@@ -36,8 +36,10 @@ from app.models import (
 )
 from app.prompts.doctor import (
     DOCTOR_SYSTEM_PROMPT,
-    STRUCTURED_NOTE_SYSTEM_PROMPT,
+    STRUCTURED_NOTE_TASKS,
     build_structured_note_prompt,
+    parse_structured_note_response,
+    render_structured_note_responses,
 )
 from app.security import UccPrincipal, current_ucc_principal, require_scopes
 from app.services.async_clinical_io import (
@@ -51,6 +53,7 @@ from app.services.clinical_summary import (
 from app.services.rag import (
     deduplicate_sources,
     retrieve_context_block,
+    retrieve_knowledge_base_block,
 )
 from app.services.rule_management import (
     authorize_rule_editor,
@@ -717,26 +720,26 @@ async def doctor_chat(request: DoctorChatRequest):
     if request.mode == "structured_note":
         primary_route = patient.get("type") if patient else None
         patient_data = clinical_patient_data(patient.get("data")) if patient else None
-        diag_context, diag_sources = retrieve_context_block(
+        diag_context, diag_sources = retrieve_knowledge_base_block(
+            "A",
             f"{base_query} 鑑別診斷 危險徵兆 紅旗症狀",
             n_results=5,
             primary_route=primary_route,
             patient_data=patient_data,
-            purpose="diagnosis",
         )
-        lab_context, lab_sources = retrieve_context_block(
+        lab_context, lab_sources = retrieve_knowledge_base_block(
+            "B",
             f"{base_query} 抽血檢驗 實驗室檢查",
             n_results=4,
             primary_route=primary_route,
             patient_data=patient_data,
-            purpose="lab",
         )
-        imaging_context, imaging_sources = retrieve_context_block(
+        imaging_context, imaging_sources = retrieve_knowledge_base_block(
+            "C",
             f"{base_query} 影像學 X光 電腦斷層 CT MRI 超音波",
             n_results=4,
             primary_route=primary_route,
             patient_data=patient_data,
-            purpose="imaging",
         )
         sources = deduplicate_sources(
             diag_sources,
@@ -752,9 +755,10 @@ async def doctor_chat(request: DoctorChatRequest):
             purpose="general",
         )
 
-    patient_block = ""
-    if patient:
-        patient_block = f"""目前正在討論的病人：
+    if request.mode != "structured_note":
+        patient_block = ""
+        if patient:
+            patient_block = f"""目前正在討論的病人：
 
 {model_patient_summary(patient)}
 
@@ -764,21 +768,6 @@ async def doctor_chat(request: DoctorChatRequest):
 ---
 
 """
-
-    if request.mode == "structured_note":
-        user_prompt = build_structured_note_prompt(
-            request.message,
-            patient,
-            diag_context,
-            lab_context,
-            imaging_context,
-        )
-        messages = [
-            {"role": "system", "content": STRUCTURED_NOTE_SYSTEM_PROMPT},
-            {"role": "user", "content": user_prompt},
-        ]
-        max_tokens = 1400
-    else:
         messages = [{"role": "system", "content": DOCTOR_SYSTEM_PROMPT}]
         for turn in session["history"][-runtime.DOCTOR_HISTORY_MAX_TURNS :]:
             messages.append({"role": "user", "content": turn["user"]})
@@ -796,12 +785,37 @@ async def doctor_chat(request: DoctorChatRequest):
         max_tokens = 800
 
     try:
-        reply = await run_clinical_io(
-            runtime.llm_client.generate_text,
-            messages,
-            temperature=0.2,
-            max_tokens=max_tokens,
-        )
+        if request.mode == "structured_note":
+            raw_responses: dict[str, str] = {}
+            focus_conditions = ""
+            for task in STRUCTURED_NOTE_TASKS:
+                prompt_request = build_structured_note_prompt(
+                    task,
+                    request.message,
+                    patient,
+                    diag_context,
+                    lab_context,
+                    imaging_context,
+                    focus_conditions=focus_conditions,
+                )
+                raw_response = await run_clinical_io(
+                    runtime.llm_client.generate_text,
+                    prompt_request.messages,
+                    temperature=0.2,
+                    max_tokens=prompt_request.max_tokens,
+                )
+                validated_content = parse_structured_note_response(task, raw_response)
+                raw_responses[task] = raw_response
+                if task == "must_not_miss":
+                    focus_conditions = validated_content
+            reply = render_structured_note_responses(raw_responses)
+        else:
+            reply = await run_clinical_io(
+                runtime.llm_client.generate_text,
+                messages,
+                temperature=0.2,
+                max_tokens=max_tokens,
+            )
     except ClinicalOperationTimeout as error:
         audit_ucc(
             "doctor.consultation.chat",

@@ -58,6 +58,19 @@ docs/*.txt
 collections，其餘保留為 `archive` 而不建立向量。實際數量以
 `cleaning_report.json`、`classification_report.json` 與 ingest dry-run 為準。
 
+六段式報告使用同一批 v2 route collections 上的三個 metadata 分區，而不是讓模型
+自行決定要查哪一庫：
+
+| 知識庫 | Chroma `clinical_stage` filter | 用途 |
+| --- | --- | --- |
+| A | `diagnosis`、`workup` | 初步鑑別、防漏診與理學檢查 |
+| B | `lab` | 抽血與驗尿 |
+| C | `imaging` | X-ray、超音波、CT、MRI 等影像決策 |
+
+Backend 先以 filter 直接檢索對應分區，再把取回的 `retrieved_evidence` 傳入該題模型
+request；prompt 不負責搜尋或選庫。這項分區只支援含 `clinical_stage` metadata 的 v2
+索引，legacy 索引會 fail closed，不能作為 A／B／C 報告的靜默 fallback。
+
 分類階段產生的 embeddings 會直接由 ingest 重用，不對相同 chunks 重算。
 新索引不會刪除 legacy `medical_kb`；只有明確使用 `--rebuild` 才會重建相同
 version 的目標 collections。

@@ -9,6 +9,7 @@ import {
 } from '../services/structuredNote.js'
 import BodyPainMap from './BodyPainMap.vue'
 import ClinicalEvidence from './ClinicalEvidence.vue'
+import StructuredReport from './StructuredReport.vue'
 import TerminologyCode from './TerminologyCode.vue'
 
 const props = defineProps({
@@ -90,6 +91,14 @@ const painLocationIds = computed(() =>
         </section>
       </div>
     </header>
+
+    <StructuredReport
+      v-if="record.structured_note"
+      class="patient-summary-report"
+      :text="record.structured_note"
+      :sources="record.structured_sources || []"
+      hide-emr
+    />
 
     <section
       v-if="clinical.redFlags.length"
@@ -263,6 +272,10 @@ const painLocationIds = computed(() =>
 .patient-identity {
   padding: 20px 22px 17px;
   border-bottom: 1px solid #dbe4ec;
+}
+
+.patient-summary-report {
+  margin: 16px 18px 0;
 }
 
 .identity-title {
@@ -766,6 +779,7 @@ const painLocationIds = computed(() =>
   }
 
   .red-flag-banner,
+  .patient-summary-report,
   .snapshot-grid,
   .narrative-grid {
     margin-right: 12px;

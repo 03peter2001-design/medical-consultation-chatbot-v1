@@ -216,9 +216,7 @@ async function loadPatient(consultationIdOverride = '') {
       },
     ]
 
-    if (record.structured_note) {
-      pushStructured(record.structured_note, record.structured_sources, true)
-    } else {
+    if (!record.structured_note) {
       items.value.push({
         id: nextId(),
         kind: 'unavailable',

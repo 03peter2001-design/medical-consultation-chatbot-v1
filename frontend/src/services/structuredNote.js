@@ -1,5 +1,50 @@
 const EMR_HEADING = '【病歷摘要 EMR】'
 
+const SECTION_DEFINITIONS = [
+  {
+    key: 'emr',
+    title: '病歷摘要 EMR',
+    question: '這次就診的病歷重點是什麼？',
+    tone: 'emr',
+    matches: (heading) => heading.includes('病歷摘要') && heading.includes('EMR'),
+  },
+  {
+    key: 'differential',
+    title: '初步鑑別診斷',
+    question: '最可能的前三項診斷是什麼？',
+    tone: 'differential',
+    matches: (heading) => heading.includes('初步鑑別診斷'),
+  },
+  {
+    key: 'must-not-miss',
+    title: '防漏診鑑別',
+    question: '哪些致命疾病絕對不能漏掉？',
+    tone: 'danger',
+    matches: (heading) => heading.includes('防漏診鑑別'),
+  },
+  {
+    key: 'physical',
+    title: '理學檢查',
+    question: '要做哪些重點理學檢查？',
+    tone: 'physical',
+    matches: (heading) => heading.includes('理學檢查'),
+  },
+  {
+    key: 'laboratory',
+    title: '檢驗（抽血／驗尿）',
+    question: '最小且有鑑別力的檢驗有哪些？',
+    tone: 'laboratory',
+    matches: (heading) => heading.includes('檢驗') && heading.includes('抽血'),
+  },
+  {
+    key: 'imaging',
+    title: '影像學決策',
+    question: '需要哪些影像，以及 CT／MRI 是否必要？',
+    tone: 'imaging',
+    matches: (heading) => heading.includes('影像學決策'),
+  },
+]
+
 function singleLine(value) {
   return String(value || '').replace(/\s+/g, ' ').trim()
 }
@@ -86,4 +131,50 @@ export function splitStructuredNote(text) {
     emrSummary,
     clinicalDecision: [beforeEmr, afterEmr].filter(Boolean).join('\n\n'),
   }
+}
+
+function sectionDefinition(heading) {
+  return SECTION_DEFINITIONS.find((definition) =>
+    definition.matches(heading),
+  )
+}
+
+export function parseStructuredNoteBlocks(text) {
+  const source = String(text || '').trim()
+  if (!source) {
+    return { sections: [], footer: '', fallbackText: '' }
+  }
+
+  const footerIndex = source.search(/(?:^|\n)模型：/)
+  const body = (footerIndex < 0 ? source : source.slice(0, footerIndex)).trim()
+  const footer = (footerIndex < 0 ? '' : source.slice(footerIndex)).trim()
+  const headings = [...body.matchAll(/【([^】]+)】/g)]
+
+  if (!headings.length) {
+    return { sections: [], footer, fallbackText: body }
+  }
+
+  const fallbackText = body.slice(0, headings[0].index).trim()
+  const sections = headings
+    .map((match, index) => {
+      const heading = match[1].trim()
+      const definition = sectionDefinition(heading)
+      const contentStart = Number(match.index) + match[0].length
+      const contentEnd =
+        index + 1 < headings.length
+          ? Number(headings[index + 1].index)
+          : body.length
+      const content = body.slice(contentStart, contentEnd).trim()
+
+      return {
+        key: definition?.key || `section-${index + 1}`,
+        title: definition?.title || heading,
+        question: definition?.question || '其他需要注意的臨床資訊是什麼？',
+        tone: definition?.tone || 'neutral',
+        content,
+      }
+    })
+    .filter((section) => section.content)
+
+  return { sections, footer, fallbackText }
 }

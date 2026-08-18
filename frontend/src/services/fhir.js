@@ -1,6 +1,12 @@
 import { buildFhirClinicalCodings } from './terminology.js'
 
 export const TAIWAN_ID_SYSTEM = 'http://www.moi.gov.tw'
+export const SYNTHEA_DEFAULT_ID_SYSTEM =
+  'https://github.com/synthetichealth/synthea'
+export const PATIENT_IDENTIFIER_TYPES = Object.freeze({
+  NATIONAL_ID: 'national-id',
+  SYNTHEA_DEFAULT_ID: 'synthea-default-id',
+})
 
 // Deliberately narrow: these are presentation symptoms that may be recorded as
 // a Condition for the current encounter. Disease names and routing shortcuts
@@ -159,6 +165,28 @@ export function isNationalIdFormat(value) {
   return /^[A-Z][0-9]{9}$/.test(normalizeNationalId(value))
 }
 
+export function normalizeSyntheaDefaultId(value) {
+  return String(value || '').trim().toLowerCase()
+}
+
+export function isSyntheaDefaultIdFormat(value) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(
+    normalizeSyntheaDefaultId(value),
+  )
+}
+
+export function normalizePatientIdentifier(identifierType, value) {
+  return identifierType === PATIENT_IDENTIFIER_TYPES.SYNTHEA_DEFAULT_ID
+    ? normalizeSyntheaDefaultId(value)
+    : normalizeNationalId(value)
+}
+
+export function isPatientIdentifierFormat(identifierType, value) {
+  return identifierType === PATIENT_IDENTIFIER_TYPES.SYNTHEA_DEFAULT_ID
+    ? isSyntheaDefaultIdFormat(value)
+    : isNationalIdFormat(value)
+}
+
 function fhirErrorMessage(payload, fallback) {
   const diagnostics = payload?.issue
     ?.map((issue) => issue.diagnostics || issue.details?.text)
@@ -177,20 +205,39 @@ async function readFhirResponse(response) {
   return payload
 }
 
-export async function findPatientByNationalId(
-  nationalId,
+export async function findPatientByIdentifier(
+  identifierType,
+  identifierValue,
   {
     baseUrl = resolveFhirBaseUrl(),
     fetchImpl = fetch,
   } = {},
 ) {
-  const normalizedId = normalizeNationalId(nationalId)
-  if (!isNationalIdFormat(normalizedId)) {
-    throw new Error('身分證字號格式應為 1 個英文字母加 9 個數字。')
+  if (!Object.values(PATIENT_IDENTIFIER_TYPES).includes(identifierType)) {
+    throw new Error('不支援的 FHIR Patient identifier 類型。')
+  }
+  const isSyntheaDefaultId =
+    identifierType === PATIENT_IDENTIFIER_TYPES.SYNTHEA_DEFAULT_ID
+  const normalizedId = normalizePatientIdentifier(
+    identifierType,
+    identifierValue,
+  )
+  if (!isPatientIdentifierFormat(identifierType, normalizedId)) {
+    throw new Error(
+      isSyntheaDefaultId
+        ? 'Synthea Default ID 格式應為 8-4-4-4-12 位十六進位 UUID。'
+        : '身分證字號格式應為 1 個英文字母加 9 個數字。',
+    )
   }
 
+  const identifierSystem = isSyntheaDefaultId
+    ? SYNTHEA_DEFAULT_ID_SYSTEM
+    : TAIWAN_ID_SYSTEM
+  const identifierLabel = isSyntheaDefaultId
+    ? 'Synthea Default ID'
+    : '身分證字號'
   const body = new URLSearchParams({
-    identifier: `${TAIWAN_ID_SYSTEM}|${normalizedId}`,
+    identifier: `${identifierSystem}|${normalizedId}`,
   })
   const response = await fetchImpl(`${baseUrl}/Patient/_search`, {
     method: 'POST',
@@ -206,14 +253,30 @@ export async function findPatientByNationalId(
     .filter((resource) => resource?.resourceType === 'Patient')
 
   if (matches.length === 0) {
-    throw new Error(`查無身分證字號 ${normalizedId} 的測試病人。`)
+    throw new Error(`查無 ${identifierLabel} ${normalizedId} 的測試病人。`)
   }
   if (matches.length > 1) {
     throw new Error(
-      `身分證字號 ${normalizedId} 找到 ${matches.length} 位病人，請由管理人員處理重複資料。`,
+      `${identifierLabel} ${normalizedId} 找到 ${matches.length} 位病人，請由管理人員處理重複資料。`,
     )
   }
   return matches[0]
+}
+
+export async function findPatientByNationalId(nationalId, options = {}) {
+  return findPatientByIdentifier(
+    PATIENT_IDENTIFIER_TYPES.NATIONAL_ID,
+    nationalId,
+    options,
+  )
+}
+
+export async function findPatientBySyntheaDefaultId(defaultId, options = {}) {
+  return findPatientByIdentifier(
+    PATIENT_IDENTIFIER_TYPES.SYNTHEA_DEFAULT_ID,
+    defaultId,
+    options,
+  )
 }
 
 async function loadPatientEverything(
@@ -237,7 +300,34 @@ export async function loadPatientByNationalId(
   nationalId,
   options = {},
 ) {
-  const patient = await findPatientByNationalId(nationalId, options)
+  return loadPatientByIdentifier(
+    PATIENT_IDENTIFIER_TYPES.NATIONAL_ID,
+    nationalId,
+    options,
+  )
+}
+
+export async function loadPatientBySyntheaDefaultId(
+  defaultId,
+  options = {},
+) {
+  return loadPatientByIdentifier(
+    PATIENT_IDENTIFIER_TYPES.SYNTHEA_DEFAULT_ID,
+    defaultId,
+    options,
+  )
+}
+
+export async function loadPatientByIdentifier(
+  identifierType,
+  identifierValue,
+  options = {},
+) {
+  const patient = await findPatientByIdentifier(
+    identifierType,
+    identifierValue,
+    options,
+  )
   const bundle = await loadPatientEverything(patient.id, options)
   return {
     patient,

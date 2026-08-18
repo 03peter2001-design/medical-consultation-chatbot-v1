@@ -1,18 +1,34 @@
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
 import test from 'node:test'
 
 import {
+  PATIENT_IDENTIFIER_TYPES,
+  SYNTHEA_DEFAULT_ID_SYSTEM,
   TAIWAN_ID_SYSTEM,
   buildPatientPrefill,
   findPatientByNationalId,
+  findPatientBySyntheaDefaultId,
   isDirectFhirEnabled,
   isNationalIdFormat,
+  isSyntheaDefaultIdFormat,
   loadPatientByNationalId,
+  loadPatientBySyntheaDefaultId,
   normalizeNationalId,
+  normalizeSyntheaDefaultId,
   patientAge,
   patientDisplayName,
   resolveFhirBaseUrl,
 } from '../src/services/fhir.js'
+
+const startOverlaySource = readFileSync(
+  new URL('../src/components/StartConsultationOverlay.vue', import.meta.url),
+  'utf8',
+)
+const patientViewSource = readFileSync(
+  new URL('../src/views/PatientView.vue', import.meta.url),
+  'utf8',
+)
 
 function jsonResponse(payload, ok = true, status = 200) {
   return {
@@ -116,6 +132,22 @@ test('normalizes and validates the synthetic national ID', () => {
   assert.equal(isNationalIdFormat('SYN-CHEST-001'), false)
 })
 
+test('normalizes and validates a Synthea Default ID', () => {
+  const defaultId = 'c85baeef-9dbd-d06f-791d-5e1e3f24a8bf'
+  assert.equal(normalizeSyntheaDefaultId(` ${defaultId.toUpperCase()} `), defaultId)
+  assert.equal(isSyntheaDefaultIdFormat(defaultId), true)
+  assert.equal(isSyntheaDefaultIdFormat(`${defaultId}0`), false)
+  assert.equal(isSyntheaDefaultIdFormat('syn-chest-001'), false)
+})
+
+test('offers an explicit Synthea identifier mode in the direct FHIR UI', () => {
+  assert.match(startOverlaySource, /Synthea Default ID/)
+  assert.match(startOverlaySource, /v-model="identifierType"/)
+  assert.match(startOverlaySource, /@input="updatePatientIdentifier"/)
+  assert.match(patientViewSource, /loadPatientByIdentifier/)
+  assert.match(patientViewSource, /v-model:synthea-default-id/)
+})
+
 test('searches Patient.identifier using the TW Core national ID system', async () => {
   let request
   const patient = await findPatientByNationalId('A000000000', {
@@ -143,6 +175,74 @@ test('searches Patient.identifier using the TW Core national ID system', async (
   assert.equal(
     request.options.body.get('identifier'),
     `${TAIWAN_ID_SYSTEM}|A000000000`,
+  )
+})
+
+test('searches Patient.identifier using the Synthea Default ID system', async () => {
+  const defaultId = 'c85baeef-9dbd-d06f-791d-5e1e3f24a8bf'
+  let request
+  const patient = await findPatientBySyntheaDefaultId(defaultId.toUpperCase(), {
+    baseUrl: 'http://localhost:8081/fhir',
+    fetchImpl: async (url, options) => {
+      request = { url, options }
+      return jsonResponse({
+        resourceType: 'Bundle',
+        total: 1,
+        entry: [
+          {
+            resource: {
+              resourceType: 'Patient',
+              id: 'hapi-assigned-patient-id',
+            },
+          },
+        ],
+      })
+    },
+  })
+
+  assert.equal(patient.id, 'hapi-assigned-patient-id')
+  assert.equal(request.url, 'http://localhost:8081/fhir/Patient/_search')
+  assert.equal(request.options.method, 'POST')
+  assert.equal(
+    request.options.body.get('identifier'),
+    `${SYNTHEA_DEFAULT_ID_SYSTEM}|${defaultId}`,
+  )
+})
+
+test('rejects an invalid Synthea Default ID before contacting HAPI', async () => {
+  let fetchCalled = false
+  await assert.rejects(
+    findPatientBySyntheaDefaultId('not-a-uuid', {
+      fetchImpl: async () => {
+        fetchCalled = true
+        return jsonResponse({})
+      },
+    }),
+    /Synthea Default ID 格式/,
+  )
+  assert.equal(fetchCalled, false)
+})
+
+test('fails closed when a Synthea Default ID is missing or duplicated', async () => {
+  const defaultId = 'c85baeef-9dbd-d06f-791d-5e1e3f24a8bf'
+  await assert.rejects(
+    findPatientBySyntheaDefaultId(defaultId, {
+      fetchImpl: async () => jsonResponse({ resourceType: 'Bundle', total: 0 }),
+    }),
+    /Synthea Default ID.*查無|\u67e5無.*Synthea Default ID/,
+  )
+  await assert.rejects(
+    findPatientBySyntheaDefaultId(defaultId, {
+      fetchImpl: async () =>
+        jsonResponse({
+          resourceType: 'Bundle',
+          entry: [
+            { resource: { resourceType: 'Patient', id: 'one' } },
+            { resource: { resourceType: 'Patient', id: 'two' } },
+          ],
+        }),
+    }),
+    /找到 2 位病人/,
   )
 })
 
@@ -188,6 +288,38 @@ test('loads the patient compartment after resolving the Patient id', async () =>
 
   assert.equal(result.resources.length, 2)
   assert.match(urls[1], /Patient\/syn-chest-001\/\$everything/)
+})
+
+test('loads Synthea patient data using the HAPI Patient id returned by search', async () => {
+  const defaultId = 'c85baeef-9dbd-d06f-791d-5e1e3f24a8bf'
+  const urls = []
+  await loadPatientBySyntheaDefaultId(defaultId, {
+    baseUrl: 'http://localhost:8081/fhir',
+    fetchImpl: async (url) => {
+      urls.push(url)
+      if (url.endsWith('/Patient/_search')) {
+        return jsonResponse({
+          resourceType: 'Bundle',
+          entry: [
+            {
+              resource: {
+                resourceType: 'Patient',
+                id: 'server-patient-123',
+              },
+            },
+          ],
+        })
+      }
+      return jsonResponse({ resourceType: 'Bundle', entry: [] })
+    },
+  })
+
+  assert.match(urls[1], /Patient\/server-patient-123\/\$everything/)
+  assert.doesNotMatch(urls[1], new RegExp(defaultId))
+  assert.equal(
+    PATIENT_IDENTIFIER_TYPES.SYNTHEA_DEFAULT_ID,
+    'synthea-default-id',
+  )
 })
 
 test('formats patient identity data for the intake flow', () => {

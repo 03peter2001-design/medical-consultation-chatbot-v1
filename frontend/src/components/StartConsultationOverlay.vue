@@ -1,23 +1,36 @@
 <script setup>
+import { computed } from 'vue'
+
 import AvatarSettings from './AvatarSettings.vue'
 import AvatarStage from './AvatarStage.vue'
-import { normalizeNationalId } from '../services/fhir.js'
+import {
+  PATIENT_IDENTIFIER_TYPES,
+  normalizePatientIdentifier,
+} from '../services/fhir.js'
 
 defineProps({
   avatar: { type: Object, required: true },
   visible: { type: Boolean, default: false },
   directFhirEnabled: { type: Boolean, default: false },
   fhirBaseUrl: { type: String, default: '' },
-  nationalIdValid: { type: Boolean, default: false },
+  identifierValid: { type: Boolean, default: false },
   smartLaunch: { type: Boolean, default: false },
   starting: { type: Boolean, default: false },
   error: { type: String, default: '' },
 })
 
 const emit = defineEmits(['start', 'connect-avatar'])
+const identifierType = defineModel('identifierType', {
+  type: String,
+  default: PATIENT_IDENTIFIER_TYPES.NATIONAL_ID,
+})
 const nationalId = defineModel('nationalId', {
   type: String,
   default: 'A000000000',
+})
+const syntheaDefaultId = defineModel('syntheaDefaultId', {
+  type: String,
+  default: '',
 })
 const avatarClientKey = defineModel('avatarClientKey', {
   type: String,
@@ -28,8 +41,23 @@ const avatarAgentId = defineModel('avatarAgentId', {
   default: '',
 })
 
-function normalizeInput() {
-  nationalId.value = normalizeNationalId(nationalId.value)
+const usingSyntheaDefaultId = computed(
+  () => identifierType.value === PATIENT_IDENTIFIER_TYPES.SYNTHEA_DEFAULT_ID,
+)
+const patientIdentifier = computed({
+  get: () =>
+    usingSyntheaDefaultId.value ? syntheaDefaultId.value : nationalId.value,
+  set: (value) => {
+    if (usingSyntheaDefaultId.value) syntheaDefaultId.value = value
+    else nationalId.value = value
+  },
+})
+
+function updatePatientIdentifier(event) {
+  patientIdentifier.value = normalizePatientIdentifier(
+    identifierType.value,
+    event.target.value,
+  )
 }
 </script>
 
@@ -58,21 +86,45 @@ function normalizeInput() {
           SMART on FHIR · OAuth 授權模式
         </div>
         <div v-if="directFhirEnabled" class="identity-lookup">
-          <label for="national-id">身分證字號</label>
+          <label for="identifier-type">查詢識別碼類型</label>
+          <select id="identifier-type" v-model="identifierType">
+            <option :value="PATIENT_IDENTIFIER_TYPES.NATIONAL_ID">
+              台灣身分證字號
+            </option>
+            <option :value="PATIENT_IDENTIFIER_TYPES.SYNTHEA_DEFAULT_ID">
+              Synthea Default ID
+            </option>
+          </select>
+          <label for="patient-identifier">
+            {{ usingSyntheaDefaultId ? 'Synthea Default ID' : '身分證字號' }}
+          </label>
           <input
-            id="national-id"
-            v-model="nationalId"
+            id="patient-identifier"
+            :value="patientIdentifier"
             type="text"
-            maxlength="10"
+            :maxlength="usingSyntheaDefaultId ? 36 : 10"
             autocomplete="off"
             spellcheck="false"
-            placeholder="A000000000"
-            :aria-invalid="nationalId.length > 0 && !nationalIdValid"
-            @input="normalizeInput"
-            @keydown.enter.prevent="nationalIdValid && emit('start')"
+            :class="{ 'national-id-input': !usingSyntheaDefaultId }"
+            :placeholder="
+              usingSyntheaDefaultId
+                ? 'c85baeef-9dbd-d06f-791d-5e1e3f24a8bf'
+                : 'A000000000'
+            "
+            :aria-invalid="patientIdentifier.length > 0 && !identifierValid"
+            @input="updatePatientIdentifier"
+            @keydown.enter.prevent="identifierValid && emit('start')"
           />
           <small>
-            直接以 Patient.identifier 查詢 {{ fhirBaseUrl }}
+            Patient.identifier ·
+            {{
+              usingSyntheaDefaultId
+                ? 'https://github.com/synthetichealth/synthea'
+                : 'http://www.moi.gov.tw'
+            }}
+          </small>
+          <small class="fhir-base-url">
+            查詢 {{ fhirBaseUrl }}
           </small>
         </div>
         <p v-if="smartLaunch">
@@ -86,7 +138,7 @@ function normalizeInput() {
         <p v-if="error" class="start-error">{{ error }}</p>
         <button
           class="start-button"
-          :disabled="starting || (directFhirEnabled && !nationalIdValid)"
+          :disabled="starting || (directFhirEnabled && !identifierValid)"
           @click="emit('start')"
         >
           {{
@@ -238,7 +290,8 @@ function normalizeInput() {
   font-weight: 500;
 }
 
-.identity-lookup input {
+.identity-lookup input,
+.identity-lookup select {
   width: 100%;
   min-height: 48px;
   padding: 11px 13px;
@@ -248,7 +301,13 @@ function normalizeInput() {
   color: var(--text);
   font-family: 'JetBrains Mono', monospace;
   font-size: 15px;
+}
+
+.identity-lookup input {
   letter-spacing: 0.08em;
+}
+
+.identity-lookup .national-id-input {
   text-transform: uppercase;
 }
 
@@ -263,6 +322,10 @@ function normalizeInput() {
   font-size: 11px;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.identity-lookup .fhir-base-url {
+  color: var(--muted);
 }
 
 .start-button {

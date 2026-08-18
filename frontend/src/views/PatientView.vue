@@ -23,12 +23,13 @@ import { useAvatar } from '../composables/useAvatar.js'
 import { getPainMapPreset } from '../data/bodyPainRegions.js'
 import { api, connectionError } from '../services/backend.js'
 import {
+  PATIENT_IDENTIFIER_TYPES,
   buildPatientPrefill,
   directFhirEnabled,
   fhirBaseUrl,
-  isNationalIdFormat,
-  loadPatientByNationalId,
-  normalizeNationalId,
+  isPatientIdentifierFormat,
+  loadPatientByIdentifier,
+  normalizePatientIdentifier,
   patientDisplayName,
 } from '../services/fhir.js'
 import {
@@ -66,7 +67,9 @@ const completed = ref(false)
 const typing = ref(false)
 const startError = ref('')
 const overlayVisible = ref(true)
+const identifierType = ref(PATIENT_IDENTIFIER_TYPES.NATIONAL_ID)
 const nationalId = ref('A000000000')
+const syntheaDefaultId = ref('')
 const fhirPatient = ref(null)
 const fhirResourceCount = ref(0)
 const smartContext = ref(null)
@@ -140,8 +143,13 @@ const showBodyMap = computed(
 const currentInputKind = computed(
   () => questionInput.value?.kind ?? 'text',
 )
-const nationalIdValid = computed(() =>
-  isNationalIdFormat(nationalId.value),
+const patientIdentifier = computed(() =>
+  identifierType.value === PATIENT_IDENTIFIER_TYPES.SYNTHEA_DEFAULT_ID
+    ? syntheaDefaultId.value
+    : nationalId.value,
+)
+const patientIdentifierValid = computed(() =>
+  isPatientIdentifierFormat(identifierType.value, patientIdentifier.value),
 )
 const loadedPatientName = computed(() =>
   fhirPatient.value ? patientDisplayName(fhirPatient.value) : '',
@@ -280,10 +288,24 @@ async function startConsultation({ skipFhir = false } = {}) {
     let patient = null
     let patientRecord = null
     if (effectiveDirectFhirEnabled.value && !skipFhir) {
-      nationalId.value = normalizeNationalId(nationalId.value)
-      const record = await loadPatientByNationalId(nationalId.value, {
-        baseUrl: fhirBaseUrl,
-      })
+      const normalizedIdentifier = normalizePatientIdentifier(
+        identifierType.value,
+        patientIdentifier.value,
+      )
+      if (
+        identifierType.value === PATIENT_IDENTIFIER_TYPES.SYNTHEA_DEFAULT_ID
+      ) {
+        syntheaDefaultId.value = normalizedIdentifier
+      } else {
+        nationalId.value = normalizedIdentifier
+      }
+      const record = await loadPatientByIdentifier(
+        identifierType.value,
+        normalizedIdentifier,
+        {
+          baseUrl: fhirBaseUrl,
+        },
+      )
       patient = record.patient
       patientRecord = record
       fhirPatient.value = patient
@@ -666,14 +688,16 @@ onBeforeUnmount(() => {
 <template>
   <div class="app-shell patient-app">
     <StartConsultationOverlay
+      v-model:identifier-type="identifierType"
       v-model:national-id="nationalId"
+      v-model:synthea-default-id="syntheaDefaultId"
       v-model:avatar-client-key="avatarClientKey"
       v-model:avatar-agent-id="avatarAgentId"
       :avatar="avatar"
       :visible="overlayVisible"
       :direct-fhir-enabled="effectiveDirectFhirEnabled"
       :fhir-base-url="fhirBaseUrl"
-      :national-id-valid="nationalIdValid"
+      :identifier-valid="patientIdentifierValid"
       :smart-launch="smartLaunchDetected"
       :starting="starting"
       :error="startError"

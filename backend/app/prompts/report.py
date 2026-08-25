@@ -2,11 +2,15 @@
 
 from __future__ import annotations
 
-from app.services.clinical_summary import (
-    build_summary,
-    clinical_patient_data,
-)
+from app.prompts.common import PromptRequest, text_prompt_messages
+from app.services.clinical_summary import build_summary, clinical_patient_data
 from domain.questionnaires import ALL_ROUTE_LABELS
+
+_SYSTEM_PROMPT = (
+    "你是協助醫師快速掌握病況的醫療預問診病史整理助手。"
+    "只能重述既有資料；疾病與理由由後端固定規則補入，"
+    "你不得自行提出疾病、鑑別診斷、檢查或治療建議。"
+)
 
 
 def build_report_prompt(data: dict) -> str:
@@ -35,3 +39,13 @@ def build_report_prompt(data: dict) -> str:
   可能疾病與理由會由系統依固定疾病表另外接在同一段文字後方，
   組成總長約300字的醫師速覽摘要
 """
+
+
+def build_report_prompt_request(data: dict) -> PromptRequest:
+    """Build the physician quick-view request in the standard prompt format."""
+
+    return PromptRequest(
+        task="physician_quick_view",
+        messages=text_prompt_messages(_SYSTEM_PROMPT, build_report_prompt(data)),
+        max_tokens=500,
+    )

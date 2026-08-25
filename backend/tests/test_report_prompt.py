@@ -1,6 +1,8 @@
 import json
 import unittest
 
+from app.prompts.common import PromptRequest
+from app.prompts.consultation_reporting import build_reporting_prompt_requests
 from app.prompts.doctor import (
     DOCTOR_SYSTEM_PROMPT,
     STRUCTURED_NOTE_TASKS,
@@ -8,10 +10,34 @@ from app.prompts.doctor import (
     build_structured_note_prompts,
     render_structured_note_responses,
 )
-from app.prompts.report import build_report_prompt
+from app.prompts.report import build_report_prompt, build_report_prompt_request
 
 
 class ReportPromptTests(unittest.TestCase):
+    def test_prompt_modules_use_the_shared_request_and_message_format(self):
+        quick_view = build_report_prompt_request(
+            {"type": "chest", "gender": "男", "age": "58", "reason": "胸悶"}
+        )
+        reporting = build_reporting_prompt_requests(
+            patient_summary="synthetic patient",
+            allowed_conditions=[{"id": "condition-a", "name": "Condition A"}],
+            knowledge_contexts={
+                "diagnosis": "A evidence",
+                "laboratory": "B evidence",
+                "imaging": "C evidence",
+            },
+        )
+
+        for request in [quick_view, *reporting]:
+            self.assertIsInstance(request, PromptRequest)
+            self.assertEqual([message["role"] for message in request.messages], ["system", "user"])
+            self.assertGreater(request.max_tokens, 0)
+        self.assertEqual(quick_view.task, "physician_quick_view")
+        self.assertEqual(
+            json.loads(reporting[0].messages[-1]["content"])["task"],
+            "emr_summary",
+        )
+
     def test_structured_note_builds_one_scoped_prompt_per_question(self):
         prompts = build_structured_note_prompts(
             "走路時胸悶",

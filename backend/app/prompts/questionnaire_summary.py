@@ -2,13 +2,22 @@
 
 from __future__ import annotations
 
-import json
-from dataclasses import dataclass
 from typing import Any
 
-PROMPT_VERSION = "fixed-questionnaire-doctor-style-english-v7"
+from app.prompts.common import PromptRequest, json_prompt_messages
+
+PROMPT_VERSION = "fixed-questionnaire-complete-drug-history-v9"
+EMR_TASKS = (
+    "chief_complaint",
+    "present_illness",
+    "past_history",
+    "drug_history",
+    "drug_allergy_history",
+    "personal_history",
+    "family_history",
+)
 SUMMARY_TASKS = (
-    "emr",
+    *EMR_TASKS,
     "differential_diagnoses",
     "must_not_miss",
     "physical_examination",
@@ -17,32 +26,98 @@ SUMMARY_TASKS = (
 )
 
 
-@dataclass(frozen=True)
-class SummaryPromptRequest:
-    """A single independently generated question in the final report."""
+def summary_response_schema(task: str) -> dict[str, Any]:
+    """Return the API-level JSON schema for one atomic summary task."""
 
-    task: str
-    messages: list[dict[str, str]]
-    max_tokens: int
+    if task not in SUMMARY_TASKS:
+        raise ValueError(f"unknown questionnaire summary task: {task}")
+    value_schema: dict[str, Any]
+    if task in EMR_TASKS:
+        value_schema = {"type": "string"}
+    else:
+        value_schema = {
+            "type": "array",
+            "items": {"type": "string"},
+        }
+    return {
+        "type": "object",
+        "properties": {task: value_schema},
+        "required": [task],
+        "additionalProperties": False,
+    }
 
 
-_TASK_CONFIG = {
-    "emr": {
-        "question": (
-            "Translate the patient information into professional medical English and organize it "
-            "under Chief Complaint, Present Illness, Past History, Drug History, and Allergy History. "
-            "Keep the Chief Complaint to fewer than two sentences."
-        ),
-        "schema": {
-            "cc": "Chief Complaint in fewer than two sentences",
-            "pi": "Present Illness",
-            "ph": "Past History",
-            "meds": "Drug History",
-            "allergy": "Allergy History",
-        },
+_TASK_CONFIG: dict[str, dict[str, Any]] = {
+    "chief_complaint": {
+        "question": "What is the chief complaint?",
+        "schema": "Chief complaint symptoms and duration in professional medical English",
         "knowledge": None,
-        "max_tokens": 900,
-        "rules": "Restate only patient facts from the input; do not add diagnoses, tests, or treatment.",
+        "max_tokens": 240,
+        "rules": (
+            "Return only the reported symptoms and symptom duration as a concise phrase. Do not "
+            "include or calculate age or sex; the Backend adds those verified values. Use "
+            "'Not provided' for a missing element. Do not add diagnoses, tests, or treatment."
+        ),
+    },
+    "present_illness": {
+        "question": "What is the present illness?",
+        "schema": "Present illness paragraph in professional medical English",
+        "knowledge": None,
+        "max_tokens": 500,
+        "rules": "Describe only the reported course and associated symptoms; do not repeat demographics.",
+    },
+    "past_history": {
+        "question": "What is the past history?",
+        "schema": "Past history paragraph in professional medical English",
+        "knowledge": None,
+        "max_tokens": 400,
+        "rules": (
+            "Include only reported surgical, medical, and admission history. Use 'Not provided' "
+            "when the input contains no information for this paragraph."
+        ),
+    },
+    "drug_history": {
+        "question": "What is the drug history?",
+        "schema": (
+            "Drug history paragraph in professional medical English that distinguishes past "
+            "medication treatments from current medications"
+        ),
+        "knowledge": None,
+        "max_tokens": 400,
+        "rules": (
+            "Include both reported past medication treatments and current medications, clearly "
+            "labeling each within one paragraph. Do not infer that an unreported category is a "
+            "denial; write 'Past medications: Not provided' or 'Current medications: Not provided' "
+            "for the category that is missing."
+        ),
+    },
+    "drug_allergy_history": {
+        "question": "What is the drug allergy history?",
+        "schema": "Drug allergy history paragraph in professional medical English",
+        "knowledge": None,
+        "max_tokens": 300,
+        "rules": "State only reported drug allergies or explicit denial; otherwise return 'Not provided'.",
+    },
+    "personal_history": {
+        "question": "What is the personal history?",
+        "schema": "Personal history paragraph in professional medical English",
+        "knowledge": None,
+        "max_tokens": 450,
+        "rules": (
+            "Include only reported alcohol, cigarette, betel nut, recent travel, occupation, contact, "
+            "and cluster history. Do not treat an unasked item as a denial; use 'Not provided'."
+        ),
+    },
+    "family_history": {
+        "question": "What is the family history of medical illness?",
+        "schema": "Family history paragraph in professional medical English",
+        "knowledge": None,
+        "max_tokens": 400,
+        "rules": (
+            "Include only reported family history, including hypertension, hyperlipidemia, type 2 "
+            "diabetes mellitus, and cancer when available. Do not treat an unasked item as a denial; "
+            "use 'Not provided'."
+        ),
     },
     "differential_diagnoses": {
         "question": (
@@ -119,7 +194,7 @@ def build_summary_prompt_request(
     prefilled_data: dict[str, Any],
     knowledge_contexts: dict[str, str],
     focus_conditions: list[str] | None = None,
-) -> SummaryPromptRequest:
+) -> PromptRequest:
     """Build one model request for one final-report question."""
 
     if task not in SUMMARY_TASKS:
@@ -130,6 +205,17 @@ def build_summary_prompt_request(
         for key, value in prefilled_data.items()
         if not key.startswith("_") and value not in (None, "", [], {})
     }
+    task_answers = answers
+    if task == "chief_complaint":
+        demographic_fields = {"name", "age", "birth_date", "gender", "sex"}
+        prefill = {key: value for key, value in prefill.items() if key not in demographic_fields}
+        task_answers = [
+            answer for answer in answers if answer.get("field") not in demographic_fields
+        ]
+    elif task == "drug_history":
+        medication_fields = {"past_meds", "current_meds", "current_medications"}
+        prefill = {key: value for key, value in prefill.items() if key in medication_fields}
+        task_answers = [answer for answer in answers if answer.get("field") in medication_fields]
     config = _TASK_CONFIG[task]
     knowledge_key = config["knowledge"]
     payload: dict[str, Any] = {
@@ -137,7 +223,7 @@ def build_summary_prompt_request(
         "question": config["question"],
         "patient_context": {
             "prefilled_data": prefill,
-            "questionnaire_answers": answers,
+            "questionnaire_answers": task_answers,
         },
         "rules": config["rules"],
         "response_schema": {task: config["schema"]},
@@ -149,15 +235,9 @@ def build_summary_prompt_request(
         )
     if task in {"physical_examination", "laboratory", "imaging"}:
         payload["focus_conditions"] = list(focus_conditions or [])
-    return SummaryPromptRequest(
+    return PromptRequest(
         task=task,
-        messages=[
-            {"role": "system", "content": _SYSTEM_PROMPT},
-            {
-                "role": "user",
-                "content": json.dumps(payload, ensure_ascii=False, separators=(",", ":")),
-            },
-        ],
+        messages=json_prompt_messages(_SYSTEM_PROMPT, payload),
         max_tokens=int(config["max_tokens"]),
     )
 
@@ -168,7 +248,7 @@ def build_summary_prompt_requests(
     prefilled_data: dict[str, Any],
     knowledge_contexts: dict[str, str],
     focus_conditions: list[str] | None = None,
-) -> list[SummaryPromptRequest]:
+) -> list[PromptRequest]:
     """Build all requests for callers that do not need intermediate task results."""
 
     return [

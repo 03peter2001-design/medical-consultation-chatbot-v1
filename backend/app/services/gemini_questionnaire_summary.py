@@ -7,9 +7,17 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any, cast
 
-from app.prompts.questionnaire_summary import PROMPT_VERSION, SUMMARY_TASKS
+from app.prompts.questionnaire_summary import EMR_TASKS, PROMPT_VERSION, SUMMARY_TASKS
 
-EMR_FIELDS = ("cc", "pi", "ph", "meds", "allergy")
+EMR_FIELD_BY_TASK = {
+    "chief_complaint": "cc",
+    "present_illness": "pi",
+    "past_history": "ph",
+    "drug_history": "meds",
+    "drug_allergy_history": "allergy",
+    "personal_history": "personal",
+    "family_history": "family",
+}
 
 
 @dataclass(frozen=True)
@@ -94,7 +102,41 @@ def _parse_json_object(raw: str) -> dict[str, Any]:
     return payload
 
 
-def parse_summary_section(task: str, raw: str) -> dict[str, str] | list[str]:
+def _medical_english_sex(value: str | None) -> str:
+    normalized = str(value or "").strip()
+    return {
+        "男": "male",
+        "男性": "male",
+        "male": "male",
+        "女": "female",
+        "女性": "female",
+        "female": "female",
+        "其他": "other",
+        "other": "other",
+    }.get(normalized.lower(), normalized or "Not provided")
+
+
+def _chief_complaint_sentence(
+    complaint: str,
+    *,
+    patient_age: str | None,
+    patient_sex: str | None,
+) -> str:
+    age = str(patient_age or "").strip().removesuffix("歲")
+    sex = _medical_english_sex(patient_sex)
+    symptom = complaint.strip().rstrip(". ") or "Not provided"
+    if age and sex != "Not provided":
+        subject = f"A {age}-year-old {sex} patient"
+    elif age:
+        subject = f"A {age}-year-old patient (sex: Not provided)"
+    elif sex != "Not provided":
+        subject = f"A {sex} patient (age: Not provided)"
+    else:
+        subject = "A patient (age: Not provided; sex: Not provided)"
+    return f"{subject} presents with {symptom}."
+
+
+def parse_summary_section(task: str, raw: str) -> str | list[str]:
     """Validate one task response before it can influence a later request."""
 
     if task not in SUMMARY_TASKS:
@@ -103,16 +145,10 @@ def parse_summary_section(task: str, raw: str) -> dict[str, str] | list[str]:
     if set(payload) != {task}:
         raise ValueError(f"Gemini {task} response has an invalid shape")
     value = payload[task]
-    if task == "emr":
-        if not isinstance(value, dict) or set(value) != set(EMR_FIELDS):
-            raise ValueError("Gemini emr has an invalid shape")
-        emr: dict[str, str] = {}
-        for field in EMR_FIELDS:
-            field_value = value.get(field)
-            if not isinstance(field_value, str):
-                raise ValueError("Gemini emr fields must be text")
-            emr[field] = _clean_text(field_value, limit=4000) or "Not provided"
-        return emr
+    if task in EMR_TASKS:
+        if not isinstance(value, str):
+            raise ValueError(f"Gemini {task} must be text")
+        return _clean_text(value, limit=4000) or "Not provided"
 
     limits = {
         "differential_diagnoses": 3,
@@ -126,15 +162,24 @@ def parse_summary_section(task: str, raw: str) -> dict[str, str] | list[str]:
 
 def parse_summary_sections(
     raw_sections: Mapping[str, str],
+    *,
+    patient_age: str | None = None,
+    patient_sex: str | None = None,
 ) -> GeminiQuestionnaireSummary:
     """Validate all independently generated sections before constructing a report."""
 
     if set(raw_sections) != set(SUMMARY_TASKS):
         raise ValueError("Gemini questionnaire summary has missing or extra tasks")
     sections = {task: parse_summary_section(task, raw_sections[task]) for task in SUMMARY_TASKS}
+    emr = {field: cast(str, sections[task]) for task, field in EMR_FIELD_BY_TASK.items()}
+    emr["cc"] = _chief_complaint_sentence(
+        emr["cc"],
+        patient_age=patient_age,
+        patient_sex=patient_sex,
+    )
 
     return GeminiQuestionnaireSummary(
-        emr=cast(dict[str, str], sections["emr"]),
+        emr=emr,
         differential_diagnoses=cast(list[str], sections["differential_diagnoses"]),
         must_not_miss=cast(list[str], sections["must_not_miss"]),
         physical_examination=cast(list[str], sections["physical_examination"]),
@@ -144,7 +189,7 @@ def parse_summary_sections(
 
 
 def parse_summary(raw: str) -> GeminiQuestionnaireSummary:
-    """Parse the legacy combined response shape for internal compatibility."""
+    """Parse a combined response shape for internal compatibility."""
 
     payload = _parse_json_object(raw)
     if set(payload) != set(SUMMARY_TASKS):
@@ -171,20 +216,26 @@ def _numbered_items(
 def render_emr(summary: GeminiQuestionnaireSummary, *, model: str) -> str:
     emr = summary.emr
     return f"""【病歷摘要 EMR】
-CC（主訴）：
+Chief Complaint:
 {emr["cc"]}
 
-PI（現病史）：
+Present Illness:
 {emr["pi"]}
 
-PH（過去病史）：
+Past History:
 {emr["ph"]}
 
-Meds（用藥）：
+Drug History:
 {emr["meds"]}
 
-Allergy（過敏史）：
+Allergy History:
 {emr["allergy"]}
+
+Personal History:
+{emr["personal"]}
+
+Family History:
+{emr["family"]}
 
 【初步鑑別診斷（前3項最可能）】
 {_numbered_items(summary.differential_diagnoses, total=3)}

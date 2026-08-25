@@ -107,3 +107,11 @@ test('renders localized labels while submitting canonical values', () => {
     '沒有，從未抽菸',
   )
 })
+
+test('choice inputs keep their native checked-state update', () => {
+  assert.match(questionnaireControl, /@click="selectOption\(option\)"/)
+  assert.doesNotMatch(
+    questionnaireControl,
+    /@click\.prevent="selectOption\(option\)"/,
+  )
+})

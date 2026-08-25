@@ -2,20 +2,14 @@
 
 from __future__ import annotations
 
-import json
-from dataclasses import dataclass
+from typing import Any
+
+from app.prompts.common import PromptRequest, json_prompt_messages
 
 REPORTING_TASKS = ("emr_summary", "physical_exam", "laboratory", "imaging")
 
 
-@dataclass(frozen=True)
-class ReportingPromptRequest:
-    task: str
-    messages: list[dict[str, str]]
-    max_tokens: int
-
-
-_TASK_CONFIG = {
+_TASK_CONFIG: dict[str, dict[str, Any]] = {
     "emr_summary": {
         "question": (
             "以恰好兩句簡短繁體中文，摘要年齡、性別、主訴與發作時間以外的其他 EMR "
@@ -77,8 +71,8 @@ def build_reporting_prompt_requests(
     patient_summary: str,
     allowed_conditions: list[dict[str, str]],
     knowledge_contexts: dict[str, str],
-) -> list[ReportingPromptRequest]:
-    requests: list[ReportingPromptRequest] = []
+) -> list[PromptRequest]:
+    requests: list[PromptRequest] = []
     for task in REPORTING_TASKS:
         config = _TASK_CONFIG[task]
         payload = {
@@ -92,15 +86,9 @@ def build_reporting_prompt_requests(
             payload["allowed_conditions"] = allowed_conditions
             payload["retrieved_evidence"] = knowledge_contexts[str(knowledge_key)]
         requests.append(
-            ReportingPromptRequest(
+            PromptRequest(
                 task=task,
-                messages=[
-                    {"role": "system", "content": _SYSTEM_PROMPT},
-                    {
-                        "role": "user",
-                        "content": json.dumps(payload, ensure_ascii=False, separators=(",", ":")),
-                    },
-                ],
+                messages=json_prompt_messages(_SYSTEM_PROMPT, payload),
                 max_tokens=int(config["max_tokens"]),
             )
         )

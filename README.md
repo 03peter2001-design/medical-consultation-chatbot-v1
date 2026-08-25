@@ -43,13 +43,13 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 
 | 服務／可部署產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
 | --- | --- | --- | --- | --- |
-| Backend API（含 Breeze ASR） | `0.8.2` | 2026-09-09 | 容許受限 JWT 時差、可靠傳遞 UCC principal，並禁止快取 API 回應 | [backend/README.md](backend/README.md#服務版本) |
-| 開發版 Vue frontend | `0.6.1` | 2026-08-18 | 六段式報告卡片與僅供 Vite 開發伺服器使用的 Vue DevTools | [frontend/README.md](frontend/README.md#服務版本) |
+| Backend API（含 Breeze ASR） | `0.11.3` | 2026-08-20 | Gemini 標準 JSON Schema 相容修正，無工具呼叫停用 AFC | [backend/README.md](backend/README.md#服務版本) |
+| 開發版 Vue frontend | `0.9.0` | 2026-08-20 | `/ai-consult/` SMART EHR Launch、OAuth callback 與 FHIR resources 載入 | [frontend/README.md](frontend/README.md#服務版本) |
 | 正式部署 Doctor frontend | `2.1.1` | 2026-09-09 | Doctor API 與 401 token refresh retry 強制略過瀏覽器快取 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | 正式部署 Patient frontend | `2.1.0` | 2026-08-11 | 問診主畫面常駐醫師 Avatar、朗讀字幕與可恢復有聲播放的控制 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | Local Avatar service | `1.2.0` | 2026-08-11 | 新增可由 Backend 逐請求覆寫、完全跳過 MuseTalk 的靜態醫師 CosyVoice 模式 | [avatar-service/README.md](avatar-service/README.md#服務版本) |
 | SMART on FHIR sandbox app | `1.0.0` | 2026-08-05 | SMART OAuth launch、FHIR 預填、同源 API proxy、合成病人 seed 與本機驗證 | [smart-app/README.md](smart-app/README.md#服務版本) |
-| Integration deployment bundle | `1.6.0` | 2026-09-11 | B01 掛號後直接產生受授權的患者預問診 QR，並修正 eHIS invitation gateway 埠設定流程 | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
+| Integration deployment bundle | `1.6.0` | 2026-09-11 | B01 掛號患者 QR 邀請與 Gemini 擷取／推理／RAG 翻譯模型分流 | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
 
 `frontend-v2/packages/shared` 是 doctor／patient 共用程式庫，不是獨立服務；
 `smart-deployment/` 是 SMART sandbox 的 proxy 設定，跟隨 SMART app

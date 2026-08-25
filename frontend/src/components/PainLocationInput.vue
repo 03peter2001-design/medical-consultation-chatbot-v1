@@ -4,7 +4,10 @@ import BodyPainMap from './BodyPainMap.vue'
 
 defineProps({
   preset: { type: Object, required: true },
+  highlightedRegionIds: { type: Array, default: () => [] },
   sending: { type: Boolean, default: false },
+  embedded: { type: Boolean, default: false },
+  showRegionOptions: { type: Boolean, default: true },
 })
 
 const emit = defineEmits(['submit'])
@@ -21,7 +24,7 @@ function submit() {
 </script>
 
 <template>
-  <section class="pain-map-card">
+  <section class="pain-map-card" :class="{ embedded }">
     <div class="pain-map-heading">
       <div>
         <h3>{{ preset.title }}</h3>
@@ -29,8 +32,14 @@ function submit() {
       </div>
       <span>{{ selectedIds.length }} 個位置</span>
     </div>
-    <BodyPainMap v-model="selectedIds" :preset="preset" />
+    <BodyPainMap
+      v-model="selectedIds"
+      :preset="preset"
+      :highlighted-region-ids="highlightedRegionIds"
+      :show-region-options="showRegionOptions"
+    />
     <button
+      v-if="!embedded"
       class="confirm-pain-button"
       type="button"
       :disabled="!selectedIds.length || sending"
@@ -38,7 +47,7 @@ function submit() {
     >
       {{ sending ? '傳送中…' : '確認疼痛位置' }}
     </button>
-    <p class="pain-map-alternative">
+    <p v-if="!embedded" class="pain-map-alternative">
       疼痛不在圖示範圍內時，也可以在下方直接用文字描述。
     </p>
   </section>
@@ -55,6 +64,14 @@ function submit() {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-1);
+}
+
+.pain-map-card.embedded {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
 .pain-map-heading {

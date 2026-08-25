@@ -4,6 +4,7 @@ import test from 'node:test'
 
 import {
   formatEmrSummary,
+  parseEmrFields,
   parseStructuredNoteBlocks,
   splitStructuredNote,
 } from '../src/services/structuredNote.js'
@@ -70,6 +71,75 @@ test('keeps the full report when no EMR heading exists', () => {
     emrSummary: '',
     clinicalDecision: text,
   })
+})
+
+test('parses clinician note fields without leaking later sections into PI', () => {
+  const fields = parseEmrFields(`【病歷摘要 EMR】
+CC（主訴）：
+Exertional chest pain.
+
+PI（現病史）：
+Pain began two days ago and worsens with activity.
+
+PH（過去病史）：
+Hypertension.
+
+Meds（用藥）：
+Daily antihypertensive medication.
+
+Allergy（過敏史）：
+No known drug allergies.
+
+【初步鑑別診斷】
+Acute coronary syndrome`)
+
+  assert.deepEqual(fields, {
+    cc: 'Exertional chest pain.',
+    pi: 'Pain began two days ago and worsens with activity.',
+    ph: 'Hypertension.',
+    meds: 'Daily antihypertensive medication.',
+    allergy: 'No known drug allergies.',
+  })
+  assert.doesNotMatch(fields.pi, /Hypertension|medication|allergies/)
+})
+
+test('keeps seven-field English medical history sections isolated', () => {
+  const fields = parseEmrFields(`【病歷摘要 EMR】
+Chief Complaint:
+A 36-year-old female patient presents with fever for two days.
+
+Present Illness:
+The fever is associated with chills.
+
+Past History:
+Not provided
+
+Meds（用藥）：
+Not provided
+
+Allergy History:
+The patient denies any known drug allergies.
+
+Personal History:
+The patient reports a history of smoking and recent sick contact.
+
+Family History:
+Family history was not provided.
+
+【初步鑑別診斷】
+Viral infection`)
+
+  assert.deepEqual(fields, {
+    cc: 'A 36-year-old female patient presents with fever for two days.',
+    pi: 'The fever is associated with chills.',
+    ph: 'Not provided',
+    meds: 'Not provided',
+    allergy: 'The patient denies any known drug allergies.',
+    personal:
+      'The patient reports a history of smoking and recent sick contact.',
+    family: 'Family history was not provided.',
+  })
+  assert.doesNotMatch(fields.allergy, /Personal History|Family History|smoking/)
 })
 
 test('parses the six clinical questions into prominent block data', () => {
@@ -146,6 +216,7 @@ test('preloaded report keeps EMR and clinical question cards together near the p
   assert.match(structuredReport, /class="question-grid"/)
   assert.match(structuredReport, /class="question-card"/)
   assert.match(structuredReport, /section\.question/)
+  assert.match(structuredReport, /AI 臨床決策/)
   assert.match(doctorView, /檢驗（抽血／驗尿） \/ 影像學決策/)
   assert.doesNotMatch(doctorView, /檢驗建議/)
   assert.match(terminologyCode, /AI 編碼結果，待醫師確認/)

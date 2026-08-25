@@ -5,7 +5,7 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 
 ## 服務版本
 
-目前版本：**v0.8.2（2026-09-09）**。
+目前版本：**v0.11.3（2026-08-20）**。
 
 本次因主動撤除既有 AMIE／語意標籤能力並回到較小的實驗性功能面，版本線依專案
 決策由 0 重新編碼。下方 `v1.x` 條目保留為舊能力線的歷史紀錄，不表示 `v0.3.0`
@@ -22,6 +22,96 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 - RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
 - Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
   revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v0.11.3 (2026-08-20)
+
+- 修正 `google-genai` 拒絕 Chief Complaint structured-output request 的 HTTP 400
+  `ClientError`：含 `additionalProperties` 的標準 JSON Schema 現改由 SDK 的
+  `response_json_schema` 傳送，不再交給只接受 OpenAPI subset 的舊式
+  `response_schema` 轉換路徑。
+- 所有直接且未使用工具的 Gemini `Models.generate_content` 呼叫明確停用 automatic
+  function calling，避免 `google-genai 2.18.1` 顯示應改用 `Chat.send_message` 的 AFC
+  警告。摘要、RAG query translation 與語音轉錄均未啟用任何 function tool，停用 AFC
+  不改變其功能或臨床資料邊界。
+- 41 項 Gemini client、summary pipeline、安全日誌與 RAG translation 聚焦測試、相關
+  format check 及全 Backend Ruff check 通過；完整 Backend suite 執行 407 項，其中
+  405 項通過，另 2 項只因本機未掛載外部 `D:\ehis\eHIS` C# 原始碼而 error。
+
+### v0.11.2 (2026-08-20)
+
+- 修正 structured-output 上線後仍可能只記為 `failure_stage=aggregate` 的定位缺口：每個
+  Gemini task 回覆現在會在收到後立即通過既有 exact-key parser，再進入下一個 task；
+  任一不合格回覆會直接記錄實際 task 名稱，不再延後到最終組裝才失敗。
+- 各 task 的 API JSON schema 新增 `additionalProperties: false`，明確禁止 Gemini 產生
+  schema 未列出的額外欄位。這項限制受 Gemini structured-output 支援；Backend 仍保留
+  自己的型別、欄位與內容邊界驗證，HTTP／資料庫及臨床 prompt 契約不變。
+- 33 項 Gemini schema、parser、pipeline 與安全日誌聚焦測試、相關 format check 及全
+  Backend Ruff check 通過；完整 Backend suite 執行 407 項，其中 405 項通過，另 2 項
+  只因本機未掛載外部 `D:\ehis\eHIS` C# 原始碼而 error。
+
+### v0.11.1 (2026-08-20)
+
+- 修正固定問卷完成後偶發的 Gemini `ValueError`／HTTP 503：十二個原子摘要 task 現在
+  除了 prompt 內的格式說明，也把各自的 object、string 或 string-array JSON schema
+  傳給 Gemini structured-output API；既有 Backend exact-key parser 仍作為第二層
+  fail-closed 驗證，不接受額外欄位或錯誤型別。
+- 失敗安全日誌新增固定 `failure_stage`（例如 `must_not_miss`），可定位 RAG、個別 task
+  或最終組裝階段；不記錄 prompt、模型原文、病人回答或例外訊息。HTTP／資料庫契約、
+  十二個 task 的臨床要求、模型分流與未成功就不建立半成品病例的行為不變。
+- 33 項 Gemini schema、parser、pipeline 與安全日誌聚焦測試通過，全 Backend Ruff check
+  通過；完整 Backend suite 執行 407 項，其中 405 項通過，另 2 項只因本機未掛載外部
+  `D:\ehis\eHIS` C# 原始碼而 error。未以外部 Gemini 執行合成 smoke test，因本次未獲
+  明確授權傳送測試 payload。
+
+### v0.11.0 (2026-08-20)
+
+- 固定問卷英文 EMR 的用藥任務由僅整理 `current_meds` 的 Current Medications 改為
+  `drug_history`：同一個單一職責 prompt 同時接收 `past_meds` 與 `current_meds`，並在
+  一段 Drug History 中明確區分 Past medications 與 Current medications。
+- 用藥任務不再接收無關問卷答案；任一類資料未提供時只對該類標示 `Not provided`，不把
+  未詢問誤寫成否認。既有 `emr["meds"]` 儲存鍵、HTTP／資料庫契約、模型分流、其他
+  十一個 tasks 與 fail-closed 行為不變。Prompt version 升為
+  `fixed-questionnaire-complete-drug-history-v9`。
+- 全目錄 Ruff check、40 項 prompt／模型分流／問卷聚焦測試通過；完整 Backend suite
+  執行 405 項，其中 403 項通過，另 2 項只因未掛載外部 `D:\ehis\eHIS` C# 原始碼而
+  error；開發版 frontend 的 Drug History parser／元件契約 2 項聚焦測試亦通過。
+
+### v0.10.0 (2026-08-20)
+
+- 固定問卷完成後的 12 個原子任務依用途分流：Chief Complaint 至 Family History
+  七個病史擷取任務預設使用 `gemini-3.5-flash-lite`；鑑別診斷、must-not-miss、理學
+  檢查、檢驗與影像五個 RAG／臨床決策任務預設使用 `gemini-3.6-flash`。RAG 查詢的
+  去識別化醫療術語翻譯也改用 Flash-Lite。
+- 新增 `GEMINI_EXTRACTION_MODEL` 與 `GEMINI_REASONING_MODEL` 專用覆寫；既有
+  `GEMINI_MODEL` 仍是兩者未設定時的共用相容覆寫，其他 Gemini 工作維持原有共用
+  client。病例 provenance 保留舊 `model` 欄位指向 reasoning model，另新增
+  `models.extraction`／`models.reasoning` 並在報告 footer 顯示兩個實際模型。
+- Gemini 3.5 以上模型不再傳送已不支援的 `temperature` sampling 參數；Gemini 2.5
+  與 Groq 行為維持不變。任一擷取或推理任務失敗仍回傳 503，保留答案且不建立半成品
+  病例；本次不變更 RAG corpus、prompt、疾病規則、診斷內容或臨床核准狀態。
+- 34 項 Gemini client、RAG translation、固定問卷 parser／pipeline 聚焦測試與全目錄
+  Ruff check 通過。完整 Backend suite 執行 405 項，其中 403 項通過，另 2 項只因本機
+  未掛載外部 `D:\ehis\eHIS` C# 原始碼而 error；全目錄 format check 另回報 4 個非本次
+  檔案的既有格式差異。
+
+### v0.9.0 (2026-08-20)
+
+- 固定問卷完成後的英文 EMR 不再以一個 prompt 同時生成多個欄位；Chief Complaint、
+  Present Illness、Past History、Current Medications、Drug Allergy History、Personal
+  History 與 Family History 現在各用一個單一任務、exact-key JSON request，全部成功後
+  才依既定順序組裝病例。Prompt version 升為
+  `fixed-questionnaire-atomic-medical-history-v8`。
+- Chief Complaint 固定為一句，使用 Backend 已由出生日期計算的年齡與正規化性別，
+  不要求模型重新推算；其餘段落只能整理已回答資料。共通問卷未詢問的飲酒、檳榔、
+  旅遊、職業、接觸／群聚、住院或家族史不得推論為否認，缺漏時明示 `Not provided`。
+- 六大報告區塊、HTTP／資料庫契約、A／B／C RAG 與任一 task 失敗即不建立半成品病例的
+  fail-closed 行為維持不變。模型呼叫由 6 次增至 12 次，Gemini 延遲、配額與費用可能
+  增加；新增病史格式是依產品需求提供的未審草稿，不代表臨床內容已核准。
+- `app/prompts/` 的 JSON 與純文字工作流統一使用共用 immutable request、兩訊息結構與
+  message builder；醫師 RAG、手動 structured note 與舊背景報告的既有語言、task ID、
+  schema、token 上限及臨床語意不變。
+- 全目錄 Ruff check 與 45 項聚焦測試通過；完整 Backend suite 執行 402 項，其中 400
+  項通過，另 2 項只因本機未掛載外部 `D:\ehis\eHIS` C# 原始碼而 error。
 
 ### v0.8.2 (2026-09-09)
 
@@ -446,14 +536,24 @@ Gemini Key 可由 [Google AI Studio](https://aistudio.google.com/app/apikey) 申
 Groq Key 可由 [Groq Console](https://console.groq.com/keys) 申請。
 
 `LLM_PROVIDER` 省略時會優先使用 `GROQ_API_KEY`，沒有 Groq key 才使用
-`GEMINI_API_KEY`。模型可用 `GEMINI_MODEL` 或 `GROQ_MODEL` 覆寫；預設分別為
-`gemini-2.5-flash` 與 `llama-3.3-70b-versatile`。
+`GEMINI_API_KEY`。一般模型可用 `GEMINI_MODEL` 或 `GROQ_MODEL` 覆寫；預設分別為
+`gemini-2.5-flash` 與 `llama-3.3-70b-versatile`。固定問卷另依任務分流：
+
+```dotenv
+GEMINI_EXTRACTION_MODEL=gemini-3.5-flash-lite
+GEMINI_REASONING_MODEL=gemini-3.6-flash
+GEMINI_TRANSLATION_MODEL=gemini-3.5-flash-lite
+```
+
+專用設定優先於 `GEMINI_MODEL`；若未設定專用值，既有 `GEMINI_MODEL` 會同時覆寫
+兩類問卷任務以維持舊部署相容性。修改 `.env` 後必須重啟 Backend process／container，
+因為 client 與 RAG query normalizer 都會在 process 內快取。
 
 常用設定：
 
 | 變數 | 用途 |
 | --- | --- |
-| `INTERVIEW_ENGINE=questionnaire` | 預設：本機依序問固定題目，完成後以六個獨立 Gemini prompt 整理並驗證六段式報告 |
+| `INTERVIEW_ENGINE=questionnaire` | 預設：本機依序問固定題目，完成後以 7 個擷取與 5 個 RAG／臨床決策 Gemini prompts 整理並驗證六大報告區塊 |
 | `INTERVIEW_ENGINE=legacy` | `questionnaire` 的相容別名 |
 | `INTERVIEW_ENGINE=simple` | `questionnaire` 的相容別名 |
 | `INTERVIEW_ENGINE=amie` | 明示回退舊 AMIE／ClinicalFact／疾病票數流程；不建議作為新流程 |

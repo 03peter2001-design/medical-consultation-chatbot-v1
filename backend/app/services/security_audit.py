@@ -20,18 +20,34 @@ def opaque_id(namespace: str, value: Any) -> str:
     return f"{normalized_namespace}:{digest}"
 
 
-def safe_log(action: str, outcome: str, *, error: BaseException | None = None) -> None:
-    """Log an event name and exception class only; never log values or tracebacks."""
+def safe_log(
+    action: str,
+    outcome: str,
+    *,
+    error: BaseException | None = None,
+    failure_stage: str | None = None,
+) -> None:
+    """Log whitelist-safe operational metadata; never log values or tracebacks."""
     normalized_action = _EVENT_PATTERN.sub("_", action.casefold())[:100] or "unknown"
     normalized_outcome = outcome if outcome in _OUTCOMES else "failure"
     error_type = type(error).__name__ if error is not None else "none"
     log = _LOGGER.info if normalized_outcome == "success" else _LOGGER.warning
-    log(
-        "security_event action=%s outcome=%s error_type=%s",
-        normalized_action,
-        normalized_outcome,
-        error_type,
-    )
+    if failure_stage:
+        normalized_stage = _EVENT_PATTERN.sub("_", failure_stage.casefold())[:60] or "unknown"
+        log(
+            "security_event action=%s outcome=%s error_type=%s failure_stage=%s",
+            normalized_action,
+            normalized_outcome,
+            error_type,
+            normalized_stage,
+        )
+    else:
+        log(
+            "security_event action=%s outcome=%s error_type=%s",
+            normalized_action,
+            normalized_outcome,
+            error_type,
+        )
 
 
 def audit_event(

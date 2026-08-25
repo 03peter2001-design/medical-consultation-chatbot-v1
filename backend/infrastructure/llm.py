@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 from collections.abc import Mapping, Sequence
 from typing import Any
 
@@ -11,6 +12,16 @@ DEFAULT_MODELS = {
     "groq": "llama-3.3-70b-versatile",
     "gemini": "gemini-2.5-flash",
 }
+
+
+def gemini_supports_temperature(model: str) -> bool:
+    """Return whether the Gemini model still accepts sampling temperature."""
+
+    match = re.match(r"^gemini-(\d+)(?:\.(\d+))?", model.strip().lower())
+    if not match:
+        return True
+    generation = (int(match.group(1)), int(match.group(2) or 0))
+    return generation < (3, 5)
 
 
 def _bounded_int(
@@ -125,6 +136,7 @@ class LLMClient:
         *,
         temperature: float,
         max_tokens: int,
+        response_json_schema: Mapping[str, Any] | None = None,
     ) -> str:
         if self.provider == "groq":
             response = self._client.chat.completions.create(
@@ -135,7 +147,12 @@ class LLMClient:
             )
             text = response.choices[0].message.content
         else:
-            text = self._generate_gemini_text(messages, temperature, max_tokens)
+            text = self._generate_gemini_text(
+                messages,
+                temperature,
+                max_tokens,
+                response_json_schema=response_json_schema,
+            )
 
         if not text or not str(text).strip():
             raise RuntimeError(f"{self.provider} 未回傳文字內容")
@@ -146,6 +163,8 @@ class LLMClient:
         messages: Sequence[Mapping[str, str]],
         temperature: float,
         max_tokens: int,
+        *,
+        response_json_schema: Mapping[str, Any] | None = None,
     ) -> str | None:
         from google.genai import types
 
@@ -171,9 +190,14 @@ class LLMClient:
         )
         config_kwargs: dict[str, Any] = {
             "system_instruction": "\n\n".join(system_parts) or None,
-            "temperature": temperature,
             "max_output_tokens": effective_max_tokens,
+            "automatic_function_calling": types.AutomaticFunctionCallingConfig(disable=True),
         }
+        if gemini_supports_temperature(self.model):
+            config_kwargs["temperature"] = temperature
+        if response_json_schema is not None:
+            config_kwargs["response_mime_type"] = "application/json"
+            config_kwargs["response_json_schema"] = dict(response_json_schema)
         if thinking_budget is not None:
             # Gemini 2.5 的 thinking tokens 會計入 max_output_tokens。
             # Flash 預設關閉；Pro 無法關閉，因此使用官方最小值 128。
@@ -236,9 +260,11 @@ class LLMClient:
             "Markdown 或加上說話者標籤。聽不清楚時不要自行補寫醫療資訊。"
         )
         transcription_config: dict[str, Any] = {
-            "temperature": 0,
             "max_output_tokens": 1000,
+            "automatic_function_calling": types.AutomaticFunctionCallingConfig(disable=True),
         }
+        if gemini_supports_temperature(self.model):
+            transcription_config["temperature"] = 0
         if self.model.startswith("gemini-2.5-flash"):
             transcription_config["thinking_config"] = types.ThinkingConfig(thinking_budget=0)
 

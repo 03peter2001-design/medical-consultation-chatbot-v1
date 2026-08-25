@@ -39,12 +39,12 @@ const visibleSections = computed(() =>
       <div>
         <small>Gemini 生成 · 待醫師確認</small>
         <h2>
-          {{ hideEmr ? '臨床決策問題總結' : '六段式臨床問題總結' }}
+          {{ hideEmr ? 'AI 臨床決策' : '六段式臨床問題總結' }}
         </h2>
       </div>
-      <strong v-if="visibleSections.length">
+      <!-- <strong v-if="visibleSections.length">
         {{ visibleSections.length }} 個重點區塊
-      </strong>
+      </strong> -->
     </header>
 
     <div
@@ -89,10 +89,10 @@ const visibleSections = computed(() =>
 .structured-report {
   align-self: stretch;
   overflow: hidden;
-  border: 1px solid #b8cde0;
-  border-radius: 12px;
-  background: #f8fbfd;
-  box-shadow: 0 10px 28px rgb(25 62 94 / 10%);
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
   animation: pop-in 0.3s ease;
 }
 
@@ -100,24 +100,21 @@ const visibleSections = computed(() =>
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 17px 19px;
-  border-bottom: 1px solid #cbdbe8;
-  background: linear-gradient(115deg, #eaf4fb 0%, #f7fbfd 55%, #eef8f5 100%);
+  padding: 2px 0 10px;
+  border-bottom: 0;
+  background: #fff;
 }
 
 .report-mark {
   display: grid;
-  width: 38px;
+  width: 4px;
   height: 38px;
-  flex: 0 0 38px;
+  flex: 0 0 4px;
   place-items: center;
-  border-radius: 9px;
-  background: #245f98;
-  color: #fff;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #2568b2;
+  color: transparent;
 }
 
 .report-heading > div:nth-child(2) {
@@ -133,9 +130,9 @@ const visibleSections = computed(() =>
 }
 
 .report-heading h2 {
-  margin-top: 2px;
+  margin-top: 1px;
   color: #173b5b;
-  font-size: clamp(18px, 2vw, 22px);
+  font-size: clamp(17px, 2vw, 20px);
   line-height: 1.25;
 }
 
@@ -152,19 +149,25 @@ const visibleSections = computed(() =>
 .question-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  padding: 16px;
+  gap: 10px;
+  padding: 0;
 }
 
 .question-card {
   --card-accent: #3977ad;
   min-width: 0;
   overflow: hidden;
-  border: 1px solid #d5e0e9;
-  border-top: 4px solid var(--card-accent);
-  border-radius: 9px;
+  border: 1px solid #cbd7e1;
+  border-left: 3px solid var(--card-accent);
+  border-radius: 6px;
   background: #fff;
-  box-shadow: 0 4px 12px rgb(32 66 94 / 7%);
+  box-shadow: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+.question-card:hover {
+  border-color: #9eb6ca;
+  box-shadow: 0 3px 10px rgb(32 66 94 / 7%);
 }
 
 .question-card.wide {
@@ -175,23 +178,18 @@ const visibleSections = computed(() =>
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  padding: 13px 14px 10px;
+  padding: 11px 13px 9px;
   border-bottom: 1px solid #e3eaf0;
-  background: color-mix(in srgb, var(--card-accent) 7%, #fff);
+  background: #fff;
 }
 
 .question-number {
-  display: grid;
-  width: 30px;
-  height: 30px;
-  flex: 0 0 30px;
-  place-items: center;
-  border-radius: 7px;
-  background: var(--card-accent);
-  color: #fff;
+  flex: 0 0 auto;
+  color: var(--card-accent);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 17px;
   font-weight: 800;
+  line-height: 1.3;
 }
 
 .question-card header > div {
@@ -201,15 +199,15 @@ const visibleSections = computed(() =>
 .question-card small {
   display: block;
   color: #64788a;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 650;
   line-height: 1.35;
 }
 
 .question-card h3 {
-  margin-top: 2px;
+  margin-top: 1px;
   color: #203b51;
-  font-size: 17px;
+  font-size: 15px;
   line-height: 1.35;
 }
 
@@ -225,7 +223,7 @@ const visibleSections = computed(() =>
 }
 
 .question-card pre {
-  padding: 13px 14px 15px;
+  padding: 11px 13px 13px;
 }
 
 .report-fallback {
@@ -253,7 +251,7 @@ const visibleSections = computed(() =>
 }
 
 .report-provenance {
-  margin: 0 16px 15px;
+  margin: 12px 0 0;
   padding: 10px 12px;
   border: 1px solid #dce5ec;
   border-radius: 7px;
@@ -265,13 +263,13 @@ const visibleSections = computed(() =>
 }
 
 :deep(.source-list) {
-  margin: 0 16px 16px;
+  margin: 12px 0 0;
 }
 
 @media (max-width: 720px) {
   .report-heading {
     align-items: flex-start;
-    padding: 14px;
+    padding: 2px 0 9px;
   }
 
   .report-heading > strong {
@@ -280,7 +278,7 @@ const visibleSections = computed(() =>
 
   .question-grid {
     grid-template-columns: 1fr;
-    padding: 12px;
+    padding: 0;
   }
 
   .question-card.wide {

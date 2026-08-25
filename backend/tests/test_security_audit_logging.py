@@ -186,9 +186,15 @@ class SecurityAuditLoggingTests(unittest.TestCase):
     def test_safe_log_never_emits_exception_message(self):
         secret = "raw-token-and-patient-name-Alice"
         with self.assertLogs("medical_consultation.security", level="WARNING") as captured:
-            safe_log("patient.chat", "failure", error=RuntimeError(secret))
+            safe_log(
+                "patient.chat",
+                "failure",
+                error=RuntimeError(secret),
+                failure_stage="Must Not Miss",
+            )
         output = "\n".join(captured.output)
         self.assertIn("RuntimeError", output)
+        self.assertIn("failure_stage=must_not_miss", output)
         self.assertNotIn(secret, output)
 
 

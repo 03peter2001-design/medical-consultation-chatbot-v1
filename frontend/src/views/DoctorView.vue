@@ -553,8 +553,8 @@ onBeforeUnmount(() => {
   flex: 0 0 auto;
   align-items: center;
   gap: 10px;
-  min-height: 62px;
-  padding: 10px 24px;
+  min-height: 56px;
+  padding: 7px 20px;
   border-bottom: 1px solid var(--border);
   background: var(--surface-1);
 }
@@ -616,7 +616,7 @@ onBeforeUnmount(() => {
   display: grid;
   min-height: 0;
   flex: 1;
-  grid-template-columns: minmax(300px, 340px) minmax(0, 1fr);
+  grid-template-columns: minmax(270px, 300px) minmax(0, 1fr);
   overflow: hidden;
 }
 
@@ -631,12 +631,12 @@ onBeforeUnmount(() => {
 
 .doctor-messages {
   width: 100%;
-  max-width: 1180px;
+  max-width: 1240px;
   flex: 1;
   gap: 16px;
   margin: 0 auto;
   overflow-anchor: none;
-  padding: 24px 28px;
+  padding: 18px 20px;
 }
 
 .empty-state {
@@ -704,7 +704,7 @@ onBeforeUnmount(() => {
 .mode-bar {
   display: flex;
   width: 100%;
-  max-width: 1180px;
+  max-width: 1240px;
   flex: 0 0 auto;
   align-items: center;
   gap: 8px;
@@ -752,7 +752,7 @@ onBeforeUnmount(() => {
 .doctor-input-bar {
   display: flex;
   width: 100%;
-  max-width: 1180px;
+  max-width: 1240px;
   flex: 0 0 auto;
   align-items: flex-end;
   gap: 10px;
@@ -805,7 +805,7 @@ onBeforeUnmount(() => {
 
 .footnote {
   width: 100%;
-  max-width: 1180px;
+  max-width: 1240px;
   margin: 0 auto;
   padding: 0 24px 10px;
   color: var(--muted);
@@ -823,6 +823,25 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 760px) {
+  .doctor-app :deep(.app-header) {
+    height: auto;
+    min-height: var(--header-height);
+    flex-wrap: wrap;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .doctor-app :deep(.app-title) {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .doctor-app :deep(.header-actions) {
+    width: 100%;
+    order: 2;
+    margin-left: 0;
+  }
+
   .patient-bar {
     flex-wrap: wrap;
     padding: 10px 12px;

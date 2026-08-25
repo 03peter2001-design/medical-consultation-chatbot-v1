@@ -6,6 +6,129 @@ SNOMED CT 查詢。根目錄的 `index.html`、`doctor.html` 是重構前的相�
 
 ## 服務版本
 
+### v0.9.0 (2026-08-20)
+
+- 開發版 Vite 新增同源 `/ai-consult/launch.html` SMART EHR Launch 入口，依 launcher
+  提供的 `iss`／`launch` 執行 OAuth，callback 固定回到 `/ai-consult/?smart=1`，再由
+  既有病患頁讀取 launch-context `Patient`、`Encounter` 與
+  `Patient/{id}/$everything` Bundle。
+- SMART client 固定為既有 sandbox 使用的 `fhirclient` 2.6.3，採本地 npm bundle，
+  不從 CDN 載入；scope 維持唯讀 `launch patient/*.read`，access token 只供瀏覽器
+  呼叫 FHIR Server，不會放入問診 prefill、送往 Backend、RAG 或外部模型。
+- Launch issuer 僅接受無帳密的 HTTP(S) URL；缺少或無效的 `iss`／`launch` 會明確
+  fail closed。Hash router 明確綁定 `/ai-consult/` base，callback 清除 authorization
+  code 時保留 router history state；`frontend-v2/` 與 SMART sandbox 部署線未修改。
+- Node 22 的 16 組 Node tests、Vite multi-page production build 與 OpenAPI type drift
+  check 通過；Browser plugin／Playwright 不可用，故以 headless Chrome 驗證 1280×800
+  與 390×844 的 launch fail-closed 畫面、既有病患首頁、無水平溢出或應用程式 console
+  error。實際院方 OAuth／FHIR round trip 仍需可連線的 Launcher、client registration 與
+  合成測試病人。
+
+### v0.8.4 (2026-08-20)
+
+- 將病患端疼痛位置圖與同題原問卷選項合併為單一題卡；問診畫面不再同時顯示圖內
+  精細位置 checkbox 清單與下方原問卷選項。
+- 位置題只保留下方原問卷選項與一個「確認答案」按鈕；點圖仍會自動勾選對應選項，
+  點選項仍會反向標示圖上範圍，精確圖形位置會隨同原問卷答案送出。
+- Node 22 的 15 組 Node tests、Vite production build 與 OpenAPI type drift check 通過；
+  Browser plugin／Playwright 不可用，故以 headless Chrome 驅動真實 Vue 元件，驗證
+  1440×960 與 390×844 均只有一組選項與一個確認按鈕，雙向同步正常，無水平溢出或
+  runtime error；`frontend-v2/` 未修改。
+
+### v0.8.3 (2026-08-20)
+
+- 醫師病例卡頂部的「基本資料」與「主訴分類」改為帶色彩識別與左側強調線的資訊卡，
+  同時提高內容字級、字重與對比，讓醫師進入病例後能更快辨識關鍵身分及主訴資訊。
+- 手機版將兩張資訊卡改為單欄排列並保留可讀字級；摘要與臨床紅旗警訊的既有層級及
+  資料內容均未變更，`frontend-v2/` 未修改。
+- Node 22 的 15 組 Node tests、Vite production build 與 OpenAPI type drift check 通過；
+  Browser plugin／Playwright 不可用，故以 headless Chrome 驅動真實 Vue 元件，驗證
+  1440×960 與 390×844 的兩張資訊卡均可見、內容字級至少 16px，且無水平溢出。
+
+### v0.8.2 (2026-08-20)
+
+- 將人體疼痛圖與同題下方原有問卷選項接成雙向同步：點精細圖上區域後，
+  胸痛、頭痛、腹痛的既有 canonical options 會依明確映射自動勾選；從問卷選項操作
+  時，圖上會反向標示對應範圍。
+- 粗粒度選項不會作為精細 `pain_location_ids` 送出；例如僅選「前額」只標示可能範圍，
+  不臆測成左側、右側或雙側精確疼痛。點圖指定「右前額」時則可確定性對應為「單側＋
+  前額」；此 UI 映射不新增診斷或安全規則，`frontend-v2/` 未修改。
+- Node 22 的 15 組 Node tests、Vite production build 與 OpenAPI type drift check 通過；
+  Browser plugin／Playwright 不可用，故以 headless Chrome 驅動真實 Vue 元件，驗證
+  1440×960 與 390×844 的圖→原問卷選項、原問卷選項→圖雙向互動，無水平
+  溢出或 runtime error。
+
+### v0.8.1 (2026-08-20)
+
+- 修正問診單選與複選選項的 click handler：不再阻止瀏覽器原生 checked 狀態更新，
+  因此選項背景變色時，radio／checkbox 也會同步顯示勾選。
+- 保留既有「再點一次可取消」、單選互斥、複選與排他選項規則；`frontend-v2/`
+  未修改。
+- Node 22 的 14 組 Node tests、Vite production build 與 OpenAPI type drift check 通過；
+  Browser plugin／Playwright 不可用，故以 headless Chrome 驅動真實 Vue 元件，驗證
+  1440×960 與 390×844 的選取、取消、恢復勾選與視覺狀態，無水平溢出或
+  runtime error。
+
+### v0.8.0 (2026-08-20)
+
+- 病患端人體疼痛圖新增依正面／背面切換的部位 checkbox 清單；點擊圖上區域會
+  自動勾選對應選項，勾選或取消選項也會同步更新圖上標示。
+- 圖與清單共用同一組結構化 region IDs，保留複選、清除、鍵盤操作、疼痛位置文字及
+  Backend `pain_location_ids` 送出格式；`frontend-v2/` 未修改。
+- Node 22 的 14 組 Node tests、Vite production build 與 OpenAPI type drift check 通過；
+  Browser plugin／Playwright 不可用，故以 headless Chrome 驅動真實 Vue 元件，驗證
+  1440×960 與 390×844 的圖→checkbox、checkbox→圖雙向互動，無水平溢出或
+  runtime error。
+
+### v0.7.3 (2026-08-20)
+
+- 修正七段英文 EMR 的 heading parser：同時支援 Chief Complaint／CC、Present
+  Illness／PI、Past History／PH、Meds／Current Medications／Drug History、Allergy／
+  Allergy History／Drug Allergy History，以及 Personal History、Family History。
+- Personal／Family History 現在各自顯示為醫師摘要資料列；解析 Allergy History 後不再
+  把後續個人史、家族史文字附加到過敏內容。舊五欄病例格式與缺漏時的結構化資料回退
+  維持相容；`frontend-v2/` 未修改。
+- Node 22 的 14 組 Node tests、Vite production build 與 OpenAPI type drift check 通過。
+  本工作階段沒有 Browser plugin，專案也未安裝 Playwright，因此未執行 rendered browser
+  QA；七段合成病例由 parser 與元件契約回歸測試覆蓋。
+
+### v0.7.2 (2026-08-20)
+
+- 修正醫師摘要的欄位對應：依既有 EMR heading 將 CC、PI、PH、Meds、Allergy
+  分別呈現為 CC、PI、PHx、DHx、AHx，不再把完整結構化報告塞入 PI。
+- 舊病例若沒有可解析 heading，僅以既有主訴、發作時間、病史、用藥與過敏結構化欄位
+  個別回退；缺少內容時明示未提供，不進行臨床推測。本次未更動後端資料契約，亦未修改
+  `frontend-v2/`。
+- Node 22 的 14 組 Node tests、Vite production build 與 OpenAPI type drift check 通過；
+  Browser plugin／Playwright 不可用，因此另以合成病例透過 headless Chrome CDP 驗證
+  1440×960 與 390×844 的五列資料、來源標示及響應式排列，無水平溢出或 console
+  warning／error。
+
+### v0.7.1 (2026-08-20)
+
+- 優化醫師病例的 RAG 病歷／文獻摘要 disclosure：收合時保留 RAG 標識、AI provenance、
+  病況首行預覽與來源數量，展開後才顯示完整摘要和來源 tags；SVG chevron、hover、focus
+  與旋轉狀態明確提示可互動性。
+- 手機將來源數與展開控制移至標題下方，摘要預覽允許自然換行；桌機維持緊湊單列，
+  兩種版面都沿用既有 teal、左側強調線與臨床文件密度。本次未修改 `frontend-v2/`。
+- Node 22 的 14 組 Node tests、Vite production build 與 OpenAPI type drift check 通過；
+  Browser plugin／Playwright 不可用，因此另以合成病例透過 headless Chrome CDP 驗證
+  1440×960 收合／展開與 390×844 收合狀態，無水平溢出或 console warning／error。
+
+### v0.7.0 (2026-08-20)
+
+- 醫師病例工作區依新介面草圖重排為單一臨床文件：基本資料與出生日期、主訴、三欄
+  關鍵症狀／重要病史／疼痛位置、01–05 AI 臨床決策、RAG 病歷／文獻摘要，以及
+  CC／PI／PHx 醫師摘要資料列，並保留病例資料庫與既有問答功能。
+- AI 決策、RAG 摘要與資料彙整草稿均明示待醫師確認；紅旗警訊維持在上方，來源、
+  固定規則、疾病票數及問診軌跡移入可展開的稽核區，未把 Gemini 內容標成醫師已確認。
+- 桌面使用開放式三欄快照與雙欄決策模組，手機改為單欄並將完整標題與可橫向捲動的
+  工具列分列顯示；本次只修改 `frontend/` 開發版，未同步 `frontend-v2/` 部署版。
+- 使用 Node 22 執行 14 組 Node tests、Vite production build 與 OpenAPI type drift
+  check，全部通過。由於 Browser plugin／Playwright 不可用，另以合成病例透過
+  headless Chrome CDP 驗證 1440×960 與 390×844：區塊順序、五張決策卡、稽核區
+  展開及響應式版面正確，無水平溢出或 console warning／error。
+
 ### v0.6.1 (2026-08-18)
 
 - Vite 開發伺服器加入 Vue DevTools，供本機檢查元件樹、狀態與互動；plugin 自身限制
@@ -296,9 +419,9 @@ npm run dev
 
 Vite 會顯示實際網址，預設入口為：
 
-- `http://localhost:5173/#/`：病患端
-- `http://localhost:5173/#/doctor`：醫師端
-- `http://localhost:5173/#/doctor/terminology/snomed`：SNOMED CT 查詢
+- `http://localhost:5173/ai-consult/#/`：病患端
+- `http://localhost:5173/ai-consult/#/doctor`：醫師端
+- `http://localhost:5173/ai-consult/#/doctor/terminology/snomed`：SNOMED CT 查詢
 
 其他指令：
 
@@ -372,6 +495,40 @@ Docker gateway 可達，再檢查 frontend 的 backend URL 設定。Port 18000 �
 [../backend/README.md](../backend/README.md#醫師端規則中心)。
 
 ## FHIR 直接連線（僅限開發／測試）
+
+### SMART EHR Launcher
+
+Vite 開發站可由 SMART Launcher 使用以下 Launch URL 啟動：
+
+```text
+http://127.0.0.1:5173/ai-consult/launch.html
+```
+
+SMART client ID 預設為本機 sandbox 的 `my_web_app`；若院方另行註冊，請在 `.env`
+設定公開的 client identifier：
+
+```dotenv
+VITE_SMART_CLIENT_ID=my_web_app
+```
+
+Provider EHR Launch 必須提供 `iss` 與 `launch` query parameters。授權 callback 必須在
+authorization server 精確註冊為同一 origin 的：
+
+```text
+http://127.0.0.1:5173/ai-consult/?smart=1
+```
+
+不要混用 `localhost`／`127.0.0.1`、不同 port 或 HTTP／HTTPS；OAuth state 存在同源
+browser sessionStorage。遠端瀏覽器的 `127.0.0.1` 指向操作該瀏覽器的電腦，跨電腦測試
+需改用可達的核准 HTTPS hostname。FHIR issuer 也必須能由瀏覽器到達，並允許 App
+origin 的 CORS。
+
+授權成功後，病患頁以 `fhirclient` 恢復 authorized client，取得 `Patient`、可用的
+`Encounter` launch context 及分頁後的 `$everything` Bundle，再交給既有 FHIR prefill
+映射。只會回傳 Patient／Bundle resources 與必要 context metadata；access token 不會
+加入 prefill record。當前 scope 只有讀取權限，不支援把 AI 病歷寫回 FHIR。
+
+### Identifier 直連測試
 
 使用本機 HAPI Server 時，可在 `.env` 設定：
 

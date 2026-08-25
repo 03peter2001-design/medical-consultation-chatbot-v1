@@ -284,6 +284,7 @@ export function buildClinicalRecord(record = {}) {
     identity: {
       name: data.name || '姓名未提供',
       queueNumber: record.queue_number || '—',
+      birthDate: data.birth_date || '未提供',
       gender: data.gender || '未提供',
       age: isPresent(data.age) ? `${data.age}歲` : '年齡未提供',
       bloodType: data.blood_type || '血型未提供',

@@ -134,3 +134,14 @@ export function formatPainRegions(ids = []) {
     .map((region) => region.label)
     .join('、')
 }
+
+export function togglePainRegionSelection(
+  ids = [],
+  regionId,
+  allowedRegionIds = ALL_REGION_IDS,
+) {
+  if (!allowedRegionIds.includes(regionId)) return ids
+  return ids.includes(regionId)
+    ? ids.filter((id) => id !== regionId)
+    : [...ids, regionId]
+}

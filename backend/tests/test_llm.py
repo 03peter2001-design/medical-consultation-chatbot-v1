@@ -88,10 +88,75 @@ class GeminiGenerationTests(unittest.TestCase):
         self.assertEqual(text, "完成內容")
         self.assertEqual(len(fake_models.configs), 2)
         self.assertEqual(fake_models.configs[0].max_output_tokens, 1528)
+        self.assertEqual(fake_models.configs[0].temperature, 0.2)
         self.assertGreater(
             fake_models.configs[1].max_output_tokens,
             fake_models.configs[0].max_output_tokens,
         )
+
+    def test_gemini_35_and_newer_omit_unsupported_temperature(self):
+        class FakeModels:
+            def __init__(self):
+                self.configs = []
+
+            def generate_content(self, **kwargs):
+                self.configs.append(kwargs["config"])
+                return SimpleNamespace(
+                    text="完成內容",
+                    candidates=[SimpleNamespace(finish_reason="STOP")],
+                )
+
+        for model in ("gemini-3.5-flash-lite", "gemini-3.6-flash"):
+            with self.subTest(model=model):
+                fake_models = FakeModels()
+                client = LLMClient.__new__(LLMClient)
+                client.provider = "gemini"
+                client.model = model
+                client._env = {}
+                client._client = SimpleNamespace(models=fake_models)
+
+                client.generate_text(
+                    [{"role": "user", "content": "測試"}],
+                    temperature=0.2,
+                    max_tokens=600,
+                )
+
+                self.assertIsNone(fake_models.configs[0].temperature)
+
+    def test_gemini_structured_output_passes_json_schema_to_generate_content(self):
+        class FakeModels:
+            def __init__(self):
+                self.config = None
+
+            def generate_content(self, **kwargs):
+                self.config = kwargs["config"]
+                return SimpleNamespace(
+                    text='{"chief_complaint":"Chest pain"}',
+                    candidates=[SimpleNamespace(finish_reason="STOP")],
+                )
+
+        fake_models = FakeModels()
+        client = LLMClient.__new__(LLMClient)
+        client.provider = "gemini"
+        client.model = "gemini-3.5-flash-lite"
+        client._env = {}
+        client._client = SimpleNamespace(models=fake_models)
+        schema = {
+            "type": "object",
+            "properties": {"chief_complaint": {"type": "string"}},
+            "required": ["chief_complaint"],
+        }
+
+        client.generate_text(
+            [{"role": "user", "content": "測試"}],
+            temperature=0.2,
+            max_tokens=240,
+            response_json_schema=schema,
+        )
+
+        self.assertEqual(fake_models.config.response_mime_type, "application/json")
+        self.assertEqual(fake_models.config.response_json_schema, schema)
+        self.assertTrue(fake_models.config.automatic_function_calling.disable)
 
 
 if __name__ == "__main__":

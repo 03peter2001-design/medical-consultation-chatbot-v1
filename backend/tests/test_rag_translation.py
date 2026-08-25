@@ -3,6 +3,7 @@ import unittest
 from types import SimpleNamespace
 
 from knowledge.translation import (
+    QUERY_NORMALIZATION_SCHEMA,
     GeminiQueryNormalizer,
     QueryNormalization,
     parse_normalization,
@@ -87,6 +88,10 @@ class RagTranslationTests(unittest.TestCase):
         self.assertIn("[REDACTED_", sent)
         config = models.calls[0]["config"]
         self.assertEqual(config.response_mime_type, "application/json")
+        self.assertEqual(config.response_json_schema, QUERY_NORMALIZATION_SCHEMA)
+        self.assertIsNone(config.response_schema)
+        self.assertTrue(config.automatic_function_calling.disable)
+        self.assertIsNone(config.temperature)
 
     def test_non_chinese_query_does_not_call_gemini(self):
         models = FakeModels(json.dumps(valid_payload()))
@@ -129,7 +134,7 @@ class RagTranslationTests(unittest.TestCase):
                 "GEMINI_MODEL": "gemini-2.5-pro",
             }
         )
-        self.assertEqual(normalizer.model, "gemini-2.5-flash")
+        self.assertEqual(normalizer.model, "gemini-3.5-flash-lite")
 
 
 class QueryNormalizationValueTests(unittest.TestCase):

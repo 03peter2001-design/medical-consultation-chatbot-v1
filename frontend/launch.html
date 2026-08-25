@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer" />
+    <title>啟動 SMART on FHIR</title>
+    <style>
+      :root {
+        color: #17324d;
+        background: #f3f7fa;
+        font: 16px/1.6 system-ui, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+      }
+
+      main {
+        width: min(520px, calc(100% - 40px));
+        padding: 28px;
+        border: 1px solid #cbd7e1;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 14px 40px rgb(23 50 77 / 10%);
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 1.45rem;
+      }
+
+      p {
+        margin: 0;
+        color: #526b80;
+      }
+
+      body[data-launch-state='error'] main {
+        border-color: #d9a4aa;
+      }
+
+      body[data-launch-state='error'] p {
+        color: #a12636;
+      }
+    </style>
+  </head>
+  <body>
+    <main aria-live="polite">
+      <h1>SMART on FHIR</h1>
+      <p data-smart-launch-status>正在連接院方授權伺服器……</p>
+    </main>
+    <script type="module" src="/src/smartLaunchEntry.js"></script>
+  </body>
+</html>

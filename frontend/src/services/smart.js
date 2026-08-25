@@ -1,4 +1,5 @@
 const SMART_PENDING_KEY = 'chest-pain-ai-doctor.smart.pending'
+export const SMART_EHR_READ_SCOPE = 'launch patient/*.read'
 
 let libraryPromise = null
 let cachedClient = null
@@ -37,6 +38,81 @@ export function markSmartLaunchPending(
   }
 }
 
+export function smartCallbackUrl(
+  locationLike = runtimeWindow()?.location,
+  basePath = import.meta.env?.BASE_URL || '/',
+) {
+  if (!locationLike?.origin) {
+    throw new Error('無法判斷 SMART App callback origin。')
+  }
+  const callback = new URL(basePath || '/', locationLike.origin)
+  callback.search = 'smart=1'
+  callback.hash = ''
+  return callback.toString()
+}
+
+export function smartEhrLaunchContext(
+  locationLike = runtimeWindow()?.location,
+) {
+  const params = new URLSearchParams(locationLike?.search || '')
+  const issuer = params.get('iss')?.trim() || ''
+  const launch = params.get('launch')?.trim() || ''
+  if (!issuer || !launch) {
+    throw new Error('缺少 SMART EHR Launch 所需的 iss 或 launch 參數。')
+  }
+
+  let issuerUrl
+  try {
+    issuerUrl = new URL(issuer)
+  } catch {
+    throw new Error('SMART EHR Launch 的 iss 不是有效 URL。')
+  }
+  if (
+    !['http:', 'https:'].includes(issuerUrl.protocol) ||
+    issuerUrl.username ||
+    issuerUrl.password
+  ) {
+    throw new Error('SMART EHR Launch 的 iss 必須是無帳密的 HTTP(S) URL。')
+  }
+
+  return {
+    issuer: issuerUrl.toString().replace(/\/$/, ''),
+    launch,
+  }
+}
+
+export async function authorizeSmartEhrLaunch({
+  fhirLibrary,
+  clientId,
+  locationLike = runtimeWindow()?.location,
+  storageLike = runtimeWindow()?.sessionStorage,
+  basePath = import.meta.env?.BASE_URL || '/',
+} = {}) {
+  if (typeof fhirLibrary?.oauth2?.authorize !== 'function') {
+    throw new Error('SMART on FHIR client 未提供 OAuth authorize API。')
+  }
+  const normalizedClientId = String(clientId || '').trim()
+  if (!normalizedClientId) {
+    throw new Error('尚未設定 SMART client ID。')
+  }
+
+  const context = smartEhrLaunchContext(locationLike)
+  const redirectUri = smartCallbackUrl(locationLike, basePath)
+  markSmartLaunchPending(storageLike)
+  try {
+    return await fhirLibrary.oauth2.authorize({
+      clientId: normalizedClientId,
+      scope: SMART_EHR_READ_SCOPE,
+      redirectUri,
+      iss: context.issuer,
+      launch: context.launch,
+    })
+  } catch (error) {
+    markSmartLaunchPending(storageLike, false)
+    throw error
+  }
+}
+
 export function sanitizeSmartCallbackUrl(
   locationLike = runtimeWindow()?.location,
   historyLike = runtimeWindow()?.history,
@@ -63,7 +139,7 @@ export function sanitizeSmartCallbackUrl(
   const sanitized =
     `${locationLike.pathname || '/'}${query ? `?${query}` : ''}` +
     (locationLike.hash || '')
-  historyLike.replaceState({}, '', sanitized)
+  historyLike.replaceState(historyLike.state ?? {}, '', sanitized)
   return sanitized
 }
 
@@ -71,18 +147,23 @@ function hasReadyApi(candidate) {
   return typeof candidate?.oauth2?.ready === 'function'
 }
 
-export function ensureSmartClientLibrary({
+export async function ensureSmartClientLibrary({
   globalLike = runtimeWindow(),
   documentLike = runtimeWindow()?.document,
-  scriptUrl = '/vendor/fhir-client.js',
+  scriptUrl = `${import.meta.env?.BASE_URL || '/'}vendor/fhir-client.js`,
 } = {}) {
   if (hasReadyApi(globalLike?.FHIR)) {
-    return Promise.resolve(globalLike.FHIR)
+    return globalLike.FHIR
+  }
+  try {
+    const bundled = await import('fhirclient')
+    const candidate = bundled.default || bundled
+    if (hasReadyApi(candidate)) return candidate
+  } catch {
+    // Legacy SMART sandbox builds still provide the pinned browser bundle.
   }
   if (!documentLike?.createElement) {
-    return Promise.reject(
-      new Error('目前環境無法載入 SMART on FHIR client。'),
-    )
+    throw new Error('目前環境無法載入 SMART on FHIR client。')
   }
   if (libraryPromise) return libraryPromise
 

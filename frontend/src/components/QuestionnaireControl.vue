@@ -13,11 +13,15 @@ const props = defineProps({
   disabled: { type: Boolean, default: false },
   sending: { type: Boolean, default: false },
   maxBirthDate: { type: String, required: true },
+  embedded: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['submit'])
 
-const selectedOptions = ref([])
+const selectedOptions = defineModel('selectedOptions', {
+  type: Array,
+  default: () => [],
+})
 const otherText = ref('')
 const quickOption = ref('')
 const durationNumber = ref('')
@@ -141,6 +145,7 @@ defineExpose({ applyVoiceTranscript, focus })
   <section
     v-if="kind === 'duration' && spec"
     class="question-control-card duration-control"
+    :class="{ embedded }"
   >
     <div class="duration-section">
       <span class="control-label">快捷選擇</span>
@@ -209,7 +214,11 @@ defineExpose({ applyVoiceTranscript, focus })
     </button>
   </section>
 
-  <section v-else-if="kind === 'choice' && spec" class="question-control-card">
+  <section
+    v-else-if="kind === 'choice' && spec"
+    class="question-control-card"
+    :class="{ embedded }"
+  >
     <div ref="choiceControls" class="choice-grid">
       <label
         v-for="option in spec.options"
@@ -222,7 +231,7 @@ defineExpose({ applyVoiceTranscript, focus })
           name="question-choice"
           :checked="selectedOptions.includes(option)"
           :disabled="disabled"
-          @click.prevent="selectOption(option)"
+          @click="selectOption(option)"
         />
         <span>{{ localizedLabel(spec.option_labels, option) }}</span>
       </label>
@@ -251,6 +260,7 @@ defineExpose({ applyVoiceTranscript, focus })
   <section
     v-else-if="kind === 'date' && spec"
     class="question-control-card date-control"
+    :class="{ embedded }"
   >
     <label>
       <span>出生日期</span>
@@ -286,6 +296,15 @@ defineExpose({ applyVoiceTranscript, focus })
   border-radius: var(--radius);
   background: var(--surface-1);
   box-shadow: 0 4px 14px rgb(37 67 91 / 5%);
+}
+
+.question-control-card.embedded {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .choice-grid {

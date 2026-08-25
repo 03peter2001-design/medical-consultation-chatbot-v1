@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Mapping
 from threading import RLock
 
 from dotenv import load_dotenv
@@ -41,18 +42,46 @@ def _normalize_interview_engine(value: str) -> str:
 INTERVIEW_ENGINE = _normalize_interview_engine(os.getenv("INTERVIEW_ENGINE", "questionnaire"))
 print(f"[Interview] 使用 {INTERVIEW_ENGINE} 問診引擎")
 
-_gemini_summary_client: LLMClient | None = None
+GEMINI_SUMMARY_MODEL_DEFAULTS = {
+    "extraction": "gemini-3.5-flash-lite",
+    "reasoning": "gemini-3.6-flash",
+}
+GEMINI_SUMMARY_MODEL_ENV = {
+    "extraction": "GEMINI_EXTRACTION_MODEL",
+    "reasoning": "GEMINI_REASONING_MODEL",
+}
+_gemini_summary_clients: dict[str, LLMClient] = {}
+_gemini_summary_clients_lock = RLock()
 
 
-def get_gemini_summary_client() -> LLMClient:
-    """Return the Gemini client used after a fixed questionnaire is complete."""
+def resolve_gemini_summary_model(
+    role: str,
+    env: Mapping[str, str] | None = None,
+) -> str:
+    """Resolve one questionnaire model while preserving the legacy shared override."""
 
-    global _gemini_summary_client
-    if _gemini_summary_client is None:
-        env = dict(os.environ)
-        env["LLM_PROVIDER"] = "gemini"
-        _gemini_summary_client = LLMClient(env)
-    return _gemini_summary_client
+    if role not in GEMINI_SUMMARY_MODEL_DEFAULTS:
+        raise ValueError(f"不支援的 Gemini 問卷模型角色：{role}")
+    values = os.environ if env is None else env
+    dedicated = values.get(GEMINI_SUMMARY_MODEL_ENV[role], "").strip()
+    shared = values.get("GEMINI_MODEL", "").strip()
+    return dedicated or shared or GEMINI_SUMMARY_MODEL_DEFAULTS[role]
+
+
+def get_gemini_summary_client(role: str) -> LLMClient:
+    """Return the cached extraction or clinical-reasoning Gemini client."""
+
+    if role not in GEMINI_SUMMARY_MODEL_DEFAULTS:
+        raise ValueError(f"不支援的 Gemini 問卷模型角色：{role}")
+    with _gemini_summary_clients_lock:
+        client = _gemini_summary_clients.get(role)
+        if client is None:
+            env = dict(os.environ)
+            env["LLM_PROVIDER"] = "gemini"
+            env["GEMINI_MODEL"] = resolve_gemini_summary_model(role, env)
+            client = LLMClient(env)
+            _gemini_summary_clients[role] = client
+        return client
 
 
 AMIE_DEBUG_TRACE = os.getenv("AMIE_DEBUG_TRACE", "true").strip().lower() in {

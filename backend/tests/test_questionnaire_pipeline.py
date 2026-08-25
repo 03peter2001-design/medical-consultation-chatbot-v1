@@ -42,13 +42,13 @@ def _answer_for(question: dict) -> str:
 
 def _gemini_response(task: str) -> str:
     responses = {
-        "emr": {
-            "cc": "Left-sided chest pain for 30 minutes.",
-            "pi": "A 36-year-old female presented with pressure-like chest pain.",
-            "ph": "Not provided",
-            "meds": "Not provided",
-            "allergy": "Not provided",
-        },
+        "chief_complaint": "left-sided chest pain for 30 minutes",
+        "present_illness": "Pressure-like chest pain developed during exertion.",
+        "past_history": "Not provided",
+        "drug_history": ("Past medications: none reported. Current medications: none reported."),
+        "drug_allergy_history": "Not provided",
+        "personal_history": "The patient has never smoked cigarettes.",
+        "family_history": "Not provided",
         "differential_diagnoses": [
             "Acute coronary syndrome",
             "Pericarditis",
@@ -144,6 +144,33 @@ class QuestionnairePipelineTests(unittest.TestCase):
         self.assertEqual(runtime._normalize_interview_engine("amie"), "amie")
         with self.assertRaises(RuntimeError):
             runtime._normalize_interview_engine("unknown")
+
+    def test_questionnaire_models_use_dedicated_defaults_and_keep_shared_override(self):
+        self.assertEqual(
+            runtime.resolve_gemini_summary_model("extraction", {}),
+            "gemini-3.5-flash-lite",
+        )
+        self.assertEqual(
+            runtime.resolve_gemini_summary_model("reasoning", {}),
+            "gemini-3.6-flash",
+        )
+        self.assertEqual(
+            runtime.resolve_gemini_summary_model(
+                "extraction",
+                {"GEMINI_MODEL": "gemini-shared"},
+            ),
+            "gemini-shared",
+        )
+        self.assertEqual(
+            runtime.resolve_gemini_summary_model(
+                "extraction",
+                {
+                    "GEMINI_MODEL": "gemini-shared",
+                    "GEMINI_EXTRACTION_MODEL": "gemini-extraction",
+                },
+            ),
+            "gemini-extraction",
+        )
 
     def test_taigi_language_is_snapshotted_and_cannot_change_mid_interview(self):
         with (
@@ -262,10 +289,26 @@ class QuestionnairePipelineTests(unittest.TestCase):
 
     def test_fixed_questions_run_locally_then_each_report_question_gets_its_own_prompt(self):
         session_id = "fixed-order"
+        extraction_generate_text = Mock(side_effect=_generate_gemini_section)
+        reasoning_generate_text = Mock(side_effect=_generate_gemini_section)
+        clients = {
+            "extraction": SimpleNamespace(
+                model="gemini-extraction-test",
+                generate_text=extraction_generate_text,
+            ),
+            "reasoning": SimpleNamespace(
+                model="gemini-reasoning-test",
+                generate_text=reasoning_generate_text,
+            ),
+        }
         with (
             patch.object(patient, "sessions", self.sessions),
             patch.object(patient, "consultation_repository", self.repository),
-            patch.object(patient, "get_gemini_summary_client", return_value=self.gemini_client),
+            patch.object(
+                patient,
+                "get_gemini_summary_client",
+                side_effect=clients.__getitem__,
+            ),
             patch.object(
                 patient,
                 "detect_red_flags",
@@ -294,27 +337,50 @@ class QuestionnairePipelineTests(unittest.TestCase):
             item["field"] for item in build_questionnaire("chest") if condition_matches(item, data)
         ]
         self.assertEqual(asked_fields, expected_fields)
-        self.assertEqual(self.generate_text.call_count, 6)
+        self.assertEqual(extraction_generate_text.call_count, 7)
+        self.assertEqual(reasoning_generate_text.call_count, 5)
         submitted_by_task = {}
         called_tasks = []
-        for call in self.generate_text.call_args_list:
+        for call in [
+            *extraction_generate_text.call_args_list,
+            *reasoning_generate_text.call_args_list,
+        ]:
             messages = call.args[0]
             self.assertNotIn("每次請求只回答", messages[0]["content"])
             submitted = json.loads(messages[-1]["content"])
             called_tasks.append(submitted["task"])
             submitted_by_task[submitted["task"]] = submitted
-            self.assertEqual(
-                [item["field"] for item in submitted["patient_context"]["questionnaire_answers"]],
-                expected_fields,
-            )
-            self.assertEqual(
-                submitted["patient_context"]["questionnaire_answers"][0]["answer"],
-                "我胸痛而且昏倒",
-            )
+            submitted_fields = [
+                item["field"] for item in submitted["patient_context"]["questionnaire_answers"]
+            ]
+            if submitted["task"] == "chief_complaint":
+                self.assertEqual(
+                    submitted_fields,
+                    [
+                        field
+                        for field in expected_fields
+                        if field not in {"name", "age", "birth_date", "gender", "sex"}
+                    ],
+                )
+            elif submitted["task"] == "drug_history":
+                self.assertEqual(submitted_fields, ["past_meds", "current_meds"])
+            else:
+                self.assertEqual(submitted_fields, expected_fields)
+            if submitted["task"] != "drug_history":
+                self.assertEqual(
+                    submitted["patient_context"]["questionnaire_answers"][0]["answer"],
+                    "我胸痛而且昏倒",
+                )
         self.assertEqual(
             called_tasks,
             [
-                "emr",
+                "chief_complaint",
+                "present_illness",
+                "past_history",
+                "drug_history",
+                "drug_allergy_history",
+                "personal_history",
+                "family_history",
                 "differential_diagnoses",
                 "must_not_miss",
                 "physical_examination",
@@ -322,7 +388,21 @@ class QuestionnairePipelineTests(unittest.TestCase):
                 "imaging",
             ],
         )
-        self.assertNotIn("retrieved_evidence", submitted_by_task["emr"])
+        for task in called_tasks[:7]:
+            self.assertNotIn("retrieved_evidence", submitted_by_task[task])
+        self.assertNotIn(
+            "patient_demographics",
+            submitted_by_task["chief_complaint"]["patient_context"],
+        )
+        self.assertEqual(
+            [
+                answer["field"]
+                for answer in submitted_by_task["drug_history"]["patient_context"][
+                    "questionnaire_answers"
+                ]
+            ],
+            ["past_meds", "current_meds"],
+        )
         self.assertEqual(
             submitted_by_task["differential_diagnoses"]["retrieved_evidence"],
             "知識庫A內容",
@@ -343,13 +423,26 @@ class QuestionnairePipelineTests(unittest.TestCase):
         self.assertEqual(submitted_by_task["imaging"]["focus_conditions"], expected_focus)
         self.assertNotIn("_safety", data)
         self.assertNotIn("_amie", data)
-        self.assertEqual(data["_interview_pipeline"]["model"], "gemini-test-model")
+        self.assertEqual(data["_interview_pipeline"]["model"], "gemini-reasoning-test")
+        self.assertEqual(
+            data["_interview_pipeline"]["models"],
+            {
+                "extraction": "gemini-extraction-test",
+                "reasoning": "gemini-reasoning-test",
+            },
+        )
 
         record = self.repository.get_by_registration_number(response["queue_number"])
         self.assertEqual(record["status"], "completed")
         self.assertEqual(record["triage_level"], "routine")
         self.assertIn("【病歷摘要 EMR】", record["structured_note"])
-        self.assertIn("CC（主訴）：", record["structured_note"])
+        self.assertIn("Chief Complaint:", record["structured_note"])
+        self.assertIn(
+            "A 36-year-old male patient presents with left-sided chest pain for 30 minutes.",
+            record["structured_note"],
+        )
+        self.assertIn("Personal History:", record["structured_note"])
+        self.assertIn("Family History:", record["structured_note"])
         self.assertIn("【初步鑑別診斷（前3項最可能）】", record["structured_note"])
         self.assertIn("【防漏診鑑別 — 5個絕對不能漏掉的隱形殺手】", record["structured_note"])
         self.assertIn("【理學檢查】", record["structured_note"])
@@ -358,7 +451,12 @@ class QuestionnairePipelineTests(unittest.TestCase):
         self.assertNotIn("建議", record["structured_note"])
         self.assertIn("Acute coronary syndrome", record["structured_note"])
         self.assertNotIn("理由：", record["structured_note"])
-        self.assertIn("fixed-questionnaire-doctor-style-english-v7", record["structured_note"])
+        self.assertIn("病史擷取：gemini-extraction-test", record["structured_note"])
+        self.assertIn("RAG 臨床決策：gemini-reasoning-test", record["structured_note"])
+        self.assertIn("Drug History:", record["structured_note"])
+        self.assertIn("Past medications: none reported.", record["structured_note"])
+        self.assertIn("Current medications: none reported.", record["structured_note"])
+        self.assertIn("fixed-questionnaire-complete-drug-history-v9", record["structured_note"])
         self.assertEqual(
             data["_interview_pipeline"]["postprocess"],
             "per_task_gemini_report_after_questionnaire",
@@ -388,13 +486,53 @@ class QuestionnairePipelineTests(unittest.TestCase):
             patch.object(patient, "sessions", self.sessions),
             patch.object(patient, "consultation_repository", self.repository),
             patch.object(patient, "get_gemini_summary_client", return_value=self.gemini_client),
+            patch.object(patient, "safe_log") as safe_log,
         ):
             with self.assertRaises(HTTPException) as caught:
                 self._finish("invalid", "我胸痛")
 
         self.assertEqual(caught.exception.status_code, 503)
+        safe_log.assert_called_once()
+        self.assertEqual(safe_log.call_args.kwargs["failure_stage"], "chief_complaint")
         self.assertEqual(self.repository.count(), 0)
         self.assertNotEqual(self.sessions["invalid"]["index"], -1)
+
+    def test_invalid_reasoning_result_fails_closed_after_extraction(self):
+        extraction_client = SimpleNamespace(
+            model="gemini-extraction-test",
+            generate_text=Mock(side_effect=_generate_gemini_section),
+        )
+        reasoning_client = SimpleNamespace(
+            model="gemini-reasoning-test",
+            generate_text=Mock(return_value="not-json"),
+        )
+        clients = {
+            "extraction": extraction_client,
+            "reasoning": reasoning_client,
+        }
+        with (
+            patch.object(patient, "sessions", self.sessions),
+            patch.object(patient, "consultation_repository", self.repository),
+            patch.object(
+                patient,
+                "get_gemini_summary_client",
+                side_effect=clients.__getitem__,
+            ),
+            patch.object(patient, "safe_log") as safe_log,
+        ):
+            with self.assertRaises(HTTPException) as caught:
+                self._finish("invalid-reasoning", "我胸痛")
+
+        self.assertEqual(caught.exception.status_code, 503)
+        self.assertEqual(extraction_client.generate_text.call_count, 7)
+        self.assertEqual(reasoning_client.generate_text.call_count, 1)
+        safe_log.assert_called_once()
+        self.assertEqual(
+            safe_log.call_args.kwargs["failure_stage"],
+            "differential_diagnoses",
+        )
+        self.assertEqual(self.repository.count(), 0)
+        self.assertNotEqual(self.sessions["invalid-reasoning"]["index"], -1)
 
     def test_reporting_helpers_never_rebuild_questionnaire_disease_votes(self):
         record = {

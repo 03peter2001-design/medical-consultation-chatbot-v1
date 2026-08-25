@@ -133,6 +133,52 @@ export function splitStructuredNote(text) {
   }
 }
 
+const EMR_FIELD_KEYS = {
+  cc: 'cc',
+  'chief complaint': 'cc',
+  pi: 'pi',
+  'present illness': 'pi',
+  ph: 'ph',
+  'past history': 'ph',
+  meds: 'meds',
+  'current medications': 'meds',
+  'drug history': 'meds',
+  allergy: 'allergy',
+  'allergy history': 'allergy',
+  'drug allergy history': 'allergy',
+  'personal history': 'personal',
+  'family history': 'family',
+}
+
+const EMR_FIELD_HEADING = new RegExp(
+  `^(${Object.keys(EMR_FIELD_KEYS)
+    .sort((left, right) => right.length - left.length)
+    .join('|')})(?:（[^）]+）)?[：:]\\s*(.*)$`,
+  'i',
+)
+
+export function parseEmrFields(text) {
+  const source = splitStructuredNote(text).emrSummary
+  if (!source) return {}
+
+  const fields = {}
+  let activeKey = ''
+  for (const rawLine of source.split(/\r?\n/)) {
+    const line = rawLine.trim()
+    const heading = line.match(EMR_FIELD_HEADING)
+    if (heading) {
+      activeKey = EMR_FIELD_KEYS[heading[1].toLowerCase()] || ''
+      if (activeKey && heading[2]) fields[activeKey] = heading[2]
+      continue
+    }
+    if (!activeKey || !line) continue
+    fields[activeKey] = [fields[activeKey], line]
+      .filter(Boolean)
+      .join('\n')
+  }
+  return fields
+}
+
 function sectionDefinition(heading) {
   return SECTION_DEFINITIONS.find((definition) =>
     definition.matches(heading),

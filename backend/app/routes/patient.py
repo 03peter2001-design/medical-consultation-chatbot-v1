@@ -31,11 +31,13 @@ from amie.models import ChiefComplaintAssessment
 from app.contracts import PatientChatResponse, error_responses
 from app.models import ChatRequest, PatientPrefill
 from app.prompts.questionnaire_summary import (
-    PROMPT_VERSION as GEMINI_SUMMARY_PROMPT_VERSION,
-)
-from app.prompts.questionnaire_summary import (
+    EMR_TASKS,
     SUMMARY_TASKS,
     build_summary_prompt_request,
+    summary_response_schema,
+)
+from app.prompts.questionnaire_summary import (
+    PROMPT_VERSION as GEMINI_SUMMARY_PROMPT_VERSION,
 )
 from app.runtime import (
     AMIE_DEBUG_TRACE,
@@ -214,7 +216,7 @@ def classify_complaint(text: str) -> str:
                 {
                     "role": "system",
                     "content": (
-                        "你是急診分流護理師。請判斷病患描述的主訴最符合以下哪一類："
+                        "你是專業急診分流醫師。請判斷病患描述的主訴最符合以下哪一類："
                         + "、".join(
                             f"{route}（{ROUTE_LABELS[route]}相關不適）" for route in ROUTE_KEYWORDS
                         )
@@ -393,15 +395,20 @@ async def _complete_questionnaire_consultation(
     prefilled_data = {
         field: data[field] for field in session.get("prefilled_fields", []) if field in data
     }
+    failure_stage = "rag"
     try:
         knowledge_contexts, structured_sources = await run_clinical_io(
             _questionnaire_rag_contexts,
             data,
         )
-        client = get_gemini_summary_client()
         raw_sections: dict[str, str] = {}
         focus_conditions: list[str] = []
+        summary_models: dict[str, str] = {}
         for task in SUMMARY_TASKS:
+            failure_stage = task
+            model_role = "extraction" if task in EMR_TASKS else "reasoning"
+            client = get_gemini_summary_client(model_role)
+            summary_models[model_role] = client.model
             prompt_request = build_summary_prompt_request(
                 task,
                 answers,
@@ -414,26 +421,42 @@ async def _complete_questionnaire_consultation(
                 prompt_request.messages,
                 temperature=0.2,
                 max_tokens=prompt_request.max_tokens,
+                response_json_schema=summary_response_schema(task),
             )
             raw_sections[task] = raw_response
+            parsed_section = parse_gemini_summary_section(task, raw_response)
             if task == "must_not_miss":
-                parsed_focus = parse_gemini_summary_section(task, raw_response)
-                if not isinstance(parsed_focus, list):
+                if not isinstance(parsed_section, list):
                     raise ValueError("Gemini must_not_miss response must be a list")
-                focus_conditions = parsed_focus
-        generated = parse_gemini_summary_sections(raw_sections)
+                focus_conditions = parsed_section
+        failure_stage = "aggregate"
+        generated = parse_gemini_summary_sections(
+            raw_sections,
+            patient_age=str(data.get("age") or ""),
+            patient_sex=str(data.get("gender") or ""),
+        )
     except Exception as error:
-        safe_log("patient.questionnaire_summary", "failure", error=error)
+        safe_log(
+            "patient.questionnaire_summary",
+            "failure",
+            error=error,
+            failure_stage=failure_stage,
+        )
         raise HTTPException(
             status_code=503,
             detail="Gemini 目前無法整理問診結果，答案已保留，請稍後重試。",
         ) from error
-    structured_note = render_gemini_emr(generated, model=client.model)
+    model_provenance = (
+        f"病史擷取：{summary_models['extraction']}／RAG 臨床決策：{summary_models['reasoning']}"
+    )
+    structured_note = render_gemini_emr(generated, model=model_provenance)
     data["_questionnaire_answers"] = answers
     data["_gemini_emr"] = generated.emr
     data["_interview_pipeline"].update(
         {
-            "model": client.model,
+            # Keep the legacy field as the clinical reasoning model for old consumers.
+            "model": summary_models["reasoning"],
+            "models": summary_models,
             "prompt_version": GEMINI_SUMMARY_PROMPT_VERSION,
             "postprocess": "per_task_gemini_report_after_questionnaire",
             "rag_contexts": ["diagnosis", "laboratory", "imaging"],

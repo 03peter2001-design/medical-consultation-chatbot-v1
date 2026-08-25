@@ -26,6 +26,15 @@ GPU／Avatar 部署能力的共同基線；repository 目前沒有與此版本�
 - 驗證涵蓋 `regSno`／antiforgery／no-store request contract、HTTPS patient URL、
   403／404／502 非破壞性錯誤狀態、B01 授權 source contract 與 eHIS .NET build。
 
+- Backend 的 Compose 環境範例新增 Gemini 任務分流：固定問卷七個病史擷取任務與
+  RAG query translation 使用 `gemini-3.5-flash-lite`，五個 RAG／臨床決策任務使用
+  `gemini-3.6-flash`。
+- `backend/.env` 與 `integration-deployment/.env` 仍是彼此獨立的本機設定來源；部署
+  bundle 只透過本目錄 `env_file: .env` 注入容器，不會讀取或同步 `backend/.env`。
+  更新模型設定後需重新建立或重啟 backend container 才會清除 process-level client cache。
+- 未改變 Compose 網路、祕密掛載、RAG corpus、臨床規則或 API 契約；既有
+  `GEMINI_MODEL` 仍可作為未設定專用模型時的相容回退。
+
 ### v1.5.3 (2026-09-09)
 
 - 明確設定 UCC JWT clock-skew 容忍預設 30 秒，Backend 只接受 0–300 秒，避免 eHIS 與

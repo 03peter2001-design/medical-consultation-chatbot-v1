@@ -5,6 +5,7 @@ import {
   formatPainRegions,
   getPainMapPreset,
   getPainRegions,
+  togglePainRegionSelection,
 } from '../src/data/bodyPainRegions.js'
 
 test('resolves structured body-map selections in patient order', () => {
@@ -92,4 +93,42 @@ test('falls back to the complete body map for unknown routes', () => {
   const all = getPainMapPreset('unknown')
   assert.equal(all.key, 'all')
   assert.equal(all.allowedRegionIds.length > 20, true)
+})
+
+test('keeps diagram and checkbox selections on the same region state', () => {
+  const allowedRegionIds = getPainMapPreset('chest').allowedRegionIds
+
+  const selectedFromDiagram = togglePainRegionSelection(
+    [],
+    'front_chest_center',
+    allowedRegionIds,
+  )
+  assert.deepEqual(selectedFromDiagram, ['front_chest_center'])
+
+  const selectedFromOption = togglePainRegionSelection(
+    selectedFromDiagram,
+    'front_chest_left',
+    allowedRegionIds,
+  )
+  assert.deepEqual(selectedFromOption, [
+    'front_chest_center',
+    'front_chest_left',
+  ])
+
+  assert.deepEqual(
+    togglePainRegionSelection(
+      selectedFromOption,
+      'front_chest_center',
+      allowedRegionIds,
+    ),
+    ['front_chest_left'],
+  )
+  assert.strictEqual(
+    togglePainRegionSelection(
+      selectedFromOption,
+      'front_leg_left',
+      allowedRegionIds,
+    ),
+    selectedFromOption,
+  )
 })

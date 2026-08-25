@@ -43,6 +43,11 @@ import {
   rootMeanSquare,
   updateVoiceActivity,
 } from '../services/voiceActivity.js'
+import {
+  highlightedPainRegionsFromQuestionOptions,
+  questionOptionsFromPainRegions,
+  supportsPainLocationSync,
+} from '../services/painLocationSync.js'
 const sessionId = `pt_${Date.now()}`
 const maxBirthDate = new Date().toISOString().slice(0, 10)
 const smartLaunchDetected = hasSmartLaunchContext()
@@ -74,6 +79,7 @@ const fhirPatient = ref(null)
 const fhirResourceCount = ref(0)
 const smartContext = ref(null)
 const selectedPainLocationIds = ref([])
+const selectedQuestionOptions = ref([])
 const questionInput = ref(null)
 const questionnaireInfo = ref(null)
 const canGoBack = ref(false)
@@ -163,6 +169,13 @@ const patientContextStatus = computed(() =>
 const painMapPreset = computed(() =>
   getPainMapPreset(questionnaireInfo.value?.route),
 )
+const highlightedPainLocationIds = computed(() => {
+  if (!showBodyMap.value || selectedPainLocationIds.value.length) return []
+  return highlightedPainRegionsFromQuestionOptions(
+    questionnaireInfo.value?.route,
+    selectedQuestionOptions.value,
+  )
+})
 const urgentConditions = computed(() =>
   Array.isArray(triageState.value?.possible_conditions)
     ? triageState.value.possible_conditions.filter(
@@ -201,6 +214,8 @@ function addMessage(role, text) {
 
 function setQuestionState(data) {
   cancelAutoSend()
+  selectedPainLocationIds.value = []
+  selectedQuestionOptions.value = []
   questionInput.value = data.question_input ?? null
   questionnaireInfo.value = data.questionnaire ?? null
   canGoBack.value = Boolean(data.can_go_back)
@@ -210,6 +225,37 @@ function setQuestionState(data) {
     data.triage ?? triageState.value
   input.value = ''
   voiceNotice.value = ''
+}
+
+function updatePainLocations(regionIds) {
+  selectedPainLocationIds.value = regionIds
+  const route = questionnaireInfo.value?.route
+  if (!supportsPainLocationSync(route)) return
+
+  const allowedOptions = new Set(questionInput.value?.options ?? [])
+  selectedQuestionOptions.value = questionOptionsFromPainRegions(
+    route,
+    regionIds,
+  ).filter((option) => allowedOptions.has(option))
+}
+
+function updateQuestionOptions(options) {
+  selectedQuestionOptions.value = options
+  if (
+    showBodyMap.value &&
+    supportsPainLocationSync(questionnaireInfo.value?.route)
+  ) {
+    // Coarse questionnaire options can cover multiple precise regions. Clear
+    // precise IDs instead of storing an inferred left/right or exact site.
+    selectedPainLocationIds.value = []
+  }
+}
+
+function submitQuestionnaireAnswer(message) {
+  const painLocationIds = showBodyMap.value
+    ? selectedPainLocationIds.value
+    : []
+  return submitMessage(message, painLocationIds)
 }
 
 async function initializeBackendSession(patientRecord = null) {
@@ -828,21 +874,41 @@ onBeforeUnmount(() => {
           >
             ← 回到上一題
           </button>
-          <PainLocationInput
+          <section
             v-if="showBodyMap"
-            v-model="selectedPainLocationIds"
-            :preset="painMapPreset"
-            :sending="sending"
-            @submit="submitMessage"
-          />
+            class="pain-location-question-card"
+          >
+            <PainLocationInput
+              :model-value="selectedPainLocationIds"
+              :preset="painMapPreset"
+              :highlighted-region-ids="highlightedPainLocationIds"
+              :sending="sending"
+              embedded
+              :show-region-options="false"
+              @update:model-value="updatePainLocations"
+            />
+            <QuestionnaireControl
+              ref="questionnaireControl"
+              :spec="questionInput"
+              :disabled="inputsDisabled"
+              :sending="sending"
+              :max-birth-date="maxBirthDate"
+              :selected-options="selectedQuestionOptions"
+              embedded
+              @update:selected-options="updateQuestionOptions"
+              @submit="submitQuestionnaireAnswer"
+            />
+          </section>
           <QuestionnaireControl
-            v-if="!completed && currentInputKind !== 'text'"
+            v-else-if="!completed && currentInputKind !== 'text'"
             ref="questionnaireControl"
             :spec="questionInput"
             :disabled="inputsDisabled"
             :sending="sending"
             :max-birth-date="maxBirthDate"
-            @submit="submitMessage"
+            :selected-options="selectedQuestionOptions"
+            @update:selected-options="updateQuestionOptions"
+            @submit="submitQuestionnaireAnswer"
           />
           <TypingIndicator v-if="typing" />
         </div>
@@ -1169,6 +1235,19 @@ onBeforeUnmount(() => {
   background: #fbfdff;
 }
 
+.pain-location-question-card {
+  display: flex;
+  width: min(100%, 720px);
+  align-self: flex-start;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-1);
+  box-shadow: 0 4px 14px rgb(37 67 91 / 5%);
+}
+
 .previous-question-button {
   min-height: 42px;
   align-self: flex-start;
@@ -1299,6 +1378,10 @@ onBeforeUnmount(() => {
 
   .patient-messages {
     padding: 16px 12px;
+  }
+
+  .pain-location-question-card {
+    padding: 14px;
   }
 
   .patient-context-bar {

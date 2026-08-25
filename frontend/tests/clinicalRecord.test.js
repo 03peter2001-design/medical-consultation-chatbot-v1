@@ -30,6 +30,7 @@ test('builds a scannable clinical record from structured patient data', () => {
     },
     patient_data: {
       name: '測試病人',
+      birth_date: '1968-05-25',
       gender: '男',
       age: '58',
       blood_type: 'O型',
@@ -103,6 +104,7 @@ test('builds a scannable clinical record from structured patient data', () => {
   assert.deepEqual(result.identity, {
     name: '測試病人',
     queueNumber: '261',
+    birthDate: '1968-05-25',
     gender: '男',
     age: '58歲',
     bloodType: 'O型',

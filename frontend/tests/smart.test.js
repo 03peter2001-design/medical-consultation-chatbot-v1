@@ -2,12 +2,15 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 
 import {
+  authorizeSmartEhrLaunch,
   hasSmartLaunchContext,
   initializeSmartPatient,
   markSmartLaunchPending,
   readSmartPatientRecord,
   resetSmartClientCache,
   sanitizeSmartCallbackUrl,
+  smartCallbackUrl,
+  smartEhrLaunchContext,
 } from '../src/services/smart.js'
 
 function memoryStorage() {
@@ -35,22 +38,114 @@ test('detects SMART callbacks and the launch pending hint', () => {
   assert.equal(hasSmartLaunchContext({ search: '' }, storage), false)
 })
 
+test('builds a base-aware callback URL before the hash route', () => {
+  assert.equal(
+    smartCallbackUrl(
+      { origin: 'http://127.0.0.1:5173' },
+      '/ai-consult/',
+    ),
+    'http://127.0.0.1:5173/ai-consult/?smart=1',
+  )
+})
+
+test('validates EHR launch parameters without accepting unsafe issuers', () => {
+  assert.deepEqual(
+    smartEhrLaunchContext({
+      search:
+        '?iss=https%3A%2F%2Fehr.example%2Ffhir%2F&launch=launch-123',
+    }),
+    {
+      issuer: 'https://ehr.example/fhir',
+      launch: 'launch-123',
+    },
+  )
+  assert.throws(
+    () => smartEhrLaunchContext({ search: '?iss=javascript:alert(1)&launch=x' }),
+    /HTTP\(S\)/,
+  )
+  assert.throws(
+    () => smartEhrLaunchContext({ search: '?iss=https://ehr.example/fhir' }),
+    /iss 或 launch/,
+  )
+})
+
+test('starts provider OAuth with the registered base-aware callback', async () => {
+  const storage = memoryStorage()
+  let options = null
+  await authorizeSmartEhrLaunch({
+    fhirLibrary: {
+      oauth2: {
+        authorize: async (value) => {
+          options = value
+        },
+      },
+    },
+    clientId: 'test-client',
+    locationLike: {
+      origin: 'http://127.0.0.1:5173',
+      search:
+        '?iss=https%3A%2F%2Fehr.example%2Ffhir&launch=launch-123',
+    },
+    storageLike: storage,
+    basePath: '/ai-consult/',
+  })
+
+  assert.deepEqual(options, {
+    clientId: 'test-client',
+    scope: 'launch patient/*.read',
+    redirectUri: 'http://127.0.0.1:5173/ai-consult/?smart=1',
+    iss: 'https://ehr.example/fhir',
+    launch: 'launch-123',
+  })
+  assert.equal(hasSmartLaunchContext({ search: '' }, storage), true)
+})
+
+test('clears the pending hint when OAuth cannot start', async () => {
+  const storage = memoryStorage()
+  await assert.rejects(
+    () =>
+      authorizeSmartEhrLaunch({
+        fhirLibrary: {
+          oauth2: {
+            authorize: async () => {
+              throw new Error('discovery unavailable')
+            },
+          },
+        },
+        clientId: 'test-client',
+        locationLike: {
+          origin: 'http://127.0.0.1:5173',
+          search: '?iss=https%3A%2F%2Fehr.example%2Ffhir&launch=launch-123',
+        },
+        storageLike: storage,
+        basePath: '/ai-consult/',
+      }),
+    /discovery unavailable/,
+  )
+  assert.equal(hasSmartLaunchContext({ search: '' }, storage), false)
+})
+
 test('removes the authorization code from browser history', () => {
   let replacement = ''
+  let replacementState = null
+  const originalState = { current: '/#/' }
   const result = sanitizeSmartCallbackUrl(
     {
-      pathname: '/',
+      pathname: '/ai-consult/',
       search: '?smart=1&code=secret-code&state=state-1',
       hash: '#/',
     },
     {
-      replaceState: (_state, _title, url) => {
+      state: originalState,
+      replaceState: (state, _title, url) => {
+        replacementState = state
         replacement = url
       },
     },
   )
-  assert.equal(result, '/?smart=1&state=state-1#/')
-  assert.equal(replacement, '/?smart=1&state=state-1#/')
+  assert.equal(result, '/ai-consult/?smart=1&state=state-1#/')
+  assert.equal(replacement, '/ai-consult/?smart=1&state=state-1#/')
+  assert.equal(replacementState, originalState)
 })
 
 test('reads the launch-context patient through the authorized client', async () => {
@@ -68,6 +163,7 @@ test('reads the launch-context patient through the authorized client', async () 
     state: {
       serverUrl: 'https://ehr.example/fhir',
       tokenResponse: {
+        access_token: 'must-not-leak',
         scope: 'launch patient/*.read',
       },
     },
@@ -92,6 +188,7 @@ test('reads the launch-context patient through the authorized client', async () 
   assert.equal(record.resources[1].resourceType, 'Condition')
   assert.equal(record.smart.encounterId, 'encounter-456')
   assert.deepEqual(record.smart.scopes, ['launch', 'patient/*.read'])
+  assert.doesNotMatch(JSON.stringify(record), /must-not-leak/)
   assert.deepEqual(requests, [
     {
       url: 'Patient/patient-123/$everything?_count=100',

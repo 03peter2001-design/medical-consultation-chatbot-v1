@@ -5,10 +5,13 @@ import { getPainMapPreset } from '../data/bodyPainRegions.js'
 import { buildClinicalRecord } from '../services/clinicalRecord.js'
 import {
   formatEmrSummary,
+  parseEmrFields,
   splitStructuredNote,
 } from '../services/structuredNote.js'
 import BodyPainMap from './BodyPainMap.vue'
 import ClinicalEvidence from './ClinicalEvidence.vue'
+import PhysicianSummary from './PhysicianSummary.vue'
+import SourceTags from './SourceTags.vue'
 import StructuredReport from './StructuredReport.vue'
 import TerminologyCode from './TerminologyCode.vue'
 
@@ -24,6 +27,9 @@ const emrSummary = computed(
       splitStructuredNote(props.record.structured_note).emrSummary,
     ),
 )
+const emrPreview = computed(
+  () => emrSummary.value.split(/\r?\n/).find(Boolean) || '',
+)
 const painMapPreset = computed(() => getPainMapPreset(props.record.type))
 const painLocationIds = computed(() =>
   (props.record.pain_locations || [])
@@ -32,21 +38,112 @@ const painLocationIds = computed(() =>
     )
     .filter(Boolean),
 )
+const patientData = computed(
+  () => props.record.patient_data || props.record.data || {},
+)
+const complaintDuration = computed(
+  () =>
+    patientData.value.onset ||
+    [patientData.value.onset_num, patientData.value.onset_unit]
+      .filter(Boolean)
+      .join(' '),
+)
+const parsedEmrFields = computed(() =>
+  parseEmrFields(props.record.structured_note),
+)
+const physicianSummaryRows = computed(() => {
+  const parsed = parsedEmrFields.value
+  const parsedSource = 'Gemini 彙整 · 待醫師確認'
+  const history = clinical.value.historyFacts
+  const historyValue = history
+    .filter(
+      (fact) =>
+        !['past_meds', 'current_meds', 'allergy'].includes(fact.key),
+    )
+    .map((fact) => `${fact.label}：${fact.value}`)
+    .join('；')
+  const medicationValue = [
+    patientData.value.past_meds
+      ? `過去用藥：${patientData.value.past_meds}`
+      : '',
+    patientData.value.current_meds
+      ? `目前用藥：${patientData.value.current_meds}`
+      : '',
+  ]
+    .filter(Boolean)
+    .join('；')
+  const onsetValue = complaintDuration.value
+    ? `發作／持續時間：${complaintDuration.value}`
+    : '現病史細節未提供'
+
+  return [
+    {
+      key: 'Chief Complaint',
+      label: '主訴',
+      value: parsed.cc || clinical.value.complaint,
+      source: parsed.cc ? parsedSource : '病人自述',
+    },
+    {
+      key: 'Present Illness',
+      label: '現病史',
+      value: parsed.pi || onsetValue,
+      source: parsed.pi ? parsedSource : '結構化資料',
+    },
+    {
+      key: 'Past History',
+      label: '過去病史',
+      value: parsed.ph || historyValue || '尚無結構化過去病史',
+      source: parsed.ph ? parsedSource : '結構化資料',
+    },
+    {
+      key: 'Drug History',
+      label: '用藥史',
+      value: parsed.meds || medicationValue || '用藥史未提供',
+      source: parsed.meds ? parsedSource : '結構化資料',
+    },
+    {
+      key: 'Allergy History',
+      label: '過敏史',
+      value: parsed.allergy || patientData.value.allergy || '過敏史未提供',
+      source: parsed.allergy ? parsedSource : '結構化資料',
+    },
+    {
+      key: 'Personal History',
+      label: '個人史',
+      value:
+        parsed.personal ||
+        patientData.value.personal_history ||
+        '個人史未提供',
+      source: parsed.personal ? parsedSource : '結構化資料',
+    },
+    {
+      key: 'Family History',
+      label: '家族病史',
+      value:
+        parsed.family || patientData.value.family_history || '家族病史未提供',
+      source: parsed.family ? parsedSource : '結構化資料',
+    },
+  ]
+})
 </script>
 
 <template>
   <article class="clinical-dashboard">
     <header class="patient-identity">
-      <div>
+      <span class="identity-eyebrow" aria-hidden="true" />
+      <div class="identity-content">
         <div class="identity-title">
           <h2>{{ clinical.identity.name }}</h2>
+          <span class="birth-date">
+            出生日期 {{ clinical.identity.birthDate }}
+          </span>
           <span>#{{ clinical.identity.queueNumber }}</span>
           <strong :class="{ urgent: clinical.identity.urgent }">
             {{ clinical.identity.triage }}
           </strong>
         </div>
         <dl class="identity-meta">
-          <div>
+          <div class="identity-highlight identity-demographics">
             <dt>基本資料</dt>
             <dd>
               {{ clinical.identity.gender }} /
@@ -64,41 +161,22 @@ const painLocationIds = computed(() =>
               </span>
             </dd>
           </div>
-          <div>
+          <div class="identity-highlight identity-category">
             <dt>主訴分類</dt>
             <dd>{{ clinical.identity.type }}</dd>
           </div>
           <div class="complaint">
-            <dt>主訴</dt>
-            <dd>{{ clinical.complaint }}</dd>
+            <dt>摘要</dt>
+            <dd>
+              {{ clinical.identity.age }}{{ clinical.identity.gender }} ，主訴為「{{ clinical.complaint }}」
+              <template v-if="complaintDuration">
+                ，持續時間{{ complaintDuration?.slice(0, -1) }}
+              </template>
+            </dd>
           </div>
         </dl>
-
-        <section
-          v-if="emrSummary"
-          class="emr-summary"
-          aria-labelledby="emr-summary-title"
-        >
-          <div class="emr-summary-heading">
-            <span class="emr-mark" aria-hidden="true">EMR</span>
-            <div>
-              <small>結構化病歷重點</small>
-              <h3 id="emr-summary-title">病歷摘要 EMR</h3>
-            </div>
-            <strong>快速掌握病況</strong>
-          </div>
-          <p>{{ emrSummary }}</p>
-        </section>
       </div>
     </header>
-
-    <StructuredReport
-      v-if="record.structured_note"
-      class="patient-summary-report"
-      :text="record.structured_note"
-      :sources="record.structured_sources || []"
-      hide-emr
-    />
 
     <section
       v-if="clinical.redFlags.length"
@@ -230,30 +308,65 @@ const painLocationIds = computed(() =>
       </section>
     </div>
 
-    <ClinicalEvidence :clinical="clinical" />
+    <StructuredReport
+      v-if="record.structured_note"
+      class="patient-summary-report"
+      :text="record.structured_note"
+      hide-emr
+    />
+    <details v-if="emrSummary" class="emr-summary">
+      <summary class="emr-summary-trigger">
+        <span class="emr-mark" aria-hidden="true">RAG</span>
+        <span class="emr-summary-label">
+          <span class="emr-summary-title-row">
+            <strong id="emr-summary-title">RAG 病歷／文獻摘要</strong>
+            <small>Gemini 生成 · 待醫師確認</small>
+          </span>
+          <span class="emr-summary-preview">{{ emrPreview }}</span>
+        </span>
+        <span class="emr-summary-action">
+          <span v-if="record.structured_sources?.length">
+            {{ record.structured_sources.length }} 項來源
+          </span>
+          <span v-else>查看完整摘要</span>
+          <svg
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.8"
+            aria-hidden="true"
+          >
+            <path d="m6 8 4 4 4-4" />
+          </svg>
+        </span>
+      </summary>
+      <section
+        class="emr-summary-content"
+        aria-labelledby="emr-summary-title"
+      >
+        <p>{{ emrSummary }}</p>
+        <SourceTags :sources="record.structured_sources || []" />
+      </section>
+    </details>
 
-    <div class="narrative-grid">
-      <details class="narrative-panel">
-        <summary>
-          <span>
-            <small>原始文字</small>
-            <strong>問卷摘要</strong>
-          </span>
-          <em>展開完整摘要</em>
-        </summary>
-        <p>{{ record.summary || '未提供問卷摘要' }}</p>
-      </details>
-      <details class="narrative-panel">
-        <summary>
-          <span>
-            <small>Gemini 整理 · 固定疾病表</small>
-            <strong>醫師速覽摘要</strong>
-          </span>
-          <em>展開約 300 字摘要</em>
-        </summary>
-        <p>{{ record.report || '尚未產生醫師速覽摘要' }}</p>
-      </details>
-    </div>
+    <PhysicianSummary
+      class="physician-summary"
+      :rows="physicianSummaryRows"
+      :report="record.report"
+    />
+
+    <details class="clinical-evidence-disclosure">
+      <summary>
+        <span>
+          <small>固定規則、疾病票數與問診軌跡</small>
+          <strong>臨床依據與稽核資料</strong>
+        </span>
+        <em>展開完整依據</em>
+      </summary>
+      <ClinicalEvidence :clinical="clinical" />
+    </details>
   </article>
 </template>
 
@@ -267,26 +380,35 @@ const painLocationIds = computed(() =>
   background: #fff;
   color: #1b3145;
   font-size: 15px;
+  box-shadow: 0 8px 24px rgb(32 65 91 / 7%);
 }
 
 .patient-identity {
-  padding: 20px 22px 17px;
+  display: grid;
+  grid-template-columns: 4px minmax(0, 1fr);
+  gap: 12px;
+  padding: 20px 22px 18px;
   border-bottom: 1px solid #dbe4ec;
 }
 
-.patient-summary-report {
-  margin: 16px 18px 0;
+.identity-eyebrow {
+  overflow: hidden;
+  width: 4px;
+  border-radius: 4px;
+  background: #2568b2;
+  color: transparent;
 }
 
 .identity-title {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 10px 14px;
+  align-items: baseline;
+  gap: 7px 14px;
 }
 
 .identity-title h2 {
-  font-size: clamp(23px, 2.2vw, 30px);
+  color: #17324d;
+  font-size: clamp(24px, 2.2vw, 31px);
   line-height: 1.2;
   letter-spacing: 0.01em;
 }
@@ -294,16 +416,22 @@ const painLocationIds = computed(() =>
 .identity-title > span {
   color: #61758a;
   font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+
+.identity-title .birth-date {
+  font-family: 'Noto Sans TC', system-ui, sans-serif;
   font-size: 14px;
 }
 
 .identity-title > strong {
-  padding: 5px 10px;
+  margin-left: auto;
+  padding: 4px 9px;
   border: 1px solid #9fcfc4;
   border-radius: 6px;
   background: #eef9f6;
   color: #087f6d;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .identity-title > strong.urgent {
@@ -313,9 +441,9 @@ const painLocationIds = computed(() =>
 }
 
 .identity-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 26px;
+  display: grid;
+  grid-template-columns: minmax(260px, auto) minmax(220px, 1fr);
+  gap: 10px;
   margin-top: 14px;
 }
 
@@ -325,115 +453,90 @@ const painLocationIds = computed(() =>
   gap: 8px;
 }
 
-.identity-meta .complaint {
+.identity-meta > .identity-highlight {
   display: grid;
   min-width: 0;
-  flex: 1 0 100%;
+  min-height: 58px;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: 10px;
-  margin-top: 3px;
-  padding: 12px 14px;
-  border: 1px solid #c4d9e7;
+  padding: 10px 13px;
+  border: 1px solid #c7d9e9;
   border-left: 4px solid #2568b2;
   border-radius: 8px;
-  background: linear-gradient(90deg, #eef6fb 0%, #f8fbfd 100%);
+  background: #f5f9fd;
 }
 
-.identity-meta .complaint dt {
-  color: #2568b2;
-  font-size: 12px;
+.identity-meta .identity-highlight dt {
+  padding: 3px 7px;
+  border-radius: 4px;
+  background: #dcebf8;
+  color: #1e5f98;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
 
-.identity-meta .complaint dd {
-  color: #16334a;
-  font-size: clamp(17px, 1.6vw, 20px);
-  font-weight: 700;
-  line-height: 1.5;
+.identity-meta .identity-highlight dd {
+  overflow-wrap: anywhere;
+  color: #17324d;
+  font-size: clamp(16px, 1.4vw, 19px);
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+.identity-meta > .identity-category {
+  border-color: #a9d3ca;
+  border-left-color: #0b8c78;
+  background: #eef9f6;
+}
+
+.identity-meta .identity-category dt {
+  background: #d9f0eb;
+  color: #087563;
+}
+
+.identity-meta .identity-category dd {
+  color: #086f60;
 }
 
 .identity-meta dt {
   flex: 0 0 auto;
   color: #6b7f92;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 650;
 }
 
 .identity-meta dd {
   color: #2c4357;
-  font-size: 15px;
+  font-size: 14px;
 }
 
-.emr-summary {
-  margin-top: 12px;
-  overflow: hidden;
-  border: 1px solid #8fc8bf;
-  border-left: 5px solid #087f6d;
-  border-radius: 9px;
-  background: linear-gradient(120deg, #effaf7 0%, #f8fcfb 58%, #edf7fb 100%);
-  box-shadow: 0 5px 16px rgb(23 72 88 / 9%);
-}
-
-.emr-summary-heading {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 14px 10px;
-  border-bottom: 1px solid #cce3df;
-}
-
-.emr-mark {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  flex: 0 0 34px;
-  place-items: center;
-  border-radius: 8px;
-  background: #087f6d;
-  color: #fff;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-}
-
-.emr-summary-heading div {
+.identity-meta .complaint {
   display: grid;
   min-width: 0;
-  flex: 1;
-  gap: 1px;
+  grid-column: 1 / -1;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #d8e1e9;
 }
 
-.emr-summary-heading small {
-  color: #53766f;
-  font-size: 11px;
-  letter-spacing: 0.05em;
+.identity-meta .complaint dt {
+  padding-left: 10px;
+  border-left: 3px solid #2568b2;
+  color: #2568b2;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
 }
 
-.emr-summary-heading h3 {
-  color: #15584f;
-  font-size: 17px;
-  line-height: 1.3;
-}
-
-.emr-summary-heading > strong {
-  flex: 0 0 auto;
-  padding: 4px 8px;
-  border: 1px solid #add5ce;
-  border-radius: 999px;
-  background: rgb(255 255 255 / 75%);
-  color: #087f6d;
-  font-size: 11px;
-}
-
-.emr-summary > p {
-  padding: 13px 15px 15px;
-  color: #203f3b;
-  font-size: 15px;
-  font-weight: 550;
-  line-height: 1.75;
-  white-space: pre-wrap;
+.identity-meta .complaint dd {
+  color: #16334a;
+  font-size: clamp(16px, 1.6vw, 20px);
+  font-weight: 700;
+  line-height: 1.5;
 }
 
 .inline-codings,
@@ -449,24 +552,25 @@ const painLocationIds = computed(() =>
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 16px 18px 0;
-  padding: 13px 15px;
+  margin: 14px 18px 0;
+  padding: 12px 14px;
   border: 1px solid #eb8793;
-  border-radius: 8px;
+  border-left: 4px solid #c6404f;
+  border-radius: 7px;
   background: #fff6f7;
   color: #ab2d3d;
 }
 
 .alert-mark {
   display: grid;
-  width: 28px;
-  height: 28px;
-  flex: 0 0 28px;
+  width: 27px;
+  height: 27px;
+  flex: 0 0 27px;
   place-items: center;
   border-radius: 50%;
   background: #c6404f;
   color: #fff;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 800;
 }
 
@@ -483,7 +587,7 @@ const painLocationIds = computed(() =>
 }
 
 .red-flag-banner strong {
-  font-size: 17px;
+  font-size: 16px;
 }
 
 .red-flag-banner small {
@@ -494,19 +598,19 @@ const painLocationIds = computed(() =>
 
 .snapshot-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr minmax(280px, 1.1fr);
-  margin: 16px 18px 0;
-  border: 1px solid #d6e0e9;
-  border-radius: 8px;
+  grid-template-columns: 1fr 1fr minmax(270px, 1.05fr);
+  margin: 14px 18px 0;
+  border: 1px solid #cbd7e1;
+  border-radius: 7px;
 }
 
 .snapshot-section {
   min-width: 0;
-  padding: 17px;
+  padding: 15px 17px;
 }
 
 .snapshot-section + .snapshot-section {
-  border-left: 1px solid #d6e0e9;
+  border-left: 1px solid #cbd7e1;
 }
 
 .section-heading {
@@ -514,18 +618,19 @@ const painLocationIds = computed(() =>
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 13px;
+  margin-bottom: 12px;
 }
 
 .section-heading span {
   color: #6b7f92;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
 }
 
 .section-heading h3 {
   margin-top: 1px;
+  color: #17324d;
   font-size: 17px;
 }
 
@@ -538,21 +643,22 @@ const painLocationIds = computed(() =>
 .finding-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 15px;
+  gap: 7px;
+  margin-bottom: 14px;
 }
 
 .finding-list span {
-  padding: 6px 9px;
+  padding: 5px 8px;
   border: 1px solid #ef9ca5;
-  border-radius: 6px;
+  border-radius: 5px;
   background: #fff7f8;
   color: #b83243;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 650;
 }
 
-.fact-list {
+.fact-list,
+.history-list {
   display: grid;
   gap: 8px;
 }
@@ -563,6 +669,13 @@ const painLocationIds = computed(() =>
   gap: 8px;
   padding-top: 8px;
   border-top: 1px solid #e5ebf1;
+}
+
+.history-row {
+  display: grid;
+  grid-template-columns: 8px 76px minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
 }
 
 .fact-row dt,
@@ -587,21 +700,9 @@ const painLocationIds = computed(() =>
   margin-left: 0;
 }
 
-.history-list {
-  display: grid;
-  gap: 10px;
-}
-
-.history-row {
-  display: grid;
-  grid-template-columns: 9px 76px minmax(0, 1fr);
-  gap: 8px;
-  align-items: baseline;
-}
-
 .history-status {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: #2568b2;
 }
@@ -618,11 +719,12 @@ const painLocationIds = computed(() =>
 
 .pain-section :deep(.body-map) {
   width: 100%;
-  border-color: #d6e0e9;
+  border: 0;
+  background: transparent;
 }
 
 .pain-section :deep(.compact .figure-stage) {
-  height: 190px;
+  height: 150px;
 }
 
 .pain-section :deep(.side-label) {
@@ -631,15 +733,15 @@ const painLocationIds = computed(() =>
 
 .pain-empty {
   display: flex;
-  min-height: 205px;
+  min-height: 150px;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 18px;
   color: #6b7f92;
 }
 
 .pain-empty svg {
-  width: 54px;
+  width: 46px;
   fill: #edf3f8;
   stroke: #8aa4ba;
   stroke-linejoin: round;
@@ -657,66 +759,193 @@ const painLocationIds = computed(() =>
 
 .pain-empty span {
   max-width: 180px;
-  font-size: 13px;
+  font-size: 12px;
 }
 
-.narrative-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin: 14px 18px 18px;
+.patient-summary-report,
+.emr-summary,
+.physician-summary,
+.clinical-evidence-disclosure {
+  margin: 14px 18px 0;
 }
 
-.narrative-panel {
-  border: 1px solid #d6e0e9;
-  border-radius: 8px;
+.emr-summary {
+  overflow: hidden;
+  border: 1px solid #58aa9c;
+  border-left: 5px solid #087f6d;
+  border-radius: 7px;
   background: #fff;
+  box-shadow: 0 4px 14px rgb(23 86 75 / 7%);
 }
 
-.narrative-panel summary {
+.emr-summary-trigger {
+  display: grid;
+  min-height: 76px;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 14px;
+  background: #f3fbf9;
+  cursor: pointer;
+  list-style: none;
+  transition: background 0.18s ease;
+}
+
+.emr-summary-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.emr-summary-trigger:hover {
+  background: #ecf8f5;
+}
+
+.emr-summary-trigger:focus-visible {
+  outline: 2px solid #087f6d;
+  outline-offset: -3px;
+}
+
+.emr-summary[open] .emr-summary-trigger {
+  border-bottom: 1px solid #cbe7e1;
+}
+
+.emr-mark {
+  display: grid;
+  width: 38px;
+  height: 30px;
+  flex: 0 0 38px;
+  place-items: center;
+  border-radius: 6px;
+  background: #087f6d;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.emr-summary-label {
   display: flex;
-  min-height: 68px;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.emr-summary-title-row {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px 10px;
+}
+
+.emr-summary-title-row > strong {
+  color: #087f6d;
+  font-size: 17px;
+  line-height: 1.3;
+}
+
+.emr-summary-title-row > small {
+  color: #53766f;
+  font-size: 11px;
+}
+
+.emr-summary-preview {
+  overflow: hidden;
+  color: #405f59;
+  font-size: 13px;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.emr-summary-action {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #087f6d;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.emr-summary-action svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.18s ease;
+}
+
+.emr-summary[open] .emr-summary-action svg {
+  transform: rotate(180deg);
+}
+
+.emr-summary-content > p {
+  padding: 14px 16px 10px 63px;
+  color: #203f3b;
+  font-size: 14px;
+  font-weight: 550;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.emr-summary-content :deep(.source-list) {
+  padding: 0 16px 15px 63px;
+}
+
+.clinical-evidence-disclosure > summary {
+  display: flex;
+  min-height: 58px;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 13px 15px;
+  padding: 11px 16px;
   cursor: pointer;
   list-style: none;
 }
 
-.narrative-panel summary::-webkit-details-marker {
+.clinical-evidence-disclosure > summary::-webkit-details-marker {
   display: none;
 }
 
-.narrative-panel summary span {
+.clinical-evidence-disclosure > summary span {
   display: grid;
-  gap: 2px;
+  gap: 1px;
 }
 
-.narrative-panel summary small {
+.clinical-evidence-disclosure > summary small {
   color: #6b7f92;
-  font-size: 11px;
-  letter-spacing: 0.06em;
+  font-size: 10px;
+  letter-spacing: 0.05em;
 }
 
-.narrative-panel summary strong {
-  font-size: 16px;
+.clinical-evidence-disclosure > summary strong {
+  color: #2b4256;
+  font-size: 14px;
 }
 
-.narrative-panel summary em {
+.clinical-evidence-disclosure > summary em {
   color: #2568b2;
   font-size: 12px;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 650;
 }
 
-.narrative-panel > p {
-  padding: 0 15px 15px;
-  border-top: 1px solid #e2e9ef;
-  color: #40576b;
-  line-height: 1.75;
-  padding-top: 14px;
-  white-space: pre-wrap;
+.clinical-evidence-disclosure {
+  margin-bottom: 18px;
+  border: 1px solid #d6e0e9;
+  border-radius: 7px;
+  background: #f8fafc;
+}
+
+.clinical-evidence-disclosure > summary {
+  min-height: 64px;
+}
+
+.clinical-evidence-disclosure[open] > summary {
+  border-bottom: 1px solid #d6e0e9;
+}
+
+.clinical-evidence-disclosure :deep(.evidence-layout) {
+  margin: 14px;
 }
 
 @media (max-width: 1040px) {
@@ -740,15 +969,29 @@ const painLocationIds = computed(() =>
     border-right: 0;
     border-left: 0;
     border-radius: 0;
+    box-shadow: none;
   }
 
   .patient-identity {
-    padding: 17px 15px;
+    gap: 9px;
+    padding: 16px 14px;
+  }
+
+  .identity-title {
+    align-items: center;
+  }
+
+  .identity-title h2 {
+    flex: 1 0 100%;
+  }
+
+  .identity-title > strong {
+    margin-left: 0;
   }
 
   .identity-meta {
-    display: grid;
-    gap: 7px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
   }
 
   .identity-meta > div {
@@ -756,38 +999,31 @@ const painLocationIds = computed(() =>
     gap: 1px;
   }
 
+  .identity-meta > .identity-highlight {
+    min-height: 54px;
+    grid-template-columns: minmax(80px, auto) minmax(0, 1fr);
+    gap: 9px;
+    padding: 9px 11px;
+  }
+
   .identity-meta .complaint {
+    grid-column: 1;
     grid-template-columns: 1fr;
     gap: 4px;
-    margin-top: 5px;
-    padding: 11px 12px;
-  }
-
-  .emr-summary-heading {
-    align-items: flex-start;
-    padding: 11px 12px 9px;
-  }
-
-  .emr-summary-heading > strong {
-    display: none;
-  }
-
-  .emr-summary > p {
-    padding: 12px;
-    font-size: 14px;
-    line-height: 1.7;
+    padding-top: 10px;
   }
 
   .red-flag-banner,
   .patient-summary-report,
   .snapshot-grid,
-  .narrative-grid {
+  .emr-summary,
+  .physician-summary,
+  .clinical-evidence-disclosure {
     margin-right: 12px;
     margin-left: 12px;
   }
 
-  .snapshot-grid,
-  .narrative-grid {
+  .snapshot-grid {
     grid-template-columns: 1fr;
   }
 
@@ -800,5 +1036,33 @@ const painLocationIds = computed(() =>
     grid-column: auto;
   }
 
+  .emr-summary-trigger {
+    grid-template-columns: 38px minmax(0, 1fr);
+    align-items: start;
+    padding: 12px;
+  }
+
+  .emr-summary-action {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .emr-summary-preview {
+    white-space: normal;
+  }
+
+  .emr-summary-content > p,
+  .emr-summary-content :deep(.source-list) {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .clinical-evidence-disclosure > summary {
+    padding: 11px 12px;
+  }
+
+  .clinical-evidence-disclosure :deep(.evidence-layout) {
+    margin: 10px;
+  }
 }
 </style>

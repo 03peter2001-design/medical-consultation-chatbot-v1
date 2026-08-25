@@ -18,7 +18,7 @@ from app.prompts.consultation_reporting import (
     REPORTING_TASKS,
     build_reporting_prompt_requests,
 )
-from app.prompts.report import build_report_prompt
+from app.prompts.report import build_report_prompt_request
 from app.services.clinical_summary import (
     build_structured_emr,
     clinical_patient_data,
@@ -496,20 +496,11 @@ def generate_structured_note(
 
 def generate_ai_report(record: dict) -> str | None:
     data = record.get("data") or {}
+    prompt_request = build_report_prompt_request(data)
     report = runtime.llm_client.generate_text(
-        [
-            {
-                "role": "system",
-                "content": (
-                    "你是協助醫師快速掌握病況的醫療預問診病史整理助手。"
-                    "只能重述既有資料；疾病與理由由後端固定規則補入，"
-                    "你不得自行提出疾病、鑑別診斷、檢查或治療建議。"
-                ),
-            },
-            {"role": "user", "content": build_report_prompt(data)},
-        ],
+        prompt_request.messages,
         temperature=0.3,
-        max_tokens=500,
+        max_tokens=prompt_request.max_tokens,
     )
     questionnaire_pipeline = data.get("_interview_pipeline", {}).get("engine") == "questionnaire"
     assessment = _assessment_for_record(record)

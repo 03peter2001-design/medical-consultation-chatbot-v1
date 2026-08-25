@@ -11,6 +11,8 @@ from collections import OrderedDict
 from dataclasses import dataclass
 from typing import Any, Mapping
 
+from infrastructure.llm import gemini_supports_temperature
+
 LOGGER = logging.getLogger("rag.translation")
 SUPPORTED_TRANSLATORS = {"off", "gemini"}
 SUPPORTED_QUERY_MODES = {"dual", "english"}
@@ -227,7 +229,7 @@ class GeminiQueryNormalizer:
             "dual",
             SUPPORTED_QUERY_MODES,
         )
-        self.model = self.env.get("GEMINI_TRANSLATION_MODEL", "").strip() or "gemini-2.5-flash"
+        self.model = self.env.get("GEMINI_TRANSLATION_MODEL", "").strip() or "gemini-3.5-flash-lite"
         try:
             configured_max_chars = int(self.env.get("RAG_TRANSLATION_MAX_INPUT_CHARS", "4000"))
         except (TypeError, ValueError):
@@ -272,11 +274,13 @@ class GeminiQueryNormalizer:
 
             config_kwargs: dict[str, Any] = {
                 "system_instruction": SYSTEM_INSTRUCTION,
-                "temperature": 0,
                 "max_output_tokens": 700,
                 "response_mime_type": "application/json",
-                "response_schema": QUERY_NORMALIZATION_SCHEMA,
+                "response_json_schema": QUERY_NORMALIZATION_SCHEMA,
+                "automatic_function_calling": types.AutomaticFunctionCallingConfig(disable=True),
             }
+            if gemini_supports_temperature(self.model):
+                config_kwargs["temperature"] = 0
             if self.model.startswith("gemini-2.5-flash"):
                 config_kwargs["thinking_config"] = types.ThinkingConfig(thinking_budget=0)
             elif self.model.startswith("gemini-2.5-pro"):

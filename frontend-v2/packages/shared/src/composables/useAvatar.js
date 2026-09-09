@@ -2,6 +2,9 @@ import { computed, onBeforeUnmount, ref } from 'vue'
 
 let sdkPromise
 
+const avatarBaseUrl = import.meta.env?.BASE_URL || '/ai-consult/'
+const avatarImageUrl = `${avatarBaseUrl}dr%20training%20pc.png`
+
 async function loadDidSdk(timeout = 10000) {
   if (!sdkPromise) {
     sdkPromise = import('@d-id/client-sdk').catch((error) => {
@@ -25,6 +28,12 @@ export function normalizeAvatarProvider(value) {
   return String(value || '').trim().toLowerCase() === 'did' ? 'did' : 'local'
 }
 
+export function normalizeAvatarLanguage(value) {
+  return String(value || '').trim().toLowerCase() === 'minnan'
+    ? 'minnan'
+    : 'mandarin'
+}
+
 export function cleanSpeechText(text) {
   return text
     .replace(/【.*?】/g, '')
@@ -38,22 +47,27 @@ export function cleanSpeechText(text) {
 
 export function useAvatar({
   getStatus,
+  warmup,
   synthesize,
   initialProvider = 'local',
 } = {}) {
   const provider = ref(normalizeAvatarProvider(initialProvider))
+  const language = ref('mandarin')
   const manager = ref(null)
   const videoStream = ref(null)
   const videoUrl = ref('')
-  const imageUrl = ref('/avatar/doctor.png')
+  const imageUrl = ref(avatarImageUrl)
   const caption = ref('')
   const connectionState = ref('idle')
   const status = ref('Avatar 尚未啟用')
   const statusTone = ref('idle')
   const talking = ref(false)
+  const rendering = ref(false)
   const speechModel = ref('Fun-CosyVoice3-0.5B-2512')
   const animationModel = ref('MuseTalk 1.5')
-  let speechQueue = Promise.resolve()
+  let pendingLocalSpeech = null
+  let localSpeechWorker = null
+  let localSpeechRequestId = 0
   let userEnabled = false
   let lifecycleToken = 0
   let activeRequestController = null
@@ -63,9 +77,13 @@ export function useAvatar({
   const isConnected = computed(() => connectionState.value === 'connected')
   const isConnecting = computed(() => connectionState.value === 'connecting')
   const providerLabel = computed(() => isDid.value ? 'D-ID' : '本地 Avatar')
+  const languageLabel = computed(() =>
+    language.value === 'minnan' ? '台語' : '國語',
+  )
   const headerStatus = computed(() => {
     if (talking.value) return `${providerLabel.value} 說話中`
     if (isConnecting.value) return `${providerLabel.value} 連線或生成中`
+    if (rendering.value) return `${providerLabel.value} 背景生成中，可直接作答`
     if (isConnected.value) return `${providerLabel.value} 已啟用`
     return '文字問診模式'
   })
@@ -89,6 +107,7 @@ export function useAvatar({
     videoStream.value = null
     connectionState.value = 'idle'
     talking.value = false
+    rendering.value = false
     caption.value = ''
     status.value = message
     statusTone.value = 'idle'
@@ -108,6 +127,16 @@ export function useAvatar({
       animationModel.value = info.animation_model || animationModel.value
       if (!info.enabled || !info.available) {
         throw new Error('GPU 模型服務尚未就緒')
+      }
+      if (typeof warmup === 'function') {
+        status.value = '正在預載 Breeze ASR 與本機醫師語音模型…'
+        const warmed = await warmup()
+        if (!isCurrent(token, 'local')) return false
+        if (!warmed.available || !warmed.loaded) {
+          throw new Error('語音與 Avatar 模型未完整載入')
+        }
+        speechModel.value = warmed.speech_model || speechModel.value
+        animationModel.value = warmed.animation_model || animationModel.value
       }
       connectionState.value = 'connected'
       status.value = `本地 Avatar 已啟用（${info.device || 'local'}）`
@@ -196,6 +225,9 @@ export function useAvatar({
   async function disconnect(message = 'Avatar 已停用；問診仍可繼續') {
     userEnabled = false
     lifecycleToken += 1
+    localSpeechRequestId += 1
+    pendingLocalSpeech = null
+    rendering.value = false
     activeRequestController?.abort()
     activeRequestController = null
     const currentManager = manager.value
@@ -218,34 +250,62 @@ export function useAvatar({
     status.value = `${nextProvider === 'did' ? 'D-ID' : '本地 Avatar'} 尚未啟用`
   }
 
-  async function performLocalSpeech(text, token) {
+  function setLanguage(value) {
+    language.value = normalizeAvatarLanguage(value)
+    if (isLocal.value && isConnected.value) {
+      status.value = `已切換為${languageLabel.value}；下一段回覆開始套用`
+      statusTone.value = 'success'
+    }
+  }
+
+  async function performLocalSpeech(text, token, requestId) {
     if (!isCurrent(token, 'local')) return
     const input = cleanSpeechText(text)
     if (!input) return
-    connectionState.value = 'connecting'
-    status.value = '本機醫師語音生成中…'
+    status.value = 'Avatar 影片背景生成中；下一題已可直接作答'
     statusTone.value = 'waiting'
     const controller = new AbortController()
     activeRequestController = controller
     try {
-      const result = await synthesize(input, { signal: controller.signal })
-      if (!isCurrent(token, 'local')) return
+      const result = await synthesize(input, {
+        language: language.value,
+        signal: controller.signal,
+      })
+      if (!isCurrent(token, 'local') || requestId !== localSpeechRequestId) return
       revokeVideo()
       videoUrl.value = URL.createObjectURL(result.blob)
       speechModel.value = result.speechModel || speechModel.value
       animationModel.value = result.animationModel || animationModel.value
-      connectionState.value = 'connected'
-      status.value = result.cacheHit ? '影片已由本機快取載入' : '本地影片已完成'
+      status.value = result.cacheHit
+        ? `${languageLabel.value}影片已由本機快取載入`
+        : `${languageLabel.value}影片已完成`
       statusTone.value = 'success'
     } catch (error) {
-      if (!isCurrent(token, 'local') || error?.name === 'AbortError') return
-      connectionState.value = 'connected'
+      if (
+        !isCurrent(token, 'local') ||
+        requestId !== localSpeechRequestId ||
+        error?.name === 'AbortError'
+      ) return
       talking.value = false
       status.value = `本次本地 Avatar 失敗：${error.message}`
       statusTone.value = 'error'
       console.warn('本地 Avatar 語音播放失敗：', error)
     } finally {
       if (activeRequestController === controller) activeRequestController = null
+    }
+  }
+
+  async function drainLocalSpeech(token) {
+    rendering.value = true
+    try {
+      while (pendingLocalSpeech && isCurrent(token, 'local')) {
+        const request = pendingLocalSpeech
+        pendingLocalSpeech = null
+        await performLocalSpeech(request.text, token, request.id)
+      }
+    } finally {
+      rendering.value = false
+      localSpeechWorker = null
     }
   }
 
@@ -261,10 +321,12 @@ export function useAvatar({
     }
 
     const token = lifecycleToken
-    speechQueue = speechQueue
-      .catch(() => undefined)
-      .then(() => performLocalSpeech(input, token))
-    return speechQueue
+    const requestId = ++localSpeechRequestId
+    pendingLocalSpeech = { id: requestId, text: input }
+    if (!localSpeechWorker) {
+      localSpeechWorker = drainLocalSpeech(token)
+    }
+    return localSpeechWorker
   }
 
   function onPlaybackStart() {
@@ -290,12 +352,15 @@ export function useAvatar({
     connect,
     disconnect,
     setProvider,
+    setLanguage,
     speak,
     onPlaybackStart,
     onPlaybackEnd,
     onPlaybackError,
     provider,
     providerLabel,
+    language,
+    languageLabel,
     isLocal,
     isDid,
     manager,
@@ -308,6 +373,7 @@ export function useAvatar({
     status,
     statusTone,
     talking,
+    rendering,
     isConnected,
     isConnecting,
     headerStatus,

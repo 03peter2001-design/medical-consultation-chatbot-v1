@@ -5,12 +5,15 @@ import {
   BODY_PAIN_REGIONS,
   getPainRegions,
   getPainMapPreset,
+  togglePainRegionSelection,
 } from '../data/bodyPainRegions.js'
 
 const props = defineProps({
   modelValue: { type: Array, default: () => [] },
+  highlightedRegionIds: { type: Array, default: () => [] },
   readonly: { type: Boolean, default: false },
   compact: { type: Boolean, default: false },
+  showRegionOptions: { type: Boolean, default: true },
   preset: {
     type: Object,
     default: () => getPainMapPreset(),
@@ -26,9 +29,17 @@ const allowedRegionSet = computed(
   () => new Set(props.preset.allowedRegionIds || []),
 )
 const selectedSet = computed(() => new Set(props.modelValue))
+const highlightedSet = computed(() => new Set(props.highlightedRegionIds))
 const selectedRegions = computed(() =>
   getPainRegions(props.modelValue).filter(
     (region) => props.readonly || allowedRegionSet.value.has(region.id),
+  ),
+)
+const highlightedRegions = computed(() =>
+  getPainRegions(props.highlightedRegionIds).filter(
+    (region) =>
+      !selectedSet.value.has(region.id) &&
+      (props.readonly || allowedRegionSet.value.has(region.id)),
   ),
 )
 const visibleRegions = computed(() =>
@@ -39,8 +50,12 @@ const visibleRegions = computed(() =>
   ),
 )
 const counts = computed(() => ({
-  front: selectedRegions.value.filter((region) => region.view === 'front').length,
-  back: selectedRegions.value.filter((region) => region.view === 'back').length,
+  front: [...selectedRegions.value, ...highlightedRegions.value].filter(
+    (region) => region.view === 'front',
+  ).length,
+  back: [...selectedRegions.value, ...highlightedRegions.value].filter(
+    (region) => region.view === 'back',
+  ).length,
 }))
 
 const availableViews = computed(() =>
@@ -85,9 +100,11 @@ watch(
 
 function toggleRegion(region) {
   if (props.readonly) return
-  const next = selectedSet.value.has(region.id)
-    ? props.modelValue.filter((id) => id !== region.id)
-    : [...props.modelValue, region.id]
+  const next = togglePainRegionSelection(
+    props.modelValue,
+    region.id,
+    props.preset.allowedRegionIds,
+  )
   emit('update:modelValue', next)
 }
 
@@ -150,7 +167,12 @@ function handleRegionKeydown(event, region) {
             v-for="region in visibleRegions"
             :key="region.id"
             class="pain-region"
-            :class="{ selected: selectedSet.has(region.id) }"
+            :class="{
+              selected: selectedSet.has(region.id),
+              highlighted:
+                !selectedSet.has(region.id) && highlightedSet.has(region.id),
+            }"
+            :data-region-id="region.id"
             :d="region.d"
             :tabindex="readonly ? undefined : 0"
             :role="readonly ? undefined : 'button'"
@@ -174,6 +196,35 @@ function handleRegionKeydown(event, region) {
       </svg>
     </div>
 
+    <fieldset
+      v-if="!readonly && showRegionOptions"
+      class="region-options"
+    >
+      <legend>
+        {{ activeView === 'front' ? '正面' : '背面' }}部位選項
+      </legend>
+      <div class="region-option-grid">
+        <label
+          v-for="region in visibleRegions"
+          :key="region.id"
+          class="region-option"
+          :class="{
+            selected: selectedSet.has(region.id),
+            highlighted:
+              !selectedSet.has(region.id) && highlightedSet.has(region.id),
+          }"
+          :data-region-id="region.id"
+        >
+          <input
+            type="checkbox"
+            :checked="selectedSet.has(region.id)"
+            @change="toggleRegion(region)"
+          />
+          <span>{{ region.label }}</span>
+        </label>
+      </div>
+    </fieldset>
+
     <div v-if="selectedRegions.length" class="selected-regions">
       <span
         v-for="region in selectedRegions"
@@ -184,6 +235,9 @@ function handleRegionKeydown(event, region) {
         {{ region.label }}
       </span>
     </div>
+    <p v-else-if="highlightedRegions.length" class="map-guidance">
+      已依下方問卷選項標示可能範圍；可直接點圖指定更精確的位置。
+    </p>
     <p v-else class="map-empty">
       {{ readonly ? '未記錄圖像化疼痛位置' : '尚未選擇疼痛位置' }}
     </p>
@@ -321,6 +375,12 @@ function handleRegionKeydown(event, region) {
   stroke-width: 2;
 }
 
+.pain-region.highlighted {
+  fill: rgb(10 146 126 / 24%);
+  stroke: var(--green);
+  stroke-width: 1.8;
+}
+
 .side-label {
   position: absolute;
   top: 14px;
@@ -344,6 +404,68 @@ function handleRegionKeydown(event, region) {
   fill: var(--muted);
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
+}
+
+.region-options {
+  min-width: 0;
+  margin: 0;
+  padding: 12px;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.region-options legend {
+  padding: 0 5px;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+
+.region-option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.region-option {
+  display: flex;
+  min-width: 0;
+  min-height: 40px;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 9px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface-2);
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.region-option:hover {
+  border-color: var(--green);
+}
+
+.region-option.selected {
+  border-color: rgb(198 64 79 / 45%);
+  background: #fdecee;
+}
+
+.region-option.highlighted {
+  border-color: rgb(10 146 126 / 45%);
+  background: var(--green-soft);
+}
+
+.region-option input {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  accent-color: var(--danger);
+}
+
+.region-option:focus-within {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
 }
 
 .selected-regions {
@@ -374,13 +496,18 @@ function handleRegionKeydown(event, region) {
   background: var(--danger);
 }
 
-.map-empty {
+.map-empty,
+.map-guidance {
   padding: 10px 12px 12px;
   border-top: 1px solid var(--border);
   color: var(--muted);
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
   text-align: center;
+}
+
+.map-guidance {
+  color: var(--green);
 }
 
 .compact {
@@ -394,6 +521,10 @@ function handleRegionKeydown(event, region) {
 @media (max-width: 480px) {
   .figure-stage {
     height: 310px;
+  }
+
+  .region-option-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>

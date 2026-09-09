@@ -64,6 +64,18 @@ const agentId = defineModel('agentId', { type: String, default: '' })
         </select>
       </label>
 
+      <label>
+        <span>問卷與醫生語言</span>
+        <select
+          :value="avatar.language.value"
+          :disabled="avatar.isConnecting.value"
+          @change="avatar.setLanguage($event.target.value)"
+        >
+          <option value="mandarin">國語</option>
+          <option value="minnan">台語</option>
+        </select>
+      </label>
+
       <div v-if="avatar.isLocal.value" class="model-card">
         <span>語音</span>
         <strong>{{ avatar.speechModel.value }}</strong>

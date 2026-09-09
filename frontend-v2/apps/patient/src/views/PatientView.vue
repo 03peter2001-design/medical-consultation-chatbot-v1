@@ -17,27 +17,48 @@ import QueueCard from '@medical/shared/components/QueueCard.vue'
 import TypingIndicator from '@medical/shared/components/TypingIndicator.vue'
 import { useAvatar } from '@medical/shared/composables/useAvatar.js'
 import AvatarStage from '../components/AvatarStage.vue'
+import VoiceWaveform from '../components/VoiceWaveform.vue'
 import { getPainMapPreset } from '@medical/shared/data/bodyPainRegions.js'
 import { api, connectionError } from '@medical/shared/services/patientBackend.js'
 import {
+  PATIENT_IDENTIFIER_TYPES,
+  buildFhirPatientContext,
   buildPatientPrefill,
   directFhirEnabled,
   fhirBaseUrl,
-  isNationalIdFormat,
-  loadPatientByNationalId,
-  normalizeNationalId,
+  isPatientIdentifierFormat,
+  loadPatientByIdentifier,
+  normalizePatientIdentifier,
   patientDisplayName,
 } from '@medical/shared/services/fhir.js'
 import {
   hasSmartLaunchContext,
   initializeSmartPatient,
 } from '@medical/shared/services/smart.js'
-const sessionId = `pt_${Date.now()}`
+import {
+  highlightedPainRegionsFromQuestionOptions,
+  questionOptionsFromPainRegions,
+  supportsPainLocationSync,
+} from '@medical/shared/services/painLocationSync.js'
+import {
+  AUTO_SEND_REVIEW_MS,
+  AVATAR_SILENCE_MS,
+  normalizeVoiceLevel,
+  rootMeanSquare,
+  updateVoiceActivity,
+} from '@medical/shared/services/voiceActivity.js'
+
+const props = defineProps({
+  patientSession: { type: Object, default: null },
+})
+
+const sessionId = props.patientSession?.interview_session_id || `pt_${Date.now()}`
 const maxBirthDate = new Date().toISOString().slice(0, 10)
 const smartLaunchDetected = hasSmartLaunchContext()
 
 const avatar = useAvatar({
   getStatus: api.avatarStatus,
+  warmup: api.avatarWarmup,
   synthesize: api.speakAvatar,
   initialProvider: import.meta.env.VITE_AVATAR_PROVIDER,
 })
@@ -54,12 +75,24 @@ const completed = ref(false)
 const typing = ref(false)
 const startError = ref('')
 const overlayVisible = ref(false)
+const identifierType = ref(PATIENT_IDENTIFIER_TYPES.NATIONAL_ID)
 const nationalId = ref('A000000000')
-const fhirPatient = ref(null)
+const syntheaDefaultId = ref('')
+const fhirPatient = ref(
+  props.patientSession?.fhir_patient_id
+    ? {
+        id: props.patientSession.fhir_patient_id,
+        name: props.patientSession.patient_name
+          ? [{ text: props.patientSession.patient_name }]
+          : [],
+      }
+    : null,
+)
 const fhirResourceCount = ref(0)
 const smartContext = ref(null)
 const mobileAvatarOpen = ref(false)
 const selectedPainLocationIds = ref([])
+const selectedQuestionOptions = ref([])
 const questionInput = ref(null)
 const questionnaireInfo = ref(null)
 const canGoBack = ref(false)
@@ -71,6 +104,10 @@ const triageState = ref({
 })
 const recording = ref(false)
 const voiceProcessing = ref(false)
+const autoSendPending = ref(false)
+const voiceNotice = ref('')
+const voiceLevel = ref(0)
+const voiceDetected = ref(false)
 const chatbox = ref(null)
 const textInput = ref(null)
 const questionnaireControl = ref(null)
@@ -78,6 +115,16 @@ const questionnaireControl = ref(null)
 let mediaRecorder = null
 let mediaStream = null
 let audioChunks = []
+let recordingTimeout = null
+let voiceActivityTimer = null
+let autoSendTimeout = null
+let audioContext = null
+let audioSource = null
+let analyser = null
+let analyserSamples = null
+let voiceActivityState = { speechStarted: false, lastVoiceAt: 0 }
+let recordingAutoSubmit = false
+let stopOnSilence = false
 
 const progress = computed(() => progressState.value.percent ?? 0)
 const progressLabel = computed(() =>
@@ -88,6 +135,7 @@ const inputsDisabled = computed(
     !started.value ||
     starting.value ||
     sending.value ||
+    recording.value ||
     voiceProcessing.value ||
     completed.value,
 )
@@ -113,21 +161,45 @@ const showBodyMap = computed(
 const currentInputKind = computed(
   () => questionInput.value?.kind ?? 'text',
 )
-const nationalIdValid = computed(() =>
-  isNationalIdFormat(nationalId.value),
+const patientIdentifier = computed(() =>
+  identifierType.value === PATIENT_IDENTIFIER_TYPES.SYNTHEA_DEFAULT_ID
+    ? syntheaDefaultId.value
+    : nationalId.value,
+)
+const patientIdentifierValid = computed(() =>
+  isPatientIdentifierFormat(identifierType.value, patientIdentifier.value),
 )
 const loadedPatientName = computed(() =>
-  fhirPatient.value ? patientDisplayName(fhirPatient.value) : '',
+  fhirPatient.value
+    ? patientDisplayName(fhirPatient.value)
+    : props.patientSession?.patient_name || '',
 )
 const effectiveDirectFhirEnabled = computed(
   () => directFhirEnabled && !smartLaunchDetected,
 )
 const patientContextStatus = computed(() =>
-  smartContext.value ? 'SMART 已授權' : 'FHIR 已載入',
+  props.patientSession
+    ? '掛號 QR 已驗證'
+    : smartContext.value
+      ? 'SMART 已授權'
+      : 'FHIR 已載入',
+)
+const patientEncounterId = computed(
+  () =>
+    smartContext.value?.encounterId ||
+    props.patientSession?.fhir_encounter_id ||
+    '',
 )
 const painMapPreset = computed(() =>
   getPainMapPreset(questionnaireInfo.value?.route),
 )
+const highlightedPainLocationIds = computed(() => {
+  if (!showBodyMap.value || selectedPainLocationIds.value.length) return []
+  return highlightedPainRegionsFromQuestionOptions(
+    questionnaireInfo.value?.route,
+    selectedQuestionOptions.value,
+  )
+})
 const urgentConditions = computed(() =>
   Array.isArray(triageState.value?.possible_conditions)
     ? triageState.value.possible_conditions.filter(
@@ -165,6 +237,9 @@ function addMessage(role, text) {
 }
 
 function setQuestionState(data) {
+  cancelAutoSend()
+  selectedPainLocationIds.value = []
+  selectedQuestionOptions.value = []
   questionInput.value = data.question_input ?? null
   questionnaireInfo.value = data.questionnaire ?? null
   canGoBack.value = Boolean(data.can_go_back)
@@ -173,6 +248,36 @@ function setQuestionState(data) {
   triageState.value =
     data.triage ?? triageState.value
   input.value = ''
+  voiceNotice.value = ''
+}
+
+function updatePainLocations(regionIds) {
+  selectedPainLocationIds.value = regionIds
+  const route = questionnaireInfo.value?.route
+  if (!supportsPainLocationSync(route)) return
+
+  const allowedOptions = new Set(questionInput.value?.options ?? [])
+  selectedQuestionOptions.value = questionOptionsFromPainRegions(
+    route,
+    regionIds,
+  ).filter((option) => allowedOptions.has(option))
+}
+
+function updateQuestionOptions(options) {
+  selectedQuestionOptions.value = options
+  if (
+    showBodyMap.value &&
+    supportsPainLocationSync(questionnaireInfo.value?.route)
+  ) {
+    selectedPainLocationIds.value = []
+  }
+}
+
+function submitQuestionnaireAnswer(message) {
+  const painLocationIds = showBodyMap.value
+    ? selectedPainLocationIds.value
+    : []
+  return submitMessage(message, painLocationIds)
 }
 
 async function initializeBackendSession(patientRecord = null) {
@@ -181,6 +286,8 @@ async function initializeBackendSession(patientRecord = null) {
     sessionId,
     [],
     patientRecord ? buildPatientPrefill(patientRecord) : null,
+    avatar.language.value,
+    patientRecord ? buildFhirPatientContext(patientRecord) : null,
   )
 }
 
@@ -228,7 +335,7 @@ async function startSmartConsultation() {
   }
 }
 
-async function startConsultation({ skipFhir = false } = {}) {
+async function startConsultation({ skipFhir = false, successMessage = '' } = {}) {
   if (started.value || starting.value) return
   if (smartLaunchDetected && !skipFhir) {
     await startSmartConsultation()
@@ -243,10 +350,22 @@ async function startConsultation({ skipFhir = false } = {}) {
     let patient = null
     let patientRecord = null
     if (effectiveDirectFhirEnabled.value && !skipFhir) {
-      nationalId.value = normalizeNationalId(nationalId.value)
-      const record = await loadPatientByNationalId(nationalId.value, {
-        baseUrl: fhirBaseUrl,
-      })
+      const normalizedIdentifier = normalizePatientIdentifier(
+        identifierType.value,
+        patientIdentifier.value,
+      )
+      if (identifierType.value === PATIENT_IDENTIFIER_TYPES.SYNTHEA_DEFAULT_ID) {
+        syntheaDefaultId.value = normalizedIdentifier
+      } else {
+        nationalId.value = normalizedIdentifier
+      }
+      const record = await loadPatientByIdentifier(
+        identifierType.value,
+        normalizedIdentifier,
+        {
+          baseUrl: fhirBaseUrl,
+        },
+      )
       patient = record.patient
       patientRecord = record
       fhirPatient.value = patient
@@ -257,7 +376,7 @@ async function startConsultation({ skipFhir = false } = {}) {
     await finishConsultationStart(patientRecord, {
       successMessage: patient
         ? `已從測試 HAPI 載入 ${patientDisplayName(patient)}（Patient/${patient.id}），共 ${fhirResourceCount.value} 筆相關 FHIR Resources。已帶入基本資料；只有病歷未提供的病史欄位會再詢問。`
-        : '',
+        : successMessage,
     })
   } catch (error) {
     startError.value =
@@ -270,7 +389,21 @@ async function startConsultation({ skipFhir = false } = {}) {
 }
 
 onMounted(() => {
-  void startConsultation({ skipFhir: true })
+  const contextLabel = [
+    props.patientSession?.patient_name || '',
+    props.patientSession?.fhir_patient_id
+      ? `Patient/${props.patientSession.fhir_patient_id}`
+      : '',
+    props.patientSession?.fhir_encounter_id
+      ? `Encounter/${props.patientSession.fhir_encounter_id}`
+      : '',
+  ].filter(Boolean).join(' · ')
+  void startConsultation({
+    skipFhir: true,
+    successMessage: contextLabel
+      ? `已恢復院方驗證的問診工作階段：${contextLabel}。`
+      : '',
+  })
 })
 
 function handleResponse(data, rawFallback) {
@@ -305,7 +438,13 @@ async function submitMessage(
   sending.value = true
   typing.value = true
   try {
-    const data = await api.patientChat(text, sessionId, painLocationIds)
+    const data = await api.patientChat(
+      text,
+      sessionId,
+      painLocationIds,
+      null,
+      avatar.language.value,
+    )
     handleResponse(data, text)
     selectedPainLocationIds.value = []
   } catch (error) {
@@ -331,7 +470,7 @@ async function goToPreviousQuestion() {
 
   sending.value = true
   try {
-    const data = await api.patientBack(sessionId)
+    const data = await api.patientBack(sessionId, avatar.language.value)
     trimLastAnsweredTurn()
     if (amieTraces.value.length) amieTraces.value.pop()
     selectedPainLocationIds.value = []
@@ -368,12 +507,104 @@ async function connectAvatar() {
   }
 }
 
-async function toggleVoice() {
-  if (completed.value || voiceProcessing.value) return
-  if (recording.value) {
-    mediaRecorder?.stop()
-    return
+function cancelAutoSendForEditing() {
+  if (!autoSendPending.value) return
+  cancelAutoSend()
+  voiceNotice.value = '已暫停自動送出，您可以修改文字後手動送出。'
+}
+
+function cancelAutoSend() {
+  if (autoSendTimeout) window.clearTimeout(autoSendTimeout)
+  autoSendTimeout = null
+  autoSendPending.value = false
+}
+
+function scheduleAutoSend() {
+  cancelAutoSend()
+  autoSendPending.value = true
+  voiceNotice.value = '語音辨識完成，3 秒後自動送出；開始編輯可取消。'
+  autoSendTimeout = window.setTimeout(() => {
+    autoSendTimeout = null
+    autoSendPending.value = false
+    const text = input.value.trim()
+    if (text && !sending.value && !completed.value) void submitMessage(text)
+  }, AUTO_SEND_REVIEW_MS)
+}
+
+function structuredVoiceMessage(result, transcript) {
+  if (result?.status === 'mapped') {
+    return `已辨識「${transcript}」並填入答案，請確認後再送出。`
   }
+  if (result?.status === 'other') {
+    return `已辨識「${transcript}」並填入其他／補充說明，請確認後再送出。`
+  }
+  return `已辨識「${transcript}」，但無法安全轉成目前題目的答案，請手動作答或重新錄音。`
+}
+
+function stopVoiceActivityDetection() {
+  if (voiceActivityTimer) window.clearInterval(voiceActivityTimer)
+  voiceActivityTimer = null
+  try {
+    audioSource?.disconnect()
+  } catch {
+    // The stream may already be disconnected during browser teardown.
+  }
+  audioSource = null
+  analyser = null
+  analyserSamples = null
+  voiceLevel.value = 0
+  voiceDetected.value = false
+  stopOnSilence = false
+  const context = audioContext
+  audioContext = null
+  if (context && context.state !== 'closed') void context.close()
+}
+
+function startVoiceActivityDetection(stream, { autoStop = false } = {}) {
+  stopVoiceActivityDetection()
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext
+  if (!AudioContextClass) return false
+  audioContext = new AudioContextClass()
+  analyser = audioContext.createAnalyser()
+  analyser.fftSize = 2048
+  analyser.smoothingTimeConstant = 0.15
+  analyserSamples = new Uint8Array(analyser.fftSize)
+  audioSource = audioContext.createMediaStreamSource(stream)
+  audioSource.connect(analyser)
+  voiceActivityState = { speechStarted: false, lastVoiceAt: 0 }
+  stopOnSilence = autoStop
+  voiceActivityTimer = window.setInterval(() => {
+    if (!analyser || !analyserSamples || !recording.value) return
+    analyser.getByteTimeDomainData(analyserSamples)
+    const rms = rootMeanSquare(analyserSamples)
+    voiceLevel.value = normalizeVoiceLevel(rms)
+    voiceActivityState = updateVoiceActivity(voiceActivityState, {
+      rms,
+      now: Date.now(),
+    })
+    voiceDetected.value = voiceActivityState.speechStarted
+    if (stopOnSilence && voiceActivityState.shouldStop) {
+      stopRecording({ autoSubmit: true, reason: 'silence' })
+    }
+  }, 100)
+  return true
+}
+
+function stopRecording({ autoSubmit = false, reason = 'manual' } = {}) {
+  if (mediaRecorder?.state !== 'recording') return
+  recordingAutoSubmit = autoSubmit
+  voiceNotice.value =
+    reason === 'silence'
+      ? `已偵測到 ${AVATAR_SILENCE_MS / 1000} 秒停頓，正在完成錄音…`
+      : '正在結束錄音…'
+  stopVoiceActivityDetection()
+  mediaRecorder.stop()
+}
+
+async function startVoiceRecording({ autoSubmitOnSilence = false } = {}) {
+  if (completed.value || voiceProcessing.value) return
+  if (recording.value || sending.value) return
+  if (input.value.trim()) return
 
   try {
     mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -384,29 +615,69 @@ async function toggleVoice() {
         noiseSuppression: true,
       },
     })
-    const preferredType = 'audio/webm;codecs=opus'
-    const options =
-      window.MediaRecorder?.isTypeSupported?.(preferredType)
-        ? { mimeType: preferredType }
-        : undefined
+    const preferredType = [
+      'audio/webm;codecs=opus',
+      'audio/mp4',
+      'audio/webm',
+    ].find((type) => window.MediaRecorder?.isTypeSupported?.(type))
+    const options = preferredType ? { mimeType: preferredType } : undefined
     mediaRecorder = new MediaRecorder(mediaStream, options)
     audioChunks = []
     mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) audioChunks.push(event.data)
     }
-    mediaRecorder.onstop = processRecording
+    mediaRecorder.onstop = () => void processRecording()
     mediaRecorder.start()
     recording.value = true
+    recordingAutoSubmit = false
+    const activityDetectionReady = startVoiceActivityDetection(mediaStream, {
+      autoStop: autoSubmitOnSilence,
+    })
+    const silenceDetectionReady = autoSubmitOnSilence && activityDetectionReady
+    voiceNotice.value = silenceDetectionReady
+      ? currentInputKind.value === 'text'
+        ? `請直接說話；開始說話後停頓 ${AVATAR_SILENCE_MS / 1000} 秒會完成辨識並自動送出。`
+        : `請直接說話；開始說話後停頓 ${AVATAR_SILENCE_MS / 1000} 秒會完成辨識並填入答案，仍需確認後送出。`
+      : activityDetectionReady
+        ? '錄音中；音波會跟著收到的聲音變化，再按一次麥克風停止。'
+        : '錄音中，再按一次麥克風停止（最長 60 秒）。'
+    recordingTimeout = window.setTimeout(() => {
+      if (mediaRecorder?.state === 'recording') {
+        stopRecording({
+          autoSubmit: autoSubmitOnSilence && voiceActivityState.speechStarted,
+          reason: 'timeout',
+        })
+      }
+    }, 60_000)
   } catch (error) {
+    voiceNotice.value = ''
+    mediaStream?.getTracks().forEach((track) => track.stop())
+    mediaStream = null
     addMessage('ai', `⚠️ 無法存取麥克風：${error.message}`)
   }
 }
 
+async function toggleVoice() {
+  if (recording.value) {
+    stopRecording({ autoSubmit: false })
+    return
+  }
+  await startVoiceRecording({
+    autoSubmitOnSilence: avatar.isConnected.value,
+  })
+}
+
 async function processRecording() {
+  const shouldAutoSubmit = recordingAutoSubmit
+  recordingAutoSubmit = false
   recording.value = false
+  if (recordingTimeout) window.clearTimeout(recordingTimeout)
+  recordingTimeout = null
+  stopVoiceActivityDetection()
   mediaStream?.getTracks().forEach((track) => track.stop())
   mediaStream = null
   voiceProcessing.value = true
+  voiceNotice.value = '正在使用 Breeze ASR 辨識錄音…'
 
   try {
     const audioBlob = new Blob(audioChunks, {
@@ -415,13 +686,30 @@ async function processRecording() {
     const transcript = await api.transcribe(audioBlob)
     const text = transcript.text?.trim()
     if (!text) {
-      addMessage('ai', '⚠️ 未偵測到語音內容，請再試一次。')
+      await askPatientToRepeat()
       return
     }
+    const latency = Number(transcript.latency_seconds)
+    const latencyLabel = Number.isFinite(latency)
+      ? `，${latency.toFixed(1)} 秒`
+      : ''
+    const providerLabel =
+      transcript.provider === 'breeze' ? 'Breeze ASR' : '語音 ASR'
+    if (currentInputKind.value === 'text') {
+      input.value = text
+      voiceNotice.value = `語音辨識完成（${providerLabel}${latencyLabel}），請確認文字後再送出。`
+    } else {
+      const result = questionnaireControl.value?.applyVoiceTranscript(text)
+      voiceNotice.value = structuredVoiceMessage(result, text)
+    }
     voiceProcessing.value = false
-    await submitMessage(text)
+    await nextTick()
+    focusInput()
+    if (shouldAutoSubmit && currentInputKind.value === 'text') {
+      scheduleAutoSend()
+    }
   } catch (error) {
-    addMessage('ai', `⚠️ 語音辨識失敗（${error.message}），請重試。`)
+    await askPatientToRepeat(error.message)
   } finally {
     voiceProcessing.value = false
     audioChunks = []
@@ -429,8 +717,47 @@ async function processRecording() {
   }
 }
 
+async function askPatientToRepeat(detail = '') {
+  const prompt = '對不起，我沒有聽清楚，請再講一次。'
+  voiceNotice.value = detail ? `語音辨識失敗：${detail}` : '未辨識到語音內容。'
+  addMessage('ai', prompt)
+  if (avatar.isConnected.value) await avatar.speak(prompt)
+}
+
+watch(
+  () => avatar.talking.value,
+  (talking, wasTalking) => {
+    if (
+      wasTalking &&
+      !talking &&
+      avatar.isConnected.value &&
+      started.value &&
+      !completed.value
+    ) {
+      window.setTimeout(() => {
+        void startVoiceRecording({ autoSubmitOnSilence: true })
+      }, 250)
+    }
+  },
+)
+
+watch(
+  () => avatar.isConnected.value,
+  (connected) => {
+    if (connected) return
+    cancelAutoSend()
+    if (recording.value) stopRecording({ autoSubmit: false })
+  },
+)
+
 onBeforeUnmount(() => {
-  if (mediaRecorder?.state === 'recording') mediaRecorder.stop()
+  cancelAutoSend()
+  stopVoiceActivityDetection()
+  if (recordingTimeout) window.clearTimeout(recordingTimeout)
+  if (mediaRecorder?.state === 'recording') {
+    mediaRecorder.onstop = null
+    mediaRecorder.stop()
+  }
   mediaStream?.getTracks().forEach((track) => track.stop())
 })
 </script>
@@ -468,14 +795,14 @@ onBeforeUnmount(() => {
 
     <main class="patient-layout">
       <section class="consultation-panel">
-        <div v-if="fhirPatient" class="patient-context-bar">
+        <div v-if="fhirPatient || props.patientSession" class="patient-context-bar">
           <span class="context-status">{{ patientContextStatus }}</span>
           <strong>{{ loadedPatientName }}</strong>
-          <span>Patient/{{ fhirPatient.id }}</span>
-          <span v-if="smartContext?.encounterId">
-            Encounter/{{ smartContext.encounterId }}
+          <span v-if="fhirPatient?.id">Patient/{{ fhirPatient.id }}</span>
+          <span v-if="patientEncounterId">
+            Encounter/{{ patientEncounterId }}
           </span>
-          <span>{{ fhirResourceCount }} 筆 Resources</span>
+          <span v-if="!props.patientSession">{{ fhirResourceCount }} 筆 Resources</span>
         </div>
         <div
           v-if="triageState.level === 'urgent'"
@@ -546,21 +873,41 @@ onBeforeUnmount(() => {
           >
             ← 回到上一題
           </button>
-          <PainLocationInput
+          <section
             v-if="showBodyMap"
-            v-model="selectedPainLocationIds"
-            :preset="painMapPreset"
-            :sending="sending"
-            @submit="submitMessage"
-          />
+            class="pain-location-question-card"
+          >
+            <PainLocationInput
+              :model-value="selectedPainLocationIds"
+              :preset="painMapPreset"
+              :highlighted-region-ids="highlightedPainLocationIds"
+              :sending="sending"
+              embedded
+              :show-region-options="false"
+              @update:model-value="updatePainLocations"
+            />
+            <QuestionnaireControl
+              ref="questionnaireControl"
+              :spec="questionInput"
+              :disabled="inputsDisabled"
+              :sending="sending"
+              :max-birth-date="maxBirthDate"
+              :selected-options="selectedQuestionOptions"
+              embedded
+              @update:selected-options="updateQuestionOptions"
+              @submit="submitQuestionnaireAnswer"
+            />
+          </section>
           <QuestionnaireControl
-            v-if="!completed && currentInputKind !== 'text'"
+            v-else-if="!completed && currentInputKind !== 'text'"
             ref="questionnaireControl"
             :spec="questionInput"
             :disabled="inputsDisabled"
             :sending="sending"
             :max-birth-date="maxBirthDate"
-            @submit="submitMessage"
+            :selected-options="selectedQuestionOptions"
+            @update:selected-options="updateQuestionOptions"
+            @submit="submitQuestionnaireAnswer"
           />
           <TypingIndicator v-if="typing" />
         </div>
@@ -577,7 +924,13 @@ onBeforeUnmount(() => {
               questionInput?.placeholder || '請輸入您的回覆...'
             "
             :disabled="inputsDisabled"
+            @input="cancelAutoSendForEditing"
             @keydown="handleInputKeydown"
+          />
+          <VoiceWaveform
+            v-if="recording"
+            :level="voiceLevel"
+            :received="voiceDetected"
           />
           <button
             class="input-icon"
@@ -597,16 +950,52 @@ onBeforeUnmount(() => {
             ➤
           </button>
         </div>
+        <p
+          v-if="!completed && currentInputKind === 'text' && voiceNotice"
+          class="voice-notice"
+          role="status"
+        >
+          {{ voiceNotice }}
+        </p>
         <div
-          v-else-if="!completed"
+          v-if="!completed && currentInputKind !== 'text'"
           class="structured-input-hint"
         >
           {{
             currentInputKind === 'duration'
-              ? '請在上方選擇快捷時間，或輸入時間長度與單位。'
-              : '請在上方選擇答案；找不到合適選項時可使用「其他／補充說明」。'
+              ? '請在上方選擇快捷時間、輸入時間，或使用語音作答。'
+              : currentInputKind === 'date'
+                ? '請選擇日期，或使用語音說出西元／民國年月日。'
+                : '請在上方選擇答案，或使用語音作答後確認辨識結果。'
           }}
         </div>
+        <div
+          v-if="!completed && currentInputKind !== 'text'"
+          class="structured-voice-bar"
+        >
+          <span>{{ recording ? '正在聆聽您的答案' : '也可以用語音回答這一題' }}</span>
+          <VoiceWaveform
+            v-if="recording"
+            :level="voiceLevel"
+            :received="voiceDetected"
+          />
+          <button
+            class="input-icon"
+            :class="{ recording }"
+            :disabled="inputsDisabled && !recording"
+            :aria-label="recording ? '停止錄音' : '開始語音輸入'"
+            @click="toggleVoice"
+          >
+            {{ microphoneLabel }}
+          </button>
+        </div>
+        <p
+          v-if="!completed && currentInputKind !== 'text' && voiceNotice"
+          class="voice-notice"
+          role="status"
+        >
+          {{ voiceNotice }}
+        </p>
       </section>
     </main>
   </div>
@@ -794,6 +1183,19 @@ onBeforeUnmount(() => {
   background: #fbfdff;
 }
 
+.pain-location-question-card {
+  display: flex;
+  width: min(100%, 720px);
+  align-self: flex-start;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-1);
+  box-shadow: 0 4px 14px rgb(37 67 91 / 5%);
+}
+
 .previous-question-button {
   min-height: 42px;
   align-self: flex-start;
@@ -828,6 +1230,16 @@ onBeforeUnmount(() => {
   background: var(--surface-1);
 }
 
+.voice-notice {
+  margin: 0;
+  padding: 7px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--blue-soft);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
 .structured-input-hint {
   min-height: 52px;
   flex: 0 0 52px;
@@ -837,6 +1249,25 @@ onBeforeUnmount(() => {
   color: var(--muted);
   font-size: 13px;
   text-align: center;
+}
+
+.structured-voice-bar {
+  display: flex;
+  min-height: 64px;
+  flex: 0 0 64px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 7px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-1);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.structured-voice-bar > span:first-child {
+  margin-right: auto;
 }
 
 .patient-input-bar input {
@@ -897,6 +1328,10 @@ onBeforeUnmount(() => {
     padding: 16px 12px;
   }
 
+  .pain-location-question-card {
+    padding: 14px;
+  }
+
   .patient-context-bar {
     flex-wrap: wrap;
     gap: 5px 8px;
@@ -923,6 +1358,11 @@ onBeforeUnmount(() => {
     height: 70px;
     flex-basis: 70px;
     padding: 0 10px;
+  }
+
+
+  .structured-voice-bar {
+    padding: 7px 10px;
   }
 
   .questionnaire-badge {

@@ -6,17 +6,22 @@ import {
   isQuestionAnswerReady,
   toggleQuestionOption,
 } from '../services/questionnaire.js'
+import { interpretQuestionnaireVoice } from '../services/questionnaireVoice.js'
 
 const props = defineProps({
   spec: { type: Object, default: null },
   disabled: { type: Boolean, default: false },
   sending: { type: Boolean, default: false },
   maxBirthDate: { type: String, required: true },
+  embedded: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['submit'])
 
-const selectedOptions = ref([])
+const selectedOptions = defineModel('selectedOptions', {
+  type: Array,
+  default: () => [],
+})
 const otherText = ref('')
 const quickOption = ref('')
 const durationNumber = ref('')
@@ -38,6 +43,10 @@ const answerState = computed(() => ({
 const answerReady = computed(() =>
   isQuestionAnswerReady(props.spec, answerState.value),
 )
+
+function localizedLabel(labels, canonicalValue) {
+  return labels?.[canonicalValue] || canonicalValue
+}
 
 watch(
   () => props.spec,
@@ -97,6 +106,24 @@ function submit() {
   emit('submit', composeQuestionAnswer(props.spec, answerState.value))
 }
 
+function applyVoiceTranscript(transcript) {
+  const result = interpretQuestionnaireVoice(props.spec, transcript, {
+    maxDate: props.maxBirthDate,
+  })
+  if (result.kind === 'choice') {
+    selectedOptions.value = result.selectedOptions ?? []
+    otherText.value = result.otherText ?? ''
+  } else if (result.kind === 'duration') {
+    quickOption.value = result.quickOption ?? ''
+    durationNumber.value = result.durationNumber ?? ''
+    durationUnit.value = result.durationUnit ?? durationUnit.value
+    otherText.value = result.otherText ?? ''
+  } else if (result.kind === 'date') {
+    dateValue.value = result.dateValue ?? ''
+  }
+  return result
+}
+
 function focus() {
   nextTick(() => {
     if (kind.value === 'choice') {
@@ -111,13 +138,14 @@ function focus() {
   })
 }
 
-defineExpose({ focus })
+defineExpose({ applyVoiceTranscript, focus })
 </script>
 
 <template>
   <section
     v-if="kind === 'duration' && spec"
     class="question-control-card duration-control"
+    :class="{ embedded }"
   >
     <div class="duration-section">
       <span class="control-label">快捷選擇</span>
@@ -131,7 +159,7 @@ defineExpose({ focus })
           :disabled="disabled"
           @click="selectQuickDuration(option)"
         >
-          {{ option }}
+          {{ localizedLabel(spec.quick_option_labels, option) }}
         </button>
       </div>
     </div>
@@ -160,7 +188,7 @@ defineExpose({ focus })
           @change="handleDurationUnit"
         >
           <option v-for="unit in spec.units" :key="unit" :value="unit">
-            {{ unit }}
+            {{ localizedLabel(spec.unit_labels, unit) }}
           </option>
         </select>
       </label>
@@ -186,7 +214,11 @@ defineExpose({ focus })
     </button>
   </section>
 
-  <section v-else-if="kind === 'choice' && spec" class="question-control-card">
+  <section
+    v-else-if="kind === 'choice' && spec"
+    class="question-control-card"
+    :class="{ embedded }"
+  >
     <div ref="choiceControls" class="choice-grid">
       <label
         v-for="option in spec.options"
@@ -199,9 +231,9 @@ defineExpose({ focus })
           name="question-choice"
           :checked="selectedOptions.includes(option)"
           :disabled="disabled"
-          @click.prevent="selectOption(option)"
+          @click="selectOption(option)"
         />
-        <span>{{ option }}</span>
+        <span>{{ localizedLabel(spec.option_labels, option) }}</span>
       </label>
     </div>
     <label v-if="spec.allow_other" class="other-answer">
@@ -228,6 +260,7 @@ defineExpose({ focus })
   <section
     v-else-if="kind === 'date' && spec"
     class="question-control-card date-control"
+    :class="{ embedded }"
   >
     <label>
       <span>出生日期</span>
@@ -263,6 +296,15 @@ defineExpose({ focus })
   border-radius: var(--radius);
   background: var(--surface-1);
   box-shadow: 0 4px 14px rgb(37 67 91 / 5%);
+}
+
+.question-control-card.embedded {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .choice-grid {

@@ -23,6 +23,16 @@ test('patient app supports local and D-ID providers with local as default', () =
   assert.doesNotMatch(avatar, /esm\.sh|vite-ignore/i)
 })
 
+test('patient can select Mandarin or Minnan for questionnaire and local speech', () => {
+  assert.match(avatar, /function normalizeAvatarLanguage/)
+  assert.match(avatar, /function setLanguage/)
+  assert.match(settings, /問卷與醫生語言/)
+  assert.match(settings, /avatar\.setLanguage/)
+  assert.match(settings, /<option value="mandarin">國語<\/option>/)
+  assert.match(settings, /<option value="minnan">台語<\/option>/)
+  assert.match(patientView, /avatar\.language\.value/)
+})
+
 test('D-ID credentials remain in memory and carry a public-bundle warning', () => {
   assert.match(patientView, /VITE_DID_CLIENT_KEY/)
   assert.match(patientView, /VITE_DID_AGENT_ID/)

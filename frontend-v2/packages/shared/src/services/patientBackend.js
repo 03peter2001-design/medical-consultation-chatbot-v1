@@ -52,22 +52,33 @@ export const patientApi = {
   session: () => request(apiPath('/patient/session')),
   exchangeInvitation: (token) =>
     request(apiPath('/invitations/exchange'), jsonOptions({ token })),
-  chat: (message, sessionId, painLocationIds = []) =>
+  chat: (
+    message,
+    sessionId,
+    painLocationIds = [],
+    patientPrefill = null,
+    language = 'mandarin',
+    fhirContext = null,
+  ) =>
     request(
       apiPath('/chat'),
       jsonOptions({
         message,
         session_id: sessionId,
         pain_location_ids: painLocationIds,
+        patient_prefill: patientPrefill,
+        fhir_context: fhirContext,
+        language,
       }),
     ),
-  back: (sessionId) =>
+  back: (sessionId, language = 'mandarin') =>
     request(
       apiPath('/chat'),
       jsonOptions({
         message: '',
         session_id: sessionId,
         action: 'back',
+        language,
       }),
     ),
   transcribe: (audioBlob) => {
@@ -76,9 +87,10 @@ export const patientApi = {
     return request(apiPath('/transcribe'), { method: 'POST', body: formData })
   },
   avatarStatus: () => request(apiPath('/avatar/status')),
+  avatarWarmup: () => request(apiPath('/avatar/warmup'), jsonOptions({})),
   speakAvatar: (text, options = {}) =>
     requestVideo(apiPath('/avatar/speak'), {
-      ...jsonOptions({ text }),
+      ...jsonOptions({ text, language: options.language || 'mandarin' }),
       signal: options.signal,
     }),
 }
@@ -88,6 +100,7 @@ export const api = {
   patientBack: patientApi.back,
   transcribe: patientApi.transcribe,
   avatarStatus: patientApi.avatarStatus,
+  avatarWarmup: patientApi.avatarWarmup,
   speakAvatar: patientApi.speakAvatar,
 }
 

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import os
+import re
 import time
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -17,6 +19,7 @@ from app.contracts import (
     ConsultationDeletedResponse,
     ConsultationListResponse,
     DoctorChatResponse,
+    FhirCompositionCreateResponse,
     LoadPatientResponse,
     RuleAssistantResponse,
     RuleAuthorizationResponse,
@@ -30,6 +33,7 @@ from app.models import (
     DiseaseProfileUpdateRequest,
     DoctorChatRequest,
     FactLabelUpdateRequest,
+    FhirCompositionCreateRequest,
     LoadPatientRequest,
     SafetyRuleAssistantRequest,
     SafetyRuleUpdateRequest,
@@ -50,6 +54,7 @@ from app.services.clinical_summary import (
     clinical_patient_data,
     model_patient_summary,
 )
+from app.services.fhir_composition import build_tw_core_composition
 from app.services.rag import (
     deduplicate_sources,
     retrieve_context_block,
@@ -74,6 +79,7 @@ from domain.terminology_reference import (
     filter_supported_codings,
     terminology_reference,
 )
+from infrastructure.fhir_client import FhirClientError
 
 router = APIRouter(
     prefix="/doctor",
@@ -88,6 +94,44 @@ def _consultation_institution_scope(principal: UccPrincipal) -> str | None:
     if principal.claims.get("legacy_frontend_bypass") is True:
         return None
     return principal.institution_id
+
+
+FHIR_AUTHOR_REFERENCE_PATTERN = re.compile(
+    r"(?:Practitioner|PractitionerRole)/[A-Za-z0-9\-.]{1,64}"
+)
+FHIR_AUTHOR_ABSOLUTE_REFERENCE_PATTERN = re.compile(
+    r"https?://[^\s?#]+/(?:Practitioner|PractitionerRole)/[A-Za-z0-9\-.]{1,64}"
+)
+
+
+def _composition_author(principal: UccPrincipal) -> dict[str, str | None]:
+    claimed_reference = str(
+        principal.claims.get("fhirUser") or principal.claims.get("fhir_user") or ""
+    ).strip()
+    if claimed_reference and (
+        FHIR_AUTHOR_REFERENCE_PATTERN.fullmatch(claimed_reference)
+        or FHIR_AUTHOR_ABSOLUTE_REFERENCE_PATTERN.fullmatch(claimed_reference)
+    ):
+        return {
+            "reference": claimed_reference,
+            "identifier": None,
+            "display": str(principal.claims.get("name") or principal.subject)[:200],
+        }
+
+    local_author_enabled = os.getenv(
+        "FHIR_LOCAL_DEVELOPMENT_AUTHOR",
+        "false",
+    ).strip().lower() in {"1", "true", "yes", "on"}
+    if principal.claims.get("legacy_frontend_bypass") is True and local_author_enabled:
+        return {
+            "reference": None,
+            "identifier": principal.subject,
+            "display": "Local development clinician",
+        }
+    raise HTTPException(
+        status_code=403,
+        detail="登入身分缺少可驗證的 Practitioner／PractitionerRole",
+    )
 
 
 @router.get(
@@ -390,6 +434,138 @@ def list_consultations(
     return result
 
 
+@router.post(
+    "/consultations/{consultation_id}/fhir-composition",
+    response_model=FhirCompositionCreateResponse,
+    responses=error_responses(403, 404, 409, 422, 503),
+    summary="Create a clinician-reviewed TW Core Composition",
+    dependencies=[Depends(require_scopes("consultation:fhir-write"))],
+)
+def create_fhir_composition(
+    consultation_id: str,
+    request: FhirCompositionCreateRequest,
+):
+    principal = _doctor_principal()
+    normalized = consultation_id.strip()[:32]
+    try:
+        record = runtime.consultation_repository.get(
+            normalized,
+            institution_id=_consultation_institution_scope(principal),
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail="病例識別資料格式不正確") from error
+    if not record:
+        audit_ucc(
+            "doctor.consultation.fhir_write",
+            "denied",
+            principal,
+            resource_type="consultation",
+            resource_id=normalized,
+        )
+        raise HTTPException(status_code=404, detail="查無此病例")
+    existing = record.get("fhir_submission")
+    context = record.get("fhir_context")
+    if not context:
+        raise HTTPException(status_code=409, detail="此病例沒有可信任的 FHIR 病患綁定")
+    if existing:
+        return {
+            "status": "existing",
+            "resource_id": existing["resource_id"],
+            "version_id": existing["version_id"],
+            "submitted_at": existing["submitted_at"],
+            "patient_reference": f"Patient/{context['patient_id']}",
+            "encounter_reference": (
+                f"Encounter/{context['encounter_id']}" if context.get("encounter_id") else None
+            ),
+        }
+    if record["updated_at"] != request.expected_updated_at:
+        raise HTTPException(status_code=409, detail="病例已更新，請重新載入後再送出")
+    if not runtime.fhir_client.enabled:
+        raise HTTPException(status_code=503, detail="FHIR 寫入服務尚未啟用")
+
+    configured_issuer = (
+        os.getenv("FHIR_PUBLIC_ISSUER", "").strip().rstrip("/") or runtime.fhir_client.base_url
+    )
+    if context["issuer"].rstrip("/") != configured_issuer:
+        raise HTTPException(status_code=409, detail="病例的 FHIR issuer 與寫入服務不一致")
+
+    author = _composition_author(principal)
+    composition = build_tw_core_composition(
+        consultation_id=f"{principal.institution_id}:{normalized}",
+        patient_id=context["patient_id"],
+        encounter_id=context.get("encounter_id"),
+        sections=request.sections,
+        author_reference=author["reference"],
+        author_identifier=author["identifier"],
+        author_display=author["display"] or principal.subject,
+        identifier_system=os.getenv(
+            "FHIR_COMPOSITION_IDENTIFIER_SYSTEM",
+            "https://medical-consultation.local/fhir/consultations",
+        ).strip(),
+        clinician_identifier_system=os.getenv(
+            "FHIR_CLINICIAN_IDENTIFIER_SYSTEM",
+            "https://medical-consultation.local/fhir/clinicians",
+        ).strip(),
+    )
+    try:
+        runtime.fhir_client.read_resource("Patient", context["patient_id"])
+        if context.get("encounter_id"):
+            runtime.fhir_client.read_resource("Encounter", context["encounter_id"])
+        result = runtime.fhir_client.create_composition(composition)
+        submitted_at = runtime.consultation_repository.save_fhir_submission(
+            normalized,
+            resource_id=result.resource_id,
+            version_id=result.version_id,
+            submitted_by=principal.subject,
+            sections=[section.model_dump() for section in request.sections],
+        )
+        if not submitted_at:
+            raise RuntimeError("consultation disappeared after FHIR write")
+    except FhirClientError as error:
+        audit_ucc(
+            "doctor.consultation.fhir_write",
+            "failure",
+            principal,
+            resource_type="consultation",
+            resource_id=normalized,
+        )
+        safe_log("doctor.consultation.fhir_write", "failure", error=error)
+        if error.status_code == 404:
+            raise HTTPException(
+                status_code=422,
+                detail="FHIR Patient／Encounter 參照不存在",
+            ) from error
+        raise HTTPException(status_code=503, detail="FHIR 寫入服務暫時無法使用") from error
+    except Exception as error:
+        audit_ucc(
+            "doctor.consultation.fhir_write",
+            "failure",
+            principal,
+            resource_type="consultation",
+            resource_id=normalized,
+        )
+        safe_log("doctor.consultation.fhir_write", "failure", error=error)
+        raise
+
+    audit_ucc(
+        "doctor.consultation.fhir_write",
+        "success",
+        principal,
+        resource_type="consultation",
+        resource_id=normalized,
+    )
+    return {
+        "status": "created" if result.created else "existing",
+        "resource_id": result.resource_id,
+        "version_id": result.version_id,
+        "submitted_at": submitted_at,
+        "patient_reference": f"Patient/{context['patient_id']}",
+        "encounter_reference": (
+            f"Encounter/{context['encounter_id']}" if context.get("encounter_id") else None
+        ),
+    }
+
+
 @router.delete(
     "/consultations/{consultation_id}",
     response_model=ConsultationDeletedResponse,
@@ -654,6 +830,18 @@ def load_patient(request: LoadPatientRequest):
         "summary_error": record.get("summary_error", ""),
         "rag_enabled": runtime.RAG_ENABLED,
         "created_at": record["created_at"],
+        "updated_at": record.get("updated_at", record["created_at"]),
+        "fhir_context": record.get("fhir_context"),
+        "fhir_submission": (
+            {
+                "resource_id": record["fhir_submission"]["resource_id"],
+                "version_id": record["fhir_submission"]["version_id"],
+                "submitted_at": record["fhir_submission"]["submitted_at"],
+            }
+            if record.get("fhir_submission")
+            else None
+        ),
+        "fhir_summary_sections": record.get("fhir_summary_sections") or [],
     }
 
 

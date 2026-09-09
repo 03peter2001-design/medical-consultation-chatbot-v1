@@ -43,12 +43,17 @@ def _route(router, path: str, method: str):
 
 def _required_scopes(route) -> set[str]:
     result: set[str] = set()
-    for item in route.dependant.dependencies:
-        dependency = item.call
-        for cell in dependency.__closure__ or ():
-            value = cell.cell_contents
-            if isinstance(value, tuple) and all(isinstance(scope, str) for scope in value):
-                result.update(value)
+
+    def collect(dependant):
+        for item in dependant.dependencies:
+            dependency = item.call
+            for cell in getattr(dependency, "__closure__", None) or ():
+                value = cell.cell_contents
+                if isinstance(value, tuple) and all(isinstance(scope, str) for scope in value):
+                    result.update(value)
+            collect(item)
+
+    collect(route.dependant)
     return result
 
 
@@ -449,6 +454,16 @@ class SchemaAndRouteAcceptanceTests(unittest.TestCase):
 
     def test_patient_doctor_transcribe_and_rule_route_scopes(self):
         self.assertEqual(
+            _required_scopes(
+                _route(
+                    invitations.router,
+                    "/doctor/launcher/invitations",
+                    "POST",
+                )
+            ),
+            {"consultation:read", "invite:create"},
+        )
+        self.assertEqual(
             _required_scopes(_route(doctor.router, "/doctor/consultations", "GET")),
             {"consultation:read"},
         )
@@ -457,6 +472,16 @@ class SchemaAndRouteAcceptanceTests(unittest.TestCase):
                 _route(doctor.router, "/doctor/consultations/{consultation_id}", "DELETE")
             ),
             {"consultation:read", "consultation:delete"},
+        )
+        self.assertEqual(
+            _required_scopes(
+                _route(
+                    doctor.router,
+                    "/doctor/consultations/{consultation_id}/fhir-composition",
+                    "POST",
+                )
+            ),
+            {"consultation:read", "consultation:fhir-write"},
         )
         ordinary_doctor = UccPrincipal("doctor", "hospital-a", frozenset({"consultation:read"}), {})
         with self.assertRaises(HTTPException) as denied:

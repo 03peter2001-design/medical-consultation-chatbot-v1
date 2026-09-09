@@ -1,6 +1,7 @@
 """Patient questionnaire and AMIE interview endpoints."""
 
 import asyncio
+import os
 import time
 from copy import deepcopy
 from weakref import WeakValueDictionary
@@ -147,6 +148,42 @@ router = APIRouter(tags=["patient"])
 _patient_chat_locks: WeakValueDictionary[str, asyncio.Lock] = WeakValueDictionary()
 
 _HISTORY_LIMIT = 16
+
+
+def _initial_fhir_context(req: ChatRequest) -> dict[str, str | None] | None:
+    patient_session = current_patient_session()
+    if patient_session is not None:
+        trusted_context = patient_session.get("fhir_context")
+        return dict(trusted_context) if trusted_context else None
+    if req.fhir_context is None:
+        return None
+    enabled = os.getenv("FHIR_PATIENT_CONTEXT_INPUT_ENABLED", "false").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+    if not enabled:
+        raise HTTPException(
+            status_code=403,
+            detail="瀏覽器 FHIR context 匯入未啟用",
+        )
+    issuer = (
+        os.getenv("FHIR_PUBLIC_ISSUER", "").strip() or os.getenv("FHIR_WRITE_BASE_URL", "").strip()
+    )
+    if not issuer:
+        raise HTTPException(status_code=503, detail="FHIR issuer 尚未設定")
+    return {
+        **req.fhir_context.model_dump(exclude_none=True),
+        "issuer": issuer.rstrip("/"),
+    }
+
+
+def _record_integration_metadata(session: dict) -> dict:
+    metadata = dict(session.get("_integration", {}))
+    if session.get("fhir_context"):
+        metadata["fhir_context"] = dict(session["fhir_context"])
+    return metadata
 
 
 def _cleanup_sessions():
@@ -474,7 +511,7 @@ async def _complete_questionnaire_consultation(
             "structured_sources": structured_sources,
             "triage_level": "routine",
             "status": "completed",
-            **session.get("_integration", {}),
+            **_record_integration_metadata(session),
         }
     )
     queue_number = created["queue_number"]
@@ -512,7 +549,7 @@ async def _complete_consultation(
             "structured_sources": [],
             "triage_level": "routine",
             "status": "summary_pending",
-            **session.get("_integration", {}),
+            **_record_integration_metadata(session),
         }
     )
     queue_number = created["queue_number"]
@@ -573,7 +610,7 @@ async def _complete_urgent_consultation(
             "structured_sources": [],
             "triage_level": "urgent",
             "status": "summary_pending",
-            **session.get("_integration", {}),
+            **_record_integration_metadata(session),
         }
     )
     queue_number = created["queue_number"]
@@ -854,7 +891,7 @@ async def _handoff_amie_consultation(
             "data": data,
             "triage_level": session.get("triage_level", "routine"),
             "status": "manual_handoff",
-            **session.get("_integration", {}),
+            **_record_integration_metadata(session),
         }
     )
     queue_number = created["queue_number"]
@@ -881,6 +918,7 @@ async def _chat_amie(
 ) -> dict:
     if req.session_id not in sessions:
         session = _amie_initial_session(req)
+        session["fhir_context"] = _initial_fhir_context(req)
         sessions[req.session_id] = session
         return _question_payload(
             session,
@@ -1145,6 +1183,7 @@ def _questionnaire_initial_session(req: ChatRequest) -> dict:
         "questionnaire": list(CHIEF_QUESTIONNAIRE),
         "data": data,
         "prefilled_fields": sorted(prefilled_fields),
+        "fhir_context": _initial_fhir_context(req),
         "_history": [],
         "ts": time.time(),
     }
@@ -1261,6 +1300,11 @@ async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
 
     patient_session = current_patient_session()
     if patient_session is not None:
+        if req.fhir_context is not None:
+            raise HTTPException(
+                status_code=403,
+                detail="已驗證病患 session 不接受瀏覽器提供的 FHIR context",
+            )
         req.session_id = patient_session["interview_session_id"]
         req.patient_prefill = PatientPrefill(**patient_session["prefill"])
 

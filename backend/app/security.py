@@ -40,6 +40,7 @@ _LOCAL_DEVELOPMENT_SCOPES = frozenset(
         "consultation:read",
         "consultation:delete",
         "consultation:chat",
+        "consultation:fhir-write",
         "rules:read",
         "rules:write",
         "invite:create",
@@ -64,10 +65,13 @@ def _allow_local_auth_bypass(request: Request) -> bool:
 
 
 def _build_local_development_principal() -> UccPrincipal:
-    institution_id = os.getenv(
-        "LOCAL_DEVELOPMENT_INSTITUTION",
-        "local-development",
-    ).strip() or "local-development"
+    institution_id = (
+        os.getenv(
+            "LOCAL_DEVELOPMENT_INSTITUTION",
+            "local-development",
+        ).strip()
+        or "local-development"
+    )
     return UccPrincipal(
         subject="local-developer",
         institution_id=institution_id,
@@ -94,7 +98,9 @@ def _public_key() -> str:
         try:
             return Path(path).read_text(encoding="utf-8")
         except OSError as error:
-            raise HTTPException(status_code=503, detail="UCC JWT public key is unavailable") from error
+            raise HTTPException(
+                status_code=503, detail="UCC JWT public key is unavailable"
+            ) from error
     raise HTTPException(status_code=503, detail="UCC JWT verification is not configured")
 
 

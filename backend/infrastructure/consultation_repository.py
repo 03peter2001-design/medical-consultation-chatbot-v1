@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-SCHEMA_VERSION = 9
+SCHEMA_VERSION = 11
 DEFAULT_CONSULTATION_TIMEZONE = "Asia/Taipei"
 BACKEND_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_DATABASE_PATH = BACKEND_DIR / "data" / "consultations.db"
@@ -195,6 +195,14 @@ class ConsultationRepository:
                     consultation_date TEXT NOT NULL,
                     created_at TEXT NOT NULL,
                     updated_at TEXT NOT NULL
+                    ,fhir_issuer TEXT
+                    ,fhir_patient_id TEXT
+                    ,fhir_encounter_id TEXT
+                    ,fhir_composition_id TEXT
+                    ,fhir_composition_version_id TEXT
+                    ,fhir_submitted_at TEXT
+                    ,fhir_submitted_by TEXT
+                    ,fhir_summary_json TEXT NOT NULL DEFAULT '[]'
                 )
             """
         )
@@ -253,6 +261,25 @@ class ConsultationRepository:
         for column in ("invitation_id", "institution_id", "patient_sno", "reg_sno"):
             if column not in columns:
                 connection.execute(f"ALTER TABLE consultations ADD COLUMN {column} TEXT")
+        for column in (
+            "fhir_issuer",
+            "fhir_patient_id",
+            "fhir_encounter_id",
+            "fhir_composition_id",
+            "fhir_composition_version_id",
+            "fhir_submitted_at",
+            "fhir_submitted_by",
+            "fhir_summary_json",
+        ):
+            if column not in columns:
+                connection.execute(f"ALTER TABLE consultations ADD COLUMN {column} TEXT")
+        connection.execute(
+            """
+            UPDATE consultations
+            SET fhir_summary_json = '[]'
+            WHERE fhir_summary_json IS NULL OR fhir_summary_json = ''
+            """
+        )
 
         connection.execute(
             """
@@ -299,6 +326,20 @@ class ConsultationRepository:
         connection.execute(
             """
             CREATE INDEX IF NOT EXISTS
+                idx_consultations_fhir_patient
+                ON consultations (fhir_issuer, fhir_patient_id)
+            """
+        )
+        connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS
+                idx_consultations_fhir_encounter
+                ON consultations (fhir_issuer, fhir_encounter_id)
+            """
+        )
+        connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS
                 idx_consultations_status_created_at
                 ON consultations (workflow_status, created_at DESC)
             """
@@ -331,10 +372,19 @@ class ConsultationRepository:
                 created_by TEXT NOT NULL,
                 created_at TEXT NOT NULL,
                 consumed_at TEXT,
-                consultation_id TEXT
+                consultation_id TEXT,
+                fhir_issuer TEXT,
+                fhir_patient_id TEXT,
+                fhir_encounter_id TEXT
             )
             """
         )
+        invitation_columns = {
+            row["name"] for row in connection.execute("PRAGMA table_info(invitations)").fetchall()
+        }
+        for column in ("fhir_issuer", "fhir_patient_id", "fhir_encounter_id"):
+            if column not in invitation_columns:
+                connection.execute(f"ALTER TABLE invitations ADD COLUMN {column} TEXT")
         connection.execute(
             """
             CREATE INDEX IF NOT EXISTS idx_invitations_encounter_status
@@ -574,6 +624,7 @@ class ConsultationRepository:
     def create_with_identifiers(self, record: dict[str, Any]) -> dict[str, str]:
         """Insert a result and return its permanent and patient-facing IDs."""
         data_json = self._serialize_data(record.get("data", {}))
+        fhir_context = record.get("fhir_context") or {}
         structured_note = str(record.get("structured_note") or "").strip() or None
         structured_sources = record.get("structured_sources", [])
         if not isinstance(structured_sources, list):
@@ -620,9 +671,12 @@ class ConsultationRepository:
                             invitation_id,
                             institution_id,
                             patient_sno,
-                            reg_sno
+                            reg_sno,
+                            fhir_issuer,
+                            fhir_patient_id,
+                            fhir_encounter_id
                         )
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         """,
                         (
                             queue_number,
@@ -646,6 +700,9 @@ class ConsultationRepository:
                             record.get("institution_id"),
                             record.get("patient_sno"),
                             record.get("reg_sno"),
+                            fhir_context.get("issuer"),
+                            fhir_context.get("patient_id"),
+                            fhir_context.get("encounter_id"),
                         ),
                     )
                     invitation_id = record.get("invitation_id")
@@ -774,7 +831,15 @@ class ConsultationRepository:
                     invitation_id,
                     institution_id,
                     patient_sno,
-                    reg_sno
+                    reg_sno,
+                    fhir_issuer,
+                    fhir_patient_id,
+                    fhir_encounter_id,
+                    fhir_composition_id,
+                    fhir_composition_version_id,
+                    fhir_submitted_at,
+                    fhir_submitted_by,
+                    fhir_summary_json
                 FROM consultations
                 WHERE consultation_date = ? AND display_number = ?
                   AND (? IS NULL OR institution_id = ?)
@@ -852,7 +917,70 @@ class ConsultationRepository:
             "institution_id": row["institution_id"],
             "patient_sno": row["patient_sno"],
             "reg_sno": row["reg_sno"],
+            "fhir_context": (
+                {
+                    "issuer": row["fhir_issuer"],
+                    "patient_id": row["fhir_patient_id"],
+                    "encounter_id": row["fhir_encounter_id"],
+                }
+                if row["fhir_patient_id"]
+                else None
+            ),
+            "fhir_submission": (
+                {
+                    "resource_id": row["fhir_composition_id"],
+                    "version_id": row["fhir_composition_version_id"] or "",
+                    "submitted_at": row["fhir_submitted_at"],
+                    "submitted_by": row["fhir_submitted_by"],
+                }
+                if row["fhir_composition_id"]
+                else None
+            ),
+            "fhir_summary_sections": json.loads(row["fhir_summary_json"] or "[]"),
         }
+
+    def save_fhir_submission(
+        self,
+        consultation_id: str,
+        *,
+        resource_id: str,
+        version_id: str,
+        submitted_by: str,
+        sections: list[dict[str, Any]],
+    ) -> str | None:
+        """Persist the successful FHIR result and return its submission timestamp."""
+
+        if not resource_id.strip() or not submitted_by.strip():
+            raise ValueError("FHIR submission identifiers must not be empty")
+        if not isinstance(sections, list) or not sections:
+            raise ValueError("FHIR submission sections must not be empty")
+        sections_json = json.dumps(sections, ensure_ascii=False, separators=(",", ":"))
+        submitted_at = _utc_now()
+        consultation_date, registration_number = self._parse_consultation_id(consultation_id)
+        with closing(self._connect()) as connection, connection:
+            cursor = connection.execute(
+                """
+                UPDATE consultations
+                SET fhir_composition_id = ?,
+                    fhir_composition_version_id = ?,
+                    fhir_submitted_at = ?,
+                    fhir_submitted_by = ?,
+                    fhir_summary_json = ?,
+                    updated_at = ?
+                WHERE consultation_date = ? AND display_number = ?
+                """,
+                (
+                    resource_id.strip(),
+                    version_id.strip() or None,
+                    submitted_at,
+                    submitted_by.strip(),
+                    sections_json,
+                    submitted_at,
+                    consultation_date,
+                    registration_number,
+                ),
+            )
+        return submitted_at if cursor.rowcount == 1 else None
 
     def list_summaries(
         self,
@@ -1158,7 +1286,16 @@ class ConsultationRepository:
         prefill: dict[str, Any],
         actor_sub: str,
         ttl_seconds: int = 24 * 60 * 60,
+        fhir_context: dict[str, str | None] | None = None,
     ) -> dict[str, str]:
+        trusted_fhir_context = fhir_context or {}
+        fhir_issuer = str(trusted_fhir_context.get("issuer") or "").strip() or None
+        fhir_patient_id = str(trusted_fhir_context.get("patient_id") or "").strip() or None
+        fhir_encounter_id = str(trusted_fhir_context.get("encounter_id") or "").strip() or None
+        if bool(fhir_issuer) != bool(fhir_patient_id):
+            raise ValueError("FHIR invitation context requires issuer and patient id")
+        if fhir_encounter_id and not fhir_patient_id:
+            raise ValueError("FHIR encounter requires a patient id")
         token = secrets.token_urlsafe(32)
         invite_id = secrets.token_hex(16)
         now = datetime.now(timezone.utc)
@@ -1178,8 +1315,9 @@ class ConsultationRepository:
                 """
                 INSERT INTO invitations (
                     invite_id, token_hash, institution_id, patient_sno, reg_sno,
-                    prefill_json, status, expires_at, created_by, created_at
-                ) VALUES (?, ?, ?, ?, ?, ?, 'active', ?, ?, ?)
+                    prefill_json, status, expires_at, created_by, created_at,
+                    fhir_issuer, fhir_patient_id, fhir_encounter_id
+                ) VALUES (?, ?, ?, ?, ?, ?, 'active', ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     invite_id,
@@ -1191,6 +1329,9 @@ class ConsultationRepository:
                     expires_at,
                     actor_sub,
                     created_at,
+                    fhir_issuer,
+                    fhir_patient_id,
+                    fhir_encounter_id,
                 ),
             )
             self._audit(
@@ -1320,7 +1461,8 @@ class ConsultationRepository:
                 SELECT
                     ps.session_id, ps.interview_session_id, ps.expires_at,
                     i.invite_id, i.institution_id, i.patient_sno, i.reg_sno,
-                    i.prefill_json, i.consultation_id
+                    i.prefill_json, i.consultation_id,
+                    i.fhir_issuer, i.fhir_patient_id, i.fhir_encounter_id
                 FROM patient_sessions ps
                 JOIN invitations i ON i.invite_id = ps.invite_id
                 WHERE ps.session_token_hash = ?
@@ -1345,6 +1487,15 @@ class ConsultationRepository:
             "reg_sno": row["reg_sno"],
             "prefill": json.loads(row["prefill_json"]),
             "consultation_id": row["consultation_id"],
+            "fhir_context": (
+                {
+                    "issuer": row["fhir_issuer"],
+                    "patient_id": row["fhir_patient_id"],
+                    "encounter_id": row["fhir_encounter_id"],
+                }
+                if row["fhir_patient_id"]
+                else None
+            ),
         }
 
     @staticmethod

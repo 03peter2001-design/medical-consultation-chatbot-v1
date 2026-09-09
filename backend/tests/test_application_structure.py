@@ -64,6 +64,7 @@ class ApplicationStructureTests(unittest.TestCase):
                 ("PUT", "/rules/disease-profiles/{route}"),
                 ("GET", "/consultations"),
                 ("DELETE", "/consultations/{consultation_id}"),
+                ("POST", "/consultations/{consultation_id}/fhir-composition"),
                 ("POST", "/load_patient"),
                 ("DELETE", "/patient/{session_id}"),
                 ("POST", "/chat"),

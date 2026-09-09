@@ -5,7 +5,7 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 
 ## 服務版本
 
-目前版本：**v0.11.3（2026-08-20）**。
+目前版本：**v0.13.0（2026-08-27）**。
 
 本次因主動撤除既有 AMIE／語意標籤能力並回到較小的實驗性功能面，版本線依專案
 決策由 0 重新編碼。下方 `v1.x` 條目保留為舊能力線的歷史紀錄，不表示 `v0.3.0`
@@ -18,10 +18,50 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 服務版本與下列既有版本機制彼此獨立，不可互相替代：
 
 - API 的 `/v1` 是 HTTP 契約前綴，不是後端服務的 SemVer。
-- SQLite schema version 是資料庫遷移版本；本基線於 2026-08-05 升至 version 6。
+- SQLite schema version 是資料庫遷移版本；本版升至 version 11，保存 FHIR
+  Patient／Encounter context、Composition 寫入結果與本機 launcher invitation 綁定。
 - RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
 - Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
   revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v0.13.0 (2026-08-27)
+
+- 新增 `POST /v1/doctor/launcher/invitations`，讓本機合成資料 SMART launcher
+  選定病人後核發一次性 opaque code。端點同時要求 `consultation:read`／
+  `invite:create`、loopback local／legacy doctor principal 與明示
+  `LOCAL_FHIR_LAUNCHER_ENABLED=true`；一般醫師與正式 UCC token 不能使用。
+- Request 必須帶入 SMART callback 實際使用的 issuer，Backend 會將其正規化後與
+  `FHIR_PUBLIC_ISSUER` 完全比對；不相符即拒絕，browser 不能把另一個 FHIR Box 的
+  Patient ID 綁到伺服器核准的 issuer。
+- code 沿用既有高熵隨機 invitation token，SQLite 只保存 SHA-256；發碼回應加上
+  `Cache-Control: no-store`。預設有效 300 秒，設定值限制在 60–3600 秒，掃碼或貼上
+  code 後仍由既有 `/v1/invitations/exchange` 單次兌換 HttpOnly patient session。
+- SQLite schema 升至 version 11，invitation 持久保存伺服器決定的 FHIR issuer、
+  Patient 與可選 Encounter；兌換後由受驗證 session 注入初始問診 state，最後保存至
+  consultation。病人 browser 仍不能用 request 內的 prefill 或 FHIR context 覆寫綁定。
+- `GET /v1/patient/session` 在驗證 cookie 後可回傳病人顯示名稱與 FHIR
+  Patient／Encounter ID，供問診開始前確認。本機 launcher 只是合成資料暫代流程，
+  不是 UCC 或正式 SMART 授權邊界，預設關閉且不得用於真實病人。
+- launcher、invitation、session、repository、授權、audit 與 FHIR Composition
+  聚焦測試通過，OpenAPI route／typed-response 契約測試亦通過。
+
+### v0.12.0 (2026-08-25)
+
+- 新增 `POST /v1/doctor/consultations/{consultation_id}/fhir-composition`。端點要求既有
+  `consultation:read` 與額外的 exact `consultation:fhir-write` scope，並只接受七段皆由
+  醫師確認、且 `updated_at` 未過期的摘要；Patient、Encounter、FHIR endpoint 與作者
+  均由後端已保存或受信任的身分資訊決定，不接受醫師端任意指定。
+- SQLite schema 升至 version 10，持久保存來源 issuer、Patient／Encounter ID、FHIR
+  Composition resource/version、送出時間／操作者及實際送出的醫師審閱內容。FHIR 採
+  TW Core Composition profile、LOINC 11503-0 與穩定 consultation identifier 做條件建立；
+  狀態固定為 `preliminary`，畫面確認不等同電子簽章或臨床核准。
+- 瀏覽器帶入 FHIR context 與本機 Practitioner fallback 均預設 fail closed，只有明確設定
+  `FHIR_PATIENT_CONTEXT_INPUT_ENABLED=true`、loopback auth bypass 與
+  `FHIR_LOCAL_DEVELOPMENT_AUTHOR=true` 的合成資料沙盒才會啟用；UCC／SMART 正式身分
+  必須提供簽章 JWT 中的 Practitioner／PractitionerRole `fhirUser`。
+- 新增 FHIR builder、HTTP client、repository migration、authorization／idempotency／
+  escaping／錯誤處理測試，並同步 OpenAPI 與前端型別。未以院方 OAuth 或真實 HAPI
+  驗證，正式上線前仍需核准寫入 scope、TLS、Provenance／簽署與復原治理。
 
 ### v0.11.3 (2026-08-20)
 
@@ -573,9 +613,17 @@ GEMINI_TRANSLATION_MODEL=gemini-3.5-flash-lite
 | `AVATAR_TIMEOUT_SECONDS` | 首次載入與影片生成逾時，整合部署預設 600 秒 |
 | `ALLOW_LOCAL_AUTH_BYPASS=true` | 只在 loopback 開發時略過病患 session 與 UCC Bearer；預設關閉 |
 | `UCC_JWT_CLOCK_SKEW_SECONDS` | eHIS／Backend JWT 驗證時差容忍秒數，預設 30、範圍 0–300；無效值會 fail closed |
+| `LOCAL_FHIR_LAUNCHER_ENABLED=false` | 僅在 loopback local／legacy doctor principal 下開啟合成病人發碼；不可用於正式環境 |
+| `LOCAL_FHIR_LAUNCH_CODE_TTL_SECONDS=300` | 本機 launcher code 有效秒數；無效值回復 300，數值限制在 60–3600 |
 | `CONSULTATION_DB_PATH` | SQLite 路徑；相對路徑以 `backend/` 為基準 |
 | `SAFETY_RULE_ADMIN_TOKEN` | 啟用規則中心編輯；未設定時維持唯讀 |
 | `FHIR_BASE_URL` | HAPI FHIR terminology server URL |
+| `FHIR_WRITE_ENABLED=false` | FHIR Composition 寫入總開關；預設關閉 |
+| `FHIR_WRITE_BASE_URL` | 後端寫入用 FHIR R4 endpoint；與瀏覽器 issuer 分開設定 |
+| `FHIR_PUBLIC_ISSUER` | 唯一可接受並保存的 FHIR launch issuer；SMART callback 回報值必須與其完全一致 |
+| `FHIR_PATIENT_CONTEXT_INPUT_ENABLED=false` | 只供合成資料沙盒接受瀏覽器傳入 Patient／Encounter ID；正式 UCC 病患 session 一律拒絕 |
+| `FHIR_LOCAL_DEVELOPMENT_AUTHOR=false` | 只搭配 loopback auth bypass 建立本機 Practitioner identifier；正式身分不得啟用 |
+| `FHIR_WRITE_BEARER_TOKEN` | 可選的後端 FHIR 寫入 token；屬祕密，不得提交或記錄 |
 | `RAG_INDEX_VERSION=v2` | 使用具 `clinical_stage` 分區的 RAG v2 collections；移除或設為 `legacy` 會使用具 provenance 的未分區相容檢索 |
 
 若使用 `gemini-2.5-pro`，後端會為不可關閉的 thinking 預留 128 tokens，並將
@@ -690,7 +738,7 @@ fact 白名單、舊病例映射與 Safety 規則位於
 及輪數上限位於 `questionnaire_data/*.json`。這裡的 AMIE 是依公開研究方法實作的流程，不是
 Google 官方 AMIE 模型或服務，也不包含 self-play 訓練。
 
-## FHIR 病歷預填
+## FHIR 病歷預填與 Composition 寫入
 
 使用身分證字號由 FHIR 載入病歷時，姓名、性別、出生日期、血型及既有病史
 不會重問；身分證字號不會送入 `/chat`、RAG 或外部模型。
@@ -703,6 +751,17 @@ Google 官方 AMIE 模型或服務，也不包含 self-play 訓練。
 本機 FHIR／TW Core／SNOMED 環境請見
 [terminology/README.md](terminology/README.md)，SMART OAuth 整合請見
 [../smart-app/README.md](../smart-app/README.md)。
+
+若問診在建立時已綁定 FHIR `Patient.id`（以及可選的 `Encounter.id`），醫師完成七段
+摘要確認後可呼叫 `POST /v1/doctor/consultations/{consultation_id}/fhir-composition`。
+Backend 會先確認 Patient／Encounter 存在，再以院所與 consultation ID 組成穩定
+identifier，對 `Composition` 執行 conditional create；重試不會刻意建立第二份資源。
+寫入內容是醫師確認後的七段 narrative，resource 狀態仍為 `preliminary`。
+
+此端點不是電子簽章，也不會建立完整 document Bundle、Provenance 或正式
+AuditEvent resource。正式環境須由院方授予 Backend 最小寫入權限，使用受信任
+Practitioner／PractitionerRole 身分，並補齊版本衝突、簽署、撤回、更正、稽核與失敗
+復原政策；瀏覽器的 SMART access token 永遠不會送至問診 API。
 
 ## 問診資料庫與測試病例
 

@@ -126,6 +126,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/doctor/consultations/{consultation_id}/fhir-composition": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a clinician-reviewed TW Core Composition */
+        post: operations["create_fhir_composition_v1_doctor_consultations__consultation_id__fhir_composition_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/doctor/launcher/invitations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a short-lived patient code from the local FHIR launcher */
+        post: operations["create_launcher_invitation_v1_doctor_launcher_invitations_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/doctor/load_patient": {
         parameters: {
             query?: never;
@@ -442,6 +476,7 @@ export interface components {
              * @enum {string}
              */
             action: "answer" | "back";
+            fhir_context?: components["schemas"]["FhirPatientContext"] | null;
             /** Language */
             language?: ("mandarin" | "minnan") | null;
             /**
@@ -679,6 +714,70 @@ export interface components {
             /** Session Id */
             session_id: string;
         };
+        /** FhirCompositionCreateRequest */
+        FhirCompositionCreateRequest: {
+            /** Expected Updated At */
+            expected_updated_at: string;
+            /** Sections */
+            sections: components["schemas"]["PhysicianSummarySection"][];
+        };
+        /** FhirCompositionCreateResponse */
+        FhirCompositionCreateResponse: {
+            /** Encounter Reference */
+            encounter_reference?: string | null;
+            /** Patient Reference */
+            patient_reference: string;
+            /** Resource Id */
+            resource_id: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "created" | "existing";
+            /** Submitted At */
+            submitted_at: string;
+            /**
+             * Version Id
+             * @default
+             */
+            version_id: string;
+        };
+        /**
+         * FhirPatientContext
+         * @description FHIR launch references accepted only by the explicit sandbox ingress.
+         */
+        FhirPatientContext: {
+            /** Encounter Id */
+            encounter_id?: string | null;
+            /** Patient Id */
+            patient_id: string;
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "smart" | "direct";
+        };
+        /** FhirPatientContextResponse */
+        FhirPatientContextResponse: {
+            /** Encounter Id */
+            encounter_id?: string | null;
+            /** Issuer */
+            issuer: string;
+            /** Patient Id */
+            patient_id: string;
+        };
+        /** FhirSubmissionResponse */
+        FhirSubmissionResponse: {
+            /** Resource Id */
+            resource_id: string;
+            /** Submitted At */
+            submitted_at: string;
+            /**
+             * Version Id
+             * @default
+             */
+            version_id: string;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -780,6 +879,33 @@ export interface components {
              */
             status: "active";
         };
+        /**
+         * LauncherInvitationCreateRequest
+         * @description Synthetic SMART launcher context accepted only by the local doctor route.
+         */
+        LauncherInvitationCreateRequest: {
+            /** Encounter Id */
+            encounter_id?: string | null;
+            /** Issuer */
+            issuer: string;
+            /** Patient Id */
+            patient_id: string;
+            prefill: components["schemas"]["PatientPrefill"];
+        };
+        /** LauncherInvitationResponse */
+        LauncherInvitationResponse: {
+            /** Code */
+            code: string;
+            /** Expires At */
+            expires_at: string;
+            /** Invite Id */
+            invite_id: string;
+            /**
+             * Status
+             * @constant
+             */
+            status: "active";
+        };
         /** LoadPatientRequest */
         LoadPatientRequest: {
             /** Consultation Date */
@@ -819,6 +945,10 @@ export interface components {
             disease_assessment: {
                 [key: string]: unknown;
             };
+            fhir_context?: components["schemas"]["FhirPatientContextResponse"] | null;
+            fhir_submission?: components["schemas"]["FhirSubmissionResponse"] | null;
+            /** Fhir Summary Sections */
+            fhir_summary_sections?: components["schemas"]["PhysicianSummarySection"][];
             /** Legacy Differential Hypotheses */
             legacy_differential_hypotheses: unknown[];
             /** Pain Locations */
@@ -858,6 +988,8 @@ export interface components {
             triage_level: "routine" | "urgent";
             /** Type */
             type: string;
+            /** Updated At */
+            updated_at: string;
             /** Workflow Status */
             workflow_status: string;
         };
@@ -944,13 +1076,36 @@ export interface components {
             consultation_id?: string | null;
             /** Expires At */
             expires_at: string;
+            /** Fhir Encounter Id */
+            fhir_encounter_id?: string | null;
+            /** Fhir Patient Id */
+            fhir_patient_id?: string | null;
             /** Interview Session Id */
             interview_session_id: string;
+            /** Patient Name */
+            patient_name?: string | null;
             /**
              * Status
              * @constant
              */
             status: "active";
+        };
+        /** PhysicianSummarySection */
+        PhysicianSummarySection: {
+            /**
+             * Confirmed
+             * @constant
+             */
+            confirmed: true;
+            /** Key */
+            key: string;
+            /**
+             * Label
+             * @default
+             */
+            label: string;
+            /** Value */
+            value: string;
         };
         /** ProgressResponse */
         ProgressResponse: {
@@ -1621,6 +1776,128 @@ export interface operations {
             };
         };
     };
+    create_fhir_composition_v1_doctor_consultations__consultation_id__fhir_composition_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                consultation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FhirCompositionCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FhirCompositionCreateResponse"];
+                };
+            };
+            /** @description The caller is not authorized for this operation. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The requested consultation does not exist. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The submitted revision conflicts with the current revision. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Request validation or domain validation failed. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description A required configured service is unavailable. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_launcher_invitation_v1_doctor_launcher_invitations_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LauncherInvitationCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LauncherInvitationResponse"];
+                };
+            };
+            /** @description The caller is not authorized for this operation. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Request validation or domain validation failed. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description A required configured service is unavailable. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     load_patient_v1_doctor_load_patient_post: {
         parameters: {
             query?: never;
@@ -2111,6 +2388,15 @@ export interface operations {
             };
             /** @description The caller is not authorized for this operation. */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The submitted revision conflicts with the current revision. */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

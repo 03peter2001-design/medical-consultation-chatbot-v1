@@ -6,7 +6,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field, field_validator
 
-from app.models import ClinicalCoding, SafetyRuleGroup
+from app.models import ClinicalCoding, PhysicianSummarySection, SafetyRuleGroup
 
 
 class ValidationIssue(BaseModel):
@@ -125,6 +125,13 @@ class InvitationResponse(BaseModel):
     status: Literal["active"]
 
 
+class LauncherInvitationResponse(BaseModel):
+    invite_id: str
+    code: str
+    expires_at: str
+    status: Literal["active"]
+
+
 class InvitationExchangeResponse(BaseModel):
     status: Literal["ok"]
     expires_at: str
@@ -134,6 +141,9 @@ class PatientSessionResponse(BaseModel):
     status: Literal["active"]
     expires_at: str
     interview_session_id: str
+    patient_name: str | None = None
+    fhir_patient_id: str | None = None
+    fhir_encounter_id: str | None = None
     consultation_id: str | None = None
     completed: bool = False
 
@@ -228,6 +238,24 @@ class ConsultationListResponse(BaseModel):
     offset: int = Field(ge=0)
 
 
+class FhirPatientContextResponse(BaseModel):
+    issuer: str
+    patient_id: str
+    encounter_id: str | None = None
+
+
+class FhirSubmissionResponse(BaseModel):
+    resource_id: str
+    version_id: str = ""
+    submitted_at: str
+
+
+class FhirCompositionCreateResponse(FhirSubmissionResponse):
+    status: Literal["created", "existing"]
+    patient_reference: str
+    encounter_reference: str | None = None
+
+
 class LoadPatientResponse(BaseModel):
     consultation_id: str
     consultation_date: str
@@ -253,6 +281,10 @@ class LoadPatientResponse(BaseModel):
     summary_error: str
     rag_enabled: bool
     created_at: str
+    updated_at: str
+    fhir_context: FhirPatientContextResponse | None = None
+    fhir_submission: FhirSubmissionResponse | None = None
+    fhir_summary_sections: list[PhysicianSummarySection] = Field(default_factory=list)
 
 
 class SnomedConcept(BaseModel):

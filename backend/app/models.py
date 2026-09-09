@@ -1,10 +1,50 @@
 """Pydantic request models used by the HTTP API contract."""
 
+import re
 from typing import Any, Literal
+from urllib.parse import urlsplit, urlunsplit
 
-from pydantic import BaseModel, Field, field_validator, model_validator, validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator, validator
 
 from domain.body_pain_regions import validate_pain_location_ids
+
+FHIR_ID_PATTERN = re.compile(r"[A-Za-z0-9\-.]{1,64}")
+PHYSICIAN_SUMMARY_SECTION_KEYS = frozenset(
+    {
+        "Chief Complaint",
+        "Present Illness",
+        "Past History",
+        "Drug History",
+        "Allergy History",
+        "Personal History",
+        "Family History",
+    }
+)
+
+
+def normalize_fhir_issuer(value: str) -> str:
+    """Validate and normalize a configured SMART/FHIR issuer without network I/O."""
+
+    normalized = str(value or "").strip()
+    parsed = urlsplit(normalized)
+    if (
+        parsed.scheme not in {"http", "https"}
+        or not parsed.hostname
+        or parsed.username
+        or parsed.password
+        or parsed.query
+        or parsed.fragment
+    ):
+        raise ValueError("FHIR issuer 必須是無帳密、query 或 fragment 的 HTTP(S) URL")
+    try:
+        port = parsed.port
+    except ValueError as error:
+        raise ValueError("FHIR issuer port 格式不正確") from error
+    host = parsed.hostname.casefold()
+    if ":" in host:
+        host = f"[{host}]"
+    netloc = f"{host}:{port}" if port is not None else host
+    return urlunsplit((parsed.scheme.casefold(), netloc, parsed.path.rstrip("/"), "", ""))
 
 
 class ClinicalCoding(BaseModel):
@@ -22,7 +62,7 @@ class ClinicalCoding(BaseModel):
 
 class PatientPrefill(BaseModel):
     source: str = "fhir"
-    clinical_codings: list[ClinicalCoding] = Field(default_factory=list)
+    clinical_codings: list[ClinicalCoding] = Field(default_factory=list, max_length=200)
     name: str | None = None
     gender: str | None = None
     birth_date: str | None = None
@@ -54,6 +94,87 @@ class PatientPrefill(BaseModel):
     )
     def trim_prefill_value(cls, value):
         return value.strip()[:500] if value else None
+
+
+class FhirPatientContext(BaseModel):
+    """FHIR launch references accepted only by the explicit sandbox ingress."""
+
+    patient_id: str = Field(min_length=1, max_length=64)
+    encounter_id: str | None = Field(default=None, max_length=64)
+    source: Literal["smart", "direct"]
+
+    @field_validator("patient_id", "encounter_id")
+    @classmethod
+    def validate_fhir_id(cls, value):
+        if value is None:
+            return None
+        normalized = value.strip()
+        if not FHIR_ID_PATTERN.fullmatch(normalized):
+            raise ValueError("FHIR resource id 格式不正確")
+        return normalized
+
+
+class LauncherInvitationCreateRequest(BaseModel):
+    """Synthetic SMART launcher context accepted only by the local doctor route."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    issuer: str = Field(min_length=1, max_length=2048)
+    patient_id: str = Field(min_length=1, max_length=64)
+    encounter_id: str | None = Field(default=None, max_length=64)
+    prefill: PatientPrefill
+
+    @field_validator("patient_id", "encounter_id")
+    @classmethod
+    def validate_fhir_id(cls, value):
+        if value is None:
+            return None
+        normalized = value.strip()
+        if not FHIR_ID_PATTERN.fullmatch(normalized):
+            raise ValueError("FHIR resource id 格式不正確")
+        return normalized
+
+    @field_validator("issuer")
+    @classmethod
+    def validate_issuer(cls, value):
+        return normalize_fhir_issuer(value)
+
+
+class PhysicianSummarySection(BaseModel):
+    key: str = Field(min_length=1, max_length=100)
+    label: str = Field(default="", max_length=100)
+    value: str = Field(min_length=1, max_length=12_000)
+    confirmed: Literal[True]
+
+    @field_validator("key", "value")
+    @classmethod
+    def trim_required_summary_section(cls, value):
+        normalized = value.strip()
+        if not normalized:
+            raise ValueError("醫師摘要欄位不可為空")
+        return normalized
+
+    @field_validator("label")
+    @classmethod
+    def trim_summary_label(cls, value):
+        return value.strip()
+
+
+class FhirCompositionCreateRequest(BaseModel):
+    expected_updated_at: str = Field(min_length=1, max_length=64)
+    sections: list[PhysicianSummarySection] = Field(min_length=1, max_length=20)
+
+    @model_validator(mode="after")
+    def exact_summary_sections(self):
+        keys = [section.key for section in self.sections]
+        if len(keys) != len(set(keys)):
+            raise ValueError("醫師摘要欄位不可重複")
+        if set(keys) != PHYSICIAN_SUMMARY_SECTION_KEYS:
+            raise ValueError("醫師摘要必須包含完整七個欄位")
+        self.expected_updated_at = self.expected_updated_at.strip()
+        if not self.expected_updated_at:
+            raise ValueError("病例版本資訊不可為空")
+        return self
 
 
 class InvitationPrefill(BaseModel):
@@ -140,6 +261,7 @@ class ChatRequest(BaseModel):
     action: Literal["answer", "back"] = "answer"
     pain_location_ids: list[str] = Field(default_factory=list)
     patient_prefill: PatientPrefill | None = None
+    fhir_context: FhirPatientContext | None = None
     language: Literal["mandarin", "minnan"] | None = None
 
     @validator("session_id")

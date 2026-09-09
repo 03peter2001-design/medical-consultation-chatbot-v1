@@ -12,6 +12,7 @@ from domain.patient_messages import patient_message
 from infrastructure.asr import SpeechTranscriber
 from infrastructure.avatar import AvatarClient
 from infrastructure.consultation_repository import ConsultationRepository
+from infrastructure.fhir_client import FhirClient
 from infrastructure.llm import LLMClient
 
 load_dotenv()
@@ -109,6 +110,7 @@ DOCTOR_HISTORY_MAX_TURNS = 8
 URGENT_CARE_MESSAGE = patient_message("safety.urgent_care")
 
 consultation_repository = ConsultationRepository.from_environment()
+fhir_client = FhirClient.from_environment()
 
 RAG_ENABLED = False
 RAG_STATUS = {

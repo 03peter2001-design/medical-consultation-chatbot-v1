@@ -11,10 +11,16 @@ from app import runtime
 from app.contracts import (
     InvitationExchangeResponse,
     InvitationResponse,
+    LauncherInvitationResponse,
     PatientSessionResponse,
     error_responses,
 )
-from app.models import InvitationCreateRequest, InvitationExchangeRequest
+from app.models import (
+    InvitationCreateRequest,
+    InvitationExchangeRequest,
+    LauncherInvitationCreateRequest,
+    normalize_fhir_issuer,
+)
 from app.security import (
     PATIENT_SESSION_COOKIE,
     UccPrincipal,
@@ -24,6 +30,10 @@ from app.security import (
 from app.services.security_audit import audit_patient
 
 router = APIRouter(tags=["patient"])
+
+_DEFAULT_LAUNCH_CODE_TTL_SECONDS = 5 * 60
+_MIN_LAUNCH_CODE_TTL_SECONDS = 60
+_MAX_LAUNCH_CODE_TTL_SECONDS = 60 * 60
 
 
 def _secure_cookie() -> bool:
@@ -56,10 +66,47 @@ def require_invitation_service(
     return principal
 
 
+def require_local_fhir_launcher(
+    principal: UccPrincipal = Depends(require_scopes("consultation:read", "invite:create")),
+) -> UccPrincipal:
+    enabled = os.getenv("LOCAL_FHIR_LAUNCHER_ENABLED", "false").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+    if not enabled:
+        raise HTTPException(status_code=403, detail="Local FHIR launcher is disabled")
+    if not (
+        principal.claims.get("local_auth_bypass") is True
+        and principal.claims.get("legacy_frontend_bypass") is True
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail="Local development doctor identity required",
+        )
+    return principal
+
+
+def _launcher_code_ttl_seconds() -> int:
+    raw_value = os.getenv(
+        "LOCAL_FHIR_LAUNCH_CODE_TTL_SECONDS",
+        str(_DEFAULT_LAUNCH_CODE_TTL_SECONDS),
+    ).strip()
+    try:
+        configured = int(raw_value)
+    except ValueError:
+        configured = _DEFAULT_LAUNCH_CODE_TTL_SECONDS
+    return max(
+        _MIN_LAUNCH_CODE_TTL_SECONDS,
+        min(configured, _MAX_LAUNCH_CODE_TTL_SECONDS),
+    )
+
+
 @router.post(
     "/invitations",
     response_model=InvitationResponse,
-    responses=error_responses(403, 422, 503),
+    responses=error_responses(403, 409, 422, 503),
     summary="Create a single-use patient invitation from UCC",
 )
 def create_invitation(
@@ -86,6 +133,56 @@ def create_invitation(
     )
     invitation["public_url"] = f"{public_base}/#token={quote(invitation.pop('token'))}"
     return invitation
+
+
+@router.post(
+    "/doctor/launcher/invitations",
+    response_model=LauncherInvitationResponse,
+    responses=error_responses(403, 422, 503),
+    summary="Create a short-lived patient code from the local FHIR launcher",
+    tags=["doctor"],
+)
+def create_launcher_invitation(
+    payload: LauncherInvitationCreateRequest,
+    response: Response,
+    principal: UccPrincipal = Depends(require_local_fhir_launcher),
+):
+    configured_issuer = os.getenv("FHIR_PUBLIC_ISSUER", "").strip()
+    if not configured_issuer:
+        raise HTTPException(status_code=503, detail="FHIR public issuer is not configured")
+    try:
+        issuer = normalize_fhir_issuer(configured_issuer)
+    except ValueError as error:
+        raise HTTPException(
+            status_code=503,
+            detail="FHIR public issuer configuration is invalid",
+        ) from error
+    if payload.issuer != issuer:
+        raise HTTPException(
+            status_code=409,
+            detail="SMART launch issuer does not match the configured FHIR issuer",
+        )
+
+    invitation = runtime.consultation_repository.create_invitation(
+        institution_id=principal.institution_id,
+        patient_sno=payload.patient_id,
+        reg_sno=payload.encounter_id or f"smart-patient:{payload.patient_id}",
+        prefill=payload.prefill.model_dump(exclude_none=True),
+        actor_sub=principal.subject,
+        ttl_seconds=_launcher_code_ttl_seconds(),
+        fhir_context={
+            "issuer": issuer,
+            "patient_id": payload.patient_id,
+            "encounter_id": payload.encounter_id,
+        },
+    )
+    response.headers["Cache-Control"] = "no-store"
+    return {
+        "invite_id": invitation["invite_id"],
+        "code": invitation["token"],
+        "expires_at": invitation["expires_at"],
+        "status": invitation["status"],
+    }
 
 
 @router.post(
@@ -122,10 +219,15 @@ def exchange_invitation(payload: InvitationExchangeRequest, response: Response):
 def patient_session(request: Request, _: dict = Depends(require_patient_session)):
     session = request.state.patient_session
     audit_patient("patient.session.restore", "success", session)
+    prefill = session.get("prefill") or {}
+    fhir_context = session.get("fhir_context") or {}
     return {
         "status": "active",
         "expires_at": session["expires_at"],
         "interview_session_id": session["interview_session_id"],
+        "patient_name": prefill.get("name"),
+        "fhir_patient_id": fhir_context.get("patient_id"),
+        "fhir_encounter_id": fhir_context.get("encounter_id"),
         "consultation_id": session.get("consultation_id"),
         "completed": bool(session.get("consultation_id")),
     }

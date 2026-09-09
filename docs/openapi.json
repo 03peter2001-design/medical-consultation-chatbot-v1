@@ -117,6 +117,16 @@
             "title": "Action",
             "type": "string"
           },
+          "fhir_context": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FhirPatientContext"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "language": {
             "anyOf": [
               {
@@ -696,6 +706,168 @@
         "title": "FactLabelUpdateRequest",
         "type": "object"
       },
+      "FhirCompositionCreateRequest": {
+        "properties": {
+          "expected_updated_at": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Expected Updated At",
+            "type": "string"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/PhysicianSummarySection"
+            },
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Sections",
+            "type": "array"
+          }
+        },
+        "required": [
+          "expected_updated_at",
+          "sections"
+        ],
+        "title": "FhirCompositionCreateRequest",
+        "type": "object"
+      },
+      "FhirCompositionCreateResponse": {
+        "properties": {
+          "encounter_reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Encounter Reference"
+          },
+          "patient_reference": {
+            "title": "Patient Reference",
+            "type": "string"
+          },
+          "resource_id": {
+            "title": "Resource Id",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "created",
+              "existing"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "submitted_at": {
+            "title": "Submitted At",
+            "type": "string"
+          },
+          "version_id": {
+            "default": "",
+            "title": "Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_id",
+          "submitted_at",
+          "status",
+          "patient_reference"
+        ],
+        "title": "FhirCompositionCreateResponse",
+        "type": "object"
+      },
+      "FhirPatientContext": {
+        "description": "FHIR launch references accepted only by the explicit sandbox ingress.",
+        "properties": {
+          "encounter_id": {
+            "anyOf": [
+              {
+                "maxLength": 64,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Encounter Id"
+          },
+          "patient_id": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Patient Id",
+            "type": "string"
+          },
+          "source": {
+            "enum": [
+              "smart",
+              "direct"
+            ],
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "patient_id",
+          "source"
+        ],
+        "title": "FhirPatientContext",
+        "type": "object"
+      },
+      "FhirPatientContextResponse": {
+        "properties": {
+          "encounter_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Encounter Id"
+          },
+          "issuer": {
+            "title": "Issuer",
+            "type": "string"
+          },
+          "patient_id": {
+            "title": "Patient Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "issuer",
+          "patient_id"
+        ],
+        "title": "FhirPatientContextResponse",
+        "type": "object"
+      },
+      "FhirSubmissionResponse": {
+        "properties": {
+          "resource_id": {
+            "title": "Resource Id",
+            "type": "string"
+          },
+          "submitted_at": {
+            "title": "Submitted At",
+            "type": "string"
+          },
+          "version_id": {
+            "default": "",
+            "title": "Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_id",
+          "submitted_at"
+        ],
+        "title": "FhirSubmissionResponse",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -986,6 +1158,75 @@
         "title": "InvitationResponse",
         "type": "object"
       },
+      "LauncherInvitationCreateRequest": {
+        "additionalProperties": false,
+        "description": "Synthetic SMART launcher context accepted only by the local doctor route.",
+        "properties": {
+          "encounter_id": {
+            "anyOf": [
+              {
+                "maxLength": 64,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Encounter Id"
+          },
+          "issuer": {
+            "maxLength": 2048,
+            "minLength": 1,
+            "title": "Issuer",
+            "type": "string"
+          },
+          "patient_id": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Patient Id",
+            "type": "string"
+          },
+          "prefill": {
+            "$ref": "#/components/schemas/PatientPrefill"
+          }
+        },
+        "required": [
+          "issuer",
+          "patient_id",
+          "prefill"
+        ],
+        "title": "LauncherInvitationCreateRequest",
+        "type": "object"
+      },
+      "LauncherInvitationResponse": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "expires_at": {
+            "title": "Expires At",
+            "type": "string"
+          },
+          "invite_id": {
+            "title": "Invite Id",
+            "type": "string"
+          },
+          "status": {
+            "const": "active",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "invite_id",
+          "code",
+          "expires_at",
+          "status"
+        ],
+        "title": "LauncherInvitationResponse",
+        "type": "object"
+      },
       "LoadPatientRequest": {
         "properties": {
           "consultation_date": {
@@ -1094,6 +1335,33 @@
             "title": "Disease Assessment",
             "type": "object"
           },
+          "fhir_context": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FhirPatientContextResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fhir_submission": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FhirSubmissionResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fhir_summary_sections": {
+            "items": {
+              "$ref": "#/components/schemas/PhysicianSummarySection"
+            },
+            "title": "Fhir Summary Sections",
+            "type": "array"
+          },
           "legacy_differential_hypotheses": {
             "items": {},
             "title": "Legacy Differential Hypotheses",
@@ -1175,6 +1443,10 @@
             "title": "Type",
             "type": "string"
           },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string"
+          },
           "workflow_status": {
             "title": "Workflow Status",
             "type": "string"
@@ -1202,7 +1474,8 @@
           "workflow_status",
           "summary_error",
           "rag_enabled",
-          "created_at"
+          "created_at",
+          "updated_at"
         ],
         "title": "LoadPatientResponse",
         "type": "object"
@@ -1385,6 +1658,7 @@
             "items": {
               "$ref": "#/components/schemas/ClinicalCoding"
             },
+            "maxItems": 200,
             "title": "Clinical Codings",
             "type": "array"
           },
@@ -1496,9 +1770,42 @@
             "title": "Expires At",
             "type": "string"
           },
+          "fhir_encounter_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fhir Encounter Id"
+          },
+          "fhir_patient_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fhir Patient Id"
+          },
           "interview_session_id": {
             "title": "Interview Session Id",
             "type": "string"
+          },
+          "patient_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Patient Name"
           },
           "status": {
             "const": "active",
@@ -1512,6 +1819,40 @@
           "interview_session_id"
         ],
         "title": "PatientSessionResponse",
+        "type": "object"
+      },
+      "PhysicianSummarySection": {
+        "properties": {
+          "confirmed": {
+            "const": true,
+            "title": "Confirmed",
+            "type": "boolean"
+          },
+          "key": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Key",
+            "type": "string"
+          },
+          "label": {
+            "default": "",
+            "maxLength": 100,
+            "title": "Label",
+            "type": "string"
+          },
+          "value": {
+            "maxLength": 12000,
+            "minLength": 1,
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value",
+          "confirmed"
+        ],
+        "title": "PhysicianSummarySection",
         "type": "object"
       },
       "ProgressResponse": {
@@ -2849,6 +3190,170 @@
         ]
       }
     },
+    "/v1/doctor/consultations/{consultation_id}/fhir-composition": {
+      "post": {
+        "operationId": "create_fhir_composition_v1_doctor_consultations__consultation_id__fhir_composition_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "consultation_id",
+            "required": true,
+            "schema": {
+              "title": "Consultation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FhirCompositionCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FhirCompositionCreateResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The caller is not authorized for this operation."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The requested consultation does not exist."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The submitted revision conflicts with the current revision."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "A required configured service is unavailable."
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Create a clinician-reviewed TW Core Composition",
+        "tags": [
+          "doctor"
+        ]
+      }
+    },
+    "/v1/doctor/launcher/invitations": {
+      "post": {
+        "operationId": "create_launcher_invitation_v1_doctor_launcher_invitations_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LauncherInvitationCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LauncherInvitationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The caller is not authorized for this operation."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request validation or domain validation failed."
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "A required configured service is unavailable."
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Create a short-lived patient code from the local FHIR launcher",
+        "tags": [
+          "patient",
+          "doctor"
+        ]
+      }
+    },
     "/v1/doctor/load_patient": {
       "post": {
         "operationId": "load_patient_v1_doctor_load_patient_post",
@@ -3522,6 +4027,16 @@
               }
             },
             "description": "The caller is not authorized for this operation."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The submitted revision conflicts with the current revision."
           },
           "422": {
             "content": {

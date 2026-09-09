@@ -15,6 +15,18 @@ their own versions or revisions.
 
 ### Doctor app
 
+#### v2.2.0 (2026-09-09)
+
+- 新增七段醫師摘要的逐欄編輯與確認流程；任何修改都會撤銷該欄確認狀態，七段全部
+  確認後才可進入 FHIR 送出預覽。
+- 串接既有 `POST /v1/doctor/consultations/{consultation_id}/fhir-composition`，要求
+  `consultation:fhir-write` scope、可信任 Patient context 與病例版本，並把送出結果明確
+  標示為 `preliminary` Composition，不視為電子簽章或臨床核准。
+- 保留正式版 UCC bootstrap、CSRF 與 encounter 綁定的邀請流程；未帶入開發版僅允許
+  loopback legacy principal 的 SMART Doctor Launcher。若 UCC 尚未核發 FHIR scope、
+  `fhirUser` 或可信任 FHIR context，寫入操作會安全停用。
+- Node 22 的 14 個 frontend-v2 測試檔及 Doctor production build 通過。
+
 #### v2.1.1 (2026-09-09)
 
 - Doctor API request 與 401 refresh retry 一律使用瀏覽器 `no-store` cache mode，避免首次
@@ -50,6 +62,23 @@ their own versions or revisions.
     the development frontend.
 
 ### Patient app
+
+#### v2.2.0 (2026-09-09)
+
+- 在既有 HttpOnly session gate 加入 QR 相機掃描與貼上完整邀請網址；優先使用瀏覽器
+  `BarcodeDetector`，不支援時延遲載入 ZXing，並在任何相機失敗路徑保留貼碼方式。
+- 先驗證既有 cookie session，再交換單次 opaque code 並重新取得 session；避免成功交換後
+  因暫時性驗證錯誤重送已消耗 code。畫面只顯示伺服器回傳的可信任 Patient／Encounter，
+  並驗證完整 active session schema；不從 code 解碼病人資料，也不接受瀏覽器覆寫
+  invitation FHIR context。
+- 對齊新版 SMART/FHIR reader、Synthea default identifier、國語／台語逐請求語言、Avatar
+  預載與背景生成，以及文字和結構化題目的語音活動偵測、可確認辨識結果與失敗重問。
+- 疼痛圖與 headache／chest／abdomen 問卷選項雙向同步；精細部位不明時不推測左右側，
+  並維持單一選項群組與送出動作。
+- Node 22 的 14 個 frontend-v2 測試檔及 Patient production build 通過。npm audit 另回報
+  18 個來自 `fhirclient`／`isomorphic-webcrypto` optional React Native／Expo 相依鏈的上游
+  moderate／high advisories；瀏覽器 production bundle 未載入該 mobile toolchain，仍待
+  上游提供不破壞相容性的更新。
 
 #### v2.1.0 (2026-08-11)
 
@@ -98,6 +127,10 @@ body-map, rule-governance, and clinical-evidence code into this package. The
 2026-08-07 questionnaire correction, body-map, EMR rendering, and patient Avatar
 changes were implemented through the relevant shared modules while doctor and
 patient authorization, routing, and bootstrap boundaries remained app-specific.
+The 2026-09-09 parity update added clinician-reviewed FHIR Composition submission,
+SMART/FHIR context helpers, invitation parsing, questionnaire voice mapping, and
+precise/coarse pain-location synchronization. These shared capabilities remain
+guarded by each app's independent authorization and session boundary.
 
 ## Commands
 

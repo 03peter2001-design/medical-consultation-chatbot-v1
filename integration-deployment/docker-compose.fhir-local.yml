@@ -1,0 +1,14 @@
+# Local synthetic FHIR sandbox connectivity only. Do not include this override in
+# an institutional deployment; production must use its approved FHIR endpoint and
+# authenticated clinician identity.
+services:
+  backend:
+    networks:
+      - private-api
+      - backend-egress
+      - fhir-sandbox
+
+networks:
+  fhir-sandbox:
+    external: true
+    name: medical-consultation-chatbot-v1_default

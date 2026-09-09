@@ -64,7 +64,7 @@ server {
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
     add_header X-Content-Type-Options nosniff always;
     add_header Referrer-Policy no-referrer always;
-    add_header Permissions-Policy "camera=(), geolocation=(), microphone=(self)" always;
+    add_header Permissions-Policy "camera=(self), geolocation=(), microphone=(self)" always;
     # Local mode expands the suffix to empty. The deployment script permits
     # only the exact D-ID HTTPS/WSS origins when provider `did` is selected.
     # The D-ID SDK is locally bundled, so script-src always remains self-only.

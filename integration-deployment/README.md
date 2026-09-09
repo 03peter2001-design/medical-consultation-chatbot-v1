@@ -6,12 +6,12 @@ explicitly runs the scripts.
 
 ## Service version
 
-目前版本為 **integration deployment bundle v1.6.0（2026-09-11）**。
+目前版本為 **integration deployment bundle v1.8.0（2026-09-11）**。
 這是依 `devlog/` 回溯整理的部署文件版本，用來標示安全整合藍圖、雙前端與
 GPU／Avatar 部署能力的共同基線；repository 目前沒有與此版本對應的 Git tag，
 也不表示任何院所環境已完成正式上線驗收。
 
-### v1.6.0 (2026-09-11)
+### v1.8.0 (2026-09-11)
 
 - B01 掛號成功後會以資料庫掛號流水號 `regSno` 呼叫獨立的
   `AiConsult/RegistrationInvitations`，並直接在掛號介面以 eHIS 既有的本機
@@ -25,6 +25,29 @@ GPU／Avatar 部署能力的共同基線；repository 目前沒有與此版本�
   patient SPA 的 443 listener。
 - 驗證涵蓋 `regSno`／antiforgery／no-store request contract、HTTPS patient URL、
   403／404／502 非破壞性錯誤狀態、B01 授權 source contract 與 eHIS .NET build。
+
+### v1.7.0 (2026-08-31)
+
+- 新增 `docker-compose.fhir-local.yml`，讓 integration Backend 可選擇性加入現有的
+  SMART sandbox Docker network，透過內部 DNS `http://hapi:8080/fhir` 寫入合成資料。
+- 本機 `.env` 可明確啟用 FHIR writer 與 local clinician author fallback；正式部署仍
+  預設 fail closed，且不得套用本機 override，必須使用院所核准的 FHIR endpoint、權杖
+  與帶有 `fhirUser` 的臨床人員身分。
+- 驗證包含合併後 Compose config、Backend health，以及由 Backend container 連線至
+  HAPI capability statement；未以既有病例執行測試寫入，避免產生非預期臨床資料。
+
+### v1.6.1 (2026-08-27)
+
+- 病患 HTTPS origin 的 Permissions Policy 由完全禁止相機的 `camera=()`，縮限調整為
+  `camera=(self)`，讓同源病患 UI 可在使用者授權後啟用 QR scanner；geolocation 仍禁止，
+  microphone 仍只允許同源，CSP、`frame-ancestors 'none'` 與 doctor IIS policy 不放寬。
+- PowerShell deployment validator 要求 `camera=(self)` 並拒絕退回 `camera=()`；驗證另含
+  Compose config、Nginx header 與公開 HTTPS response。
+- Gateway 目前仍掛載獨立控制的 `frontend-v2/apps/patient/dist`。本版不移植開發版
+  `frontend/` 的 QR scanner、不修改 `frontend-v2/`，也不將開發 bundle 偷換成正式病患
+  bundle；正式 patient app 若要取得 scanner，仍須另行核准 promotion。
+
+### v1.6.0 (2026-08-20)
 
 - Backend 的 Compose 環境範例新增 Gemini 任務分流：固定問卷七個病史擷取任務與
   RAG query translation 使用 `gemini-3.5-flash-lite`，五個 RAG／臨床決策任務使用
@@ -279,6 +302,39 @@ Frontend source changes still use Vite hot reload. `backend/.env` does not confi
 the Docker backend; `integration-deployment/.env` is authoritative. The Docker
 `consultation-data` volume is also separate from `backend/data/consultations.db`;
 moving old cases requires an explicit backup/import and is never automatic.
+
+### Local synthetic FHIR write
+
+若同一台開發機已由 repository root 的 `compose.fhir.yml` 或 `compose.smart.yml`
+啟動 HAPI，integration Backend 不能使用 host loopback URL；容器內的
+`127.0.0.1` 只會指向 Backend 自己。請在未提交的 `integration-deployment/.env`
+加入以下本機設定：
+
+```dotenv
+FHIR_WRITE_ENABLED=true
+FHIR_WRITE_BASE_URL=http://hapi:8080/fhir
+FHIR_LOCAL_DEVELOPMENT_AUTHOR=true
+FHIR_WRITE_TIMEOUT_SECONDS=10
+```
+
+接著使用 local override 重建 Backend：
+
+```sh
+cd integration-deployment
+docker compose \
+  -f docker-compose.yml \
+  -f docker-compose.fhir-local.yml \
+  up -d --build backend
+```
+
+外部 network `medical-consultation-chatbot-v1_default` 必須已存在，且其中必須有服務名為
+`hapi` 的 FHIR R4 server。`FHIR_PUBLIC_ISSUER` 仍應保留瀏覽器／SMART launch 使用的公開
+issuer URL；它不需要與容器內部 write URL 相同。
+
+此 override 與 `FHIR_LOCAL_DEVELOPMENT_AUTHOR=true` 只適用無真實病患資料的本機 sandbox。
+院所或正式環境不得套用：正式寫入必須關閉 local author fallback，使用受信任登入所提供的
+`Practitioner`／`PractitionerRole` `fhirUser`，並依 FHIR server 要求設定受保護的 bearer
+credential。若未提供這些條件，服務應維持拒絕寫入。
 
 ### Local container status and live logs
 

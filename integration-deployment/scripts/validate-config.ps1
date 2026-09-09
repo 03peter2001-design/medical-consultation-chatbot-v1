@@ -35,7 +35,7 @@ if ([regex]::Matches($compose, [regex]::Escape($animationDefault)).Count -ne 2) 
 if ($compose.Contains('${RAG_CHROMA_DB_PATH:-../backend/chroma_db}:/app/chroma_db:ro')) {
     throw 'Chroma PersistentClient requires a writable SQLite working directory.'
 }
-foreach ($needle in @('frame-ancestors ''none''', 'client_max_body_size 12m', 'proxy_read_timeout 180s', 'allow ${UCC_SOURCE_CIDR}', '$request_method $uri', 'connect-src ''self''${AVATAR_CSP_CONNECT_SRC_SUFFIX}', 'script-src ''self''', 'listen 8000;', 'proxy_set_header X-Forwarded-For 127.0.0.1;', 'resolver 127.0.0.11', 'server backend:8000 resolve;', 'add_header Cache-Control "no-store" always;', 'proxy_hide_header Cache-Control;')) {
+foreach ($needle in @('frame-ancestors ''none''', 'camera=(self)', 'client_max_body_size 12m', 'proxy_read_timeout 180s', 'allow ${UCC_SOURCE_CIDR}', '$request_method $uri', 'connect-src ''self''${AVATAR_CSP_CONNECT_SRC_SUFFIX}', 'script-src ''self''', 'listen 8000;', 'proxy_set_header X-Forwarded-For 127.0.0.1;', 'resolver 127.0.0.11', 'server backend:8000 resolve;', 'add_header Cache-Control "no-store" always;', 'proxy_hide_header Cache-Control;')) {
     if (-not $nginx.Contains($needle)) { throw "Nginx invariant missing: $needle" }
 }
 if ([regex]::Matches($nginx, 'add_header Cache-Control "no-store" always;').Count -ne 3) {
@@ -54,6 +54,9 @@ foreach ($needle in @('Strict-Transport-Security', 'X-Content-Type-Options', 'Re
 }
 foreach ($needle in @('cacheControlMode="DisableCache"', 'value="no-cache, no-store, must-revalidate"')) {
     if (-not $doctorStaticConfig.Contains($needle)) { throw "Doctor static cache invariant missing: $needle" }
+}
+if ($nginx.Contains('camera=()')) {
+    throw 'Patient origin must not block the QR scanner camera.'
 }
 if ($nginx.Contains('proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;')) {
     throw 'Public proxy routes must overwrite untrusted X-Forwarded-For input.'

@@ -34,4 +34,5 @@ SMART-APP-Exercise-1
 package
 
 local/
+# I don't want to commit this folder, DO NOT EDIT THIS LINE!!!!
 llm_experiments/

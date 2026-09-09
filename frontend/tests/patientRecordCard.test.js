@@ -10,6 +10,10 @@ const physicianSummary = readFileSync(
   new URL('../src/components/PhysicianSummary.vue', import.meta.url),
   'utf8',
 )
+const fhirSubmissionDialog = readFileSync(
+  new URL('../src/components/FhirSubmissionDialog.vue', import.meta.url),
+  'utf8',
+)
 
 test('patient record follows the approved clinical document hierarchy', () => {
   const complaintIndex = component.indexOf('class="complaint"')
@@ -58,10 +62,38 @@ test('patient record follows the approved clinical document hierarchy', () => {
   assert.match(component, /key: 'Personal History'/)
   assert.match(component, /key: 'Family History'/)
   assert.doesNotMatch(component, /value: props\.record\.summary/)
-  assert.match(physicianSummary, /資料彙整草稿 · 待醫師確認/)
-  assert.match(physicianSummary, /v-for="row in rows"/)
+  assert.match(physicianSummary, /Draft/)
+  assert.match(physicianSummary, /v-for="\(row, index\) in editableRows"/)
   assert.match(physicianSummary, /<b>\{\{ row\.key \}\}<\/b>/)
+  assert.match(physicianSummary, /class="summary-editor"/)
+  assert.match(physicianSummary, /@input="handleSummaryInput\(row, \$event\)"/)
+  assert.match(physicianSummary, /@click="confirmRow\(row\)"/)
+  assert.match(physicianSummary, /v-if="row\.confirmed"/)
+  assert.match(physicianSummary, /送出並儲存至 FHIR/)
+  assert.match(physicianSummary, /@click="openFhirSubmissionDialog"/)
+  assert.match(physicianSummary, /:disabled="!canOpenSubmission"/)
+  assert.match(physicianSummary, /if \(!allRowsConfirmed\.value\)/)
+  assert.match(physicianSummary, /api\.createFhirComposition/)
+  assert.match(physicianSummary, /<FhirSubmissionDialog/)
+  assert.doesNotMatch(
+    physicianSummary,
+    /window\.open|about:blank|document\.write/,
+  )
+  assert.match(component, /:record="record"/)
   assert.match(component, /<StructuredReport/)
   assert.match(component, /hide-emr/)
   assert.equal(component.match(/record\.report/g)?.length, 1)
+})
+
+test('FHIR confirmation dialog keeps its middle content vertically scrollable', () => {
+  assert.match(
+    fhirSubmissionDialog,
+    /grid-template-rows: auto minmax\(0, 1fr\) auto/,
+  )
+  assert.match(
+    fhirSubmissionDialog,
+    /\.dialog-content \{[\s\S]*?min-height: 0;[\s\S]*?overflow-y: auto;/,
+  )
+  assert.match(fhirSubmissionDialog, /touch-action: pan-y/)
+  assert.match(fhirSubmissionDialog, /max-height: 94dvh/)
 })

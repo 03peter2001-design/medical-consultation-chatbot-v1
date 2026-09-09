@@ -6,6 +6,133 @@ SNOMED CT 查詢。根目錄的 `index.html`、`doctor.html` 是重構前的相�
 
 ## 服務版本
 
+### v0.13.2 (2026-08-31)
+
+- 修正 FHIR 送出確認視窗在內容高於 viewport 時無法向下捲動：dialog grid 明確分為
+  header、可縮小的捲動內容與 footer，中間區加入 `min-height: 0`、垂直 overflow、
+  overscroll containment 與手機慣性／觸控捲動。
+- 桌機仍保留固定 header／footer，手機以 dynamic viewport height 限制視窗高度，醫師可
+  捲過完整七段摘要並操作底部「返回修改」或「確認無誤，送出至 FHIR」。
+- Node 22 的 18 個測試檔、production build、OpenAPI type check 與 diff check 通過；
+  Browser plugin／Playwright 不可用，改以 headless Chrome/CDP 驗證桌機與手機捲動到底、
+  footer 可見及送出成功，無水平溢出、Vite overlay 或 console error。
+
+### v0.13.1 (2026-08-27)
+
+- 修正 QR 相機掃描只依賴非 Baseline `BarcodeDetector`，導致 iPhone Safari、Firefox
+  與部分 WebView 一律退回貼碼。掃描器現在優先使用原生 API，不可用時 lazy-load 固定版
+  `@zxing/browser` 0.1.5／`@zxing/library` 0.21.3；掃描成功、關閉或元件卸載都會停止
+  camera tracks／decoder controls。
+- 相機錯誤會區分非可信 HTTP context、權限或 Permissions Policy 拒絕、無相機及裝置被
+  其他程式占用，不再把所有情況顯示成瀏覽器不支援；錯誤文字不回顯裝置細節，貼碼入口
+  始終保留。
+- Node 22 frontend tests、production build 與 OpenAPI type check 通過。ZXing 只在開啟
+  掃描器時下載，build 產生約 412 KB／gzip 108 KB 的獨立 lazy chunk；實體 iOS／Android
+  相機仍需由可信 HTTPS origin 驗證。`frontend-v2/` 未修改。
+
+### v0.13.0 (2026-08-27)
+
+- `frontend/launch.html` 成為掛號 QR 的 SMART Provider EHR Launch 入口。FHIR Launcher
+  選定病人並完成 OAuth 後，專用 callback 會讀取本次 launch context 的 Patient、可選
+  Encounter 與 `$everything`，自動進入醫師 QR 結果頁；頁面不再允許自行輸入 identifier
+  或切換病人。畫面以本機 `qrcode` dependency 顯示可複製 raw code、到期倒數及重發；
+  QR 不包含姓名、Patient identifier 或可由瀏覽器解碼的 JWT。
+- 病患開始畫面新增相機掃描與貼碼報到。本版最初只支援原生 `BarcodeDetector`；
+  後續跨瀏覽器 fallback 見 v0.13.1。兌換後必須成功恢復 HttpOnly patient session 才會開始
+  問診，Patient／Encounter 與 prefill 均採後端 invitation 綁定，不信任 code 內資料或病患
+  browser 覆寫。
+- Vite 開發模式預設以同源 `/api` proxy 連到 loopback `18000` gateway，讓 patient session
+  cookie 保持 first-party；純 HTTP 合成資料測試另須在 Backend 明示
+  `PATIENT_COOKIE_SECURE=false`。正式環境仍必須使用 HTTPS、同源 proxy 與 Secure cookie。
+- Node 22 的 18 個測試檔、production build 與 OpenAPI type check 通過；Browser plugin／
+  Playwright 不可用，改以既有 headless Chrome/CDP 在 1280×900 與 390×844 驗證 SMART
+  callback 病人、QR/raw code、倒數、相機 fallback、貼碼後載入綁定病人及首題，無水平
+  溢出或 console error。
+  `frontend-v2/` 未修改；正式 UCC、真實病人與實體相機仍未驗證。
+
+### v0.12.3 (2026-08-25)
+
+- SMART Patient 與 `$everything` 請求明確使用 `no-store`／`no-cache`，避免 FHIR proxy
+  以固定 context URL 回應上一個 access token 的 Patient 姓名；身份顯示優先採用本次
+  `$everything` 中與 launch-context ID 相符的 Patient resource。
+- token Patient ID、`patient.read()` 或 Bundle 唯一 Patient 若互相衝突，前端會中止
+  載入並顯示 context mismatch，不再把某位病人的固定姓名與另一份 FHIR resources
+  混合。Node 22 的 17 個測試檔、production build 與 OpenAPI type check 通過；Browser
+  plugin／Playwright 不可用，改以現有 headless Chrome 對 Vite frontend 完成畫面 smoke
+  test，實際 OAuth round trip 仍需在 Launcher 環境重驗。
+
+### v0.12.2 (2026-08-25)
+
+- 修正 SMART patient record 的模組級快取未區分 OAuth callback `state`，造成同一個
+  前端頁面生命週期內重新 launch 不同病人時，可能沿用上一位病人的姓名與整包 FHIR
+  resources。現在只有相同 `state` 才重用結果；新的 launch state 一律重新取得 SMART
+  client 與 launch-context Patient。
+- 回歸測試以兩個不同 state 與兩位不同姓名／Patient ID，確認第二次 launch 不會回傳
+  第一位病人的資料；Node 22 的 17 組測試、production build 與 OpenAPI type check
+  通過。本機 SMART／FHIR services 當下未啟動，因此尚未執行瀏覽器 OAuth round trip。
+
+### v0.12.1 (2026-08-25)
+
+- 移除已不再使用的 FHIR 純文字 popup formatter，並加入元件契約回歸檢查，禁止
+  `PhysicianSummary` 再出現 `window.open`、`about:blank` 或 `document.write`；送出按鈕
+  只允許在目前頁面開啟 `FhirSubmissionDialog`。
+- 針對長時間未重啟的 Vite 開發程序造成瀏覽器保留舊 preview handler 的情境，重新啟動
+  localhost 開發伺服器並以乾淨頁面重驗；FHIR API、資料 mapping 與 `frontend-v2/`
+  均未變更。
+- Node 22 的 17 組測試、production build、OpenAPI type check 與 diff check 通過；
+  Browser plugin／Playwright 不可用，改以 headless Chrome 驗證點擊前後 page count 均為
+  1、URL 不變、原頁 modal 可見，桌機／手機無水平溢出或 console error。
+
+### v0.12.0 (2026-08-25)
+
+- 將原本的純文字預覽改為正式送出前確認視窗：完整顯示病人姓名、出生日期、性別、
+  問診編號、已綁定的 FHIR Patient／Encounter，以及七段醫師確認內容；醫師可返回修改，
+  全部確認且資料未變更時才可送出。
+- 病患端在 SMART／直接 FHIR 預填時只把 Patient／Encounter ID 與來源類型交給 Backend
+  保存，不傳 access token 或可由瀏覽器指定的寫入 endpoint。醫師端透過新增的受權限
+  保護 API 建立 Composition；成功後顯示 resource ID 並鎖定已保存摘要，重新載入仍可
+  看到實際送出版本。
+- Backend 送出錯誤、病例版本衝突、缺少 FHIR context 或未完成確認時均明確阻止成功
+  狀態；`frontend-v2/` 未修改。本機合成 fake FHIR round trip 與 1280×900、390×844
+  實際 Vue UI 驗證通過，正式院方 OAuth／FHIR 尚待整合環境驗證。
+
+### v0.11.1 (2026-08-25)
+
+- 「送出並儲存至 FHIR」純文字預覽新增完整確認門檻：只有全部醫師摘要欄位都按下確認
+  後才會啟用；只確認部分欄位、沒有摘要欄位或存在空白未確認欄位時均保持停用。
+- 已全部確認後若再次編輯任一欄位，該欄會回到待確認，FHIR 預覽按鈕也會立即重新停用；
+  預覽函式另有同一條程式檢查，避免非按鈕路徑繞過 UI 限制。
+- Node 22 的 17 組 Node tests、Vite production build、OpenAPI type drift check 通過；
+  Browser plugin／Playwright 未安裝，改以 headless Chrome 驗證初始停用、部分確認仍停用、
+  全部確認啟用、重新編輯停用及再次確認啟用，最後純文字預覽仍維持零 fetch／XHR。
+
+### v0.11.0 (2026-08-25)
+
+- 未串接 FHIR API 時，「送出並儲存至 FHIR」按鈕改為可操作的本機預覽：使用者點擊後
+  開啟 `about:blank` 新分頁，只以純文字列出當下七段醫師摘要，不加入表單、成功訊息、
+  HTML 資料卡或其他操作介面。
+- 預覽直接使用同一份醫師編輯草稿，因此包含畫面上最新修改；不呼叫 fetch、XHR、
+  Backend 或 FHIR API，也不建立持久化／稽核紀錄。新分頁會切斷 `window.opener`；瀏覽器
+  阻擋 popup 時，原頁顯示允許彈出視窗的明確提示。
+- Node 22 的 17 組 Node tests、Vite production build、OpenAPI type drift check 通過；
+  Browser plugin 與 Playwright 未安裝，改以合成資料透過 headless Chrome 驗證新分頁為
+  空標題、零 HTML 子元素且只含預期純文字，點擊期間 fetch／XHR 為 0；390×844 無水平
+  溢出且預覽按鈕可見、可操作。`frontend-v2/` 未修改。
+
+### v0.10.0 (2026-08-25)
+
+- 醫師病例的七段摘要改為可編輯欄位，每列提供獨立確認按鈕；已確認欄位若再次修改，
+  會自動回到待確認狀態，空白內容不能確認，頁首同步顯示已確認欄位數。
+- 醫師編輯內容即時同步到同一元件下方的「AI 合成病歷」，並明示內容目前只存在瀏覽器
+  畫面、尚未寫入 Backend 或 FHIR。切換病例時會由新病例資料重新建立草稿，避免沿用
+  前一病例的本機編輯狀態。
+- 「AI 合成病歷」底部新增停用的「送出並儲存至 FHIR」按鈕框架；本版刻意不呼叫 API、
+  不宣稱儲存成功，也不改變既有唯讀 SMART scope、Backend 契約或 `frontend-v2/`。
+- Node 22 的 17 組 Node tests、Vite production build、OpenAPI type drift check 通過。
+  Browser plugin 與 Playwright 未安裝，改以合成資料透過 headless Chrome 驗證 1280×900
+  與 390×844：編輯內容即時同步、確認／重新待確認狀態正確、FHIR 按鈕保持停用，且無
+  水平溢出、framework overlay 或 console warning／error。
+
 ### v0.9.0 (2026-08-20)
 
 - 開發版 Vite 新增同源 `/ai-consult/launch.html` SMART EHR Launch 入口，依 launcher
@@ -465,8 +592,8 @@ cp .env.example .env
 
 ```dotenv
 VITE_BACKEND_PORT=18000
-# 正式同源 reverse proxy 可改用：
-# VITE_BACKEND_BASE_URL=/api
+# Vite development 與正式容器皆使用同源 reverse proxy：
+VITE_BACKEND_BASE_URL=/api
 ```
 
 啟動完整 Docker backend pipeline：
@@ -494,6 +621,43 @@ Docker gateway 可達，再檢查 frontend 的 backend URL 設定。Port 18000 �
 規則中心的實際治理與權限邏輯在後端，請見
 [../backend/README.md](../backend/README.md#醫師端規則中心)。
 
+### 本機問診 Launcher（UCC 尚未完成時的合成資料流程）
+
+在既有 FHIR Launcher 將 App Launch URL 設為：
+
+```text
+http://127.0.0.1:5173/ai-consult/launch.html
+```
+
+由 Launcher 設定 FHIR Box、選定病人並 launch；SMART OAuth callback 會自動載入該次
+Patient／Encounter 與 `$everything`，接著顯示一次性 QR/raw code。`/#/doctor/launcher`
+是 callback 結果頁，不是手動選病人入口。Backend 必須明示：
+
+```dotenv
+ALLOW_LOCAL_AUTH_BYPASS=true
+LOCAL_FHIR_LAUNCHER_ENABLED=true
+LOCAL_FHIR_LAUNCH_CODE_TTL_SECONDS=300
+# 必須與 Launcher 的 SMART issuer 完全一致，例如 https://192.168.102.51/fhir
+FHIR_PUBLIC_ISSUER=https://approved-fhir-box.example/fhir
+# 僅限本機 HTTP 合成資料測試；HTTPS 環境維持 true
+PATIENT_COOKIE_SECURE=false
+```
+
+病患端掃碼或貼碼後呼叫既有 `/v1/invitations/exchange`，成功時取得 HttpOnly session，
+再由 Backend 將 invitation 綁定的 Patient／Encounter 與 prefill 注入問診。code 只在發碼
+回應中出現一次，不能從中解出病人資料；重發會撤銷同一 Patient／Encounter 尚未使用的
+舊 code，兌換或過期後也不能重用。
+
+發碼端點會要求 callback 回報的 issuer 與 `FHIR_PUBLIC_ISSUER` 正規化後完全一致，不能
+由 browser 任意切換到另一個 FHIR server。入口另外要求 loopback local／legacy doctor
+principal，且預設關閉，只適合本機合成資料。它不是正式 UCC 或院所掛號授權機制，不得
+用於真實病人；跨裝置 kiosk 上線時必須改用可連線的核准 HTTPS 同源網址與 Secure cookie。
+
+手機相機 API 只在可信 secure context 可用。`http://127.0.0.1`／`localhost` 的開發特例
+不延伸到手機上的 `http://192.168.x.x`；跨裝置測試必須使用手機信任、且 hostname／IP
+符合憑證 SAN 的 HTTPS 網址。若部署層使用 Permissions Policy，病患 origin 必須至少允許
+`camera=(self)`，不應使用 `camera=*`。
+
 ## FHIR 直接連線（僅限開發／測試）
 
 ### SMART EHR Launcher
@@ -515,7 +679,7 @@ Provider EHR Launch 必須提供 `iss` 與 `launch` query parameters。授權 ca
 authorization server 精確註冊為同一 origin 的：
 
 ```text
-http://127.0.0.1:5173/ai-consult/?smart=1
+http://127.0.0.1:5173/ai-consult/?smart=1&launch_mode=doctor-qr
 ```
 
 不要混用 `localhost`／`127.0.0.1`、不同 port 或 HTTP／HTTPS；OAuth state 存在同源
@@ -523,10 +687,16 @@ browser sessionStorage。遠端瀏覽器的 `127.0.0.1` 指向操作該瀏覽器
 需改用可達的核准 HTTPS hostname。FHIR issuer 也必須能由瀏覽器到達，並允許 App
 origin 的 CORS。
 
-授權成功後，病患頁以 `fhirclient` 恢復 authorized client，取得 `Patient`、可用的
-`Encounter` launch context 及分頁後的 `$everything` Bundle，再交給既有 FHIR prefill
-映射。只會回傳 Patient／Bundle resources 與必要 context metadata；access token 不會
-加入 prefill record。當前 scope 只有讀取權限，不支援把 AI 病歷寫回 FHIR。
+授權成功後，醫師 QR callback 頁以 `fhirclient` 恢復 authorized client，取得 `Patient`、
+可用的 `Encounter` launch context 及分頁後的 `$everything` Bundle，再交給既有 FHIR
+prefill 映射與一次性 invitation。只會把 Patient／Bundle 映射資料與必要 context metadata
+交給發碼 API；SMART access token 不會加入 prefill record，也不會傳往問診 Backend。
+
+目前瀏覽器 SMART scope 仍只有讀取權限。醫師確認後的 Composition 寫入由 Backend 的
+獨立 server-side credential／scope 執行；開發沙盒只有在 Backend 明確啟用
+`FHIR_PATIENT_CONTEXT_INPUT_ENABLED` 時，才會保存瀏覽器帶入的 Patient／Encounter ID。
+正式部署不得信任這個開發入口，必須由受信任的 BFF／院方身分流程建立 patient context，
+並授予 Backend 最小 FHIR 寫入權限。
 
 ### Identifier 直連測試
 

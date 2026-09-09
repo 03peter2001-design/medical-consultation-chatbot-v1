@@ -1,9 +1,19 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import DoctorView from './views/DoctorView.vue'
+import DoctorLauncherView from './views/DoctorLauncherView.vue'
 import PatientView from './views/PatientView.vue'
 import RuleCenterView from './views/RuleCenterView.vue'
 import SnomedSearchView from './views/SnomedSearchView.vue'
+import { isSmartDoctorQrCallback } from './services/smart.js'
+
+if (isSmartDoctorQrCallback() && !window.location.hash) {
+  window.history.replaceState(
+    window.history.state,
+    '',
+    `${window.location.pathname}${window.location.search}#/doctor/launcher`,
+  )
+}
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -19,6 +29,12 @@ const router = createRouter({
       name: 'doctor',
       component: DoctorView,
       meta: { title: '醫師端病例與文獻助手' },
+    },
+    {
+      path: '/doctor/launcher',
+      name: 'doctor-launcher',
+      component: DoctorLauncherView,
+      meta: { title: '問診 Launcher' },
     },
     {
       path: '/doctor/rules',

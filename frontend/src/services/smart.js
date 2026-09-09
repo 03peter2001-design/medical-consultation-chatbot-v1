@@ -1,9 +1,10 @@
 const SMART_PENDING_KEY = 'chest-pain-ai-doctor.smart.pending'
 export const SMART_EHR_READ_SCOPE = 'launch patient/*.read'
+export const SMART_DOCTOR_QR_MODE = 'doctor-qr'
 
 let libraryPromise = null
-let cachedClient = null
 let cachedPatientRecord = null
+let cachedLaunchState = ''
 
 function runtimeWindow() {
   return typeof window === 'undefined' ? null : window
@@ -41,14 +42,26 @@ export function markSmartLaunchPending(
 export function smartCallbackUrl(
   locationLike = runtimeWindow()?.location,
   basePath = import.meta.env?.BASE_URL || '/',
+  launchMode = '',
 ) {
   if (!locationLike?.origin) {
     throw new Error('無法判斷 SMART App callback origin。')
   }
   const callback = new URL(basePath || '/', locationLike.origin)
-  callback.search = 'smart=1'
+  callback.searchParams.set('smart', '1')
+  if (launchMode) callback.searchParams.set('launch_mode', launchMode)
   callback.hash = ''
   return callback.toString()
+}
+
+export function isSmartDoctorQrCallback(
+  locationLike = runtimeWindow()?.location,
+) {
+  const params = new URLSearchParams(locationLike?.search || '')
+  return (
+    params.get('smart') === '1' &&
+    params.get('launch_mode') === SMART_DOCTOR_QR_MODE
+  )
 }
 
 export function smartEhrLaunchContext(
@@ -87,6 +100,7 @@ export async function authorizeSmartEhrLaunch({
   locationLike = runtimeWindow()?.location,
   storageLike = runtimeWindow()?.sessionStorage,
   basePath = import.meta.env?.BASE_URL || '/',
+  callbackMode = '',
 } = {}) {
   if (typeof fhirLibrary?.oauth2?.authorize !== 'function') {
     throw new Error('SMART on FHIR client 未提供 OAuth authorize API。')
@@ -97,7 +111,7 @@ export async function authorizeSmartEhrLaunch({
   }
 
   const context = smartEhrLaunchContext(locationLike)
-  const redirectUri = smartCallbackUrl(locationLike, basePath)
+  const redirectUri = smartCallbackUrl(locationLike, basePath, callbackMode)
   markSmartLaunchPending(storageLike)
   try {
     return await fhirLibrary.oauth2.authorize({
@@ -224,6 +238,23 @@ function resourcesFromBundle(bundle, patient) {
   return resources
 }
 
+function patientFromEverything(bundle, launchPatient) {
+  const bundlePatients = resourcesFromBundle(bundle).filter(
+    (resource) => resource.resourceType === 'Patient',
+  )
+  const matchingPatient = bundlePatients.find(
+    (resource) => resource.id === launchPatient.id,
+  )
+  if (matchingPatient) return matchingPatient
+  if (bundlePatients.length === 1) {
+    throw new Error(
+      `SMART Patient context 不一致：token 為 Patient/${launchPatient.id}，` +
+        `但 $everything 回傳 Patient/${bundlePatients[0].id}。`,
+    )
+  }
+  return launchPatient
+}
+
 export async function readSmartPatientRecord(client) {
   const patientId = client?.patient?.id
   if (!patientId) {
@@ -232,11 +263,31 @@ export async function readSmartPatientRecord(client) {
     )
   }
 
-  const patient = await client.patient.read()
+  const launchPatient = await client.patient.read({
+    cache: 'no-store',
+    headers: {
+      Accept: 'application/fhir+json',
+      'Cache-Control': 'no-cache',
+    },
+  })
+  if (launchPatient?.id !== patientId) {
+    throw new Error(
+      `SMART Patient context 不一致：token 為 Patient/${patientId}，` +
+        `但 Patient read 回傳 Patient/${launchPatient?.id || 'unknown'}。`,
+    )
+  }
   const bundle = await client.request(
-    `Patient/${encodeURIComponent(patientId)}/$everything?_count=100`,
+    {
+      url: `Patient/${encodeURIComponent(patientId)}/$everything?_count=100`,
+      cache: 'no-store',
+      headers: {
+        Accept: 'application/fhir+json',
+        'Cache-Control': 'no-cache',
+      },
+    },
     { flat: false, pageLimit: 10 },
   )
+  const patient = patientFromEverything(bundle, launchPatient)
   const token = tokenResponse(client)
   return {
     patient,
@@ -261,21 +312,30 @@ export async function initializeSmartPatient({
   locationLike = runtimeWindow()?.location,
   historyLike = runtimeWindow()?.history,
 } = {}) {
-  if (cachedPatientRecord) return cachedPatientRecord
+  const launchState = new URLSearchParams(locationLike?.search || '')
+    .get('state')
+    ?.trim()
+  if (
+    launchState &&
+    launchState === cachedLaunchState &&
+    cachedPatientRecord
+  ) {
+    return cachedPatientRecord
+  }
 
   const FHIR =
     fhirLibrary ||
     (await ensureSmartClientLibrary({ globalLike, documentLike }))
-  const client = cachedClient || (await FHIR.oauth2.ready())
-  cachedClient = client
+  const client = await FHIR.oauth2.ready()
   cachedPatientRecord = await readSmartPatientRecord(client)
+  cachedLaunchState = launchState || ''
   markSmartLaunchPending(storageLike, false)
   sanitizeSmartCallbackUrl(locationLike, historyLike)
   return cachedPatientRecord
 }
 
 export function resetSmartClientCache() {
-  cachedClient = null
   cachedPatientRecord = null
+  cachedLaunchState = ''
   libraryPromise = null
 }

@@ -81,6 +81,11 @@ export function resolveBackendUrl(
     }
   }
 
+  // Vite development proxies `/api` to the loopback integration gateway so
+  // invitation cookies stay first-party. An explicitly supplied empty string
+  // still opts into the legacy direct-port behavior used by tests and tools.
+  if (developmentMode && configuredBaseUrl == null) return '/api'
+
   const protocol = locationLike.protocol === 'https:' ? 'https:' : 'http:'
   const hostname = locationLike.hostname || '127.0.0.1'
   const requestedPort = queryOverridesAllowed
@@ -154,6 +159,18 @@ export function consultationDetailPath(consultationId) {
     `/doctor/consultations/${encodeURIComponent(consultationId)}`,
   )
 }
+
+export function fhirCompositionPath(consultationId) {
+  return apiPath(
+    `/doctor/consultations/${encodeURIComponent(consultationId)}/fhir-composition`,
+  )
+}
+
+export const doctorLaunchInvitationPath = apiPath(
+  '/doctor/launcher/invitations',
+)
+export const invitationExchangePath = apiPath('/invitations/exchange')
+export const patientSessionPath = apiPath('/patient/session')
 
 export function consultationLookupFields(value) {
   const reference = String(value ?? '').trim()
@@ -274,12 +291,29 @@ export const api = {
     request(consultationDetailPath(consultationId), {
       method: 'DELETE',
     }),
+  createFhirComposition: (consultationId, payload) =>
+    request(
+      fhirCompositionPath(consultationId),
+      jsonOptions('POST', payload),
+    ),
+  createDoctorLaunchInvitation: (payload) =>
+    request(
+      doctorLaunchInvitationPath,
+      jsonOptions('POST', payload),
+    ),
+  exchangeInvitation: (code) =>
+    request(
+      invitationExchangePath,
+      jsonOptions('POST', { token: code }),
+    ),
+  patientSession: () => request(patientSessionPath),
   patientChat: (
     message,
     sessionId,
     painLocationIds = [],
     patientPrefill = null,
     language = 'mandarin',
+    fhirContext = null,
   ) =>
     request(
       apiPath('/chat'),
@@ -288,6 +322,7 @@ export const api = {
         session_id: sessionId,
         pain_location_ids: painLocationIds,
         patient_prefill: patientPrefill,
+        fhir_context: fhirContext,
         language,
       }),
     ),

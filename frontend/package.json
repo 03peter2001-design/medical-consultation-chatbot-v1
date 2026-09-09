@@ -16,7 +16,10 @@
   },
   "dependencies": {
     "@d-id/client-sdk": "1.2.10",
+    "@zxing/browser": "0.1.5",
+    "@zxing/library": "0.21.3",
     "fhirclient": "2.6.3",
+    "qrcode": "1.5.4",
     "vue": "3.5.40",
     "vue-router": "4.6.4"
   },

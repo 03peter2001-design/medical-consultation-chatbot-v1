@@ -7,6 +7,7 @@ import {
   SYNTHEA_DEFAULT_ID_SYSTEM,
   TAIWAN_ID_SYSTEM,
   buildPatientPrefill,
+  buildFhirPatientContext,
   findPatientByNationalId,
   findPatientBySyntheaDefaultId,
   isDirectFhirEnabled,
@@ -146,6 +147,24 @@ test('offers an explicit Synthea identifier mode in the direct FHIR UI', () => {
   assert.match(startOverlaySource, /@input="updatePatientIdentifier"/)
   assert.match(patientViewSource, /loadPatientByIdentifier/)
   assert.match(patientViewSource, /v-model:synthea-default-id/)
+})
+
+test('builds the narrow FHIR context persisted with a consultation', () => {
+  assert.deepEqual(
+    buildFhirPatientContext({
+      patient: { id: 'patient-1' },
+      smart: { patientId: 'patient-1', encounterId: 'encounter-1' },
+    }),
+    {
+      patient_id: 'patient-1',
+      encounter_id: 'encounter-1',
+      source: 'smart',
+    },
+  )
+  assert.deepEqual(
+    buildFhirPatientContext({ patient: { id: 'patient-2' } }),
+    { patient_id: 'patient-2', source: 'direct' },
+  )
 })
 
 test('searches Patient.identifier using the TW Core national ID system', async () => {

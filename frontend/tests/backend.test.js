@@ -11,8 +11,12 @@ import {
   connectionError,
   credentialsForBackendUrl,
   diseaseProfileUpdatePath,
+  doctorLaunchInvitationPath,
   factLabelUpdatePath,
+  fhirCompositionPath,
   formatApiErrorDetail,
+  invitationExchangePath,
+  patientSessionPath,
   resolveBackendUrl,
   ruleAssistantPath,
   ruleAuthorizationPath,
@@ -23,6 +27,67 @@ import {
 
 test('uses the canonical versioned API prefix', () => {
   assert.equal(apiVersionPrefix, '/v1')
+})
+
+test('writes a confirmed Composition through the consultation endpoint', async () => {
+  const originalFetch = globalThis.fetch
+  let captured
+  globalThis.fetch = async (url, options) => {
+    captured = { url, options }
+    return {
+      ok: true,
+      json: async () => ({ status: 'created', resource_id: 'composition-1' }),
+    }
+  }
+  const payload = {
+    expected_updated_at: '2026-08-25T00:00:00Z',
+    sections: [],
+  }
+  try {
+    await api.createFhirComposition('2026-08-25:10000', payload)
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+
+  assert.equal(
+    fhirCompositionPath('2026-08-25:10000'),
+    '/v1/doctor/consultations/2026-08-25%3A10000/fhir-composition',
+  )
+  assert.equal(captured.options.method, 'POST')
+  assert.deepEqual(JSON.parse(captured.options.body), payload)
+})
+
+test('issues and exchanges an opaque doctor launcher code through JSON bodies', async () => {
+  const originalFetch = globalThis.fetch
+  const captured = []
+  globalThis.fetch = async (url, options = {}) => {
+    captured.push({ url, options })
+    return {
+      ok: true,
+      json: async () => ({ status: 'ok' }),
+    }
+  }
+  const payload = {
+    issuer: 'https://fhir.example.test/base',
+    patient_id: 'synthetic-patient-1',
+    encounter_id: 'synthetic-encounter-1',
+    prefill: { source: 'fhir', name: '合成測試病人' },
+  }
+  const code = 'A'.repeat(43)
+  try {
+    await api.createDoctorLaunchInvitation(payload)
+    await api.exchangeInvitation(code)
+    await api.patientSession()
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+
+  assert.equal(doctorLaunchInvitationPath, '/v1/doctor/launcher/invitations')
+  assert.equal(invitationExchangePath, '/v1/invitations/exchange')
+  assert.equal(patientSessionPath, '/v1/patient/session')
+  assert.deepEqual(JSON.parse(captured[0].options.body), payload)
+  assert.deepEqual(JSON.parse(captured[1].options.body), { token: code })
+  assert.equal(captured[2].options.method, undefined)
 })
 
 test('sends the selected questionnaire language with patient chat requests', async () => {
@@ -183,6 +248,21 @@ test('supports a same-origin backend proxy path', () => {
         hostname: 'ehr-app.example.test',
       },
       '/api/',
+    ),
+    '/api',
+  )
+})
+
+test('uses the Vite same-origin proxy when development has no explicit backend URL', () => {
+  assert.equal(
+    resolveBackendUrl(
+      {
+        search: '',
+        protocol: 'http:',
+        hostname: '127.0.0.1',
+      },
+      undefined,
+      { developmentMode: true },
     ),
     '/api',
   )

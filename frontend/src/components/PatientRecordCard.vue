@@ -52,6 +52,13 @@ const parsedEmrFields = computed(() =>
   parseEmrFields(props.record.structured_note),
 )
 const physicianSummaryRows = computed(() => {
+  if (props.record.fhir_summary_sections?.length) {
+    return props.record.fhir_summary_sections.map((row) => ({
+      ...row,
+      source: '醫師確認 · 已儲存至 FHIR',
+      confirmed: true,
+    }))
+  }
   const parsed = parsedEmrFields.value
   const parsedSource = 'Gemini 彙整 · 待醫師確認'
   const history = clinical.value.historyFacts
@@ -355,6 +362,7 @@ const physicianSummaryRows = computed(() => {
       class="physician-summary"
       :rows="physicianSummaryRows"
       :report="record.report"
+      :record="record"
     />
 
     <details class="clinical-evidence-disclosure">

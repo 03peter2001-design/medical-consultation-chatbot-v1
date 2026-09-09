@@ -24,6 +24,7 @@ import { getPainMapPreset } from '../data/bodyPainRegions.js'
 import { api, connectionError } from '../services/backend.js'
 import {
   PATIENT_IDENTIFIER_TYPES,
+  buildFhirPatientContext,
   buildPatientPrefill,
   directFhirEnabled,
   fhirBaseUrl,
@@ -36,6 +37,7 @@ import {
   hasSmartLaunchContext,
   initializeSmartPatient,
 } from '../services/smart.js'
+import { launchCodeFromScan } from '../services/patientLaunch.js'
 import {
   AUTO_SEND_REVIEW_MS,
   AVATAR_SILENCE_MS,
@@ -71,6 +73,11 @@ const sending = ref(false)
 const completed = ref(false)
 const typing = ref(false)
 const startError = ref('')
+const launchCode = ref('')
+const launchRedeeming = ref(false)
+const launchError = ref('')
+const launchSession = ref(null)
+let redeemedLaunchCode = ''
 const overlayVisible = ref(true)
 const identifierType = ref(PATIENT_IDENTIFIER_TYPES.NATIONAL_ID)
 const nationalId = ref('A000000000')
@@ -164,7 +171,11 @@ const effectiveDirectFhirEnabled = computed(
   () => directFhirEnabled && !smartLaunchDetected,
 )
 const patientContextStatus = computed(() =>
-  smartContext.value ? 'SMART 已授權' : 'FHIR 已載入',
+  launchSession.value
+    ? '掛號 QR 已驗證'
+    : smartContext.value
+      ? 'SMART 已授權'
+      : 'FHIR 已載入',
 )
 const painMapPreset = computed(() =>
   getPainMapPreset(questionnaireInfo.value?.route),
@@ -265,6 +276,7 @@ async function initializeBackendSession(patientRecord = null) {
     [],
     patientRecord ? buildPatientPrefill(patientRecord) : null,
     consultationLanguage.value || avatar.language.value,
+    patientRecord ? buildFhirPatientContext(patientRecord) : null,
   )
 }
 
@@ -289,6 +301,55 @@ async function finishConsultationStart(
   addMessage('ai', data.reply)
   void avatar.speak(data.reply)
   focusInput()
+}
+
+async function redeemLaunchCode(scannedCode = launchCode.value) {
+  if (started.value || launchRedeeming.value) return
+  const code = launchCodeFromScan(scannedCode)
+  if (!code) {
+    launchError.value = 'code 格式不正確，請重新掃描或完整貼上。'
+    return
+  }
+
+  launchRedeeming.value = true
+  launchError.value = ''
+  startError.value = ''
+  try {
+    if (redeemedLaunchCode !== code) {
+      await api.exchangeInvitation(code)
+      redeemedLaunchCode = code
+    }
+
+    launchSession.value = await api.patientSession()
+
+    const patientId = launchSession.value?.fhir_patient_id
+    if (patientId) {
+      fhirPatient.value = {
+        id: patientId,
+        name: launchSession.value.patient_name
+          ? [{ text: launchSession.value.patient_name }]
+          : [],
+      }
+    }
+    const contextLabel = [
+      launchSession.value?.patient_name || '掛號病人',
+      patientId ? `Patient/${patientId}` : '',
+      launchSession.value?.fhir_encounter_id
+        ? `Encounter/${launchSession.value.fhir_encounter_id}`
+        : '',
+    ].filter(Boolean).join(' · ')
+    await finishConsultationStart(null, {
+      successMessage: `一次性掛號 code 驗證完成，已載入 ${contextLabel} 的病歷脈絡。`,
+    })
+    launchCode.value = ''
+  } catch (error) {
+    launchError.value =
+      redeemedLaunchCode === code
+        ? `病患 session 已建立，但問診暫時無法開始（${error.message}）。請保留本頁並重試。`
+        : `無法驗證此 code（${error.message}）。code 可能已過期或使用過。`
+  } finally {
+    launchRedeeming.value = false
+  }
 }
 
 async function startSmartConsultation() {
@@ -376,7 +437,20 @@ async function startConsultation({ skipFhir = false } = {}) {
 
 onMounted(() => {
   void connectAvatar()
-  if (smartLaunchDetected) void startSmartConsultation()
+  if (smartLaunchDetected) {
+    void startSmartConsultation()
+    return
+  }
+  const initialCode = launchCodeFromScan(window.location.href)
+  if (initialCode) {
+    launchCode.value = initialCode
+    window.history.replaceState(
+      window.history.state,
+      '',
+      `${window.location.pathname}${window.location.search}#/`,
+    )
+    void redeemLaunchCode(initialCode)
+  }
 })
 
 function handleResponse(data, rawFallback) {
@@ -739,6 +813,7 @@ onBeforeUnmount(() => {
       v-model:synthea-default-id="syntheaDefaultId"
       v-model:avatar-client-key="avatarClientKey"
       v-model:avatar-agent-id="avatarAgentId"
+      v-model:launch-code="launchCode"
       :avatar="avatar"
       :visible="overlayVisible"
       :direct-fhir-enabled="effectiveDirectFhirEnabled"
@@ -747,7 +822,10 @@ onBeforeUnmount(() => {
       :smart-launch="smartLaunchDetected"
       :starting="starting"
       :error="startError"
+      :launch-redeeming="launchRedeeming"
+      :launch-error="launchError"
       @start="startConsultation"
+      @redeem-launch="redeemLaunchCode"
       @connect-avatar="connectAvatar"
     />
 

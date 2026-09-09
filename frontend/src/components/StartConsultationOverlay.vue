@@ -3,6 +3,7 @@ import { computed } from 'vue'
 
 import AvatarSettings from './AvatarSettings.vue'
 import AvatarStage from './AvatarStage.vue'
+import PatientLaunchEntry from './PatientLaunchEntry.vue'
 import {
   PATIENT_IDENTIFIER_TYPES,
   normalizePatientIdentifier,
@@ -17,9 +18,11 @@ defineProps({
   smartLaunch: { type: Boolean, default: false },
   starting: { type: Boolean, default: false },
   error: { type: String, default: '' },
+  launchRedeeming: { type: Boolean, default: false },
+  launchError: { type: String, default: '' },
 })
 
-const emit = defineEmits(['start', 'connect-avatar'])
+const emit = defineEmits(['start', 'connect-avatar', 'redeem-launch'])
 const identifierType = defineModel('identifierType', {
   type: String,
   default: PATIENT_IDENTIFIER_TYPES.NATIONAL_ID,
@@ -37,6 +40,10 @@ const avatarClientKey = defineModel('avatarClientKey', {
   default: '',
 })
 const avatarAgentId = defineModel('avatarAgentId', {
+  type: String,
+  default: '',
+})
+const launchCode = defineModel('launchCode', {
   type: String,
   default: '',
 })
@@ -79,6 +86,13 @@ function updatePatientIdentifier(event) {
       </div>
 
       <div class="start-actions">
+        <PatientLaunchEntry
+          v-if="!smartLaunch"
+          v-model="launchCode"
+          :redeeming="launchRedeeming"
+          :error="launchError"
+          @redeem="emit('redeem-launch', $event)"
+        />
         <div v-if="directFhirEnabled" class="test-mode-badge">
           測試模式 · 前端直連 HAPI
         </div>

@@ -338,6 +338,18 @@ export async function loadPatientByIdentifier(
   }
 }
 
+export function buildFhirPatientContext(record = {}) {
+  const patientId = record.smart?.patientId || record.patient?.id
+  if (!patientId) return null
+  return {
+    patient_id: patientId,
+    ...(record.smart?.encounterId
+      ? { encounter_id: record.smart.encounterId }
+      : {}),
+    source: record.smart ? 'smart' : 'direct',
+  }
+}
+
 export function patientDisplayName(patient) {
   const officialName =
     patient?.name?.find((name) => name.use === 'official') || patient?.name?.[0]

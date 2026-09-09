@@ -1,6 +1,9 @@
 import FHIR from 'fhirclient'
 
-import { authorizeSmartEhrLaunch } from './services/smart.js'
+import {
+  SMART_DOCTOR_QR_MODE,
+  authorizeSmartEhrLaunch,
+} from './services/smart.js'
 
 const status = document.querySelector('[data-smart-launch-status]')
 
@@ -17,4 +20,5 @@ authorizeSmartEhrLaunch({
   fhirLibrary: FHIR,
   clientId: import.meta.env.VITE_SMART_CLIENT_ID || 'my_web_app',
   basePath: import.meta.env.BASE_URL,
+  callbackMode: SMART_DOCTOR_QR_MODE,
 }).catch(showFailure)

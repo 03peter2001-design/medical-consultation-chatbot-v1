@@ -41,7 +41,7 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 整理的詳細更新內容；未來發布時再依 SemVer 分別遞增，不強制所有服務
 使用相同版本號。
 
-| 服務／可部署產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
+| 服務／可部署或研究產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
 | --- | --- | --- | --- | --- |
 | Backend API（含 Breeze ASR） | `0.13.0` | 2026-08-27 | 本機合成資料 launcher 核發單次 opaque code，並以 session 綁定 FHIR Patient／Encounter | [backend/README.md](backend/README.md#服務版本) |
 | 開發版 Vue frontend | `0.13.2` | 2026-08-31 | 修正 FHIR 送出確認視窗的桌機／手機內容捲動 | [frontend/README.md](frontend/README.md#服務版本) |
@@ -50,6 +50,7 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 | Local Avatar service | `1.2.0` | 2026-08-11 | 新增可由 Backend 逐請求覆寫、完全跳過 MuseTalk 的靜態醫師 CosyVoice 模式 | [avatar-service/README.md](avatar-service/README.md#服務版本) |
 | SMART on FHIR sandbox app | `1.1.2` | 2026-08-28 | 修正 Patient／$everything no-cache request 的 SMART gateway CORS preflight | [smart-app/README.md](smart-app/README.md#服務版本) |
 | Integration deployment bundle | `1.8.0` | 2026-09-11 | B01 掛號患者 QR 邀請，並支援本機 Backend 連接合成資料 HAPI sandbox | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
+| LLM 雙 Agent DDX 實驗 | `0.8.1` | 2026-08-30 | 暫時性 Gemini API 有限退避重試，judge 契約錯誤可在原操作內修正一次 | [llm_experiments/README.md](llm_experiments/README.md#版本) |
 
 `frontend-v2/packages/shared` 是 doctor／patient 共用程式庫，不是獨立服務；
 `smart-deployment/` 是 SMART sandbox 的 proxy 設定，跟隨 SMART app
@@ -123,6 +124,7 @@ npm run dev
 ├── smart-deployment/      SMART／FHIR 本機 proxy 設定
 ├── docs/                  OpenAPI、研究文件與工作規劃
 ├── devlog/                依日期整理的開發紀錄
+├── llm_experiments/       Gemini 雙 agent 合成病例與鑑別診斷研究 harness
 ├── pic/                   圖片素材
 ├── compose.fhir.yml       HAPI FHIR、PostgreSQL、TW Core、SNOMED services
 └── compose.smart.yml      完整 SMART 開發環境

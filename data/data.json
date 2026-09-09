@@ -1,0 +1,1580 @@
+[
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 4,
+      "sha256": "32a6481384ab9296d1ab7c441933a86e274dc937fb9db6b4606c1d5357fbefd2"
+    },
+    "description": "suggest treatment for pneumonia",
+    "utterances": [
+      "patient: just found out i was pregnant. yesterday diagnosed with pneumonia. i am a high risk pregnancy. fertility issues, pcos, weak cervix. delivered first daughter at 29 weeks, miscarried, and gave birth at 38 weeks to second daughter, but was on bedrest for weak cervix beginning at 5 months. i m a wreck. when i miscarried they said my progesterone level is low which caused me to miscarry, and gave me progesterone shots every week. can t see doctor for two days.",
+      "doctor: thanks for your question on healthcare magic.i can understand your concern. pneumonia with pregnancy is always critical.antibiotics as early as possible is the treatment of choice for pneumonia. so better to immediately consult doctor and start antibiotics for pneumonia. drink plenty of fluids orally and keep yourself hydrated. with prompt and appropriate treatment, pneumonia can be cured easily. hope i have solved your query. i will be happy to help you further. wish you good health. thanks."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "pneumonia",
+        "certainty": "confirmed",
+        "evidence": "antibiotics as early as possible is the treatment of choice for pneumonia. so better to immediately consult doctor and start antibiotics for pneumonia."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 5,
+      "sha256": "e17f0aed8236a3b91e1a3288c2202b6c8e141bfa1647e0dfe922bc0a555c350c"
+    },
+    "description": "can you contact coronavirus or any virus from the air? also, from talking to someone from a distance of beyond 6 feet. any info on airborne facts?",
+    "utterances": [
+      "patient: can you contact coronavirus or any virus from the air? also, from talking to someone from a distance of beyond 6 feet. any info on airborne facts?",
+      "doctor: covid 19 is airborne. covid 19 is primarily an airborne acquired infection. the number of potentially infected viruses dissipate by 6 feet."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "covid 19",
+        "certainty": "confirmed",
+        "evidence": "covid 19 is airborne. covid 19 is primarily an airborne acquired infection."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 14,
+      "sha256": "e0a88f1ee9416bc6b412927a5a9e596978f2dea53dfac127030ea119bbaae5e3"
+    },
+    "description": "i am a little concerned that i may be showing some symptoms for coronavirus. i have had a bit of a dry cough about 2 weeks ago for 3 days. a week later i had a headache and got nauseaus. i never get headaches. my chest has felt unusual for 5 days.",
+    "utterances": [
+      "patient: i am a little concerned that i may be showing some symptoms for coronavirus. i have had a bit of a dry cough about 2 weeks ago for 3 days. a week later i had a headache and got nauseaus. i never get headaches. my chest has felt unusual for 5 days.",
+      "doctor: current symptoms? you may have experienced coronavirus infection. please stay at home until well and without any signs of illness. drink fluids, rest and monitor your temperature. ."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "coronavirus infection",
+        "certainty": "provisional",
+        "evidence": "you may have experienced coronavirus infection"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 15,
+      "sha256": "b274413f388c66021ecb2b4adbc0b3834d7e90d764d3a0f006b3f340d491eb65"
+    },
+    "description": "what causes odour while coughing after treatment with antibiotics for pneumonia?",
+    "utterances": [
+      "patient: my husband has advanced m.s. after battling a cough for a month, he had a chest x ray and we were told he had pneumonia. he was on an antibotic for 10 days which ended 1 week ago today. his nurse was here halfway through the dose and said his lungs sounded clear he has not been coughing or a temprature in over a week. this evening he started coughing, phlegm is not discolored but when he coughs there is a strange odor that i can not describe. i have never smelled an odor like this",
+      "doctor: hello dear warm welcome to healthcaremagic.comi have evaluated your query for your husband in details .* this odor is in relation with underlying pneumonia causing pathogens * must seek doctor`s opinion immediately , this is not normal .wishing him fine recovery .feel free to ask any further doubts .regards ."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "pneumonia",
+        "certainty": "confirmed",
+        "evidence": "this odor is in relation with underlying pneumonia causing pathogens"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 20,
+      "sha256": "cd0cf6cc0a5d8b3e78fa44671ecb78f8d274e5df713b01a3f5e8fcf29b6c1671"
+    },
+    "description": "my wife just found out that she sat next to someone on tuesday who is being tested for the coronavirus. person is being tested as his wife was tested positive. please advise next steps.",
+    "utterances": [
+      "patient: my wife just found out that she sat next to someone on tuesday who is being tested for the coronavirus. person is being tested as his wife was tested positive. please advise next steps.",
+      "doctor: stay home. right now stay home, keep reporting here. there should be home to home testing coming soon. mild corona virus is easy to treat at home. treat everyone right now as if they have it, including everyone in your home."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "mild corona virus",
+        "certainty": "provisional",
+        "evidence": "mild corona virus is easy to treat at home. treat everyone right now as if they have it, including everyone in your home."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 36,
+      "sha256": "338790ca3842673595d72a9137d616aaf3737d57c18c8bb69c85588b465bdeda"
+    },
+    "description": "how can minimal ptb with pneumonia be treated?",
+    "utterances": [
+      "patient: the reading of my chest x-ray states that there are hazed and confluent densities seen in the left upper lung field. the rest of the lungs are clear. the heart is not enlarged. the rest of the included structures are unremarkable. i am very much worried because the impression states that i have minimal ptb, left with pneumonia. please advice me on what to do best as i fear this might affect my application for renewal of contract.",
+      "doctor: hello, for tuberculosis, akt needs to be started. so confirm tuberculosis by sputum afb stain and culture. if tuberculosis confirmed, then akt should be started. and it is to be taken for around six months. provide reports if available. hope i have answered your query. let me know if i can assist you further. regards,dr. parth goswami"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "tuberculosis",
+        "certainty": "provisional",
+        "evidence": "for tuberculosis, akt needs to be started. so confirm tuberculosis by sputum afb stain and culture. if tuberculosis confirmed, then akt should be started."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 38,
+      "sha256": "4303bbb9c993792990ecbb6a0baf09e3d7fd3cd4c1a0961724aac01b3891e51c"
+    },
+    "description": "how can pneumonia, coughing with low body temperature be treated?",
+    "utterances": [
+      "patient: hi, may i answer your health queries right now ? please type your query here...i am 42 year old female with known case of pneumonia and constant coughing and low body temp of 35.3c feeling anemic advise please ? currently using bioxin and guafinicine/codein",
+      "doctor: thanks for your question on healthcare magic.i can understand your concern.constant coughing and hypothermia (low body temperature) in pneumonia patient can be due to1. worsening of underlying pneumonia2. bronchitisso better to consult pulmonologist and get done clinical examination of respiratory system, chest x ray and pft (pulmonary function test).yoi may need higher antibiotic and inhaled bronchodilators (formoterol or salmeterol).don't worry, you will be alright with all these.hope i have solved your query. i will be happy to help you further. wish you good health. thanks."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "pneumonia",
+        "certainty": "provisional",
+        "evidence": "worsening of underlying pneumonia"
+      },
+      {
+        "name": "bronchitis",
+        "certainty": "provisional",
+        "evidence": "bronchitis"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 42,
+      "sha256": "5591f4ab70e0ba4b1a88b99467c3ccd3f7ae8813a665264e069310825f9702c0"
+    },
+    "description": "good day my 2 year old toddler has been coughing and now she started to vomit when coughing, is it something i should be consent about or it's just flue?",
+    "utterances": [
+      "patient: good day my 2 year old toddler has been coughing and now she started to vomit when coughing, is it something i should be consent about or it's just flue?",
+      "doctor: not particularly . the muscles involved in coughing & vomiting are similar & young children often have difficulty not vomiting if they cough hard enough. i would concentrate of maintaining her fluid balance & see if she gradually improves. these are often simple viruses but need to be monitored closely."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "simple viruses",
+        "certainty": "provisional",
+        "evidence": "these are often simple viruses but need to be monitored closely."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 43,
+      "sha256": "b9e44992662ad83959d2bf626d06ad9ac20e596c47c8dd358358c0a0f96eec21"
+    },
+    "description": "should icu care be given for aspirational pneumonia?",
+    "utterances": [
+      "patient: my mother was diagonesed with multiple myloma after a hip fracture surgery 5 yrs ago by dr mathews at st. stephens. she was treated for the cancer at aiims. the disease has advanced now and as a result she developed aspirational pnemonia . due to a knock down incident we rushed her to max hospital on 19th jan and ever since she is on the ventilator all though some antibiotic is being administered there is talk of trichotomy for her. since its nt possible to take her home and in her stage more than anything palliative care is reqd. max being to expensive is nt sustainable. is stephens the right place for taking care of her? can she be please adjusted in the icu there? also, what wouldbe the cost per day?and who will be the pulmonary expert?",
+      "doctor: hello,she requires icu care as per the symptomatic details. stephens is right place for her; you will get pulmonologist there to take care of the issue.she has to be shifted with icu on wheels along with ventilator support. cost there has to be inquired.hope i have answered your query. let me know if i can assist you further.regards,dr. bhagyesh v. patel"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "aspirational pneumonia",
+        "certainty": "confirmed",
+        "evidence": "she requires icu care as per the symptomatic details."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 45,
+      "sha256": "fd8755d0334cfa14268c3461d00984e1f5b47f445425a600a20e482cfc126faf"
+    },
+    "description": "what causes pneumonia with spiking temperatures?",
+    "utterances": [
+      "patient: my friend had pneumonia a few weeks ago and was given cipro and flagl antibiotics. she had to return to the hospital two more time because of spiking temperatures. fluid was tested from her lungs and came back negative. could she possibly have contacted mersa?",
+      "doctor: thanks for your question on healthcare magic.i can understand your concern. repeated spiking temperatures (fever) in pneumonia patient is suggestive of nonresolving pneumonia.so better to consult pulmonologist and get done sputum culture and sensitivity report. culture report will isolate the causative organism (if it is mrsa or other bacteria) and sensitivity report will guide about effective antibiotic treatment.he may need higher antibiotics on the basis of sensitivity report. by this, we can achieve speedy recovery. hope i have solved your query. i will be happy to help you further. wishing good health to your friend. thanks."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "nonresolving pneumonia",
+        "certainty": "provisional",
+        "evidence": "repeated spiking temperatures (fever) in pneumonia patient is suggestive of nonresolving pneumonia"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 46,
+      "sha256": "b7f7a650245c1a961a6d0d77f07933eea8cafc0545bbeb8d6d2d403371b7fa68"
+    },
+    "description": "i have had a runny nose and have been coughing and have had on and off headaches. i went to the doctor the first time, he gave me an antibiotic and i got worse then i went back a and he gave me a different one but it seems i still have these symptoms?",
+    "utterances": [
+      "patient: i have had a runny nose and have been coughing and have had on and off headaches. i went to the doctor the first time, he gave me an antibiotic and i got worse then i went back a and he gave me a different one but it seems i still have these symptoms?",
+      "doctor: in brief: likely a virus. what you describe is likely caused by a virus, antibiotics don't do anything against viruses. would you like to video or text chat with me?"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "a virus",
+        "certainty": "provisional",
+        "evidence": "likely a virus"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 51,
+      "sha256": "459161d1739e234863637bef416f32ae1d385a283d933dd5cc1b85131c16da7d"
+    },
+    "description": "is mild intermittent asthma an elevated risk group for covid 19 complications? if so, should i continue to use my inhalers when it's occasionally necessary or will the steroids in them put me at more risk? thank you.",
+    "utterances": [
+      "patient: is mild intermittent asthma an elevated risk group for covid 19 complications? if so, should i continue to use my inhalers when it's occasionally necessary or will the steroids in them put me at more risk? thank you.",
+      "doctor: in brief: maybe being over 50 with a medical condition like intermittent asthma makes you at higher risk for any respiratory illness including covid19. it appears to be less an issue for children and youth."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "intermittent asthma",
+        "certainty": "provisional",
+        "evidence": "maybe being over 50 with a medical condition like intermittent asthma makes you at higher risk for any respiratory illness including covid19"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 55,
+      "sha256": "ba9c646db50cc02d7aa4464fa227f437e9de1bd15891fff00c35428655519de7"
+    },
+    "description": "if you are tested positive for covid-19, and your fever keeps going up daily (100 to 101 to 102 to 103), what should you do if all other symptoms remain the same?",
+    "utterances": [
+      "patient: if you are tested positive for covid-19, and your fever keeps going up daily (100 to 101 to 102 to 103), what should you do if all other symptoms remain the same?",
+      "doctor: consider chest image. pneumonia may occur and if you continue to spike fevers, please see your pcp for a chest image and reevaluation. testing for additional bacterial and viral causes may be performed at the same time. stay at home at least for three days after the fever has broken and avoid contact with others. ."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "pneumonia",
+        "certainty": "provisional",
+        "evidence": "pneumonia may occur"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 58,
+      "sha256": "11d463c6b32133de49e2bf363b81a7c61f9ae51a4d98b5e8b3cc99144ad6fb8f"
+    },
+    "description": "if i have fever and coughing (even blood) and i havent been outside of the country, do i have corona virus?",
+    "utterances": [
+      "patient: if i have fever and coughing (even blood) and i havent been outside of the country, do i have corona virus?",
+      "doctor: hard to guess. if you are living in an area affected with covid-19 pandemic certainly it arouse suspicion if you are infected. your age is aginst criteria. it may well be what you have is bronchitis or flu. isolate yourself and get in touch with your doctor preferably via telemedicine to find out about where you can be tested and your treatment path forward. ."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "bronchitis",
+        "certainty": "provisional",
+        "evidence": "it may well be what you have is bronchitis or flu"
+      },
+      {
+        "name": "flu",
+        "certainty": "provisional",
+        "evidence": "it may well be what you have is bronchitis or flu"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 60,
+      "sha256": "67ab150983ba80ba0f4d47caca850f6c1cafbd05f19ff4be565e68dab857ba5c"
+    },
+    "description": "my hba1c is not as good as it should be. am i more likely to die of the virus? i’m so scared. i have type 1 diabetes. please help.",
+    "utterances": [
+      "patient: my hba1c is not as good as it should be. am i more likely to die of the virus? i’m so scared. i have type 1 diabetes. please help.",
+      "doctor: diabetes + covid-19. have you been diagnosed as a diabetic, or just someone with slightly elevated a1c? reports are that diabetics, especially males, are at greater risk. follow all precautions that have been posted all over the internet and have been printed in newspapers. if you have a sore throat and a fever, call your general physician and follow his/her directions completely."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "diabetic",
+        "certainty": "provisional",
+        "evidence": "have you been diagnosed as a diabetic, or just someone with slightly elevated a1c?"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 62,
+      "sha256": "8687d96c54153b4a67ece2779616296d039045989cecd4f96dc9f62dcfce0834"
+    },
+    "description": "is constant chest infection and coughing sign of pneumonia?",
+    "utterances": [
+      "patient: i have had constant chest inf was hospitalised for 4 days said they think phnewmonia out now still on lots of anti biotics and steroids however i'm still sweating have right lower back pain and still really coughing and short of breath. i am mbl deficency and alpha 1",
+      "doctor: helloyes according to the history it might be pneumonia.continue the current treatment.regardsdr.jolanda"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "pneumonia",
+        "certainty": "provisional",
+        "evidence": "according to the history it might be pneumonia"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 64,
+      "sha256": "de42128b58cdab1098c8cf27f086dd6084bea41b4a69f5efbac038ef5e2b687a"
+    },
+    "description": "what does left basal pneumonia mean?",
+    "utterances": [
+      "patient: my mother was diagnosed with left basal pneumonia she is 74 yeas old and was discharged from hospital yesterday was given amoxicillin and clarithromycin but now she is being sick and has diarohhea she has had amoxicillin before which hasnt effected her this way will it be the other antibiotics also what is left basal pneumonia",
+      "doctor: thanks for your question on healthcare magic. i can understand your concern. in my opinion, her diarrhoea is mostly due to amoxicillin. amoxicillin can cause diarrhea on second exposure. so you should stop amoxicillin. there are options for oral antibiotics other than amoxicillin like cefixime, levofloxacin, moxifloxacin etc. and left basal pneumonia means lung infection in lower lobe of left lung. so antibiotics are the mainstay of treatment. hope i have solved your query. i will be happy to help you further. wishing good health to your mother.thanks."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "left basal pneumonia",
+        "certainty": "confirmed",
+        "evidence": "left basal pneumonia means lung infection in lower lobe of left lung"
+      },
+      {
+        "name": "diarrhoea",
+        "certainty": "provisional",
+        "evidence": "her diarrhoea is mostly due to amoxicillin"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 67,
+      "sha256": "ab462e3a4ad4045a7886998c9655cdb0335348f9445491eca04a7598d4f6e1e3"
+    },
+    "description": "what reduces the suffocation feeling during the healing process of pneumonia?",
+    "utterances": [
+      "patient: i am 46yrs old two wks ago i was diagnosed with pneumonia and the same time i had this suffercation feelin which was really scary i have had two lots of antibiotics and a nasal spray, today is the first day it has felt ok but im worried its goin to come back",
+      "doctor: thanks for your question on healthcare magic.i can understand your concern. in my opinion, you are mostly having bronchospasm which is causing this suffocating feeling. pneumonia causes inflammation in airways and this in turn causes bronchospasm. so in my opinion, you should ask your doctor about starting inhaled bronchodilators like formoterol or salmeterol to relieve bronchospasm. also avoid stress and tension, be relax and calm. don't worry, you will be alright with all these. hope i have solved your query. i will be happy to help you further. wish you good health. thanks."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "bronchospasm",
+        "certainty": "provisional",
+        "evidence": "in my opinion, you are mostly having bronchospasm which is causing this suffocating feeling."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 72,
+      "sha256": "a6eb9f266d904590b00a3e7fffef0153d61e82f887250de7ec948c1bbf0ad1c2"
+    },
+    "description": "what causes persistent pneumonia?",
+    "utterances": [
+      "patient: how much will this cost? i have had pneumonia 8 time last year. not 1 specialist could find the bacteria causing this. by december of that year i almost passed away. i had just been dismissed by a hospital and sent home, and 1 hour layer i could barely breathe. i was filling up with fluid and foamy blood was coming out. the paramedics saved me and took me to another hospital the drs. found a serious heart condition, still waiting for open heart surgery. i fill up to my bronchials with fluid every few weeks, it bubbles up and i can hear gurgling. i have no lung problems, such as copd, or emphasyma. what can i do.",
+      "doctor: hello and welcome to ‘ask a doctor’ service.i have reviewed your query and here is my advice.as per your history and description, the possibility of end-stage heart disease leads to heart failure is more likely. surgical treatment is best for this. so try to get it done urgently as soon as possible.diuretics and other cardiac supportive drugs are advisable until surgery. so better to consult the cardiologist and try for early surgery.hope i have answered your query. let me know if i can assist you further.regards,dr. kaushal bhavsar"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "end-stage heart disease leads to heart failure",
+        "certainty": "provisional",
+        "evidence": "as per your history and description, the possibility of end-stage heart disease leads to heart failure is more likely"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 73,
+      "sha256": "da468e76c4d2867f47a32b5a8731a192510ac3e4476f7905dab1c3cb2076b7b7"
+    },
+    "description": "what are the symptoms and treatment for pneumonia?",
+    "utterances": [
+      "patient: i have been ill for 6 weeks and my gp suspected pneumonia and i was put on antibiotics. the third one has almost cleared the infection. however, i had an x-ray and it apparently showed nothing at all, although all my symptoms were in line with pneumonia and my gp had definitely heard a lot of crackles in the left lung. is it possible that i had pneumonia if the xray was clear?",
+      "doctor: thanks for your question on healthcare magic.i can understand your concern. for diagnosis of pneumonia, chest x ray need to have infiltration.with normal chest x ray, pneumonia is not possible. cough, congestion, crackles on auscultation are also seen with bronchitis. and bronchitis shows normal chest x ray too.so it is quite possible that you improve within antibiotic because antibiotics also work in bronchitis. so i don't think you are having pneumonia because your chest x ray is normal. hope i have solved your query. i will be happy to help you further. wish you good health. thanks."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "bronchitis",
+        "certainty": "provisional",
+        "evidence": "cough, congestion, crackles on auscultation are also seen with bronchitis. and bronchitis shows normal chest x ray too.so it is quite possible that you improve within antibiotic because antibiotics also work in bronchitis."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 75,
+      "sha256": "48de1f4c78e3b4590dd91cd92033bb4f45ec61a821e0a36c6c8f0ef143b92cd6"
+    },
+    "description": "i have a dry cough, sore throat and headaches, can you please assist with giving me possible explanations for this, i am scared as well due to the corona virus?",
+    "utterances": [
+      "patient: i have a dry cough, sore throat and headaches, can you please assist with giving me possible explanations for this, i am scared as well due to the corona virus?",
+      "doctor: in brief: +- covid19 (see bel) there are multiple causes of those symptoms, including covid 19, but only go for a test if,1. you have traveled to high risk countries in the last 2-4 weeks2. you have had +ve contact with a known +ve covid 19 case3. if you have a high fever with your sore throat + severe headache + dry cough.hope that helps.rgdsdr wayne korras would you like to video or text chat with me?"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "covid19",
+        "certainty": "provisional",
+        "evidence": "+- covid19"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 77,
+      "sha256": "0ec5ac7a3c2c581298d133985f662e3af0c9f541822b4a6434fddbd728d84b87"
+    },
+    "description": "could the fever,wheezing and lung ache be pneumonia relapse?",
+    "utterances": [
+      "patient: hello. about 3-4 weeks ago i was diagnosed with pneumonia. after two weeks i felt well enough to start getting back out, but i continued to cough up mucus. i got in the swimming pool last night and it was an outdoor pool and kind of cool. this morning i woke up with fever, wheezing bad and my back in my lung area hurts so bad. the coughing is getting worse too. could the pneumonia have came back or never left? what should i do?",
+      "doctor: thanks for your question on healthcare magic.i can understand your concern. swimming pool water is full of organisms. so possibility of relapse of pneumonia is more likely because your symptoms, coughing, wheezing, chest pain are more suggestive of pneumonia. so consult your doctor and get done clinical examination of respiratory system and chest x ray. if chest x ray is showing fresh infiltrates then you will need another course of antibiotics, mucolytic and expectorant drugs. avoid swimming for atleast 1 month.hope i have solved your query. i will be happy to help you further. wish you good health. thanks."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "pneumonia",
+        "certainty": "provisional",
+        "evidence": "possibility of relapse of pneumonia is more likely because your symptoms, coughing, wheezing, chest pain are more suggestive of pneumonia"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 81,
+      "sha256": "47750ba510bfbbe9a098eb1519d89431ed4bf804394b394d424727351a0eef31"
+    },
+    "description": "blocked nose,coughing,aore throat,sometimes fever.sometimes body aches.",
+    "utterances": [
+      "patient: blocked nose,coughing,aore throat,sometimes fever.sometimes body aches.",
+      "doctor: in brief: telephonic consult? could well be another respiratory virus, i would stay home for now. use this platform to consult either virtually or ask more questions. use home medicine - decongestant and pain medication. stay away from any anti-inflammatories if possible. keep up warm fluids. would you like to video or text chat with me?"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "respiratory virus",
+        "certainty": "provisional",
+        "evidence": "could well be another respiratory virus"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 83,
+      "sha256": "38b9aaf7e334d7f779bc8f8e841d0754a7ea07dfc821d00152083634875e4818"
+    },
+    "description": "is the cough of a patient with covid-19 any different sounding than a cough of a patient with a cold?",
+    "utterances": [
+      "patient: is the cough of a patient with covid-19 any different sounding than a cough of a patient with a cold?",
+      "doctor: in brief: cough of covid-19 in covid-19, cough is usually dry, persistent (initially not much different from a cold), then turns into wet with mucus and high fever (pneumonia). in severe cases, severe shortness of breath and oxygen desaturation can develop after the pneumonia (severe respiratory distress syndrome). would you like to video or text chat with me?"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "covid-19",
+        "certainty": "confirmed",
+        "evidence": "cough of covid-19 in covid-19, cough is usually dry, persistent (initially not much different from a cold), then turns into wet with mucus and high fever (pneumonia)."
+      },
+      {
+        "name": "pneumonia",
+        "certainty": "confirmed",
+        "evidence": "then turns into wet with mucus and high fever (pneumonia)."
+      },
+      {
+        "name": "severe respiratory distress syndrome",
+        "certainty": "confirmed",
+        "evidence": "in severe cases, severe shortness of breath and oxygen desaturation can develop after the pneumonia (severe respiratory distress syndrome)."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 85,
+      "sha256": "65d193fc6edda07b66ad6b8b9b66d31427bd7d623ba23b36616b0c6a03909efd"
+    },
+    "description": "what causes pneumonia in lungs with no other symptoms?",
+    "utterances": [
+      "patient: my mom was diagnosed with bacterial pneumonia back in late december. after a round of antibiotics, she felt much better but the xray still showed pneumonia. a round of stronger antibiotics were then given to her. she went back for a follow up xray last week and the xray now shows the pneumonia is in both lungs. the strange thing is...she has no symptoms. no coughing, no fever, nothing. could it possibly be viral? or fluid? or cancer???? btw she has never smoked in her life.",
+      "doctor: thanks for your question on healthcare magic. i can understand your concern. radiological resolution takes 2-3 weeks in pneumonia. so it is possible that patient of pneumonia is improved symptomatically but still show pneumonia on chest x ray. so in my opinion, you should should waiting for 2 weeks more. get done repeat chest x ray after 2 weeks.if chest x ray is showing pneumonia then go for ct thorax and bronchoscopy to rule out lung cancer, tuberculosis, fungal pneumonia. if xun4 ray is improving then no need to worry. hope i have solved your query. i will be happy to help you further. wishing good health to your mother. thanks."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "pneumonia",
+        "certainty": "confirmed",
+        "evidence": "radiological resolution takes 2-3 weeks in pneumonia. so it is possible that patient of pneumonia is improved symptomatically but still show pneumonia on chest x ray."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 86,
+      "sha256": "6df6ba3e0151216a3aa9ceed5469188087cab507fb69d6013299264150e94adf"
+    },
+    "description": "suggest treatment for persistent pneumonia",
+    "utterances": [
+      "patient: my friend suffers from diagnosed bronchiectias and gets pneumonia constantly. she is 72 each time they give her antibotics for a week and then the xray will show the pneumonia gone, however, it contantly returns. she has been to mayo, iowa city had many test. it's beginning to take a toll on her. i would say she had pneumonia about 6 times last year and so far 2 or 3 this year. any suggestions",
+      "doctor: thanks for your question on healthcare magic. i can understand your concern. bronchiectesis is permanently damaged part of lung. so bacterial colonization is common in bronchiectesis. and this gives repeated pneumonia attacks. so best and permanent cure for this is surgical removal of bronchiectic part of lung. so consult cardio thoracic surgeon and discuss about surgical removal. another option is culture and sensitivity based treatment. get done sputum culture and sensitivity report. culture will identify the causative organism and sensitivity report will guide about effective antibiotic treatment. hope i have solved your query. i will be happy to help you further. wishing good health to your friend. thanks."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "bronchiectesis",
+        "certainty": "confirmed",
+        "evidence": "bronchiectesis is permanently damaged part of lung. so bacterial colonization is common in bronchiectesis. and this gives repeated pneumonia attacks."
+      },
+      {
+        "name": "pneumonia",
+        "certainty": "confirmed",
+        "evidence": "and this gives repeated pneumonia attacks"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 87,
+      "sha256": "0c0403a3119974d6539f48ac27a02b62d58a9af3e4183eaf12fd8307f824c13d"
+    },
+    "description": "what causes persistent pneumonia?",
+    "utterances": [
+      "patient: i was diagnosed with pneumonia 5 days ago and went to urgent care. been on prescribed antibiotics and i completed the 5 day treatment today, (levofloxacin) i have flight reservations to michigan on friday morning 4/28/2017. will it be safe to fly. please advise. your anticipated help will be appreciated.",
+      "doctor: thanks for your question on healthcare magic.i can understand your concern.you have given oral antibiotic for pneumonia.this itself suggests that you are had walking pneumonia (no serious type).levofloxacin is broad spectrum antibiotic and usually sufficient for walking pneumonia.so if you are don't have fever or coughing at present and feel good then you can definitely fly. no harm in it.hope i have solved your query. i will be happy to help you further. wish you good health. thanks."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "walking pneumonia",
+        "certainty": "confirmed",
+        "evidence": "this itself suggests that you are had walking pneumonia (no serious type)"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 95,
+      "sha256": "4b359e1c2639498f8b97c0aaebab7fc3a365d8f88ec1aeebce5fb85dfc95ad83"
+    },
+    "description": "i have been feeling very hot and having headaches everyday and always tired?",
+    "utterances": [
+      "patient: i have been feeling very hot and having headaches everyday and always tired?",
+      "doctor: viral infection. most likely a non-specific viral infection.check your temperature.if persistently raised an symptoms don't clear in 7 days, consult your doctor.most likely a non-specific viral infection.only be concerned about covid-19 if:you have been in contact with someone with a conformed diagnosis of covid-19you have visited a high risk areasymptoms worsen and include persistent fever and dry cough."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "viral infection",
+        "certainty": "provisional",
+        "evidence": "most likely a non-specific viral infection"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 99,
+      "sha256": "8501dc7b6b2c4853d645649195aa278fc0c802c8344da78842fcb17720ae8c1f"
+    },
+    "description": "i was on a plane on march 8th have been home ever since self quarantine myself i have had headaches and runny throat i have 2 days left of my self quarantine should i be having worse symptoms by now ?",
+    "utterances": [
+      "patient: i was on a plane on march 8th have been home ever since self quarantine myself i have had headaches and runny throat i have 2 days left of my self quarantine should i be having worse symptoms by now ?",
+      "doctor: in brief: covid these are healthtap guidelines:https://www. healthtap.com/blog/covid-19-care-guidelines/virtual-care-guidelines-for-covid-19?utm_campaign=covid%20outreach&utm_medium=email&_hsmi=84951814&_hsenc=p2anqtz-_jlhafqzrxrcncgr4mj57eqcomm2titlnybaqii_sh-f4iyzjpz7-eivc1okn2_qdpzno3&utm_content=84951814&utm_source=hs_emaili agree your symptoms should be improving. contact provider. would you like to video or text chat with me?"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "covid",
+        "certainty": "confirmed",
+        "evidence": "in brief: covid"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 100,
+      "sha256": "78430dece9e418733d61c809db6e7a30492f3e17a8b15bf5821b2a9929228e6f"
+    },
+    "description": "my 68 yr old mom is waiting for corona virus results. she’s been having fever 101-102 for a week. was admitted to hospital and has pneumonia. how is it treated and should she stay at the hospital until her symptoms get better? she has htn. help!",
+    "utterances": [
+      "patient: my 68 yr old mom is waiting for corona virus results. she’s been having fever 101-102 for a week. was admitted to hospital and has pneumonia. how is it treated and should she stay at the hospital until her symptoms get better? she has htn. help!",
+      "doctor: covid-19? it sounds like your mom is in good hands. if she has covid, they will know how to treat it. if the pneumonia is beleived to be bacterial, they will treat with antibiotics. there is no proved effective treatment for coronavirus itself. ask her doctors if she is a candidate for remdesivir -- not proved effective but sometimes available on a \"compassionate\" basis for severely ill patients. good luck."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "pneumonia",
+        "certainty": "confirmed",
+        "evidence": "if the pneumonia is beleived to be bacterial, they will treat with antibiotics."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 105,
+      "sha256": "b0eef79d04f4ef49f9f54d64b5da8b69cad85a73e14967d0a658ef2447bcd4f7"
+    },
+    "description": "suggest therapy for pneumonia",
+    "utterances": [
+      "patient: i am 33 years old, i was diagnosed with pneumonia almost a month ago after a short period of low grade fever and dry cough. even after treatment with 4 courses of antibiotics dry cough has not resolved.i am having pain on the right lower side of the rib which is constant and experiencing back pain and pains all over my back and chest in a nonspecific pattern. a chest ct was performed and found subsegmental consolidatory changes in the anterior and lateral basal segments of right lower lobe with bronchial wall thickening, minimal ground glass opacification in the adjacent posterior and medial basal segments, few small mediastinal and axillary lymph nodes, plus few lymph nodes seen in the pretracheal region, few of them showing dense calcification.my last lab report from december 23rd is as followstotal count-7200/cummneutrophils-70%, lymphocytes-28%, eosinophils-2%esr-28 mm/hr.still i am having fatigue, dry cough and pains. what can it be?",
+      "doctor: thanks for your question on healthcare magic.i can understand your concern. possibility of post infectious bronchitis is more likely. bronchitis (inflammation of airways) is common after pneumonia.and persistent dry cough and chest pain are mostly due to bronchitis.so better to consult pulmonologist and get done clinical examination of respiratory system and pft (pulmonary function test).pft will not only diagnose bronchitis but it will also tell you about severity of the disease and treatment is based on severity only. you will mostly improve with inhaled bronchodilators (formoterol or salmeterol) and inhaled corticosteroid (ics) (budesonide or fluticasone).don't worry, you will be alright with all these. hope i have solved your query. i will be happy to help you further. wish you good health. thanks."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "post infectious bronchitis",
+        "certainty": "provisional",
+        "evidence": "possibility of post infectious bronchitis is more likely."
+      },
+      {
+        "name": "bronchitis",
+        "certainty": "confirmed",
+        "evidence": "bronchitis (inflammation of airways) is common after pneumonia.and persistent dry cough and chest pain are mostly due to bronchitis."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 108,
+      "sha256": "35d10638ce3ca82ab235f181563eda357ccbdd9977b6af11b9a57ba33778935d"
+    },
+    "description": "what causes severe hair loss while recovering from pneumonia?",
+    "utterances": [
+      "patient: hi, my name is becky and i exasberated back in sept with heavy pneumonia in my right lung...... the last few months i have experienced tremendous hair loss and breakage--it is so thin i only have about 1/3 of my hair left but no bald spots. i also have a big lump (or bulge) about 1 inch above the base of my hairline on the back of my head. it goes all across the back of my skull. any advice? i thought you were here to help....... but hell no....... everybody wants my money....... which i don t have. thanks alot",
+      "doctor: hello,after a long chronic disease, there is hair fall present, it is normal but you have a lump, and it is back, maybe it is a lipoma or subcutaneous abscess.you have to investigate all these things like serum biotin level, zinc level, fnac of that lump after usg. till then take tablet astymin m forte for three months at least and biotin-rich foods.hope i have answered your query. let me know if i can assist you further.regards,dr. chandra shekhar"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "hair fall",
+        "certainty": "confirmed",
+        "evidence": "after a long chronic disease, there is hair fall present, it is normal"
+      },
+      {
+        "name": "lipoma",
+        "certainty": "provisional",
+        "evidence": "maybe it is a lipoma or subcutaneous abscess"
+      },
+      {
+        "name": "subcutaneous abscess",
+        "certainty": "provisional",
+        "evidence": "maybe it is a lipoma or subcutaneous abscess"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 111,
+      "sha256": "4b833d33b7a7e3dfd7f18bcc2b1275bdbf4ef0634e5632f204d4d570bbcaa83c"
+    },
+    "description": "what causes severe cough, shoulder blade pain and heart palpitations while treating pneumonia?",
+    "utterances": [
+      "patient: i have a pneumonia and have gone through 1 full round of a zpack and steroid. i m also using an inhaler, had to go back to dog on thursday night because i was still not any better. they gave me a antibiotic shot and a 1/10day script for levaquin which i started about 10am friday morning. i m still not feeling better. i now as of this morning have a sharp pain inbetween shoulder blades that comes and goes, my heart flutters sometimes and sometimes beats really fast, i also woke up to chest pain that would go from burning feeling to sharp pain for about 30 min consecutively, then stopped and has been on and off since then. my cough is so bad that when i cough it feels like my ribs/lower sides of my back/lung area are bruised/fractured and takes my breath away when i take deap breathes or bend my waiste. i noticed bout a 5 days ago that i would get really hot at random times. ao thinking i was having a fever, i ve been keeping track daily of my bt as of about 3/4 days ago and it s seems to have steadily slowly dropped. it s ranging usually from 96-97 but sometimes it ll get to like 98.0 and thats while i m sweating so bad that s my shirt will be soaked and hair wet like i was standing outside in the sun for an hr in middle of summer. it s sick. should i be worried?",
+      "doctor: respected user , hi thanks for using healthcaremagic.comi have evaluated your query thoroughly .* all symptoms are in relation with underlying lung condition giving rise to broncho alveolar constrictions , pleura irritation with systemic manifestations* as there is not much relief of oral medications given till now , i strongly recommend to get hospitalised treatment & early better recovery through iv antibiotics , bronchodilators, supportive nursing care hope this clears your querywelcome for any further assistance regards ."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "broncho alveolar constrictions",
+        "certainty": "confirmed",
+        "evidence": "all symptoms are in relation with underlying lung condition giving rise to broncho alveolar constrictions , pleura irritation with systemic manifestations"
+      },
+      {
+        "name": "pleura irritation",
+        "certainty": "confirmed",
+        "evidence": "all symptoms are in relation with underlying lung condition giving rise to broncho alveolar constrictions , pleura irritation with systemic manifestations"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 114,
+      "sha256": "a3977fae56d6fa0b2244780b0ee09e272671b367c9ec1e1930141e6491174bf3"
+    },
+    "description": "can pneumococcal vaccine be taken after being diagnosed with pneumonia?",
+    "utterances": [
+      "patient: hello doctor, i am copd patient. i was taken a vaccine called pneumo 23 almost 4years and 8months ago. the doctor advised me to take the vaccine once in every 5 years. but before the completion of 5 year i am diagnosed with pneumonia. what should i do? should i take the vaccine before the completion of 5 year period? please advise.",
+      "doctor: thanks for your question on healthcare magic.i can understand your concern. pneumococcal vaccine is live attenuated vaccine. so it is contraindicated in active infections like pneumonia because it can flare up infection. so better not to take pneumococcal vaccine at present. get complete cure from current pneumonia and then take pneumococcal vaccine. don't worry if time period between two vaccine is more than 5 years.hope i have solved your query. i will be happy to help you further. wish you good health. thanks."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "pneumonia",
+        "certainty": "confirmed",
+        "evidence": "get complete cure from current pneumonia"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 123,
+      "sha256": "e50ad7de4cb221f8e85fec5c32427f52d06a8b100a85299c626440500051c05d"
+    },
+    "description": "i have had mild chest pain for over a week. it now seems more persistent and pronounced. i don't have shortness of breath or any other covid-19 symptoms, except some fatigue. i have been traveling a lot in high risk areas. should i get tested?",
+    "utterances": [
+      "patient: i have had mild chest pain for over a week. it now seems more persistent and pronounced. i don't have shortness of breath or any other covid-19 symptoms, except some fatigue. i have been traveling a lot in high risk areas. should i get tested?",
+      "doctor: in brief: yes i would advise screening due to your exposure. fever is very commonly associated with covid-19. stay at home, rest, drink fluids and monitor your temperature. arrange the testing which also may include a chest image with your pcp. since your have been traveling, a pulmonary embolism is another possible cause of your shortness of breath. would you like to video or text chat with me?"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "covid-19",
+        "certainty": "provisional",
+        "evidence": "yes i would advise screening due to your exposure. fever is very commonly associated with covid-19."
+      },
+      {
+        "name": "pulmonary embolism",
+        "certainty": "provisional",
+        "evidence": "since your have been traveling, a pulmonary embolism is another possible cause of your shortness of breath."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 125,
+      "sha256": "ef637def60c7354712831a295ec6fdc8e966761135ee666750bcc5554bb5e576"
+    },
+    "description": "i have had a sore throat for a few days, tuesday night it felt like tonsils, yesterday it started becoming scratchy and today i have started coughing and spitting mucus. i do not have a fever, but i get light headed here and there, could it be covid-?",
+    "utterances": [
+      "patient: i have had a sore throat for a few days, tuesday night it felt like tonsils, yesterday it started becoming scratchy and today i have started coughing and spitting mucus. i do not have a fever, but i get light headed here and there, could it be covid-?",
+      "doctor: in brief: very unlikely it sounds more like a viral cold. covid does not present this way. treat the symptoms,consult gp if worse or if sputum changes color. would you like to video or text chat with me?"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "viral cold",
+        "certainty": "provisional",
+        "evidence": "it sounds more like a viral cold"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 132,
+      "sha256": "0fdb0191814b511c16e8167fd58d2a8e40bf8d310f2370a7f697dfb9e8f0b202"
+    },
+    "description": "symptoms include irritation in the throat, dry cough, trouble breathing properly, headache. however not really a sign of a fever. temperature is about 35 degrees. should i get tested?",
+    "utterances": [
+      "patient: symptoms include irritation in the throat, dry cough, trouble breathing properly, headache. however not really a sign of a fever. temperature is about 35 degrees. should i get tested?",
+      "doctor: in brief: many causes. most cases of covid-19 with symptoms are associated with fever, however milder cases do occur. your shortness of breath and difficulty breathing may have a number of causes and should be evaluated. please call your pcp. avoid dust, mold, smoke, animal dander, pollen. your symptoms also are consistent with an allergic reaction. would you like to video or text chat with me?"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "allergic reaction",
+        "certainty": "provisional",
+        "evidence": "your symptoms also are consistent with an allergic reaction"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 135,
+      "sha256": "ecb36f11f5d95b5c28b0d2a4cb23ef26dd382860752680f68f3d9bd9a5a0dd99"
+    },
+    "description": "suggest remedy for raspy chest post a pneumonia incidence",
+    "utterances": [
+      "patient: well quick question i had pneumonia back in november2013 and theres a concern i have now i took antibiotics s and got better but im simply not all there in the breathing department. lately ive been waking up with a raspy chest but goes away as day progresses also feel as tho if i had dust in my throat when i manage to get the plegm out its not all colorful its just clear. i get a tight chest feelings sometimes albuterol does help before exerting myself/ excersise.",
+      "doctor: hello,since, you are feeling better after albuterol (inhaled bronchodilator), possibility of bronchitis (inflammation of airways) is more likely for your symptoms.bronchitis is common after lung infection (pneumonia). so, it is better to consult pulmonologist and get done clinical examination of respiratory system and pft (pulmonary function test).pft will not only diagnose bronchitis but it will also tell you about severity of the disease and treatment is based on severity only.you will mostly improve with inhaled bronchodilators (formoterol or salmeterol) and inhaled corticosteroid (ics) (budesonide or fluticasone).hope i have answered your query. let me know if i can assist you further.regards,dr. kaushal bhavsar"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "bronchitis",
+        "certainty": "provisional",
+        "evidence": "possibility of bronchitis (inflammation of airways) is more likely for your symptoms.bronchitis is common after lung infection (pneumonia)."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 137,
+      "sha256": "cabe535b38f5cbbd63238fc2d28083f82b7a13e520062e4180d64ad46ee521e7"
+    },
+    "description": "hi, i'm on plasmaquine and methotrexate 7.5mg x 1 per week for arthritis. i'm concerned that the methotrexate may weaken my immune system and make me more vulnerable to covid-19. would it not be safer to discontinue use untill the threat has passed?",
+    "utterances": [
+      "patient: hi, i'm on plasmaquine and methotrexate 7.5mg x 1 per week for arthritis. i'm concerned that the methotrexate may weaken my immune system and make me more vulnerable to covid-19. would it not be safer to discontinue use untill the threat has passed?",
+      "doctor: covid-19 and ra. some anecdotal data showed that chloroquine or hydroxychloroquine might have activity against covid-19. observation from china wuhan noted that patients with ra and on these medications had low incidence of covid-19 infection. there is however no definite proof yet at this time. in terms of whether you can stop methotrexate, you better discuss with your rheumatologist for the benefit and risk. ."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "RA",
+        "certainty": "confirmed",
+        "evidence": "covid-19 and ra"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 138,
+      "sha256": "47159a97f0153441ade6901c8a3671c156a61247275d7ecacc4d52e361d3f1f2"
+    },
+    "description": "can pneumonia cause itching in upper torso?",
+    "utterances": [
+      "patient: my daughter is 11 years old she has has pneumonia she has been sick since january 3rd symptoms keep changing. she is up at night itching all over her upper torso, head, and ears. she has major headache and abdominal pain.. she is very upset and crying because this is going on way to long and she has seen many doctors with no relief any suggestions. tried most itching products what could be causing the head pain and stomach pain. they check her today for appendicitis",
+      "doctor: hello and welcome to ‘ask a doctor’ service. i have reviewed your query and here is my advice. according to the history it might be a viral situation or an allergy. don't worry so much she is under medical control. regards dr.jolanda"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "viral situation",
+        "certainty": "provisional",
+        "evidence": "according to the history it might be a viral situation or an allergy."
+      },
+      {
+        "name": "allergy",
+        "certainty": "provisional",
+        "evidence": "according to the history it might be a viral situation or an allergy."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 151,
+      "sha256": "c03fb891d2731ad2b034504972f2364d36cbbc8ccbc7e0437a33a2b0dded9ee0"
+    },
+    "description": "i have chills, breathing problems and cough with white phlegm. could it be coronavirus infection?",
+    "utterances": [
+      "patient: hello doctor, last night i was getting chills, feeling more cold than usual and lightheaded and a lot of burping. maybe like every 30 minutes or less or so feel more chills running down my body and chest feeling bit weird like i am starting having trouble breathing then goes back to normal and repeats, with weird feeling like chills down my left and right lungs or left and right upper chest. also, my heart was pumping fast. also, some minor coughs were there since seven days ago, still here. i have white mucus and have not gotten yellow yet. i took medicines yesterday but today i got severe cold and flu medicine with a pain reliever, the chills did not go away. then today, i called the doctor on the phone and told him what happen last night and the same thing happened this morning too. i had minor coughs, feeling lightheaded, feel like maybe cannot breathe or something, and a lot of burping. i told him the burping issue was going on for at least two years, but somehow this time i am feeling lightheaded. he just gives pepcid, a try maybe gerd. i ate that today still feeling chills now and still burping a lot. right now, still some chills on arms, with breathing issue or something makes my chest feel weird and arm sometimes. so, should i be worried? i do not think i have a fever now but do not feel hot on the forehead? was it gerd or flu, it is coronavirus or something else? i hope it is not coronavirus. i am 21 years old and weigh around 110-115 kg.",
+      "doctor: hello, please answer the following: any travel history in the last one month? any use of airports? any fever, have you checked the temperature? any cough? any mucus or phlegm? how is your sleep? is there any malaise or body aches or weakness?",
+      "patient: thank you doctor, i travel to school, nearby grocery stores in the bus. no airport exposure. i have not checked the temperature. i do not feel hot or anything. i have minor coughs and sore throat. yes, i have mucus which seems white or clear for now. during sleep, i do not have much aches. last night i have not got much sleep, probably because i was thinking about stuff being worried, but got some sleep though.",
+      "doctor: hi, most probably with the history it does not appear like a severe problem or coronavirus infection. is sore throat severe and does the pain last the whole day? do you smoke or drink? can you try taking sudafed, tylenol, and zyrtec and try getting sleep for a few days? i am sure that will make you feel better. avoid exposure to smoke dust and cold winds. keep the ac to a minimum or use ceiling fan instead. drink plenty of water and warm fluids. avoid eating out, partying. avoid unnecessary travel. you need not quarantine yourself in the strictest manner but some amount of restrictions in interacting and meeting with the community is advised. lastly, where are you currently? your place of residence and country? is it a corona endemic country? did you talk to or interact with any known or suspected flu patient? can you please take a picture of the back of the throat with open mouth showing details of the tonsils and pharyngeal wall and send it to me?",
+      "patient: thank you doctor, i woke up this morning, i had trouble sleeping being worried, but i got some sleep then nearby phone ringing woke me up. so far, seems no one got any severe coughs or pain so far. i only hear minor coughs the past week or so. thanks for those medicine recommendations for sleep. i fall asleep quicker, usually, it takes me around one hour to fall asleep on most days. i will try to avoid smoking as much as possible. yes, i will be staying inside since many places are on lockdown. and school is online. i recently turned on the air purifier to clean up some air for allergies possible viruses but makes me cold. i might not need ac unless really hot. i will be staying home for the next month at least. my chills right now are feeling a bit better, but a little sick only because maybe i did not get enough sleep. i stay in san francisco ca, united states, and there are close to 40 confirmed cases around here. no severe reports near my district, and have not heard anyone in serious condition. so, last week i have a sore throat and tonsil pain while swallowing for a few days, then one day drank a lot of honey and water and some tea, then it got better. not sure if it got smaller, but the pain was less now though. between my tonsils in the middle (behind the tongue) looks like my throat, got some red stuff, maybe looks like inflamed or rashes. any recommendations? any foods or drinks that can help?",
+      "doctor: hi, you have got it right. follow all the precautions. you will be alright soon. try getting a good sleep tonight. i heard about the cases in sf. my brother was supposed to fly there from india for work but his meeting got canceled in the wake of the virus. yes, your camera has not done a decent job this time around. it has not focussed on our area of interest. (attachment removed to protect patient identity). but yours has picked up the two big bumps in the back of the throat (enlarged tonsils). the tonsils could be enlarged due to the current infection and sore throat problem you are having. once the problem is resolved they should get back to their normal size, which i guess, in you, must be slightly big. the pharyngeal wall between the tonsils could be having some granular bumps which are quite common during an infection. now you do not worry, for most such infections are due to viruses (not corona). they usually get better with time and supportive treatment. traditional indian forms of medicine advise honey and hot water. tea makes a good addition i guess. sudafed and zyrtec appropriate for your weight will help additionally. tylenol every time you got pain will help you tide over this period wonderfully. now watch for some warning symptoms fever, increased pain, thick mucus, thick postnasal drip, severe malaise, swelling in the neck, etc. in such cases promptly revert to me. you may need a z pack then.",
+      "patient: thank you doctor, as of now 12:40 pm i am breathing harder than usual since 30 minutes ago. i only ate some breakfast and drank water. here is my story: before feb 28th - no issues at all, besides always burping a lot, sometimes bloating, no coughs, tonsil was enlarged for a while, no lightheadedness, no breathing problems, not sick. friday february 28th - i woke up feeling unwell, drank water went back to bed, came back out super lightheaded about to faint, lied on bed for an hour, came out stomach feeling weird, even more lightheaded about to faint, can barely even eat a little noodles and two small pieces of spam, vomited it, then four more times which as water or acid. hours later was better. saturday february 29th - diarrhea sunday march 1st - diarrhea monday march 2 - diarrhea tuesday march 3 - diarrhea wednesday march 4 - no stool thursday march 3 - no more diarrhea friday march 4th - monday march 9th - no issues monday march 9th - feeling better, no problems, enlarged tonsil, no coughs really. sunday march 15 - no problems besides burping, minor coughs, some sore throat afternoon i ate chicken, burping a lot, stomach uncomfortable, felt like breathing problems, chills on hands, chest and left and right side, felt like could not breathe. 20 minutes later, still chills breathing a bit better, lightheaded kind of feel like fainting, then went to bed for 15 minutes (the breathing problem and weird chest feeling comes back randomly), ate tums, then later i drank cough and flu medicine. on monday march 16 - woke up around 11:30 am, feeling breathing problems, chills around body, lightheaded again, chest feeling weird, burping a lot, and i described my story to doctor he said it sounds like you ate something bad, does sound like gerd, of course we do not know for sure unless lab tests maybe on stool. he asked have you tried stronger antacids like pepcid or zantac? i said no. then doctor asked me to try pepcid and tell me how it goes. tuesday and wednesday march 16/17 - feeling better, no lightheadedness, no more chills, minor coughs, sore throat, burping a lot, no breathing problems so far. pepcid no problems so far besides making me burp almost all day. wednesday night still coughing a lot and drank severe cold and flu medicine. thursday march 21 i woke up fine, then once ate pepcid and drank some water, heart rate was going really fast, started to make worried, called doctor office they said can you count your beats per minute, then i counted, my phone was showing my heart rating going to 120 bpm, when i counted to them was not 120 bpm, then they told me to call back if it gets worse. then shortly after, i drank some water and ate a little bit of breakfast. my heart rate started to drop slowly and was getting better after that. friday march 20- 10 am i woke up with some chest pains (chest area above the stomach), then some coughing and feeling a little sick, little lightheaded, heart beating fast, breathing harder, felt of shortness of breath. drank some water and breathe harder, a little bit of mucus. 15-20 minutes later no more chest pains, still breathing harder. 11 am - still breathing a little bit harder than usual, coughing would make me breathe even harder. better now, but still breathing a little harder than usual. 11:30 am moving makes me breathe harder, sat in bed. 11:58 am - feeling a bit better 12:10 - feeling like breathing a harder than usual. after an hour later, feeling better now which is strange. not sure if its heart problems, acid reflux, chest issues, or esophagus.",
+      "doctor: hello, always protonix is better than zantac. try using protonix (pantoprazole). do not lie down immediately after consuming meals. do not drink a lot of water after a meal. avoid spicy and oily foods.",
+      "patient: thank you doctor, i went to the store to look for zantac they did not have it, so i talked to the pharmacy they said sounds like could be some weird chest tightening and the doctor said since pepcid and zantac are the same. he said to try ranitidine. right now i tried pepcid again like now, for the first five to ten minutes i think it means me feel more nervous or anxiety or something, i tried to calm myself by putting fingers on teeth. then i think now it did not cause my heart to beat super fast this time which was strange. even water makes my heart beat a little faster. should i stick with pepcid? finish the entire bottle? i think it has 20-30 pieces. i used to lie down after a meal a few years ago like i get hungry before i go to bed then i started eating snacks and lying down. sometimes i starve myself. sometimes i wake up with acid feeling in my mouth. i don't know why i woke up this morning with chest pain, like the middle area right above the stomach and felt like i had breathing problems, breathing harder than usual, drank water and barely could eat breakfast (lasted for at least 30 minutes+). i then waited a bit after 10 minutes, drank hot water and ate breakfast, i started to breathe better again. could it be shortness or breath? may be blood pressure? esophagus issue? chest issue? heart issue? i am having weird breathing. should i be worried?",
+      "doctor: hi, you need to take pantoprazole or any other proton pump inhibitor. avoid heavy meals. the issue appears like a heartburn problem due to acidity only. it does not appear sinister.",
+      "patient: thank you doctor, i was trying to finish the bowl of food in one hour. i was eating veggies and rice, halfway through felt something like acid may be some pain in chest and throat. feeling lightheaded so ate some meat to then coughed after.",
+      "doctor: hi, do not worry about it. drink plenty of water but not immediately after a meal. eat well cooked meats.",
+      "patient: thank you doctor, i really appreciate your help so much. i appreciate your time and effort to help me and give advice. only thing i am worried is just the chest pains, breathing issues and esophagus and throat stuff. i will try to wait two to three hours after eating or drinking before bed now. i hope to get less chest issues when i wake up.",
+      "doctor: hi, do not worry so much. you will be absolutely alright. give it some time. if you are not getting better we can do laryngoscopy and check if there is anything wrong with the larynx. do you eat healthy food and do exercises?",
+      "patient: yeah if it doesn't get better laryngoscopy would be perfect. okay, i'll give it some time thank you! i try to eat vegetables and fruits. i don't eat much junk food that much. i used to eat more junk years ago, but now mostly vegetables, fruits, meat (pork, chicken, beef, fish) usually not fried, and tried to eat whole wheat bread with fried chicken patty from the super market (for school lunch) since its cheap and its chicken (stopped now after acid problems), don't really eat french fries, pizza or drink soda etc... exercise, haven't been exercising these few months. i have been telling myself that, but then i haven't really been doing it. used to a lot years ago, now barely. since high school, when i exercise running when i try to get air feels like throat is tight or chest is tight and air is trying to squeeze its way through. after this point high school until college feels like i'm not breathing enough air. when i was younger (elementary/middle school) felt like i gotten a lot more air then now through my throat and air doesn't squeezes through. one doctor just used stethoscope for heart and lungs, told me to breathe hasn't said much about it. then another doctor said, sounds you are not breathing that much, feels like not getting another air (in high school, like 4-6 years ago maybe), they didn't do much about it. so, when i try to breath regularly, seems like not much air comes out through mouth even before acid reflux,.that's why recent breathing problems kinda worry me, but anyways yeah like that.",
+      "doctor: i guess you are in the right track. with regards to food diet and exercise. restart doing your exercise. keep yourself active. try having more than three meals a day but keep the quantity of each meal less than the usual. that way you eat more frequently but without putting weight or adding unnecessary calories.",
+      "patient: sounds good! awesome! appreciate your time and effort to help, this means a lot. very patient and kind!"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "heartburn problem due to acidity",
+        "certainty": "confirmed",
+        "evidence": "the issue appears like a heartburn problem due to acidity only."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 153,
+      "sha256": "acb4bcf2a66295eb7f60452b3dd0f7d7c5defb604d5614dcfe198a08f546ada0"
+    },
+    "description": "what are the treatment and side effects of pneumonia?",
+    "utterances": [
+      "patient: dear doctor my littel son 11 months when he was 2 months and 15 days he got chest infection pneumonia in the right lung and after 2 weeks of treatment in the hospital with antibiotic he discharged next day he was admitted again with new infected by pneumonia in the right lung and then doctor did some test a barium swallow and ph. the resulte ge reflux grade 4. he was with ngt and ar formula by ngt for 3 moths with zantac and motinorm also with sitting position ,but all of those dosn t change any thing.after that when he was 5 months and 15 days he had an a laparoscopic fundoplication 5 ports, 360m degree wrap over 10fr ryles tube. he trying to vomit but he can t.i observed every time when he trying to vomit like for 5 to 7 minutes and when he sneeze every time after trying vomit then he got back to normal after sneezing.. and he drinking now neocate formula based on free amino acid. also he is allergy with lots of food ,.",
+      "doctor: primarily he suffering reflux disease which causes repeated aspiration and pneumonia so correction of underlying pathology will resolve pneumonia and as for concern about antibiotic and treatment of pneumonia use of antibiotics for prolong period can cause development of resistant organisms"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "reflux disease",
+        "certainty": "confirmed",
+        "evidence": "primarily he suffering reflux disease which causes repeated aspiration and pneumonia"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 154,
+      "sha256": "bee5ae92ccff1bba1cc13a12d004a90769db2f94d332809a1ef1b152b90db7b4"
+    },
+    "description": "do i just go to a dr to determine if it's a sinus infection or do i go get tested for covid first? to not risk anyone in practice?",
+    "utterances": [
+      "patient: do i just go to a dr to determine if it's a sinus infection or do i go get tested for covid first? to not risk anyone in practice?",
+      "doctor: in brief: phone triage. call your gp's office for instructions and identify local resources. your symptoms are suggesting sinusitis (other causes still possible) that is frequently viral and self limited. local regulations should also be followed in such circumstances. self quarantine will work for all in trying to prevent the spread. hydration and rest will also work regardless of what the cause for your symptoms is. would you like to video or text chat with me?"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "sinusitis",
+        "certainty": "provisional",
+        "evidence": "your symptoms are suggesting sinusitis (other causes still possible) that is frequently viral and self limited"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 162,
+      "sha256": "90d634e26a9e21e952d84c0fcfc597a51891e27f09ea319596e171ec0cd5a066"
+    },
+    "description": "11 year old has a cough, runny nose, headache,earache, no fever. is this covid-19?",
+    "utterances": [
+      "patient: 11 year old has a cough, runny nose, headache,earache, no fever. is this covid-19?",
+      "doctor: the symptom pattern is not specific to one agent. it suggests a cold and ear infection. kids have been among those least affected by covid-19 . only proper screening and testing could confirm or exclude this or any other agent. parainfluenza, rhinovirus, or rsv would be more likely."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "cold",
+        "certainty": "provisional",
+        "evidence": "it suggests a cold and ear infection."
+      },
+      {
+        "name": "ear infection",
+        "certainty": "provisional",
+        "evidence": "it suggests a cold and ear infection."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 165,
+      "sha256": "cd0e6ca114ec0c218eec4c642447510ae2d2cb30cf572392a9a3c1e3919e7c53"
+    },
+    "description": "what causes a decrease in the wbc count while treating flu and pneumonia?",
+    "utterances": [
+      "patient: my daughter has been sick with the flu for over a week and now has strep throat and pneumonia. she s saw her doctor, ran some tests and her white blood cell count keeps dropping. they just sent her to the er. what would cause her wbc to drop? i know there s probably a few reasons, but given this recent background of her health?? thank you. very worried mom",
+      "doctor: hello,any infection if severe can suppress bone marrow. and this is responsible for low wbc (white blood cells) count. so better to start injectable antibiotics for control of infection. she may need leucovorin injection to stimulate bone marrow for producing wbcs. once her infection is controlled, she will have a normal wbc count. hope i have answered your query. let me know if i can assist you further.regards,dr. kaushal bhavsar"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "low wbc (white blood cells) count",
+        "certainty": "confirmed",
+        "evidence": "any infection if severe can suppress bone marrow. and this is responsible for low wbc (white blood cells) count."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 169,
+      "sha256": "7e1a858fac955795a0ba3c2dbac3b3ce45e7889ef38fda9572f587d789e4013f"
+    },
+    "description": "i'm just a bit concerned as i have a sore throat and coughing a little bit as a result of my sore throat. my upper body is also aching a bit. is this a cause for concern?",
+    "utterances": [
+      "patient: i'm just a bit concerned as i have a sore throat and coughing a little bit as a result of my sore throat. my upper body is also aching a bit. is this a cause for concern?",
+      "doctor: possible virus. this is likely a viral infection. if you have a fever and/or the cough or sore throat get worse, you should be examined by your doctor. if you've been exposed to a particular illness, such as strep or the flu or coronavirus, you may need to be tested.for now, rest, drink fluids, take acetaminophen or ibuprofen as needed if you have no medical contraindication."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "viral infection",
+        "certainty": "provisional",
+        "evidence": "this is likely a viral infection"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 173,
+      "sha256": "dc2a982b32d47d6901200ae5763f4dbcaf8bdcda0f3353e4d50a31b2b92af9ae"
+    },
+    "description": "ons het teruggekom vanaf oostenryk op 8 maart..reeds 13 dae gelede. het tans seer keel maar ook nasale drip. wat staan my te doen?",
+    "utterances": [
+      "patient: ons het teruggekom vanaf oostenryk op 8 maart..reeds 13 dae gelede. het tans seer keel maar ook nasale drip. wat staan my te doen?",
+      "doctor: in brief: covid19 even though your have no fever or shortness of breath, your travel history fits criteria to be tested. i suggest you get tested for covid19 - speak with your gp to advise further, self isolate in the meanwhile would you like to video or text chat with me?"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "covid19",
+        "certainty": "provisional",
+        "evidence": "in brief: covid19 even though your have no fever or shortness of breath, your travel history fits criteria to be tested. i suggest you get tested for covid19"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 178,
+      "sha256": "a3e9003209af3ce7f9cbe19651abc1306a3a34764ba36ebfa15e465313425d59"
+    },
+    "description": "suggest treatment for pneumonia, vomiting and dizziness",
+    "utterances": [
+      "patient: hi my name is.brent i was diagnosed with pneumonia friday since i haven t been able to sleep due to vomiting and i m dizzy and the weirdest thang is if i touch a certain part of my neck or back i instantly feel sick if you can give me advice that would be great",
+      "doctor: hey brent,if you feeling low and drowsy with pneumonia then you must take appropriate antibiotics.if required might get admitted to get done i.v. treatment."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "pneumonia",
+        "certainty": "confirmed",
+        "evidence": "if you feeling low and drowsy with pneumonia then you must take appropriate antibiotics"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 183,
+      "sha256": "1c9515d6505f410aea001f66f6965a1d0a88170e16d8834708e4d676abef543a"
+    },
+    "description": "suggest management of complete lung whiteout with invisible heart outline and pneumonia",
+    "utterances": [
+      "patient: my father is in the hospital on ventilator currently. the doctor says he now has what is considered whiteout in his lungs. he has said that the outline of the heart can no longer be seen. my father aspirated and then was diagnosed with pneumonia. three days later he ended up in ccu on a ventilator and has not been able to be weened off/ he is currently taking 3 antibiotics. what is your advise.",
+      "doctor: lung whiteout and loss of heart outline are findings of chest x-ray compatible with many abnormal conditions affecting the lungs, like pneumonia, pleural effusion, acute respiratory distress syndrome among others. in the actual setting, your father is already receiving treatment to his pneumonia. all the other possibilities are probably been considerated and adressed by ccu staff. weaning from mechanical ventilation is sometimes challenging because many factors can impair patients evolution, like how long he's been in mv, his nutrition status, his cardiovascular performance and resolution of the cause that led him to mv in the first place."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "pneumonia",
+        "certainty": "confirmed",
+        "evidence": "your father is already receiving treatment to his pneumonia"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 185,
+      "sha256": "9451369ba7fc65c31d058c31ac6b1251745f2f13ae6dcf68d693efa4609089ed"
+    },
+    "description": "hi my symptoms are aching and sore joints i feel feverish but i don’t have a cough or runny nose . i do feel a little throat congestion ( phlegm ) but no sore throat. not very sick. i have been taking viral choice and vitamin c for a month . ?",
+    "utterances": [
+      "patient: hi my symptoms are aching and sore joints i feel feverish but i don’t have a cough or runny nose . i do feel a little throat congestion ( phlegm ) but no sore throat. not very sick. i have been taking viral choice and vitamin c for a month . ?",
+      "doctor: in brief: uri your symptoms are consistent with a flu like upper respiratory tract infection. treatment would be resting, drinking adequate fluids and taking acetaminophen. chest discomfort or shortness of breath would be concerning and if you've been exposed to anyone with covid19, who has been in an affected region or if you live in a region where covid19 is present, notify your md and get tested. would you like to video or text chat with me?"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "upper respiratory tract infection",
+        "certainty": "confirmed",
+        "evidence": "your symptoms are consistent with a flu like upper respiratory tract infection"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 187,
+      "sha256": "4245536edb41b35f52ededaed9fc3b9c2775d011eb746cd740657234272dff3e"
+    },
+    "description": "what are the symptoms of pneumonia?",
+    "utterances": [
+      "patient: my 1 year old daughter has been congested for about 2 days no coughing. today she was fine this morning other than the stuffy nose. now she is just laying around, just wants held interested in absolutely nothing and she has projectile vomited 3 times. pneumonia is going around i know numerous people that have it. are those symptoms?",
+      "doctor: thanks for your question on healthcare magic.i can understand your concern.yes, possibility of pneumonia is more.children don't show high grade fever sometimes.vomiting can be seen in pneumonia. chest congestion is classical symptom of pneumonia in children.so better to take her to pediatrician and get done clinical examination of respiratory system and chest x ray.she may need antibiotics and other supportive drugs.hope i have solved your query. i will be happy to help you further. wishing good health to your daughter. thanks."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "pneumonia",
+        "certainty": "provisional",
+        "evidence": "yes, possibility of pneumonia is more"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 189,
+      "sha256": "a40e9846be234259debe744616e2a91a4dfa248572b92b224ffb3d05e416bf2b"
+    },
+    "description": "chronic sore throat for 4 months. not strep. no fever. bloody green phlegm for a while. sinus congestion and pressure sometimes. bad breath in back of throat sometimes. maybe post nasal drip. 2 wks. of amoxicillin didn’t help. is this mild covid-19?",
+    "utterances": [
+      "patient: chronic sore throat for 4 months. not strep. no fever. bloody green phlegm for a while. sinus congestion and pressure sometimes. bad breath in back of throat sometimes. maybe post nasal drip. 2 wks. of amoxicillin didn’t help. is this mild covid-19?",
+      "doctor: bacterial likely. use nasal saline rinses, a nasal steroid and discuss the use of augmentin for 10 days with your pcp. it is more likely that you have a bacterial infection. an examination of your mouth or uploaded photo to a ht virtual consultation is important. avoid smoke and if you are a smoker, please consider a biopsy of the area. ."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "bacterial infection",
+        "certainty": "provisional",
+        "evidence": "it is more likely that you have a bacterial infection"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 190,
+      "sha256": "d37b6b9ed933ef32b23f28a8b24c496d83876bdc922b37d7155f2c69f15aa1c4"
+    },
+    "description": "hi there, i was recently in close contact with someone who travelled overseas. the person has become ill but has not communicated whether or not they’ve been tested. should i go and get tested for covid19?",
+    "utterances": [
+      "patient: hi there, i was recently in close contact with someone who travelled overseas. the person has become ill but has not communicated whether or not they’ve been tested. should i go and get tested for covid19?",
+      "doctor: in brief: test since there is a risk for coronavirus, please stay home, rest and drink fluids. monitor for symptoms including fever, dry cough and/or shortness of breath. avoid contact with others and consider testing. the symptoms of covid 19 may be very mild. travel is one risk factor for acquiring the disease. would you like to video or text chat with me?"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "coronavirus",
+        "certainty": "provisional",
+        "evidence": "test since there is a risk for coronavirus"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 192,
+      "sha256": "0e5bf74acc04d7bb4407b88af8f03b2231b83a8dbcedfd0ca192ee2d4ced771d"
+    },
+    "description": "what causes tingling in forearms/legs after having steroid injection for pneumonia?",
+    "utterances": [
+      "patient: i went to the doctor today and found out that i have pneumonia. i got a steroid injection and breathing treatment in the office and was sent home with levaquin, albuterol, and cough medicine. my forearms and legs are very tingly and almost numb and heavy feeling. is this from the steroid injection? i am 23 years old and i have juvenile rheumatoid arthritis so i am also taking humira, methotrexate, plaquenil, and folic acid for the ra. is this a side effect or a drug reaction or nothing to be concerned about?",
+      "doctor: tingling in extremities may be a sign of peripheral neuropathy, wich is most of the cases caused by inflammatory injury to the nerves. anti-tnf drugs, such as humira, have been reported to be associated to this kind of injury, that can be potentialized when associated to steroids. you should visit your attending rheumathologist for physical evaluation and apropriate management."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "peripheral neuropathy",
+        "certainty": "provisional",
+        "evidence": "tingling in extremities may be a sign of peripheral neuropathy"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 194,
+      "sha256": "1404cc2cd74e7ae652b6c94f07d54f81cc3604ebb3565c0b813aaa7575b0a066"
+    },
+    "description": "what are the risks of smoking while treating pneumonia?",
+    "utterances": [
+      "patient: hi, i got diagnosed with pneumonia yesterday and have been sent home with antibiotics (amoxicillin and doxycycline) i was just wondering what the risk factors would be if i were to have at least one cigarette? i know it wouldn’t be good for the healing process(will probably slow it down) but is there any serious risk with smoking (ciggerattes or maybe even weed mixed with tobacco?) my doctor at the hospital that diagnosed me knew i smoked and also knew i smoked at least one or two bongs and he said nothing when i was leaving about trying not to smoke etc etc?",
+      "doctor: hello,the tobacco with or without seeds will contribute to bronchi spasm effects and hamper the pneumonia condition to a great extent. in our clinic, we strongly recommend quitting all tobacco items till complete recovery.hope i have answered your query. let me know if i can assist you further.regards, dr. bhagyesh v. patel"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "pneumonia",
+        "certainty": "confirmed",
+        "evidence": "hamper the pneumonia condition to a great extent"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 195,
+      "sha256": "179730b857b1bca6aa07e128de8db947dac554df0ec2bf4844ff47fd85f894f7"
+    },
+    "description": "good day. i have a body temperature of 38—39 degrees celsius accompanied by headaches and a cough. i've been tested for covid, but it's negative. i have trouble urinating and have a pain in my penis as well as my anus. thank you?",
+    "utterances": [
+      "patient: good day. i have a body temperature of 38—39 degrees celsius accompanied by headaches and a cough. i've been tested for covid, but it's negative. i have trouble urinating and have a pain in my penis as well as my anus. thank you?",
+      "doctor: fever. hiit sounds like a viral infection with temp , headache and cough.the urine and pain down there does not sounds related, but if it is, it can be a bacterial infection, for which you need antibiotics.are you taking enough fluids?what meds have you taken so far?."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "viral infection",
+        "certainty": "provisional",
+        "evidence": "it sounds like a viral infection with temp , headache and cough"
+      },
+      {
+        "name": "bacterial infection",
+        "certainty": "provisional",
+        "evidence": "it can be a bacterial infection"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 198,
+      "sha256": "4fa8a2e0c3226b2c2d759a2e97b899c8791b60f90edccdf1bb0c4fcc2086729a"
+    },
+    "description": "hi, i have severe headache, a sore throat (feels like swollen sore, not raw sore but it doesnt hurt if i press my lymp nodes in neck except near my left ear), body hurts, coughing, body temp 32.5, head is hot. light headed. just normal flu?",
+    "utterances": [
+      "patient: hi, i have severe headache, a sore throat (feels like swollen sore, not raw sore but it doesnt hurt if i press my lymp nodes in neck except near my left ear), body hurts, coughing, body temp 32.5, head is hot. light headed. just normal flu?",
+      "doctor: flu. i think you a probably right. body aches not as common with covid. if no significant sob follow the following: https://www.healthtap.com/blog/covid-19-care-guidelines/self-quarantine-guide talk to your provider flu test may help, but management typically best conservative. certainly if worseing sob be seen. remeber at 29 risk for severe infection is low either way. ."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "flu",
+        "certainty": "confirmed",
+        "evidence": "flu. i think you a probably right."
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 201,
+      "sha256": "1994ed726edaf457b518e9de26f051b636a41133ce23789ac04fc79dce1b15b5"
+    },
+    "description": "if you have wolf parkinson white syndrome does this make you more of a risk with covid 19?",
+    "utterances": [
+      "patient: if you have wolf parkinson white syndrome does this make you more of a risk with covid 19?",
+      "doctor: avoid cold/ice... though untreated wpw syndrome can be regarded as pre-existing chronic condition, there is no current evidence that one is more susceptible to covid-19, an infectious disease mostly transmitted through respiratory fluid droplets. best to follow who/cdc guideline on hygiene. plus avoid cold/ice drinks/foods. drink warm water/tea, even chicken soup. aleve or ibuprofen can be helpful for fever/soreness."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "wpw syndrome",
+        "certainty": "confirmed",
+        "evidence": "untreated wpw syndrome can be regarded as pre-existing chronic condition"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 202,
+      "sha256": "f60a37f5fda41840f5d82d331fb7010d4e552ab722297e4632ef3b62202b1deb"
+    },
+    "description": "what causes coughing up dark phlegm while treating pneumonia?",
+    "utterances": [
+      "patient: i had a colonoscopy last wednesday and aspirated. ended up in the emergency department and diagnosed with aspiration pneumonia.i am on antibiotics now. i am able to breathe better than yesterday but i am still coughing a lot, at times producing dark phlegm. and i am very tired. how long should i expect this to last? thank you! dani b",
+      "doctor: hello,for your pneumonia, complete the course of antibiotic. sputum culture and examination done if needed to do further work up.if your cough is not expelled properly, then cough expectorant syrup containing ambroxol plus terbutaline drug can be prescribed. kindly attach your reports for giving more comment.hope i have answered your query. let me know if i can assist you further.regards,dr. parth goswami"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "pneumonia",
+        "certainty": "confirmed",
+        "evidence": "for your pneumonia, complete the course of antibiotic"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 204,
+      "sha256": "f9d4ea72acad494ff07c7d7969e7e49ab6cbfac96670bb814ad490068fd39548"
+    },
+    "description": "what are the symptoms of recovery from pneumonia?",
+    "utterances": [
+      "patient: i am a 14 year old female that was recently diagnosed with a slight bit of pneumonia, i took the antibiotics that i was supposed to take: once a day for 6 days, i completed it. but i want to know if i'm know cured, it's been a week or two since i finish the tablet treatment, how can i tell that i'm cured?",
+      "doctor: thanks for your question on healthcare magic.i can understand your concern. if you are not having fever, cough or chest pain after completing antibiotics, you are probably cured from pneumonia. you are should also get done chest x ray. if recent chest x ray is showing normal results or resolving infiltration then you are cured from pneumonia. hope i have solved your query. i will be happy to help you further. wish you good health. thanks."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "pneumonia",
+        "certainty": "provisional",
+        "evidence": "if you are not having fever, cough or chest pain after completing antibiotics, you are probably cured from pneumonia"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 205,
+      "sha256": "79a48d1ca343f1ff7dff98eea689e84d02d462bbe17fe272f1d35b84bcd42c8a"
+    },
+    "description": "hi, i have a bad cough, sinus congestion and body aches but no fever. should i consult with a doctor regarding the current covid19 pandemic?",
+    "utterances": [
+      "patient: hi, i have a bad cough, sinus congestion and body aches but no fever. should i consult with a doctor regarding the current covid19 pandemic?",
+      "doctor: in brief: most likely not c most likely sinusitis or seasonal allergy. try to access a telelphonic or virtual consult to discuss thoroughly with someone. for now stay home stay safe. treat yourself and all in your family as if they have covid for now =it's safer. would you like to video or text chat with me?"
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "sinusitis",
+        "certainty": "provisional",
+        "evidence": "most likely sinusitis"
+      },
+      {
+        "name": "seasonal allergy",
+        "certainty": "provisional",
+        "evidence": "most likely sinusitis or seasonal allergy"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  },
+  {
+    "source": {
+      "file": "english-train.json",
+      "index": 216,
+      "sha256": "6c05cac0ef43906e531bce6558ef5eb15b6f27011e038266f5c699dcac18d152"
+    },
+    "description": "i‘ve had a dry cough for a couple weeks now, post nasal drip, runny nose, sore throat every now and then, i think i’m starting to develop a fever and i’m getting lightheaded/feeling faint when i stand and walk & slight body aches. do i have covid19?",
+    "utterances": [
+      "patient: i‘ve had a dry cough for a couple weeks now, post nasal drip, runny nose, sore throat every now and then, i think i’m starting to develop a fever and i’m getting lightheaded/feeling faint when i stand and walk & slight body aches. do i have covid19?",
+      "doctor: hard to guess. you have some of the symptoms of cold , flu and covid19 . also you appear to be dehydrated. but you are young and no mention of any underlying medical condition. so, i think you are not vulnerable. drink at least 6 cups of water a day. probably need self isolation for 2 weeks and to be tested in mean time for covid19 if you develop breathing problem. contact to your doctor for a guidance."
+    ],
+    "documented_diagnoses": [
+      {
+        "name": "dehydrated",
+        "certainty": "confirmed",
+        "evidence": "also you appear to be dehydrated"
+      }
+    ],
+    "extraction": {
+      "model": "gemini-2.5-flash",
+      "prompt_version": "doctor-documented-diagnosis-v1",
+      "review_status": "model_extracted_unreviewed"
+    }
+  }
+]

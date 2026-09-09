@@ -27,7 +27,7 @@ services:
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgresDialect
       HAPI_FHIR_IG_RUNTIME_UPLOAD_ENABLED: "true"
     ports:
-      - "127.0.0.1:${FHIR_PORT:-8080}:8080"
+      - "127.0.0.1:${FHIR_PORT:-8081}:8080"
     restart: unless-stopped
 
   twcore-installer:

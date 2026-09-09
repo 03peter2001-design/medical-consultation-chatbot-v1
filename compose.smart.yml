@@ -8,6 +8,11 @@ services:
     environment:
       CONSULTATION_DB_PATH: /app/data/consultations.db
       FHIR_BASE_URL: http://hapi:8080/fhir
+      FHIR_WRITE_ENABLED: "true"
+      FHIR_WRITE_BASE_URL: http://hapi:8080/fhir
+      FHIR_PUBLIC_ISSUER: "http://127.0.0.1:${SMART_LAUNCHER_PORT:-8090}/v/r4/fhir"
+      FHIR_PATIENT_CONTEXT_INPUT_ENABLED: "true"
+      FHIR_LOCAL_DEVELOPMENT_AUTHOR: "true"
       HF_HUB_CACHE: /models/hub
       HF_HUB_OFFLINE: "1"
       HF_HUB_DISABLE_TELEMETRY: "1"

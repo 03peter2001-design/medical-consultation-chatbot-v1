@@ -3,9 +3,21 @@
 ## 版本關係與更新紀錄
 
 此目錄不是可獨立執行的服務；其中的 Nginx 設定由 `compose.smart.yml` 與
-`./scripts/start-smart.sh` 載入，因此隨 **SMART sandbox v1.0.0** 維護，版本與
-`smart-app` 相同。這是截至 2026-08-05 依 `devlog/` 回溯建立的文件基線，
+`./scripts/start-smart.sh` 載入，因此隨 **SMART sandbox v1.1.2** 維護，版本與
+`smart-app` 相同。這是截至 2026-08-28 依 `devlog/` 維護的文件基線，
 repository 目前沒有對應的 Git tag。
+
+### v1.1.2 (2026-08-28)
+
+- SMART FHIR request 使用 `Cache-Control: no-cache` 防止不同 OAuth launch state 共用
+  Patient response；gateway 的 CORS allow-list 現在明確允許 `Cache-Control` 與瀏覽器
+  可能附帶的 `Pragma`，避免 preflight 成功回 204 後仍被瀏覽器拒絕。
+- FHIR root proxy 對 HAPI pagination 的精確 `/fhir` base path 提供 compatibility alias，
+  避免 SMART public base 將 next link 解析成重複的 `/v/r4/fhir/fhir`。
+- Compose 傳給 Backend 的 `FHIR_PUBLIC_ISSUER` 現在跟隨 `SMART_LAUNCHER_PORT`，與瀏覽器
+  callback issuer 完全一致，同時仍維持單一 issuer 的 fail-closed 比對。
+- Origin allow-list 仍限制在帶 port 的 loopback HTTP origin，不允許 wildcard。靜態
+  regression test 位於 `tests/test_gateway_config.py`。
 
 ### v1.0.0（隨 SMART sandbox，截至 2026-08-05）
 

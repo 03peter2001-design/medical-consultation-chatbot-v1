@@ -5,13 +5,16 @@ import { getPainMapPreset } from '../data/bodyPainRegions.js'
 import { buildClinicalRecord } from '../services/clinicalRecord.js'
 import {
   formatEmrSummary,
+  parseEmrFields,
   splitStructuredNote,
 } from '../services/structuredNote.js'
 import BodyPainMap from './BodyPainMap.vue'
 import ClinicalEvidence from '../doctor/components/ClinicalEvidence.vue'
+import PhysicianSummary from './PhysicianSummary.vue'
 
 const props = defineProps({
   record: { type: Object, required: true },
+  canWriteFhir: { type: Boolean, default: false },
 })
 
 const clinical = computed(() => buildClinicalRecord(props.record))
@@ -30,6 +33,91 @@ const painLocationIds = computed(() =>
     )
     .filter(Boolean),
 )
+const patientData = computed(
+  () => props.record.patient_data || props.record.data || {},
+)
+const parsedEmrFields = computed(() =>
+  parseEmrFields(props.record.structured_note),
+)
+const physicianSummaryRows = computed(() => {
+  if (props.record.fhir_summary_sections?.length) {
+    return props.record.fhir_summary_sections.map((row) => ({
+      ...row,
+      source: '醫師確認 · 已儲存至 FHIR',
+      confirmed: true,
+    }))
+  }
+
+  const parsed = parsedEmrFields.value
+  const parsedSource = 'Gemini 彙整 · 待醫師確認'
+  const historyValue = clinical.value.historyFacts
+    .filter(
+      (fact) =>
+        !['past_meds', 'current_meds', 'allergy'].includes(fact.key),
+    )
+    .map((fact) => `${fact.label}：${fact.value}`)
+    .join('；')
+  const medicationValue = [
+    patientData.value.past_meds
+      ? `過去用藥：${patientData.value.past_meds}`
+      : '',
+    patientData.value.current_meds
+      ? `目前用藥：${patientData.value.current_meds}`
+      : '',
+  ]
+    .filter(Boolean)
+    .join('；')
+  const onset =
+    patientData.value.onset ||
+    [patientData.value.onset_num, patientData.value.onset_unit]
+      .filter(Boolean)
+      .join(' ')
+
+  return [
+    {
+      key: 'Chief Complaint',
+      label: '主訴',
+      value: parsed.cc || clinical.value.complaint,
+      source: parsed.cc ? parsedSource : '病人自述',
+    },
+    {
+      key: 'Present Illness',
+      label: '現病史',
+      value: parsed.pi || (onset ? `發作／持續時間：${onset}` : '現病史細節未提供'),
+      source: parsed.pi ? parsedSource : '結構化資料',
+    },
+    {
+      key: 'Past History',
+      label: '過去病史',
+      value: parsed.ph || historyValue || '尚無結構化過去病史',
+      source: parsed.ph ? parsedSource : '結構化資料',
+    },
+    {
+      key: 'Drug History',
+      label: '用藥史',
+      value: parsed.meds || medicationValue || '用藥史未提供',
+      source: parsed.meds ? parsedSource : '結構化資料',
+    },
+    {
+      key: 'Allergy History',
+      label: '過敏史',
+      value: parsed.allergy || patientData.value.allergy || '過敏史未提供',
+      source: parsed.allergy ? parsedSource : '結構化資料',
+    },
+    {
+      key: 'Personal History',
+      label: '個人史',
+      value: parsed.personal || patientData.value.personal_history || '個人史未提供',
+      source: parsed.personal ? parsedSource : '結構化資料',
+    },
+    {
+      key: 'Family History',
+      label: '家族病史',
+      value: parsed.family || patientData.value.family_history || '家族病史未提供',
+      source: parsed.family ? parsedSource : '結構化資料',
+    },
+  ]
+})
 </script>
 
 <template>
@@ -220,6 +308,14 @@ const painLocationIds = computed(() =>
         <p>{{ record.report || '尚未產生醫師速覽摘要' }}</p>
       </details>
     </div>
+
+    <PhysicianSummary
+      class="physician-summary"
+      :rows="physicianSummaryRows"
+      :report="record.report"
+      :record="record"
+      :can-write-fhir="canWriteFhir"
+    />
   </article>
 </template>
 
@@ -629,6 +725,10 @@ const painLocationIds = computed(() =>
   margin: 14px 18px 18px;
 }
 
+.physician-summary {
+  margin: 0 18px 18px;
+}
+
 .narrative-panel {
   border: 1px solid #d6e0e9;
   border-radius: 8px;
@@ -742,7 +842,8 @@ const painLocationIds = computed(() =>
 
   .red-flag-banner,
   .snapshot-grid,
-  .narrative-grid {
+  .narrative-grid,
+  .physician-summary {
     margin-right: 12px;
     margin-left: 12px;
   }

@@ -90,6 +90,12 @@ export function consultationDetailPath(consultationId) {
   return apiPath(`/doctor/consultations/${encodeURIComponent(consultationId)}`)
 }
 
+export function fhirCompositionPath(consultationId) {
+  return apiPath(
+    `/doctor/consultations/${encodeURIComponent(consultationId)}/fhir-composition`,
+  )
+}
+
 export function consultationLookupFields(value) {
   const reference = String(value ?? '').trim()
   if (/^(?:\d{3}|\d{5})$/.test(reference)) return { registration_number: reference }
@@ -128,6 +134,11 @@ export const api = {
   listConsultations: (options) => request(consultationListPath(options)),
   deleteConsultation: (consultationId) =>
     request(consultationDetailPath(consultationId), { method: 'DELETE' }),
+  createFhirComposition: (consultationId, payload) =>
+    request(
+      fhirCompositionPath(consultationId),
+      jsonOptions('POST', payload),
+    ),
   loadPatient: (consultationId, sessionId) =>
     request(
       apiPath('/doctor/load_patient'),

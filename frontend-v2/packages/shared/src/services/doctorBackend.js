@@ -8,6 +8,7 @@ export {
   consultationLookupFields,
   diseaseProfileUpdatePath,
   factLabelUpdatePath,
+  fhirCompositionPath,
   formatApiErrorDetail,
   resolveBackendUrl,
   ruleAssistantPath,

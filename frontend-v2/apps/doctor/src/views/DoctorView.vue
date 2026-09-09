@@ -76,6 +76,9 @@ const hasMoreCases = computed(
 const canCreateInvitation = computed(
   () => doctorSession.canCreateInvitation(),
 )
+const canWriteFhir = computed(
+  () => doctorSession.hasScope('consultation:fhir-write'),
+)
 const hasEncounter = computed(() => doctorSession.hasEncounter())
 const encounterRegSno = computed(
   () => doctorSession.context?.encounter?.reg_sno ?? doctorSession.context?.encounter?.regSno ?? '',
@@ -553,6 +556,7 @@ onBeforeUnmount(() => {
           <PatientRecordCard
             v-else-if="item.kind === 'patient'"
             :record="item.record"
+            :can-write-fhir="canWriteFhir"
           />
           <StructuredReport
             v-else-if="item.kind === 'structured'"

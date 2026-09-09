@@ -2,10 +2,24 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 
 import {
+  PATIENT_IDENTIFIER_TYPES,
+  SYNTHEA_DEFAULT_ID_SYSTEM,
+  buildFhirPatientContext,
   buildPatientPrefill,
+  findPatientBySyntheaDefaultId,
   isDirectFhirEnabled,
+  isPatientIdentifierFormat,
+  normalizePatientIdentifier,
   resolveFhirBaseUrl,
 } from '../packages/shared/src/services/fhir.js'
+
+function jsonResponse(payload, ok = true, status = 200) {
+  return {
+    ok,
+    status,
+    json: async () => payload,
+  }
+}
 
 test('shared FHIR service ignores production and unallowlisted query overrides', () => {
   const location = {
@@ -84,4 +98,50 @@ test('shared FHIR history keeps Dementia but excludes an approved current sympto
 
   assert.match(prefill.chronic, /Dementia/)
   assert.doesNotMatch(prefill.chronic, /Fever/)
+})
+
+test('shared FHIR service validates and queries Synthea identifiers', async () => {
+  const defaultId = 'c85baeef-9dbd-d06f-791d-5e1e3f24a8bf'
+  let request
+  const patient = await findPatientBySyntheaDefaultId(defaultId.toUpperCase(), {
+    baseUrl: 'http://localhost:8081/fhir',
+    fetchImpl: async (url, options) => {
+      request = { url, options }
+      return jsonResponse({
+        resourceType: 'Bundle',
+        entry: [{ resource: { resourceType: 'Patient', id: 'synthea-patient' } }],
+      })
+    },
+  })
+
+  assert.equal(patient.id, 'synthea-patient')
+  assert.equal(
+    request.options.body.get('identifier'),
+    `${SYNTHEA_DEFAULT_ID_SYSTEM}|${defaultId}`,
+  )
+  assert.equal(
+    normalizePatientIdentifier(
+      PATIENT_IDENTIFIER_TYPES.SYNTHEA_DEFAULT_ID,
+      defaultId.toUpperCase(),
+    ),
+    defaultId,
+  )
+  assert.equal(
+    isPatientIdentifierFormat(PATIENT_IDENTIFIER_TYPES.SYNTHEA_DEFAULT_ID, defaultId),
+    true,
+  )
+})
+
+test('shared FHIR service builds only the narrow patient context', () => {
+  assert.deepEqual(
+    buildFhirPatientContext({
+      patient: { id: 'patient-1' },
+      smart: { patientId: 'patient-1', encounterId: 'encounter-1' },
+    }),
+    {
+      patient_id: 'patient-1',
+      encounter_id: 'encounter-1',
+      source: 'smart',
+    },
+  )
 })

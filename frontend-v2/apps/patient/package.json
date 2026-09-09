@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@medical/shared": "2.0.0",
+    "@zxing/browser": "0.1.5",
+    "@zxing/library": "0.21.3",
     "vue": "3.5.40"
   }
 }

@@ -1,8 +1,10 @@
 const SMART_PENDING_KEY = 'chest-pain-ai-doctor.smart.pending'
+export const SMART_EHR_READ_SCOPE = 'launch patient/*.read'
+export const SMART_DOCTOR_QR_MODE = 'doctor-qr'
 
 let libraryPromise = null
-let cachedClient = null
 let cachedPatientRecord = null
+let cachedLaunchState = ''
 
 function runtimeWindow() {
   return typeof window === 'undefined' ? null : window
@@ -37,6 +39,94 @@ export function markSmartLaunchPending(
   }
 }
 
+export function smartCallbackUrl(
+  locationLike = runtimeWindow()?.location,
+  basePath = import.meta.env?.BASE_URL || '/',
+  launchMode = '',
+) {
+  if (!locationLike?.origin) {
+    throw new Error('無法判斷 SMART App callback origin。')
+  }
+  const callback = new URL(basePath || '/', locationLike.origin)
+  callback.searchParams.set('smart', '1')
+  if (launchMode) callback.searchParams.set('launch_mode', launchMode)
+  callback.hash = ''
+  return callback.toString()
+}
+
+export function isSmartDoctorQrCallback(
+  locationLike = runtimeWindow()?.location,
+) {
+  const params = new URLSearchParams(locationLike?.search || '')
+  return (
+    params.get('smart') === '1' &&
+    params.get('launch_mode') === SMART_DOCTOR_QR_MODE
+  )
+}
+
+export function smartEhrLaunchContext(
+  locationLike = runtimeWindow()?.location,
+) {
+  const params = new URLSearchParams(locationLike?.search || '')
+  const issuer = params.get('iss')?.trim() || ''
+  const launch = params.get('launch')?.trim() || ''
+  if (!issuer || !launch) {
+    throw new Error('缺少 SMART EHR Launch 所需的 iss 或 launch 參數。')
+  }
+
+  let issuerUrl
+  try {
+    issuerUrl = new URL(issuer)
+  } catch {
+    throw new Error('SMART EHR Launch 的 iss 不是有效 URL。')
+  }
+  if (
+    !['http:', 'https:'].includes(issuerUrl.protocol) ||
+    issuerUrl.username ||
+    issuerUrl.password
+  ) {
+    throw new Error('SMART EHR Launch 的 iss 必須是無帳密的 HTTP(S) URL。')
+  }
+
+  return {
+    issuer: issuerUrl.toString().replace(/\/$/, ''),
+    launch,
+  }
+}
+
+export async function authorizeSmartEhrLaunch({
+  fhirLibrary,
+  clientId,
+  locationLike = runtimeWindow()?.location,
+  storageLike = runtimeWindow()?.sessionStorage,
+  basePath = import.meta.env?.BASE_URL || '/',
+  callbackMode = '',
+} = {}) {
+  if (typeof fhirLibrary?.oauth2?.authorize !== 'function') {
+    throw new Error('SMART on FHIR client 未提供 OAuth authorize API。')
+  }
+  const normalizedClientId = String(clientId || '').trim()
+  if (!normalizedClientId) {
+    throw new Error('尚未設定 SMART client ID。')
+  }
+
+  const context = smartEhrLaunchContext(locationLike)
+  const redirectUri = smartCallbackUrl(locationLike, basePath, callbackMode)
+  markSmartLaunchPending(storageLike)
+  try {
+    return await fhirLibrary.oauth2.authorize({
+      clientId: normalizedClientId,
+      scope: SMART_EHR_READ_SCOPE,
+      redirectUri,
+      iss: context.issuer,
+      launch: context.launch,
+    })
+  } catch (error) {
+    markSmartLaunchPending(storageLike, false)
+    throw error
+  }
+}
+
 export function sanitizeSmartCallbackUrl(
   locationLike = runtimeWindow()?.location,
   historyLike = runtimeWindow()?.history,
@@ -63,7 +153,7 @@ export function sanitizeSmartCallbackUrl(
   const sanitized =
     `${locationLike.pathname || '/'}${query ? `?${query}` : ''}` +
     (locationLike.hash || '')
-  historyLike.replaceState({}, '', sanitized)
+  historyLike.replaceState(historyLike.state ?? {}, '', sanitized)
   return sanitized
 }
 
@@ -71,18 +161,23 @@ function hasReadyApi(candidate) {
   return typeof candidate?.oauth2?.ready === 'function'
 }
 
-export function ensureSmartClientLibrary({
+export async function ensureSmartClientLibrary({
   globalLike = runtimeWindow(),
   documentLike = runtimeWindow()?.document,
-  scriptUrl = '/vendor/fhir-client.js',
+  scriptUrl = `${import.meta.env?.BASE_URL || '/'}vendor/fhir-client.js`,
 } = {}) {
   if (hasReadyApi(globalLike?.FHIR)) {
-    return Promise.resolve(globalLike.FHIR)
+    return globalLike.FHIR
+  }
+  try {
+    const bundled = await import('fhirclient')
+    const candidate = bundled.default || bundled
+    if (hasReadyApi(candidate)) return candidate
+  } catch {
+    // Legacy SMART sandbox builds still provide the pinned browser bundle.
   }
   if (!documentLike?.createElement) {
-    return Promise.reject(
-      new Error('目前環境無法載入 SMART on FHIR client。'),
-    )
+    throw new Error('目前環境無法載入 SMART on FHIR client。')
   }
   if (libraryPromise) return libraryPromise
 
@@ -143,6 +238,23 @@ function resourcesFromBundle(bundle, patient) {
   return resources
 }
 
+function patientFromEverything(bundle, launchPatient) {
+  const bundlePatients = resourcesFromBundle(bundle).filter(
+    (resource) => resource.resourceType === 'Patient',
+  )
+  const matchingPatient = bundlePatients.find(
+    (resource) => resource.id === launchPatient.id,
+  )
+  if (matchingPatient) return matchingPatient
+  if (bundlePatients.length === 1) {
+    throw new Error(
+      `SMART Patient context 不一致：token 為 Patient/${launchPatient.id}，` +
+        `但 $everything 回傳 Patient/${bundlePatients[0].id}。`,
+    )
+  }
+  return launchPatient
+}
+
 export async function readSmartPatientRecord(client) {
   const patientId = client?.patient?.id
   if (!patientId) {
@@ -151,11 +263,31 @@ export async function readSmartPatientRecord(client) {
     )
   }
 
-  const patient = await client.patient.read()
+  const launchPatient = await client.patient.read({
+    cache: 'no-store',
+    headers: {
+      Accept: 'application/fhir+json',
+      'Cache-Control': 'no-cache',
+    },
+  })
+  if (launchPatient?.id !== patientId) {
+    throw new Error(
+      `SMART Patient context 不一致：token 為 Patient/${patientId}，` +
+        `但 Patient read 回傳 Patient/${launchPatient?.id || 'unknown'}。`,
+    )
+  }
   const bundle = await client.request(
-    `Patient/${encodeURIComponent(patientId)}/$everything?_count=100`,
+    {
+      url: `Patient/${encodeURIComponent(patientId)}/$everything?_count=100`,
+      cache: 'no-store',
+      headers: {
+        Accept: 'application/fhir+json',
+        'Cache-Control': 'no-cache',
+      },
+    },
     { flat: false, pageLimit: 10 },
   )
+  const patient = patientFromEverything(bundle, launchPatient)
   const token = tokenResponse(client)
   return {
     patient,
@@ -180,21 +312,30 @@ export async function initializeSmartPatient({
   locationLike = runtimeWindow()?.location,
   historyLike = runtimeWindow()?.history,
 } = {}) {
-  if (cachedPatientRecord) return cachedPatientRecord
+  const launchState = new URLSearchParams(locationLike?.search || '')
+    .get('state')
+    ?.trim()
+  if (
+    launchState &&
+    launchState === cachedLaunchState &&
+    cachedPatientRecord
+  ) {
+    return cachedPatientRecord
+  }
 
   const FHIR =
     fhirLibrary ||
     (await ensureSmartClientLibrary({ globalLike, documentLike }))
-  const client = cachedClient || (await FHIR.oauth2.ready())
-  cachedClient = client
+  const client = await FHIR.oauth2.ready()
   cachedPatientRecord = await readSmartPatientRecord(client)
+  cachedLaunchState = launchState || ''
   markSmartLaunchPending(storageLike, false)
   sanitizeSmartCallbackUrl(locationLike, historyLike)
   return cachedPatientRecord
 }
 
 export function resetSmartClientCache() {
-  cachedClient = null
   cachedPatientRecord = null
+  cachedLaunchState = ''
   libraryPromise = null
 }

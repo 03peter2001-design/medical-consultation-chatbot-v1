@@ -10,6 +10,7 @@
     "vue": "^3.5.0"
   },
   "dependencies": {
-    "@d-id/client-sdk": "1.2.10"
+    "@d-id/client-sdk": "1.2.10",
+    "fhirclient": "2.6.3"
   }
 }

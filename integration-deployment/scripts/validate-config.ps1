@@ -5,8 +5,12 @@ $repoRoot = (Resolve-Path (Join-Path $deployRoot '..')).Path
 $required = @(
     '.env.example', 'docker-compose.yml', 'nginx\default.conf.template',
     'iis\ai-api-rewrite.rules.xml', 'iis\doctor-static.web.config',
+    'iis\registration-invitation.js',
     'scripts\deploy-ubuntu.sh', 'scripts\backup-sqlite.sh',
-    'scripts\restore-sqlite.sh', 'scripts\deploy-doctor.ps1'
+    'scripts\restore-sqlite.sh', 'scripts\deploy-doctor.ps1',
+    'scripts\install-registration-invitation.ps1',
+    'scripts\set-ehis-ai-backend-url.ps1',
+    'scripts\deploy-local-ehis-registration.ps1'
 )
 foreach ($relative in $required) {
     if (-not (Test-Path -LiteralPath (Join-Path $deployRoot $relative))) {
@@ -19,8 +23,9 @@ foreach ($relative in $required) {
 
 $compose = Get-Content -LiteralPath (Join-Path $deployRoot 'docker-compose.yml') -Raw
 $nginx = Get-Content -LiteralPath (Join-Path $deployRoot 'nginx\default.conf.template') -Raw
+$doctorStaticConfig = Get-Content -LiteralPath (Join-Path $deployRoot 'iis\doctor-static.web.config') -Raw
 $exampleEnv = Get-Content -LiteralPath (Join-Path $deployRoot '.env.example') -Raw
-foreach ($needle in @('workers', '"1"', 'ENABLE_UNVERSIONED_ALIASES', 'CORS_ALLOWED_ORIGINS', 'internal: true', 'edge:', 'backend-egress', 'AVATAR_CSP_CONNECT_SRC_SUFFIX', '127.0.0.1:${DEVELOPMENT_API_PORT:-18000}:8000', '${PATIENT_HTTPS_PORT:-443}:443', '${UCC_API_PORT:-8443}:8443', 'https://127.0.0.1/api/v1/health', '${RAG_CHROMA_DB_PATH:-../backend/chroma_db}:/app/chroma_db', 'amir20/dozzle:v10.6.14', 'ghcr.io/tecnativa/docker-socket-proxy:v0.5.0', '127.0.0.1:${CONTAINER_MONITOR_PORT:-18080}:8080', '/var/run/docker.sock:/var/run/docker.sock:ro', 'DOZZLE_REMOTE_HOST: tcp://docker-api-proxy:2375|${COMPOSE_PROJECT_NAME:-medical-consultation}', 'DOZZLE_ENABLE_ACTIONS: "false"', 'DOZZLE_ENABLE_SHELL: "false"', 'DOZZLE_ENABLE_MCP: "false"', 'DOZZLE_NO_ANALYTICS: "true"', 'POST: "0"')) {
+foreach ($needle in @('workers', '"1"', 'ENABLE_UNVERSIONED_ALIASES', 'CORS_ALLOWED_ORIGINS', 'UCC_JWT_CLOCK_SKEW_SECONDS', 'internal: true', 'edge:', 'backend-egress', 'AVATAR_CSP_CONNECT_SRC_SUFFIX', '127.0.0.1:${DEVELOPMENT_API_PORT:-18000}:8000', '${PATIENT_HTTPS_PORT:-443}:443', '${UCC_API_PORT:-8443}:8443', 'https://127.0.0.1/api/v1/health', '${RAG_CHROMA_DB_PATH:-../backend/chroma_db}:/app/chroma_db', 'amir20/dozzle:v10.6.14', 'ghcr.io/tecnativa/docker-socket-proxy:v0.5.0', '127.0.0.1:${CONTAINER_MONITOR_PORT:-18080}:8080', '/var/run/docker.sock:/var/run/docker.sock:ro', 'DOZZLE_REMOTE_HOST: tcp://docker-api-proxy:2375|${COMPOSE_PROJECT_NAME:-medical-consultation}', 'DOZZLE_ENABLE_ACTIONS: "false"', 'DOZZLE_ENABLE_SHELL: "false"', 'DOZZLE_ENABLE_MCP: "false"', 'DOZZLE_NO_ANALYTICS: "true"', 'POST: "0"')) {
     if (-not $compose.Contains($needle)) { throw "Compose invariant missing: $needle" }
 }
 $animationDefault = 'AVATAR_ANIMATION_ENABLED: ${AVATAR_ANIMATION_ENABLED:-true}'
@@ -30,8 +35,25 @@ if ([regex]::Matches($compose, [regex]::Escape($animationDefault)).Count -ne 2) 
 if ($compose.Contains('${RAG_CHROMA_DB_PATH:-../backend/chroma_db}:/app/chroma_db:ro')) {
     throw 'Chroma PersistentClient requires a writable SQLite working directory.'
 }
-foreach ($needle in @('frame-ancestors ''none''', 'client_max_body_size 12m', 'proxy_read_timeout 180s', 'allow ${UCC_SOURCE_CIDR}', '$request_method $uri', 'connect-src ''self''${AVATAR_CSP_CONNECT_SRC_SUFFIX}', 'script-src ''self''', 'listen 8000;', 'proxy_set_header X-Forwarded-For 127.0.0.1;', 'resolver 127.0.0.11', 'server backend:8000 resolve;')) {
+foreach ($needle in @('frame-ancestors ''none''', 'client_max_body_size 12m', 'proxy_read_timeout 180s', 'allow ${UCC_SOURCE_CIDR}', '$request_method $uri', 'connect-src ''self''${AVATAR_CSP_CONNECT_SRC_SUFFIX}', 'script-src ''self''', 'listen 8000;', 'proxy_set_header X-Forwarded-For 127.0.0.1;', 'resolver 127.0.0.11', 'server backend:8000 resolve;', 'add_header Cache-Control "no-store" always;', 'proxy_hide_header Cache-Control;')) {
     if (-not $nginx.Contains($needle)) { throw "Nginx invariant missing: $needle" }
+}
+if ([regex]::Matches($nginx, 'add_header Cache-Control "no-store" always;').Count -ne 3) {
+    throw 'Every Nginx API proxy must force no-store responses.'
+}
+$publicApiStart = $nginx.IndexOf('location /api/v1/')
+$publicApiEnd = $nginx.IndexOf("`n    }", $publicApiStart)
+if ($publicApiStart -lt 0 -or $publicApiEnd -lt 0) {
+    throw 'Public API proxy location could not be inspected.'
+}
+$publicApiLocation = $nginx.Substring($publicApiStart, $publicApiEnd - $publicApiStart)
+foreach ($needle in @('Strict-Transport-Security', 'X-Content-Type-Options', 'Referrer-Policy', 'Permissions-Policy', 'Content-Security-Policy')) {
+    if (-not $publicApiLocation.Contains($needle)) {
+        throw "Public API security header was lost after adding no-store: $needle"
+    }
+}
+foreach ($needle in @('cacheControlMode="DisableCache"', 'value="no-cache, no-store, must-revalidate"')) {
+    if (-not $doctorStaticConfig.Contains($needle)) { throw "Doctor static cache invariant missing: $needle" }
 }
 if ($nginx.Contains('proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;')) {
     throw 'Public proxy routes must overwrite untrusted X-Forwarded-For input.'
@@ -44,6 +66,25 @@ foreach ($blockedPublicRoute in @('location ^~ /api/v1/doctor/', 'location = /ap
 }
 if (-not $exampleEnv.Contains('UCC_JWT_AUDIENCE=medical-consultation-api')) {
     throw 'Deployment JWT audience no longer matches the eHIS AiConsult default.'
+}
+if (-not $exampleEnv.Contains('UCC_JWT_CLOCK_SKEW_SECONDS=30')) {
+    throw 'Deployment JWT clock-skew tolerance must stay explicit and bounded.'
+}
+$deployDoctor = Get-Content -LiteralPath (Join-Path $deployRoot 'scripts\deploy-doctor.ps1') -Raw
+foreach ($needle in @('assetVersion', 'assets/index-([A-Za-z0-9_-]+)', 'doctor-', "Join-Path `$backup 'Index.cshtml'", 'install-registration-invitation.ps1')) {
+    if (-not $deployDoctor.Contains($needle)) { throw "Doctor deploy cache-buster invariant missing: $needle" }
+}
+$registrationInstaller = Get-Content -LiteralPath (Join-Path $deployRoot 'scripts\install-registration-invitation.ps1') -Raw
+$registrationAsset = Get-Content -LiteralPath (Join-Path $deployRoot 'iis\registration-invitation.js') -Raw
+foreach ($needle in @('RegistrationInvitations', 'GetRegistrationEncounterAsync', 'RegisteredUserId', 'RegistrationInvitationStates', 'Outpatient", "B01', 'ValidateAntiForgeryToken', 'ehis:registration-succeeded')) {
+    if (-not $registrationInstaller.Contains($needle)) { throw "Registration invitation installer invariant missing: $needle" }
+}
+foreach ($needle in @('/AiConsult/RegistrationInvitations', 'RequestVerificationToken', 'credentials: "same-origin"', 'cache: "no-store"', 'QRCodeGenerator', 'noopener noreferrer')) {
+    if (-not $registrationAsset.Contains($needle)) { throw "Registration invitation browser invariant missing: $needle" }
+}
+$localEhisDeploy = Get-Content -LiteralPath (Join-Path $deployRoot 'scripts\deploy-local-ehis-registration.ps1') -Raw
+foreach ($needle in @('eHIS.dll', 'OP01.js', 'registration-invitation.js', 'appcmd.exe', 'Get-FileHash', '.deployment-backups', 'Remove-Item -LiteralPath')) {
+    if (-not $localEhisDeploy.Contains($needle)) { throw "Local eHIS registration deployment invariant missing: $needle" }
 }
 if (-not $exampleEnv.Contains('ALLOW_LOCAL_AUTH_BYPASS=false')) {
     throw 'Deployment defaults must keep local authentication bypass disabled.'

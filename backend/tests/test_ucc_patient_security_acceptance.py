@@ -495,6 +495,7 @@ class SchemaAndRouteAcceptanceTests(unittest.TestCase):
         source = (ROOT / "backend" / "app" / "factory.py").read_text(encoding="utf-8")
         self.assertIn('os.getenv("CORS_ALLOWED_ORIGINS", "")', source)
         self.assertNotIn('allow_origins=["*"]', source.replace(" ", ""))
+        self.assertIn('app.middleware("http")(prevent_api_response_caching)', source)
         env_example = (ROOT / "integration-deployment" / ".env.example").read_text(encoding="utf-8")
         self.assertIn("ENABLE_UNVERSIONED_ALIASES=false", env_example)
         self.assertIn("CORS_ALLOWED_ORIGINS=", env_example)
@@ -502,6 +503,11 @@ class SchemaAndRouteAcceptanceTests(unittest.TestCase):
             encoding="utf-8"
         )
         self.assertIn('ENABLE_UNVERSIONED_ALIASES: "false"', compose)
+        nginx = (ROOT / "integration-deployment" / "nginx" / "default.conf.template").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('add_header Cache-Control "no-store" always;', nginx)
+        self.assertIn("proxy_hide_header ETag;", nginx)
 
     def test_actual_ehis_invitation_json_shape_is_accepted_by_backend(self):
         # AiConsultPatientPrefill currently serializes these fields as JSON arrays.

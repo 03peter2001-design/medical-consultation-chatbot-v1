@@ -31,6 +31,12 @@ server {
         proxy_read_timeout ${AVATAR_UPSTREAM_TIMEOUT};
         proxy_request_buffering off;
         proxy_buffering off;
+        proxy_hide_header Cache-Control;
+        proxy_hide_header Pragma;
+        proxy_hide_header Expires;
+        proxy_hide_header ETag;
+        add_header Cache-Control "no-store" always;
+        add_header Pragma "no-cache" always;
     }
 
     location / {
@@ -115,6 +121,19 @@ server {
         proxy_send_timeout 180s;
         proxy_read_timeout 180s;
         proxy_request_buffering off;
+        proxy_hide_header Cache-Control;
+        proxy_hide_header Pragma;
+        proxy_hide_header Expires;
+        proxy_hide_header ETag;
+        add_header Cache-Control "no-store" always;
+        add_header Pragma "no-cache" always;
+        # Defining add_header at location scope disables inheritance, so retain
+        # every public-listener security header on API responses as well.
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+        add_header X-Content-Type-Options nosniff always;
+        add_header Referrer-Policy no-referrer always;
+        add_header Permissions-Policy "camera=(), geolocation=(), microphone=(self)" always;
+        add_header Content-Security-Policy "default-src 'self'; base-uri 'self'; connect-src 'self'${AVATAR_CSP_CONNECT_SRC_SUFFIX}; font-src 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data: blob:; media-src 'self' blob:; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'" always;
     }
 
     location / {
@@ -150,6 +169,12 @@ server {
         proxy_send_timeout 180s;
         proxy_read_timeout 180s;
         proxy_request_buffering off;
+        proxy_hide_header Cache-Control;
+        proxy_hide_header Pragma;
+        proxy_hide_header Expires;
+        proxy_hide_header ETag;
+        add_header Cache-Control "no-store" always;
+        add_header Pragma "no-cache" always;
     }
 
     location / {

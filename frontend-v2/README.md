@@ -15,6 +15,13 @@ their own versions or revisions.
 
 ### Doctor app
 
+#### v2.1.1 (2026-09-09)
+
+- Doctor API request 與 401 refresh retry 一律使用瀏覽器 `no-store` cache mode，避免首次
+  UCC 驗證的暫時性錯誤被同一病例清單 URL 重用；refresh 後仍以新的 Bearer token 重試。
+- 回歸測試驗證初次 401、token refresh、第二次請求 header 與兩次 no-store 行為；Patient
+  app 不引用這個 doctor API client，因此 Patient 版本維持 v2.1.0。
+
 #### v2.1.0 (2026-08-09)
 
 - Preserved readable route and field labels when rendering candidate or historical

@@ -5,7 +5,7 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 
 ## 服務版本
 
-目前版本：**v0.8.1（2026-08-18）**。
+目前版本：**v0.8.2（2026-09-09）**。
 
 本次因主動撤除既有 AMIE／語意標籤能力並回到較小的實驗性功能面，版本線依專案
 決策由 0 重新編碼。下方 `v1.x` 條目保留為舊能力線的歷史紀錄，不表示 `v0.3.0`
@@ -22,6 +22,19 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 - RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
 - Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
   revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v0.8.2 (2026-09-09)
+
+- UCC JWT 的 `iat`、`nbf` 與 `exp` 驗證新增預設 30 秒、最多 300 秒的受限
+  clock-skew 容忍，避免 eHIS 與
+  Backend 主機只有數秒時差時，剛簽發 token 因未來 `iat` 被短暫拒絕；無效或超界設定
+  會以 503 fail closed，簽章、issuer、audience、scope 與必填 claim 驗證維持不變。
+- UCC principal 改由 request-scoped async dependency 安裝及清除，確保同步 doctor route
+  經 threadpool 執行時仍能取得已驗證身分，不再於有效 Bearer token 後誤回 401。
+- 所有 API 成功與錯誤回應統一加入 `Cache-Control: no-store` 與 `Pragma: no-cache`，避免
+  瀏覽器或 proxy 重用暫時性 401 或含病例資料的回應。
+- 回歸測試涵蓋容許／拒絕的時差邊界、無效設定、同步 route 的 principal 傳遞與
+  200／401 cache headers；不變更病患資料、臨床規則、資料庫或公開 API schema。
 
 ### v0.8.1 (2026-08-18)
 
@@ -459,6 +472,7 @@ Groq Key 可由 [Groq Console](https://console.groq.com/keys) 申請。
 | `AVATAR_ANIMATION_ENABLED=true` | 預設使用 MuseTalk；設為 `false` 時請 Avatar service 產生靜態醫師圖 MP4，只需載入 CosyVoice |
 | `AVATAR_TIMEOUT_SECONDS` | 首次載入與影片生成逾時，整合部署預設 600 秒 |
 | `ALLOW_LOCAL_AUTH_BYPASS=true` | 只在 loopback 開發時略過病患 session 與 UCC Bearer；預設關閉 |
+| `UCC_JWT_CLOCK_SKEW_SECONDS` | eHIS／Backend JWT 驗證時差容忍秒數，預設 30、範圍 0–300；無效值會 fail closed |
 | `CONSULTATION_DB_PATH` | SQLite 路徑；相對路徑以 `backend/` 為基準 |
 | `SAFETY_RULE_ADMIN_TOKEN` | 啟用規則中心編輯；未設定時維持唯讀 |
 | `FHIR_BASE_URL` | HAPI FHIR terminology server URL |

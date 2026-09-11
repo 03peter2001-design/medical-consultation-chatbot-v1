@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.errors import install_error_handlers
+from app.response_cache import prevent_api_response_caching
 from app.routes.doctor import router as doctor_router
 from app.routes.invitations import router as invitation_router
 from app.routes.patient import router as patient_router
@@ -61,6 +62,9 @@ def create_app() -> FastAPI:
                 "X-Avatar-Cache",
             ],
         )
+
+    app.middleware("http")(prevent_api_response_caching)
+
     app.include_router(system_router, prefix=API_V1_PREFIX)
     app.include_router(patient_router, prefix=API_V1_PREFIX)
     app.include_router(doctor_router, prefix=API_V1_PREFIX)

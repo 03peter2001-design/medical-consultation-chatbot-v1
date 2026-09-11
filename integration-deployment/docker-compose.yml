@@ -10,6 +10,7 @@ services:
     environment:
       CONSULTATION_DB_PATH: /var/lib/medical-consultation/consultations.db
       UCC_JWT_PUBLIC_KEY_PATH: /run/secrets/ucc-jwt-public.pem
+      UCC_JWT_CLOCK_SKEW_SECONDS: ${UCC_JWT_CLOCK_SKEW_SECONDS:-30}
       ENABLE_UNVERSIONED_ALIASES: "false"
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-}
       HF_HUB_CACHE: /models/hub

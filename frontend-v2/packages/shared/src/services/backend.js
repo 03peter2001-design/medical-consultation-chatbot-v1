@@ -52,6 +52,9 @@ async function request(path, options = {}, retry = true) {
     ...options,
     headers,
     credentials: 'include',
+    // Doctor responses may contain patient data or a transient authentication
+    // failure. Neither is safe to reuse from a browser or intermediary cache.
+    cache: 'no-store',
   })
 
   if (response.status === 401 && retry && authProvider?.refresh) {

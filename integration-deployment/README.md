@@ -6,10 +6,36 @@ explicitly runs the scripts.
 
 ## Service version
 
-目前版本為 **integration deployment bundle v1.5.2（2026-08-17）**。
+目前版本為 **integration deployment bundle v1.6.0（2026-09-11）**。
 這是依 `devlog/` 回溯整理的部署文件版本，用來標示安全整合藍圖、雙前端與
 GPU／Avatar 部署能力的共同基線；repository 目前沒有與此版本對應的 Git tag，
 也不表示任何院所環境已完成正式上線驗收。
+
+### v1.6.0 (2026-09-11)
+
+- B01 掛號成功後會以資料庫掛號流水號 `regSno` 呼叫獨立的
+  `AiConsult/RegistrationInvitations`，並直接在掛號介面以 eHIS 既有的本機
+  Syncfusion QR renderer 顯示患者預問診 QR Code；邀請失敗不會回滾已完成的掛號，
+  且可在原畫面重試。
+- 掛號邀請端點保留 antiforgery、同院所與稽核邊界，只允許具有 B01 選單權限且
+  `registered_user_id` 與登入帳號相同的建立者，並僅接受當日未報到、候診或看診中的
+  掛號；原醫師／代診邀請端點及其 `0/1` 狀態限制不變。
+- 新增可重複執行、先備份且遇到未知 eHIS source anchor 會拒絕部分安裝的整合安裝器，
+  以及只修改 `AiConsult:BackendBaseUrl` 的安全設定工具，避免伺服器端邀請誤送至
+  patient SPA 的 443 listener。
+- 驗證涵蓋 `regSno`／antiforgery／no-store request contract、HTTPS patient URL、
+  403／404／502 非破壞性錯誤狀態、B01 授權 source contract 與 eHIS .NET build。
+
+### v1.5.3 (2026-09-09)
+
+- 明確設定 UCC JWT clock-skew 容忍預設 30 秒，Backend 只接受 0–300 秒，避免 eHIS 與
+  Ubuntu 主機的正常小幅時差造成剛簽發 token 暫時 401；不放寬簽章、issuer、audience、
+  scope 或機構隔離。
+- Nginx 三個 API proxy 入口會移除 upstream cache metadata，再固定回傳 `no-store`；IIS
+  doctor 靜態設定亦禁止沿用舊 SPA shell，避免暫時性 401 或病例回應被快取。
+- Doctor 部署腳本從 Vite entry hash 更新 eHIS `AiConsult/Index.cshtml` 的 iframe
+  `assetVersion`，讓一般重新整理也能取得新 bundle；腳本仍不 publish 或 restart IIS。
+- 靜態部署驗證涵蓋 clock-skew、Nginx／IIS no-cache 與 iframe cache-buster invariants。
 
 ### v1.5.2 (2026-08-17)
 
@@ -409,9 +435,15 @@ On the development/build Windows host, build and copy to an eHIS *project*:
   -EhisProjectRoot 'D:\ehis\eHIS'
 ```
 
-The script builds with `VITE_BACKEND_BASE_URL=/ai-api`, backs up an existing
-`wwwroot\ai-consult`, then installs the build plus the static CSP. It does not
-publish or restart eHIS. The iframe URL remains:
+The script builds with `VITE_BACKEND_BASE_URL=/ai-api`, updates the eHIS iframe
+`assetVersion` from the generated Vite entry hash, backs up an existing
+`wwwroot\ai-consult` and the changed `AiConsult/Index.cshtml`, then installs the
+build plus the static CSP and no-cache policy. It also invokes the idempotent B01
+registration-invitation installer, which backs up and patches the required eHIS
+controller, encounter service, model, view, and registration success hook before
+copying the local QR browser asset. Unknown source anchors fail closed before any
+source file is written. Rebuild and publish eHIS after these updates; the script
+itself does not publish or restart eHIS. The iframe URL remains:
 
 ```text
 /ai-consult/index.html?regSno=<current-registration>#/doctor
@@ -440,11 +472,52 @@ JSON file. The audience and issuer must exactly match Ubuntu `.env`:
 }
 ```
 
+For an existing deployed eHIS configuration, update only the private backend URL
+with the guarded helper (it creates a timestamped backup and never prints other
+configuration values):
+
+```powershell
+.\integration-deployment\scripts\set-ehis-ai-backend-url.ps1 `
+  -ConfigPath 'C:\Deploy\eHIS\appsettings.Local.json' `
+  -BackendBaseUrl 'https://ai-api.internal.example:8443/'
+```
+
+The B01 QR flow uses a separate authorization path from the doctor dashboard.
+Only the signed-in B01 user who created the same-day registration may issue its
+invitation, including `NotCheckIn` state 5. The existing doctor invitation still
+requires the assigned/substitute doctor and current state 0 or 1. Neither path
+places patient prefill data in the DOM or logs; the displayed QR contains the
+one-time patient invitation URL and must not be forwarded.
+
+After publishing eHIS to a separate staging directory and completing the normal
+change-window checks, an administrator may deploy only the B01 integration files
+with a backup-first, hash-verified app-pool switch:
+
+```powershell
+dotnet publish D:\ehis\eHIS\eHIS.csproj -c Release --no-restore `
+  -o "$env:TEMP\ehis-registration-qr"
+
+.\integration-deployment\scripts\deploy-local-ehis-registration.ps1 `
+  -StagingRoot "$env:TEMP\ehis-registration-qr" `
+  -DeployRoot 'C:\Deploy\eHIS' `
+  -AppPoolName 'eHIS-Pool'
+```
+
+The script validates both roots and all three staged files before stopping IIS,
+backs up existing targets, rolls back copied files on failure, and restarts the
+application pool in `finally`. This interrupts active eHIS requests; run it only
+during an explicitly approved maintenance window and do not treat it as a substitute
+for the organization's release procedure.
+
 The IIS application-pool identity needs read permission on that certificate's
 private key. Export only its SubjectPublicKeyInfo as `ucc-jwt-public.pem` for
 Ubuntu. Confirm the exported public key validates a token before enabling the
 invitation flow. `DevelopmentPrivateKeyPem` is for local testing only and must
 not be present in deployed configuration.
+
+Keep `UCC_JWT_CLOCK_SKEW_SECONDS=30` in Ubuntu `.env` unless infrastructure has a
+stricter measured requirement. Accepted values are 0–300 seconds; this tolerance
+is only for JWT time claims and is not a substitute for NTP synchronization.
 
 If an eHIS site-level CSP already exists, merge rather than duplicate policies.
 It must allow same-origin `frame-src 'self'` and the doctor iframe response must

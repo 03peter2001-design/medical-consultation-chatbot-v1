@@ -7,7 +7,7 @@ from contextvars import ContextVar
 from dataclasses import dataclass
 from ipaddress import ip_address
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, AsyncIterator, Callable
 
 import jwt
 from fastapi import Cookie, Depends, HTTPException, Request, status
@@ -98,6 +98,17 @@ def _public_key() -> str:
     raise HTTPException(status_code=503, detail="UCC JWT verification is not configured")
 
 
+def _jwt_clock_skew_seconds() -> int:
+    raw_value = os.getenv("UCC_JWT_CLOCK_SKEW_SECONDS", "30").strip()
+    try:
+        value = int(raw_value)
+    except ValueError as error:
+        raise HTTPException(status_code=503, detail="UCC JWT clock skew is invalid") from error
+    if not 0 <= value <= 300:
+        raise HTTPException(status_code=503, detail="UCC JWT clock skew is invalid")
+    return value
+
+
 def _claim_scopes(claims: dict[str, Any]) -> frozenset[str]:
     collected: set[str] = set()
     for raw in (claims.get("scope"), claims.get("scopes")):
@@ -131,6 +142,7 @@ def authenticate_ucc(
             algorithms=["RS256"],
             issuer=issuer,
             audience=audience,
+            leeway=_jwt_clock_skew_seconds(),
             options={"require": ["exp", "iat", "iss", "aud", "sub", "jti"]},
         )
     except InvalidTokenError as error:
@@ -150,12 +162,25 @@ def authenticate_ucc(
         claims=claims,
     )
     request.state.ucc_principal = principal
-    _ucc_principal_context.set(principal)
     return principal
 
 
+async def authenticate_ucc_request(
+    request: Request,
+    credentials: HTTPAuthorizationCredentials | None = Depends(_bearer),
+) -> AsyncIterator[UccPrincipal]:
+    """Keep the verified principal in the request context used by sync routes."""
+
+    principal = authenticate_ucc(request, credentials)
+    context_token = _ucc_principal_context.set(principal)
+    try:
+        yield principal
+    finally:
+        _ucc_principal_context.reset(context_token)
+
+
 def require_scopes(*required: str) -> Callable[..., UccPrincipal]:
-    def dependency(principal: UccPrincipal = Depends(authenticate_ucc)) -> UccPrincipal:
+    def dependency(principal: UccPrincipal = Depends(authenticate_ucc_request)) -> UccPrincipal:
         missing = set(required) - principal.scopes
         if missing:
             raise HTTPException(

@@ -43,17 +43,17 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 
 | 服務／可部署產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
 | --- | --- | --- | --- | --- |
-| Backend API（含 Breeze ASR） | `0.8.1` | 2026-08-18 | 忽略未經合格語言與臨床審查的本機台語問卷生成產物 | [backend/README.md](backend/README.md#服務版本) |
+| Backend API（含 Breeze ASR） | `0.8.2` | 2026-09-09 | 容許受限 JWT 時差、可靠傳遞 UCC principal，並禁止快取 API 回應 | [backend/README.md](backend/README.md#服務版本) |
 | 開發版 Vue frontend | `0.6.1` | 2026-08-18 | 六段式報告卡片與僅供 Vite 開發伺服器使用的 Vue DevTools | [frontend/README.md](frontend/README.md#服務版本) |
-| 正式部署 Doctor frontend | `2.1.0` | 2026-08-09 | 候選問卷路由與欄位標籤可讀化，保留歷史病例顯示能力 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
+| 正式部署 Doctor frontend | `2.1.1` | 2026-09-09 | Doctor API 與 401 token refresh retry 強制略過瀏覽器快取 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | 正式部署 Patient frontend | `2.1.0` | 2026-08-11 | 問診主畫面常駐醫師 Avatar、朗讀字幕與可恢復有聲播放的控制 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | Local Avatar service | `1.2.0` | 2026-08-11 | 新增可由 Backend 逐請求覆寫、完全跳過 MuseTalk 的靜態醫師 CosyVoice 模式 | [avatar-service/README.md](avatar-service/README.md#服務版本) |
 | SMART on FHIR sandbox app | `1.0.0` | 2026-08-05 | SMART OAuth launch、FHIR 預填、同源 API proxy、合成病人 seed 與本機驗證 | [smart-app/README.md](smart-app/README.md#服務版本) |
-| Integration deployment bundle | `1.5.2` | 2026-08-17 | 補充更新前 image／SQLite 快照、完整重建驗證與失敗回退流程 | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
+| Integration deployment bundle | `1.6.0` | 2026-09-11 | B01 掛號後直接產生受授權的患者預問診 QR，並修正 eHIS invitation gateway 埠設定流程 | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
 
 `frontend-v2/packages/shared` 是 doctor／patient 共用程式庫，不是獨立服務；
 `smart-deployment/` 是 SMART sandbox 的 proxy 設定，跟隨 SMART app
-`1.0.0` 基線維護。Doctor app 與 Patient app 目前皆為 `2.1.0`。
+`1.0.0` 基線維護。Doctor app 目前為 `2.1.1`，Patient app 維持 `2.1.0`。
 HAPI FHIR、PostgreSQL、TW Core 與 SNOMED installer 是外部或
 建置元件，使用各自上游版本；目前矩陣與更新說明見
 [FHIR／術語服務](backend/terminology/README.md#外部元件版本矩陣)。

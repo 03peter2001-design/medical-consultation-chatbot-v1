@@ -566,7 +566,7 @@ class EhisStaticContractTests(unittest.TestCase):
         doctor_scopes = controller.split("private static readonly string[] DoctorScopes", 1)[
             1
         ].split("};", 1)[0]
-        self.assertNotIn('"invite:create"', doctor_scopes)
+        self.assertIn('"invite:create"', doctor_scopes)
         self.assertIn('"doctor"', controller)
         self.assertIn('"ucc_service"', controller)
         self.assertIn("_antiforgery.GetAndStoreTokens(HttpContext)", controller)

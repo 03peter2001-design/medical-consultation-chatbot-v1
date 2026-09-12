@@ -125,6 +125,32 @@ class InvitationResponse(BaseModel):
     status: Literal["active"]
 
 
+InvitationStatus = Literal["active", "expired", "consumed", "completed", "revoked"]
+
+
+class ManagedInvitation(BaseModel):
+    invite_id: str
+    patient_sno: str
+    reg_sno: str
+    status: InvitationStatus
+    created_at: str
+    expires_at: str
+    consumed_at: str | None = None
+    consultation_id: str | None = None
+    replaced_by_invite_id: str | None = None
+    last_seen_at: str | None = None
+    session_expires_at: str | None = None
+
+
+class InvitationListResponse(BaseModel):
+    items: list[ManagedInvitation]
+    total: int
+
+
+class InvitationCancelResponse(BaseModel):
+    status: Literal["revoked"]
+
+
 class LauncherInvitationResponse(BaseModel):
     invite_id: str
     code: str

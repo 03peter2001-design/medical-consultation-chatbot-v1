@@ -143,6 +143,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/doctor/invitations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List institution invitation usage without bearer tokens */
+        get: operations["list_doctor_invitations_v1_doctor_invitations_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/doctor/invitations/{invite_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Revoke an invitation and all patient sessions */
+        post: operations["cancel_doctor_invitation_v1_doctor_invitations__invite_id__cancel_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/doctor/invitations/{invite_id}/reissue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Revoke old access and issue a fresh single-use invitation */
+        post: operations["reissue_doctor_invitation_v1_doctor_invitations__invite_id__reissue_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/doctor/launcher/invitations": {
         parameters: {
             query?: never;
@@ -818,6 +869,14 @@ export interface components {
             /** Stored Consultations */
             stored_consultations: number;
         };
+        /** InvitationCancelResponse */
+        InvitationCancelResponse: {
+            /**
+             * Status
+             * @constant
+             */
+            status: "revoked";
+        };
         /** InvitationCreateRequest */
         InvitationCreateRequest: {
             /** Institution Id */
@@ -842,6 +901,13 @@ export interface components {
              * @constant
              */
             status: "ok";
+        };
+        /** InvitationListResponse */
+        InvitationListResponse: {
+            /** Items */
+            items: components["schemas"]["ManagedInvitation"][];
+            /** Total */
+            total: number;
         };
         /**
          * InvitationPrefill
@@ -992,6 +1058,34 @@ export interface components {
             updated_at: string;
             /** Workflow Status */
             workflow_status: string;
+        };
+        /** ManagedInvitation */
+        ManagedInvitation: {
+            /** Consultation Id */
+            consultation_id?: string | null;
+            /** Consumed At */
+            consumed_at?: string | null;
+            /** Created At */
+            created_at: string;
+            /** Expires At */
+            expires_at: string;
+            /** Invite Id */
+            invite_id: string;
+            /** Last Seen At */
+            last_seen_at?: string | null;
+            /** Patient Sno */
+            patient_sno: string;
+            /** Reg Sno */
+            reg_sno: string;
+            /** Replaced By Invite Id */
+            replaced_by_invite_id?: string | null;
+            /** Session Expires At */
+            session_expires_at?: string | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "active" | "expired" | "consumed" | "completed" | "revoked";
         };
         /** PatientChatResponse */
         PatientChatResponse: {
@@ -1834,6 +1928,200 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description A required configured service is unavailable. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_doctor_invitations_v1_doctor_invitations_get: {
+        parameters: {
+            query?: {
+                status?: ("active" | "expired" | "consumed" | "completed" | "revoked") | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvitationListResponse"];
+                };
+            };
+            /** @description Authentication is required or has expired. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The caller is not authorized for this operation. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Request validation or domain validation failed. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    cancel_doctor_invitation_v1_doctor_invitations__invite_id__cancel_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                invite_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvitationCancelResponse"];
+                };
+            };
+            /** @description Authentication is required or has expired. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The caller is not authorized for this operation. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The requested consultation does not exist. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The submitted revision conflicts with the current revision. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reissue_doctor_invitation_v1_doctor_invitations__invite_id__reissue_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                invite_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvitationResponse"];
+                };
+            };
+            /** @description Authentication is required or has expired. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The caller is not authorized for this operation. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The requested consultation does not exist. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The submitted revision conflicts with the current revision. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
             /** @description A required configured service is unavailable. */

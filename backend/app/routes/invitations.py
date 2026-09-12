@@ -5,12 +5,15 @@ from __future__ import annotations
 import os
 from urllib.parse import quote
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 
 from app import runtime
 from app.contracts import (
+    InvitationCancelResponse,
     InvitationExchangeResponse,
+    InvitationListResponse,
     InvitationResponse,
+    InvitationStatus,
     LauncherInvitationResponse,
     PatientSessionResponse,
     error_responses,
@@ -27,7 +30,7 @@ from app.security import (
     require_patient_session,
     require_scopes,
 )
-from app.services.security_audit import audit_patient
+from app.services.security_audit import audit_patient, audit_ucc
 
 router = APIRouter(tags=["patient"])
 
@@ -43,6 +46,115 @@ def _secure_cookie() -> bool:
         "yes",
         "on",
     }
+
+
+def require_invitation_doctor(
+    principal: UccPrincipal = Depends(require_scopes("consultation:read")),
+) -> UccPrincipal:
+    if principal.claims.get("token_use") == "ucc_service":
+        raise HTTPException(status_code=403, detail="Doctor identity required")
+    return principal
+
+
+def require_invitation_manager(
+    principal: UccPrincipal = Depends(require_invitation_doctor),
+    _: UccPrincipal = Depends(require_scopes("invite:create")),
+) -> UccPrincipal:
+    return principal
+
+
+@router.get(
+    "/doctor/invitations",
+    response_model=InvitationListResponse,
+    responses=error_responses(401, 403, 422),
+    tags=["doctor"],
+    summary="List institution invitation usage without bearer tokens",
+)
+def list_doctor_invitations(
+    response: Response,
+    status: InvitationStatus | None = None,
+    limit: int = Query(default=50, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+    principal: UccPrincipal = Depends(require_invitation_doctor),
+):
+    response.headers["Cache-Control"] = "no-store"
+    result = runtime.consultation_repository.list_invitations(
+        institution_id=principal.institution_id,
+        status=status,
+        limit=limit,
+        offset=offset,
+    )
+    audit_ucc("doctor.invitation.list", "success", principal)
+    return result
+
+
+def _manage_invitation(invite_id: str, principal: UccPrincipal, *, reissue: bool):
+    try:
+        result = runtime.consultation_repository.manage_invitation(
+            institution_id=principal.institution_id,
+            invite_id=invite_id,
+            actor_sub=principal.subject,
+            reissue=reissue,
+        )
+    except ValueError as error:
+        audit_ucc(
+            "doctor.invitation.manage",
+            "denied",
+            principal,
+            resource_type="invitation",
+            resource_id=invite_id,
+        )
+        raise HTTPException(
+            status_code=409,
+            detail="Invitation is completed, already reissued, or conflicts with another invitation",
+        ) from error
+    if result is None:
+        audit_ucc(
+            "doctor.invitation.manage",
+            "denied",
+            principal,
+            resource_type="invitation",
+            resource_id=invite_id,
+        )
+        raise HTTPException(status_code=404, detail="Invitation not found")
+    return result
+
+
+@router.post(
+    "/doctor/invitations/{invite_id}/cancel",
+    response_model=InvitationCancelResponse,
+    responses=error_responses(401, 403, 404, 409),
+    tags=["doctor"],
+    summary="Revoke an invitation and all patient sessions",
+)
+def cancel_doctor_invitation(
+    invite_id: str,
+    response: Response,
+    principal: UccPrincipal = Depends(require_invitation_manager),
+):
+    response.headers["Cache-Control"] = "no-store"
+    return _manage_invitation(invite_id, principal, reissue=False)
+
+
+@router.post(
+    "/doctor/invitations/{invite_id}/reissue",
+    response_model=InvitationResponse,
+    responses=error_responses(401, 403, 404, 409, 503),
+    tags=["doctor"],
+    summary="Revoke old access and issue a fresh single-use invitation",
+)
+def reissue_doctor_invitation(
+    invite_id: str,
+    response: Response,
+    principal: UccPrincipal = Depends(require_invitation_manager),
+):
+    public_base = os.getenv("PATIENT_PUBLIC_BASE_URL", "").strip().rstrip("/")
+    if not public_base.startswith("https://"):
+        raise HTTPException(status_code=503, detail="HTTPS patient public URL is not configured")
+    result = _manage_invitation(invite_id, principal, reissue=True)
+    result["public_url"] = f"{public_base}/#token={quote(result.pop('token'))}"
+    response.headers["Cache-Control"] = "no-store"
+    return result
 
 
 def _canonical_reg_sno_claim(value) -> str | None:

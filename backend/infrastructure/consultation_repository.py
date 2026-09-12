@@ -21,7 +21,9 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-SCHEMA_VERSION = 11
+from infrastructure import invitation_management
+
+SCHEMA_VERSION = 12
 DEFAULT_CONSULTATION_TIMEZONE = "Asia/Taipei"
 BACKEND_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_DATABASE_PATH = BACKEND_DIR / "data" / "consultations.db"
@@ -382,7 +384,12 @@ class ConsultationRepository:
         invitation_columns = {
             row["name"] for row in connection.execute("PRAGMA table_info(invitations)").fetchall()
         }
-        for column in ("fhir_issuer", "fhir_patient_id", "fhir_encounter_id"):
+        for column in (
+            "fhir_issuer",
+            "fhir_patient_id",
+            "fhir_encounter_id",
+            "replaced_by_invite_id",
+        ):
             if column not in invitation_columns:
                 connection.execute(f"ALTER TABLE invitations ADD COLUMN {column} TEXT")
         connection.execute(
@@ -415,6 +422,13 @@ class ConsultationRepository:
             connection.execute("ALTER TABLE patient_sessions ADD COLUMN runtime_state_json TEXT")
         if "runtime_updated_at" not in patient_session_columns:
             connection.execute("ALTER TABLE patient_sessions ADD COLUMN runtime_updated_at TEXT")
+        connection.execute(
+            "CREATE INDEX IF NOT EXISTS idx_patient_sessions_invite ON patient_sessions (invite_id)"
+        )
+        connection.execute(
+            "CREATE INDEX IF NOT EXISTS idx_invitations_institution_created "
+            "ON invitations (institution_id, created_at DESC, invite_id DESC)"
+        )
         connection.execute(
             """
             CREATE TABLE IF NOT EXISTS audit_events (
@@ -643,6 +657,13 @@ class ConsultationRepository:
             try:
                 with closing(self._connect()) as connection, connection:
                     connection.execute("BEGIN IMMEDIATE")
+                    if record.get("invitation_id"):
+                        bound_invitation = connection.execute(
+                            "SELECT status FROM invitations WHERE invite_id = ?",
+                            (record["invitation_id"],),
+                        ).fetchone()
+                        if bound_invitation is not None and bound_invitation["status"] == "revoked":
+                            raise ValueError("Invitation has been revoked")
                     display_number = self._allocate_display_number(
                         connection,
                         consultation_date,
@@ -1276,6 +1297,47 @@ class ConsultationRepository:
                 institution_id=(institution_id[:100] if institution_id else None),
                 outcome=outcome[:40],
             )
+
+    def list_invitations(
+        self,
+        *,
+        institution_id: str,
+        status: str | None = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> dict[str, Any]:
+        with closing(self._connect()) as connection, connection:
+            return invitation_management.list_invitations(
+                connection, institution_id, status, limit, offset
+            )
+
+    def manage_invitation(
+        self,
+        *,
+        institution_id: str,
+        invite_id: str,
+        actor_sub: str,
+        reissue: bool = False,
+    ) -> dict[str, str] | None:
+        with closing(self._connect()) as connection, connection:
+            result = invitation_management.mutate_invitation(
+                connection,
+                institution_id,
+                invite_id,
+                actor_sub,
+                reissue,
+            )
+            if result is not None:
+                self._audit(
+                    connection,
+                    actor_type="ucc_user",
+                    actor_id=actor_sub,
+                    action="invitation.reissue" if reissue else "invitation.cancel",
+                    resource_type="invitation",
+                    resource_id=invite_id,
+                    institution_id=institution_id,
+                )
+            return result
 
     def create_invitation(
         self,

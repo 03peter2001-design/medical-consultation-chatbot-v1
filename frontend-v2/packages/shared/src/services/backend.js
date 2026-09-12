@@ -131,6 +131,15 @@ export function formatApiErrorDetail(detail, status) {
 
 export const api = {
   health: () => request(apiPath('/health')),
+  listInvitations: ({ status = '', limit = 20, offset = 0 } = {}) => {
+    const params = new URLSearchParams({ limit: String(limit), offset: String(offset) })
+    if (status) params.set('status', status)
+    return request(apiPath(`/doctor/invitations?${params}`))
+  },
+  cancelInvitation: (id) =>
+    request(apiPath(`/doctor/invitations/${encodeURIComponent(id)}/cancel`), { method: 'POST' }),
+  reissueInvitation: (id) =>
+    request(apiPath(`/doctor/invitations/${encodeURIComponent(id)}/reissue`), { method: 'POST' }),
   listConsultations: (options) => request(consultationListPath(options)),
   deleteConsultation: (consultationId) =>
     request(consultationDetailPath(consultationId), { method: 'DELETE' }),

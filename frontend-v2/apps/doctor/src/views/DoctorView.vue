@@ -9,6 +9,7 @@ import {
 } from 'vue'
 import { RouterLink } from 'vue-router'
 import QRCode from 'qrcode'
+import InvitationManager from '../components/InvitationManager.vue'
 
 import AppHeader from '@medical/shared/components/AppHeader.vue'
 import ChatMessage from '@medical/shared/components/ChatMessage.vue'
@@ -53,6 +54,8 @@ const invitation = ref(null)
 const invitationQr = ref('')
 const invitationError = ref('')
 const creatingInvitation = ref(false)
+const showInvitationManager = ref(false)
+const invitationRevision = ref(0)
 let caseSearchTimer = null
 let caseRequestVersion = 0
 
@@ -90,6 +93,7 @@ async function createInvitation() {
   invitationError.value = ''
   try {
     invitation.value = await doctorSession.createInvitation()
+    invitationRevision.value += 1
     const publicUrl = invitation.value.public_url || invitation.value.publicUrl
     invitationQr.value = publicUrl
       ? await QRCode.toDataURL(publicUrl, { width: 224, margin: 1, errorCorrectionLevel: 'M' })
@@ -413,6 +417,9 @@ onBeforeUnmount(() => {
         </svg>
       </template>
       <RouterLink class="nav-link" to="/doctor/rules">規則中心</RouterLink>
+      <button class="utility-button" type="button" :aria-expanded="showInvitationManager" @click="showInvitationManager = !showInvitationManager">
+        {{ showInvitationManager ? '收起 QR 管理' : 'QR Code 管理' }}
+      </button>
       <button
         class="utility-button"
         type="button"
@@ -456,6 +463,13 @@ onBeforeUnmount(() => {
         <button class="utility-button" type="button" @click="invitationError = ''">關閉</button>
       </template>
     </aside>
+
+    <InvitationManager
+      v-if="showInvitationManager"
+      :key="invitationRevision"
+      :can-manage="doctorSession.hasScope('consultation:read') && doctorSession.hasScope('invite:create')"
+      @changed="invitation = null; invitationQr = ''; invitationError = ''"
+    />
 
     <section class="patient-bar" aria-label="病人查詢">
       <input

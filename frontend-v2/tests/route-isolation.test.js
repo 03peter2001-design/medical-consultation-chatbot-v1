@@ -51,7 +51,9 @@ test('doctor source graph uses doctor-safe API and presentation modules', async 
   assert.doesNotMatch(clinicalRecord, /terminology\.js|SNOMED|snomed-registry/)
   assert.match(recordCard, /doctor\/components\/ClinicalEvidence\.vue/)
   assert.doesNotMatch(`${recordCard}\n${doctorEvidence}`, /TerminologyCode|SNOMED|snomed-registry/)
-  assert.doesNotMatch(doctorView, /hasScope\(['"]invite:create['"]\)/)
+  // New management actions use explicit scopes; first issuance stays encounter/CSRF bound.
+  assert.match(doctorView, /:can-manage="doctorSession\.hasScope\('consultation:read'\) && doctorSession\.hasScope\('invite:create'\)"/)
+  assert.match(doctorView, /const canCreateInvitation = computed\(\s*\(\) => doctorSession\.canCreateInvitation\(\)/)
   assert.match(doctorView, /doctorSession\.canCreateInvitation\(\)/)
   assert.match(doctorSession, /fetchImpl\(['"]\/AiConsult\/Invitations['"]/)
   assert.doesNotMatch(doctorSession, /\/v1\/invitations/)

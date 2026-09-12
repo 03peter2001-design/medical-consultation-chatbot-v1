@@ -6,10 +6,26 @@ explicitly runs the scripts.
 
 ## Service version
 
-目前版本為 **integration deployment bundle v1.8.0（2026-09-11）**。
+目前版本為 **integration deployment bundle v1.9.0（2026-09-11）**。
 這是依 `devlog/` 回溯整理的部署文件版本，用來標示安全整合藍圖、雙前端與
 GPU／Avatar 部署能力的共同基線；repository 目前沒有與此版本對應的 Git tag，
 也不表示任何院所環境已完成正式上線驗收。
+
+### v1.9.0 (2026-09-11)
+
+- eHIS 的 `AiConsultController.DoctorScopes` 加入 `invite:create`，讓所有具智慧問診
+  `Index` 選單權限的醫師可在 v2 管理已派發 QR 的使用狀況、取消及重新派發。
+  Backend 仍須檢查 doctor 身分、`consultation:read`、異動所需 `invite:create`、
+  同院所隔離；管理清單與異動不限目前 encounter。原始 UCC 建立邀請仍保留
+  service 身分及 encounter 限制。
+- 外部來源 `D:\ehis\eHIS\Controllers\AiConsultController.cs` 必須與 Backend／Doctor
+  frontend 一起發布；既有 token 不會自動取得新 scope，需重新載入智慧問診取得 bootstrap。
+  eHIS 無資料 migration；配套 Backend v0.14.0 會將 SQLite 升至 schema v12，
+  更新前應備份資料庫。2026-09-11 已發布本機 eHIS／Doctor 並重啟 eHIS-Pool；
+  遠端 Backend 更新仍待完成，詳見當日 devlog。
+- 驗證：指定 `EHIS_SOURCE_ROOT=D:\ehis` 後執行 Node integration tests，6 項通過；
+  `dotnet build eHIS\eHIS.csproj --no-restore --verbosity quiet -p:BuildProjectReferences=false`
+  通過（0 errors、338 個既有套件／編譯警告）。尚未驗證登入院方環境的端到端流程。
 
 ### v1.8.0 (2026-09-11)
 
@@ -553,6 +569,22 @@ invitation, including `NotCheckIn` state 5. The existing doctor invitation still
 requires the assigned/substitute doctor and current state 0 or 1. Neither path
 places patient prefill data in the DOM or logs; the displayed QR contains the
 one-time patient invitation URL and must not be forwarded.
+
+For v2 QR management, every doctor with `AiConsult/Index` menu access receives
+`consultation:read`, `consultation:chat`, and `invite:create` from eHIS bootstrap.
+Deploy the corresponding `AiConsultController.DoctorScopes` source update when
+releasing the QR management UI and Backend. Reload the doctor application to obtain
+a fresh token. Management remains limited to the signed token's institution,
+independently of the currently opened encounter. Initial invitations still use the guarded eHIS endpoint
+and a separate `ucc_service` token; the new doctor scope does not permit arbitrary
+patient/encounter invitation creation through the service endpoint.
+
+The optional source contract check uses a separately controlled eHIS checkout:
+
+```powershell
+$env:EHIS_SOURCE_ROOT = 'D:\ehis'
+node --test integration-deployment/tests/*.test.js
+```
 
 After publishing eHIS to a separate staging directory and completing the normal
 change-window checks, an administrator may deploy only the B01 integration files

@@ -5,7 +5,7 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 
 ## 服務版本
 
-目前版本：**v0.13.0（2026-08-27）**。
+目前版本：**v0.14.0（2026-09-11）**。
 
 本次因主動撤除既有 AMIE／語意標籤能力並回到較小的實驗性功能面，版本線依專案
 決策由 0 重新編碼。下方 `v1.x` 條目保留為舊能力線的歷史紀錄，不表示 `v0.3.0`
@@ -18,11 +18,32 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 服務版本與下列既有版本機制彼此獨立，不可互相替代：
 
 - API 的 `/v1` 是 HTTP 契約前綴，不是後端服務的 SemVer。
-- SQLite schema version 是資料庫遷移版本；本版升至 version 11，保存 FHIR
+- SQLite schema version 是資料庫遷移版本；本版升至 version 12，保存 FHIR
   Patient／Encounter context、Composition 寫入結果與本機 launcher invitation 綁定。
 - RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
 - Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
   revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v0.14.0 (2026-09-11)
+
+- 新增 `GET /v1/doctor/invitations`，依醫師 token 所屬機構分頁查詢派發紀錄；支援
+  `status`、`limit`（1–100，預設 50）、`offset`。僅回傳識別欄位、有效期限、兌換時間、
+  最近 session 存取時間與完成病例連結，不回傳原始 token、token hash 或病歷預填內容。
+- 狀態區分 `active`、`expired`、`consumed`、`completed`、`revoked`；`consumed` 僅表示
+  已兌換病患 session，不代表已回答題目；session 到期時間獨立顯示。已完成問診不可取消或重發。
+- 新增 `POST /v1/doctor/invitations/{invite_id}/cancel` 與 `/reissue`，取消在同一 SQLite
+  transaction 撤銷邀請與 session；重發保留可信預填、FHIR 綁定及原始有效期間，產生新的
+  一次性 token，原碼與原 session 失效。問診結果寫入也在 transaction 內阻止已撤銷邀請，
+  避免取消與完成同時發生時寫入撤銷後的結果；既有完成病例不受影響。
+- SQLite schema version 12 新增 nullable `replaced_by_invite_id`，保留歷史且不刪除資料；
+  重啟後及並行請求仍拒絕重複重發。同一掛號已有其他 active／consumed 邀請時亦拒絕重發
+  歷史碼（HTTP 409），避免覆蓋較新的派發。遷移僅新增欄位，既有資料與 API 相容。
+- 查詢要求 `consultation:read`，異動另外要求 `invite:create`，拒絕 UCC service token；
+  UCC 必須將 `invite:create` 納入具有 AI 問診存取權的醫師 token。不可由瀏覽器指定機構。
+  重發須先設定 HTTPS `PATIENT_PUBLIC_BASE_URL`；未設定回 503，舊邀請保持有效。
+  管理回應皆使用 `Cache-Control: no-store`，異動保留稽核紀錄。
+- 新增 repository／HTTP 授權測試，涵蓋機構隔離、分頁、敏感欄位排除、過期、session
+  撤銷、完成不可變、重發來源保留、重啟與並行重發。驗證結果見本次 devlog。
 
 ### v0.13.0 (2026-08-27)
 

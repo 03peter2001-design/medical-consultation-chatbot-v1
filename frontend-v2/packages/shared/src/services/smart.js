@@ -1,5 +1,23 @@
 const SMART_PENDING_KEY = 'chest-pain-ai-doctor.smart.pending'
-export const SMART_EHR_READ_SCOPE = 'launch patient/*.read'
+const SMART_SCOPE_TOKEN_PATTERN = /^[\x21\x23-\x5B\x5D-\x7E]+$/
+const SMART_USER_RESOURCE_SCOPE_PATTERN =
+  /^(?:patient|user)\/(?:\*|[A-Z][A-Za-z0-9]*)\.(?=[cruds])c?r?u?d?s?(?:\?.+)?$/
+const SMART_PATIENT_READ_SCOPE_PATTERN =
+  /^patient\/(?:\*|[A-Z][A-Za-z0-9]*)\.c?ru?d?s?(?:\?.+)?$/
+const LOOPBACK_HOST_PATTERN = /^(localhost|127(?:\.\d{1,3}){3}|\[::1\])$/i
+
+export const SMART_EHR_READ_SCOPE = [
+  'launch',
+  'patient/Patient.r',
+  'patient/Encounter.rs',
+  'patient/Condition.rs',
+  'patient/Observation.rs',
+  'patient/AllergyIntolerance.rs',
+  'patient/MedicationRequest.rs',
+  'patient/MedicationStatement.rs',
+  'patient/Procedure.rs',
+  'patient/QuestionnaireResponse.rs',
+].join(' ')
 export const SMART_DOCTOR_QR_MODE = 'doctor-qr'
 
 let libraryPromise = null
@@ -8,6 +26,93 @@ let cachedLaunchState = ''
 
 function runtimeWindow() {
   return typeof window === 'undefined' ? null : window
+}
+
+function normalizeSmartIssuer(
+  issuer,
+  { allowInsecureLoopback = import.meta.env?.DEV === true } = {},
+) {
+  let issuerUrl
+  try {
+    issuerUrl = new URL(String(issuer || '').trim())
+  } catch {
+    throw new Error('SMART EHR Launch 的 iss 不是有效 URL。')
+  }
+  if (
+    !['http:', 'https:'].includes(issuerUrl.protocol) ||
+    issuerUrl.username ||
+    issuerUrl.password
+  ) {
+    throw new Error('SMART EHR Launch 的 iss 必須是無帳密的 HTTP(S) URL。')
+  }
+  if (issuerUrl.search || issuerUrl.hash) {
+    throw new Error('SMART EHR Launch 的 iss 不可包含 query 或 fragment。')
+  }
+  if (
+    issuerUrl.protocol !== 'https:' &&
+    !(
+      allowInsecureLoopback &&
+      LOOPBACK_HOST_PATTERN.test(issuerUrl.hostname)
+    )
+  ) {
+    throw new Error(
+      'SMART EHR Launch 的 iss 必須使用 HTTPS；只有開發模式的 loopback issuer 可使用 HTTP。',
+    )
+  }
+  return issuerUrl.toString().replace(/\/$/, '')
+}
+
+export function parseSmartIssuerAllowlist(
+  value,
+  { allowInsecureLoopback = import.meta.env?.DEV === true } = {},
+) {
+  const rawValue = String(value || '').trim()
+  if (!rawValue) return []
+  const issuers = rawValue
+    .split(',')
+    .map((issuer) => issuer.trim())
+  if (issuers.some((issuer) => !issuer)) {
+    throw new Error('SMART issuer allowlist 包含空白項目。')
+  }
+  return [
+    ...new Set(
+      issuers.map((issuer) =>
+        normalizeSmartIssuer(issuer, { allowInsecureLoopback }),
+      ),
+    ),
+  ]
+}
+
+export function parseSmartScopes(value = SMART_EHR_READ_SCOPE) {
+  const configured = String(value || '').trim()
+  const scopeTokens = (configured || SMART_EHR_READ_SCOPE).split(/\s+/)
+  if (
+    scopeTokens.some(
+      (scope) => !scope || !SMART_SCOPE_TOKEN_PATTERN.test(scope),
+    )
+  ) {
+    throw new Error('SMART scopes 包含無效字元。')
+  }
+  const scopes = [...new Set(scopeTokens)]
+  if (!scopes.includes('launch')) {
+    throw new Error('SMART EHR Launch scopes 必須包含 launch。')
+  }
+  if (scopes.some((scope) => scope.startsWith('system/'))) {
+    throw new Error('瀏覽器 SMART client 不可要求 system scope。')
+  }
+  if (
+    scopes.some(
+      (scope) =>
+        /^(?:patient|user)\//.test(scope) &&
+        !SMART_USER_RESOURCE_SCOPE_PATTERN.test(scope),
+    )
+  ) {
+    throw new Error('SMART resource scopes 必須使用 STU 2.2 .cruds 語法。')
+  }
+  if (!scopes.some((scope) => SMART_PATIENT_READ_SCOPE_PATTERN.test(scope))) {
+    throw new Error('SMART scopes 必須包含至少一個 patient read 權限。')
+  }
+  return scopes.join(' ')
 }
 
 export function hasSmartLaunchContext(
@@ -66,6 +171,10 @@ export function isSmartDoctorQrCallback(
 
 export function smartEhrLaunchContext(
   locationLike = runtimeWindow()?.location,
+  {
+    allowInsecureLoopback = import.meta.env?.DEV === true,
+    issuerAllowlist = import.meta.env?.VITE_SMART_ISSUER_ALLOWLIST || '',
+  } = {},
 ) {
   const params = new URLSearchParams(locationLike?.search || '')
   const issuer = params.get('iss')?.trim() || ''
@@ -74,22 +183,18 @@ export function smartEhrLaunchContext(
     throw new Error('缺少 SMART EHR Launch 所需的 iss 或 launch 參數。')
   }
 
-  let issuerUrl
-  try {
-    issuerUrl = new URL(issuer)
-  } catch {
-    throw new Error('SMART EHR Launch 的 iss 不是有效 URL。')
-  }
-  if (
-    !['http:', 'https:'].includes(issuerUrl.protocol) ||
-    issuerUrl.username ||
-    issuerUrl.password
-  ) {
-    throw new Error('SMART EHR Launch 的 iss 必須是無帳密的 HTTP(S) URL。')
+  const normalizedIssuer = normalizeSmartIssuer(issuer, {
+    allowInsecureLoopback,
+  })
+  const allowedIssuers = parseSmartIssuerAllowlist(issuerAllowlist, {
+    allowInsecureLoopback,
+  })
+  if (allowedIssuers.length && !allowedIssuers.includes(normalizedIssuer)) {
+    throw new Error('SMART EHR Launch 的 iss 不在允許清單中。')
   }
 
   return {
-    issuer: issuerUrl.toString().replace(/\/$/, ''),
+    issuer: normalizedIssuer,
     launch,
   }
 }
@@ -101,6 +206,9 @@ export async function authorizeSmartEhrLaunch({
   storageLike = runtimeWindow()?.sessionStorage,
   basePath = import.meta.env?.BASE_URL || '/',
   callbackMode = '',
+  scopes = import.meta.env?.VITE_SMART_SCOPES || SMART_EHR_READ_SCOPE,
+  issuerAllowlist = import.meta.env?.VITE_SMART_ISSUER_ALLOWLIST || '',
+  allowInsecureLoopback = import.meta.env?.DEV === true,
 } = {}) {
   if (typeof fhirLibrary?.oauth2?.authorize !== 'function') {
     throw new Error('SMART on FHIR client 未提供 OAuth authorize API。')
@@ -110,16 +218,21 @@ export async function authorizeSmartEhrLaunch({
     throw new Error('尚未設定 SMART client ID。')
   }
 
-  const context = smartEhrLaunchContext(locationLike)
+  const normalizedScopes = parseSmartScopes(scopes)
+  const context = smartEhrLaunchContext(locationLike, {
+    issuerAllowlist,
+    allowInsecureLoopback,
+  })
   const redirectUri = smartCallbackUrl(locationLike, basePath, callbackMode)
   markSmartLaunchPending(storageLike)
   try {
     return await fhirLibrary.oauth2.authorize({
       clientId: normalizedClientId,
-      scope: SMART_EHR_READ_SCOPE,
+      scope: normalizedScopes,
       redirectUri,
       iss: context.issuer,
       launch: context.launch,
+      pkceMode: 'required',
     })
   } catch (error) {
     markSmartLaunchPending(storageLike, false)
@@ -136,6 +249,9 @@ export function sanitizeSmartCallbackUrl(
   }
   const params = new URLSearchParams(locationLike.search || '')
   const sensitiveKeys = [
+    'smart',
+    'state',
+    'launch_mode',
     'code',
     'error',
     'error_description',

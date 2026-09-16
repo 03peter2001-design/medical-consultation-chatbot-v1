@@ -15,6 +15,24 @@ their own versions or revisions.
 
 ### Doctor app
 
+#### v2.4.0 (2026-09-13)
+
+- 新增正式 Doctor bundle 的 `/ai-consult/launch.html` Provider EHR Launch 入口；以 public
+  client、PKCE S256、SMART STU 2.2 細粒度 Patient／Encounter／預填資源讀取 scopes 啟動
+  OAuth。Client ID、scopes 與 exact issuer allowlist 均由 build-time `VITE_*` 設定；正式
+  build 拒絕非 HTTPS issuer，只有 Vite development 的 loopback 可使用 HTTP。
+- OAuth callback 回到既有 `/ai-consult/?smart=1`，仍先完成 UCC bootstrap，成功後才交換
+  SMART authorization code。若 UCC 明確提供 FHIR Patient／Encounter reference，兩邊
+  context 必須相符；不符時 fail closed。若 UCC 尚未提供對照欄位，畫面會明示尚未綁定，
+  SMART context 不會用於建立邀請或臨床寫入，既有 `regSno`／CSRF／scope 邊界不變。
+- Callback 完成或失敗後會移除 URL 中的 authorization code、state 與 SMART 暫態標記；
+  token 只由 `fhirclient` 管理且不送往 Backend，Doctor 抽出的 Patient／Encounter ID
+  只留在目前頁面記憶體。Multi-page build 保留既有 `index-*.js` 命名，讓 eHIS 部署
+  腳本的 cache-buster 契約不受新增 launch page 影響。
+- Node 22 的 18 個 frontend-v2 測試檔與 Doctor production build 通過；build 同時產生
+  `index.html`、`launch.html` 及既有 `index-*.js` entry。尚未以院方 SMART authorization
+  server 執行 OAuth round trip 或 Inferno STU 2.2 Client suite。
+
 #### v2.3.0 (2026-09-11)
 
 - 新增「QR Code 管理」，列出登入者所屬院所全部派發紀錄，支援狀態篩選、分頁、
@@ -83,6 +101,15 @@ their own versions or revisions.
     the development frontend.
 
 ### Patient app
+
+#### v2.2.1 (2026-09-13)
+
+- 共用 SMART callback 在成功或失敗後會移除 URL 中的 authorization code、state、
+  `smart` 與 launch-mode 暫態參數，並清除 pending marker，避免重新整理時把已完成的
+  callback 再當成新授權；原有 QR／HttpOnly patient session gate 與伺服器綁定 context
+  不變。
+- Node 22 的 frontend-v2 共用測試與 Patient production build 通過；未新增 Patient
+  SMART launch entry，也未允許瀏覽器提供 Patient／Encounter 身分。
 
 #### v2.2.0 (2026-09-09)
 
@@ -164,13 +191,27 @@ npm test
 ```
 
 - Doctor app: `/ai-consult/`, hash routes `/doctor` and `/doctor/rules`, API
-  base `/ai-api`.
+  base `/ai-api`; Provider EHR Launch entry: `/ai-consult/launch.html`.
 - Patient app: `/`, no doctor routes, API base `/api`.
 
 The doctor app obtains a short-lived UCC access token from
 `/AiConsult/Bootstrap`; the token stays in memory. The patient app exchanges a
 token from the URL fragment only after explicit confirmation and then relies on
 an HttpOnly session cookie. Never place patient identity data in either URL.
+
+The Doctor SMART entry uses these public build-time settings:
+
+```dotenv
+VITE_SMART_CLIENT_ID=registered-public-client-id
+VITE_SMART_SCOPES=launch patient/Patient.r patient/Encounter.rs patient/Condition.rs patient/Observation.rs patient/AllergyIntolerance.rs patient/MedicationRequest.rs patient/MedicationStatement.rs patient/Procedure.rs patient/QuestionnaireResponse.rs
+VITE_SMART_ISSUER_ALLOWLIST=https://ehr.example.test/fhir
+```
+
+Register the exact callback `/ai-consult/?smart=1` for the public client. These
+values are compiled into browser JavaScript and must never contain a client
+secret. `openid fhirUser` can be added only when the returned Practitioner
+identity is consumed by an approved authorization binding; UCC bootstrap remains
+the current Doctor authorization source.
 
 See each app's `.env.example` for deploy-time overrides.
 

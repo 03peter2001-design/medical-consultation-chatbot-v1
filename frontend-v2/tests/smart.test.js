@@ -3,11 +3,14 @@ import test from 'node:test'
 
 import {
   SMART_DOCTOR_QR_MODE,
+  SMART_EHR_READ_SCOPE,
   authorizeSmartEhrLaunch,
   hasSmartLaunchContext,
   initializeSmartPatient,
   isSmartDoctorQrCallback,
   markSmartLaunchPending,
+  parseSmartIssuerAllowlist,
+  parseSmartScopes,
   readSmartPatientRecord,
   resetSmartClientCache,
   sanitizeSmartCallbackUrl,
@@ -109,8 +112,109 @@ test('validates EHR launch parameters without accepting unsafe issuers', () => {
     /HTTP\(S\)/,
   )
   assert.throws(
+    () =>
+      smartEhrLaunchContext({
+        search: '?iss=http%3A%2F%2Fehr.example%2Ffhir&launch=x',
+      }),
+    /必須使用 HTTPS/,
+  )
+  assert.throws(
+    () =>
+      smartEhrLaunchContext({
+        search: '?iss=http%3A%2F%2F127.0.0.1%3A8080%2Ffhir&launch=x',
+      }),
+    /只有開發模式/,
+  )
+  assert.deepEqual(
+    smartEhrLaunchContext(
+      {
+        search: '?iss=http%3A%2F%2F127.0.0.1%3A8080%2Ffhir&launch=x',
+      },
+      { allowInsecureLoopback: true },
+    ),
+    { issuer: 'http://127.0.0.1:8080/fhir', launch: 'x' },
+  )
+  assert.throws(
+    () =>
+      smartEhrLaunchContext(
+        {
+          search: '?iss=http%3A%2F%2Flocalhost.evil.test%2Ffhir&launch=x',
+        },
+        { allowInsecureLoopback: true },
+      ),
+    /必須使用 HTTPS/,
+  )
+  assert.throws(
     () => smartEhrLaunchContext({ search: '?iss=https://ehr.example/fhir' }),
     /iss 或 launch/,
+  )
+})
+
+test('parses configurable scopes and rejects unsafe browser scope sets', () => {
+  assert.equal(
+    parseSmartScopes('launch  patient/Patient.r patient/Patient.r'),
+    'launch patient/Patient.r',
+  )
+  assert.equal(
+    parseSmartScopes(
+      'launch openid fhirUser patient/Observation.rs?category=vital-signs',
+    ),
+    'launch openid fhirUser patient/Observation.rs?category=vital-signs',
+  )
+  assert.equal(parseSmartScopes(''), SMART_EHR_READ_SCOPE)
+  assert.match(SMART_EHR_READ_SCOPE, /patient\/Patient\.r/)
+  assert.doesNotMatch(SMART_EHR_READ_SCOPE, /\*\.read/)
+  assert.throws(
+    () => parseSmartScopes('patient/Patient.r'),
+    /必須包含 launch/,
+  )
+  assert.throws(
+    () => parseSmartScopes('launch system/Patient.rs'),
+    /不可要求 system scope/,
+  )
+  assert.throws(
+    () => parseSmartScopes('launch openid'),
+    /patient read/,
+  )
+  assert.throws(
+    () => parseSmartScopes('launch patient/Patient.create'),
+    /STU 2\.2/,
+  )
+  assert.throws(
+    () => parseSmartScopes('launch patient/Patient.r patient/*.read'),
+    /STU 2\.2/,
+  )
+})
+
+test('enforces an exact normalized SMART issuer allowlist', () => {
+  assert.deepEqual(
+    parseSmartIssuerAllowlist(
+      'https://ehr.example/fhir/, https://backup.example/r4',
+    ),
+    ['https://ehr.example/fhir', 'https://backup.example/r4'],
+  )
+  assert.deepEqual(
+    smartEhrLaunchContext(
+      {
+        search: '?iss=https%3A%2F%2Fehr.example%2Ffhir%2F&launch=x',
+      },
+      { issuerAllowlist: 'https://ehr.example/fhir' },
+    ),
+    { issuer: 'https://ehr.example/fhir', launch: 'x' },
+  )
+  assert.throws(
+    () =>
+      smartEhrLaunchContext(
+        {
+          search: '?iss=https%3A%2F%2Fehr.example%2Ffhir2&launch=x',
+        },
+        { issuerAllowlist: 'https://ehr.example/fhir' },
+      ),
+    /不在允許清單/,
+  )
+  assert.throws(
+    () => parseSmartIssuerAllowlist('https://ehr.example/fhir,'),
+    /空白項目/,
   )
 })
 
@@ -137,10 +241,11 @@ test('starts provider OAuth with the registered base-aware callback', async () =
 
   assert.deepEqual(options, {
     clientId: 'test-client',
-    scope: 'launch patient/*.read',
+    scope: SMART_EHR_READ_SCOPE,
     redirectUri: 'http://127.0.0.1:5173/ai-consult/?smart=1',
     iss: 'https://ehr.example/fhir',
     launch: 'launch-123',
+    pkceMode: 'required',
   })
   assert.equal(hasSmartLaunchContext({ search: '' }, storage), true)
 })
@@ -188,8 +293,8 @@ test('removes the authorization code from browser history', () => {
       },
     },
   )
-  assert.equal(result, '/ai-consult/?smart=1&state=state-1#/')
-  assert.equal(replacement, '/ai-consult/?smart=1&state=state-1#/')
+  assert.equal(result, '/ai-consult/#/')
+  assert.equal(replacement, '/ai-consult/#/')
   assert.equal(replacementState, originalState)
 })
 

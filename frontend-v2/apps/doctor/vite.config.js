@@ -8,12 +8,21 @@ const appRoot = fileURLToPath(new URL('.', import.meta.url))
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, appRoot, 'VITE_')
   const backendBaseUrl = env.VITE_BACKEND_BASE_URL?.trim() || '/ai-api'
+  const smartClientId = env.VITE_SMART_CLIENT_ID?.trim() || ''
+  const smartScopes = env.VITE_SMART_SCOPES?.trim() || ''
+  const smartIssuerAllowlist =
+    env.VITE_SMART_ISSUER_ALLOWLIST?.trim() || ''
 
   return {
     base: '/ai-consult/',
     plugins: [vue()],
     define: {
       'import.meta.env.VITE_BACKEND_BASE_URL': JSON.stringify(backendBaseUrl),
+      'import.meta.env.VITE_SMART_CLIENT_ID': JSON.stringify(smartClientId),
+      'import.meta.env.VITE_SMART_SCOPES': JSON.stringify(smartScopes),
+      'import.meta.env.VITE_SMART_ISSUER_ALLOWLIST': JSON.stringify(
+        smartIssuerAllowlist,
+      ),
     },
     resolve: {
       alias: {
@@ -26,6 +35,12 @@ export default defineConfig(({ mode }) => {
       outDir: 'dist',
       emptyOutDir: true,
       sourcemap: false,
+      rollupOptions: {
+        input: {
+          index: fileURLToPath(new URL('index.html', import.meta.url)),
+          launch: fileURLToPath(new URL('launch.html', import.meta.url)),
+        },
+      },
     },
   }
 })

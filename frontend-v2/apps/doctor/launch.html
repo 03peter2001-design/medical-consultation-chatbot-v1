@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>啟動 SMART 醫師工作台</title>
+    <style>
+      body {
+        display: grid;
+        min-height: 100vh;
+        min-height: 100dvh;
+        margin: 0;
+        place-items: center;
+        color: #16302b;
+        background: #f2f7f5;
+        font: 16px/1.6 system-ui, sans-serif;
+      }
+
+      main {
+        box-sizing: border-box;
+        width: min(480px, calc(100% - 32px));
+        padding: 28px;
+        border: 1px solid #d8e4df;
+        border-radius: 12px;
+        background: white;
+        box-shadow: 0 12px 34px rgb(32 51 69 / 9%);
+      }
+
+      h1 { margin: 0 0 8px; font-size: 22px; }
+      p { margin: 0; }
+
+      @media (max-width: 480px) {
+        main { padding: 24px; }
+      }
+    </style>
+  </head>
+  <body data-launch-state="pending">
+    <main role="status" aria-live="polite">
+      <h1 data-smart-launch-heading>正在連接 SMART 授權服務</h1>
+      <p data-smart-launch-status>
+        完成授權後，醫師工作台仍會驗證目前的 UCC 登入工作階段。
+      </p>
+    </main>
+    <script type="module" src="/src/smartLaunchEntry.js"></script>
+  </body>
+</html>

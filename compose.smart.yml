@@ -36,7 +36,7 @@ services:
     restart: unless-stopped
 
   fhir-root-proxy:
-    image: nginx:alpine
+    image: nginx:1.27.5-alpine
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
@@ -44,7 +44,7 @@ services:
     restart: unless-stopped
 
   smart-launcher:
-    image: smartonfhir/smart-launcher-2:latest
+    image: smartonfhir/smart-launcher-2@sha256:72bd3e3c682ce4c74e6dddb605d89acad7c8aae446ae38079e8dfe8455b84793
     depends_on:
       fhir-root-proxy:
         condition: service_started
@@ -56,7 +56,7 @@ services:
     restart: unless-stopped
 
   smart-launcher-gateway:
-    image: nginx:alpine
+    image: nginx:1.27.5-alpine
     depends_on:
       smart-launcher:
         condition: service_started
@@ -71,11 +71,19 @@ services:
       context: .
       dockerfile: smart-app/Dockerfile
     image: chest-pain-ai-doctor-smart-app:local
+    environment:
+      SMART_APP_PORT: "${SMART_APP_PORT:-5174}"
+      SMART_LAUNCHER_PORT: "${SMART_LAUNCHER_PORT:-8090}"
+      NGINX_ENVSUBST_TEMPLATE_DIR: /etc/nginx/templates
+      NGINX_ENVSUBST_TEMPLATE_SUFFIX: .template
+      NGINX_ENVSUBST_OUTPUT_DIR: /usr/share/nginx/html
     depends_on:
       backend:
         condition: service_healthy
     ports:
       - "127.0.0.1:${SMART_APP_PORT:-5174}:80"
+    volumes:
+      - ./smart-app/start.html:/etc/nginx/templates/start.html.template:ro
     restart: unless-stopped
 
 volumes:

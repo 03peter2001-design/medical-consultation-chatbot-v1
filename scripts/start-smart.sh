@@ -5,9 +5,24 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
 SMART_APP_PORT="${SMART_APP_PORT:-5174}"
 SMART_LAUNCHER_PORT="${SMART_LAUNCHER_PORT:-8090}"
-FHIR_BASE_URL="http://127.0.0.1:8080/fhir"
+FHIR_PORT="${FHIR_PORT:-8081}"
+FHIR_BASE_URL="http://127.0.0.1:${FHIR_PORT}/fhir"
 RAG_HF_HUB_CACHE="${RAG_HF_HUB_CACHE:-${HOME}/.cache/huggingface/hub}"
 RAG_EMBEDDING_MODEL_DIR="${RAG_HF_HUB_CACHE}/models--sentence-transformers--paraphrase-multilingual-MiniLM-L12-v2"
+
+validate_port() {
+  local name="$1"
+  local value="$2"
+
+  if [[ ! "${value}" =~ ^[1-9][0-9]{0,4}$ ]] || (( value > 65535 )); then
+    echo "${name} must be an integer between 1 and 65535 (received: ${value})." >&2
+    exit 1
+  fi
+}
+
+validate_port "FHIR_PORT" "${FHIR_PORT}"
+validate_port "SMART_APP_PORT" "${SMART_APP_PORT}"
+validate_port "SMART_LAUNCHER_PORT" "${SMART_LAUNCHER_PORT}"
 
 cd "${PROJECT_DIR}"
 

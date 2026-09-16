@@ -96,5 +96,13 @@ volume 一起保存，因此移除資料庫後會重新安裝，不會被本機 
 ```
 
 腳本會檢查 `backend/.env`、RAG 索引、embedding model cache 及後端
-`/api/v1/health`。完整前置條件、入口與停止方式請見
+`/api/v1/health`。HAPI FHIR 預設從 host 的 `8081` port 讀取；三個對外 port 都可
+覆寫，且啟動前會拒絕非 `1` 到 `65535` 的值：
+
+```bash
+FHIR_PORT=8082 SMART_LAUNCHER_PORT=8091 SMART_APP_PORT=5175 \
+  ./scripts/start-smart.sh
+```
+
+完整前置條件、入口與停止方式請見
 [smart-app/README.md](../smart-app/README.md)。

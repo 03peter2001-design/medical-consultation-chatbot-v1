@@ -2,9 +2,22 @@
 
 ## 服務版本
 
-目前文件基線為 **SMART sandbox/app v1.1.2**（截至 2026-08-28）。這是依
+目前文件基線為 **SMART sandbox/app v1.2.0**（截至 2026-09-13）。這是依
 `devlog/` 回溯整理的文件版本，用來描述當時已整合的本機 SMART 開發能力；
 repository 目前沒有與此版本對應的 Git tag，也不代表正式臨床部署版本。
+
+### v1.2.0 (2026-09-13)
+
+- Provider EHR 與 standalone patient launch entry 改用 SMART STU 2.2 細粒度
+  Patient／Encounter／預填資源 `r`／`rs` scopes，並要求 PKCE S256；不再以舊式
+  `patient/*.read` 靜默取得全部病人 compartment 讀取權限。
+- `start-smart.sh` 的 host HAPI 檢查改採與 `compose.fhir.yml` 一致的 `FHIR_PORT=8081`
+  預設並驗證三個外部 port；`start.html` 由 Nginx entrypoint 依 runtime SMART ports
+  產生，自訂 port 不再導向寫死的 8090／5174。
+- 兩個 proxy 固定使用 Nginx 1.27.5 Alpine，SMART Launcher 固定到已確認含 amd64／arm64
+  manifest 的 image digest，避免上游 `latest` 改變 OAuth sandbox 行為。10 個 deployment
+  config tests、shell syntax、Compose config、Ruff 與 diff check 通過；實際 OAuth round
+  trip 與 Inferno client suite 未在本次執行。
 
 ### v1.1.2 (2026-08-28)
 
@@ -85,6 +98,12 @@ authorized `fhirclient`, reads the launch-context Patient and
 questionnaire prefill, and starts the consultation. The access token is not
 sent to the consultation backend.
 
+兩個 launch entry 都要求 PKCE S256，並使用 SMART v2 細粒度的病人層級
+`r`／`rs` scopes，只涵蓋目前預填會讀取的 FHIR resource types。本機固定的
+SMART Launcher 映像支援這組 scope 語法；若外部 authorization server 只接受
+舊式 `patient/*.read`，應在該環境完成相容性升級或另行設定已審核的 client，
+不會由此沙盒靜默降級權限語意。
+
 The local stack reuses the existing HAPI FHIR R4 server at
 `http://127.0.0.1:8081/fhir`（可由 `FHIR_PORT` 覆寫）. Start the FastAPI backend, SMART Launcher,
 internal FHIR path proxy, and Vue application from the repository root:
@@ -153,9 +172,15 @@ The app image pins `fhirclient` 2.6.3 and serves it locally from
 Override the SMART-facing ports when needed:
 
 ```bash
-SMART_LAUNCHER_PORT=8091 SMART_APP_PORT=5175 \
+FHIR_PORT=8082 SMART_LAUNCHER_PORT=8091 SMART_APP_PORT=5175 \
   ./scripts/start-smart.sh
 ```
+
+`FHIR_PORT`、`SMART_LAUNCHER_PORT` 與 `SMART_APP_PORT` 預設分別為 `8081`、
+`8090` 與 `5174`。`start.html` 由官方 Nginx entrypoint 在容器啟動時以後兩者
+產生，因此自訂 port 時測試病人的 launcher URL 與 callback URL 會保持一致。
+Compose 使用固定的 Nginx patch tag，SMART Launcher 則固定到多架構 image digest，
+避免上游 `latest` 無預警改變本機 OAuth 行為。
 
 Stop the local stack without deleting its PostgreSQL volume:
 

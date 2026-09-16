@@ -3,9 +3,18 @@
 ## 版本關係與更新紀錄
 
 此目錄不是可獨立執行的服務；其中的 Nginx 設定由 `compose.smart.yml` 與
-`./scripts/start-smart.sh` 載入，因此隨 **SMART sandbox v1.1.2** 維護，版本與
-`smart-app` 相同。這是截至 2026-08-28 依 `devlog/` 維護的文件基線，
+`./scripts/start-smart.sh` 載入，因此隨 **SMART sandbox v1.2.0** 維護，版本與
+`smart-app` 相同。這是截至 2026-09-13 依 `devlog/` 維護的文件基線，
 repository 目前沒有對應的 Git tag。
+
+### v1.2.0 (2026-09-13)
+
+- SMART sandbox launch entry 要求 PKCE S256 並改用 STU 2.2 細粒度病人讀取 scopes；
+  `start-smart.sh` 統一採用 repo 的 host HAPI port 8081 預設，且自訂 SMART ports 會正確
+  注入測試啟動頁。
+- Compose proxy image 固定為 Nginx 1.27.5 Alpine，SMART Launcher 固定為多架構 image
+  digest；deployment regression tests 同時驗證 image pin、port 傳遞、啟動頁 URL、scope
+  與 PKCE 設定。
 
 ### v1.1.2 (2026-08-28)
 

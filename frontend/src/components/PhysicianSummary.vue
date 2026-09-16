@@ -11,7 +11,7 @@ import {
 import {
   areAllSummaryRowsConfirmed,
   buildFhirCompositionRequest,
-  confirmEditableSummaryRow,
+  confirmEditableSummaryRows,
   createEditableSummaryRows,
   updateEditableSummaryRow,
 } from '../services/physicianSummary.js'
@@ -30,11 +30,13 @@ const previewError = ref('')
 const dialogOpen = ref(false)
 const submitting = ref(false)
 const submissionResult = ref(props.record.fhir_submission || null)
-const confirmedCount = computed(
-  () => editableRows.value.filter((row) => row.confirmed).length,
-)
 const allRowsConfirmed = computed(
   () => areAllSummaryRowsConfirmed(editableRows.value),
+)
+const hasIncompleteRow = computed(
+  () =>
+    !editableRows.value.length ||
+    editableRows.value.some((row) => !row.value.trim()),
 )
 const hasFhirContext = computed(
   () => Boolean(props.record.fhir_context?.patient_id),
@@ -43,7 +45,6 @@ const alreadySubmitted = computed(() => Boolean(submissionResult.value))
 const canOpenSubmission = computed(
   () =>
     allRowsConfirmed.value &&
-    hasFhirContext.value &&
     !alreadySubmitted.value &&
     !submitting.value,
 )
@@ -63,18 +64,18 @@ function resizeSummaryInputs() {
 }
 
 function handleSummaryInput(row, event) {
-  updateEditableSummaryRow(row, event.target.value)
+  updateEditableSummaryRow(row, event.target.value, editableRows.value)
   resizeTextarea(event.target)
 }
 
-function confirmRow(row) {
-  confirmEditableSummaryRow(row)
+function confirmAllRows() {
+  confirmEditableSummaryRows(editableRows.value)
 }
 
 function openFhirSubmissionDialog() {
   previewError.value = ''
   if (!allRowsConfirmed.value) {
-    previewError.value = '請先確認所有醫師摘要欄位，再送出資料。'
+    previewError.value = '請先確認整份醫師摘要，再送出資料。'
     return
   }
   if (!hasFhirContext.value) {
@@ -136,10 +137,7 @@ onBeforeUnmount(() => {
         <h3 id="physician-summary-title">醫師摘要</h3>
       </div>
       <strong :class="{ confirmed: allRowsConfirmed }">
-        <template v-if="allRowsConfirmed">All columns are reviewed</template>
-        <template v-else>
-          Draft · {{ confirmedCount }}/{{ editableRows.length }} Confirmed
-        </template>
+        {{ allRowsConfirmed ? '整份病歷已確認' : 'Draft · 待整份確認' }}
       </strong>
     </header>
     <dl class="physician-summary-rows">
@@ -164,21 +162,22 @@ onBeforeUnmount(() => {
             已由醫師修改；尚未寫入後端或 FHIR
           </small>
         </dd>
-        <div class="row-review">
-          <span v-if="row.confirmed" class="row-confirmed">✓ Confirmed</span>
-          <button
-            v-else
-            type="button"
-            class="confirm-button"
-            :disabled="!row.value.trim()"
-            :aria-label="`確認${row.label || row.key}`"
-            @click="confirmRow(row)"
-          >
-            確認
-          </button>
-        </div>
       </div>
     </dl>
+    <div class="summary-review">
+      <span v-if="allRowsConfirmed" class="summary-confirmed">
+        ✓ 已確認整份病歷內容
+      </span>
+      <button
+        v-else
+        type="button"
+        class="confirm-button"
+        :disabled="hasIncompleteRow || alreadySubmitted"
+        @click="confirmAllRows"
+      >
+        確認整份病歷
+      </button>
+    </div>
     <details class="ai-overview">
       <summary>
         <span>
@@ -208,7 +207,7 @@ onBeforeUnmount(() => {
                 點擊後先核對病人與病歷內容，再確認送出
               </template>
               <template v-else>
-                請先確認全部 {{ editableRows.length }} 個摘要欄位
+                請先確認整份醫師摘要
               </template>
             </small>
           </div>
@@ -285,7 +284,7 @@ section > header > strong.confirmed {
 .physician-summary-rows > div {
   display: grid;
   min-width: 0;
-  grid-template-columns: 112px minmax(0, 1fr) auto;
+  grid-template-columns: 112px minmax(0, 1fr);
   align-items: start;
   gap: 12px;
   padding: 11px 16px;
@@ -355,10 +354,12 @@ section > header > strong.confirmed {
   font-size: 10px !important;
 }
 
-.row-review {
+.summary-review {
   display: flex;
-  min-width: 96px;
   justify-content: flex-end;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e9ef;
+  background: #f8fafc;
 }
 
 .confirm-button,
@@ -390,7 +391,7 @@ section > header > strong.confirmed {
   cursor: not-allowed;
 }
 
-.row-confirmed {
+.summary-confirmed {
   padding: 7px 0;
   color: #087f6d;
   font-size: 11px;
@@ -546,11 +547,6 @@ section > header > strong.confirmed {
   .physician-summary-rows > div {
     grid-template-columns: 80px minmax(0, 1fr);
     padding: 11px 12px;
-  }
-
-  .row-review {
-    grid-column: 2;
-    justify-content: flex-start;
   }
 
   .ai-overview summary {

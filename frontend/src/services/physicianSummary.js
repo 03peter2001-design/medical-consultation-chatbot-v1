@@ -27,14 +27,18 @@ export function buildFhirCompositionRequest(rows = [], updatedAt = '') {
   }
 }
 
-export function updateEditableSummaryRow(row, value) {
+export function updateEditableSummaryRow(row, value, rows = [row]) {
   row.value = String(value ?? '')
-  row.confirmed = false
+  rows.forEach((summaryRow) => {
+    summaryRow.confirmed = false
+  })
 }
 
-export function confirmEditableSummaryRow(row) {
-  if (!row.value.trim()) return false
-  row.confirmed = true
+export function confirmEditableSummaryRows(rows = []) {
+  if (!rows.length || rows.some((row) => !row.value.trim())) return false
+  rows.forEach((row) => {
+    row.confirmed = true
+  })
   return true
 }
 

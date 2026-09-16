@@ -67,12 +67,21 @@ test('patient record follows the approved clinical document hierarchy', () => {
   assert.match(physicianSummary, /<b>\{\{ row\.key \}\}<\/b>/)
   assert.match(physicianSummary, /class="summary-editor"/)
   assert.match(physicianSummary, /@input="handleSummaryInput\(row, \$event\)"/)
-  assert.match(physicianSummary, /@click="confirmRow\(row\)"/)
-  assert.match(physicianSummary, /v-if="row\.confirmed"/)
+  assert.match(physicianSummary, /@click="confirmAllRows"/)
+  assert.match(physicianSummary, /確認整份病歷/)
+  assert.equal(physicianSummary.match(/class="confirm-button"/g)?.length, 1)
+  assert.doesNotMatch(physicianSummary, /confirmRow\(row\)/)
   assert.match(physicianSummary, /送出並儲存至 FHIR/)
   assert.match(physicianSummary, /@click="openFhirSubmissionDialog"/)
   assert.match(physicianSummary, /:disabled="!canOpenSubmission"/)
+  const submissionAvailability = physicianSummary.slice(
+    physicianSummary.indexOf('const canOpenSubmission'),
+    physicianSummary.indexOf('function resizeTextarea'),
+  )
+  assert.match(submissionAvailability, /allRowsConfirmed\.value/)
+  assert.doesNotMatch(submissionAvailability, /hasFhirContext/)
   assert.match(physicianSummary, /if \(!allRowsConfirmed\.value\)/)
+  assert.match(physicianSummary, /if \(!hasFhirContext\.value\)/)
   assert.match(physicianSummary, /api\.createFhirComposition/)
   assert.match(physicianSummary, /<FhirSubmissionDialog/)
   assert.doesNotMatch(

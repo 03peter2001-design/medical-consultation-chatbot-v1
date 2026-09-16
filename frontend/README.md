@@ -6,6 +6,41 @@ SNOMED CT 查詢。根目錄的 `index.html`、`doctor.html` 是重構前的相�
 
 ## 服務版本
 
+### v0.14.2 (2026-09-13)
+
+- 修正整份病歷確認後，「送出並儲存至 FHIR」仍可能因缺少 FHIR Patient context 而保持
+  disabled 的互動問題。現在整份確認完成後即可點擊；有可信 FHIR context 時開啟最終
+  核對視窗，沒有 context 時則顯示明確錯誤，不會呼叫 API 或宣稱送出成功。
+- 完整前端測試、production build、OpenAPI type check 與 diff check 通過；Browser
+  plugin 未提供，改以既有 Playwright 與系統 headless Chrome 驗證有／無 FHIR context
+  的點擊分支及 1280×900、390×844 響應式版面。
+
+### v0.14.1 (2026-09-13)
+
+- 醫師端七段 AI 摘要由逐欄確認改為整份病歷一次確認；任一段為空白時不可確認，
+  已確認後若再次編輯任一段，整份病歷會回到待確認狀態。
+- FHIR 送出門檻維持不變：必須完成整份確認且病例具有 FHIR Patient context 才能進入
+  最終送出視窗。完整前端測試、production build 與 OpenAPI type check 通過；
+  Browser plugin 未提供，改以既有 Playwright 與系統 headless Chrome 在 1280×900、
+  390×844 驗證單一確認、編輯後失效、FHIR 門檻及響應式版面。
+
+### v0.14.0 (2026-09-13)
+
+- SMART Provider EHR Launch 預設改用 STU 2.2 細粒度病人讀取／搜尋 scopes，涵蓋目前
+  FHIR 預填所需的 Patient、Encounter、Condition、Observation、AllergyIntolerance、
+  MedicationRequest、MedicationStatement、Procedure 與 QuestionnaireResponse；可由
+  `VITE_SMART_SCOPES` 覆寫，但瀏覽器 client 會拒絕 system scope、缺少 `launch` 或沒有
+  patient read 權限的設定。
+- OAuth authorization 明確要求 PKCE S256；issuer 正式使用時必須是 HTTPS，只有 Vite
+  development 的 loopback issuer 可使用 HTTP，並可透過 `VITE_SMART_ISSUER_ALLOWLIST`
+  設定 exact allowlist。含帳密、query、fragment、非允許 issuer 或不安全 HTTP 都會在
+  redirect 前 fail closed。
+- `openid fhirUser` 仍是 opt-in：目前 frontend 尚未把 Practitioner identity 接到 Backend
+  authorization，因此不預設索取未使用的身分資料。Node 22 的 18 個測試檔、production
+  build、OpenAPI type check 與 diff check 通過。完成 callback 後也會移除 URL 中的 code、
+  state 與 SMART 暫態參數，避免重新整理時重跑已完成的授權；實際 OAuth round trip 與
+  Inferno STU 2.2 client suite 尚待在 SMART stack 執行。
+
 ### v0.13.2 (2026-08-31)
 
 - 修正 FHIR 送出確認視窗在內容高於 viewport 時無法向下捲動：dialog grid 明確分為
@@ -673,7 +708,16 @@ SMART client ID 預設為本機 sandbox 的 `my_web_app`；若院方另行註冊
 
 ```dotenv
 VITE_SMART_CLIENT_ID=my_web_app
+VITE_SMART_SCOPES="launch patient/Patient.r patient/Encounter.rs patient/Condition.rs patient/Observation.rs patient/AllergyIntolerance.rs patient/MedicationRequest.rs patient/MedicationStatement.rs patient/Procedure.rs patient/QuestionnaireResponse.rs"
+VITE_SMART_ISSUER_ALLOWLIST=https://approved-fhir-box.example/fhir
 ```
+
+`VITE_SMART_SCOPES` 以空白分隔；上例也是內建的 STU 2.2 最小讀取／搜尋 scope。
+前端會要求 authorization server 支援 PKCE S256，且在 OAuth redirect 前驗證 issuer 與
+scope。正式 build 只接受 HTTPS issuer；`http://localhost`、`http://127.0.0.1` 與
+`http://[::1]` 只在 Vite development 模式可用。正式部署應設定 exact issuer allowlist。
+`openid fhirUser` 可加入 scopes，但在 Backend 尚未使用其 Practitioner identity 授權前
+不預設要求。
 
 Provider EHR Launch 必須提供 `iss` 與 `launch` query parameters。授權 callback 必須在
 authorization server 精確註冊為同一 origin 的：

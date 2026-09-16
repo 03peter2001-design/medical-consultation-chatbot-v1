@@ -4,12 +4,12 @@ import test from 'node:test'
 import {
   areAllSummaryRowsConfirmed,
   buildFhirCompositionRequest,
-  confirmEditableSummaryRow,
+  confirmEditableSummaryRows,
   createEditableSummaryRows,
   updateEditableSummaryRow,
 } from '../src/services/physicianSummary.js'
 
-test('physician edits are reflected in the shared summary row and require reconfirmation', () => {
+test('physician edits invalidate the single whole-record confirmation', () => {
   const sourceRows = [
     {
       key: 'Chief Complaint',
@@ -17,8 +17,15 @@ test('physician edits are reflected in the shared summary row and require reconf
       value: 'Original AI summary',
       source: 'Gemini 彙整 · 待醫師確認',
     },
+    {
+      key: 'Past History',
+      label: '過去病史',
+      value: 'No known history',
+      source: 'Gemini 彙整 · 待醫師確認',
+    },
   ]
-  const [editableRow] = createEditableSummaryRows(sourceRows)
+  const rows = createEditableSummaryRows(sourceRows)
+  const [editableRow] = rows
 
   assert.equal(editableRow.value, 'Original AI summary')
   assert.equal(editableRow.originalValue, 'Original AI summary')
@@ -27,38 +34,38 @@ test('physician edits are reflected in the shared summary row and require reconf
   updateEditableSummaryRow(editableRow, 'Physician-edited summary')
   assert.equal(editableRow.value, 'Physician-edited summary')
   assert.equal(editableRow.confirmed, false)
-  assert.equal(confirmEditableSummaryRow(editableRow), true)
-  assert.equal(editableRow.confirmed, true)
+  assert.equal(confirmEditableSummaryRows(rows), true)
+  assert.equal(rows.every((row) => row.confirmed), true)
 
-  updateEditableSummaryRow(editableRow, 'Second edit')
-  assert.equal(editableRow.confirmed, false)
+  updateEditableSummaryRow(editableRow, 'Second edit', rows)
+  assert.equal(rows.some((row) => row.confirmed), false)
   assert.equal(sourceRows[0].value, 'Original AI summary')
 })
 
-test('an empty physician summary row cannot be confirmed', () => {
-  const [editableRow] = createEditableSummaryRows([
+test('the whole record cannot be confirmed when any summary row is empty', () => {
+  const rows = createEditableSummaryRows([
+    { key: 'Chief Complaint', value: 'Headache' },
     { key: 'Past History', value: 'Initial history' },
   ])
 
-  updateEditableSummaryRow(editableRow, '   ')
+  updateEditableSummaryRow(rows[1], '   ', rows)
 
-  assert.equal(confirmEditableSummaryRow(editableRow), false)
-  assert.equal(editableRow.confirmed, false)
+  assert.equal(confirmEditableSummaryRows(rows), false)
+  assert.equal(rows.some((row) => row.confirmed), false)
+  assert.equal(confirmEditableSummaryRows([]), false)
 })
 
-test('FHIR preview remains unavailable until every summary row is confirmed', () => {
+test('one action confirms every row and enables the FHIR preview', () => {
   const rows = createEditableSummaryRows([
     { key: 'Chief Complaint', value: 'Headache' },
     { key: 'Past History', value: 'Diabetes' },
   ])
 
   assert.equal(areAllSummaryRowsConfirmed(rows), false)
-  confirmEditableSummaryRow(rows[0])
-  assert.equal(areAllSummaryRowsConfirmed(rows), false)
-  confirmEditableSummaryRow(rows[1])
+  confirmEditableSummaryRows(rows)
   assert.equal(areAllSummaryRowsConfirmed(rows), true)
 
-  updateEditableSummaryRow(rows[0], 'Updated headache')
+  updateEditableSummaryRow(rows[0], 'Updated headache', rows)
   assert.equal(areAllSummaryRowsConfirmed(rows), false)
   assert.equal(areAllSummaryRowsConfirmed([]), false)
 })
@@ -68,7 +75,7 @@ test('FHIR write request contains only the reviewed sections and optimistic vers
     { key: 'Chief Complaint', label: '主訴', value: 'Headache' },
     { key: 'Present Illness', label: '現病史', value: 'One hour' },
   ])
-  rows.forEach(confirmEditableSummaryRow)
+  confirmEditableSummaryRows(rows)
 
   assert.deepEqual(
     buildFhirCompositionRequest(rows, '2026-08-25T00:00:00Z'),

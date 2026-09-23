@@ -1,0 +1,3 @@
+[submodule "AgentClinic"]
+	path = AgentClinic
+	url = git@github.com:W-X-Dai/AgentClinic.git

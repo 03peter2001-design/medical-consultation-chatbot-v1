@@ -51,6 +51,7 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 | SMART on FHIR sandbox app | `1.2.0` | 2026-09-13 | STU 2.2 scopes／PKCE、可覆寫 ports 與固定 runtime images | [smart-app/README.md](smart-app/README.md#服務版本) |
 | Integration deployment bundle | `1.9.0` | 2026-09-11 | 為可開啟智慧問診的醫師核發 QR 管理權限並記錄整合發布需求 | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
 | LLM 雙 Agent DDX 實驗 | `0.8.1` | 2026-08-30 | 暫時性 Gemini API 有限退避重試，judge 契約錯誤可在原操作內修正一次 | [llm_experiments/README.md](llm_experiments/README.md#版本) |
+| 通才醫療 VLM 影像評測 | `0.4.1` | 2026-09-17 | 新增 A100 80GB 的 11 模型 vLLM 測試矩陣、記憶體保守設定與硬體相容性紀錄 | [AgentClinic/README.md](AgentClinic/README.md#local-research-extension-version) |
 
 `frontend-v2/packages/shared` 是 doctor／patient 共用程式庫，不是獨立服務；
 `smart-deployment/` 是 SMART sandbox 的 proxy 設定，跟隨 SMART app

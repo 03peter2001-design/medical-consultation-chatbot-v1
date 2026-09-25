@@ -73,7 +73,7 @@ class SpeechTranscriptionStatus(BaseModel):
 
 class HealthResponse(BaseModel):
     status: Literal["ok"]
-    interview_engine: Literal["questionnaire", "amie"]
+    interview_engine: Literal["questionnaire", "medkgi", "amie"]
     llm_provider: str
     llm_model: str
     sessions: int = Field(ge=0)

@@ -895,6 +895,7 @@
           "interview_engine": {
             "enum": [
               "questionnaire",
+              "medkgi",
               "amie"
             ],
             "title": "Interview Engine",

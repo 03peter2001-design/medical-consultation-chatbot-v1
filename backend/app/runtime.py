@@ -35,8 +35,10 @@ def _normalize_interview_engine(value: str) -> str:
     configured = value.strip().lower()
     aliases = {"legacy": "questionnaire", "simple": "questionnaire"}
     normalized = aliases.get(configured, configured)
-    if normalized not in {"amie", "questionnaire"}:
-        raise RuntimeError("INTERVIEW_ENGINE 僅支援 questionnaire（legacy／simple 別名）或 amie")
+    if normalized not in {"amie", "medkgi", "questionnaire"}:
+        raise RuntimeError(
+            "INTERVIEW_ENGINE 僅支援 questionnaire（legacy／simple 別名）、medkgi 或 amie"
+        )
     return normalized
 
 

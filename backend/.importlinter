@@ -5,6 +5,7 @@ root_packages =
     domain
     infrastructure
     knowledge
+    medkgi
     scripts
 
 [importlinter:contract:domain-boundary]
@@ -17,6 +18,7 @@ forbidden_modules =
     app
     infrastructure
     knowledge
+    medkgi
 
 [importlinter:contract:infrastructure-boundary]
 name = Infrastructure must not depend on application concerns
@@ -28,6 +30,7 @@ forbidden_modules =
     app
     domain
     knowledge
+    medkgi
 
 [importlinter:contract:knowledge-boundary]
 name = Knowledge retrieval must remain independent
@@ -39,6 +42,7 @@ forbidden_modules =
     app
     domain
     infrastructure
+    medkgi
 
 [importlinter:contract:amie-boundary]
 name = AMIE workflow may only depend on the domain layer
@@ -47,5 +51,17 @@ source_modules =
     amie
 forbidden_modules =
     app
+    infrastructure
+    knowledge
+
+[importlinter:contract:medkgi-boundary]
+name = MedKGI core must remain independent
+type = forbidden
+source_modules =
+    medkgi
+forbidden_modules =
+    amie
+    app
+    domain
     infrastructure
     knowledge

@@ -12,8 +12,23 @@ RAG 只用於：
 - 背景理學檢查、檢驗及影像建議
 - 六段式臨床分析的來源輔助
 
-病患端 AMIE 執行時不查 RAG。RAG 不得產生或改變 Safety 結果、疾病候選、
+病患端 AMIE 執行時不查 RAG。明示選用的 MedKGI 研究引擎也不以 RAG 計算疾病
+posterior、資訊增益、下一題或停止條件；RAG 可保留於其完成後的非診斷性檢查／檢驗／
+影像工作草稿，以及醫師主動文獻問答。RAG 不得產生或改變 Safety 結果、疾病候選、
 支持／反對票、完整度與下一題。
+
+MedKGI 的 PrimeKG 子圖、manifest 與可選 PubMedBERT embeddings 是獨立的本機研究
+資產，預設位於被版本控制忽略的 `../data/medkgi/`，不屬於 Chroma/RAG collections。
+PubMedBERT 只在標準英文名稱的精確與編輯距離對齊失敗後提供語意後備；它不直接解讀
+中文／台語病人原話，也不取代來源治理或人工審查。資產建置與啟用方式見
+[後端說明](../README.md#medkgi-研究引擎)。
+
+官方 PrimeKG file `6180620` 已驗證可建置及載入：26,474 nodes、151,338
+disease-symptom edges、64,388 disease-disease edges，並去除 151,682 筆 duplicate
+rows。但這不等於路由 coverage 合格；目前每個 active route 均有受治理 profiles
+缺少 phenotype edges 或存在語意碰撞，strict startup prevalidation 會使 MedKGI
+回傳 503 fail closed。PubMedBERT 相似度不得被當作臨床核准 mapping；必須先完成
+clinician-reviewed terminology mapping 與 coverage reconciliation。
 
 ## 資料目錄
 

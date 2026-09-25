@@ -10,6 +10,8 @@ import unittest
 from unittest.mock import patch
 
 from app.services.amie_audit import (
+    _decision_source,
+    append_amie_trace,
     append_manual_amie_trace,
     interview_length_profile,
     save_amie_state,
@@ -145,6 +147,78 @@ class ProfileWiringTests(unittest.TestCase):
         )
         self.assertEqual(session["amie_state"]["interview_length"]["asked"], 1)
         self.assertEqual(session["data"]["_amie"]["interview_length"]["asked"], 1)
+
+    def test_medkgi_trace_keeps_information_gain_and_specific_source(self):
+        class MedKGIResult(self._Result):
+            action = "ask"
+            decision = {
+                "scoring_method": "medkgi_bayesian_information_gain_v1",
+                "question_utility": 0.1875,
+                "next_field": "tender",
+            }
+            next_question = QUESTIONNAIRE[6]
+            data: dict = {}
+            handoff_reason = ""
+
+        session = session_with(turns=1)
+        append_amie_trace(
+            session,
+            current_question=QUESTIONNAIRE[5],
+            answer="突然發作",
+            result=MedKGIResult(),
+        )
+
+        decision = session["transcript"][-1]["decision"]
+        self.assertEqual(decision["source"], "medkgi_information_gain")
+        self.assertEqual(decision["question_utility"], 0.1875)
+        self.assertEqual(decision["information_gain"], 0.1875)
+
+    def test_legacy_vote_decision_source_is_unchanged(self):
+        self.assertEqual(
+            _decision_source(
+                section="disease",
+                decision={"scoring_method": "unit_vote_v1"},
+                model_error="",
+                red_flags=[],
+            ),
+            "deterministic_disease_vote",
+        )
+
+    def test_legacy_vote_trace_does_not_add_medkgi_information_gain_alias(self):
+        class LegacyResult(self._Result):
+            action = "ask"
+            decision = {
+                "scoring_method": "unit_vote_v1",
+                "question_utility": 2,
+                "next_field": "tender",
+            }
+            next_question = QUESTIONNAIRE[6]
+            data: dict = {}
+            handoff_reason = ""
+
+        session = session_with(turns=1)
+        append_amie_trace(
+            session,
+            current_question=QUESTIONNAIRE[5],
+            answer="突然發作",
+            result=LegacyResult(),
+        )
+
+        decision = session["transcript"][-1]["decision"]
+        self.assertEqual(decision["source"], "deterministic_disease_vote")
+        self.assertEqual(decision["question_utility"], 2)
+        self.assertNotIn("information_gain", decision)
+
+    def test_medkgi_source_precedes_generic_section_classification(self):
+        self.assertEqual(
+            _decision_source(
+                section="basic",
+                decision={"scoring_method": "medkgi_bayesian_information_gain_v1"},
+                model_error="",
+                red_flags=[],
+            ),
+            "medkgi_information_gain",
+        )
 
 
 class BatchMeasurementValidityTests(unittest.TestCase):

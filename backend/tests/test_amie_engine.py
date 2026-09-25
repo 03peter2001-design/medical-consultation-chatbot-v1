@@ -589,6 +589,92 @@ class AMIEEngineTests(unittest.TestCase):
             {"onset", "current_meds", "allergy"},
         )
 
+    def test_selected_question_hook_updates_returned_disease_assessment(self):
+        hook_calls = []
+
+        class StubDiagnosisStrategy:
+            @staticmethod
+            def score_diseases(clinical_facts, *, route, previous_assessment):
+                del clinical_facts, route, previous_assessment
+                candidate = {
+                    "id": "synthetic_candidate",
+                    "name": "Synthetic candidate",
+                    "net_votes": 1,
+                    "support_votes": 1,
+                    "oppose_votes": 0,
+                    "coverage": 0.0,
+                    "decisive_coverage": 0.0,
+                    "supporting": [],
+                    "opposing": [],
+                    "missing_facts": [],
+                    "must_not_miss": False,
+                    "review_status": "reviewed",
+                    "safety_rule_codes": [],
+                    "coding": None,
+                }
+                return {
+                    "schema_version": 2,
+                    "profile_version": "chest-synthetic-v1",
+                    "method": "synthetic_strategy",
+                    "status": "ready",
+                    "computed_from": "live",
+                    "provisional": False,
+                    "top": [candidate],
+                    "ranked": [candidate],
+                    "must_not_miss": [],
+                }
+
+            @staticmethod
+            def question_utility(question, assessment, *, route):
+                del question, assessment, route
+                return 1.0
+
+            @staticmethod
+            def build_candidate_frontier(assessment, *, max_candidates):
+                return {
+                    "phase": "confirm",
+                    "leader_id": assessment["ranked"][0]["id"],
+                    "candidates": assessment["ranked"][:max_candidates],
+                }
+
+            @staticmethod
+            def funnel_question_score(question, frontier, *, route):
+                del question, frontier, route
+                return {
+                    "discrimination_score": 1.0,
+                    "confirmation_score": 0.0,
+                    "refutation_score": 0.0,
+                    "target_fact_codes": [],
+                }
+
+            @staticmethod
+            def record_selected_question(question, assessment, *, route):
+                hook_calls.append((question["field"], route))
+                return {**assessment, "recorded_selected_field": question["field"]}
+
+        result = AMIEEngine(
+            FakeLLM(),
+            diagnosis_strategy=StubDiagnosisStrategy(),
+        ).run_turn(
+            route="chest",
+            answer="逐漸發作",
+            current_field="start_type",
+            data={**self.base_data, "start_type": "逐漸發作"},
+            questionnaire=self.questionnaire,
+            prefilled_fields=self.prefilled,
+        )
+
+        self.assertEqual(result.action, "ask")
+        self.assertIsNotNone(result.next_question)
+        self.assertEqual(
+            hook_calls,
+            [(result.next_question["field"], "chest")],
+        )
+        self.assertEqual(
+            result.disease_assessment["recorded_selected_field"],
+            result.next_question["field"],
+        )
+
     def test_chest_severity_option_maps_directly_to_a_clinical_fact(self):
         llm = FakeLLM()
         result = AMIEEngine(llm).run_turn(

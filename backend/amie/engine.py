@@ -95,8 +95,10 @@ class AMIEEngine:
         llm_client: Any,
         *,
         max_turns: int | None = None,
+        diagnosis_strategy: Any | None = None,
     ):
         self.llm = llm_client
+        self.diagnosis_strategy = diagnosis_strategy
         configured_max_turns = os.getenv("AMIE_MAX_TURNS")
         # ``None`` means "derive the cap from the session". A route policy only
         # budgets its own disease section, so no single constant fits every
@@ -116,6 +118,73 @@ class AMIEEngine:
         self.max_turns = override
         self.chief_extractor = ChiefComplaintExtractor(llm_client)
         self.graph = self._build_graph()
+
+    def _score_diseases(
+        self,
+        clinical_facts: list[dict[str, Any]],
+        *,
+        route: str,
+        previous_assessment: dict[str, Any] | None,
+    ) -> dict[str, Any]:
+        diagnosis_strategy = getattr(self, "diagnosis_strategy", None)
+        if diagnosis_strategy is not None:
+            return diagnosis_strategy.score_diseases(
+                clinical_facts,
+                route=route,
+                previous_assessment=previous_assessment,
+            )
+        return score_diseases(clinical_facts, route=route, computed_from="live")
+
+    def _question_utility(
+        self,
+        question: dict[str, Any],
+        assessment: dict[str, Any],
+        *,
+        route: str,
+    ) -> float:
+        diagnosis_strategy = getattr(self, "diagnosis_strategy", None)
+        if diagnosis_strategy is not None:
+            return diagnosis_strategy.question_utility(
+                question,
+                assessment,
+                route=route,
+            )
+        return question_utility(question, assessment, route=route)
+
+    def _candidate_frontier(
+        self,
+        assessment: dict[str, Any],
+        *,
+        vote_margin: int,
+        max_candidates: int,
+    ) -> dict[str, Any]:
+        diagnosis_strategy = getattr(self, "diagnosis_strategy", None)
+        if diagnosis_strategy is not None:
+            return diagnosis_strategy.build_candidate_frontier(
+                assessment,
+                max_candidates=max_candidates,
+            )
+        return build_candidate_frontier(
+            assessment,
+            vote_margin=vote_margin,
+            max_candidates=max_candidates,
+        )
+
+    def _question_score(
+        self,
+        question: dict[str, Any],
+        frontier: dict[str, Any],
+        *,
+        route: str,
+    ) -> dict[str, Any]:
+        diagnosis_strategy = getattr(self, "diagnosis_strategy", None)
+        if diagnosis_strategy is not None:
+            return diagnosis_strategy.funnel_question_score(
+                question,
+                frontier,
+                route=route,
+            )
+        return funnel_question_score(question, frontier, route=route)
 
     def _build_graph(self):
         workflow = StateGraph(AMIEGraphState)
@@ -668,12 +737,17 @@ class AMIEEngine:
         fixed_order_routes = set(session_routes) - set(disease_vote_routes)
         scoring_errors: dict[str, str] = {}
         assessments_by_route: dict[str, dict[str, Any]] = {}
+        previous_by_route = data.get("_disease_assessments_by_route", {})
         for scoring_route in disease_vote_routes:
             try:
-                assessments_by_route[scoring_route] = score_diseases(
+                assessments_by_route[scoring_route] = self._score_diseases(
                     clinical_facts,
                     route=scoring_route,
-                    computed_from="live",
+                    previous_assessment=(
+                        previous_by_route.get(scoring_route)
+                        if isinstance(previous_by_route, dict)
+                        else None
+                    ),
                 )
             except Exception as error:
                 scoring_errors[scoring_route] = f"{type(error).__name__}: {_trim(error, 200)}"
@@ -703,13 +777,13 @@ class AMIEEngine:
             state.get("questionnaire", []),
             clinical_facts,
         )
-        utilities: dict[str, int] = {}
+        utilities: dict[str, float] = {}
         if not scoring_error:
             for item in candidates:
                 item_route = str(item.get("route") or route)
                 item_assessment = assessments_by_route.get(item_route)
                 utilities[item["field"]] = (
-                    question_utility(
+                    self._question_utility(
                         item,
                         item_assessment,
                         route=item_route,
@@ -724,7 +798,7 @@ class AMIEEngine:
         candidate_frontier: list[dict[str, Any]] = []
         selected_funnel_score: dict[str, Any] = {}
         frontiers_by_route = {
-            scoring_route: build_candidate_frontier(
+            scoring_route: self._candidate_frontier(
                 assessments_by_route[scoring_route],
                 vote_margin=policies[scoring_route]["frontier_vote_margin"],
                 max_candidates=policies[scoring_route]["frontier_max_candidates"],
@@ -762,7 +836,7 @@ class AMIEEngine:
                 item_route = str(item.get("route") or route)
                 frontier = frontiers_by_route.get(item_route)
                 funnel_scores[item["field"]] = (
-                    funnel_question_score(
+                    self._question_score(
                         item,
                         frontier,
                         route=item_route,
@@ -771,7 +845,7 @@ class AMIEEngine:
                     else dict(empty_score)
                 )
 
-            def selection_key(item: dict[str, Any]) -> tuple[int, int, int, int]:
+            def selection_key(item: dict[str, Any]) -> tuple[float, float, float, int]:
                 score = funnel_scores[item["field"]]
                 item_route = str(item.get("route") or route)
                 item_phase = frontiers_by_route.get(item_route, {}).get("phase", "")
@@ -853,6 +927,27 @@ class AMIEEngine:
         )
         action = "handoff" if scoring_error else "complete" if can_complete else "ask"
         next_field = selected["field"] if action == "ask" and selected else None
+        record_selected = getattr(
+            getattr(self, "diagnosis_strategy", None),
+            "record_selected_question",
+            None,
+        )
+        if action == "ask" and selected is not None and callable(record_selected):
+            selected_route = str(selected.get("route") or route)
+            try:
+                updated_assessment = record_selected(
+                    selected,
+                    assessments_by_route[selected_route],
+                    route=selected_route,
+                )
+                assessments_by_route[selected_route] = updated_assessment
+                if selected_route == route:
+                    assessment = updated_assessment
+                    data["_disease_assessment"] = updated_assessment
+            except Exception as error:
+                scoring_error = f"{selected_route}: {type(error).__name__}: {_trim(error, 200)}"
+                action = "handoff"
+                next_field = None
         reason = (
             "固定疾病表無法使用，停止自動評分並轉交醫療人員。"
             if scoring_error

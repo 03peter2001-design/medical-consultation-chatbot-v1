@@ -26,6 +26,7 @@ known-first-party = [
     "domain",
     "infrastructure",
     "knowledge",
+    "medkgi",
     "scripts",
 ]
 
@@ -40,6 +41,7 @@ include = [
     "domain",
     "infrastructure",
     "knowledge",
+    "medkgi",
     "scripts",
     "main.py",
 ]
@@ -67,6 +69,7 @@ source = [
     "domain",
     "infrastructure",
     "knowledge",
+    "medkgi",
     "scripts",
 ]
 omit = [
@@ -97,6 +100,7 @@ paths = [
     "domain",
     "infrastructure",
     "knowledge",
+    "medkgi",
     "scripts",
     "main.py",
 ]

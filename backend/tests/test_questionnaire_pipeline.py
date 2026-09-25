@@ -141,6 +141,7 @@ class QuestionnairePipelineTests(unittest.TestCase):
         self.assertEqual(runtime._normalize_interview_engine("questionnaire"), "questionnaire")
         self.assertEqual(runtime._normalize_interview_engine("legacy"), "questionnaire")
         self.assertEqual(runtime._normalize_interview_engine("simple"), "questionnaire")
+        self.assertEqual(runtime._normalize_interview_engine("medkgi"), "medkgi")
         self.assertEqual(runtime._normalize_interview_engine("amie"), "amie")
         with self.assertRaises(RuntimeError):
             runtime._normalize_interview_engine("unknown")
@@ -551,6 +552,46 @@ class QuestionnairePipelineTests(unittest.TestCase):
             side_effect=AssertionError("questionnaire records must not be scored"),
         ):
             self.assertEqual(consultation_reporting._assessment_for_record(record), {})
+
+    def test_medkgi_startup_fails_closed_before_creating_session(self):
+        request = ChatRequest(session_id="medkgi-assets-missing", message="")
+        with (
+            patch.object(patient, "INTERVIEW_ENGINE", "medkgi"),
+            patch.object(patient, "sessions", self.sessions),
+            patch.object(patient, "current_patient_session", return_value=None),
+            patch.object(patient, "_get_medkgi_engine", side_effect=ValueError("invalid asset")),
+            patch.object(patient, "safe_log") as safe_log,
+        ):
+            with self.assertRaises(HTTPException) as caught:
+                asyncio.run(patient._chat_impl(request, BackgroundTasks()))
+
+        self.assertEqual(caught.exception.status_code, 503)
+        self.assertNotIn(request.session_id, self.sessions)
+
+        safe_log.assert_called_once()
+
+    def test_medkgi_factory_applies_core_turn_limit_to_outer_engine(self):
+        strategy = SimpleNamespace(core=SimpleNamespace(config=SimpleNamespace(turn_limit=7)))
+        previous = patient._medkgi_engine_instance
+        patient._medkgi_engine_instance = None
+        try:
+            with (
+                patch.object(
+                    patient.MedKGIDiagnosisStrategy,
+                    "from_environment",
+                    return_value=strategy,
+                ),
+                patch.object(patient, "AMIEEngine") as engine_type,
+            ):
+                instance = patient._get_medkgi_engine()
+                self.assertIs(instance, engine_type.return_value)
+                engine_type.assert_called_once_with(
+                    patient.llm_client,
+                    max_turns=7,
+                    diagnosis_strategy=strategy,
+                )
+        finally:
+            patient._medkgi_engine_instance = previous
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 
 ## 服務版本
 
-目前版本：**v0.14.0（2026-09-11）**。
+目前版本：**v0.15.0（2026-09-23）**。
 
 本次因主動撤除既有 AMIE／語意標籤能力並回到較小的實驗性功能面，版本線依專案
 決策由 0 重新編碼。下方 `v1.x` 條目保留為舊能力線的歷史紀錄，不表示 `v0.3.0`
@@ -23,6 +23,30 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 - RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
 - Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
   revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v0.15.0 (2026-09-23)
+
+- 新增明示選用的 `INTERVIEW_ENGINE=medkgi` 研究引擎，以本機 PrimeKG 衍生子圖、
+  疾病 posterior、資訊增益選題與停止條件取代 RAG＋LLM 的診斷核心；預設仍是
+  `questionnaire`，既有 API 與已保存病例保持相容。
+- MedKGI 啟動時驗證知識圖譜、manifest 與可選的 PubMedBERT embeddings。資產缺失、
+  checksum／schema 不符、無法可靠對齊實體或 posterior 無法計算時會 fail closed，
+  不回退為 LLM 猜測，也不把不完整結果標示為診斷。
+- 既有 LLM 僅保留在受限 schema 下做 evidence-grounded 的自由文字實體／fact 擷取；
+  選中的題目使用經審查固定文字，不由 LLM 改寫。Safety 規則在 MedKGI 推論之前獨立
+  執行且不可被模型或圖譜覆寫。PubMedBERT 只在標準英文名稱無法
+  精確或以編輯距離對齊時提供本機語意後備，不直接判讀中文／台語病人原話。
+- PrimeKG、模型快取及衍生 embeddings 為本機、未納入版本控制的研究資產；manifest
+  記錄來源、版本、checksum 與建立 metadata，臨床審查狀態必須另行治理，不可由
+  manifest 推定。此版本未核准任何臨床內容；MedKGI 排序與 posterior 不是確診或
+  校準患病機率，正式使用仍須獨立臨床驗證與醫師確認。
+- RAG 可繼續支援非診斷性的檢查／檢驗／影像草稿及醫師文獻問答，但不參與 MedKGI
+  疾病 posterior、下一題、停止條件或 Safety 決策。
+- 官方 PrimeKG file `6180620` 已實際建置及載入為 26,474 nodes、151,338
+  disease-symptom edges 與 64,388 disease-disease edges，建置時去除 151,682 筆
+  duplicate rows；但目前每個 active route 都仍有 governed profiles 缺少 phenotype
+  edges 或發生語意碰撞。strict startup prevalidation 因此維持 503 fail closed，
+  尚不能啟用 MedKGI 病患路徑。
 
 ### v0.14.0 (2026-09-11)
 
@@ -615,9 +639,15 @@ GEMINI_TRANSLATION_MODEL=gemini-3.5-flash-lite
 | 變數 | 用途 |
 | --- | --- |
 | `INTERVIEW_ENGINE=questionnaire` | 預設：本機依序問固定題目，完成後以 7 個擷取與 5 個 RAG／臨床決策 Gemini prompts 整理並驗證六大報告區塊 |
+| `INTERVIEW_ENGINE=medkgi` | 明示啟用 gated 研究引擎；需要有效的本機 PrimeKG／manifest，不能視為臨床核准或正式診斷 |
 | `INTERVIEW_ENGINE=legacy` | `questionnaire` 的相容別名 |
 | `INTERVIEW_ENGINE=simple` | `questionnaire` 的相容別名 |
 | `INTERVIEW_ENGINE=amie` | 明示回退舊 AMIE／ClinicalFact／疾病票數流程；不建議作為新流程 |
+| `MEDKGI_KG_PATH` | PrimeKG 衍生 JSON；預設 `data/medkgi/primekg.json` |
+| `MEDKGI_MANIFEST_PATH` | 記錄來源版本、checksum 與建置設定的 manifest；預設 `data/medkgi/manifest.json` |
+| `MEDKGI_EMBEDDINGS_PATH` | 可選的本機 PubMedBERT 實體 embeddings；預設 `data/medkgi/pubmedbert_embeddings.npz` |
+| `MEDKGI_PUBMEDBERT_MODEL` | Runtime 查詢 embedding 使用的既有本機模型目錄；不接受 Hugging Face repo ID，也不會從網路下載 |
+| `MEDKGI_MAX_TURNS` | MedKGI 問診硬上限，預設 20；達上限時停止並保留研究／未確認標記 |
 | `AMIE_MAX_TURNS` | 可選的整體動態問診硬上限；未設定時依共用題與每條核准路由 policy 動態計算（最高 100） |
 | `CLINICAL_IO_CONCURRENCY` | async route 的同步臨床／模型 worker 上限，預設 4、範圍 1–32 |
 | `CLINICAL_IO_TIMEOUT_SECONDS` | 單次同步臨床／模型工作的 route 等待上限，預設 45 秒、範圍 5–180 秒 |
@@ -758,6 +788,96 @@ fact 白名單、舊病例映射與 Safety 規則位於
 `amie/rules/safety_rules.json`；必要欄位、選題策略、領先群票距與數量、停止門檻
 及輪數上限位於 `questionnaire_data/*.json`。這裡的 AMIE 是依公開研究方法實作的流程，不是
 Google 官方 AMIE 模型或服務，也不包含 self-play 訓練。
+
+### MedKGI 研究引擎
+
+`INTERVIEW_ENGINE=medkgi` 是 opt-in、gated 的研究 rollout，不會隨安裝或資產存在
+自動啟用。它以 PrimeKG 衍生圖譜上的疾病 posterior、資訊增益選題與停止條件負責
+診斷推論，不把 RAG 檢索片段交由 LLM 自由產生疾病排名。既有 LLM 只可在固定 schema
+下做 evidence-grounded 的自由文字實體／fact 擷取；資訊增益選中的題目使用經審查的
+固定問卷文字，不由 LLM 產生或改寫。若 extractor 是外部服務，病人文字仍會跨越外部
+資料邊界，必須沿用上述告知同意、契約、保存地區與稽核限制。
+
+Safety 維持獨立且優先於 MedKGI 推論。缺少資產、manifest／checksum 不符、實體無法
+可靠對齊或計算失敗時，流程必須 fail closed，不回退至 RAG、自由生成式 LLM 診斷或
+最接近疾病的猜測。圖譜 posterior 是演算法內部排序值，不是經校準患病機率；輸出保持
+研究性、未經醫師確認狀態，不得直接建立確診、治療或已簽署醫囑。
+
+#### 官方 PrimeKG 資產驗證狀態
+
+2026-09-23 使用官方 PrimeKG file `6180620` 的實際建置／載入驗證已成功，衍生圖譜
+包含：
+
+- 26,474 個 nodes
+- 151,338 條 disease-symptom edges
+- 64,388 條 disease-disease edges
+- 151,682 筆建置時去除的 duplicate rows
+
+這只證明檔案格式、builder、checksum 與 loader 可共同運作，不表示 active routes 已能
+安全執行。目前胸痛、頭痛與腹痛路由均至少有一個受治理疾病 profile 無可用 phenotype
+edges，或有多個 profiles 發生語意碰撞而對齊至同一 KG entity。strict startup
+prevalidation 會將 MedKGI runtime 標記為 unavailable；明示選用
+`INTERVIEW_ENGINE=medkgi` 時回傳 503，而不以部分 coverage、最近似疾病、RAG 或
+LLM 猜測繼續。
+
+PubMedBERT 只是一個字面精確／編輯距離失敗後的語意候選 fallback。高相似度不能證明
+兩個臨床概念等價，也不能把 collision、缺少 phenotype edges 或 route coverage 缺口
+轉換為已核准 mapping。啟用前必須由合格醫師與術語治理人員審查 profile-to-PrimeKG
+及 fact-to-phenotype mapping，解決碰撞，確認每條 active route 的 coverage，並重新
+通過 strict prevalidation。
+
+PrimeKG 原始 CSV、模型快取與衍生資產不得提交 Git。取得經核准且版本固定的 PrimeKG
+CSV 後，在 `backend/` 執行：
+
+```bash
+venv/bin/python scripts/build_medkgi_assets.py \
+  --primekg-csv /path/to/kg.csv \
+  --source-version <PrimeKG-release>
+```
+
+這會以 staging 後原子替換的方式建立：
+
+- `data/medkgi/primekg.json`
+- `data/medkgi/manifest.json`
+
+既有輸出預設不覆寫；只有確認來源與審查狀態後才可加 `--force`。CSV 缺少必要欄位、
+索引不合法、node metadata 互相衝突或沒有可保留的 edge 時，建置會在發布輸出前失敗。
+manifest 的來源版本與 checksum 是可重建性紀錄，不代表 PrimeKG 內容已獲院方臨床核准。
+
+PubMedBERT embeddings 是可選後備：標準英文實體先做精確與編輯距離對齊，兩者失敗
+時才可使用語意相似度；中文或台語病人原話必須先由受限 extractor 對應至核准詞彙，
+不得直接以英文模型強制配對。使用已下載的本機模型目錄可執行：
+
+```bash
+venv/bin/python scripts/build_medkgi_assets.py \
+  --primekg-csv /path/to/kg.csv \
+  --source-version <PrimeKG-release> \
+  --embedding-model /path/to/local/pubmedbert \
+  --embedding-batch-size 32
+```
+
+只有 builder 明確傳入 `--embedding-model hf://<repo-id>` 才允許 Hugging Face
+resolution，可能使用網路並下載第三方模型；未傳該旗標時，建置器不匯入／載入模型，
+也不存取網路。dependency、模型載入或 embedding 失敗同樣不會發布半成品。
+Runtime 的 `MEDKGI_PUBMEDBERT_MODEL` 規則更嚴格：只接受已存在的本機模型目錄，
+不接受 `hf://` 或一般 Hugging Face repo ID，也不會自行下載。完成 clinician-reviewed
+terminology mapping／coverage reconciliation 並重新通過 strict prevalidation 後，
+才可明確設定：
+
+```dotenv
+INTERVIEW_ENGINE=medkgi
+MEDKGI_KG_PATH=data/medkgi/primekg.json
+MEDKGI_MANIFEST_PATH=data/medkgi/manifest.json
+MEDKGI_EMBEDDINGS_PATH=data/medkgi/pubmedbert_embeddings.npz
+MEDKGI_PUBMEDBERT_MODEL=/opt/models/pubmedbert
+MEDKGI_MAX_TURNS=20
+```
+
+若未建立 embeddings，請不要設定 `MEDKGI_EMBEDDINGS_PATH`；無可靠對齊的實體保持
+unknown／觸發失敗安全處理。RAG 仍可在 MedKGI 問診結束後提供非診斷性的理學檢查、
+檢驗與影像工作草稿，或供醫師主動查詢文獻，但不得影響疾病 posterior、資訊增益、
+停止條件或 Safety。正式採用前仍需要資料授權審查、圖譜／詞彙臨床審查、離線黃金集
+驗證、校準與 subgroup 評估、失敗模式演練及合格醫師監督。
 
 ## FHIR 病歷預填與 Composition 寫入
 

@@ -28,6 +28,7 @@ from amie.clinical_facts import (
     merge_facts,
 )
 from amie.disease_profiles import attach_safety_conditions
+from amie.medkgi_strategy import MedKGIDiagnosisStrategy
 from amie.models import ChiefComplaintAssessment
 from app.contracts import PatientChatResponse, error_responses
 from app.models import ChatRequest, PatientPrefill
@@ -106,6 +107,9 @@ from app.services.patient_interview import (
 )
 from app.services.patient_interview import (
     copy_prefills_to_secondary_routes as _copy_prefills_to_secondary_routes,
+)
+from app.services.patient_interview import (
+    medkgi_initial_session as _medkgi_initial_session,
 )
 from app.services.patient_interview import (
     prefilled_patient_data as _prefilled_patient_data,
@@ -224,7 +228,7 @@ def _restore_previous_question(session: dict) -> dict:
     session.clear()
     session.update(snapshot)
     session["_history"] = history
-    if session.get("engine") == "amie":
+    if session.get("engine") in {"amie", "medkgi"}:
         session["transcript"] = transcript
     session["ts"] = time.time()
     if integration is not None:
@@ -298,7 +302,7 @@ def _question_payload(
     display_current = localize_question(current, language) if current else None
     if current is not None and display_current is not None and language == "minnan":
         reply = reply.replace(current["prompt"], display_current["prompt"])
-    if session.get("engine") == "amie":
+    if session.get("engine") in {"amie", "medkgi"}:
         active = [item for item in questionnaire if condition_matches(item, data)]
         completed_fields = set(data) | set(session.get("prefilled_fields", []))
         answered = sum(item["field"] in completed_fields for item in active)
@@ -312,7 +316,11 @@ def _question_payload(
         amie_progress = None
 
     debug_event = None
-    if AMIE_DEBUG_TRACE and session.get("engine") == "amie" and session.get("transcript"):
+    if (
+        AMIE_DEBUG_TRACE
+        and session.get("engine") in {"amie", "medkgi"}
+        and session.get("transcript")
+    ):
         event = session["transcript"][-1]
         decision = event.get("decision") or {}
         candidate_frontier = decision.get("candidate_frontier") or []
@@ -694,6 +702,7 @@ async def _complete_urgent_chief_complaint(
 
 
 _amie_engine_instance: AMIEEngine | None = None
+_medkgi_engine_instance: AMIEEngine | None = None
 _chief_extractor_instance: ChiefComplaintExtractor | None = None
 
 
@@ -801,6 +810,18 @@ def _get_amie_engine() -> AMIEEngine:
     if _amie_engine_instance is None:
         _amie_engine_instance = AMIEEngine(llm_client)
     return _amie_engine_instance
+
+
+def _get_medkgi_engine() -> AMIEEngine:
+    global _medkgi_engine_instance
+    if _medkgi_engine_instance is None:
+        strategy = MedKGIDiagnosisStrategy.from_environment()
+        _medkgi_engine_instance = AMIEEngine(
+            llm_client,
+            max_turns=strategy.core.config.turn_limit,
+            diagnosis_strategy=strategy,
+        )
+    return _medkgi_engine_instance
 
 
 async def _governed_route_entry(
@@ -915,9 +936,22 @@ async def _handoff_amie_consultation(
 async def _chat_amie(
     req: ChatRequest,
     background_tasks: BackgroundTasks,
+    *,
+    engine_name: str = "amie",
 ) -> dict:
     if req.session_id not in sessions:
-        session = _amie_initial_session(req)
+        if engine_name == "medkgi":
+            try:
+                _get_medkgi_engine()
+            except Exception as error:
+                safe_log("patient.medkgi_startup", "failure", error=error)
+                raise HTTPException(
+                    status_code=503,
+                    detail="MedKGI 本機知識圖譜尚未通過完整性驗證，無法安全開始問診。",
+                ) from error
+        session = (
+            _medkgi_initial_session(req) if engine_name == "medkgi" else _amie_initial_session(req)
+        )
         session["fhir_context"] = _initial_fhir_context(req)
         sessions[req.session_id] = session
         return _question_payload(
@@ -1066,9 +1100,11 @@ async def _chat_amie(
 
     session["turn_count"] += 1
 
+    engine = _get_medkgi_engine() if engine_name == "medkgi" else _get_amie_engine()
+
     try:
         result = await run_clinical_io(
-            _get_amie_engine().run_turn,
+            engine.run_turn,
             route=current.get("route") or data.get("type", ""),
             answer=user_input,
             current_field=field,
@@ -1334,8 +1370,8 @@ async def _chat_impl(req: ChatRequest, background_tasks: BackgroundTasks):
     if req.action == "back" and req.session_id in sessions:
         return _restore_previous_question(sessions[req.session_id])
 
-    if INTERVIEW_ENGINE == "amie":
-        response = await _chat_amie(req, background_tasks)
+    if INTERVIEW_ENGINE in {"amie", "medkgi"}:
+        response = await _chat_amie(req, background_tasks, engine_name=INTERVIEW_ENGINE)
     else:
         response = await _chat_questionnaire(req, background_tasks)
 

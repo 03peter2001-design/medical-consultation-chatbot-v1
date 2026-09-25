@@ -844,7 +844,7 @@ export interface components {
              * Interview Engine
              * @enum {string}
              */
-            interview_engine: "questionnaire" | "amie";
+            interview_engine: "questionnaire" | "medkgi" | "amie";
             /** Llm Model */
             llm_model: string;
             /** Llm Provider */

@@ -223,3 +223,19 @@ def amie_initial_session(req: ChatRequest) -> dict:
         "transcript": [],
         "ts": time.time(),
     }
+
+
+def medkgi_initial_session(req: ChatRequest) -> dict:
+    """Create an opt-in MedKGI session without changing legacy AMIE records."""
+
+    session = amie_initial_session(req)
+    session["engine"] = "medkgi"
+    session["data"]["_interview_pipeline"] = {
+        "engine": "medkgi",
+        "version": 1,
+        "method": "knowledge_graph_bayesian_information_gain",
+        "record": "osce_structured_evidence",
+        "question_policy": "approved_questionnaire_information_gain",
+        "clinical_status": "research_not_clinically_approved",
+    }
+    return session

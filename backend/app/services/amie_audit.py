@@ -101,6 +101,8 @@ def _decision_source(
         return "safety_rule"
     if model_error:
         return "deterministic_fallback"
+    if decision.get("scoring_method") == "medkgi_bayesian_information_gain_v1":
+        return "medkgi_information_gain"
     if section == "basic":
         return "deterministic_flow"
     if str(decision.get("audit_reason", "")).startswith("所有適用且核准的問題"):
@@ -143,6 +145,29 @@ def append_amie_trace(
         if current_question.get("field") in {"name", "gender", "birth_date", "blood_type"}
         else (result.data or {}).get("_last_semantic_safety") or {}
     )
+    decision_source = _decision_source(
+        section=current_question.get("section", ""),
+        decision=decision,
+        model_error=result.model_error,
+        red_flags=result.red_flags,
+    )
+    decision_trace = {
+        "action": result.action,
+        "requested_next_field": requested_field,
+        "selected_next_field": selected_field,
+        "next_question": (result.next_question.get("prompt") if result.next_question else None),
+        "needs_retrieval": bool(decision.get("needs_retrieval")),
+        "retrieval_query": decision.get("retrieval_query", ""),
+        "question_utility": decision.get("question_utility", 0),
+        "selection_phase": decision.get("selection_phase", ""),
+        "selection_tier": decision.get("selection_tier", ""),
+        "candidate_frontier": list(decision.get("candidate_frontier", [])),
+        "target_fact_codes": list(decision.get("target_fact_codes", [])),
+        "funnel_score": dict(decision.get("funnel_score", {})),
+        "source": decision_source,
+    }
+    if decision_source == "medkgi_information_gain":
+        decision_trace["information_gain"] = decision.get("question_utility", 0)
     trace = {
         "turn": session["turn_count"],
         "question": {
@@ -161,26 +186,7 @@ def append_amie_trace(
             "disease_assessment": result.disease_assessment,
             "clinical_facts": result.clinical_facts,
         },
-        "decision": {
-            "action": result.action,
-            "requested_next_field": requested_field,
-            "selected_next_field": selected_field,
-            "next_question": (result.next_question.get("prompt") if result.next_question else None),
-            "needs_retrieval": bool(decision.get("needs_retrieval")),
-            "retrieval_query": decision.get("retrieval_query", ""),
-            "question_utility": decision.get("question_utility", 0),
-            "selection_phase": decision.get("selection_phase", ""),
-            "selection_tier": decision.get("selection_tier", ""),
-            "candidate_frontier": list(decision.get("candidate_frontier", [])),
-            "target_fact_codes": list(decision.get("target_fact_codes", [])),
-            "funnel_score": dict(decision.get("funnel_score", {})),
-            "source": _decision_source(
-                section=current_question.get("section", ""),
-                decision=decision,
-                model_error=result.model_error,
-                red_flags=result.red_flags,
-            ),
-        },
+        "decision": decision_trace,
         "reason": reason,
         "model_error": result.model_error,
         "rag_sources": result.rag_sources,

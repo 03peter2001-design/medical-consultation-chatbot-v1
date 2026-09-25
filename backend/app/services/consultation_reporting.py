@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 import re
 import traceback
 from typing import cast
@@ -39,6 +40,29 @@ _DISEASE_LIKE_TERM = re.compile(
     r"心律不整|症候群|缺血|出血|中風)"
 )
 _DIAGNOSTIC_LANGUAGE = re.compile(r"診斷|鑑別|疑似|可能(?:是|為|罹患)|考慮(?:為|是)?|符合.+疾病")
+_MEDKGI_METHOD = "medkgi_bayesian_information_gain_v1"
+
+
+def _is_medkgi_assessment(assessment: dict) -> bool:
+    return assessment.get("method") == _MEDKGI_METHOD
+
+
+def _posterior_weight(item: dict) -> float | None:
+    value = item.get("posterior_weight")
+    if isinstance(value, bool):
+        return None
+    try:
+        weight = float(value)
+    except (TypeError, ValueError):
+        return None
+    if not math.isfinite(weight) or not 0 <= weight <= 1:
+        return None
+    return weight
+
+
+def _render_posterior_weight(item: dict) -> str:
+    weight = _posterior_weight(item)
+    return f"{weight:.1%}" if weight is not None else "未提供"
 
 
 def _contains_unapproved_disease_language(
@@ -171,13 +195,18 @@ def _supported_condition_summaries(assessment: dict) -> list[tuple[str, list[str
         if len(result) == 3:
             return result
 
+    medkgi = _is_medkgi_assessment(assessment)
     for item in assessment.get("top", []):
         name = str(item.get("name") or "").strip()
         if (
             not name
             or already_seen(name)
-            or int(item.get("support_votes") or 0) <= 0
-            or int(item.get("net_votes") or 0) <= 0
+            or (
+                _posterior_weight(item) is None
+                if medkgi
+                else int(item.get("support_votes") or 0) <= 0
+                or int(item.get("net_votes") or 0) <= 0
+            )
         ):
             continue
         evidence = list(
@@ -187,7 +216,7 @@ def _supported_condition_summaries(assessment: dict) -> list[tuple[str, list[str
                 if _single_paragraph(clue.get("evidence") or "")
             )
         )
-        if not evidence:
+        if not evidence and not medkgi:
             continue
         result.append((name, evidence[:1]))
         seen.add(name)
@@ -207,17 +236,38 @@ def _render_physician_quick_summary(
         220,
     )
     conditions = _supported_condition_summaries(assessment)
-    if conditions:
+    if conditions and _is_medkgi_assessment(assessment):
+        weights = {
+            str(item.get("name") or "").strip(): _render_posterior_weight(item)
+            for item in assessment.get("top", [])
+        }
+        rendered_items = []
+        for name, evidence in conditions:
+            basis = f"；依據：{'、'.join(evidence)}" if evidence else ""
+            rendered_items.append(
+                (
+                    f"{name}（posterior 相對權重 {weights[name]}{basis}）"
+                    if name in weights
+                    else f"{name}（Safety 規則方向{basis}）"
+                )
+            )
+        rendered_conditions = "；".join(rendered_items)
+        differential = f"MedKGI 知識圖譜鑑別：{rendered_conditions}。"
+    elif conditions:
         rendered_conditions = "；".join(
             f"{name}（依據：{'、'.join(evidence)}）" for name, evidence in conditions
         )
         differential = f"可能疾病包括{rendered_conditions}。"
+    elif _is_medkgi_assessment(assessment):
+        differential = "MedKGI 知識圖譜鑑別：目前資料不足，無法建立候選疾病排序。"
     else:
         differential = "目前資料不足，尚無具支持線索的可能疾病可供排序。"
-    return (
-        f"{history.rstrip('。；，, ')}。{differential}"
-        "以上為固定疾病表的線索相容結果，並非正式診斷。"
+    caveat = (
+        "上述 posterior 僅為候選疾病間的相對權重，不是經校準的疾病機率或正式診斷。"
+        if _is_medkgi_assessment(assessment)
+        else "以上為固定疾病表的線索相容結果，並非正式診斷。"
     )
+    return f"{history.rstrip('。；，, ')}。{differential}{caveat}"
 
 
 def _assessment_for_record(record: dict) -> dict:
@@ -251,6 +301,49 @@ def _assessment_for_record(record: dict) -> dict:
 
 
 def _render_vote_assessment(assessment: dict) -> str:
+    if _is_medkgi_assessment(assessment):
+        if assessment.get("status") == "unavailable":
+            return "【MedKGI 知識圖譜鑑別】\n知識圖譜目前無法使用，請由醫療人員依原始問診資料判斷。"
+        safety_conditions = assessment.get("safety_triggered_conditions", [])
+        top = assessment.get("top", [])
+        if not top and not safety_conditions:
+            return "【MedKGI 知識圖譜鑑別】\n目前沒有足夠的知識圖譜證據可建立候選疾病排序。"
+        lines = []
+        if safety_conditions:
+            lines.append("【Safety 規則觸發的鑑別方向】")
+            for index, item in enumerate(safety_conditions, start=1):
+                triggers = "；".join(
+                    "、".join(
+                        value
+                        for value in (
+                            trigger.get("rule_label", ""),
+                            trigger.get("evidence", ""),
+                        )
+                        if value
+                    )
+                    for trigger in item.get("triggered_by", [])
+                )
+                lines.append(f"{index}. {item['name']}{f'（{triggers}）' if triggers else ''}")
+            lines.append("以上來自固定 Safety 規則，不是經校準的疾病機率或正式診斷。")
+        if top:
+            if lines:
+                lines.append("")
+            lines.append("【MedKGI 知識圖譜鑑別】")
+            for index, item in enumerate(top, start=1):
+                evidence = "、".join(
+                    clue.get("evidence", "")
+                    for clue in item.get("supporting", [])
+                    if clue.get("evidence")
+                )
+                lines.append(
+                    f"{index}. {item['name']}：posterior 相對權重 "
+                    f"{_render_posterior_weight(item)}"
+                    f"{f'；支持線索：{evidence}' if evidence else ''}"
+                )
+            lines.append(
+                "以上 posterior 僅為候選疾病間的相對權重，不是經校準的疾病機率或正式診斷。"
+            )
+        return "\n".join(lines)
     if not assessment or assessment.get("status") == "unavailable":
         return "【規則式鑑別投票】\n疾病表目前無法使用，請由醫療人員依原始問診資料判斷。"
     safety_conditions = assessment.get("safety_triggered_conditions", [])
@@ -364,11 +457,21 @@ def _render_structured_note(
     names = {item["id"]: item["name"] for item in ranked}
     top = assessment.get("top", [])
     must_not_miss = assessment.get("must_not_miss", [])
+    medkgi = _is_medkgi_assessment(assessment)
 
     def disease_lines(items: list[dict], limit: int) -> str:
         selected = items[:limit]
         if not selected:
-            return "目前資料不足，無法由固定疾病表建立排序。"
+            return (
+                "目前資料不足，無法由 MedKGI 知識圖譜建立排序。"
+                if medkgi
+                else "目前資料不足，無法由固定疾病表建立排序。"
+            )
+        if medkgi:
+            return "\n".join(
+                f"{index}. {item['name']}（posterior 相對權重 {_render_posterior_weight(item)}）"
+                for index, item in enumerate(selected, start=1)
+            )
         return "\n".join(
             f"{index}. {item['name']}（淨票 {item['net_votes']}；"
             f"完整度 {round(item['coverage'] * 100)}%）"
@@ -398,10 +501,18 @@ def _render_structured_note(
         record,
         payload.get("emr_summary", ""),
     )
+    differential_heading = (
+        "【MedKGI 知識圖譜鑑別】" if medkgi else "【初步鑑別診斷（前3項最可能）】"
+    )
+    caveat = (
+        "MedKGI posterior 僅為候選疾病間的相對權重，不是經校準的疾病機率或正式診斷。"
+        if medkgi
+        else "固定疾病表投票僅供臨床決策參考，不是患病機率或正式診斷。"
+    )
     return f"""【病歷摘要 EMR】
 {summary}
 
-【初步鑑別診斷（前3項最可能）】
+{differential_heading}
 {disease_lines(top, 3)}
 
 【防漏診鑑別 — 5個絕對不能漏掉的隱形殺手】
@@ -416,7 +527,7 @@ def _render_structured_note(
 【影像學決策】
 {workup_lines("imaging")}
 
-固定疾病表投票僅供臨床決策參考，不是患病機率或正式診斷。"""
+{caveat}"""
 
 
 def generate_structured_note(

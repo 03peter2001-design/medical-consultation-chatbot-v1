@@ -12,6 +12,18 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 不代表正式診斷或已簽署醫囑；未完成院方的告知同意、供應商契約、資料保存地區與
 隱私審查前，不得用於真實病人資料。
 
+後端另提供需明確設定 `INTERVIEW_ENGINE=medkgi` 才會啟用的研究路徑：診斷核心改由
+本機 PrimeKG 衍生圖譜、Bayesian posterior 與資訊增益選題負責，LLM 僅做
+evidence-grounded、受限 schema 的自由文字實體／fact 擷取；題目文字仍來自經審查的
+固定問卷。該路徑不會取代獨立 Safety 規則，也未取得臨床核准；預設
+`questionnaire` 流程不變。
+
+目前的實際資產驗證狀態是「檔案可用，但臨床路由尚不可啟用」：官方 PrimeKG file
+`6180620` 已成功建置及載入；然而胸痛、頭痛與腹痛 active routes 的受治理疾病
+profiles 均仍有缺少 phenotype edges 或語意碰撞的對齊缺口。嚴格啟動預驗證會將
+MedKGI 標記為 unavailable，選用時回傳 503 fail closed。PubMedBERT fallback 不能
+取代經醫師審查的術語 mapping 與 coverage reconciliation。
+
 ## 系統總覽
 
 - **病患端**：自由主訴、FHIR 病歷預填、逐題問卷、疼痛位置標記及預設本機 Avatar
@@ -25,6 +37,9 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 - **RAG**：不參與病患問卷路由、下一題或 Safety；v2 索引在固定問卷完成後提供
   A（診斷／理檢）、B（檢驗）、C（影像）三個 metadata 分區的檢索證據，legacy
   索引則保留具 provenance 的相容檢索，再交由 Gemini 產生六段式報告
+- **MedKGI（opt-in 研究）**：本機 PrimeKG posterior／資訊增益負責疾病排序與選題；
+  RAG 只可保留於非診斷性 workup 草稿與醫師文獻問答；目前 active routes 尚未通過
+  governed terminology coverage 預驗證，因此維持 503 fail closed
 
 ```text
 病患端：病人主訴 → 本機關鍵字選擇固定問卷 → 依 JSON 順序逐題詢問
@@ -32,6 +47,9 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 
 醫師端：中文問題 → 去識別化與醫療術語英文化
                 → 本機 embedding／Chroma 檢索 → LLM 整理來源片段
+
+MedKGI 研究路徑：Safety → 受限 fact 擷取 → 本機 PrimeKG posterior／資訊增益
+                         → 核准固定題目 → 停止或繼續（資產／對齊失敗則 fail closed）
 ```
 
 ## 服務版本
@@ -43,8 +61,8 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 
 | 服務／可部署或研究產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
 | --- | --- | --- | --- | --- |
-| Backend API（含 Breeze ASR） | `0.14.0` | 2026-09-11 | 院內 QR 使用清單、原子取消／重新派發及 session 撤銷，schema v12 保留替代關係 | [backend/README.md](backend/README.md#服務版本) |
-| 開發版 Vue frontend | `0.14.2` | 2026-09-13 | 整份病歷確認後可操作 FHIR 送出入口，缺少綁定時明確提示 | [frontend/README.md](frontend/README.md#服務版本) |
+| Backend API（含 Breeze ASR） | `0.15.0` | 2026-09-23 | 新增 opt-in MedKGI 研究引擎；預設流程不變，目前待術語 coverage reconciliation、維持 503 fail closed | [backend/README.md](backend/README.md#服務版本) |
+| 開發版 Vue frontend | `0.14.3` | 2026-09-23 | 同步 Backend API v0.15.0 的 MedKGI 健康狀態型別；無 UI 行為變更 | [frontend/README.md](frontend/README.md#服務版本) |
 | 正式部署 Doctor frontend | `2.4.0` | 2026-09-13 | UCC 受控的 SMART Provider launch、PKCE／issuer 防護與 callback context 核對 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | 正式部署 Patient frontend | `2.2.1` | 2026-09-13 | SMART callback 暫態參數清除，保留 QR／HttpOnly session 身分邊界 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | Local Avatar service | `1.2.0` | 2026-08-11 | 新增可由 Backend 逐請求覆寫、完全跳過 MuseTalk 的靜態醫師 CosyVoice 模式 | [avatar-service/README.md](avatar-service/README.md#服務版本) |

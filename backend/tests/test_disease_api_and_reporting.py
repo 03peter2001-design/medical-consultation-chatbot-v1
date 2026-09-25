@@ -518,6 +518,111 @@ class DiseaseReportRestrictionTests(unittest.TestCase):
         self.assertIn("冒冷汗", rendered)
         self.assertNotIn("沒有取得足夠的支持線索", rendered)
 
+    def test_medkgi_report_renders_posterior_as_relative_weight_not_votes(self):
+        assessment = {
+            "method": "medkgi_bayesian_information_gain_v1",
+            "status": "available",
+            "top": [
+                {
+                    "id": "kg:disease-a",
+                    "name": "合成疾病 A",
+                    "posterior_weight": 0.625,
+                    "net_votes": 9,
+                    "supporting": [{"evidence": "合成線索"}],
+                }
+            ],
+        }
+
+        rendered = _render_vote_assessment(assessment)
+
+        self.assertIn("【MedKGI 知識圖譜鑑別】", rendered)
+        self.assertIn("posterior 相對權重 62.5%", rendered)
+        self.assertIn("不是經校準的疾病機率", rendered)
+        self.assertNotIn("投票", rendered)
+        self.assertNotIn("淨票", rendered)
+
+    def test_medkgi_report_keeps_safety_directions_without_vote_language(self):
+        assessment = {
+            "method": "medkgi_bayesian_information_gain_v1",
+            "status": "available",
+            "top": [],
+            "safety_triggered_conditions": [
+                {
+                    "name": "合成緊急鑑別",
+                    "triggered_by": [
+                        {
+                            "rule_label": "合成 Safety 規則",
+                            "evidence": "合成警訊",
+                        }
+                    ],
+                }
+            ],
+        }
+
+        rendered = _render_vote_assessment(assessment)
+
+        self.assertIn("【Safety 規則觸發的鑑別方向】", rendered)
+        self.assertIn("合成緊急鑑別", rendered)
+        self.assertIn("合成警訊", rendered)
+        self.assertIn("不是經校準的疾病機率", rendered)
+        self.assertNotIn("票", rendered)
+
+    def test_medkgi_quick_summary_uses_relative_weight_language(self):
+        assessment = {
+            "method": "medkgi_bayesian_information_gain_v1",
+            "top": [
+                {
+                    "id": "kg:disease-a",
+                    "name": "合成疾病 A",
+                    "posterior_weight": 0.625,
+                    "supporting": [],
+                }
+            ],
+        }
+
+        summary = _render_physician_quick_summary(
+            {"data": {"reason": "合成主訴"}},
+            "病人提供合成主訴。",
+            assessment,
+        )
+
+        self.assertIn("MedKGI 知識圖譜鑑別", summary)
+        self.assertIn("posterior 相對權重 62.5%", summary)
+        self.assertIn("不是經校準的疾病機率", summary)
+        self.assertNotIn("固定疾病表", summary)
+        self.assertNotIn("票", summary)
+
+    def test_medkgi_structured_note_uses_relative_weight_language(self):
+        item = {
+            "id": "kg:disease-a",
+            "name": "合成疾病 A",
+            "posterior_weight": 0.625,
+            "net_votes": 9,
+        }
+        assessment = {
+            "method": "medkgi_bayesian_information_gain_v1",
+            "ranked": [item],
+            "top": [item],
+            "must_not_miss": [item],
+        }
+
+        note = _render_structured_note(
+            {"data": {"reason": "合成主訴"}},
+            assessment,
+            {
+                "emr_summary": "病人提供合成主訴。",
+                "physical_exam": [],
+                "laboratory": [],
+                "imaging": [],
+            },
+        )
+
+        self.assertIn("【MedKGI 知識圖譜鑑別】", note)
+        self.assertIn("posterior 相對權重 62.5%", note)
+        self.assertIn("不是經校準的疾病機率", note)
+        self.assertNotIn("固定疾病表投票", note)
+        self.assertNotIn("淨票", note)
+
     def test_quick_summary_uses_only_supported_fixed_table_conditions(self):
         conditions = _supported_condition_summaries(self.assessment)
 

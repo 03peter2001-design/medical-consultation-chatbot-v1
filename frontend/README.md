@@ -6,6 +6,14 @@ SNOMED CT 查詢。根目錄的 `index.html`、`doctor.html` 是重構前的相�
 
 ## 服務版本
 
+### v0.14.3 (2026-09-23)
+
+- 同步 Backend API v0.15.0 的 OpenAPI 契約，讓健康狀態的 `interview_engine` 型別接受
+  opt-in `medkgi`；本次沒有改變前端畫面或預設問診流程。
+- 後端 OpenAPI export／contract check 通過；本機 Node.js 12 無法解析目前
+  `openapi-typescript` 使用的 optional chaining，因此依已匯出的契約套用唯一 enum 差異，
+  `npm run api:types`／`npm run api:check` 未能執行。
+
 ### v0.14.2 (2026-09-13)
 
 - 修正整份病歷確認後，「送出並儲存至 FHIR」仍可能因缺少 FHIR Patient context 而保持

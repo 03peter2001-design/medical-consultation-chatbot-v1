@@ -25,6 +25,12 @@ from .models import (
 )
 from .rule_config import finding_codes, load_safety_rules
 
+# The structured extraction repeats verbatim evidence for every field, so a
+# multi-symptom complaint of about 50 characters already needs ~1,200 output
+# tokens. The former 1,200 cap truncated the JSON and forced a fail-closed
+# handoff. Gemini 3.x also counts thinking tokens against this cap.
+CHIEF_EXTRACTION_MAX_TOKENS = 4096
+
 _DIRECT_IDENTIFIER = re.compile(
     r"\b(?:[A-Z][12]\d{8}|\d{8,12})\b",
     flags=re.IGNORECASE,
@@ -638,7 +644,7 @@ class ChiefComplaintExtractor:
                     },
                 ],
                 temperature=0,
-                max_tokens=1200,
+                max_tokens=CHIEF_EXTRACTION_MAX_TOKENS,
             )
             parsed = ChiefComplaintAssessment.from_model_text(response)
             return validate_assessment(redacted, parsed), ""

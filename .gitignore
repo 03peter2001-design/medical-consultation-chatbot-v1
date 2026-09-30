@@ -36,3 +36,4 @@ package
 local/
 # I don't want to commit this folder, DO NOT EDIT THIS LINE!!!!
 llm_experiments/
+benchmarks/

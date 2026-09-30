@@ -12,17 +12,17 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 不代表正式診斷或已簽署醫囑；未完成院方的告知同意、供應商契約、資料保存地區與
 隱私審查前，不得用於真實病人資料。
 
-後端另提供需明確設定 `INTERVIEW_ENGINE=medkgi` 才會啟用的研究路徑：診斷核心改由
+後端另提供需明確設定 `INTERVIEW_ENGINE=medkgi` 才會啟用的研究路徑：預設診斷核心改由
 本機 PrimeKG 衍生圖譜、Bayesian posterior 與資訊增益選題負責，LLM 僅做
 evidence-grounded、受限 schema 的自由文字實體／fact 擷取；題目文字仍來自經審查的
 固定問卷。該路徑不會取代獨立 Safety 規則，也未取得臨床核准；預設
 `questionnaire` 流程不變。
 
-目前的實際資產驗證狀態是「檔案可用，但臨床路由尚不可啟用」：官方 PrimeKG file
-`6180620` 已成功建置及載入；然而胸痛、頭痛與腹痛 active routes 的受治理疾病
-profiles 均仍有缺少 phenotype edges 或語意碰撞的對齊缺口。嚴格啟動預驗證會將
-MedKGI 標記為 unavailable，選用時回傳 503 fail closed。PubMedBERT fallback 不能
-取代經醫師審查的術語 mapping 與 coverage reconciliation。
+官方 PrimeKG file `6180620` 已成功建置及載入；胸痛、頭痛與腹痛的
+`primekg_strict` 路徑仍因 phenotype edges 與術語對齊缺口維持 503 fail closed。
+另有需明示啟用的 `profile_experiment` 研究模式，以現有 provisional 疾病線索
+建立獨立圖譜，讓三條路徑可供隔離實驗；其準確率不能代表原始 PrimeKG 路徑，
+也不表示臨床核准。
 
 ## 系統總覽
 
@@ -37,9 +37,9 @@ MedKGI 標記為 unavailable，選用時回傳 503 fail closed。PubMedBERT fall
 - **RAG**：不參與病患問卷路由、下一題或 Safety；v2 索引在固定問卷完成後提供
   A（診斷／理檢）、B（檢驗）、C（影像）三個 metadata 分區的檢索證據，legacy
   索引則保留具 provenance 的相容檢索，再交由 Gemini 產生六段式報告
-- **MedKGI（opt-in 研究）**：本機 PrimeKG posterior／資訊增益負責疾病排序與選題；
-  RAG 只可保留於非診斷性 workup 草稿與醫師文獻問答；目前 active routes 尚未通過
-  governed terminology coverage 預驗證，因此維持 503 fail closed
+- **MedKGI（opt-in 研究）**：posterior／資訊增益負責疾病排序與選題；
+  預設 PrimeKG 嚴格模式因對齊缺口維持 503 fail closed；明示的 profile-derived
+  實驗模式可供三條路徑研究，RAG 不參與診斷排序
 
 ```text
 病患端：病人主訴 → 本機關鍵字選擇固定問卷 → 依 JSON 順序逐題詢問
@@ -48,7 +48,7 @@ MedKGI 標記為 unavailable，選用時回傳 503 fail closed。PubMedBERT fall
 醫師端：中文問題 → 去識別化與醫療術語英文化
                 → 本機 embedding／Chroma 檢索 → LLM 整理來源片段
 
-MedKGI 研究路徑：Safety → 受限 fact 擷取 → 本機 PrimeKG posterior／資訊增益
+MedKGI 研究路徑：Safety → 受限 fact 擷取 → 已選圖譜的 posterior／資訊增益
                          → 核准固定題目 → 停止或繼續（資產／對齊失敗則 fail closed）
 ```
 
@@ -61,14 +61,14 @@ MedKGI 研究路徑：Safety → 受限 fact 擷取 → 本機 PrimeKG posterior
 
 | 服務／可部署或研究產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
 | --- | --- | --- | --- | --- |
-| Backend API（含 Breeze ASR） | `0.15.0` | 2026-09-23 | 新增 opt-in MedKGI 研究引擎；預設流程不變，目前待術語 coverage reconciliation、維持 503 fail closed | [backend/README.md](backend/README.md#服務版本) |
+| Backend API（含 Breeze ASR） | `0.16.1` | 2026-09-30 | 修正主訴語意抽取輸出截斷導致首輪轉交；Gemini 截斷回應一律以較大上限重試一次 | [backend/README.md](backend/README.md#服務版本) |
 | 開發版 Vue frontend | `0.14.3` | 2026-09-23 | 同步 Backend API v0.15.0 的 MedKGI 健康狀態型別；無 UI 行為變更 | [frontend/README.md](frontend/README.md#服務版本) |
 | 正式部署 Doctor frontend | `2.4.0` | 2026-09-13 | UCC 受控的 SMART Provider launch、PKCE／issuer 防護與 callback context 核對 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | 正式部署 Patient frontend | `2.2.1` | 2026-09-13 | SMART callback 暫態參數清除，保留 QR／HttpOnly session 身分邊界 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | Local Avatar service | `1.2.0` | 2026-08-11 | 新增可由 Backend 逐請求覆寫、完全跳過 MuseTalk 的靜態醫師 CosyVoice 模式 | [avatar-service/README.md](avatar-service/README.md#服務版本) |
 | SMART on FHIR sandbox app | `1.2.0` | 2026-09-13 | STU 2.2 scopes／PKCE、可覆寫 ports 與固定 runtime images | [smart-app/README.md](smart-app/README.md#服務版本) |
 | Integration deployment bundle | `1.9.0` | 2026-09-11 | 為可開啟智慧問診的醫師核發 QR 管理權限並記錄整合發布需求 | [integration-deployment/README.md](integration-deployment/README.md#service-version) |
-| LLM 雙 Agent DDX 實驗 | `0.8.1` | 2026-08-30 | 暫時性 Gemini API 有限退避重試，judge 契約錯誤可在原操作內修正一次 | [llm_experiments/README.md](llm_experiments/README.md#版本) |
+| LLM 雙 Agent DDX 實驗 | `0.11.0` | 2026-09-30 | ER-Reason 新增同條件重播：同一逐字稿、同一 facts、封閉 profile 空間與精確 ID 計分比較四種診斷方法 | [llm_experiments/README.md](llm_experiments/README.md#版本) |
 | 通才醫療 VLM 影像評測 | `0.4.1` | 2026-09-17 | 新增 A100 80GB 的 11 模型 vLLM 測試矩陣、記憶體保守設定與硬體相容性紀錄 | [AgentClinic/README.md](AgentClinic/README.md#local-research-extension-version) |
 
 `frontend-v2/packages/shared` 是 doctor／patient 共用程式庫，不是獨立服務；

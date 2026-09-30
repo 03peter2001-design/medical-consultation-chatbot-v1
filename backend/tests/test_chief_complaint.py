@@ -4,6 +4,7 @@ import unittest
 from unittest.mock import patch
 
 from amie.chief_complaint import (
+    CHIEF_EXTRACTION_MAX_TOKENS,
     ChiefComplaintExtractor,
     build_fhir_risk_profile,
     preferred_route,
@@ -136,6 +137,14 @@ class ChiefComplaintExtractorTests(unittest.TestCase):
         self.assertEqual(assessment.primary_symptom, "headache")
         self.assertEqual(assessment.primary_symptom_code, "unknown")
         self.assertEqual(assessment.symptoms, [])
+
+    def test_extraction_budget_fits_multi_symptom_complaints(self):
+        # Regression: 1,200 tokens truncated realistic ~50-character complaints.
+        llm = FakeLLM(headache_payload())
+        ChiefComplaintExtractor(llm).extract("我頭暈目眩，噁心想吐，頭痛到感覺快要裂開，視線模糊")
+
+        self.assertEqual(llm.calls[0]["max_tokens"], CHIEF_EXTRACTION_MAX_TOKENS)
+        self.assertGreaterEqual(CHIEF_EXTRACTION_MAX_TOKENS, 4096)
 
     def test_extracts_grounded_structure_and_route(self):
         complaint = "我頭暈目眩，噁心想吐，頭痛到感覺快要裂開，視線模糊"

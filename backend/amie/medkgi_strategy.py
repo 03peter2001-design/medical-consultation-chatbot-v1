@@ -16,13 +16,21 @@ from typing import Any
 from domain.questionnaires import DISEASE_ROUTES, load_questionnaire_policy
 from medkgi import EntityAligner, MedKGIConfig, MedKGICore, OSCEState
 from medkgi.loader import MedKGILoader
+from medkgi.profile_experiment import (
+    build_profile_experiment_graph,
+    fact_symptom_id,
+    profile_disease_id,
+)
 
-from .clinical_facts import facts_for_route
+from .clinical_facts import FACT_CODES, facts_for_route
 from .disease_profiles import load_profile_document, question_fact_codes
 
 METHOD = "medkgi_bayesian_information_gain_v1"
+PROFILE_EXPERIMENT_METHOD = "medkgi_profile_clue_experiment_v1"
 POSTERIOR_NOTE = "relative_weight_not_calibrated_disease_risk"
 PRIVATE_STATE_KEY = "_medkgi_state"
+STRICT_GRAPH_MODE = "primekg_strict"
+PROFILE_EXPERIMENT_GRAPH_MODE = "profile_experiment"
 BACKEND_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_ASSET_DIRECTORY = BACKEND_DIR / "data" / "medkgi"
 
@@ -112,8 +120,11 @@ class _LocalPubMedBERTEmbedder:
 class MedKGIDiagnosisStrategy:
     """Adapt MedKGICore outputs to AMIE's existing assessment contract."""
 
-    def __init__(self, core: MedKGICore):
+    def __init__(self, core: MedKGICore, *, graph_mode: str = STRICT_GRAPH_MODE):
+        if graph_mode not in {STRICT_GRAPH_MODE, PROFILE_EXPERIMENT_GRAPH_MODE}:
+            raise ValueError("unsupported MedKGI graph mode")
         self.core = core
+        self.graph_mode = graph_mode
 
     @classmethod
     def from_environment(
@@ -149,6 +160,13 @@ class MedKGIDiagnosisStrategy:
             raise MedKGIStrategyError("MEDKGI_MAX_TURNS must be between 1 and 100")
 
         raw_model = values.get("MEDKGI_PUBMEDBERT_MODEL", "").strip()
+        graph_mode = values.get("MEDKGI_GRAPH_MODE", STRICT_GRAPH_MODE).strip()
+        if graph_mode not in {STRICT_GRAPH_MODE, PROFILE_EXPERIMENT_GRAPH_MODE}:
+            raise MedKGIStrategyError("MEDKGI_GRAPH_MODE is unsupported")
+        if graph_mode == PROFILE_EXPERIMENT_GRAPH_MODE and raw_model:
+            raise MedKGIStrategyError(
+                "profile experiment uses exact profile IDs, not PubMedBERT alignment"
+            )
         model_path = None
         if raw_model:
             if raw_model.startswith("hf://"):
@@ -162,6 +180,15 @@ class MedKGIDiagnosisStrategy:
                 )
 
         graph = MedKGILoader.load(graph_path, manifest_path, embeddings_path)
+        if graph_mode == PROFILE_EXPERIMENT_GRAPH_MODE:
+            documents = {
+                route: load_profile_document(route)
+                for route in DISEASE_ROUTES
+                if load_questionnaire_policy(route)["selection_strategy"] == "disease_vote"
+            }
+            graph = build_profile_experiment_graph(
+                documents, primekg_provenance=graph.provenance, allowed_fact_codes=FACT_CODES
+            )
         embedder = None
         if model_path is not None:
             if graph.node_embeddings is None:
@@ -182,7 +209,8 @@ class MedKGIDiagnosisStrategy:
                 graph,
                 aligner=EntityAligner(graph, embedder=embedder),
                 config=MedKGIConfig(turn_limit=max_turns),
-            )
+            ),
+            graph_mode=graph_mode,
         )
         strategy.validate_deployed_routes()
         return strategy
@@ -196,7 +224,7 @@ class MedKGIDiagnosisStrategy:
             profiles = [item for item in document.get("profiles", []) if isinstance(item, dict)]
             if not profiles:
                 raise MedKGIStrategyError(f"{route} has no reviewed disease profiles")
-            self._align_profiles(profiles)
+            self._aligned_profiles(profiles, route=route)
             self._require_fact_alignment(self._profile_fact_codes(profiles), route=route)
 
     @staticmethod
@@ -245,6 +273,36 @@ class MedKGIDiagnosisStrategy:
             if isinstance(clue, dict) and clue.get("fact")
         }
 
+    def _aligned_profiles(
+        self,
+        profiles: list[dict[str, Any]],
+        *,
+        route: str,
+    ) -> tuple[dict[str, str], dict[str, dict[str, Any]]]:
+        if self.graph_mode == STRICT_GRAPH_MODE:
+            return self._align_profiles(profiles)
+
+        profile_to_disease: dict[str, str] = {}
+        disease_to_profile: dict[str, dict[str, Any]] = {}
+        for profile in profiles:
+            profile_id = str(profile.get("id") or "").strip()
+            if not profile_id or profile_id in profile_to_disease:
+                raise MedKGIStrategyError("profile experiment requires unique profile IDs")
+            disease_id = profile_disease_id(route, profile_id)
+            if disease_id not in self.core.graph.diseases:
+                raise MedKGIStrategyError(
+                    f"profile experiment is missing disease node: {disease_id}"
+                )
+            if not self.core.graph.symptom_edges(disease_id):
+                raise MedKGIStrategyError(
+                    f"profile experiment disease has no fact edges: {disease_id}"
+                )
+            profile_to_disease[profile_id] = disease_id
+            disease_to_profile[disease_id] = profile
+        if not profile_to_disease:
+            raise MedKGIStrategyError("profile experiment has no disease profiles")
+        return profile_to_disease, disease_to_profile
+
     def _align_profiles(
         self,
         profiles: list[dict[str, Any]],
@@ -292,6 +350,13 @@ class MedKGIDiagnosisStrategy:
         fact_to_symptom: dict[str, str] = {}
         unmatched: list[str] = []
         for code in sorted(codes):
+            if self.graph_mode == PROFILE_EXPERIMENT_GRAPH_MODE:
+                symptom_id = fact_symptom_id(code)
+                if symptom_id in self.core.graph.symptoms:
+                    fact_to_symptom[code] = symptom_id
+                else:
+                    unmatched.append(code)
+                continue
             alignment = self.core.aligner.align(code.replace("_", " "), "symptom")
             if alignment is None:
                 unmatched.append(code)
@@ -369,7 +434,7 @@ class MedKGIDiagnosisStrategy:
         profiles = [item for item in document.get("profiles", []) if isinstance(item, dict)]
         if not profiles:
             raise MedKGIStrategyError(f"{route} has no reviewed disease profiles")
-        profile_to_disease, disease_to_profile = self._align_profiles(profiles)
+        profile_to_disease, disease_to_profile = self._aligned_profiles(profiles, route=route)
 
         route_facts = facts_for_route(clinical_facts, route)
         observed_mapping = self._require_fact_alignment(set(route_facts), route=route)
@@ -416,7 +481,9 @@ class MedKGIDiagnosisStrategy:
                     f"MedKGI returned a disease outside reviewed profiles: {posterior.disease_id}"
                 )
             connected = {
-                edge.symptom_id for edge in self.core.graph.symptom_edges(posterior.disease_id)
+                edge.symptom_id
+                for edge in self.core.graph.symptom_edges(posterior.disease_id)
+                if self.graph_mode == STRICT_GRAPH_MODE or edge.probability != 0.5
             }
             relevant_codes = {
                 str(clue["fact"])
@@ -427,14 +494,26 @@ class MedKGIDiagnosisStrategy:
             }
             evaluated = relevant_codes & known_codes
             coverage = round(len(evaluated) / len(relevant_codes), 4) if relevant_codes else 0.0
-            supporting = self._evidence_rows(
-                posterior.supporting_symptom_ids,
-                symptom_to_facts,
-            )
-            opposing = self._evidence_rows(
-                posterior.contradicting_symptom_ids,
-                symptom_to_facts,
-            )
+            if self.graph_mode == PROFILE_EXPERIMENT_GRAPH_MODE:
+                supporting_ids: list[str] = []
+                opposing_ids: list[str] = []
+                for symptom_id in sorted(connected & set(statuses)):
+                    probability = self.core.graph.edge_probability(
+                        posterior.disease_id, symptom_id, self.core.config.smoothing
+                    )
+                    supports = (statuses[symptom_id] == "positive") == (probability > 0.5)
+                    (supporting_ids if supports else opposing_ids).append(symptom_id)
+                supporting = self._evidence_rows(tuple(supporting_ids), symptom_to_facts)
+                opposing = self._evidence_rows(tuple(opposing_ids), symptom_to_facts)
+            else:
+                supporting = self._evidence_rows(
+                    posterior.supporting_symptom_ids,
+                    symptom_to_facts,
+                )
+                opposing = self._evidence_rows(
+                    posterior.contradicting_symptom_ids,
+                    symptom_to_facts,
+                )
             missing = relevant_codes - known_codes
             if result.decision.action == "final" and not profile.get("must_not_miss"):
                 missing = set()
@@ -492,12 +571,23 @@ class MedKGIDiagnosisStrategy:
         has_evidence = bool(state.evidence)
         return {
             "schema_version": 2,
-            "method": METHOD,
+            "method": (
+                PROFILE_EXPERIMENT_METHOD
+                if self.graph_mode == PROFILE_EXPERIMENT_GRAPH_MODE
+                else METHOD
+            ),
             "status": "ready" if has_evidence else "insufficient",
             "computed_from": "live",
-            "provisional": any(item["review_status"] == "provisional" for item in ranked),
+            "provisional": self.graph_mode == PROFILE_EXPERIMENT_GRAPH_MODE
+            or any(item["review_status"] == "provisional" for item in ranked),
             "posterior_interpretation": POSTERIOR_NOTE,
             "profile_version": document["profile_version"],
+            "graph_provenance": {
+                "knowledge_graph_version": self.core.graph.provenance.knowledge_graph_version,
+                "graph_sha256": self.core.graph.provenance.graph_sha256,
+                "source_name": self.core.graph.provenance.source_name,
+                "review_status": self.core.graph.provenance.review_status,
+            },
             "top": ranked[:5] if has_evidence else [],
             "ranked": ranked,
             "must_not_miss": [item for item in ranked if item["must_not_miss"]],

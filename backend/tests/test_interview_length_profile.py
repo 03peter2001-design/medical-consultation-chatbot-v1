@@ -173,6 +173,30 @@ class ProfileWiringTests(unittest.TestCase):
         self.assertEqual(decision["question_utility"], 0.1875)
         self.assertEqual(decision["information_gain"], 0.1875)
 
+    def test_profile_experiment_trace_preserves_method_specific_source(self):
+        class ExperimentResult(self._Result):
+            action = "ask"
+            decision = {
+                "scoring_method": "medkgi_profile_clue_experiment_v1",
+                "question_utility": 0.125,
+                "next_field": "tender",
+            }
+            next_question = QUESTIONNAIRE[6]
+            data: dict = {}
+            handoff_reason = ""
+
+        session = session_with(turns=1)
+        append_amie_trace(
+            session,
+            current_question=QUESTIONNAIRE[5],
+            answer="合成回答",
+            result=ExperimentResult(),
+        )
+
+        decision = session["transcript"][-1]["decision"]
+        self.assertEqual(decision["source"], "medkgi_profile_experiment_information_gain")
+        self.assertEqual(decision["information_gain"], 0.125)
+
     def test_legacy_vote_decision_source_is_unchanged(self):
         self.assertEqual(
             _decision_source(

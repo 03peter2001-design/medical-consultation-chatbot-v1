@@ -5,7 +5,7 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 
 ## 服務版本
 
-目前版本：**v0.15.0（2026-09-23）**。
+目前版本：**v0.16.1（2026-09-30）**。
 
 本次因主動撤除既有 AMIE／語意標籤能力並回到較小的實驗性功能面，版本線依專案
 決策由 0 重新編碼。下方 `v1.x` 條目保留為舊能力線的歷史紀錄，不表示 `v0.3.0`
@@ -23,6 +23,40 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 - RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
 - Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
   revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v0.16.1 (2026-09-30)
+
+- 修正主訴語意抽取被截斷導致問診在第一輪就轉交：結構化抽取需為每個欄位附逐字
+  evidence，約 50 字的多症狀主訴已需約 1,200 個輸出 token，原本 1,200 上限會截斷
+  JSON，解析失敗後依設計 fail closed。上限改為具名常數
+  `CHIEF_EXTRACTION_MAX_TOKENS=4096`（Gemini 3.x 的 thinking tokens 也計入此上限）。
+- `LLMClient` 對 Gemini `finish_reason=MAX_TOKENS` 的回應，不論文字是否為空都以較大
+  上限重試一次；先前只在空白時重試，非空的截斷內容會被當成完整回覆回傳。重試後仍
+  截斷時直接失敗關閉，避免非空的半成品報告被接受。其他使用 `generate_text` 的報告、摘要
+  呼叫在截斷時也會多一次請求。
+- Safety 規則、抽取 prompt、schema、驗證與 API 契約不變；不改變臨床判斷邏輯，只減少
+  因輸出截斷造成的非必要轉交。
+- 驗證：新增截斷非空回應重試與抽取上限的回歸測試；以合成主訴實測 `gemini-3.6-flash`
+  由 0/3 成功變為 7/7、`gemini-2.5-flash` 由 2/4 長主訴成功變為 7/7。
+  `ruff check .` 通過；完整 backend 510 個測試中，3 failures／2 errors 與未含本修正
+  時完全相同（RAG／UCC 既有問題，其中 2 個需外部 `D:\ehis\eHIS`）。
+
+### v0.16.0 (2026-09-30)
+
+- 新增明示選用的 `MEDKGI_GRAPH_MODE=profile_experiment` 研究模式。先驗證本機
+  PrimeKG manifest／checksum，再以三條 active route 已版本化的 provisional 疾病
+  profiles 與 clinical facts 建立獨立圖譜；疾病與 fact 使用固定 ID，不以相似度任選
+  PrimeKG 實體。胸痛、頭痛與腹痛路徑現可在此模式通過啟動預驗證。
+- 實驗圖譜沿用 MedKGI posterior、資訊增益與固定問卷流程；profile clue 的支持／反對
+  與無關 fact 分別使用 0.8／0.2／0.5 的明示實驗 likelihood。這些數值不是
+  PrimeKG 的條件機率，也未經臨床校準；結果方法標記為
+  `medkgi_profile_clue_experiment_v1`，provisional 一律為 true。圖譜 provenance
+  記錄 PrimeKG checksum 及每條 route 的 profile version／內容 SHA，評估結果也保存
+  衍生圖譜版本與 checksum。
+- 預設 `primekg_strict`、Safety 規則、資產損壞時的 fail closed 與既有 API 不變。
+  此研究模式的分數衡量「現有 provisional 疾病線索＋MedKGI 推論」，不得宣稱為
+  PrimeKG 路徑準確率或臨床核准。三條 route 的建圖、異常線索、模式驗證與
+  合成 fact 評分已加入回歸測試；本機研究資產啟動檢查通過。
 
 ### v0.15.0 (2026-09-23)
 
@@ -640,6 +674,7 @@ GEMINI_TRANSLATION_MODEL=gemini-3.5-flash-lite
 | --- | --- |
 | `INTERVIEW_ENGINE=questionnaire` | 預設：本機依序問固定題目，完成後以 7 個擷取與 5 個 RAG／臨床決策 Gemini prompts 整理並驗證六大報告區塊 |
 | `INTERVIEW_ENGINE=medkgi` | 明示啟用 gated 研究引擎；需要有效的本機 PrimeKG／manifest，不能視為臨床核准或正式診斷 |
+| `MEDKGI_GRAPH_MODE=profile_experiment` | 明示啟用以 provisional profiles 建圖的離線／隔離研究模式；預設 `primekg_strict` 仍維持嚴格對齊閘門 |
 | `INTERVIEW_ENGINE=legacy` | `questionnaire` 的相容別名 |
 | `INTERVIEW_ENGINE=simple` | `questionnaire` 的相容別名 |
 | `INTERVIEW_ENGINE=amie` | 明示回退舊 AMIE／ClinicalFact／疾病票數流程；不建議作為新流程 |
@@ -679,7 +714,7 @@ GEMINI_TRANSLATION_MODEL=gemini-3.5-flash-lite
 
 若使用 `gemini-2.5-pro`，後端會為不可關閉的 thinking 預留 128 tokens，並將
 可見回答額度另外加入 `max_output_tokens`；可用 `GEMINI_THINKING_BUDGET`
-覆寫。模型因 `MAX_TOKENS` 沒有產生正文時，系統會提高上限重試一次。
+覆寫。模型因 `MAX_TOKENS` 截斷回應時，不論正文是否為空，系統都會提高上限重試一次。
 
 `.env` 含有祕密，不得提交版本控制。
 
@@ -792,7 +827,7 @@ Google 官方 AMIE 模型或服務，也不包含 self-play 訓練。
 ### MedKGI 研究引擎
 
 `INTERVIEW_ENGINE=medkgi` 是 opt-in、gated 的研究 rollout，不會隨安裝或資產存在
-自動啟用。它以 PrimeKG 衍生圖譜上的疾病 posterior、資訊增益選題與停止條件負責
+自動啟用。預設 `primekg_strict` 以 PrimeKG 衍生圖譜上的疾病 posterior、資訊增益選題與停止條件負責
 診斷推論，不把 RAG 檢索片段交由 LLM 自由產生疾病排名。既有 LLM 只可在固定 schema
 下做 evidence-grounded 的自由文字實體／fact 擷取；資訊增益選中的題目使用經審查的
 固定問卷文字，不由 LLM 產生或改寫。若 extractor 是外部服務，病人文字仍會跨越外部
@@ -802,6 +837,24 @@ Safety 維持獨立且優先於 MedKGI 推論。缺少資產、manifest／checks
 可靠對齊或計算失敗時，流程必須 fail closed，不回退至 RAG、自由生成式 LLM 診斷或
 最接近疾病的猜測。圖譜 posterior 是演算法內部排序值，不是經校準患病機率；輸出保持
 研究性、未經醫師確認狀態，不得直接建立確診、治療或已簽署醫囑。
+
+#### 隔離研究模式
+
+為比較 MedKGI 核心推論，可在已驗證的本機 PrimeKG 資產存在時，明示設定：
+
+```dotenv
+INTERVIEW_ENGINE=medkgi
+MEDKGI_GRAPH_MODE=profile_experiment
+```
+
+此模式會先檢查 PrimeKG manifest／checksum，再從現有三條路徑的版本化
+provisional 疾病線索建立另一張圖譜。相同 route 的每個疾病 profile 與每個 fact
+都以固定 ID 對應；線索支持／反對使用 0.8／0.2，未列為線索的 fact 使用中立
+0.5。這些是假設值，未受校準；原始 clue weight 只經驗證，不轉換為機率。
+輸出標記 `medkgi_profile_clue_experiment_v1`，不得與
+`medkgi_bayesian_information_gain_v1` 的 PrimeKG 結果合併計分。
+`MEDKGI_PUBMEDBERT_MODEL` 不適用於固定 ID 的研究圖譜；若有設定會拒絕啟動。
+預設嚴格模式與 Safety 邊界不受影響。研究結果不可作為臨床處置依據。
 
 #### 官方 PrimeKG 資產驗證狀態
 
@@ -816,8 +869,8 @@ Safety 維持獨立且優先於 MedKGI 推論。缺少資產、manifest／checks
 這只證明檔案格式、builder、checksum 與 loader 可共同運作，不表示 active routes 已能
 安全執行。目前胸痛、頭痛與腹痛路由均至少有一個受治理疾病 profile 無可用 phenotype
 edges，或有多個 profiles 發生語意碰撞而對齊至同一 KG entity。strict startup
-prevalidation 會將 MedKGI runtime 標記為 unavailable；明示選用
-`INTERVIEW_ENGINE=medkgi` 時回傳 503，而不以部分 coverage、最近似疾病、RAG 或
+prevalidation 會將預設 PrimeKG strict runtime 標記為 unavailable；明示選用
+`INTERVIEW_ENGINE=medkgi` 且未設定 `profile_experiment` 時回傳 503，而不以部分 coverage、最近似疾病、RAG 或
 LLM 猜測繼續。
 
 PubMedBERT 只是一個字面精確／編輯距離失敗後的語意候選 fallback。高相似度不能證明

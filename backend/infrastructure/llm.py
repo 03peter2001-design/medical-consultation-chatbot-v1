@@ -217,9 +217,10 @@ class LLMClient:
         response = generate(effective_max_tokens)
         text = response.text
         reason = _finish_reason(response)
-        if (not text or not text.strip()) and reason == "MAX_TOKENS":
-            # 防止模型仍因動態輸出或 SDK 行為耗盡上限；只重試一次，
-            # 且不記錄 prompt。
+        if reason == "MAX_TOKENS":
+            # 達上限的輸出即使非空也是被截斷的半成品（例如 JSON 缺結尾），
+            # 以更大上限只重試一次，且不記錄 prompt。重試仍截斷時
+            # 直接失敗關閉，避免非空的半成品報告被接受。
             retry_limit = min(
                 65536,
                 max(effective_max_tokens * 2, effective_max_tokens + 512),
@@ -227,6 +228,8 @@ class LLMClient:
             response = generate(retry_limit)
             text = response.text
             reason = _finish_reason(response)
+            if reason == "MAX_TOKENS":
+                raise RuntimeError("gemini 回應在重試後仍被截斷（finish_reason=MAX_TOKENS）")
 
         if not text or not text.strip():
             raise RuntimeError(f"gemini 未回傳文字內容（finish_reason={reason}）")

@@ -41,10 +41,17 @@ _DISEASE_LIKE_TERM = re.compile(
 )
 _DIAGNOSTIC_LANGUAGE = re.compile(r"診斷|鑑別|疑似|可能(?:是|為|罹患)|考慮(?:為|是)?|符合.+疾病")
 _MEDKGI_METHOD = "medkgi_bayesian_information_gain_v1"
+_MEDKGI_EXPERIMENT_METHOD = "medkgi_profile_clue_experiment_v1"
 
 
 def _is_medkgi_assessment(assessment: dict) -> bool:
-    return assessment.get("method") == _MEDKGI_METHOD
+    return assessment.get("method") in {_MEDKGI_METHOD, _MEDKGI_EXPERIMENT_METHOD}
+
+
+def _medkgi_title(assessment: dict) -> str:
+    if assessment.get("method") == _MEDKGI_EXPERIMENT_METHOD:
+        return "MedKGI provisional 線索圖譜鑑別"
+    return "MedKGI 知識圖譜鑑別"
 
 
 def _posterior_weight(item: dict) -> float | None:
@@ -252,14 +259,14 @@ def _render_physician_quick_summary(
                 )
             )
         rendered_conditions = "；".join(rendered_items)
-        differential = f"MedKGI 知識圖譜鑑別：{rendered_conditions}。"
+        differential = f"{_medkgi_title(assessment)}：{rendered_conditions}。"
     elif conditions:
         rendered_conditions = "；".join(
             f"{name}（依據：{'、'.join(evidence)}）" for name, evidence in conditions
         )
         differential = f"可能疾病包括{rendered_conditions}。"
     elif _is_medkgi_assessment(assessment):
-        differential = "MedKGI 知識圖譜鑑別：目前資料不足，無法建立候選疾病排序。"
+        differential = f"{_medkgi_title(assessment)}：目前資料不足，無法建立候選疾病排序。"
     else:
         differential = "目前資料不足，尚無具支持線索的可能疾病可供排序。"
     caveat = (
@@ -303,11 +310,13 @@ def _assessment_for_record(record: dict) -> dict:
 def _render_vote_assessment(assessment: dict) -> str:
     if _is_medkgi_assessment(assessment):
         if assessment.get("status") == "unavailable":
-            return "【MedKGI 知識圖譜鑑別】\n知識圖譜目前無法使用，請由醫療人員依原始問診資料判斷。"
+            return f"【{_medkgi_title(assessment)}】\n知識圖譜目前無法使用，請由醫療人員依原始問診資料判斷。"
         safety_conditions = assessment.get("safety_triggered_conditions", [])
         top = assessment.get("top", [])
         if not top and not safety_conditions:
-            return "【MedKGI 知識圖譜鑑別】\n目前沒有足夠的知識圖譜證據可建立候選疾病排序。"
+            return (
+                f"【{_medkgi_title(assessment)}】\n目前沒有足夠的知識圖譜證據可建立候選疾病排序。"
+            )
         lines = []
         if safety_conditions:
             lines.append("【Safety 規則觸發的鑑別方向】")
@@ -328,7 +337,7 @@ def _render_vote_assessment(assessment: dict) -> str:
         if top:
             if lines:
                 lines.append("")
-            lines.append("【MedKGI 知識圖譜鑑別】")
+            lines.append(f"【{_medkgi_title(assessment)}】")
             for index, item in enumerate(top, start=1):
                 evidence = "、".join(
                     clue.get("evidence", "")
@@ -502,7 +511,7 @@ def _render_structured_note(
         payload.get("emr_summary", ""),
     )
     differential_heading = (
-        "【MedKGI 知識圖譜鑑別】" if medkgi else "【初步鑑別診斷（前3項最可能）】"
+        f"【{_medkgi_title(assessment)}】" if medkgi else "【初步鑑別診斷（前3項最可能）】"
     )
     caveat = (
         "MedKGI posterior 僅為候選疾病間的相對權重，不是經校準的疾病機率或正式診斷。"

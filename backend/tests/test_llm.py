@@ -94,6 +94,72 @@ class GeminiGenerationTests(unittest.TestCase):
             fake_models.configs[0].max_output_tokens,
         )
 
+    def test_truncated_nonempty_max_tokens_response_retries_once(self):
+        # A truncated JSON body is non-empty but unusable; it must not be
+        # returned as if the model had finished.
+        class FakeModels:
+            def __init__(self):
+                self.configs = []
+
+            def generate_content(self, **kwargs):
+                self.configs.append(kwargs["config"])
+                if len(self.configs) == 1:
+                    return SimpleNamespace(
+                        text='{"primary_symptom": "chest", "findi',
+                        candidates=[SimpleNamespace(finish_reason="MAX_TOKENS")],
+                    )
+                return SimpleNamespace(
+                    text='{"primary_symptom": "chest"}',
+                    candidates=[SimpleNamespace(finish_reason="STOP")],
+                )
+
+        fake_models = FakeModels()
+        client = LLMClient.__new__(LLMClient)
+        client.provider = "gemini"
+        client.model = "gemini-2.5-flash"
+        client._env = {}
+        client._client = SimpleNamespace(models=fake_models)
+
+        text = client.generate_text(
+            [{"role": "user", "content": "測試"}],
+            temperature=0,
+            max_tokens=4096,
+        )
+
+        self.assertEqual(text, '{"primary_symptom": "chest"}')
+        self.assertEqual(len(fake_models.configs), 2)
+        self.assertGreater(
+            fake_models.configs[1].max_output_tokens,
+            fake_models.configs[0].max_output_tokens,
+        )
+
+    def test_repeated_max_tokens_response_fails_closed(self):
+        class FakeModels:
+            def __init__(self):
+                self.calls = 0
+
+            def generate_content(self, **kwargs):
+                self.calls += 1
+                return SimpleNamespace(
+                    text="未完成的醫師摘要",
+                    candidates=[SimpleNamespace(finish_reason="MAX_TOKENS")],
+                )
+
+        fake_models = FakeModels()
+        client = LLMClient.__new__(LLMClient)
+        client.provider = "gemini"
+        client.model = "gemini-2.5-flash"
+        client._env = {}
+        client._client = SimpleNamespace(models=fake_models)
+
+        with self.assertRaisesRegex(RuntimeError, "重試後仍被截斷"):
+            client.generate_text(
+                [{"role": "user", "content": "測試"}],
+                temperature=0,
+                max_tokens=4096,
+            )
+        self.assertEqual(fake_models.calls, 2)
+
     def test_gemini_35_and_newer_omit_unsupported_temperature(self):
         class FakeModels:
             def __init__(self):

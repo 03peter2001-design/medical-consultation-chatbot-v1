@@ -541,6 +541,28 @@ class DiseaseReportRestrictionTests(unittest.TestCase):
         self.assertNotIn("投票", rendered)
         self.assertNotIn("淨票", rendered)
 
+    def test_profile_experiment_report_is_labeled_and_uses_posterior(self):
+        assessment = {
+            "method": "medkgi_profile_clue_experiment_v1",
+            "status": "available",
+            "provisional": True,
+            "top": [
+                {
+                    "id": "profile:chest:synthetic",
+                    "name": "合成疾病 A",
+                    "posterior_weight": 0.625,
+                    "net_votes": 9,
+                    "supporting": [{"evidence": "合成線索"}],
+                }
+            ],
+        }
+
+        rendered = _render_vote_assessment(assessment)
+
+        self.assertIn("【MedKGI provisional 線索圖譜鑑別】", rendered)
+        self.assertIn("posterior 相對權重 62.5%", rendered)
+        self.assertNotIn("淨票", rendered)
+
     def test_medkgi_report_keeps_safety_directions_without_vote_language(self):
         assessment = {
             "method": "medkgi_bayesian_information_gain_v1",

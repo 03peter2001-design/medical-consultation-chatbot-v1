@@ -1,6 +1,7 @@
 import json
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 from unittest.mock import patch
 
@@ -8,11 +9,15 @@ from amie.medkgi_strategy import (
     METHOD,
     POSTERIOR_NOTE,
     PRIVATE_STATE_KEY,
+    PROFILE_EXPERIMENT_GRAPH_MODE,
+    PROFILE_EXPERIMENT_METHOD,
     MedKGIDiagnosisStrategy,
     MedKGIStrategyError,
     _LocalPubMedBERTEmbedder,
 )
 from medkgi import KnowledgeGraph, MedKGIConfig, MedKGICore
+from medkgi.graph import MedKGIUnavailable
+from medkgi.profile_experiment import build_profile_experiment_graph
 
 
 def _graph():
@@ -331,6 +336,78 @@ class MedKGIDiagnosisStrategyTests(unittest.TestCase):
         ):
             with self.assertRaisesRegex(MedKGIStrategyError, "could not be aligned"):
                 self.strategy.validate_deployed_routes()
+
+    def test_profile_experiment_scores_exact_profile_facts_without_neutral_evidence(self):
+        profiles = _profiles()
+        for profile in profiles["profiles"]:
+            for clue in profile["clues"]:
+                clue.update({"status": "present", "direction": "support", "weight": 1})
+        provenance = replace(
+            self.graph.provenance,
+            source_name="PrimeKG",
+            graph_sha256="a" * 64,
+        )
+        graph = build_profile_experiment_graph({"chest": profiles}, primekg_provenance=provenance)
+        strategy = MedKGIDiagnosisStrategy(
+            MedKGICore(graph), graph_mode=PROFILE_EXPERIMENT_GRAPH_MODE
+        )
+        with (
+            patch("amie.medkgi_strategy.DISEASE_ROUTES", ("chest",)),
+            patch(
+                "amie.medkgi_strategy.load_questionnaire_policy",
+                return_value={"selection_strategy": "disease_vote"},
+            ),
+            patch("amie.medkgi_strategy.load_profile_document", return_value=profiles),
+        ):
+            strategy.validate_deployed_routes()
+            result = strategy.score_diseases(
+                [_fact("acid_regurgitation")],
+                route="chest",
+                previous_assessment=None,
+            )
+            negative = strategy.score_diseases(
+                [_fact("acid_regurgitation", status="absent")],
+                route="chest",
+                previous_assessment=None,
+            )
+
+        self.assertEqual(result["method"], PROFILE_EXPERIMENT_METHOD)
+        self.assertTrue(result["provisional"])
+        self.assertEqual(
+            result["graph_provenance"]["graph_sha256"],
+            graph.provenance.graph_sha256,
+        )
+        self.assertEqual(result["graph_provenance"]["review_status"], "research_unreviewed")
+        self.assertTrue(result["top"])
+        by_id = {item["id"]: item for item in result["ranked"]}
+        self.assertEqual(by_id["acute_coronary_syndrome"]["support_votes"], 0)
+        self.assertEqual(by_id["acute_coronary_syndrome"]["oppose_votes"], 0)
+        self.assertEqual(by_id["gastroesophageal_reflux"]["support_votes"], 1)
+        negative_by_id = {item["id"]: item for item in negative["ranked"]}
+        self.assertEqual(negative_by_id["gastroesophageal_reflux"]["oppose_votes"], 1)
+
+    def test_invalid_experiment_mode_fails_before_asset_loading(self):
+        with patch("amie.medkgi_strategy.MedKGILoader.load") as load:
+            with self.assertRaisesRegex(MedKGIStrategyError, "unsupported"):
+                MedKGIDiagnosisStrategy.from_environment({"MEDKGI_GRAPH_MODE": "unknown"})
+            with self.assertRaisesRegex(MedKGIStrategyError, "not PubMedBERT"):
+                MedKGIDiagnosisStrategy.from_environment(
+                    {
+                        "MEDKGI_GRAPH_MODE": PROFILE_EXPERIMENT_GRAPH_MODE,
+                        "MEDKGI_PUBMEDBERT_MODEL": "local/model",
+                    }
+                )
+        load.assert_not_called()
+
+    def test_profile_experiment_does_not_bypass_primekg_asset_validation(self):
+        with patch(
+            "amie.medkgi_strategy.MedKGILoader.load",
+            side_effect=MedKGIUnavailable("invalid PrimeKG manifest"),
+        ):
+            with self.assertRaisesRegex(MedKGIUnavailable, "invalid PrimeKG manifest"):
+                MedKGIDiagnosisStrategy.from_environment(
+                    {"MEDKGI_GRAPH_MODE": PROFILE_EXPERIMENT_GRAPH_MODE}
+                )
 
     def test_local_embedder_uses_cached_kg_vectors_and_embeds_only_query(self):
         with tempfile.TemporaryDirectory() as temporary:

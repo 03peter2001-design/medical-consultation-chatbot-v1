@@ -103,6 +103,8 @@ def _decision_source(
         return "deterministic_fallback"
     if decision.get("scoring_method") == "medkgi_bayesian_information_gain_v1":
         return "medkgi_information_gain"
+    if decision.get("scoring_method") == "medkgi_profile_clue_experiment_v1":
+        return "medkgi_profile_experiment_information_gain"
     if section == "basic":
         return "deterministic_flow"
     if str(decision.get("audit_reason", "")).startswith("所有適用且核准的問題"):
@@ -166,7 +168,10 @@ def append_amie_trace(
         "funnel_score": dict(decision.get("funnel_score", {})),
         "source": decision_source,
     }
-    if decision_source == "medkgi_information_gain":
+    if decision_source in {
+        "medkgi_information_gain",
+        "medkgi_profile_experiment_information_gain",
+    }:
         decision_trace["information_gain"] = decision.get("question_utility", 0)
     trace = {
         "turn": session["turn_count"],

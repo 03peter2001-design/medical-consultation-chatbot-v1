@@ -8,6 +8,7 @@ from unittest.mock import Mock, patch
 
 from fastapi import BackgroundTasks, HTTPException
 
+from amie.chief_complaint import ChiefComplaintExtractor
 from app import runtime
 from app.models import ChatRequest
 from app.routes import patient
@@ -21,6 +22,33 @@ from domain.questionnaires import (
     condition_matches,
 )
 from infrastructure.consultation_repository import ConsultationRepository
+
+SILENT_EXTRACTION = {
+    "primary_symptom": "unknown",
+    "primary_evidence": "",
+    "symptom_domains": [],
+    "onset": {"value": "unknown", "evidence": ""},
+    "severity": {"value": "unknown", "evidence": ""},
+    "is_new_or_changed": {"value": "unknown", "evidence": ""},
+    "findings": [],
+    "negated_findings": [],
+    "route_candidates": [],
+    "uncertain_fields": [],
+}
+
+
+class FakeExtractionLLM:
+    """Stand-in for the semantic extractor's model; records calls."""
+
+    def __init__(self, response=SILENT_EXTRACTION):
+        self.response = response
+        self.calls = 0
+
+    def generate_text(self, messages, **kwargs):
+        self.calls += 1
+        if isinstance(self.response, Exception):
+            raise self.response
+        return json.dumps(self.response, ensure_ascii=False)
 
 
 def _answer_for(question: dict) -> str:
@@ -53,6 +81,8 @@ def _gemini_response(task: str) -> str:
             "Acute coronary syndrome",
             "Pericarditis",
             "Gastroesophageal reflux disease",
+            "Costochondritis",
+            "Anxiety disorder",
         ],
         "must_not_miss": [
             "Acute coronary syndrome",
@@ -80,6 +110,7 @@ class QuestionnairePipelineTests(unittest.TestCase):
             Path(self.temp_directory.name) / "questionnaire.db"
         )
         self.sessions: dict[str, dict] = {}
+        self.extraction_llm = FakeExtractionLLM()
         self.generate_text = Mock(side_effect=_generate_gemini_section)
         self.gemini_client = SimpleNamespace(
             model="gemini-test-model",
@@ -99,6 +130,11 @@ class QuestionnairePipelineTests(unittest.TestCase):
         with (
             patch.object(patient, "INTERVIEW_ENGINE", "questionnaire"),
             patch.object(patient, "current_patient_session", return_value=None),
+            patch.object(
+                patient,
+                "_get_chief_extractor",
+                return_value=ChiefComplaintExtractor(self.extraction_llm),
+            ),
             patch.object(
                 patient,
                 "_questionnaire_rag_contexts",
@@ -311,16 +347,6 @@ class QuestionnairePipelineTests(unittest.TestCase):
             ),
             patch.object(
                 patient,
-                "detect_red_flags",
-                side_effect=AssertionError("safety rules must not run"),
-            ),
-            patch.object(
-                patient,
-                "_assess_chief_complaint",
-                side_effect=AssertionError("semantic extraction must not run"),
-            ),
-            patch.object(
-                patient,
                 "_get_amie_engine",
                 side_effect=AssertionError("AMIE must not run"),
             ),
@@ -443,7 +469,7 @@ class QuestionnairePipelineTests(unittest.TestCase):
         )
         self.assertIn("Personal History:", record["structured_note"])
         self.assertIn("Family History:", record["structured_note"])
-        self.assertIn("【初步鑑別診斷（前3項最可能）】", record["structured_note"])
+        self.assertIn("【初步鑑別診斷（前5項最可能）】", record["structured_note"])
         self.assertIn("【防漏診鑑別 — 5個絕對不能漏掉的隱形殺手】", record["structured_note"])
         self.assertIn("【理學檢查】", record["structured_note"])
         self.assertIn("【檢驗（抽血／驗尿）】", record["structured_note"])
@@ -456,7 +482,7 @@ class QuestionnairePipelineTests(unittest.TestCase):
         self.assertIn("Drug History:", record["structured_note"])
         self.assertIn("Past medications: none reported.", record["structured_note"])
         self.assertIn("Current medications: none reported.", record["structured_note"])
-        self.assertIn("fixed-questionnaire-complete-drug-history-v9", record["structured_note"])
+        self.assertIn("fixed-questionnaire-complete-drug-history-v10", record["structured_note"])
         self.assertEqual(
             data["_interview_pipeline"]["postprocess"],
             "per_task_gemini_report_after_questionnaire",
@@ -479,6 +505,95 @@ class QuestionnairePipelineTests(unittest.TestCase):
         record = self.repository.get_by_registration_number(response["queue_number"])
         self.assertEqual(record["type"], "other")
         self.assertEqual(record["status"], "completed")
+
+    def test_raw_red_flag_in_chief_complaint_ends_interview_before_questions(self):
+        with (
+            patch.object(patient, "sessions", self.sessions),
+            patch.object(patient, "consultation_repository", self.repository),
+            patch.object(patient, "get_gemini_summary_client", return_value=self.gemini_client),
+        ):
+            self._chat("redflag")
+            response = self._chat("redflag", "我胸痛而且冒冷汗")
+
+        self.assertTrue(response["completed"])
+        record = self.repository.get_by_registration_number(response["queue_number"])
+        self.assertEqual(record["triage_level"], "urgent")
+        flags = self.sessions["redflag"]["amie_state"]["red_flags"]
+        self.assertIn("chest_diaphoresis", [flag["code"] for flag in flags])
+
+    def test_universal_red_flag_applies_to_unrouted_complaint(self):
+        with (
+            patch.object(patient, "sessions", self.sessions),
+            patch.object(patient, "consultation_repository", self.repository),
+            patch.object(patient, "get_gemini_summary_client", return_value=self.gemini_client),
+        ):
+            self._chat("unrouted")
+            response = self._chat("unrouted", "家人叫不醒")
+
+        self.assertTrue(response["completed"])
+        record = self.repository.get_by_registration_number(response["queue_number"])
+        self.assertEqual(record["triage_level"], "urgent")
+
+    def test_semantic_extraction_feeds_structured_rules_for_colloquial_red_flag(self):
+        self.extraction_llm.response = {
+            **SILENT_EXTRACTION,
+            "primary_symptom": "headache",
+            "primary_evidence": "頭痛",
+            "symptom_domains": [{"route": "headache", "evidence": "頭痛"}],
+            "severity": {"value": "severe", "evidence": "快要裂開"},
+            "findings": [{"code": "blurred_vision", "status": "present", "evidence": "視線模糊"}],
+            "route_candidates": [{"route": "headache", "evidence": "頭痛"}],
+        }
+        with (
+            patch.object(patient, "sessions", self.sessions),
+            patch.object(patient, "consultation_repository", self.repository),
+            patch.object(patient, "get_gemini_summary_client", return_value=self.gemini_client),
+        ):
+            self._chat("semantic")
+            response = self._chat("semantic", "我頭痛到快要裂開而且視線模糊")
+
+        self.assertTrue(response["completed"])
+        record = self.repository.get_by_registration_number(response["queue_number"])
+        self.assertEqual(record["triage_level"], "urgent")
+        flags = self.sessions["semantic"]["amie_state"]["red_flags"]
+        self.assertIn("semantic_severe_headache_visual_change", [f["code"] for f in flags])
+
+    def test_extraction_failure_hands_off_instead_of_continuing_as_routine(self):
+        self.extraction_llm.response = RuntimeError("provider unavailable")
+        with (
+            patch.object(patient, "sessions", self.sessions),
+            patch.object(patient, "consultation_repository", self.repository),
+            patch.object(patient, "get_gemini_summary_client", return_value=self.gemini_client),
+        ):
+            self._chat("failclosed")
+            response = self._chat("failclosed", "我最近一直頭痛")
+
+        self.assertTrue(response["completed"])
+        record = self.repository.get_by_registration_number(response["queue_number"])
+        self.assertEqual(record["status"], "manual_handoff")
+
+    def test_raw_red_flag_skips_the_extraction_model(self):
+        with (
+            patch.object(patient, "sessions", self.sessions),
+            patch.object(patient, "consultation_repository", self.repository),
+            patch.object(patient, "get_gemini_summary_client", return_value=self.gemini_client),
+        ):
+            self._chat("rawonly")
+            self._chat("rawonly", "我胸痛而且冒冷汗")
+
+        self.assertEqual(self.extraction_llm.calls, 0)
+
+    def test_negated_red_flag_does_not_end_interview(self):
+        with (
+            patch.object(patient, "sessions", self.sessions),
+            patch.object(patient, "consultation_repository", self.repository),
+            patch.object(patient, "get_gemini_summary_client", return_value=self.gemini_client),
+        ):
+            self._chat("negated")
+            response = self._chat("negated", "我胸痛，沒有冒冷汗")
+
+        self.assertFalse(response["completed"])
+        self.assertEqual(self.sessions["negated"]["data"]["type"], "chest")
 
     def test_invalid_gemini_result_fails_explicitly_and_does_not_create_record(self):
         self.generate_text.side_effect = lambda *_args, **_kwargs: "not-json"

@@ -1,3 +1,5 @@
+import { isBirthdayLaunchCode } from './birthdayLaunchCode.js'
+
 const OPAQUE_LAUNCH_CODE = /^[A-Za-z0-9_-]{32,512}$/
 
 export function normalizeLaunchCode(value) {
@@ -5,7 +7,8 @@ export function normalizeLaunchCode(value) {
 }
 
 export function isLaunchCodeFormat(value) {
-  return OPAQUE_LAUNCH_CODE.test(normalizeLaunchCode(value))
+  const code = normalizeLaunchCode(value)
+  return OPAQUE_LAUNCH_CODE.test(code) || isBirthdayLaunchCode(code)
 }
 
 export function launchCodeFromScan(value) {

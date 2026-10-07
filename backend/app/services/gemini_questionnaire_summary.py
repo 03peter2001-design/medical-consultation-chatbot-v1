@@ -151,7 +151,7 @@ def parse_summary_section(task: str, raw: str) -> str | list[str]:
         return _clean_text(value, limit=4000) or "Not provided"
 
     limits = {
-        "differential_diagnoses": 3,
+        "differential_diagnoses": 5,
         "must_not_miss": 5,
         "physical_examination": 4,
         "laboratory": 8,
@@ -237,8 +237,8 @@ Personal History:
 Family History:
 {emr["family"]}
 
-【初步鑑別診斷（前3項最可能）】
-{_numbered_items(summary.differential_diagnoses, total=3)}
+【初步鑑別診斷（前5項最可能）】
+{_numbered_items(summary.differential_diagnoses, total=5)}
 
 【防漏診鑑別 — 5個絕對不能漏掉的隱形殺手】
 {_numbered_items(summary.must_not_miss, total=5)}

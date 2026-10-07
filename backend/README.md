@@ -5,7 +5,7 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 
 ## 服務版本
 
-目前版本：**v0.14.0（2026-09-11）**。
+目前版本：**v0.16.0（2026-10-02）**。
 
 本次因主動撤除既有 AMIE／語意標籤能力並回到較小的實驗性功能面，版本線依專案
 決策由 0 重新編碼。下方 `v1.x` 條目保留為舊能力線的歷史紀錄，不表示 `v0.3.0`
@@ -23,6 +23,45 @@ FHIR／SNOMED 整合所在位置。舊 AMIE-inspired 引擎保留為明示回退
 - RAG v2 是檢索索引與 collection 世代，可透過 `RAG_INDEX_VERSION` 選擇。
 - Safety 規則、ClinicalFact catalog、疾病 profile 與問卷 schema／內容各有自己的
   revision、version 及審查狀態，發布時仍須遵循原有治理與稽核流程。
+
+### v0.16.0 (2026-10-02)
+
+- 預設 `questionnaire` 引擎的主訴入口新增語意 red flag 篩檢：沿用 AMIE 的
+  `_assess_chief_complaint`，先跑原文規則，再由 LLM 將主訴正規化為白名單 finding
+  （須有原文證據、遭否定者不計），最後由 `structured_rules` 判斷。LLM 只產生標籤，
+  緊急與否由版本化規則決定；命中即緊急結案並保存觸發規則與證據。問卷選擇仍只用本機
+  關鍵字。
+- Fail closed：語意抽取失敗或逾時時，不再當作 routine 繼續，而是建立 `manual_handoff`
+  病例並轉交醫療人員。副作用：抽取模型不可用時，預設流程的新問診一律轉人工；
+  `_chief_assessment` 與 `_clinical_facts` 也會保存在病例 data 內。
+- 資料邊界：主訴文字多送往一次抽取模型（`LLMClient`，目前 provider 為 Gemini）；
+  這與既有流程送往 Gemini 的邊界相同，未新增第三方。
+- 報告的初步鑑別診斷由前 3 項改為前 5 項（排序、不附理由；不足時以明確的
+  `Insufficient evidence` 補滿）。標題改為「前5項最可能」，Prompt 版本升為
+  `fixed-questionnaire-complete-drug-history-v10`，供 RAG 與報告評估追溯。
+  前端以 `includes('初步鑑別診斷')` 比對標題，已部署的 frontend-v2 相容；舊 AMIE
+  結構化病歷（`consultation_reporting`）維持 3 項，不在本次範圍。
+- 已知限制：超過 5 項的輸出仍由解析器靜默截斷（既有行為，列於 root README Medium 待辦）；
+  跨主訴的通用 Safety 與臨床審查仍未完成，規則內容為 provisional，未新增或修改規則。
+- 測試：新增語意結構化規則命中、抽取失敗轉人工、原文命中不呼叫抽取模型、top-5 解析、
+  截斷與補滿的回歸測試；移除舊的「語意抽取不得執行」斷言。`test_questionnaire_pipeline`
+  與 `test_gemini_questionnaire_summary` 通過；完整後端 450 項中 3 failures／2 errors
+  與修改前相同（UCC／RAG fallback）。未執行 pyright 與 lint-imports（環境中無此工具）。
+
+### v0.15.0 (2026-10-02)
+
+- 預設 `questionnaire` 問診引擎在主訴入口恢復確定性原文 red flag 檢查：路由前以
+  `detect_red_flags` 執行 `safety_rules.json` 的 universal、各路由與 combination
+  `raw_rules`（含否定詞判斷），不呼叫 LLM。命中時沿用既有緊急結案流程，不進入後續
+  問卷，病例 `triage_level` 為 `urgent`，並保存觸發規則與證據。未命中時行為不變。
+- 此版仍不執行語意 Safety、structured_rules、ClinicalFact 或疾病票數；跨主訴通用
+  Safety（例如「我胸悶。吐血」）仍是 root README 的未完成 Critical 項目。規則內容
+  沿用現有 provisional 版本，未新增或修改任何臨床規則，未取得臨床核准。
+- 相容性：無 API、schema 或設定變更。已知取捨：原文規則僅涵蓋三種主訴與少量
+  universal 詞，覆蓋有限，不得視為完整急症篩檢。
+- 測試：新增主訴命中、無對應路由主訴命中 universal 規則、否定句不誤觸發的回歸測試；
+  原「Safety 不得執行」斷言改為僅禁止語意抽取。`test_questionnaire_pipeline` 15 項通過；
+  完整後端 445 項中 3 failures／2 errors（UCC／RAG fallback 相關）在未修改前亦存在。
 
 ### v0.14.0 (2026-09-11)
 

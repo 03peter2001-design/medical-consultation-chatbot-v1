@@ -6,6 +6,11 @@ import QRCode from 'qrcode'
 import AppHeader from '../components/AppHeader.vue'
 import { api, connectionError } from '../services/backend.js'
 import {
+  assertBirthdayCryptoAvailable,
+  encryptBirthdayLaunchCode,
+  normalizeBirthday,
+} from '../services/birthdayLaunchCode.js'
+import {
   buildPatientPrefill,
   patientAge,
   patientDisplayName,
@@ -68,6 +73,9 @@ async function issueInvitation() {
   error.value = ''
   clearInvitation()
   try {
+    // Fail before issuing a bearer token if birthday encryption is unavailable.
+    assertBirthdayCryptoAvailable()
+    const birthday = normalizeBirthday(patient.value.birthDate)
     const result = await api.createDoctorLaunchInvitation({
       issuer: smartContext.value.fhirBaseUrl,
       patient_id: patient.value.id,
@@ -76,17 +84,20 @@ async function issueInvitation() {
         : {}),
       prefill: buildPatientPrefill(patientRecord.value),
     })
-    const dataUrl = await QRCode.toDataURL(result.code, {
+    const encryptedCode = await encryptBirthdayLaunchCode(result.code, birthday)
+    const dataUrl = await QRCode.toDataURL(encryptedCode, {
       errorCorrectionLevel: 'M',
       margin: 3,
       width: 320,
       color: { dark: '#102f3b', light: '#ffffff' },
     })
-    invitation.value = result
+    invitation.value = { ...result, code: encryptedCode }
     qrDataUrl.value = dataUrl
     startCountdown()
   } catch (caught) {
-    error.value = connectionError(caught)
+    error.value = Number.isInteger(caught?.status)
+      ? connectionError(caught)
+      : `無法產生生日加密 QR（${caught.message}）。`
   } finally {
     issuing.value = false
   }
@@ -147,7 +158,7 @@ onBeforeUnmount(clearInvitation)
         <h2>已由 FHIR Launcher 選定掛號病人</h2>
         <p>
           本頁只接受 <code>launch.html</code> 完成的 SMART 授權結果。Patient、Encounter
-          與病歷預填皆來自本次 launch context；QR 只包含隨機 opaque code。
+          與病歷預填皆來自本次 launch context；QR 以患者生日加密一次性 code。
         </p>
       </section>
 
@@ -207,7 +218,7 @@ onBeforeUnmount(clearInvitation)
               {{ expired ? 'code 已過期，請重新產生' : `剩餘 ${countdown}` }}
             </div>
             <img v-if="qrDataUrl" class="launch-qr" :src="qrDataUrl" alt="一次性問診 QR code" />
-            <p class="qr-help">病患可在問診機器開啟相機掃描，或貼上下方 code。</p>
+            <p class="qr-help">掃描 QR 或貼上下方加密 code 後，須輸入患者西元生日（YYYYMMDD）才能開始。</p>
             <div class="raw-code">
               <label for="raw-launch-code">一次性 code</label>
               <code id="raw-launch-code">{{ invitation.code }}</code>

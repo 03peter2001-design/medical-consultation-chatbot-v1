@@ -1252,6 +1252,50 @@ async def _chat_questionnaire(
 
     if field == "reason":
         route = local_complaint_route(user_input)
+        # Safety screen before any questionnaire: deterministic raw-text rules,
+        # then LLM normalization into whitelisted findings evaluated by the
+        # structured rules. The model only labels; the rules decide urgency.
+        # Questionnaire selection stays keyword-only. If extraction fails the
+        # interview is handed to staff instead of continuing as routine.
+        try:
+            screened_route, chief_flags = await run_clinical_io(
+                _assess_chief_complaint,
+                user_input,
+                data,
+            )
+        except ClinicalOperationTimeout:
+            screened_route, chief_flags = "safety_unavailable", []
+        if chief_flags:
+            return await _complete_urgent_chief_complaint(
+                session,
+                user_input=user_input,
+                route=route or screened_route,
+                red_flags=chief_flags,
+                background_tasks=background_tasks,
+            )
+        if screened_route == "safety_unavailable":
+            data["type"] = route or "other"
+            session["amie_state"] = {
+                "red_flags": [],
+                "knowledge_gaps": ["語意安全檢查未能完成"],
+            }
+            session["turn_count"] = session.get("turn_count", 0) + 1
+            _append_manual_amie_trace(
+                session,
+                current_question=current,
+                answer=user_input,
+                action="handoff",
+                reason=(
+                    "主訴語意安全抽取失敗，系統無法安全判斷是否有警訊，"
+                    "因此停止自動問診並轉交醫療人員。"
+                ),
+                source="semantic_safety_fail_closed",
+            )
+            return await _handoff_amie_consultation(
+                session,
+                reason=patient_message("handoff.reason.safety_unavailable"),
+                user_display=user_display,
+            )
         data["type"] = route or "other"
         data["types"] = [route] if route else []
         questionnaire = (

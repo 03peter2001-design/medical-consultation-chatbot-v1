@@ -38,6 +38,7 @@ import {
   initializeSmartPatient,
 } from '../services/smart.js'
 import { launchCodeFromScan } from '../services/patientLaunch.js'
+import { decryptBirthdayLaunchCode, isBirthdayLaunchCode } from '../services/birthdayLaunchCode.js'
 import {
   AUTO_SEND_REVIEW_MS,
   AVATAR_SILENCE_MS,
@@ -303,10 +304,10 @@ async function finishConsultationStart(
   focusInput()
 }
 
-async function redeemLaunchCode(scannedCode = launchCode.value) {
+async function redeemLaunchCode(input = launchCode.value) {
   if (started.value || launchRedeeming.value) return
-  const code = launchCodeFromScan(scannedCode)
-  if (!code) {
+  const scannedCode = launchCodeFromScan(typeof input === 'string' ? input : input.code)
+  if (!scannedCode) {
     launchError.value = 'code 格式不正確，請重新掃描或完整貼上。'
     return
   }
@@ -315,9 +316,12 @@ async function redeemLaunchCode(scannedCode = launchCode.value) {
   launchError.value = ''
   startError.value = ''
   try {
-    if (redeemedLaunchCode !== code) {
+    if (redeemedLaunchCode !== scannedCode) {
+      const code = isBirthdayLaunchCode(scannedCode)
+        ? await decryptBirthdayLaunchCode(scannedCode, input?.birthday || '')
+        : scannedCode
       await api.exchangeInvitation(code)
-      redeemedLaunchCode = code
+      redeemedLaunchCode = scannedCode
     }
 
     launchSession.value = await api.patientSession()
@@ -344,7 +348,7 @@ async function redeemLaunchCode(scannedCode = launchCode.value) {
     launchCode.value = ''
   } catch (error) {
     launchError.value =
-      redeemedLaunchCode === code
+      redeemedLaunchCode === scannedCode
         ? `病患 session 已建立，但問診暫時無法開始（${error.message}）。請保留本頁並重試。`
         : `無法驗證此 code（${error.message}）。code 可能已過期或使用過。`
   } finally {
@@ -444,12 +448,15 @@ onMounted(() => {
   const initialCode = launchCodeFromScan(window.location.href)
   if (initialCode) {
     launchCode.value = initialCode
+    const cleanUrl = new URL(window.location.href)
+    cleanUrl.searchParams.delete('token')
+    cleanUrl.searchParams.delete('code')
     window.history.replaceState(
       window.history.state,
       '',
-      `${window.location.pathname}${window.location.search}#/`,
+      `${cleanUrl.pathname}${cleanUrl.search}#/`,
     )
-    void redeemLaunchCode(initialCode)
+    if (!isBirthdayLaunchCode(initialCode)) void redeemLaunchCode(initialCode)
   }
 })
 

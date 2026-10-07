@@ -146,6 +146,26 @@ class GeminiQuestionnaireSummaryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "items must be text"):
             parse_summary_sections(invalid_item)
 
+    def test_differential_is_a_ranked_top_five_list(self):
+        names = [f"Diagnosis {index}" for index in range(1, 7)]
+        sections = _valid_sections()
+        sections["differential_diagnoses"] = json.dumps({"differential_diagnoses": names})
+
+        parsed = parse_summary_sections(sections)
+
+        # The sixth item exceeds the contract and is dropped; order is preserved.
+        self.assertEqual(parsed.differential_diagnoses, names[:5])
+        rendered = render_emr(parsed, model="gemini-test")
+        self.assertIn("【初步鑑別診斷（前5項最可能）】\n1. Diagnosis 1", rendered)
+        self.assertIn("5. Diagnosis 5", rendered)
+        self.assertNotIn("Diagnosis 6", rendered)
+
+    def test_short_differential_is_padded_to_five_with_explicit_insufficient_evidence(self):
+        rendered = render_emr(parse_summary_sections(_valid_sections()), model="gemini-test")
+        block = rendered.split("【初步鑑別診斷（前5項最可能）】")[1].split("【防漏診鑑別")[0]
+
+        self.assertEqual(block.count("Insufficient evidence"), 4)
+
     def test_renderer_preserves_requested_medical_history_paragraph_order(self):
         rendered = render_emr(
             parse_summary_sections(
@@ -167,7 +187,7 @@ class GeminiQuestionnaireSummaryTests(unittest.TestCase):
         ]
         positions = [rendered.index(heading) for heading in headings]
         self.assertEqual(positions, sorted(positions))
-        self.assertIn("fixed-questionnaire-complete-drug-history-v9", rendered)
+        self.assertIn("fixed-questionnaire-complete-drug-history-v10", rendered)
 
     def test_missing_demographics_are_explicit_in_one_sentence_chief_complaint(self):
         parsed = parse_summary_sections(_valid_sections())

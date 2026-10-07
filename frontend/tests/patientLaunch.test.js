@@ -11,6 +11,8 @@ import {
   normalizeLaunchCode,
 } from '../src/services/patientLaunch.js'
 
+import { encryptBirthdayLaunchCode } from '../src/services/birthdayLaunchCode.js'
+
 const code = 'AbCd_1234-efgh5678_IJKL9012-mnop3456'
 
 test('accepts only bounded opaque base64url-style launcher codes', () => {
@@ -88,4 +90,15 @@ test('scanner and patient entry retain camera cleanup and paste fallback', () =>
   assert.match(patientView, /api\.exchangeInvitation\(code\)/)
   assert.match(patientView, /api\.patientSession\(\)/)
   assert.match(patientView, /finishConsultationStart\(null/)
+})
+
+
+test('recognizes birthday envelopes in pasted codes and QR links without legacy fallback', async () => {
+  const encrypted = await encryptBirthdayLaunchCode(code, '20000101')
+  assert.equal(isLaunchCodeFormat(encrypted), true)
+  assert.equal(launchCodeFromScan(`  ${encrypted}  `), encrypted)
+  assert.equal(launchCodeFromScan(`https://patient.example/#/?token=${encrypted}`), encrypted)
+  assert.equal(launchCodeFromScan(`https://patient.example/?code=${encrypted}`), encrypted)
+  assert.equal(launchCodeFromScan(encrypted.replace('bqr1.', 'bqr2.')), '')
+  assert.equal(isLaunchCodeFormat('bqr1.broken'), false)
 })

@@ -6,7 +6,7 @@ from typing import Any
 
 from app.prompts.common import PromptRequest, json_prompt_messages
 
-PROMPT_VERSION = "fixed-questionnaire-complete-drug-history-v9"
+PROMPT_VERSION = "fixed-questionnaire-complete-drug-history-v10"
 EMR_TASKS = (
     "chief_complaint",
     "present_illness",
@@ -121,13 +121,13 @@ _TASK_CONFIG: dict[str, dict[str, Any]] = {
     },
     "differential_diagnoses": {
         "question": (
-            "Based on the patient history, list the three most likely diagnoses in priority order. "
+            "Based on the patient history, list the five most likely diagnoses in priority order. "
             "Do not explain the rationale."
         ),
         "schema": ["Diagnosis name in English"],
         "knowledge": "diagnosis",
         "max_tokens": 900,
-        "rules": "Return no more than three provisional diagnoses; do not present them as confirmed.",
+        "rules": "Return no more than five provisional diagnoses; do not present them as confirmed.",
     },
     "must_not_miss": {
         "question": (

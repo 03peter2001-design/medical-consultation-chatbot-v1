@@ -6,6 +6,27 @@ SNOMED CT 查詢。根目錄的 `index.html`、`doctor.html` 是重構前的相�
 
 ## 服務版本
 
+### v0.15.0 (2026-10-07)
+
+- 開發版 SMART QR Launcher 新產生的 QR 與可複製 code 改用患者完整西元生日加密。
+  `2000-01-01` 對應密碼 `20000101`；缺少生日、日期無效或瀏覽器不支援安全 Web Crypto
+  時，在呼叫發碼 API 前拒絕，不退回未加密 QR。需可信 HTTPS，localhost 可供開發測試。
+- 使用原生 Web Crypto 的 PBKDF2-SHA256（600,000 次、隨機 16-byte salt）衍生
+  AES-256-GCM key，使用隨機 12-byte IV 與版本 AAD；`bqr1` 密文只包覆一次性隨機
+  token，不包覆病歷。演算法參數固定在格式版本中，未新增依賴。
+- 掃描、貼碼與受支援的問診連結先顯示生日欄位；正確解密後才兌換既有 HttpOnly session。
+  錯誤生日、遭竄改的密文或無效格式不會呼叫兌換 API；生日不另傳後端、不存入 browser
+  storage，送出或切換 code 後清除輸入欄位。掃描後等待受控 v-model 更新，避免兌換舊碼。
+- 安全範圍：生日容易取得且可遭離線猜測，這是額外保護，不能代替身分驗證。後端短效、
+  一次性兌換、機構隔離與 session 控制維持原契約。這是 QR 傳遞內容加密，後端本身仍接受
+  原始 bearer token；既有未加密邀請、UCC 發碼與重發 API 不會自動獲得生日保護。
+- 僅更新 `frontend/`。`frontend-v2/` 尚不支援 `bqr1`，新加密 QR 必須在新版開發前端使用；
+  正式部署須另行移植並驗證。沒有 API、資料庫或既有邀請遷移，既有未加密 code 仍可使用。
+- 驗證：Node 22 前端測試、production build、API 型別檢查；隔離 Chrome/CDP 以合成
+  API 回應驗證正確／錯誤生日、日期檢查、掃描事件、醫師加密／複製、缺生日拒發，桌機
+  1280×900 與手機 390×844 無水平溢出或執行錯誤。實體相機、SMART OAuth round trip
+  及正式 UCC 環境未測；詳細結果見 `../devlog/2026-10-07.md`。
+
 ### v0.14.2 (2026-09-13)
 
 - 修正整份病歷確認後，「送出並儲存至 FHIR」仍可能因缺少 FHIR Patient context 而保持

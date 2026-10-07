@@ -36,3 +36,9 @@ package
 local/
 # I don't want to commit this folder, DO NOT EDIT THIS LINE!!!!
 llm_experiments/
+eicu/
+paper_experiments/
+
+# Restricted clinical benchmark payloads stay local; retain provenance metadata.
+/benchmarks/er-reason-a-benchmark-dataset-for-llm-based-clinical-reasoning-in-the-emergency-room-1.0.0/er_reason.csv
+/benchmarks/er-reason-a-benchmark-dataset-for-llm-based-clinical-reasoning-in-the-emergency-room-1.0.0/er_reason.csv.zip

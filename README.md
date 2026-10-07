@@ -16,7 +16,7 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 
 - **病患端**：自由主訴、FHIR 病歷預填、逐題問卷、疼痛位置標記及預設本機 Avatar
 - **順序式問診**：主訴只以本機關鍵字選擇固定問卷，之後依 JSON 原始順序提問；
-  不執行 AMIE、症狀語意抽取、Safety、ClinicalFact 或疾病票數
+  主訴入口執行 red flag 篩檢（原文規則＋LLM 標籤＋結構化規則，失敗轉人工）；不執行 AMIE、ClinicalFact 或疾病票數
 - **醫師端**：病例搜尋、問卷原始回答、Gemini 生成 EMR、醫師速覽、SNOMED CT
   查詢與舊病例相容的規則／分析畫面
 - **本機資料層**：SQLite 保存問診結果，Chroma 保存版本化 RAG collections
@@ -43,8 +43,8 @@ Gemini，結合本機 RAG 文獻產生六段式 EMR 與臨床決策草稿。內�
 
 | 服務／可部署或研究產物 | 目前版本 | 基線日期 | 本版重點 | 詳細記錄 |
 | --- | --- | --- | --- | --- |
-| Backend API（含 Breeze ASR） | `0.14.0` | 2026-09-11 | 院內 QR 使用清單、原子取消／重新派發及 session 撤銷，schema v12 保留替代關係 | [backend/README.md](backend/README.md#服務版本) |
-| 開發版 Vue frontend | `0.14.2` | 2026-09-13 | 整份病歷確認後可操作 FHIR 送出入口，缺少綁定時明確提示 | [frontend/README.md](frontend/README.md#服務版本) |
+| Backend API（含 Breeze ASR） | `0.16.0` | 2026-10-02 | 預設問卷流程於主訴入口加入語意 red flag 篩檢（失敗轉人工），報告鑑別診斷改為前 5 項 | [backend/README.md](backend/README.md#服務版本) |
+| 開發版 Vue frontend | `0.15.0` | 2026-10-07 | 新發 QR／code 以患者生日加密，掃描或貼碼後輸入 YYYYMMDD 解密 | [frontend/README.md](frontend/README.md#服務版本) |
 | 正式部署 Doctor frontend | `2.4.0` | 2026-09-13 | UCC 受控的 SMART Provider launch、PKCE／issuer 防護與 callback context 核對 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | 正式部署 Patient frontend | `2.2.1` | 2026-09-13 | SMART callback 暫態參數清除，保留 QR／HttpOnly session 身分邊界 | [frontend-v2/README.md](frontend-v2/README.md#service-versions) |
 | Local Avatar service | `1.2.0` | 2026-08-11 | 新增可由 Backend 逐請求覆寫、完全跳過 MuseTalk 的靜態醫師 CosyVoice 模式 | [avatar-service/README.md](avatar-service/README.md#服務版本) |

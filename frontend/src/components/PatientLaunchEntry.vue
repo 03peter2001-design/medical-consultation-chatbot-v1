@@ -1,13 +1,14 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 
 import QrCodeScanner from './QrCodeScanner.vue'
 import {
   isLaunchCodeFormat,
-  normalizeLaunchCode,
+  launchCodeFromScan,
 } from '../services/patientLaunch.js'
+import { isBirthdayLaunchCode, normalizeBirthday } from '../services/birthdayLaunchCode.js'
 
-defineProps({
+const props = defineProps({
   redeeming: { type: Boolean, default: false },
   error: { type: String, default: '' },
 })
@@ -15,18 +16,34 @@ defineProps({
 const emit = defineEmits(['redeem'])
 const code = defineModel({ type: String, default: '' })
 const scannerOpen = ref(false)
-const normalizedCode = computed(() => normalizeLaunchCode(code.value))
+const birthday = ref('')
+const birthdayInput = ref(null)
+const normalizedCode = computed(() => launchCodeFromScan(code.value))
 const codeValid = computed(() => isLaunchCodeFormat(normalizedCode.value))
+const needsBirthday = computed(() => isBirthdayLaunchCode(normalizedCode.value))
+const birthdayValid = computed(() => {
+  if (!/^[0-9]{8}$/.test(birthday.value)) return false
+  try { return Boolean(normalizeBirthday(birthday.value)) } catch { return false }
+})
+
+watch(code, () => { birthday.value = '' })
 
 function redeem() {
-  if (!codeValid.value) return
-  emit('redeem', normalizedCode.value)
+  if (props.redeeming || !codeValid.value || (needsBirthday.value && !birthdayValid.value)) return
+  emit('redeem', { code: normalizedCode.value, birthday: birthday.value })
+  birthday.value = ''
 }
 
-function acceptScan(scannedCode) {
+async function acceptScan(scannedCode) {
   code.value = scannedCode
   scannerOpen.value = false
-  emit('redeem', scannedCode)
+  // Wait for the controlled v-model to propagate before reading normalizedCode.
+  await nextTick()
+  if (isBirthdayLaunchCode(scannedCode)) {
+    birthdayInput.value?.focus()
+  } else {
+    redeem()
+  }
 }
 </script>
 
@@ -61,15 +78,38 @@ function acceptScan(scannedCode) {
           v-model="code"
           type="text"
           minlength="32"
-          maxlength="512"
+          maxlength="2048"
           autocomplete="off"
           autocapitalize="off"
           spellcheck="false"
           placeholder="貼上醫生端產生的 code"
-          :aria-invalid="Boolean(normalizedCode) && !codeValid"
+          :aria-invalid="Boolean(code) && !codeValid"
           :disabled="redeeming"
         />
-        <button type="submit" :disabled="redeeming || !codeValid">
+      </div>
+      <template v-if="needsBirthday">
+        <label for="patient-launch-birthday">患者西元生日（YYYYMMDD）</label>
+        <input
+          id="patient-launch-birthday"
+          ref="birthdayInput"
+          v-model="birthday"
+          class="birthday-input"
+          type="password"
+          inputmode="numeric"
+          pattern="[0-9]{8}"
+          minlength="8"
+          maxlength="8"
+          autocomplete="off"
+          placeholder="例如：20000101"
+          aria-describedby="birthday-help"
+          :disabled="redeeming"
+          :aria-invalid="Boolean(birthday) && !birthdayValid"
+          required
+        />
+        <small id="birthday-help">請輸入 8 位數生日解開 QR code，例如 2000 年 1 月 1 日輸入 20000101。</small>
+      </template>
+      <div class="launch-code-row">
+        <button type="submit" :disabled="redeeming || !codeValid || (needsBirthday && !birthdayValid)">
           {{ redeeming ? '驗證中…' : '驗證並開始' }}
         </button>
       </div>
@@ -141,7 +181,8 @@ function acceptScan(scannedCode) {
   font-weight: 600;
 }
 
-.launch-code-row input {
+.launch-code-row input,
+.birthday-input {
   min-width: 0;
   min-height: 42px;
   flex: 1;
